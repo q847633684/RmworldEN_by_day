@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Plant -->
+
+  <PlantHumpShroom.label>Bumspilz</PlantHumpShroom.label>
+  <PlantHumpShroom.description>Ein dicker Pilz mit festem Fleisch, dickem Saft und glatter, weicher Haushalt. Wirkt bei Konsum als Aphrodia, füllt Psyfokus.</PlantHumpShroom.description>
+
+
+  <!-- Consumable item -->
+
+  <HumpShroom.label>Bumspilz</HumpShroom.label>
+  <HumpShroom.description>Ein dicker Pilz mit festem Fleisch, dickem Saft und glatter, weicher Haushalt. Wirkt bei Konsum als Aphrodia, füllt Psyfokus.</HumpShroom.description>
+
+
+</LanguageData>

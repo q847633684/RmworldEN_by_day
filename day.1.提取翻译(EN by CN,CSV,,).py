@@ -8,7 +8,7 @@ import logging
 import time
 
 # 可翻译字段预览/确认开关
-PREVIEW_TRANSLATABLE_FIELDS = True  # True: 显示预览界面，False: 跳过预览直接导出
+PREVIEW_TRANSLATABLE_FIELDS = False  # True: 显示预览界面，False: 跳过预览直接导出
 # 日志级别控制
 DEBUG_MODE = True  # True 显示 debug 日志，False 只显示 info 及以上
 LOG_FILE = "extract_translate.log"
@@ -53,10 +53,10 @@ NON_TEXT_PATTERNS = [
     #r'^\s*[A-Za-z0-9_]+\s*$'                  # 单单词标识符
 ]
 
-def get_language_folder_path(language, mod_root_dir):
+def get_language_folder_path(language, root_dir):
     """获取语言文件夹路径"""
     # 修正为 RimWorld 标准结构，先 Languages 再语言名
-    return os.path.join(mod_root_dir, "Languages", language)
+    return os.path.join(root_dir, "Languages", language)
 
 def sanitize_xcomment(text):
     """清理 XML 注释中的非法字符"""
@@ -268,14 +268,25 @@ def preview_translatable_fields(mod_root_dir, preview=PREVIEW_TRANSLATABLE_FIELD
         # 直接返回所有字段，不再确认
         return all_translations
 
-def extract_key(mod_root_dir, active_language="ChineseSimplified", english_language="English"):
-    """提取翻译键文件"""
-    active_lang_path = get_language_folder_path(active_language, mod_root_dir)
+def extract_key(mod_root_dir, export_dir, active_language="ChineseSimplified", english_language="English"):
+    """
+    提取 Keyed 类型的翻译文件。
+    作用：
+    - 读取英文 Keyed 目录下的所有 xml 文件，复制到导出目录下的对应 Keyed 目录。
+    - 在每个字段前插入英文原文注释，方便后续翻译。
+    - 只在 export_dir 下写入和清理，不影响原始 mod 目录。
+    参数：
+    - mod_root_dir: 原始 mod 根目录（只读）
+    - export_dir: 导出目录（所有写入都在这里）
+    - active_language: 目标语言（默认 ChineseSimplified）
+    - english_language: 英文目录名（默认 English）
+    """
+    active_lang_path = get_language_folder_path(active_language, export_dir)
     english_lang_path = get_language_folder_path(english_language, mod_root_dir)
-    
+
     keyed_path = os.path.join(active_lang_path, "Keyed")
     old_keyed_path = os.path.join(active_lang_path, "CodeLinked")
-    
+
     if os.path.exists(old_keyed_path) and not os.path.exists(keyed_path):
         try:
             shutil.move(old_keyed_path, keyed_path)
@@ -283,24 +294,24 @@ def extract_key(mod_root_dir, active_language="ChineseSimplified", english_langu
             logging.info(f"重命名 {old_keyed_path} 为 {keyed_path}")
         except Exception as e:
             logging.error(f"无法重命名 {old_keyed_path}: {e}")
-    
+
     if not os.path.exists(keyed_path):
         os.makedirs(keyed_path)
         logging.info(f"创建文件夹：{keyed_path}")
-    
+
     english_keyed_path = os.path.join(english_lang_path, "Keyed")
-    
+
     if not os.path.exists(english_keyed_path) and "Core" not in mod_root_dir:
         logging.warning(f"英文 Keyed 目录 {english_keyed_path} 不存在，跳过")
         return
-    
+
     for xml_file in Path(keyed_path).rglob("*.xml"):
         try:
             os.remove(xml_file)
             logging.info(f"删除文件：{xml_file}")
         except Exception as e:
             logging.error(f"无法删除 {xml_file}: {e}")
-    
+
     if os.path.exists(english_keyed_path):
         for src_file in Path(english_keyed_path).rglob("*.xml"):
             try:
@@ -309,7 +320,7 @@ def extract_key(mod_root_dir, active_language="ChineseSimplified", english_langu
                 os.makedirs(os.path.dirname(dst_file), exist_ok=True)
                 shutil.copy2(src_file, dst_file)
                 logging.info(f"复制 {src_file} 到 {dst_file}")
-                
+
                 tree = ET.parse(dst_file)
                 root = tree.getroot()
                 parent_map = {c: p for p in root.iter() for c in p}
@@ -326,9 +337,19 @@ def extract_key(mod_root_dir, active_language="ChineseSimplified", english_langu
             except Exception as e:
                 logging.error(f"无法处理 {src_file}: {e}")
 
-def extract_definjected_from_defs(mod_root_dir, active_language="ChineseSimplified"):
-    """从 Defs 提取可翻译字段"""
-    active_lang_path = get_language_folder_path(active_language, mod_root_dir)
+def extract_definjected_from_defs(mod_root_dir, export_dir, active_language="ChineseSimplified"):
+    """
+    从 Defs 目录递归提取所有可翻译字段，生成 DefInjected 结构的 xml 文件。
+    作用：
+    - 只读取 mod_root_dir/Defs 下的 xml 文件。
+    - 根据字段筛选和用户选择，生成 DefInjected 目录下的翻译模板。
+    - 只在 export_dir 下写入和清理，不影响原始 mod 目录。
+    参数：
+    - mod_root_dir: 原始 mod 根目录（只读）
+    - export_dir: 导出目录（所有写入都在这里）
+    - active_language: 目标语言（默认 ChineseSimplified）
+    """
+    active_lang_path = get_language_folder_path(active_language, export_dir)
     def_injected_path = os.path.join(active_lang_path, "DefInjected")
     defs_path = os.path.join(mod_root_dir, "Defs")
 
@@ -411,12 +432,24 @@ def extract_definjected_from_defs(mod_root_dir, active_language="ChineseSimplifi
                 field_elem.text = text
         save_xml_to_file(root, output_path)
 
-def extract_translate(mod_root_dir, active_language="ChineseSimplified", english_language="English"):
-    """提取翻译文件"""
-    active_lang_path = get_language_folder_path(active_language, mod_root_dir)
+def extract_translate(mod_root_dir, export_dir, active_language="ChineseSimplified", english_language="English"):
+    """
+    提取 DefInjected 类型的翻译文件。
+    作用：
+    - 检查英文 DefInjected 目录是否存在，若存在可选择以英文为模板或重新提取。
+    - 复制英文 DefInjected 下的 xml 文件到导出目录，并插入英文注释。
+    - 或直接调用 extract_definjected_from_defs 重新生成。
+    - 只在 export_dir 下写入和清理，不影响原始 mod 目录。
+    参数：
+    - mod_root_dir: 原始 mod 根目录（只读）
+    - export_dir: 导出目录（所有写入都在这里）
+    - active_language: 目标语言（默认 ChineseSimplified）
+    - english_language: 英文目录名（默认 English）
+    """
+    active_lang_path = get_language_folder_path(active_language, export_dir)
     def_injected_path = os.path.join(active_lang_path, "DefInjected")
     old_def_linked_path = os.path.join(active_lang_path, "DefLinked")
-    
+
     if os.path.exists(old_def_linked_path) and not os.path.exists(def_injected_path):
         try:
             shutil.move(old_def_linked_path, def_injected_path)
@@ -424,7 +457,7 @@ def extract_translate(mod_root_dir, active_language="ChineseSimplified", english
             logging.info(f"重命名 {old_def_linked_path} 为 {def_injected_path}")
         except Exception as e:
             logging.error(f"无法重命名：{e}")
-    
+
     english_lang_path = get_language_folder_path(english_language, mod_root_dir)
     english_def_injected_path = os.path.join(english_lang_path, "DefInjected")
 
@@ -435,7 +468,7 @@ def extract_translate(mod_root_dir, active_language="ChineseSimplified", english
         choice = input("请输入选项编号（1/2，回车默认1）：").strip()
         if choice == '2':
             logging.info("用户选择：从 Defs 目录重新提取可翻译字段")
-            extract_definjected_from_defs(mod_root_dir, active_language)
+            extract_definjected_from_defs(mod_root_dir, export_dir, active_language)
             return
         else:
             logging.info("用户选择：以英文 DefInjected 为基础")
@@ -472,14 +505,23 @@ def extract_translate(mod_root_dir, active_language="ChineseSimplified", english
                     logging.error(f"无法处理 {src_file}: {e}")
     else:
         logging.info(f"未找到英文 DefInjected {english_def_injected_path}，从 Defs 提取")
-        extract_definjected_from_defs(mod_root_dir, active_language)
+        extract_definjected_from_defs(mod_root_dir, export_dir, active_language)
 
 
-def cleanup_backstories(mod_root_dir, active_language="ChineseSimplified"):
-    """清理旧背景故事文件"""
-    active_lang_path = get_language_folder_path(active_language, mod_root_dir)
+def cleanup_backstories(mod_root_dir, export_dir, active_language="ChineseSimplified"):
+    """
+    清理旧的 Backstories 目录。
+    作用：
+    - 只在导出目录下查找 Backstories 文件夹，如存在则重命名为 Backstories DELETE_ME，提示用户手动检查。
+    - 不影响原始 mod 目录。
+    参数：
+    - mod_root_dir: 原始 mod 根目录（只读）
+    - export_dir: 导出目录（所有写入都在这里）
+    - active_language: 目标语言（默认 ChineseSimplified）
+    """
+    active_lang_path = get_language_folder_path(active_language, export_dir)
     backstories_path = os.path.join(active_lang_path, "Backstories")
-    
+
     if os.path.exists(backstories_path):
         delete_me_path = os.path.join(active_lang_path, "Backstories DELETE_ME")
         try:
@@ -490,7 +532,14 @@ def cleanup_backstories(mod_root_dir, active_language="ChineseSimplified"):
             logging.error(f"无法重命名 {backstories_path}: {e}")
 
 def main():
-    """主函数"""
+    """
+    主函数，程序入口。
+    作用：
+    - 交互式输入原始 mod 路径和导出目录。
+    - 调用 extract_translate、extract_key、cleanup_backstories 完成翻译文件的提取和清理。
+    - 自动导出所有可翻译字段到 extracted_translations.csv，便于后续人工翻译或校对。
+    - 所有写入和生成都只发生在导出目录，不影响原始 mod。
+    """
     print("=== RimWorld 模组翻译提取工具 ===")
     print("请输入模组根目录路径（例如：C:/RimWorld/Mods/MyMod）：")
     mod_root_dir = input("> ").strip()
@@ -523,10 +572,10 @@ def main():
 
     print("开始提取翻译...")
     try:
-        # 下面三个函数需要以 mod_root_dir 作为根目录
-        extract_translate(mod_root_dir)
-        extract_key(mod_root_dir)
-        cleanup_backstories(mod_root_dir)
+        # 下面三个函数需要以 mod_root_dir 作为根目录，所有写入都在 export_dir
+        extract_translate(mod_root_dir, export_dir)
+        extract_key(mod_root_dir, export_dir)
+        cleanup_backstories(mod_root_dir, export_dir)
 
         # 自动导出所有可翻译字段到 extracted_translations.csv（含 DefInjected 和 Keyed）
         csv_path = os.path.join(export_dir, "extracted_translations.csv")

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+	<!-- Mod strings -->
+
+	<!-- Notifications on right-clicking CP -->
+	<PawnCantRapeCP>Das Ziel ist verwundet oder nicht erreichbar.</PawnCantRapeCP>
+	<PawnCantRapeCP0>Die Person will keinen Sex, ist nicht gesund, oder kann nicht vergewaltigen.</PawnCantRapeCP0>
+	<PawnCantRapeCP1>Die Person ist in einer Beziehung und sein Partner kann ihn sehen.</PawnCantRapeCP1>
+	<PawnCantRapeCP2>Die Person ist nicht zoophil und wird nicht mit Tieren ficken.</PawnCantRapeCP2>
+
+	<!--Submit button-->
+	<CommandSubmit>Aufgeben</CommandSubmit>
+	<CommandSubmitDesc>Gib auf und akzeptiere, was auch immer (in dich) kommen mag.</CommandSubmitDesc>
+
+	<!--Pregnancy messages-->
+	<RJW_PregnantTitle>{0} ist Schwanger.</RJW_PregnantTitle>
+	<RJW_PregnantText>{0} ist Schwanger und bald eine Mutter. Sei vorsichtig, Hunger, Verletzungen oder Trauma könnten das Kind gefährden.</RJW_PregnantText>
+	<RJW_Contractions>{0} hat Wehen! Baby(ies) ist(sind) unterwegs!</RJW_Contractions>
+	<RJW_GaveBirthTitle>Geburt beended.</RJW_GaveBirthTitle>
+	<RJW_GaveBirthText>{0} hat zur Welt gebracht: </RJW_GaveBirthText>
+	<RJW_ABaby>ein Baby</RJW_ABaby>
+	<RJW_NBabies>ihre {0} Babies.</RJW_NBabies>
+	<RJW_PregnantNormal>Bekommt ein gesundes Kind...</RJW_PregnantNormal>
+	<RJW_PregnantStrange>Irgendwas an dem Baby ist ungewöhnlich...</RJW_PregnantStrange>
+	<RJW_PregnantMechStrange>Irgendwas ist sehr merkwürdig an dem Baby...</RJW_PregnantMechStrange>
+	<RJW_GaveBirthEggTitle>Legte Ei(er).</RJW_GaveBirthEggTitle>
+	<RJW_GaveBirthEggText>{0} hat Eier gelegt!</RJW_GaveBirthEggText>
+	<RJW_EggContractions>{0} hat Wehen! Die Eier sind unterwegs!</RJW_EggContractions>
+
+	<GoToModSettings>Dieser Platz ist für optionale RJW Funktionen reserviert, welche entweder deaktiviert oder nicht für den ausgewählte Person/Tier verfügbar sind.\nLies die verdammten Mod-Einstellungen durch bevor du uns mit Fehlermeldungen überschwemmst.</GoToModSettings>
+
+	<!--Comfort designation-->
+	<ForComfort>Nutze zur Befriedigung</ForComfort>
+	<ForComfortDesc>Verbietet es der Person Sex abzulehnen.</ForComfortDesc>
+	<ForComfortRefuseDesc>Ist dagegen benutzt zu werden\n(Benötigt Masochist)</ForComfortRefuseDesc>
+
+	<!--Whore-->
+	<ForService>Prostitution</ForService>  <!-- This field is not visible -->
+	<ForServiceDesc><![CDATA[Aktiviere Prostitution
+- wird versuchen Besucher zu befriedigen
+- sorgt für die Unterhaltung der anderen Kolonisten, falls unbeschäftigt
+- wird nicht mehr masturbieren, kann zu sexueller Frustration führen
+]]></ForServiceDesc>
+	<ForServiceRefuseDesc>Will keine Hure sein</ForServiceRefuseDesc>
+
+	<!--Breeding designations-->
+	<ForBreeding>Erlaube Tiere</ForBreeding>
+	<ForBreedingDesc>Markiere zur Paarung mit Tieren</ForBreedingDesc>
+	<ForBreedingRefuseDesc>Ist dagegen von Tieren begattet zu werden\n(Benötigt Zoophilie)</ForBreedingRefuseDesc>
+
+	<ForBreedingAnimalDesc>Erlaube diesem Tier ausgewähle Personen zu besteigen</ForBreedingAnimalDesc>
+
+	<BreedMessage> versucht die Begattung von </BreedMessage>
+
+	<!--Milking-->
+	<ForMilking>Melken</ForMilking>
+	<ForMilkingDesc>Melke dieses Wesen.</ForMilkingDesc>
+
+	<!--Hero-->
+	<ForHero>Held</ForHero>
+	<ForHeroDesc><![CDATA[Wähle diese Person als dein Charakter
+	- kann nur einmal gewählt werden
+	- kann nicht widerrufen werden
+	]]></ForHeroDesc>
+	<ForHeroRefuse1Desc>Das ist der Held eines anderen Spielers</ForHeroRefuse1Desc>
+	<ForHeroRefuse2Desc>Du darfst das nicht ändern</ForHeroRefuse2Desc>
+	<ForHeroRefuseHCDesc>Normaler Kolonist im Hardcore Modus</ForHeroRefuseHCDesc>
+
+	<!-- Hediff tooltips -->
+	<RJW_hediff_braCup>:Körbchengröße: {0}:{1} ({2} cup)</RJW_hediff_braCup>
+	<RJW_hediff_braSizeNone>BH Größe: -</RJW_hediff_braSizeNone>
+	<RJW_hediff_eggs>Eier: {0}</RJW_hediff_eggs>
+	<RJW_hediff_fluidTypeFluidAmount>{0}: {1}</RJW_hediff_fluidTypeFluidAmount>
+	<RJW_hediff_girth>Umfang: {0}</RJW_hediff_girth>
+	<RJW_hediff_length>Länge: {0}</RJW_hediff_length>
+	<RJW_hediff_maxGirth>Max Umfang: {0}</RJW_hediff_maxGirth>
+	<RJW_hediff_maxLength>Max Länge: {0}</RJW_hediff_maxLength>
+	<RJW_hediff_braSize>BH Größe: {0}:{1}</RJW_hediff_braSize>
+	<RJW_hediff_overbust>Brustumfang: {0}</RJW_hediff_overbust>
+	<RJW_hediff_underbust>Unterbrustumfang: {0}</RJW_hediff_underbust>
+	<RJW_hediff_unknownSpecies>Ubekannte species</RJW_hediff_unknownSpecies>
+	<RJW_hediff_weight>Gewicht: {0}</RJW_hediff_weight>
+
+	<!-- RJW fertility tooltip -->
+	<AgeImpactor>Alter: </AgeImpactor>
+	<VanillaFertilityImpactor>Fruchtbarkeit: {VALUE}%</VanillaFertilityImpactor>
+
+	<!-- Nymphs!!! -->
+	<RJW_nymph_incident_raid_title>Nymphomanen!!!</RJW_nymph_incident_raid_title>
+	<RJW_nymph_incident_raid_description>Eine Gruppe Nymphomanen besuchen deine Siedlung.</RJW_nymph_incident_raid_description>
+	<RJW_nymph_incident_wander_title>Nymphomane!</RJW_nymph_incident_wander_title>
+	<RJW_nymph_incident_wander_description>Ein umherziehender Nymphomanmane besucht deine Siedlung.</RJW_nymph_incident_wander_description>
+	<RJW_nymph_incident_join_title>Nymphomane tritt bei</RJW_nymph_incident_join_title>
+	<RJW_nymph_incident_join_description>Ein umherziehender Nymphomanmane ist deiner Siedlung beigetreten.</RJW_nymph_incident_join_description>
+
+	<!-- Biotech integration -->
+	<PawnLacksFunctionalGenitals>{PAWN} hat keine funktionierenden Genitalien.</PawnLacksFunctionalGenitals>
+	<PawnLacksVagina>{PAWN} hat keine Vagina.</PawnLacksVagina>
+	<PawnLacksFunctionalPenis>{PAWN} hat keinen funktionierenden Penis.</PawnLacksFunctionalPenis>
+	<VaginalWeight>Vaginal Sex Wahrscheinlichkeit</VaginalWeight>
+
+	<!-- Trait gain -->
+	<!-- Tip: You can easily add trait-specific versions of these two by appending the trait's defname and optionally its degree -->
+	<LetterLabelGainedTraitFromSex>Eigenschaft erhalten: {PAWN}</LetterLabelGainedTraitFromSex>
+	<GainedTraitFromSex>Eine sexuelle Erfahrung hat verursacht, dass {PAWN} die Eigenschaft {TRAIT} erhielt.</GainedTraitFromSex>
+	<GainedTraitFromSexNymphomaniac>Aphrodisia-unterstützte Überstimulation hat {PAWN} verändert. {PAWN_pronoun} hat nun die {TRAIT} Eigenschaft.</GainedTraitFromSexNymphomaniac>
+	<GainedTraitFromSexFootSlut>Die letzte Fußpartie hat {PAWN}s Lust erweckt. {PAWN} ist nun {TRAIT}.</GainedTraitFromSexFootSlut>
+	<LetterLabelGainedMultipleTraitsFromSex>Eigenschaften erhalten: {PAWN}</LetterLabelGainedMultipleTraitsFromSex>
+	<GainedMultipleTraitsFromSex>Eine außerordentliches sexuelles Erlebnis hat {PAWN} folgende Eigenschaften verpasst:</GainedMultipleTraitsFromSex>
+	<GainedMultipleTraitsFromSexListItem>  - {0}</GainedMultipleTraitsFromSexListItem>
+
+</LanguageData>

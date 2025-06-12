@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <Rape_Fellatio.label>fellatio</Rape_Fellatio.label>
+  <Rape_Fellatio.logRulesInitiator.rulesStrings.0>r_logentry->Zwang [RECIPIENT_nameDef] [INITIATOR_objective] einen Blowjob zu geben.</Rape_Fellatio.logRulesInitiator.rulesStrings.0>
+  <Rape_Fellatio.logRulesRecipient.rulesStrings.0>r_logentry->Wurde gezwungen [INITIATOR_nameDef] einen Blowjob zu geben.</Rape_Fellatio.logRulesRecipient.rulesStrings.0>
+
+
+</LanguageData>

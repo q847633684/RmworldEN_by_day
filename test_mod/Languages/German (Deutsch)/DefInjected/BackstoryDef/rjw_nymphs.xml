@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+		<rjw_vatgrown_sex_slave.baseDesc>[PAWN_nameDef] wurde in einem Labor als lebendiges Sexspielzeug herangezüchtet. Während [PAWN_pronoun] aufwuchs wurden [PAWN_objective] viele Sex und Unterhaltungsfertigkeiten beigebracht.</rjw_vatgrown_sex_slave.baseDesc>
+		<rjw_vatgrown_sex_slave.title>Künstlicher Sex-Sklave</rjw_vatgrown_sex_slave.title>
+		<rjw_vatgrown_sex_slave.titleShort>Sex Sklave</rjw_vatgrown_sex_slave.titleShort>
+
+		<rjw_feisty.baseDesc>[PAWN_nameDef] ist hitzig, [PAWN_pronoun] wird häufig versuchen [PAWN_possessive] Willen mit Gewalt durchzusetzen. "Nein" ist keine Option.</rjw_feisty.baseDesc>
+		<rjw_feisty.title>Hitziger Nympho</rjw_feisty.title>
+		<rjw_feisty.titleShort>Nympho</rjw_feisty.titleShort>
+
+		<rjw_curious.baseDesc>[PAWN_nameDef] liebt es Dinge herzustellen.</rjw_curious.baseDesc>
+		<rjw_curious.title>Neugierige Nympho</rjw_curious.title>
+		<rjw_curious.titleShort>Nympho</rjw_curious.titleShort>
+
+		<rjw_tender.baseDesc>[PAWN_nameDef] hat ein Paar charmanter Augen und [PAWN_possessive] Stimme ist weich und süß. Durch [PAWN_possessive] ehemaligen Job als Krankenpfleger kann [PAWN_pronoun] Leute gut verarzten.</rjw_tender.baseDesc>
+		<rjw_tender.title>Fürsorglicher Nympho</rjw_tender.title>
+		<rjw_tender.titleShort>Nympho</rjw_tender.titleShort>
+
+		<rjw_chatty.baseDesc>Niemand kann mehr plappern als [PAWN_nameDef]. [PAWN_pronoun] hat eine flexible Zunge, einen scharfen Verstand und heiße Lippen.</rjw_chatty.baseDesc>
+		<rjw_chatty.title>Geschwätziger Nympho</rjw_chatty.title>
+		<rjw_chatty.titleShort>Nympho</rjw_chatty.titleShort>
+
+		<rjw_broken.baseDesc>[PAWN_nameDef] hat einige schreckliche Dinge erlitten, [PAWN_pronoun] sieht ziemlich abgemagert aus.rjw_broken.baseDesc>
+		<rjw_broken.title>Gebrochener Nympho</rjw_broken.title>
+		<rjw_broken.titleShort>Nympho</rjw_broken.titleShort>
+
+		<rjw_homekeeper.baseDesc>[PAWN_nameDef] wurde trainiert den Haushalt zu managen. Benötigen Sie ein Bad? Abendessen? Oder... [PAWN_possessive]?.</rjw_homekeeper.baseDesc>
+		<rjw_homekeeper.title>Haushalter Nympho</rjw_homekeeper.title>
+		<rjw_homekeeper.titleShort>Nympho</rjw_homekeeper.titleShort>
+
+
+</LanguageData>

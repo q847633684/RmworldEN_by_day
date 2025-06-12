@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+	<PawnColumnWorker_RJWGender_IsHerm>Herm</PawnColumnWorker_RJWGender_IsHerm>
+
+	<!-- todo? -->
+	<!-- or not todo? -->
+	<PawnColumnWorker_IsSlave>Ist Person ein Sklave?</PawnColumnWorker_IsSlave>
+	<PawnColumnWorker_IsPrisoner>Ist Person ein Gefangener?</PawnColumnWorker_IsPrisoner>
+	<PawnColumnWorker_IsComfort>Ist Person für Befriedigung?</PawnColumnWorker_IsComfort>
+	<PawnColumnWorker_IsBreeder>Ist Person für Paarung?</PawnColumnWorker_IsBreeder>
+	
+	<MainTabWindow_Designators>Designatoren</MainTabWindow_Designators>
+	
+</LanguageData>

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- left for save compatibility(for now), use glowy ones -->
+
+  <RJW_EggUnfertilized.label>Ei (unbefruchtet)</RJW_EggUnfertilized.label>
+  <RJW_EggUnfertilized.description>Ein unbefruchtetes Ei.</RJW_EggUnfertilized.description>
+
+  <RJW_EggFertilized.label>Ei (befruchtet)</RJW_EggFertilized.label>
+  <RJW_EggFertilized.description>Ein befruchtetes Ei.</RJW_EggFertilized.description>
+
+
+  <!-- Insect eggs / enemy implant -->
+
+  <RJW_EggInsectUnfertilized.label>egg (unfert.)</RJW_EggInsectUnfertilized.label>
+  <RJW_EggInsectUnfertilized.description>Ein unbefruchtetes Insektenei.</RJW_EggInsectUnfertilized.description>
+
+  <RJW_EggInsectFertilized.label>Ei (befruchtet)</RJW_EggInsectFertilized.label>
+  <RJW_EggInsectFertilized.description>Ein befruchtetes Insektenei.</RJW_EggInsectFertilized.description>
+
+
+</LanguageData>

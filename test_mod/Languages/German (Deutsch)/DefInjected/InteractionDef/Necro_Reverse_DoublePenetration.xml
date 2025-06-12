@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <Necro_Reverse_DoublePenetration.label>double-penetration</Necro_Reverse_DoublePenetration.label>
+  <Necro_Reverse_DoublePenetration.logRulesInitiator.rulesStrings.0>r_logentry->Wurde von [RECIPIENT_nameDef] doppelt penetriert.</Necro_Reverse_DoublePenetration.logRulesInitiator.rulesStrings.0>
+  <Necro_Reverse_DoublePenetration.logRulesRecipient.rulesStrings.0>r_logentry->Wurde gezwungen [INITIATOR_nameDef] doppelt zu penetrieren.</Necro_Reverse_DoublePenetration.logRulesRecipient.rulesStrings.0>
+
+
+</LanguageData>

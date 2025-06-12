@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <RJW_Sire.label>Vater</RJW_Sire.label>
+  <RJW_Sire.labelFemale>Mutter</RJW_Sire.labelFemale>
+
+  <RJW_Pup.label>Sohn</RJW_Pup.label>
+  <RJW_Pup.labelFemale>Tochter</RJW_Pup.labelFemale>
+
+
+  <!-- close family -->
+
+  <Child_Beast.label>Sohn</Child_Beast.label>
+  <Child_Beast.labelFemale>Tochter</Child_Beast.labelFemale>
+
+  <Sibling_Beast.label>Bruder</Sibling_Beast.label>
+  <Sibling_Beast.labelFemale>Schwester</Sibling_Beast.labelFemale>
+
+  <HalfSibling_Beast.label>Bruder</HalfSibling_Beast.label>
+  <HalfSibling_Beast.labelFemale>Schwester</HalfSibling_Beast.labelFemale>
+
+  <Grandparent_Beast.label>Großvater</Grandparent_Beast.label>
+  <Grandparent_Beast.labelFemale>Großmutter</Grandparent_Beast.labelFemale>
+
+  <Grandchild_Beast.label>Enkel</Grandchild_Beast.label>
+  <Grandchild_Beast.labelFemale>Enkelin</Grandchild_Beast.labelFemale>
+
+  <NephewOrNiece_Beast.label>Neffe</NephewOrNiece_Beast.label>
+  <NephewOrNiece_Beast.labelFemale>Nichte</NephewOrNiece_Beast.labelFemale>
+
+  <UncleOrAunt_Beast.label>Onkel</UncleOrAunt_Beast.label>
+  <UncleOrAunt_Beast.labelFemale>Tante</UncleOrAunt_Beast.labelFemale>
+
+  <Cousin_Beast.label>Cousin</Cousin_Beast.label>
+  <Cousin_Beast.labelFemale>Cousine</Cousin_Beast.labelFemale>
+
+
+  <!-- distant family -->
+
+  <GreatGrandparent_Beast.label>Urgroßvater</GreatGrandparent_Beast.label>
+  <GreatGrandparent_Beast.labelFemale>Urgroßmutter</GreatGrandparent_Beast.labelFemale>
+
+  <GreatGrandchild_Beast.label>Urenkel</GreatGrandchild_Beast.label>
+  <GreatGrandchild_Beast.labelFemale>Urenkelin</GreatGrandchild_Beast.labelFemale>
+
+  <GranduncleOrGrandaunt_Beast.label>Großonkel</GranduncleOrGrandaunt_Beast.label>
+  <GranduncleOrGrandaunt_Beast.labelFemale>Großtante</GranduncleOrGrandaunt_Beast.labelFemale>
+
+  <GrandnephewOrGrandniece_Beast.label>Großneffe</GrandnephewOrGrandniece_Beast.label>
+  <GrandnephewOrGrandniece_Beast.labelFemale>Großnichte</GrandnephewOrGrandniece_Beast.labelFemale>
+
+  <CousinOnceRemoved_Beast.label>Cousin 1. Grades</CousinOnceRemoved_Beast.label>
+  <CousinOnceRemoved_Beast.labelFemale>Cousine 1. Grades</CousinOnceRemoved_Beast.labelFemale>
+
+  <SecondCousin_Beast.label>Cousin 2. Grades</SecondCousin_Beast.label>
+  <SecondCousin_Beast.labelFemale>Cousine 2. Grades</SecondCousin_Beast.labelFemale>
+
+
+</LanguageData>
