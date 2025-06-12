@@ -1,0 +1,9 @@
+2025-06-12 22:42:51,831 - INFO - 未找到英文 DefInjected C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\Languages\English\DefInjected，从 Defs 提取
+2025-06-12 22:42:51,841 - INFO - 创建文件夹：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\Languages\ChineseSimplified\DefInjected
+2025-06-12 22:42:51,846 - WARNING - Defs 目录 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\Defs 不存在，跳过
+2025-06-12 22:42:51,866 - INFO - 创建文件夹：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\Languages\ChineseSimplified\Keyed
+2025-06-12 22:42:51,882 - WARNING - 英文 Keyed 目录 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\Languages\English\Keyed 不存在，跳过
+2025-06-12 22:42:51,885 - INFO - 扫描 Defs 目录：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\Defs
+2025-06-12 22:42:51,887 - WARNING - Defs 目录 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\Defs 不存在
+2025-06-12 22:42:51,902 - INFO - 已自动导出所有可翻译字段到 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\extracted_translations.csv
+2025-06-12 22:42:51,921 - INFO - 翻译提取完成
