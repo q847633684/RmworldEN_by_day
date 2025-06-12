@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: humpshroom shroom -->
+  <PlantHumpShroom.label>humpshroom shroom</PlantHumpShroom.label>
+  <!-- EN: Thick shroom with tough flesh, thick juice and smooth soft skin. Exhibits aphrodisiac effects when consumed, refills psyfocus. -->
+  <PlantHumpShroom.description>Thick shroom with tough flesh, thick juice and smooth soft skin. Exhibits aphrodisiac effects when consumed, refills psyfocus.</PlantHumpShroom.description>
+  <!-- EN: Hump shroom -->
+  <HumpShroom.label>Hump shroom</HumpShroom.label>
+  <!-- EN: A shroom with tough flesh, thick juice and smooth soft skin. Exhibits aphrodisiac effects when consumed, refills psyfocus. -->
+  <HumpShroom.description>A shroom with tough flesh, thick juice and smooth soft skin. Exhibits aphrodisiac effects when consumed, refills psyfocus.</HumpShroom.description>
+  <!-- EN: induced libido -->
+  <HumpShroomEffect.label>induced libido</HumpShroomEffect.label>
+  <!-- EN: Hump shroom aphrodisiac effects. -->
+  <HumpShroomEffect.description>Hump shroom aphrodisiac effects.</HumpShroomEffect.description>
+  <!-- EN: Humpshroom aftertaste -->
+  <HumpShroomEffect.stages.0.label>Humpshroom aftertaste</HumpShroomEffect.stages.0.label>
+  <!-- EN: Tastes funny. -->
+  <HumpShroomEffect.stages.0.description>Tastes funny.</HumpShroomEffect.stages.0.description>
+  <!-- EN: humpshroom -->
+  <HumpShroom.label>humpshroom</HumpShroom.label>
+  <!-- EN: humpshroom -->
+  <Chemical_HumpShroom.label>humpshroom</Chemical_HumpShroom.label>
+  <!-- EN: Person is now hooked on shrooms. Without them, their bedroom performance may fall. -->
+  <Chemical_HumpShroom.description>Person is now hooked on shrooms. Without them, their bedroom performance may fall.</Chemical_HumpShroom.description>
+  <!-- EN: humpshroom tolerance -->
+  <HumpShroomTolerance.label>humpshroom tolerance</HumpShroomTolerance.label>
+  <!-- EN: Hump shroom effects tolerance. -->
+  <HumpShroomTolerance.description>Hump shroom effects tolerance.</HumpShroomTolerance.description>
+  <!-- EN: humpshroom addiction -->
+  <HumpShroomAddiction.label>humpshroom addiction</HumpShroomAddiction.label>
+  <!-- EN: Hump shroom effects addiction. -->
+  <HumpShroomAddiction.description>Hump shroom effects addiction.</HumpShroomAddiction.description>
+  <!-- EN: withdrawal -->
+  <HumpShroomAddiction.stages.1.label>withdrawal</HumpShroomAddiction.stages.1.label>
+  <!-- EN: humpshroom withdrawal -->
+  <HumpShroomWithdrawal.stages.1.label>humpshroom withdrawal</HumpShroomWithdrawal.stages.1.label>
+  <!-- EN: I just feel nothing down there. -->
+  <HumpShroomWithdrawal.stages.1.description>I just feel nothing down there.</HumpShroomWithdrawal.stages.1.description>
+</LanguageData>

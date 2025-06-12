@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: generic penis -->
+  <GenericPenis.label>generic penis</GenericPenis.label>
+  <!-- EN: a penis -->
+  <GenericPenis.labelNoun>a penis</GenericPenis.labelNoun>
+  <!-- EN: A penis. Generic placeholder part for unsuported race. -->
+  <GenericPenis.description>A penis. Generic placeholder part for unsuported race.</GenericPenis.description>
+  <!-- EN: generic vagina -->
+  <GenericVagina.label>generic vagina</GenericVagina.label>
+  <!-- EN: a vagina -->
+  <GenericVagina.labelNoun>a vagina</GenericVagina.labelNoun>
+  <!-- EN: A vagina. Generic placeholder part for unsuported race. -->
+  <GenericVagina.description>A vagina. Generic placeholder part for unsuported race.</GenericVagina.description>
+  <!-- EN: generic anus -->
+  <GenericAnus.label>generic anus</GenericAnus.label>
+  <!-- EN: an anus -->
+  <GenericAnus.labelNoun>an anus</GenericAnus.labelNoun>
+  <!-- EN: An anus. Generic placeholder part for unsuported race. -->
+  <GenericAnus.description>An anus. Generic placeholder part for unsuported race.</GenericAnus.description>
+  <!-- EN: generic breasts -->
+  <GenericBreasts.label>generic breasts</GenericBreasts.label>
+  <!-- EN: breasts -->
+  <GenericBreasts.labelNoun>breasts</GenericBreasts.labelNoun>
+  <!-- EN: A pair of breasts. Generic placeholder part for unsuported race. -->
+  <GenericBreasts.description>A pair of breasts. Generic placeholder part for unsuported race.</GenericBreasts.description>
+</LanguageData>

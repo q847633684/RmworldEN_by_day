@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: ovipositor (Female) -->
+  <OvipositorF.label>ovipositor (Female)</OvipositorF.label>
+  <!-- EN: an ovipositor -->
+  <OvipositorF.labelNoun>an ovipositor</OvipositorF.labelNoun>
+  <!-- EN: An ovipositor. Lays eggs inside host. -->
+  <OvipositorF.description>An ovipositor. Lays eggs inside host.</OvipositorF.description>
+  <!-- EN: ovipositor (Male) -->
+  <OvipositorM.label>ovipositor (Male)</OvipositorM.label>
+  <!-- EN: an ovipositor -->
+  <OvipositorM.labelNoun>an ovipositor</OvipositorM.labelNoun>
+  <!-- EN: An ovipositor. Fertilizes eggs inside host. -->
+  <OvipositorM.description>An ovipositor. Fertilizes eggs inside host.</OvipositorM.description>
+  <!-- EN: insect anus -->
+  <InsectAnus.label>insect anus</InsectAnus.label>
+  <!-- EN: an insect anus -->
+  <InsectAnus.labelNoun>an insect anus</InsectAnus.labelNoun>
+  <!-- EN: An insect anus. -->
+  <InsectAnus.description>An insect anus.</InsectAnus.description>
+</LanguageData>

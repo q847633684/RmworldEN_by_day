@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: penis -->
+  <Penis.label>penis</Penis.label>
+  <!-- EN: a penis -->
+  <Penis.labelNoun>a penis</Penis.labelNoun>
+  <!-- EN: A penis. -->
+  <Penis.description>A penis.</Penis.description>
+  <!-- EN: vagina -->
+  <Vagina.label>vagina</Vagina.label>
+  <!-- EN: a vagina -->
+  <Vagina.labelNoun>a vagina</Vagina.labelNoun>
+  <!-- EN: A vagina. -->
+  <Vagina.description>A vagina.</Vagina.description>
+  <!-- EN: anus -->
+  <Anus.label>anus</Anus.label>
+  <!-- EN: an anus -->
+  <Anus.labelNoun>an anus</Anus.labelNoun>
+  <!-- EN: A anus. -->
+  <Anus.description>A anus.</Anus.description>
+  <!-- EN: breasts -->
+  <Breasts.label>breasts</Breasts.label>
+  <!-- EN: a pair of breasts -->
+  <Breasts.labelNoun>a pair of breasts</Breasts.labelNoun>
+  <!-- EN: A pair of breasts. -->
+  <Breasts.description>A pair of breasts.</Breasts.description>
+  <!-- EN: featureless chest -->
+  <FeaturelessChest.label>featureless chest</FeaturelessChest.label>
+  <!-- EN: a featureless chest -->
+  <FeaturelessChest.labelNoun>a featureless chest</FeaturelessChest.labelNoun>
+  <!-- EN: a flat chest without any nipples where there should be. -->
+  <FeaturelessChest.description>a flat chest without any nipples where there should be.</FeaturelessChest.description>
+</LanguageData>

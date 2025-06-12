@@ -1,0 +1,1563 @@
+key,text,tag
+ApparelLayerDef/AnalInsertableBondage.label,insertable,label
+ApparelLayerDef/VaginalInsertableBondage.label,insertable,label
+ApparelLayerDef/BeltsOnSkinBondage.label,Over skin,label
+ApparelLayerDef/GagOuterBondage.label,headgear,label
+ApparelLayerDef/ArmsOuterBondage.label,outer,label
+ApparelLayerDef/LegsOuterBondage.label,outer,label
+BackstoryDef/rjw_childC.baseDesc,[PAWN_nameDef] was born in civil settlement.,baseDesc
+BackstoryDef/rjw_childC.title,Child,title
+BackstoryDef/rjw_childC.titleShort,Child,titleShort
+BackstoryDef/rjw_childT.baseDesc,[PAWN_nameDef] was born in a tribe.,baseDesc
+BackstoryDef/rjw_childT.title,Child,title
+BackstoryDef/rjw_childT.titleShort,Child,titleShort
+BackstoryDef/rjw_vatgrown_sex_slave.baseDesc,"[PAWN_nameDef] was made to be a sex toy, rather than a human. During [PAWN_possessive] growing period, [PAWN_pronoun] was taught plenty of social and sex related skills to satisfy any demands of its owners.",baseDesc
+BackstoryDef/rjw_vatgrown_sex_slave.title,Vat-Grown Sex Slave,title
+BackstoryDef/rjw_vatgrown_sex_slave.titleShort,Sex Slave,titleShort
+BackstoryDef/rjw_feisty.baseDesc,"[PAWN_nameDef] is a conqueror by nature and will punch you in a face if you try to say ""No"" to [PAWN_possessive] advances.",baseDesc
+BackstoryDef/rjw_feisty.title,Feisty Nymph,title
+BackstoryDef/rjw_feisty.titleShort,Nymph,titleShort
+BackstoryDef/rjw_curious.baseDesc,"[PAWN_nameDef] loves crafting various things, especially things that provide new experiences.",baseDesc
+BackstoryDef/rjw_curious.title,Curious Nymph,title
+BackstoryDef/rjw_curious.titleShort,Nymph,titleShort
+BackstoryDef/rjw_tender.baseDesc,"[PAWN_nameDef] has a pair of charming eyes, and [PAWN_possessive] voice is soft and sweet. Due to [PAWN_possessive] previous nurse job, [PAWN_pronoun] tends people quite well.",baseDesc
+BackstoryDef/rjw_tender.title,Tender Nymph,title
+BackstoryDef/rjw_tender.titleShort,Nymph,titleShort
+BackstoryDef/rjw_chatty.baseDesc,"No one can be more loquacious than [PAWN_nameDef]. [PAWN_pronoun] has a flexible tongue, a sharp mind, and hot lips.",baseDesc
+BackstoryDef/rjw_chatty.title,Chatty Nymph,title
+BackstoryDef/rjw_chatty.titleShort,Nymph,titleShort
+BackstoryDef/rjw_broken.baseDesc,"[PAWN_nameDef] suffered some terrible things, [PAWN_pronoun] looks rather emaciated.",baseDesc
+BackstoryDef/rjw_broken.title,Broken Nymph,title
+BackstoryDef/rjw_broken.titleShort,Nymph,titleShort
+BackstoryDef/rjw_homekeeper.baseDesc,[PAWN_nameDef] was trained to be a housekeeper. Would you like dinner? A bath? Or perhaps...[PAWN_possessive]?.,baseDesc
+BackstoryDef/rjw_homekeeper.title,Homekeeper Nymph,title
+BackstoryDef/rjw_homekeeper.titleShort,Nymph,titleShort
+BodyPartGroupDef/ChestBPG.label,chest,label
+BodyPartGroupDef/GenitalsBPG.label,genitals,label
+BodyPartGroupDef/AnusBPG.label,anus,label
+BodyPartDef/Genitals.label,genitals,label
+BodyPartDef/Chest.label,chest,label
+BodyPartDef/Anus.label,anus,label
+BodyPartDef/MechGenitals.label,mechanoid implanter,label
+BodyPartTagDef/RJW_Fertility.label,fertility_source,label
+BodyPartTagDef/RJW_Fertility.description,Necessary for reproduction,description
+rjw.PartSizeConfigDef/DefaultPenisSizes.label,standard penis size config,label
+rjw.PartSizeConfigDef/DefaultVaginaSizes.label,standard vagina size config,label
+rjw.PartSizeConfigDef/DefaultBreastSizes.label,standard breast size config,label
+rjw.PartSizeConfigDef/DefaultAnusSizes.label,standard anus size config,label
+ThingDef/Aphrodisiac.label,aphrodisiac drug,label
+ThingDef/Aphrodisiac.description,A smokable drug made from humpshroom.,description
+ThingDef/RJW_Contraceptive.label,contraception pill,label
+ThingDef/RJW_Contraceptive.description,Deliver severe hit to fertility for one quadrum.,description
+HediffDef/RJW_Contraceptive.label,contraceptive,label
+HediffDef/RJW_Contraceptive.description,Contraception pills deliver severe hit to fertility for one quadrum.,description
+HediffDef/RJW_Contraceptive.stages.0.label,Contracepted,label
+ThingDef/RJW_FertPill.label,hyperfertility pill,label
+ThingDef/RJW_FertPill.description,Enhances fertility for 48 hours. Also works as a mild aphrodisiac.,description
+HediffDef/RJW_FertPill.label,fertpill,label
+HediffDef/RJW_FertPill.description,Enhanced fertility. A mild aphrodisiac.,description
+HediffDef/RJW_FertPill.stages.0.label,Hyperfertility,label
+ThingDef/PlantHumpShroom.label,humpshroom shroom,label
+ThingDef/PlantHumpShroom.description,"Thick shroom with tough flesh, thick juice and smooth soft skin. Exhibits aphrodisiac effects when consumed, refills psyfocus.",description
+ThingDef/HumpShroom.label,Hump shroom,label
+ThingDef/HumpShroom.description,"A shroom with tough flesh, thick juice and smooth soft skin. Exhibits aphrodisiac effects when consumed, refills psyfocus.",description
+HediffDef/HumpShroomEffect.label,induced libido,label
+HediffDef/HumpShroomEffect.description,Hump shroom aphrodisiac effects.,description
+ThoughtDef/HumpShroomEffect.stages.0.label,Humpshroom aftertaste,label
+ThoughtDef/HumpShroomEffect.stages.0.description,Tastes funny.,description
+ChemicalDef/HumpShroom.label,humpshroom,label
+NeedDef/Chemical_HumpShroom.label,humpshroom,label
+NeedDef/Chemical_HumpShroom.description,"Person is now hooked on shrooms. Without them, their bedroom performance may fall.",description
+HediffDef/HumpShroomTolerance.label,humpshroom tolerance,label
+HediffDef/HumpShroomTolerance.description,Hump shroom effects tolerance.,description
+HediffDef/HumpShroomAddiction.label,humpshroom addiction,label
+HediffDef/HumpShroomAddiction.description,Hump shroom effects addiction.,description
+HediffDef/HumpShroomAddiction.stages.1.label,withdrawal,label
+ThoughtDef/HumpShroomWithdrawal.stages.1.label,humpshroom withdrawal,label
+ThoughtDef/HumpShroomWithdrawal.stages.1.description,I just feel nothing down there.,description
+HediffDef/Chains.label,chains,label
+HediffDef/Chains.labelNoun,chains,labelNoun
+HediffDef/Chains.description,A series of chains that restrict its wearer.,description
+HediffDef/BoundHands.label,bound hands,label
+HediffDef/BoundHands.labelNoun,bound hands,labelNoun
+HediffDef/BoundHands.description,Bound hands.,description
+HediffDef/BoundLegs.label,bound legs,label
+HediffDef/BoundLegs.labelNoun,bound legs,labelNoun
+HediffDef/BoundLegs.description,Bound legs.,description
+HediffDef/RJW_Restraints.label,Restraints,label
+HediffDef/RJW_Restraints.labelNoun,restraints,labelNoun
+HediffDef/RJW_Restraints.description,A set of restraints.,description
+HediffDef/RJW_Cocoon.label,Cocoon,label
+HediffDef/RJW_Cocoon.labelNoun,A cocoon,labelNoun
+HediffDef/RJW_Cocoon.description,A cocoon that tends to its host until ready to procreate.,description
+rjw.HediffDef_InsectEgg/RJW_UnknownEgg.label,generic insect egg,label
+rjw.HediffDef_InsectEgg/RJW_InsectHiveEgg.label,insectoid egg,label
+rjw.HediffDef_MechImplants/RJW_MechanoidImplant.label,implanted mechanoid,label
+HediffDef/FeelingBroken.label,Feeling broken,label
+HediffDef/FeelingBroken.description,Mind broken. No longer capable of emotion.,description
+HediffDef/FeelingBroken.stages.0.label,early-stage,label
+HediffDef/FeelingBroken.stages.1.label,in a trance,label
+HediffDef/FeelingBroken.stages.2.label,broken,label
+HediffDef/FeelingBroken.stages.3.label,Extremely broken,label
+HediffDef/RJW_IUD.label,IUD,label
+HediffDef/RJW_IUD.description,A small silver device inserted into the womb that greatly reduces the chance of pregnancy.,description
+HediffDef/IncreasedFertility.label,Fertile,label
+HediffDef/IncreasedFertility.description,"Increased fertility, for baby making.",description
+HediffDef/DecreasedFertility.label,Infertile,label
+HediffDef/DecreasedFertility.description,"Low fertility, not for baby making.",description
+HediffDef/ImpregnationBlocker.label,Archotech pregnancy blocker,label
+HediffDef/ImpregnationBlocker.description,A complex device that prevents fertilization and pregnancy.,description
+HediffDef/FertilityEnhancer.label,Archotech fertility enhancer,label
+HediffDef/FertilityEnhancer.description,A complex device that increases the likelihood of pregnancy.,description
+HediffDef/RJW_Orgasm.label,Orgasm,label
+HediffDef/RJW_Orgasm.description,"""Ohh, yeahh, hah, hnnh, OH!""",description
+HediffDef/RJW_Orgasm.stages.0.label,Slightly,label
+HediffDef/RJW_Orgasm.stages.1.label,Heavy,label
+HediffDef/RJW_Orgasm.stages.2.label,Extremely,label
+HediffDef/TransportCums.description,Cumming inside.,description
+HediffDef/TransportEggs.description,Laying egg inside.,description
+HediffDef/PegArm.label,peg arm,label
+HediffDef/PegArm.labelNoun,a peg arm,labelNoun
+HediffDef/PegArm.description,A peg arm.,description
+HediffDef/Humanlike_Paraphilia.label,humanlike paraphilia,label
+HediffDef/Humanlike_Paraphilia.labelNoun,humanlike paraphilia,labelNoun
+HediffDef/Humanlike_Paraphilia.description,"Animal experiencing sexual attraction to Humanlikes. At some point, an animal might even refuse to mate with other animals",description
+HediffDef/Humanlike_Paraphilia.stages.0.label,Initial curiosity,label
+HediffDef/Humanlike_Paraphilia.stages.1.label,Attracted,label
+HediffDef/Humanlike_Paraphilia.stages.2.label,Focused,label
+HediffDef/Humanlike_Paraphilia.stages.3.label,Fixated,label
+HediffDef/Humanlike_Paraphilia.stages.4.label,Obsessed,label
+HediffDef/RJW_BabyState.label,child is growing,label
+HediffDef/RJW_BabyState.description,A growing child.,description
+HediffDef/RJW_BabyState.stages.0.label,baby,label
+HediffDef/RJW_BabyState.stages.1.label,toddler,label
+HediffDef/RJW_BabyState.stages.2.label,child,label
+HediffDef/RJW_NoManipulationFlag.label,Too young to work,label
+HediffDef/RJW_NoManipulationFlag.description,Too young to work.,description
+HediffDef/Sterilized.description,Unable to reproduce.,description
+HediffDef/Sterilized.label,sterilized,label
+HediffDef/Hediff_Submitting.label,Prostrating self,label
+HediffDef/Hediff_Submitting.description,Submitting.,description
+HediffDef/Hediff_RapeEnemyCD.label,rape enemy cooldown,label
+HediffDef/Hediff_RapeEnemyCD.description,"""Who's next?""",description
+HediffDef/hediff_male2trap.label,male2trap,label
+HediffDef/hediff_male2female.label,male2female,label
+HediffDef/hediff_male2futa.label,male2futa,label
+HediffDef/hediff_female2trap.label,female2trap,label
+HediffDef/hediff_female2male.label,female2male,label
+HediffDef/hediff_female2futa.label,female2futa,label
+HediffDef/hediff_futa2trap.label,futa2trap,label
+HediffDef/hediff_futa2male.label,futa2male,label
+HediffDef/hediff_futa2female.label,futa2female,label
+HediffDef/hediff_trap2futa.label,trap2futa,label
+HediffDef/hediff_trap2male.label,trap2male,label
+HediffDef/hediff_trap2female.label,trap2female,label
+HediffDef/hediff_was_boy.label,was_boy,label
+HediffDef/hediff_was_girl.label,was_girl,label
+HediffDef/hediff_was_futa.label,was_futa,label
+HediffDef/hediff_was_trap.label,was_trap,label
+HistoryEventDef/GoodwillChangedReason_RemovedBodyPart.label,Removed BodyPart,label
+IncidentDef/NymphJoins.label,nymph joins,label
+IncidentDef/NymphVisitor.label,nymph visitor,label
+IncidentDef/NymphVisitorGroupEasy.label,nymph raid(easy),label
+IncidentDef/NymphVisitorGroupHard.label,nymph raid(hard),label
+InteractionDef/AnimalSexChat.label,animal chat,label
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.0,r_logentry(p=20)->[INITIATOR_nameDef] [zooact] [RECIPIENT_nameDef].,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.1,r_logentry->[INITIATOR_nameDef] sat near [RECIPIENT_nameDef] and talked to [INITIATOR_objective]self about [TalkTopicSex].,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.2,r_logentry->[INITIATOR_nameDef] sat near [RECIPIENT_nameDef] and talked to [INITIATOR_objective]self about [TalkTopicAny].,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.3,r_logentry->[INITIATOR_nameDef] approached [RECIPIENT_nameDef] while whispering to [INITIATOR_objective]self about [TalkTopicSex].,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.4,r_logentry->[INITIATOR_nameDef] approached [RECIPIENT_nameDef] while whispering to [INITIATOR_objective]self about [TalkTopicAny].,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.5,r_logentry(p=2)->[INITIATOR_nameDef] came near [RECIPIENT_nameDef] while talking to [INITIATOR_objective]self about [TalkTopicSex].,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.6,r_logentry->[INITIATOR_nameDef] came near [RECIPIENT_nameDef] while talking to [INITIATOR_objective]self about [TalkTopicAny].,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.7,r_logentry->[INITIATOR_nameDef] tried to make [RECIPIENT_nameDef] sit still.,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.8,r_logentry->[INITIATOR_nameDef] attempted to hold [RECIPIENT_nameDef] still.,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.9,r_logentry->[INITIATOR_nameDef] slapped [RECIPIENT_nameDef] in a show of dominance.,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.10,r_logentry->[INITIATOR_nameDef] gently stroked [RECIPIENT_nameDef]'s genitals.,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.11,"r_logentry->[INITIATOR_nameDef] grasped a vulnerable body part of [RECIPIENT_nameDef], demanding obedience.",li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.12,zooact->demanded obedience from,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.13,zooact->made calming noises towards,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.14,"zooact->offered slow, friendly gestures to",li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.15,zooact->made shushing noises at,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.16,zooact->made happy clicking noises at,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.17,zooact->gestured gently and approached,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.18,zooact->slowly approached,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.19,zooact->gently touched,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.20,zooact->gently caressed,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.21,zooact->firmly stroked,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.22,zooact->calmed and encouraged,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.23,zooact->matched breathing with,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.24,zooact->took a low stance while approaching,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.25,zooact->showed no fear or anger to,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.26,zooact->firmly yet softly touched,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.27,zooact->showed a relaxed attitude towards,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.28,zooact->showed [INITIATOR_possessive] genitals to,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.29,zooact->presented [INITIATOR_possessive] genitals to,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.30,zooact->whispered a story about [TalkTopicAny] to,li
+InteractionDef/AnimalSexChat.logRulesInitiator.rulesStrings.31,zooact->whispered a story about [TalkTopicSex] to,li
+InteractionDef/rjw_interaction_template.label,rjw_interaction_template,label
+InteractionDef/rjw_interaction_template.logRulesInitiator.rulesStrings.0,r_logentry->had sex with [RECIPIENT_nameDef].,li
+InteractionDef/rjw_interaction_template.logRulesRecipient.rulesStrings.0,r_logentry->had sex with [INITIATOR_nameDef].,li
+InteractionDef/rjw_interaction_template.modExtensions.0.RMBLabel,template,RMBLabel
+JobDef/GettinBred.reportString,gettin' bred.,reportString
+JobDef/Breed.reportString,breeding,reportString
+JobDef/RJW_Mate.reportString,mating,reportString
+JobDef/Bestiality.reportString,lovin' animal,reportString
+JobDef/BestialityForFemale.reportString,lovin' animal,reportString
+JobDef/RJW_HackMechPregnancy.reportString,hacking implanted mech of TargetA.,reportString
+JobDef/StruggleInBondageGear.reportString,struggling,reportString
+JobDef/UnlockBondageGear.reportString,unlocking,reportString
+JobDef/GiveBondageGear.reportString,equipping,reportString
+JobDef/RJW_Knotted.reportString,Knotted.,reportString
+JobDef/RJW_Masturbate.reportString,masturbatin'.,reportString
+JobDef/ViolateCorpse.reportString,violating corpse,reportString
+JobDef/Quickie.reportString,doing quickie with TargetA.,reportString
+JobDef/GettingQuickie.reportString,lovin'.,reportString
+JobDef/GettinRaped.reportString,gettin' raped.,reportString
+JobDef/RapeComfortPawn.reportString,rapin' CP,reportString
+JobDef/RandomRape.reportString,raping.,reportString
+JobDef/RapeEnemy.reportString,rapin' enemy,reportString
+JobDef/RapeEnemyByInsect.reportString,rapin' enemy,reportString
+JobDef/RapeEnemyByAnimal.reportString,rapin' enemy,reportString
+JobDef/RapeEnemyByMech.reportString,rapin' enemy,reportString
+JobDef/RapeEnemyToParasite.reportString,rapin' enemy,reportString
+JobDef/JoinInBed.reportString,joining TargetA in bed.,reportString
+JobDef/GettinLoved.reportString,lovin'.,reportString
+JobDef/GettinLicked.reportString,gettin' licked.,reportString
+JobDef/GettinSucked.reportString,gettin' sucked.,reportString
+MeditationFocusDef/Sex.label,Sex,label
+rjw.SexualMentalStateDef/RandomRape.label,random rape,label
+StatCategoryDef/RJW_OriginalPartOwner.label,ownership,label
+rjw.MiscTranslationDef/rjw_vatgrown_sex_slave.label,Vat-Grown Sex Slave,label
+rjw.MiscTranslationDef/rjw_vatgrown_sex_slave.description,"[PAWN_nameDef] was made to be a sex toy, rather than a human. During [PAWN_possessive] growing period, [PAWN_pronoun] was taught plenty of social and sex related skills to satisfy any demands of its owners.",description
+rjw.MiscTranslationDef/rjw_feisty.label,Feisty Nymph,label
+rjw.MiscTranslationDef/rjw_feisty.description,"[PAWN_nameDef] is a conqueror by nature and will punch you in a face if you try to say ""No"" to [PAWN_possessive] advances.",description
+rjw.MiscTranslationDef/rjw_curious.label,Curious Nymph,label
+rjw.MiscTranslationDef/rjw_curious.description,"[PAWN_nameDef] loves crafting various things, especially things that provide new experiences.",description
+rjw.MiscTranslationDef/rjw_tender.label,Tender Nymph,label
+rjw.MiscTranslationDef/rjw_tender.description,"[PAWN_nameDef] has a pair of charming eyes, and [PAWN_possessive] voice is soft and sweet. Due to [PAWN_possessive] previous nurse job, [PAWN_pronoun] tends people quite well.",description
+rjw.MiscTranslationDef/rjw_chatty.label,Chatty Nymph,label
+rjw.MiscTranslationDef/rjw_chatty.description,"No one can be more loquacious than [PAWN_nameDef]. [PAWN_pronoun] has a flexible tongue, a sharp mind, and hot lips.",description
+rjw.MiscTranslationDef/rjw_broken.label,Broken Nymph,label
+rjw.MiscTranslationDef/rjw_broken.description,"[PAWN_nameDef] suffered some terrible things, [PAWN_pronoun] looks rather emaciated.",description
+NeedDef/Sex.label,sex,label
+NeedDef/Sex.description,"Represents fulfillment of sexual need, which is gained by doing sexual related activities and declined by time & turn-ons.",description
+PawnCapacityDef/RJW_Fertility.label,fertility,label
+PawnKindDef/Nymph.label,nymph,label
+PawnRelationDef/RJW_Sire.label,father,label
+PawnRelationDef/RJW_Pup.label,son,label
+PawnRelationDef/Child_Beast.label,son,label
+PawnRelationDef/Sibling_Beast.label,brother,label
+PawnRelationDef/HalfSibling_Beast.label,brother,label
+PawnRelationDef/Grandparent_Beast.label,grandfather,label
+PawnRelationDef/Grandchild_Beast.label,grandson,label
+PawnRelationDef/NephewOrNiece_Beast.label,nephew,label
+PawnRelationDef/UncleOrAunt_Beast.label,uncle,label
+PawnRelationDef/Cousin_Beast.label,cousin,label
+PawnRelationDef/GreatGrandparent_Beast.label,great grandfather,label
+PawnRelationDef/GreatGrandchild_Beast.label,great grandson,label
+PawnRelationDef/GranduncleOrGrandaunt_Beast.label,granduncle,label
+PawnRelationDef/GrandnephewOrGrandniece_Beast.label,grandnephew,label
+PawnRelationDef/CousinOnceRemoved_Beast.label,cousin once removed,label
+PawnRelationDef/SecondCousin_Beast.label,second cousin,label
+rjw.SexFluidDef/Honey.label,honey,label
+RecipeDef/RJW_AbortionMech.label,Neutralize mechanoid,label
+RecipeDef/RJW_AbortionMech.description,Safely neutralize mechanoid nanites.,description
+RecipeDef/RJW_HackMech.label,Hack mechanoid,label
+RecipeDef/RJW_HackMech.description,"Hack mechanoid AI, cutting it from global mechanoid AI, results docile(unless provoked) mechanoid.",description
+RecipeDef/claimChild.label,Claim child,label
+RecipeDef/claimChild.description,Makes the child belong to the colony.,description
+RecipeDef/DeterminePaternity.label,check Paternity,label
+RecipeDef/DeterminePaternity.description,Try to figure out who is the father.,description
+RecipeDef/DeterminePregnancy.label,check for pregnancy,label
+RecipeDef/DeterminePregnancy.description,Determines if a colonist is pregnant or not and if there any abnormalities with pregnancy.,description
+RecipeDef/MakeHololock.label,make hololock,label
+RecipeDef/MakeHololock.description,Make a hololock.,description
+RecipeDef/MakePrisonerChains.label,make chains,label
+RecipeDef/MakePrisonerChains.description,Make a restricvive chains.,description
+RecipeDef/MakePegDick.label,carve peg dick,label
+RecipeDef/MakePegDick.description,Carves a dildo from a piece of wood.,description
+RecipeDef/MakeHydraulicPenis.label,craft hydraulic penis,label
+RecipeDef/MakeHydraulicPenis.description,Crafts a hydraulic penis from steel and components.,description
+RecipeDef/MakeBionicPenis.label,craft bionic penis,label
+RecipeDef/MakeBionicPenis.description,"Crafts a bionic penis from hyperweave, plasteel, and components.",description
+RecipeDef/MakeHydraulicVagina.label,craft hydraulic vagina,label
+RecipeDef/MakeHydraulicVagina.description,Crafts a hydraulic vagina from steel and components.,description
+RecipeDef/MakeBionicVagina.label,craft bionic vagina,label
+RecipeDef/MakeBionicVagina.description,"Crafts a bionic vagina from hyperweave, plasteel, and components.",description
+RecipeDef/MakeHydraulicBreasts.label,craft hydraulic breasts,label
+RecipeDef/MakeHydraulicBreasts.description,Crafts a pair of hydraulic breasts from steel and components.,description
+RecipeDef/MakeBionicBreasts.label,craft bionic breasts,label
+RecipeDef/MakeBionicBreasts.description,"Crafts a pair of bionic breasts from hyperweave, plasteel, and components.",description
+RecipeDef/MakeHydraulicAnus.label,craft hydraulic anus,label
+RecipeDef/MakeHydraulicAnus.description,Crafts a hydraulic anus from steel and components.,description
+RecipeDef/MakeBionicAnus.label,craft bionic anus,label
+RecipeDef/MakeBionicAnus.description,"Crafts a bionic anus from hyperweave, plasteel, and components.",description
+RecipeDef/RJW_RemoveRestraints.label,remove restraints,label
+RecipeDef/RJW_RemoveRestraints.description,Removes restraints.,description
+RecipeDef/RJW_RemoveCocoon.label,remove cocoon,label
+RecipeDef/RJW_RemoveCocoon.description,Removes cocoon.,description
+RecipeDef/InstallHydraulicPenis.label,install hydraulic penis,label
+RecipeDef/InstallHydraulicPenis.description,"Installs a hydraulic penis, replaces other bodyparts if present.",description
+RecipeDef/InstallHydraulicVagina.label,install hydraulic vagina,label
+RecipeDef/InstallHydraulicVagina.description,"Installs a hydraulic vagina, replaces other bodyparts if present.",description
+RecipeDef/InstallHydraulicBreasts.label,install hydraulic breasts,label
+RecipeDef/InstallHydraulicBreasts.description,"Installs a pair of hydraulic breasts, replaces other bodyparts if present.",description
+RecipeDef/InstallHydraulicAnus.label,install hydraulic anus,label
+RecipeDef/InstallHydraulicAnus.description,"Installs a hydraulic anus, replaces other bodyparts if present.",description
+RecipeDef/InstallBionicVagina.label,install bionic vagina,label
+RecipeDef/InstallBionicVagina.description,"Installs a bionic vagina, replaces other bodyparts if present.",description
+RecipeDef/InstallBionicPenis.label,install bionic penis,label
+RecipeDef/InstallBionicPenis.description,"Attaches a bionic penis, replaces other bodyparts if present.",description
+RecipeDef/InstallBionicBreasts.label,install bionic breasts,label
+RecipeDef/InstallBionicBreasts.description,"Installs a pair of bionic breasts, replaces other bodyparts if present.",description
+RecipeDef/InstallBionicAnus.label,install bionic anus,label
+RecipeDef/InstallBionicAnus.description,"Installs a bionic anus, replaces other bodyparts if present.",description
+RecipeDef/InstallArchotechPenis.label,install archotech penis,label
+RecipeDef/InstallArchotechPenis.description,"Attaches a archotech penis, replaces other bodyparts if present.",description
+RecipeDef/InstallArchotechVagina.label,install archotech vagina,label
+RecipeDef/InstallArchotechVagina.description,"Installs a archotech vagina, replaces other bodyparts if present.",description
+RecipeDef/InstallArchotechAnus.label,install archotech anus,label
+RecipeDef/InstallArchotechAnus.description,"Installs a archotech anus, replaces other bodyparts if present.",description
+RecipeDef/InstallArchotechBreasts.label,install archotech breasts,label
+RecipeDef/InstallArchotechBreasts.description,"Installs a pair of archotech breasts, replaces other bodyparts if present.",description
+RecipeDef/AddMultiArchotechVagina.label,add archotech vagina,label
+RecipeDef/AddMultiArchotechPenis.label,add archotech penis,label
+RecipeDef/AddMultiArchotechAnus.label,add archotech anus,label
+RecipeDef/AddMultiArchotechBreasts.label,add archotech breasts,label
+RecipeDef/AddMultiHydraulicVagina.label,add hydraulic vagina,label
+RecipeDef/AddMultiHydraulicAnus.label,add hydraulic anus,label
+RecipeDef/AddMultiHydraulicBreasts.label,add hydraulic breasts,label
+RecipeDef/AddMultiBionicVagina.label,add bionic vagina,label
+RecipeDef/AddMultiBionicPenis.label,add bionic penis,label
+RecipeDef/AddMultiBionicAnus.label,add bionic anus,label
+RecipeDef/AddMultiBionicBreasts.label,add bionic breasts,label
+RecipeDef/Sterilization.label,sterilize,label
+RecipeDef/Sterilization.description,Prevents reproduction without removing genitals.,description
+RecipeDef/RJW_InstallIUD.label,install IUD,label
+RecipeDef/RJW_InstallIUD.description,Greatly reduces the chance of pregnancy. Reversible anytime.,description
+RecipeDef/RJW_RemovelIUD.label,remove IUD,label
+RecipeDef/RJW_RemovelIUD.description,"Remove an installed IUD, restoring fertility.",description
+RecipeDef/InstallPegArm.label,install peg arm,label
+RecipeDef/InstallPegArm.description,Install a peg arm.,description
+RecipeDef/AttachPenis.label,attach penis,label
+RecipeDef/InstallVagina.label,install vagina,label
+RecipeDef/InstallCatVagina.label,install feline vagina,label
+RecipeDef/InstallDogVagina.label,install canine vagina,label
+RecipeDef/InstallHorseVagina.label,install equine vagina,label
+RecipeDef/InstallDragonVagina.label,install dragon vagina,label
+RecipeDef/InstallNarrowVagina.label,install narrow vagina,label
+RecipeDef/InstallCloacalVagina.label,install cloacal vagina,label
+RecipeDef/InstallRodentVagina.label,install rodent vagina,label
+RecipeDef/InstallOvipositorF.label,install female Ovipositor,label
+RecipeDef/InstallOvipositorF.description,Installs a female Ovipositor.,description
+RecipeDef/AttachHorsePenis.label,attach equine penis,label
+RecipeDef/AttachRaccoonPenis.label,attach procyonine penis,label
+RecipeDef/AttachCatPenis.label,attach feline penis,label
+RecipeDef/AttachDogPenis.label,attach canine penis,label
+RecipeDef/AttachDragonPenis.label,attach dragon penis,label
+RecipeDef/AttachHemiPenis.label,attach hemipenis,label
+RecipeDef/AttachHemiPenis.description,Attaches a dual-shafted hemipenis.,description
+RecipeDef/AttachCrocodilianPenis.label,attach crocodilian penis,label
+RecipeDef/AttachNeedlePenis.label,attach needle penis,label
+RecipeDef/AttachCloacalPenis.label,attach cloacal penis,label
+RecipeDef/AttachRodentPenis.label,attach rodent penis,label
+RecipeDef/AttachOvipositorM.label,attach male Ovipositor,label
+RecipeDef/AttachOvipositorM.description,"Attaches a male Ovipositor, replaces other bodyparts if present.",description
+RecipeDef/AttachBreasts.label,attach breasts,label
+RecipeDef/AttachFeaturelesschest.label,attach featureless chest,label
+RecipeDef/AttachFeaturelesschest.description,"Attaches a smooth, non-mammalian chest, replaces other bodyparts if present.",description
+RecipeDef/InstallAnus.label,install average anus,label
+RecipeDef/InstallCloacalAnus.label,install cloacal anus,label
+RecipeDef/InstallInsectAnus.label,install Insect anus,label
+RecipeDef/InstallInsectAnus.description,"Installs a Insect anus, replaces other bodyparts if present.",description
+RecipeDef/AddMultiVagina.label,add vagina,label
+RecipeDef/AddMultiHorseVagina.label,add equine vagina,label
+RecipeDef/AddMultiCatVagina.label,add feline vagina,label
+RecipeDef/AddMultiDogVagina.label,add canine vagina,label
+RecipeDef/AddMultiDragonVagina.label,add dragon vagina,label
+RecipeDef/AddMultiOvipositorF.label,add female ovipositor,label
+RecipeDef/AddMultiOvipositorF.description,Adds additional female ovipositor.,description
+RecipeDef/AddMultiPenis.label,add penis,label
+RecipeDef/AddMultiHorsePenis.label,add equine penis,label
+RecipeDef/AddMultiCatPenis.label,add feline penis,label
+RecipeDef/AddMultiDogPenis.label,add canine penis,label
+RecipeDef/AddMultiDragonPenis.label,add dragon penis,label
+RecipeDef/AddMultiRaccoonPenis.label,add procyonine penis,label
+RecipeDef/AddMultiHemiPenis.label,add hemipenis,label
+RecipeDef/AddMultiCrocodilianPenis.label,add crocodilian penis,label
+RecipeDef/AddMultiOvipositorM.label,add male ovipositor,label
+RecipeDef/AddMultiOvipositorM.description,Adds additional male ovipositor.,description
+RecipeDef/AddMultiBreasts.label,add breasts,label
+RecipeDef/AddMultiAnus.label,add anus,label
+RecipeDef/AddMultiInsectAnus.label,add insect anus,label
+RecipeDef/RemoveGenitals.label,remove genitals,label
+RecipeDef/RemoveGenitals.description,Removes sex organs.,description
+RecipeDef/RemoveBreasts.label,remove breasts,label
+RecipeDef/RemoveBreasts.description,Removes breasts.,description
+RecipeDef/RemoveAnus.label,remove anus,label
+RecipeDef/RemoveAnus.description,Removes anus.,description
+RecordDef/CountOfFappin.label,masturbating done,label
+RecordDef/CountOfFappin.description,The number of times I masturbated.,description
+RecordDef/CountOfSex.label,total sex had,label
+RecordDef/CountOfSex.description,The number of times I had sex.,description
+RecordDef/CountOfSexWithHumanlikes.label,sex with humanlikes,label
+RecordDef/CountOfSexWithHumanlikes.description,The number of times I had sex with humanlikes.,description
+RecordDef/CountOfSexWithAnimals.label,sex with animals,label
+RecordDef/CountOfSexWithAnimals.description,The number of times I had sex with animals.,description
+RecordDef/CountOfSexWithInsects.label,sex with insects,label
+RecordDef/CountOfSexWithInsects.description,The number of times I had sex with insects.,description
+RecordDef/CountOfSexWithOthers.label,sex with other,label
+RecordDef/CountOfSexWithOthers.description,The number of times I had sex with weird stuff.,description
+RecordDef/CountOfRapedHumanlikes.label,raped humanlikes,label
+RecordDef/CountOfRapedHumanlikes.description,The number of times I raped humanlikes.,description
+RecordDef/CountOfRapedAnimals.label,raped animals,label
+RecordDef/CountOfRapedAnimals.description,The number of times I raped animals.,description
+RecordDef/CountOfRapedInsects.label,raped insects,label
+RecordDef/CountOfRapedInsects.description,The number of times I raped insects.,description
+RecordDef/CountOfRapedOthers.label,raped other,label
+RecordDef/CountOfRapedOthers.description,The number of times I raped weird stuff.,description
+RecordDef/CountOfSexWithCorpse.label,raped corpses,label
+RecordDef/CountOfSexWithCorpse.description,The number of times I raped corpses.,description
+RecordDef/CountOfBeenRapedByHumanlikes.label,raped by humanlikes,label
+RecordDef/CountOfBeenRapedByHumanlikes.description,The number of times I was raped by humanlikes.,description
+RecordDef/CountOfBeenRapedByAnimals.label,raped by animals,label
+RecordDef/CountOfBeenRapedByAnimals.description,The number of times I was raped by animals.,description
+RecordDef/CountOfBeenRapedByInsects.label,raped by insects,label
+RecordDef/CountOfBeenRapedByInsects.description,The number of times I was raped by insects.,description
+RecordDef/CountOfBeenRapedByOthers.label,raped by other,label
+RecordDef/CountOfBeenRapedByOthers.description,The number of times I was raped by weird stuff.,description
+RecordDef/GetRapedAsComfortPrisoner.label,raped as a comfort,label
+RecordDef/GetRapedAsComfortPrisoner.description,The number of times I was used to comfort someone.,description
+RecordDef/CountOfBirthHuman.label,birthed humanlikes,label
+RecordDef/CountOfBirthHuman.description,How many humanlikes I have birthed.,description
+RecordDef/CountOfBirthAnimal.label,birthed animals,label
+RecordDef/CountOfBirthAnimal.description,How many animals I have birthed.,description
+RecordDef/CountOfBirthEgg.label,birthed eggs,label
+RecordDef/CountOfBirthEgg.description,How many eggs I have birthed.,description
+RecordDef/CountOfCondomsUsed.label,condoms used,label
+RecordDef/CountOfCondomsUsed.description,The number of condoms I've used.,description
+MainButtonDef/RJW_MainButton.label,RJW,label
+MainButtonDef/RJW_MainButton.description,Rjw containment area.,description
+PawnTableDef/RJW_PawnTable_Humanlikes.modExtensions.0.label,Humanlikes,label
+PawnTableDef/RJW_PawnTable_Animals.modExtensions.0.label,Animals,label
+PawnTableDef/RJW_PawnTable_Colonists.modExtensions.0.label,Colonists,label
+PawnTableDef/RJW_PawnTable_Property.modExtensions.0.label,Property,label
+RulePackDef/EngravedName.rulePack.rulesStrings.0,name->[animalnameunisex],li
+RulePackDef/TalkTopicsSex.rulePack.rulesStrings.0,TalkTopicAny->[TalkTopicSex],li
+RulePackDef/TalkTopicsSex.rulePack.rulesStrings.1,TalkTopicSex(p=0.08)->[talktopicsexfile],li
+RulePackDef/TalkTopicsSex.rulePack.rulesStrings.2,TalkTopicHeavy(p=0.08)->the link between [talktopicsexfile] and [talktopicsexfile],li
+RulePackDef/TalkTopicsSex.rulePack.rulesStrings.3,TalkTopicHeavy(p=0.08)->the connection between [talktopicsexfile] and [talktopicsexfile],li
+RulePackDef/TalkTopicsSex.rulePack.rulesStrings.4,TalkTopicHeavy(p=0.08)->the relationship between [talktopicsexfile] and [talktopicsexfile],li
+RulePackDef/TalkTopicsSex.rulePack.rulesStrings.5,TalkTopicHeavy(p=0.16)->the link between [talktopicheavyfile] and [talktopicsexfile],li
+RulePackDef/TalkTopicsSex.rulePack.rulesStrings.6,TalkTopicHeavy(p=0.16)->the connection between [talktopicheavyfile] and [talktopicsexfile],li
+RulePackDef/TalkTopicsSex.rulePack.rulesStrings.7,TalkTopicHeavy(p=0.16)->the relationship between [talktopicheavyfile] and [talktopicsexfile],li
+rjw.SexFluidDef/Cum.label,cum,label
+rjw.SexFluidDef/GirlCum.label,girlcum,label
+rjw.SexFluidDef/InsectSpunk.label,insect spunk,label
+rjw.SexFluidDef/Milk.label,milk,label
+rjw.SexFluidDef/Resin.label,resin,label
+StatDef/SexSatisfaction.label,sex satisfaction,label
+StatDef/SexSatisfaction.description,Determines how much satisfaction a pawn receives from sex.,description
+StatDef/Vulnerability.label,vulnerability,label
+StatDef/Vulnerability.description,Measures how likely a pawn is to be taken advantage of sexually,description
+StatDef/SexFrequency.label,sex drive,label
+StatDef/SexFrequency.description,Measures how sexually active the pawn is.,description
+ThingCategoryDef/Bondage.label,Bondage gear,label
+ThingDef/Condom.label,Condom,label
+ThingDef/Condom.description,Prevents a single case of pregnancy. Hint: Auto used from pawn inventory or stack next to bed.,description
+ThingDef/UsedCondom.label,Used Condom,label
+ThingDef/UsedCondom.description,A condom filled with sperm. MMMM So good and tasty!,description
+RecipeDef/MakeCondom.label,make condom x10,label
+RecipeDef/MakeCondom.description,Craft 10 condoms.,description
+ThoughtDef/SexWithCondom.stages.0.label,Had to wear condom,label
+ThoughtDef/SexWithCondom.stages.0.description,Had to wear condom,description
+ThingDef/FilthInsectCum.label,bugspunk,label
+ThingDef/ResinCum.label,resin,label
+ThingDef/Hololock.label,Hololock,label
+ThingDef/Hololock.description,"A high-tech locking mechanism. Features include:
+- Extremely hardy, plasteel-reinforced build
+- Key and lock paired using a cryptographic UID holographically embedded in a jade substrate, ensuring counterfeit keys are impossible to produce
+- Self-destruct failsafe triggers when the lock is tampered with, ensuring that the protected item is destroyed rather than captured by the enemy
+
+Originally designed for military use, the hololock has since become popular in the BDSM community, where it is customary to engrave a key and lock pair with matching names so they are easier to identify.",description
+ThingDef/Holokey.label,Holokey,label
+ThingDef/Holokey.description,A high-tech key. Releases the lock on an item with a matching cryptographic stamp.,description
+rjw.bondage_gear_def/PrisonerChains.label,chains,label
+rjw.bondage_gear_def/PrisonerChains.description,"Chains with cuffs. Useful for restricting someone's movement and manipulation freedom. Prevents* hand-to-hand fighting attempts.
+*gag is advised for complete neutralization",description
+ThingDef/RJW_EggUnfertilized.label,egg (unfert.),label
+ThingDef/RJW_EggUnfertilized.description,An unfertilized egg.,description
+ThingDef/RJW_EggFertilized.label,egg (fert.),label
+ThingDef/RJW_EggFertilized.description,A fertilized egg.,description
+ThingDef/RJW_EggInsectUnfertilized.label,egg (unfert.),label
+ThingDef/RJW_EggInsectUnfertilized.description,An unfertilized insect egg.,description
+ThingDef/RJW_EggInsectFertilized.label,egg (fert.),label
+ThingDef/RJW_EggInsectFertilized.description,A fertilized insect egg.,description
+ThoughtDef/GotBredByAnimal.stages.0.label,raped by animal,label
+ThoughtDef/GotBredByAnimal.stages.0.description,Oh God... I was raped by an animal. The sheer humiliation of it...How can I look anybody in the eye now? I think I can still smell it on me...,description
+ThoughtDef/GotAnalBredByAnimal.stages.0.label,bred anally by animal,label
+ThoughtDef/GotAnalBredByAnimal.stages.0.description,"I was raped...anally... by an animal. I can't get any lower than this; I just want to crawl in a hole and die. Please, nobody look at me...",description
+ThoughtDef/MasochistGotBredByAnimal.stages.0.label,raped by animal,label
+ThoughtDef/MasochistGotBredByAnimal.stages.0.description,"An animal raped me. It makes me feel so dirty and deviant, like a filthy sow being bred...not bad.",description
+ThoughtDef/MasochistGotAnalBredByAnimal.stages.0.label,bred anally by animal,label
+ThoughtDef/MasochistGotAnalBredByAnimal.stages.0.description,I was raped...anally... by an animal. The way it utterly humiliated me by rutting on me mindlessly like I was just some pig who deserved nothing better...I could get used to this.,description
+ThoughtDef/ZoophileGotBredByAnimal.stages.0.label,bred by animal,label
+ThoughtDef/ZoophileGotBredByAnimal.stages.0.description,"An animal made love to me, just like I was one too...It's so much more better than with a human..",description
+ThoughtDef/ZoophileGotAnalBredByAnimal.stages.0.label,bred anally by animal,label
+ThoughtDef/ZoophileGotAnalBredByAnimal.stages.0.description,That animal just took me anally and made me its bitch...The way it mounted me...it just makes me want to touch myself all over again just thinking about it.,description
+ThoughtDef/AllowedAnimalToBreed.stages.0.label,bred by animal,label
+ThoughtDef/AllowedAnimalToBreed.stages.0.description,I was so horny that I let an animal mount me. I feel ashamed for enjoying it...,description
+ThoughtDef/GotLickedByAnimal.stages.0.label,raped by animal,label
+ThoughtDef/GotLickedByAnimal.stages.0.description,An animal forced their tongue inside me.,description
+ThoughtDef/MasochistGotLickedByAnimal.stages.0.label,raped by animal,label
+ThoughtDef/MasochistGotLickedByAnimal.stages.0.description,An animal forced their tongue inside me. I kinda liked it...,description
+ThoughtDef/ZoophileGotLickedByAnimal.stages.0.label,ravished by animal,label
+ThoughtDef/ZoophileGotLickedByAnimal.stages.0.description,An animal ravished me.,description
+ThoughtDef/AllowedAnimalToLick.stages.0.label,licked by animal,label
+ThoughtDef/AllowedAnimalToLick.stages.0.description,"I let an animal lick me. I feel ashamed, but kinda liked it...",description
+ThoughtDef/GotGropedByAnimal.stages.0.label,molested by animal,label
+ThoughtDef/GotGropedByAnimal.stages.0.description,An animal molested me. I feel dirty.,description
+ThoughtDef/MasochistGotGropedByAnimal.stages.0.label,molested by animal (Masochist),label
+ThoughtDef/MasochistGotGropedByAnimal.stages.0.description,An animal molested me. I kinda liked it...,description
+ThoughtDef/ZoophileGotGropedByAnimal.stages.0.label,molested by animal (Zoophile),label
+ThoughtDef/ZoophileGotGropedByAnimal.stages.0.description,An animal ravished me.,description
+ThoughtDef/AllowedAnimalToGrope.stages.0.label,groped by animal,label
+ThoughtDef/AllowedAnimalToGrope.stages.0.description,I was so horny that I let an animal grope me. I feel ashamed...,description
+ThoughtDef/Bound.stages.0.label,bound,label
+ThoughtDef/Bound.stages.0.description,This thing is seriously annoying. I wish I could take it off.,description
+ThoughtDef/Bound.stages.1.label,gagged,label
+ThoughtDef/Bound.stages.1.description,Ish shnn ish shrrrrsh uhnnninnn,description
+ThoughtDef/Bound.stages.2.label,bound and gagged,label
+ThoughtDef/Bound.stages.2.description,Ufff ish hhhh shrrrnnn shhhrrr! hhhek shi thfffff!,description
+ThoughtDef/MasochistBound.stages.0.label,masochist bound,label
+ThoughtDef/MasochistBound.stages.0.description,Heh... heh heh...,description
+ThoughtDef/MasochistBound.stages.1.label,masochist gagged,label
+ThoughtDef/MasochistBound.stages.1.description,Nnnn shsh hhhch uhnnn,description
+ThoughtDef/MasochistBound.stages.2.label,masochist bound and gagged,label
+ThoughtDef/MasochistBound.stages.2.description,Shnnn ihhh shrrr fff shnnn... shsh chhhnnn uhfsh~!,description
+ThoughtDef/MyPupDied.stages.0.label,my son {0} died,label
+ThoughtDef/MyPupDied.stages.0.description,My son is dead. My own flesh and blood...,description
+ThoughtDef/MyPupDiedFemale.stages.0.label,my daughter {0} died,label
+ThoughtDef/MyPupDiedFemale.stages.0.description,My daughter is dead. My own flesh and blood...,description
+ThoughtDef/KilledMyPup.stages.0.label,killed my son,label
+ThoughtDef/KilledMyPupFemale.stages.0.label,killed my daughter,label
+ThoughtDef/SoldMyPup.stages.0.label,loved one sold,label
+ThoughtDef/SoldMyPup.stages.0.description,My child was sold!,description
+ThoughtDef/ViolatedCorpse.stages.0.label,had sex with a corpse,label
+ThoughtDef/ViolatedCorpse.stages.0.description,{0} wasn't the only thing that was stiff if you know what I mean...,description
+ThoughtDef/ThatsMyFetish.stages.0.label,Thats my fetish,label
+ThoughtDef/ThatsMyFetish.stages.0.description,I just had sex that satisfied one of my quirks.,description
+ThoughtDef/FeelingBroken.stages.0.label,dizzy,label
+ThoughtDef/FeelingBroken.stages.0.description,Huh...wha...how many times was I...?,description
+ThoughtDef/FeelingBroken.stages.1.label,my body feels broken,label
+ThoughtDef/FeelingBroken.stages.1.description,No...I don't want...aah...ahhh...my body feels...broken...please...no more...,description
+ThoughtDef/FeelingBroken.stages.2.label,begging for more,label
+ThoughtDef/FeelingBroken.stages.2.description,"Masters, please violate me more, I only exist to be used by you. Please fuck me and fill me with your cum again, and again, and again...",description
+ThoughtDef/GotRaped.stages.0.label,raped,label
+ThoughtDef/GotRaped.stages.0.description,I was raped...I feel so helpless and used.,description
+ThoughtDef/GotAnalRaped.stages.0.label,anally raped,label
+ThoughtDef/GotAnalRaped.stages.0.description,I was raped anally...I feel so violated and filthy.,description
+ThoughtDef/GotAnalRapedByFemale.stages.0.label,anally raped by a girl,label
+ThoughtDef/GotAnalRapedByFemale.stages.0.description,I was raped anally by a girl...It's so humiliating. I probably deserved it for being so weak...,description
+ThoughtDef/GotRapedUnconscious.stages.0.label,raped (Unconscious),label
+ThoughtDef/GotRapedUnconscious.stages.0.description,"Oh God, someone or something raped me while I was unconscious. I feel so violated and dirty.",description
+ThoughtDef/MasochistGotRapedUnconscious.stages.0.label,raped (Unconscious),label
+ThoughtDef/MasochistGotRapedUnconscious.stages.0.description,Some one used my body while I was unconscious and the worst part was that I missed out and didn't feel anything!,description
+ThoughtDef/MasochistGotRaped.stages.0.label,raped,label
+ThoughtDef/MasochistGotRaped.stages.0.description,"I was used and thrown around like a piece of meat. God, I love it when they rape me.",description
+ThoughtDef/MasochistGotAnalRaped.stages.0.label,anally raped,label
+ThoughtDef/MasochistGotAnalRaped.stages.0.description,I was raped anally...it was so intense. They held me down and pounded like a piledriver...mmm...,description
+ThoughtDef/MasochistGotAnalRapedByFemale.stages.0.label,anally raped by a girl,label
+ThoughtDef/MasochistGotAnalRapedByFemale.stages.0.description,I was raped anally by a girl...God it was hot. There's just something about a woman having so much power over you as she makes you her bitch...,description
+ThoughtDef/HateMyRapist.stages.0.label,raped me,label
+ThoughtDef/HateMyRapist.stages.0.description,I was raped by {0}. I'll never forgive them.,description
+ThoughtDef/KindaLikeMyRapist.stages.0.label,raped me,label
+ThoughtDef/KindaLikeMyRapist.stages.0.description,{0} forced themselves on me roughly. Wish they'd do it more often...,description
+ThoughtDef/AllowedMeToGetRaped.stages.0.label,allowed me to get raped,label
+ThoughtDef/AllowedMeToGetRaped.stages.0.description,I got raped while that piece of shit {0} just looked the other way...,description
+ThoughtDef/StoleSomeLovin.stages.0.label,stole some lovin’,label
+ThoughtDef/StoleSomeLovin.stages.0.description,"I forced myself on some bitch. The sex was pretty shit, but it's better than nothing.",description
+ThoughtDef/MadeSomeLovin.stages.0.label,made some lovin’,label
+ThoughtDef/MadeSomeLovin.stages.0.description,Spent some good time rolling in the hay.,description
+ThoughtDef/BloodlustStoleSomeLovin.stages.0.label,stole some lovin’,label
+ThoughtDef/BloodlustStoleSomeLovin.stages.0.description,I raped some cunt who deserved it. The way they screamed and cried was so fucking good.,description
+ThoughtDef/NeedSex.stages.0.label,sexually frustrated,label
+ThoughtDef/NeedSex.stages.0.description,I NEED IT!!!,description
+ThoughtDef/NeedSex.stages.1.label,horny,label
+ThoughtDef/NeedSex.stages.1.description,It's been too long. I can't stop thinking about sex.,description
+ThoughtDef/NeedSex.stages.2.label,sexually satisfied,label
+ThoughtDef/NeedSex.stages.2.description,I had a good roll in the hay.,description
+ThoughtDef/RJW_Ahegao.stages.0.label,ahegao,label
+ThoughtDef/RJW_Ahegao.stages.0.description,"My legs are numb, my tongue's flopped out, and my eyes have rolled back in my head.",description
+ThoughtDef/Fapped.stages.0.label,just fapped,label
+ThoughtDef/Fapped.stages.0.description,I just fapped. Alone.,description
+ThoughtDef/male2trap.stages.0.label,Happy with new self,label
+ThoughtDef/male2trap.stages.0.description,"Tee hee hee... Traps are gay, you know.",description
+ThoughtDef/male2trap.stages.1.label,Acceptance of sex changes,label
+ThoughtDef/male2trap.stages.1.description,"Well, at least I'm pretty now.",description
+ThoughtDef/male2trap.stages.2.label,Mild discontent with new gender,label
+ThoughtDef/male2trap.stages.2.description,But I'm a boy!,description
+ThoughtDef/male2trap.stages.3.label,Furious about transgender surgery,label
+ThoughtDef/male2trap.stages.3.description,What are you doing to me!,description
+ThoughtDef/male2female.stages.0.label,Happy with new self,label
+ThoughtDef/male2female.stages.0.description,"Although I was a boy before, I kinda like being a girl now.",description
+ThoughtDef/male2female.stages.1.label,Acceptance of sex changes,label
+ThoughtDef/male2female.stages.1.description,"Well, I guess I will have to live with that now.",description
+ThoughtDef/male2female.stages.2.label,Mild discontent with new gender,label
+ThoughtDef/male2female.stages.2.description,But I'm a boy!,description
+ThoughtDef/male2female.stages.3.label,Furious about transgender surgery,label
+ThoughtDef/male2female.stages.3.description,"Aah, I'm not your toy! Sew it back!",description
+ThoughtDef/male2futa.stages.0.label,Happy with a vagina,label
+ThoughtDef/male2futa.stages.0.description,Whoa... This thing is awesome! How could I live without it before!,description
+ThoughtDef/male2futa.stages.1.label,Acceptance of vagina,label
+ThoughtDef/male2futa.stages.1.description,"Well, I guess I will have to live with that now..",description
+ThoughtDef/male2futa.stages.2.label,Mild discontent with vagina,label
+ThoughtDef/male2futa.stages.2.description,This thing is horrible! Take it away from meee!,description
+ThoughtDef/male2futa.stages.3.label,Furious about vagina attached,label
+ThoughtDef/male2futa.stages.3.description,I'm a monster now! Aaah!,description
+ThoughtDef/female2trap.stages.0.label,Happy with new self,label
+ThoughtDef/female2trap.stages.0.description,Tee hee hee... Now I have a built-in strap-on!,description
+ThoughtDef/female2trap.stages.1.label,Acceptance of sex changes 1,label
+ThoughtDef/female2trap.stages.1.description,"Well, at least I'm still pretty.",description
+ThoughtDef/female2trap.stages.2.label,Mild discontent with new gender 2,label
+ThoughtDef/female2trap.stages.2.description,But I'm a girl!,description
+ThoughtDef/female2trap.stages.3.label,Furious about transgender surgery 3,label
+ThoughtDef/female2trap.stages.3.description,What are you doing to me!,description
+ThoughtDef/female2male.stages.0.label,Happy with new self,label
+ThoughtDef/female2male.stages.0.description,I'm so happy now with all my masculinity unleashed.,description
+ThoughtDef/female2male.stages.1.label,Acceptance of sex changes,label
+ThoughtDef/female2male.stages.1.description,"Well, I've got to live with this.",description
+ThoughtDef/female2male.stages.2.label,Mild discontent with new gender,label
+ThoughtDef/female2male.stages.2.description,But I'm a girl!,description
+ThoughtDef/female2male.stages.3.label,Furious about transgender surgery,label
+ThoughtDef/female2male.stages.3.description,What are you doing to me!,description
+ThoughtDef/female2futa.stages.0.label,Happy with a dick,label
+ThoughtDef/female2futa.stages.0.description,Whoa... This thing is awesome! How could I live without it before!,description
+ThoughtDef/female2futa.stages.1.label,Acceptance of penis,label
+ThoughtDef/female2futa.stages.1.description,"Well, at least I can pee standing now.",description
+ThoughtDef/female2futa.stages.2.label,Mild discontent with penis,label
+ThoughtDef/female2futa.stages.2.description,This thing is horrible! Take it away from meee!,description
+ThoughtDef/female2futa.stages.3.label,Furious about penis attached,label
+ThoughtDef/female2futa.stages.3.description,I'm a monster now! Aaah!,description
+ThoughtDef/futa2trap.stages.0.label,Happy with new self,label
+ThoughtDef/futa2trap.stages.0.description,Tee hee hee... I still have another hole!,description
+ThoughtDef/futa2trap.stages.1.label,Acceptance of sex changes,label
+ThoughtDef/futa2trap.stages.1.description,"Well, at least I'm still pretty.",description
+ThoughtDef/futa2trap.stages.2.label,Mild discontent with new gender,label
+ThoughtDef/futa2trap.stages.2.description,Come on! Don't be a pussy! Give mine back!,description
+ThoughtDef/futa2trap.stages.3.label,Furious about transgender surgery,label
+ThoughtDef/futa2trap.stages.3.description,Hey! Give it back!,description
+ThoughtDef/futa2male.stages.0.label,Happy without a vagina,label
+ThoughtDef/futa2male.stages.0.description,It was an interesting experience. Let's not do that again.,description
+ThoughtDef/futa2male.stages.1.label,Sad without a vagina,label
+ThoughtDef/futa2male.stages.1.description,"Oh well, it was fun while it lasted.",description
+ThoughtDef/futa2male.stages.2.label,Unhappy without a vagina,label
+ThoughtDef/futa2male.stages.2.description,"Seriously, it is mine now. I want it back.",description
+ThoughtDef/futa2male.stages.3.label,Furious about vagina removal,label
+ThoughtDef/futa2male.stages.3.description,Aww come on! Give it back!,description
+ThoughtDef/futa2female.stages.0.label,Happy without a dick,label
+ThoughtDef/futa2female.stages.0.description,It was an interesting experience. Let's not do that again.,description
+ThoughtDef/futa2female.stages.1.label,Sad without a dick,label
+ThoughtDef/futa2female.stages.1.description,"Oh well, it was fun while it lasted.",description
+ThoughtDef/futa2female.stages.2.label,Unhappy without a dick,label
+ThoughtDef/futa2female.stages.2.description,"Seriously, it is mine! I want it back!",description
+ThoughtDef/futa2female.stages.3.label,Furious about dick removal,label
+ThoughtDef/futa2female.stages.3.description,Aww come on! Give it back!,description
+ThoughtDef/trap2futa.stages.0.label,Happy with new self,label
+ThoughtDef/trap2futa.stages.0.description,"Hey, now I have best of both worlds!",description
+ThoughtDef/trap2futa.stages.1.label,Acceptance of sex changes,label
+ThoughtDef/trap2futa.stages.1.description,"Well, now I know both sides.",description
+ThoughtDef/trap2futa.stages.2.label,Mild discontent with new gender,label
+ThoughtDef/trap2futa.stages.2.description,But I was fine the way I was!,description
+ThoughtDef/trap2futa.stages.3.label,Furious about transgender surgery,label
+ThoughtDef/trap2futa.stages.3.description,What are you doing to me!,description
+ThoughtDef/trap2male.stages.0.label,Happy without a breast,label
+ThoughtDef/trap2male.stages.0.description,It was an interesting experience. Let's not do that again.,description
+ThoughtDef/trap2male.stages.1.label,Sad without a breast,label
+ThoughtDef/trap2male.stages.1.description,"Oh well, it was fun while it lasted.",description
+ThoughtDef/trap2male.stages.2.label,Unhappy without a breast,label
+ThoughtDef/trap2male.stages.2.description,"Seriously, they're mine now. I want them back.",description
+ThoughtDef/trap2male.stages.3.label,Furious about breast removal,label
+ThoughtDef/trap2male.stages.3.description,Aww come on! Give them back!,description
+ThoughtDef/trap2female.stages.0.label,Happy without a dick,label
+ThoughtDef/trap2female.stages.0.description,It was an interesting experience. Let's not do that again.,description
+ThoughtDef/trap2female.stages.1.label,Sad without a dick,label
+ThoughtDef/trap2female.stages.1.description,"Oh well, time to learn to sit when I pee.",description
+ThoughtDef/trap2female.stages.2.label,Unhappy without a dick,label
+ThoughtDef/trap2female.stages.2.description,"Seriously, it is mine. I want it back.",description
+ThoughtDef/trap2female.stages.3.label,Furious about dick removal,label
+ThoughtDef/trap2female.stages.3.description,Aww come on! Give it back!,description
+ThoughtDef/FortunateGaveVirginity.stages.0.label,Gave virginity,label
+ThoughtDef/FortunateGaveVirginity.stages.0.description,I gave my virginity.,description
+ThoughtDef/UnfortunateLostVirginity.stages.0.label,Lost virginity,label
+ThoughtDef/UnfortunateLostVirginity.stages.0.description,I lost my virginity and I'll never get it back.,description
+ThoughtDef/TookVirginity.stages.0.label,Took virginity,label
+ThoughtDef/TookVirginity.stages.0.description,I've taken someone's virginity.,description
+ThoughtDef/MySonDied_Beast.stages.0.label,my son {0} died,label
+ThoughtDef/MySonDied_Beast.stages.0.description,My son is dead. My own flesh and blood...,description
+ThoughtDef/MyDaughterDied_Beast.stages.0.label,my daughter {0} died,label
+ThoughtDef/MyDaughterDied_Beast.stages.0.description,My daughter is dead. My own flesh and blood...,description
+ThoughtDef/MyBrotherDied_Beast.stages.0.label,my brother {0} died,label
+ThoughtDef/MyBrotherDied_Beast.stages.0.description,My brother died. My own flesh and blood...,description
+ThoughtDef/MySisterDied_Beast.stages.0.label,my sister {0} died,label
+ThoughtDef/MySisterDied_Beast.stages.0.description,My sister died. My own flesh and blood...,description
+ThoughtDef/MyGrandchildDied_Beast.stages.0.label,my grandchild {0} died,label
+ThoughtDef/MyGrandchildDied_Beast.stages.0.description,My grandchild died. My own flesh and blood...,description
+ThoughtDef/MyNieceDied_Beast.stages.0.label,my niece {0} died,label
+ThoughtDef/MyNieceDied_Beast.stages.0.description,My niece died. Such a wonderful child.,description
+ThoughtDef/MyNephewDied_Beast.stages.0.label,my nephew {0} died,label
+ThoughtDef/MyNephewDied_Beast.stages.0.description,My nephew died. Such a wonderful child.,description
+ThoughtDef/MyHalfSiblingDied_Beast.stages.0.label,my half-sibling {0} died,label
+ThoughtDef/MyHalfSiblingDied_Beast.stages.0.description,My half-sibling died. My own flesh and blood...,description
+ThoughtDef/MyAuntDied_Beast.stages.0.label,my aunt {0} died,label
+ThoughtDef/MyAuntDied_Beast.stages.0.description,My aunt died.,description
+ThoughtDef/MyUncleDied_Beast.stages.0.label,my uncle {0} died,label
+ThoughtDef/MyUncleDied_Beast.stages.0.description,My uncle died.,description
+ThoughtDef/MyGrandparentDied_Beast.stages.0.label,my grandparent {0} died,label
+ThoughtDef/MyGrandparentDied_Beast.stages.0.description,My grandparent died.,description
+ThoughtDef/MyCousinDied_Beast.stages.0.label,my cousin {0} died,label
+ThoughtDef/MyCousinDied_Beast.stages.0.description,My cousin died. My own flesh and blood...,description
+ThoughtDef/MyKinDied_Beast.stages.0.label,my kin {0} died,label
+ThoughtDef/MyKinDied_Beast.stages.0.description,My kin died.,description
+ThoughtDef/MySonLost_Beast.stages.0.label,my son {0} lost,label
+ThoughtDef/MySonLost_Beast.stages.0.description,My son has gone lost. I hope he will get back to us someday.,description
+ThoughtDef/MyDaughterLost_Beast.stages.0.label,my daughter {0} lost,label
+ThoughtDef/MyDaughterLost_Beast.stages.0.description,My daughter has gone lost. I hope she will get back to us someday.,description
+ThoughtDef/MyBrotherLost_Beast.stages.0.label,my brother {0} lost,label
+ThoughtDef/MyBrotherLost_Beast.stages.0.description,My brother has gone lost. I hope he will get back to us someday.,description
+ThoughtDef/MySisterLost_Beast.stages.0.label,my sister {0} lost,label
+ThoughtDef/MySisterLost_Beast.stages.0.description,My sister has gone lost. I hope she will get back to us someday.,description
+ThoughtDef/MyGrandchildLost_Beast.stages.0.label,my grandchild {0} lost,label
+ThoughtDef/MyGrandchildLost_Beast.stages.0.description,My grandchild has gone lost. I hope they will get back to us someday.,description
+ThoughtDef/MyNieceLost_Beast.stages.0.label,my niece {0} lost,label
+ThoughtDef/MyNieceLost_Beast.stages.0.description,My niece has gone lost. I hope she will get back to us someday.,description
+ThoughtDef/MyNephewLost_Beast.stages.0.label,my nephew {0} lost,label
+ThoughtDef/MyNephewLost_Beast.stages.0.description,My nephew has gone lost. I hope he will get back to us someday.,description
+ThoughtDef/MyHalfSiblingLost_Beast.stages.0.label,my half-sibling {0} lost,label
+ThoughtDef/MyHalfSiblingLost_Beast.stages.0.description,My half-sibling has gone lost.,description
+ThoughtDef/MyAuntLost_Beast.stages.0.label,my aunt {0} lost,label
+ThoughtDef/MyAuntLost_Beast.stages.0.description,My aunt has gone lost. I hope she will get back to us someday.,description
+ThoughtDef/MyUncleLost_Beast.stages.0.label,my uncle {0} lost,label
+ThoughtDef/MyUncleLost_Beast.stages.0.description,My uncle has gone lost. I hope he will get back to us someday.,description
+ThoughtDef/MyGrandparentLost_Beast.stages.0.label,my grandparent {0} lost,label
+ThoughtDef/MyGrandparentLost_Beast.stages.0.description,My grandparent has gone lost.,description
+ThoughtDef/MyCousinLost_Beast.stages.0.label,my cousin {0} lost,label
+ThoughtDef/MyCousinLost_Beast.stages.0.description,My cousin has gone lost.,description
+ThoughtDef/MyKinLost_Beast.stages.0.label,my kin {0} lost,label
+ThoughtDef/MyKinLost_Beast.stages.0.description,My kin has gone lost.,description
+ThoughtDef/KilledMyFather_Beast.stages.0.label,killed my father,label
+ThoughtDef/KilledMyMother_Beast.stages.0.label,killed my mother,label
+ThoughtDef/KilledMySon_Beast.stages.0.label,killed my son,label
+ThoughtDef/KilledMyDaughter_Beast.stages.0.label,killed my daughter,label
+ThoughtDef/KilledMyBrother_Beast.stages.0.label,killed my brother,label
+ThoughtDef/KilledMySister_Beast.stages.0.label,killed my sister,label
+ThoughtDef/KilledMyKin_Beast.stages.0.label,killed my kin,label
+ThoughtDef/SoldMyLovedOne_Beast.stages.0.label,sold my kin,label
+TraitDef/Rapist.degreeDatas.0.label,rapist,label
+TraitDef/Rapist.degreeDatas.0.description,"[PAWN_nameDef] doesn't take ""No"" as an answer.",description
+TraitDef/Necrophiliac.degreeDatas.0.label,necrophile,label
+TraitDef/Necrophiliac.degreeDatas.0.description,"Dead people can't say no, can they?",description
+TraitDef/Zoophile.degreeDatas.0.label,zoophile,label
+TraitDef/Zoophile.degreeDatas.0.description,[PAWN_nameDef] likes to walk on the wild side.,description
+TraitDef/Nymphomaniac.degreeDatas.0.label,hypersexual,label
+TraitDef/Nymphomaniac.degreeDatas.0.description,[PAWN_nameDef] loves sex and always wants more. Can regain psyfocus only through sex.,description
+TraitDef/FootSlut.degreeDatas.0.label,Footslut,label
+TraitDef/FootSlut.degreeDatas.0.description,[PAWN_nameDef] really likes feet and prefers sex acts involving them.,description
+TraitDef/CumSlut.degreeDatas.0.label,Cumslut,label
+TraitDef/CumSlut.degreeDatas.0.description,[PAWN_nameDef] really likes cum and prefers fellatio sex acts.,description
+TraitDef/ButtSlut.degreeDatas.0.label,Buttslut,label
+TraitDef/ButtSlut.degreeDatas.0.description,[PAWN_nameDef] really likes getting fucked in the butt and prefers anal sex acts.,description
+ThingDef/HorsePenis.label,equine penis,label
+ThingDef/HorsePenis.description,A equine penis. Huge for a human.,description
+ThingDef/HorseVagina.label,equine vagina,label
+ThingDef/HorseVagina.description,A equine vagina. Gaping vagina just begs Studs to plow it.,description
+ThingDef/CatPenis.label,feline penis,label
+ThingDef/CatPenis.description,"A feline penis. Long, thin and barbed.",description
+ThingDef/CatVagina.label,feline vagina,label
+ThingDef/CatVagina.description,"A feline vagina. Long and thin vagina with clitoris inside, perfect for barbed feline cocks.",description
+ThingDef/DogPenis.label,canine penis,label
+ThingDef/DogPenis.description,A canine penis. Thick and knotted.,description
+ThingDef/DogVagina.label,canine vagina,label
+ThingDef/DogVagina.description,A canine vagina. Has enough strength to keep cock inside for 20 minutes.,description
+ThingDef/DragonPenis.label,dragon penis,label
+ThingDef/DragonPenis.description,A dragon penis. Thick and HARD.,description
+ThingDef/DragonVagina.label,dragon vagina,label
+ThingDef/DragonVagina.description,"A dragon vagina. It's gaping, probably good for laying eggs.",description
+ThingDef/RaccoonPenis.label,procyonine penis,label
+ThingDef/RaccoonPenis.description,"A procyonine penis. Impressive length, but very thin and inflexible.",description
+ThingDef/HemiPenis.label,hemipenis,label
+ThingDef/HemiPenis.description,A reptilian hemipenis. Two knobbly shafts with flexible barbs.,description
+ThingDef/CrocodilianPenis.label,crocodilian penis,label
+ThingDef/CrocodilianPenis.description,"A crocodilian penis. Very rigid and has a thick bulbous base, but otherwise similar to a humanoid penis.",description
+ThingDef/NarrowVagina.label,narrow vagina,label
+ThingDef/NarrowVagina.description,"A narrow vagina. A deep, but particularly thin vagina.",description
+ThingDef/NeedlePenis.label,needle-like penis,label
+ThingDef/NeedlePenis.description,"A needle-like penis. A rather long, but exceptionally thin penis.",description
+ThingDef/RodentVagina.label,rodent vagina,label
+ThingDef/RodentVagina.description,A rodent vagina. A vagina barely even large enough to fit a human finger.,description
+ThingDef/RodentPenis.label,rodent penis,label
+ThingDef/RodentPenis.description,"A rodent penis. A truly tiny penis, built for the bare minimum of function.",description
+ThingDef/CloacalPenis.label,cloacal penis,label
+ThingDef/CloacalPenis.description,A cloacal penis. A male sex organ tucked away inside a slit.,description
+ThingDef/CloacalVagina.label,cloacal vagina,label
+ThingDef/CloacalVagina.description,"A cloacal vagina. A female, egg-laying sex organ.",description
+ThingDef/UdderBreasts.label,udder,label
+ThingDef/UdderBreasts.description,"A large udder, possibly from a muffalo or similar animal. May be attached to humanoids for a literal cowgirl look.",description
+ThingDef/CloacalAnus.label,cloacal anus,label
+ThingDef/CloacalAnus.description,"A cloacal anus. An anus hidden within a common port for the reproductive organs, known as a cloaca.",description
+ThingDef/DemonTentaclePenis.label,demon tentacles,label
+ThingDef/DemonTentaclePenis.description,"A demon tentacle. Long and flexible, constantly leaking demonic fluids. Useless for humans.",description
+ThingDef/DemonPenis.label,demon penis,label
+ThingDef/DemonPenis.description,"A demon penis. It's average humanlike size, constantly leaking demonic fluids. Useless for humans.",description
+ThingDef/DemonVagina.label,demon vagina,label
+ThingDef/DemonVagina.description,"A demon vagina, full of small tentacles, constantly leaking demonic fluids. Useless for humans.",description
+ThingDef/DemonAnus.label,demon anus,label
+ThingDef/DemonAnus.description,A demon anus... full of tentacles. Useless for humans.,description
+ThingDef/Penis.label,penis,label
+ThingDef/Penis.description,A penis.,description
+ThingDef/Vagina.label,vagina,label
+ThingDef/Vagina.description,A vagina.,description
+ThingDef/Breasts.label,breasts,label
+ThingDef/Breasts.description,A pair of breasts.,description
+ThingDef/Anus.label,anus,label
+ThingDef/Anus.description,An anus.,description
+ThingDef/FeaturelessChest.label,featureless chest,label
+ThingDef/FeaturelessChest.description,"Smooth, featureless chest. Primarily found on non-mammalian creatures.",description
+ThingDef/PegDick.label,peg dick,label
+ThingDef/PegDick.description,A wooden dildo designed to replace a missing penis. Be careful of splinters.,description
+ThingDef/HydraulicPenis.label,hydraulic penis,label
+ThingDef/HydraulicPenis.description,A prosthetic penis. Cold metal phallus. Has built in fluid delivery system.,description
+ThingDef/HydraulicVagina.label,hydraulic vagina,label
+ThingDef/HydraulicVagina.description,A prosthetic vagina. Its cold metal grip is uncomfortable but it has great suction power.,description
+ThingDef/HydraulicBreasts.label,hydraulic breasts,label
+ThingDef/HydraulicBreasts.description,Prosthetic breasts. Conical metal.,description
+ThingDef/HydraulicAnus.label,hydraulic anus,label
+ThingDef/HydraulicAnus.description,A prosthetic anus. Its cold metal grip is uncomfortable but it has great suction power.,description
+ThingDef/BionicPenis.label,bionic penis,label
+ThingDef/BionicPenis.description,"A high-tech prosthetic penis. Features include:
+- Adjustable size allows you to fit in any vagina.
+- Over 50 different vibration modes, including 10 of the most stimulating waveforms known to science
+- State-of-the-art neural interface activates neural pathways you didn't even know you had to make you feel things you never even imagined.",description
+ThingDef/BionicVagina.label,bionic vagina,label
+ThingDef/BionicVagina.description,"A high-tech prosthetic vagina. Features include:
+- Interior lined with 150 million micro-g-spots
+- Resizes to fit any penis
+- Auto-lubrication with boro-graphitic pseudofluid, smooth but never slimy (includes toggleable sliminess in case you're into that)",description
+ThingDef/BionicBreasts.label,bionic breasts,label
+ThingDef/BionicBreasts.description,"High-tech prosthetic breasts. Features include:
+- Resizes to any desired size",description
+ThingDef/BionicAnus.label,bionic anus,label
+ThingDef/BionicAnus.description,"A high-tech prosthetic anus. Features include:
+- Resizes to any desired size
+- Auto-lubrication with boro-graphitic pseudofluid, smooth but never slimy (includes toggleable sliminess in case you're into that)",description
+ThingDef/ArchotechPenis.label,archotech penis,label
+ThingDef/ArchotechPenis.description,"An artificial penis built by an archotech. It's stimulating capabilities are unmatched in every kind of sexual situation. Not only is it able to change color, texture, length and shape to provide the perfect stimulation for every kind of orifice, it's also stronger than plasteel and self-repairing. It attaches seamlessly to the body and directly connects to the nervous system to greatly enhance the owner's stamina and virility to keep the pleasure going for as long as possible. AI-controlled vibrations combined with custom pheromones make sure to make every sex-act into an unforgettable experience. Its internal workings are a mystery to all human minds.",description
+ThingDef/ArchotechVagina.label,archotech vagina,label
+ThingDef/ArchotechVagina.description,"An artificial vagina built by an archotech. It looks exactly like its fleshy original, but its properties make it the perfect replacement for its weaker, organic counterpart. Advanced lubrication, flexibility in addition to its self-repairing mechanisms enables it to endure any type of inserted object with ease and allows any kind of offspring to pass through without complications. It seamlessly attaches to the hosting body and maintains immunity of most known STDs. Exceptional sensitivity, warmth regulation as well as pheromones will satisfy any kind of partner. Its internal workings are a mystery to all human minds.",description
+ThingDef/ArchotechBreasts.label,archotech breasts,label
+ThingDef/ArchotechBreasts.description,"A pair of artificial breasts built by an archotech. They can change shape into any desired appearance, at any time and wont interfere in the wearers activities. Their surface is smoother than any natural skin, while beeing harder to damage than plasteel and beeing able to heal themselves. Its internal workings are a mystery to all human minds.",description
+ThingDef/ArchotechAnus.label,archotech anus,label
+ThingDef/ArchotechAnus.description,An artificial anus built by an archotech. It's indistinguishable from a normal anus. Unmatched strength and self-repairing properties make it almost impossible to destroy. Its internal workings are a mystery to all human minds.,description
+ThingDef/OvipositorM.label,ovipositor (Male),label
+ThingDef/OvipositorM.description,Ovipositor used to fertilize eggs.,description
+ThingDef/OvipositorF.label,ovipositor (Female),label
+ThingDef/OvipositorF.description,Ovipositor used to lay eggs.,description
+ThingDef/InsectAnus.label,insect anus,label
+ThingDef/InsectAnus.description,Insect anus.,description
+ThingDef/ResinGlob.label,resin,label
+ThingDef/ResinGlob.description,A mixture of highly viscous organic compounds typically harvested from plants.,description
+ThingDef/SlimeGlob.label,slime glob,label
+ThingDef/SlimeGlob.description,An oozy slime glob. Useless for humans.,description
+RulePackDef/Bestiality_AnalRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was anally bred by [INITIATOR_nameDef].,li
+RulePackDef/Bestiality_VaginalRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was vaginally bred by [INITIATOR_nameDef].,li
+RulePackDef/Bestiality_OralRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was orally bred by [INITIATOR_nameDef].,li
+RulePackDef/Bestiality_DoublePenRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was double penetrated by [INITIATOR_nameDef].,li
+RulePackDef/Bestiality_Reverse_AnalRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] anally.,li
+RulePackDef/Bestiality_Reverse_AnalRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].,li
+RulePackDef/Bestiality_Reverse_VaginalRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] vaginally.,li
+RulePackDef/Bestiality_Reverse_VaginalRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].,li
+RulePackDef/Bestiality_Reverse_OralRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] orally.,li
+RulePackDef/Bestiality_Reverse_OralRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].,li
+RulePackDef/Bestiality_Reverse_Double_Penetration.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into double penetrating [INITIATOR_nameDef].,li
+RulePackDef/Bestiality_Reverse_Double_Penetration.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].,li
+RulePackDef/Masturbation_HandjobPRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] penis.,li
+RulePackDef/Masturbation_HandjobVRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] vagina.,li
+RulePackDef/Masturbation_HandjobARP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] anus.,li
+RulePackDef/Masturbation_HandjobBRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] breasts.,li
+RulePackDef/Masturbation_AutoFellatioRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] autofellated [INITIATOR_possessive] penis.,li
+RulePackDef/Masturbation_AutoBreastjobRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] stroked [INITIATOR_possessive] penis with [INITIATOR_possessive] breasts.,li
+RulePackDef/AnalRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was anally raped by [INITIATOR_nameDef].,li
+RulePackDef/VaginalRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was vaginally raped by [INITIATOR_nameDef].,li
+RulePackDef/FellatioRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to fellate [INITIATOR_nameDef].,li
+RulePackDef/BeakjobRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to give a beakjob to [INITIATOR_nameDef].,li
+RulePackDef/OtherRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was raped.,li
+RulePackDef/ForcedRimmingRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to lick [INITIATOR_nameDef]'s anus.,li
+RulePackDef/ForcedCunnilingusRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to lick [INITIATOR_nameDef].,li
+RulePackDef/ForcedFellatioRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to fellate [INITIATOR_nameDef].,li
+RulePackDef/ForcedBreastjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to give a breastjob to [INITIATOR_nameDef].,li
+RulePackDef/HandjobRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] pinned [RECIPIENT_nameDef] down and forcefully jacked [RECIPIENT_objective] off.,li
+RulePackDef/HandjobRapeRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] humiliated [RECIPIENT_nameDef] by forcibly jerking [RECIPIENT_objective] off.,li
+RulePackDef/FootjobRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] gave a forced footjob to [RECIPIENT_nameDef].,li
+RulePackDef/MaleRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forced [RECIPIENT_nameDef] to cum.,li
+RulePackDef/ForcedHandjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to give a handjob to [INITIATOR_nameDef].,li
+RulePackDef/ForcedHandjobRP.rulePack.rulesStrings.1,sent-> [RECIPIENT_nameDef] was forced to jerk off [INITIATOR_nameDef].,li
+RulePackDef/ForcedFootjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to give a footjob to [INITIATOR_nameDef].,li
+RulePackDef/DoubleRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was double-penetrated and raped vaginally and anally.,li
+RulePackDef/FingeringRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly fingered [RECIPIENT_nameDef].,li
+RulePackDef/ForcedFingeringRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to finger [INITIATOR_nameDef].,li
+RulePackDef/ScissoringRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly scissored with [RECIPIENT_nameDef].,li
+RulePackDef/ForcedScissoringRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to scissor with [INITIATOR_nameDef].,li
+RulePackDef/FistingRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly fisted [RECIPIENT_nameDef].,li
+RulePackDef/ForcedSixtynineRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] coerced [RECIPIENT_nameDef] into 69ing with [INITIATOR_objective].,li
+RulePackDef/ForcedSixtynineRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] forced [RECIPIENT_nameDef] to 69 with [INITIATOR_objective].,li
+RulePackDef/MechImplantingRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] implanted something inside [RECIPIENT_nameDef].,li
+RulePackDef/DeepthroatRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly deepthroated [RECIPIENT_nameDef].,li
+RulePackDef/AnalReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcefully rode [RECIPIENT_nameDef] anally.,li
+RulePackDef/VaginalReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcefully rode [RECIPIENT_nameDef] vaginally.,li
+RulePackDef/HandjobReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] pinned [RECIPIENT_nameDef] down and forcefully jacked [RECIPIENT_objective] off.,li
+RulePackDef/HandjobReverseRapeRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] humiliated [RECIPIENT_nameDef] by forcibly jerking [RECIPIENT_objective] off.,li
+RulePackDef/FootjobReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcefully gave a footjob to [RECIPIENT_nameDef].,li
+RulePackDef/FingeringReverseRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was force fingered by [INITIATOR_nameDef].,li
+RulePackDef/FistingReverseRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to fist [INITIATOR_nameDef].,li
+RulePackDef/BreastjobReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly performed a breastjob on [RECIPIENT_nameDef].,li
+RulePackDef/BreastjobReverseRapeRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] tackled [RECIPIENT_nameDef] down and squeezed [RECIPIENT_objective] between [INITIATOR_possessive] breasts.,li
+RulePackDef/DoubleReverseRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced into using both [INITIATOR_nameDef] holes.,li
+RulePackDef/ScissoringReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly scissored with [RECIPIENT_nameDef].,li
+RulePackDef/RimmingReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly rimmed [RECIPIENT_nameDef].,li
+RulePackDef/CunnilingusReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly licked [RECIPIENT_nameDef].,li
+RulePackDef/FellatioReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly fellated [RECIPIENT_nameDef].,li
+RulePackDef/BeakjobReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly gave [RECIPIENT_nameDef] a beakjob.,li
+RulePackDef/SixtynineReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly sixtynined [RECIPIENT_nameDef].,li
+RulePackDef/DeepthroatReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] went down on [RECIPIENT_nameDef] and forcibly deepthroated [RECIPIENT_objective].,li
+RulePackDef/RimmingRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] rimmed [INITIATOR_nameDef].,li
+RulePackDef/CunnilingusRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] went down on [INITIATOR_nameDef].,li
+RulePackDef/FellatioRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] sucked off [INITIATOR_nameDef].,li
+RulePackDef/BeakjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] fellated [INITIATOR_nameDef] with [RECIPIENT_possessive] beak.,li
+RulePackDef/SixtynineRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] 69'd with [INITIATOR_nameDef].,li
+RulePackDef/MutualMakeoutRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] make out with [INITIATOR_nameDef].,li
+RulePackDef/DeepthroatRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] deepthroated [INITIATOR_nameDef].,li
+RulePackDef/RimmingReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] rimmed [RECIPIENT_nameDef].,li
+RulePackDef/CunnilingusReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] went down on [RECIPIENT_nameDef].,li
+RulePackDef/FellatioReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] sucked off [RECIPIENT_nameDef].,li
+RulePackDef/BeakjobReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] fellated [RECIPIENT_nameDef] with [INITIATOR_possessive] beak.,li
+RulePackDef/SixtynineReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] 69'd with [RECIPIENT_nameDef].,li
+RulePackDef/DeepthroatReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] deepthroated [RECIPIENT_nameDef].,li
+RulePackDef/MainReverseRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.,li
+RulePackDef/MainReverseRP.rulePack.rulesStrings.1,sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].,li
+RulePackDef/MainReverseRP.rulePack.rulesStrings.2,sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.,li
+RulePackDef/DefaultSexReverseRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] had sex with [INITIATOR_nameDef].,li
+RulePackDef/AnalSexReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] was fucked anally by [RECIPIENT_nameDef].,li
+RulePackDef/VaginalSexReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] was fucked vaginally by [RECIPIENT_nameDef].,li
+RulePackDef/HandjobReverseRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] received a handjob from [INITIATOR_nameDef].,li
+RulePackDef/HandjobReverseRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] squeezed [RECIPIENT_nameDef].,li
+RulePackDef/HandjobReverseRP.rulePack.rulesStrings.2,sent-> [INITIATOR_nameDef] jerked off [RECIPIENT_nameDef].,li
+RulePackDef/FootjobReverseRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] received a footjob from [INITIATOR_nameDef].,li
+RulePackDef/FootjobReverseRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] squeezed [RECIPIENT_nameDef] with [INITIATOR_possessive] feet.,li
+RulePackDef/FingeringReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] fingered [RECIPIENT_nameDef].,li
+RulePackDef/FistingReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] anally fisted [RECIPIENT_nameDef].,li
+RulePackDef/DoublePenetrationReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into using both [RECIPIENT_possessive] poles on [INITIATOR_objective].,li
+RulePackDef/DoublePenetrationReverseRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into using both [RECIPIENT_possessive] poles on both [INITIATOR_possessive] holes.,li
+RulePackDef/BreastjobReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] gave [RECIPIENT_nameDef] a breastjob.,li
+RulePackDef/BreastjobReverseRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] stroked [RECIPIENT_nameDef] with [INITIATOR_possessive] breasts.,li
+RulePackDef/AnalSexRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] had anal sex with [RECIPIENT_nameDef].,li
+RulePackDef/VaginalSexRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] had vaginal sex with [RECIPIENT_nameDef].,li
+RulePackDef/OtherSexRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] had sex with [RECIPIENT_nameDef].,li
+RulePackDef/DoublePenetrationRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was double-penetrated by [INITIATOR_nameDef].,li
+RulePackDef/BreastjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] gave [INITIATOR_nameDef] a breastjob.,li
+RulePackDef/HandjobRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] received a handjob from [RECIPIENT_nameDef].,li
+RulePackDef/HandjobRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] was jerked off by [RECIPIENT_nameDef].,li
+RulePackDef/FootjobRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] received a footjob from [RECIPIENT_nameDef].,li
+RulePackDef/FingeringRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] fingered [INITIATOR_nameDef].,li
+RulePackDef/ScissoringRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] scissored with [INITIATOR_nameDef].,li
+RulePackDef/MutualMasturbationRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] masturbated each other.,li
+RulePackDef/MutualTailholdingRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] intertwined tails.,li
+RulePackDef/MutualHandholdingRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] holded each other's hands.,li
+RulePackDef/FistingRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] anally fisted [INITIATOR_nameDef].,li
+InteractionDef/Bestiality_Anal.label,anal breeding,label
+InteractionDef/Bestiality_Anal.logRulesInitiator.rulesStrings.0,r_logentry->Mounted [RECIPIENT_nameDef].,li
+InteractionDef/Bestiality_Anal.logRulesRecipient.rulesStrings.0,r_logentry->Was anally mounted by [INITIATOR_nameDef].,li
+InteractionDef/Bestiality_Anal.modExtensions.0.RMBLabel,Breed anally,RMBLabel
+InteractionDef/Bestiality_Double_Penetration_M.label,double penetration,label
+InteractionDef/Bestiality_Double_Penetration_M.logRulesInitiator.rulesStrings.0,r_logentry->Double-penetrated [RECIPIENT_nameDef].,li
+InteractionDef/Bestiality_Double_Penetration_M.logRulesRecipient.rulesStrings.0,r_logentry->Was double-penetrated by [INITIATOR_nameDef].,li
+InteractionDef/Bestiality_Double_Penetration_M.modExtensions.0.RMBLabel,Double-penetrate,RMBLabel
+InteractionDef/Bestiality_Oral.label,MouthFuck,label
+InteractionDef/Bestiality_Oral.logRulesInitiator.rulesStrings.0,r_logentry->Mounted [RECIPIENT_nameDef].,li
+InteractionDef/Bestiality_Oral.logRulesRecipient.rulesStrings.0,r_logentry->Was mounted by [INITIATOR_nameDef].,li
+InteractionDef/Bestiality_Oral.modExtensions.0.RMBLabel,Breed orally,RMBLabel
+InteractionDef/Bestiality_Vaginal.label,vaginal breeding,label
+InteractionDef/Bestiality_Vaginal.logRulesInitiator.rulesStrings.0,r_logentry->Mounted [RECIPIENT_nameDef].,li
+InteractionDef/Bestiality_Vaginal.logRulesRecipient.rulesStrings.0,r_logentry->Was mounted by [INITIATOR_nameDef].,li
+InteractionDef/Bestiality_Vaginal.modExtensions.0.RMBLabel,Breed vaginally,RMBLabel
+InteractionDef/Masturbation_AutoBreastjob.label,masturbation_autobreastjob,label
+InteractionDef/Masturbation_AutoBreastjob.logRulesInitiator.rulesStrings.0,r_logentry->Masturbated.,li
+InteractionDef/Masturbation_AutoBreastjob.logRulesRecipient.rulesStrings.0,r_logentry->Masturbated.,li
+InteractionDef/Masturbation_AutoBreastjob.modExtensions.0.RMBLabel,AutoBreastjob,RMBLabel
+InteractionDef/Masturbation_AutoFellatio.label,masturbation_autofellatio,label
+InteractionDef/Masturbation_AutoFellatio.logRulesInitiator.rulesStrings.0,r_logentry->Masturbated.,li
+InteractionDef/Masturbation_AutoFellatio.logRulesRecipient.rulesStrings.0,r_logentry->Masturbated.,li
+InteractionDef/Masturbation_AutoFellatio.modExtensions.0.RMBLabel,AutoFellatio,RMBLabel
+InteractionDef/Masturbation_Breastjob.label,masturbation_breastjob,label
+InteractionDef/Masturbation_Breastjob.logRulesInitiator.rulesStrings.0,r_logentry->Masturbated.,li
+InteractionDef/Masturbation_Breastjob.logRulesRecipient.rulesStrings.0,r_logentry->Masturbated.,li
+InteractionDef/Masturbation_Breastjob.modExtensions.0.RMBLabel,Use breasts,RMBLabel
+InteractionDef/Masturbation_HandjobA.label,masturbation_handjoba,label
+InteractionDef/Masturbation_HandjobA.logRulesInitiator.rulesStrings.0,r_logentry->Masturbated.,li
+InteractionDef/Masturbation_HandjobA.logRulesRecipient.rulesStrings.0,r_logentry->Masturbated.,li
+InteractionDef/Masturbation_HandjobA.modExtensions.0.RMBLabel,Use anus,RMBLabel
+InteractionDef/Masturbation_HandjobP.label,masturbation_handjobp,label
+InteractionDef/Masturbation_HandjobP.logRulesInitiator.rulesStrings.0,r_logentry->Masturbated.,li
+InteractionDef/Masturbation_HandjobP.logRulesRecipient.rulesStrings.0,r_logentry->Masturbated.,li
+InteractionDef/Masturbation_HandjobP.modExtensions.0.RMBLabel,Use penis,RMBLabel
+InteractionDef/Masturbation_HandjobV.label,masturbation_handjobv,label
+InteractionDef/Masturbation_HandjobV.logRulesInitiator.rulesStrings.0,r_logentry->Masturbated.,li
+InteractionDef/Masturbation_HandjobV.logRulesRecipient.rulesStrings.0,r_logentry->Masturbated.,li
+InteractionDef/Masturbation_HandjobV.modExtensions.0.RMBLabel,Use vagina,RMBLabel
+InteractionDef/Rape_Anal.label,anal,label
+InteractionDef/Rape_Anal.logRulesInitiator.rulesStrings.0,r_logentry->Raped anally [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Anal.logRulesRecipient.rulesStrings.0,r_logentry->Was anally raped by [INITIATOR_nameDef].,li
+InteractionDef/Rape_Anal.modExtensions.0.RMBLabel,Fuck anally,RMBLabel
+InteractionDef/Rape_Beakjob.label,beakjob,label
+InteractionDef/Rape_Beakjob.logRulesInitiator.rulesStrings.0,r_logentry->Forced [RECIPIENT_nameDef] to give a beakjob.,li
+InteractionDef/Rape_Beakjob.logRulesRecipient.rulesStrings.0,r_logentry->Was forced to give a beakjob to [INITIATOR_nameDef].,li
+InteractionDef/Rape_Beakjob.modExtensions.0.RMBLabel,Get beakjob,RMBLabel
+InteractionDef/Rape_Breastjob.label,breastjob,label
+InteractionDef/Rape_Breastjob.logRulesInitiator.rulesStrings.0,r_logentry->Forced [RECIPIENT_nameDef] to give a breastjob.,li
+InteractionDef/Rape_Breastjob.logRulesRecipient.rulesStrings.0,r_logentry->Was forced to give a breastjob to [INITIATOR_nameDef].,li
+InteractionDef/Rape_Breastjob.modExtensions.0.RMBLabel,Get breastjob,RMBLabel
+InteractionDef/Rape_Cunnilingus.label,cunnilingus,label
+InteractionDef/Rape_Cunnilingus.logRulesInitiator.rulesStrings.0,r_logentry->Forced [RECIPIENT_nameDef] to give cunnilingus.,li
+InteractionDef/Rape_Cunnilingus.logRulesRecipient.rulesStrings.0,r_logentry->Was forced into giving cunnilingus to [INITIATOR_nameDef].,li
+InteractionDef/Rape_Cunnilingus.modExtensions.0.RMBLabel,Get cunnilingus,RMBLabel
+InteractionDef/Rape_DoublePenetration.label,double-penetration,label
+InteractionDef/Rape_DoublePenetration.logRulesInitiator.rulesStrings.0,r_logentry->Double-penetrated [RECIPIENT_nameDef].,li
+InteractionDef/Rape_DoublePenetration.logRulesRecipient.rulesStrings.0,r_logentry->Was double-penetrated by [INITIATOR_nameDef].,li
+InteractionDef/Rape_DoublePenetration.modExtensions.0.RMBLabel,Double-penetrate,RMBLabel
+InteractionDef/Rape_DoublePenetrationM.label,double-penetration,label
+InteractionDef/Rape_DoublePenetrationM.logRulesInitiator.rulesStrings.0,r_logentry->Double-penetrated [RECIPIENT_nameDef].,li
+InteractionDef/Rape_DoublePenetrationM.logRulesRecipient.rulesStrings.0,r_logentry->Was double-penetrated by [INITIATOR_nameDef].,li
+InteractionDef/Rape_DoublePenetrationM.modExtensions.0.RMBLabel,Double-penetrate,RMBLabel
+InteractionDef/Rape_Fellatio.label,fellatio,label
+InteractionDef/Rape_Fellatio.logRulesInitiator.rulesStrings.0,r_logentry->Forced [RECIPIENT_nameDef] to give fellatio.,li
+InteractionDef/Rape_Fellatio.logRulesRecipient.rulesStrings.0,r_logentry->Was forced to fellate [INITIATOR_nameDef].,li
+InteractionDef/Rape_Fellatio.modExtensions.0.RMBLabel,Get fellated,RMBLabel
+InteractionDef/Rape_Fingering.label,fingering,label
+InteractionDef/Rape_Fingering.logRulesInitiator.rulesStrings.0,r_logentry->Forced [RECIPIENT_nameDef] to give fingering.,li
+InteractionDef/Rape_Fingering.logRulesRecipient.rulesStrings.0,r_logentry->Was forced to finger [INITIATOR_nameDef].,li
+InteractionDef/Rape_Fingering.modExtensions.0.RMBLabel,Get fingered,RMBLabel
+InteractionDef/Rape_Fisting.label,fisting,label
+InteractionDef/Rape_Fisting.logRulesInitiator.rulesStrings.0,r_logentry->Forcefully fisted [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Fisting.logRulesRecipient.rulesStrings.0,r_logentry->Was forcibly fisted by [INITIATOR_nameDef].,li
+InteractionDef/Rape_Fisting.modExtensions.0.RMBLabel,Do anal fisting,RMBLabel
+InteractionDef/Rape_Footjob.label,footjob,label
+InteractionDef/Rape_Footjob.logRulesInitiator.rulesStrings.0,r_logentry->Forced [RECIPIENT_nameDef] to give a footjob.,li
+InteractionDef/Rape_Footjob.logRulesRecipient.rulesStrings.0,r_logentry->Was forced to give a footjob to [INITIATOR_nameDef].,li
+InteractionDef/Rape_Footjob.modExtensions.0.RMBLabel,Get footjob,RMBLabel
+InteractionDef/Rape_Handjob.label,handjob,label
+InteractionDef/Rape_Handjob.logRulesInitiator.rulesStrings.0,r_logentry->Forced [RECIPIENT_nameDef] to give a handjob.,li
+InteractionDef/Rape_Handjob.logRulesRecipient.rulesStrings.0,r_logentry->Was forced by [INITIATOR_nameDef] to give a handjob.,li
+InteractionDef/Rape_Handjob.modExtensions.0.RMBLabel,Get handjob,RMBLabel
+InteractionDef/Rape_Oral.label,MouthFuck,label
+InteractionDef/Rape_Oral.logRulesInitiator.rulesStrings.0,r_logentry->Deepthroated [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Oral.logRulesRecipient.rulesStrings.0,r_logentry->Was deepthroated by [INITIATOR_nameDef].,li
+InteractionDef/Rape_Oral.modExtensions.0.RMBLabel,Fuck orally,RMBLabel
+InteractionDef/Rape_Rimming.label,rimming,label
+InteractionDef/Rape_Rimming.logRulesInitiator.rulesStrings.0,r_logentry->Forced [RECIPIENT_nameDef] to give anal rimming.,li
+InteractionDef/Rape_Rimming.logRulesRecipient.rulesStrings.0,r_logentry->Was forced to rimm anus of [INITIATOR_nameDef].,li
+InteractionDef/Rape_Rimming.modExtensions.0.RMBLabel,Get anal rimming,RMBLabel
+InteractionDef/Rape_Scissoring.label,scissoring,label
+InteractionDef/Rape_Scissoring.logRulesInitiator.rulesStrings.0,r_logentry->Forcefully scissored with [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Scissoring.logRulesRecipient.rulesStrings.0,r_logentry->Was forced to scissor with [INITIATOR_nameDef].,li
+InteractionDef/Rape_Scissoring.modExtensions.0.RMBLabel,Do scissoring,RMBLabel
+InteractionDef/Rape_Vaginal.label,vaginal,label
+InteractionDef/Rape_Vaginal.logRulesInitiator.rulesStrings.0,r_logentry->Raped vaginally [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Vaginal.logRulesRecipient.rulesStrings.0,r_logentry->Was vaginally raped by [INITIATOR_nameDef].,li
+InteractionDef/Rape_Vaginal.modExtensions.0.RMBLabel,Fuck vaginally,RMBLabel
+InteractionDef/Sex_Anal.label,anal,label
+InteractionDef/Sex_Anal.logRulesInitiator.rulesStrings.0,r_logentry->Had anal sex with [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Anal.logRulesRecipient.rulesStrings.0,r_logentry->Had anal sex with [INITIATOR_nameDef].,li
+InteractionDef/Sex_Anal.modExtensions.0.RMBLabel,Have anal sex,RMBLabel
+InteractionDef/Sex_Beakjob.label,beakjob,label
+InteractionDef/Sex_Beakjob.logRulesInitiator.rulesStrings.0,r_logentry->Received a beakjob from [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Beakjob.logRulesRecipient.rulesStrings.0,r_logentry->Gave a beakjob to [INITIATOR_nameDef].,li
+InteractionDef/Sex_Beakjob.modExtensions.0.RMBLabel,Receive beakjob,RMBLabel
+InteractionDef/Sex_Breastjob.label,breastjob,label
+InteractionDef/Sex_Breastjob.logRulesInitiator.rulesStrings.0,r_logentry->Received a breastjob from [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Breastjob.logRulesRecipient.rulesStrings.0,r_logentry->Gave a breastjob to [INITIATOR_nameDef].,li
+InteractionDef/Sex_Breastjob.modExtensions.0.RMBLabel,Receive breastjob,RMBLabel
+InteractionDef/Sex_Cunnilingus.label,cunnilingus,label
+InteractionDef/Sex_Cunnilingus.logRulesInitiator.rulesStrings.0,r_logentry->Received cunnilingus from [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Cunnilingus.logRulesRecipient.rulesStrings.0,r_logentry->Gave cunnilingus to [INITIATOR_nameDef].,li
+InteractionDef/Sex_Cunnilingus.modExtensions.0.RMBLabel,Receive cunnilingus,RMBLabel
+InteractionDef/Sex_DoublePenetration.label,double-penetration,label
+InteractionDef/Sex_DoublePenetration.logRulesInitiator.rulesStrings.0,r_logentry->Double-penetrated [RECIPIENT_nameDef].,li
+InteractionDef/Sex_DoublePenetration.logRulesRecipient.rulesStrings.0,r_logentry->Was double-penetrated by [INITIATOR_nameDef].,li
+InteractionDef/Sex_DoublePenetration.modExtensions.0.RMBLabel,Double-penetrate,RMBLabel
+InteractionDef/Sex_DoublePenetrationM.label,double-penetration,label
+InteractionDef/Sex_DoublePenetrationM.logRulesInitiator.rulesStrings.0,r_logentry->Double-penetrated [RECIPIENT_nameDef].,li
+InteractionDef/Sex_DoublePenetrationM.logRulesRecipient.rulesStrings.0,r_logentry->Was double-penetrated by [INITIATOR_nameDef].,li
+InteractionDef/Sex_DoublePenetrationM.modExtensions.0.RMBLabel,Double-penetrate,RMBLabel
+InteractionDef/Sex_Fellatio.label,fellatio,label
+InteractionDef/Sex_Fellatio.logRulesInitiator.rulesStrings.0,r_logentry->Fellated by [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Fellatio.logRulesRecipient.rulesStrings.0,r_logentry->Fellated [INITIATOR_nameDef].,li
+InteractionDef/Sex_Fellatio.modExtensions.0.RMBLabel,Receive fellatio,RMBLabel
+InteractionDef/Sex_Fingering.label,fingering,label
+InteractionDef/Sex_Fingering.logRulesInitiator.rulesStrings.0,r_logentry->Was fingered by [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Fingering.logRulesRecipient.rulesStrings.0,r_logentry->Fingered [INITIATOR_nameDef].,li
+InteractionDef/Sex_Fingering.modExtensions.0.RMBLabel,Receive fingering,RMBLabel
+InteractionDef/Sex_Fisting.label,fisting,label
+InteractionDef/Sex_Fisting.logRulesInitiator.rulesStrings.0,r_logentry->Was fisted by [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Fisting.logRulesRecipient.rulesStrings.0,r_logentry->Fisted [INITIATOR_nameDef].,li
+InteractionDef/Sex_Fisting.modExtensions.0.RMBLabel,Receive fisting,RMBLabel
+InteractionDef/Sex_Footjob.label,footjob,label
+InteractionDef/Sex_Footjob.logRulesInitiator.rulesStrings.0,r_logentry->Received a footjob from [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Footjob.logRulesRecipient.rulesStrings.0,r_logentry->Gave a footjob to [INITIATOR_nameDef].,li
+InteractionDef/Sex_Footjob.modExtensions.0.RMBLabel,Receive footjob,RMBLabel
+InteractionDef/Sex_Handjob.label,handjob,label
+InteractionDef/Sex_Handjob.logRulesInitiator.rulesStrings.0,r_logentry->Received a handjob from [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Handjob.logRulesRecipient.rulesStrings.0,r_logentry->Gave a handjob to [INITIATOR_nameDef].,li
+InteractionDef/Sex_Handjob.modExtensions.0.RMBLabel,Receive handjob,RMBLabel
+InteractionDef/Sex_MutualMasturbation.label,mutual masturbation,label
+InteractionDef/Sex_MutualMasturbation.logRulesInitiator.rulesStrings.0,r_logentry->Engaged in mutual masturbation with [RECIPIENT_nameDef].,li
+InteractionDef/Sex_MutualMasturbation.logRulesRecipient.rulesStrings.0,r_logentry->Engaged in mutual masturbation with [INITIATOR_nameDef].,li
+InteractionDef/Sex_MutualMasturbation.modExtensions.0.RMBLabel,Do mutual masturbation,RMBLabel
+InteractionDef/Sex_Rimming.label,rimming,label
+InteractionDef/Sex_Rimming.logRulesInitiator.rulesStrings.0,r_logentry->Rimmed by [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Rimming.logRulesRecipient.rulesStrings.0,r_logentry->Rimmed [INITIATOR_nameDef].,li
+InteractionDef/Sex_Rimming.modExtensions.0.RMBLabel,Receive anal rimming,RMBLabel
+InteractionDef/Sex_Scissoring.label,scissoring,label
+InteractionDef/Sex_Scissoring.logRulesInitiator.rulesStrings.0,r_logentry->Scissored with [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Scissoring.logRulesRecipient.rulesStrings.0,r_logentry->Scissored with [INITIATOR_nameDef].,li
+InteractionDef/Sex_Scissoring.modExtensions.0.RMBLabel,Do scissoring,RMBLabel
+InteractionDef/Sex_Sixtynine.label,69ing,label
+InteractionDef/Sex_Sixtynine.logRulesInitiator.rulesStrings.0,r_logentry->69'd with [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Sixtynine.logRulesRecipient.rulesStrings.0,r_logentry->69'd with [INITIATOR_nameDef].,li
+InteractionDef/Sex_Sixtynine.modExtensions.0.RMBLabel,Do sixtynine,RMBLabel
+InteractionDef/Sex_Vaginal.label,vaginal,label
+InteractionDef/Sex_Vaginal.logRulesInitiator.rulesStrings.0,r_logentry->Had vaginal sex with [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Vaginal.logRulesRecipient.rulesStrings.0,r_logentry->Had vaginal sex with [INITIATOR_nameDef].,li
+InteractionDef/Sex_Vaginal.modExtensions.0.RMBLabel,Have vaginal sex,RMBLabel
+InteractionDef/Sex_Reverse_Anal.label,anal,label
+InteractionDef/Sex_Reverse_Anal.logRulesInitiator.rulesStrings.0,r_logentry->Was fucked anally by [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Reverse_Anal.logRulesRecipient.rulesStrings.0,r_logentry->Fucked anally [INITIATOR_nameDef].,li
+InteractionDef/Sex_Reverse_Anal.modExtensions.0.RMBLabel,Get fucked anally,RMBLabel
+InteractionDef/Sex_Reverse_Beakjob.label,beakjob,label
+InteractionDef/Sex_Reverse_Beakjob.logRulesInitiator.rulesStrings.0,r_logentry->Gave a beakjob to [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Reverse_Beakjob.logRulesRecipient.rulesStrings.0,r_logentry->Received a beakjob from [INITIATOR_nameDef].,li
+InteractionDef/Sex_Reverse_Beakjob.modExtensions.0.RMBLabel,Give beakjob,RMBLabel
+InteractionDef/Sex_Reverse_Breastjob.label,breastjob,label
+InteractionDef/Sex_Reverse_Breastjob.logRulesInitiator.rulesStrings.0,r_logentry->Gave a breastjob to [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Reverse_Breastjob.logRulesRecipient.rulesStrings.0,r_logentry->Received a breastjob from [INITIATOR_nameDef].,li
+InteractionDef/Sex_Reverse_Breastjob.modExtensions.0.RMBLabel,Give breastjob,RMBLabel
+InteractionDef/Sex_Reverse_Cunnilingus.label,cunnilingus,label
+InteractionDef/Sex_Reverse_Cunnilingus.logRulesInitiator.rulesStrings.0,r_logentry->Gave cunnilingus to [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Reverse_Cunnilingus.logRulesRecipient.rulesStrings.0,r_logentry->Received cunnilingus from [INITIATOR_nameDef].,li
+InteractionDef/Sex_Reverse_Cunnilingus.modExtensions.0.RMBLabel,Give cunnilingus,RMBLabel
+InteractionDef/Sex_Reverse_DoublePenetration.label,double-penetration,label
+InteractionDef/Sex_Reverse_DoublePenetration.logRulesInitiator.rulesStrings.0,r_logentry->Was double-penetrated by [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Reverse_DoublePenetration.logRulesRecipient.rulesStrings.0,r_logentry->Double-penetrated [INITIATOR_nameDef].,li
+InteractionDef/Sex_Reverse_DoublePenetration.modExtensions.0.RMBLabel,Get double-penetrated,RMBLabel
+InteractionDef/Sex_Reverse_DoublePenetrationM.label,double-penetration,label
+InteractionDef/Sex_Reverse_DoublePenetrationM.logRulesInitiator.rulesStrings.0,r_logentry->Was double-penetrated by [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Reverse_DoublePenetrationM.logRulesRecipient.rulesStrings.0,r_logentry->Double-penetrated [INITIATOR_nameDef].,li
+InteractionDef/Sex_Reverse_DoublePenetrationM.modExtensions.0.RMBLabel,Get double-penetrated,RMBLabel
+InteractionDef/Sex_Reverse_Fellatio.label,fellatio,label
+InteractionDef/Sex_Reverse_Fellatio.logRulesInitiator.rulesStrings.0,r_logentry->Fellated [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Reverse_Fellatio.logRulesRecipient.rulesStrings.0,r_logentry->Was fellated by [INITIATOR_nameDef].,li
+InteractionDef/Sex_Reverse_Fellatio.modExtensions.0.RMBLabel,Give fellatio,RMBLabel
+InteractionDef/Sex_Reverse_Fingering.label,fingering,label
+InteractionDef/Sex_Reverse_Fingering.logRulesInitiator.rulesStrings.0,r_logentry->Fingered [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Reverse_Fingering.logRulesRecipient.rulesStrings.0,r_logentry->Was fingered by [INITIATOR_nameDef].,li
+InteractionDef/Sex_Reverse_Fingering.modExtensions.0.RMBLabel,Give fingering,RMBLabel
+InteractionDef/Sex_Reverse_Fisting.label,fisting,label
+InteractionDef/Sex_Reverse_Fisting.logRulesInitiator.rulesStrings.0,r_logentry->Fisted [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Reverse_Fisting.logRulesRecipient.rulesStrings.0,r_logentry->Was fisted by [INITIATOR_nameDef].,li
+InteractionDef/Sex_Reverse_Fisting.modExtensions.0.RMBLabel,Give fisting,RMBLabel
+InteractionDef/Sex_Reverse_Footjob.label,footjob,label
+InteractionDef/Sex_Reverse_Footjob.logRulesInitiator.rulesStrings.0,r_logentry->Gave a footjob to [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Reverse_Footjob.logRulesRecipient.rulesStrings.0,r_logentry->Received a footjob from [INITIATOR_nameDef].,li
+InteractionDef/Sex_Reverse_Footjob.modExtensions.0.RMBLabel,Give footjob,RMBLabel
+InteractionDef/Sex_Reverse_Handjob.label,handjob,label
+InteractionDef/Sex_Reverse_Handjob.logRulesInitiator.rulesStrings.0,r_logentry->Gave a handjob to [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Reverse_Handjob.logRulesRecipient.rulesStrings.0,r_logentry->Received a handjob from [INITIATOR_nameDef].,li
+InteractionDef/Sex_Reverse_Handjob.modExtensions.0.RMBLabel,Give handjob,RMBLabel
+InteractionDef/Sex_Reverse_Rimming.label,rimming,label
+InteractionDef/Sex_Reverse_Rimming.logRulesInitiator.rulesStrings.0,r_logentry->Rimmed [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Reverse_Rimming.logRulesRecipient.rulesStrings.0,r_logentry->Was rimmed by [INITIATOR_nameDef].,li
+InteractionDef/Sex_Reverse_Rimming.modExtensions.0.RMBLabel,Give anal rimming,RMBLabel
+InteractionDef/Sex_Reverse_Vaginal.label,vaginal,label
+InteractionDef/Sex_Reverse_Vaginal.logRulesInitiator.rulesStrings.0,r_logentry->Was fucked vaginally by [RECIPIENT_nameDef].,li
+InteractionDef/Sex_Reverse_Vaginal.logRulesRecipient.rulesStrings.0,r_logentry->Fucked vaginally [INITIATOR_nameDef].,li
+InteractionDef/Sex_Reverse_Vaginal.modExtensions.0.RMBLabel,Get fucked vaginally,RMBLabel
+InteractionDef/Necro_Anal.label,anal,label
+InteractionDef/Necro_Anal.logRulesInitiator.rulesStrings.0,r_logentry->Raped anally [RECIPIENT_nameDef].,li
+InteractionDef/Necro_Anal.logRulesRecipient.rulesStrings.0,r_logentry->Was anally raped by [INITIATOR_nameDef].,li
+InteractionDef/Necro_Anal.modExtensions.0.RMBLabel,Fuck anally,RMBLabel
+InteractionDef/Necro_DoublePenetration.label,double-penetration,label
+InteractionDef/Necro_DoublePenetration.logRulesInitiator.rulesStrings.0,r_logentry->Double-penetrated [RECIPIENT_nameDef].,li
+InteractionDef/Necro_DoublePenetration.logRulesRecipient.rulesStrings.0,r_logentry->Was double-penetrated by [INITIATOR_nameDef].,li
+InteractionDef/Necro_DoublePenetration.modExtensions.0.RMBLabel,Double-penetrate,RMBLabel
+InteractionDef/Necro_DoublePenetrationM.label,double-penetration,label
+InteractionDef/Necro_DoublePenetrationM.logRulesInitiator.rulesStrings.0,r_logentry->Double-penetrated [RECIPIENT_nameDef].,li
+InteractionDef/Necro_DoublePenetrationM.logRulesRecipient.rulesStrings.0,r_logentry->Was double-penetrated by [INITIATOR_nameDef].,li
+InteractionDef/Necro_DoublePenetrationM.modExtensions.0.RMBLabel,Double-penetrate,RMBLabel
+InteractionDef/Necro_Vaginal.label,vaginal,label
+InteractionDef/Necro_Vaginal.logRulesInitiator.rulesStrings.0,r_logentry->Raped vaginally [RECIPIENT_nameDef].,li
+InteractionDef/Necro_Vaginal.logRulesRecipient.rulesStrings.0,r_logentry->Was vaginally raped by [INITIATOR_nameDef].,li
+InteractionDef/Necro_Vaginal.modExtensions.0.RMBLabel,Fuck vaginally,RMBLabel
+InteractionDef/Rape_MechImplant.label,mechanoid implanting,label
+InteractionDef/Rape_MechImplant.logRulesInitiator.rulesStrings.0,r_logentry->Assaulted [RECIPIENT_nameDef].,li
+InteractionDef/Rape_MechImplant.logRulesRecipient.rulesStrings.0,r_logentry->Was violated by [INITIATOR_nameDef].,li
+InteractionDef/Rape_MechImplant.modExtensions.0.RMBLabel,Implant chip,RMBLabel
+InteractionDef/Rape_Reverse_Anal.label,anal,label
+InteractionDef/Rape_Reverse_Anal.logRulesInitiator.rulesStrings.0,r_logentry->Raped anally [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Reverse_Anal.logRulesRecipient.rulesStrings.0,r_logentry->Was anally raped by [INITIATOR_nameDef].,li
+InteractionDef/Rape_Reverse_Anal.modExtensions.0.RMBLabel,Ride anally,RMBLabel
+InteractionDef/Rape_Reverse_Breastjob.label,breastjob,label
+InteractionDef/Rape_Reverse_Breastjob.logRulesInitiator.rulesStrings.0,r_logentry->Forcefully gave a breastjob to [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Reverse_Breastjob.logRulesRecipient.rulesStrings.0,r_logentry->Was forced to receive a breastjob by [INITIATOR_nameDef].,li
+InteractionDef/Rape_Reverse_Breastjob.modExtensions.0.RMBLabel,Do a breastjob,RMBLabel
+InteractionDef/Rape_Reverse_Cunnilingus.label,cunnilingus,label
+InteractionDef/Rape_Reverse_Cunnilingus.logRulesInitiator.rulesStrings.0,r_logentry->Forcefully gave cunnilingus to [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Reverse_Cunnilingus.logRulesRecipient.rulesStrings.0,r_logentry->Was forced to receive cunnilingus from [INITIATOR_nameDef].,li
+InteractionDef/Rape_Reverse_Cunnilingus.modExtensions.0.RMBLabel,Do cunnilingus,RMBLabel
+InteractionDef/Rape_Reverse_DoublePenetration.label,double-penetration,label
+InteractionDef/Rape_Reverse_DoublePenetration.logRulesInitiator.rulesStrings.0,r_logentry->Double-penetrated by [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Reverse_DoublePenetration.logRulesRecipient.rulesStrings.0,r_logentry->Was forced to double-penetrate [INITIATOR_nameDef].,li
+InteractionDef/Rape_Reverse_DoublePenetration.modExtensions.0.RMBLabel,Get double-penetrated,RMBLabel
+InteractionDef/Rape_Reverse_DoublePenetrationM.label,double-penetration,label
+InteractionDef/Rape_Reverse_DoublePenetrationM.logRulesInitiator.rulesStrings.0,r_logentry->Double-penetrated by [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Reverse_DoublePenetrationM.logRulesRecipient.rulesStrings.0,r_logentry->Was forced to double-penetrate [INITIATOR_nameDef].,li
+InteractionDef/Rape_Reverse_DoublePenetrationM.modExtensions.0.RMBLabel,Get double-penetrated,RMBLabel
+InteractionDef/Rape_Reverse_Fellatio.label,fellatio,label
+InteractionDef/Rape_Reverse_Fellatio.logRulesInitiator.rulesStrings.0,r_logentry->Forcefully fellated [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Reverse_Fellatio.logRulesRecipient.rulesStrings.0,r_logentry->Was forcibly fellated by [INITIATOR_nameDef].,li
+InteractionDef/Rape_Reverse_Fellatio.modExtensions.0.RMBLabel,Do fellatio,RMBLabel
+InteractionDef/Rape_Reverse_Fingering.label,fingering,label
+InteractionDef/Rape_Reverse_Fingering.logRulesInitiator.rulesStrings.0,r_logentry->Forcefully fingered [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Reverse_Fingering.logRulesRecipient.rulesStrings.0,r_logentry->Was forcibly fingered by [INITIATOR_nameDef].,li
+InteractionDef/Rape_Reverse_Fingering.modExtensions.0.RMBLabel,Do fingering,RMBLabel
+InteractionDef/Rape_Reverse_Fisting.label,fisting,label
+InteractionDef/Rape_Reverse_Fisting.logRulesInitiator.rulesStrings.0,r_logentry->Forced [RECIPIENT_nameDef] to give fisting.,li
+InteractionDef/Rape_Reverse_Fisting.logRulesRecipient.rulesStrings.0,r_logentry->Was forced to fist [INITIATOR_nameDef].,li
+InteractionDef/Rape_Reverse_Fisting.modExtensions.0.RMBLabel,Get fisted anally,RMBLabel
+InteractionDef/Rape_Reverse_Footjob.label,footjob,label
+InteractionDef/Rape_Reverse_Footjob.logRulesInitiator.rulesStrings.0,r_logentry->Forcefully gave a footjob to [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Reverse_Footjob.logRulesRecipient.rulesStrings.0,r_logentry->Was forcibly given a footjob by [INITIATOR_nameDef].,li
+InteractionDef/Rape_Reverse_Footjob.modExtensions.0.RMBLabel,Do a footjob,RMBLabel
+InteractionDef/Rape_Reverse_Handjob.label,handjob,label
+InteractionDef/Rape_Reverse_Handjob.logRulesInitiator.rulesStrings.0,r_logentry->Forcefully jerked off [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Reverse_Handjob.logRulesRecipient.rulesStrings.0,r_logentry->Was forcibly jerked off by [INITIATOR_nameDef].,li
+InteractionDef/Rape_Reverse_Handjob.modExtensions.0.RMBLabel,Do a handjob,RMBLabel
+InteractionDef/Rape_Reverse_Rimming.label,rimming,label
+InteractionDef/Rape_Reverse_Rimming.logRulesInitiator.rulesStrings.0,r_logentry->Forcefully rimmed [RECIPIENT_nameDef]'s anus.,li
+InteractionDef/Rape_Reverse_Rimming.logRulesRecipient.rulesStrings.0,r_logentry->Was forcibly rimmed by [INITIATOR_nameDef].,li
+InteractionDef/Rape_Reverse_Rimming.modExtensions.0.RMBLabel,Do anal rimming,RMBLabel
+InteractionDef/Rape_Reverse_Scissoring.label,scissoring,label
+InteractionDef/Rape_Reverse_Scissoring.logRulesInitiator.rulesStrings.0,r_logentry->Forcefully scissored with [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Reverse_Scissoring.logRulesRecipient.rulesStrings.0,r_logentry->Was forcibly scissored with [INITIATOR_nameDef].,li
+InteractionDef/Rape_Reverse_Scissoring.modExtensions.0.RMBLabel,Do scissoring,RMBLabel
+InteractionDef/Rape_Reverse_Vaginal.label,vaginal,label
+InteractionDef/Rape_Reverse_Vaginal.logRulesInitiator.rulesStrings.0,r_logentry->Raped vaginally [RECIPIENT_nameDef].,li
+InteractionDef/Rape_Reverse_Vaginal.logRulesRecipient.rulesStrings.0,r_logentry->Was vaginally raped by [INITIATOR_nameDef].,li
+InteractionDef/Rape_Reverse_Vaginal.modExtensions.0.RMBLabel,Ride vaginally,RMBLabel
+InteractionDef/Necro_Reverse_Anal.label,anal,label
+InteractionDef/Necro_Reverse_Anal.logRulesInitiator.rulesStrings.0,r_logentry->Raped anally [RECIPIENT_nameDef].,li
+InteractionDef/Necro_Reverse_Anal.logRulesRecipient.rulesStrings.0,r_logentry->Was anally raped by [INITIATOR_nameDef].,li
+InteractionDef/Necro_Reverse_Anal.modExtensions.0.RMBLabel,Ride anally,RMBLabel
+InteractionDef/Necro_Reverse_DoublePenetration.label,double-penetration,label
+InteractionDef/Necro_Reverse_DoublePenetration.logRulesInitiator.rulesStrings.0,r_logentry->Double-penetrated by [RECIPIENT_nameDef].,li
+InteractionDef/Necro_Reverse_DoublePenetration.logRulesRecipient.rulesStrings.0,r_logentry->Was forced to double-penetrate [INITIATOR_nameDef].,li
+InteractionDef/Necro_Reverse_DoublePenetration.modExtensions.0.RMBLabel,Get double-penetrated,RMBLabel
+InteractionDef/Necro_Reverse_DoublePenetrationM.label,double-penetration,label
+InteractionDef/Necro_Reverse_DoublePenetrationM.logRulesInitiator.rulesStrings.0,r_logentry->Double-penetrated by [RECIPIENT_nameDef].,li
+InteractionDef/Necro_Reverse_DoublePenetrationM.logRulesRecipient.rulesStrings.0,r_logentry->Was forced to double-penetrate [INITIATOR_nameDef].,li
+InteractionDef/Necro_Reverse_DoublePenetrationM.modExtensions.0.RMBLabel,Get double-penetrated,RMBLabel
+InteractionDef/Necro_Reverse_Vaginal.label,vaginal,label
+InteractionDef/Necro_Reverse_Vaginal.logRulesInitiator.rulesStrings.0,r_logentry->Raped vaginally [RECIPIENT_nameDef].,li
+InteractionDef/Necro_Reverse_Vaginal.logRulesRecipient.rulesStrings.0,r_logentry->Was vaginally raped by [INITIATOR_nameDef].,li
+InteractionDef/Necro_Reverse_Vaginal.modExtensions.0.RMBLabel,Ride vaginally,RMBLabel
+InteractionDef/Bestiality_Reverse_Anal.label,anal breeding,label
+InteractionDef/Bestiality_Reverse_Anal.logRulesInitiator.rulesStrings.0,r_logentry->Presented to [RECIPIENT_nameDef].,li
+InteractionDef/Bestiality_Reverse_Anal.logRulesRecipient.rulesStrings.0,r_logentry->Mounted anally [INITIATOR_nameDef].,li
+InteractionDef/Bestiality_Reverse_Anal.modExtensions.0.RMBLabel,Get bred anally,RMBLabel
+InteractionDef/Bestiality_Reverse_Double_Penetration_M.label,double penetration,label
+InteractionDef/Bestiality_Reverse_Double_Penetration_M.logRulesInitiator.rulesStrings.0,r_logentry->Presented to [RECIPIENT_nameDef].,li
+InteractionDef/Bestiality_Reverse_Double_Penetration_M.logRulesRecipient.rulesStrings.0,r_logentry->Double-penetrated [INITIATOR_nameDef].,li
+InteractionDef/Bestiality_Reverse_Double_Penetration_M.modExtensions.0.RMBLabel,Get double-penetrated,RMBLabel
+InteractionDef/Bestiality_Reverse_Handjob.label,Handjob,label
+InteractionDef/Bestiality_Reverse_Handjob.logRulesInitiator.rulesStrings.0,r_logentry->Serviced [RECIPIENT_nameDef] with handjob .,li
+InteractionDef/Bestiality_Reverse_Handjob.logRulesRecipient.rulesStrings.0,r_logentry->Received handjob from [INITIATOR_nameDef].,li
+InteractionDef/Bestiality_Reverse_Handjob.modExtensions.0.RMBLabel,Give handjob,RMBLabel
+InteractionDef/Bestiality_Reverse_Oral.label,MouthFuck,label
+InteractionDef/Bestiality_Reverse_Oral.logRulesInitiator.rulesStrings.0,r_logentry->Presented to [RECIPIENT_nameDef].,li
+InteractionDef/Bestiality_Reverse_Oral.logRulesRecipient.rulesStrings.0,r_logentry->Mounted orally [INITIATOR_nameDef].,li
+InteractionDef/Bestiality_Reverse_Oral.modExtensions.0.RMBLabel,Get bred orally,RMBLabel
+InteractionDef/Bestiality_Reverse_Oral_Service.label,MouthFuck,label
+InteractionDef/Bestiality_Reverse_Oral_Service.logRulesInitiator.rulesStrings.0,r_logentry->Orally serviced [RECIPIENT_nameDef].,li
+InteractionDef/Bestiality_Reverse_Oral_Service.logRulesRecipient.rulesStrings.0,r_logentry->Was orally serviced by [INITIATOR_nameDef].,li
+InteractionDef/Bestiality_Reverse_Oral_Service.modExtensions.0.RMBLabel,Service orally,RMBLabel
+InteractionDef/Bestiality_Reverse_Vaginal.label,vaginal breeding,label
+InteractionDef/Bestiality_Reverse_Vaginal.logRulesInitiator.rulesStrings.0,r_logentry->Presented to [RECIPIENT_nameDef].,li
+InteractionDef/Bestiality_Reverse_Vaginal.logRulesRecipient.rulesStrings.0,r_logentry->Mounted vaginally [INITIATOR_nameDef].,li
+InteractionDef/Bestiality_Reverse_Vaginal.modExtensions.0.RMBLabel,Get bred vaginally,RMBLabel
+rjw.HediffDef_SexPart/GenericPenis.label,generic penis,label
+rjw.HediffDef_SexPart/GenericPenis.labelNoun,a penis,labelNoun
+rjw.HediffDef_SexPart/GenericPenis.description,A penis. Generic placeholder part for unsuported race.,description
+rjw.HediffDef_SexPart/GenericVagina.label,generic vagina,label
+rjw.HediffDef_SexPart/GenericVagina.labelNoun,a vagina,labelNoun
+rjw.HediffDef_SexPart/GenericVagina.description,A vagina. Generic placeholder part for unsuported race.,description
+rjw.HediffDef_SexPart/GenericAnus.label,generic anus,label
+rjw.HediffDef_SexPart/GenericAnus.labelNoun,an anus,labelNoun
+rjw.HediffDef_SexPart/GenericAnus.description,An anus. Generic placeholder part for unsuported race.,description
+rjw.HediffDef_SexPart/GenericBreasts.label,generic breasts,label
+rjw.HediffDef_SexPart/GenericBreasts.labelNoun,breasts,labelNoun
+rjw.HediffDef_SexPart/GenericBreasts.description,A pair of breasts. Generic placeholder part for unsuported race.,description
+rjw.HediffDef_SexPart/HorsePenis.label,equine penis,label
+rjw.HediffDef_SexPart/HorsePenis.labelNoun,an equine penis,labelNoun
+rjw.HediffDef_SexPart/HorsePenis.description,A large horse penis. Flares out during sex.,description
+rjw.HediffDef_SexPart/HorseVagina.label,equine vagina,label
+rjw.HediffDef_SexPart/HorseVagina.labelNoun,an equine vagina,labelNoun
+rjw.HediffDef_SexPart/HorseVagina.description,A mare vagina.,description
+rjw.HediffDef_SexPart/CatPenis.label,feline penis,label
+rjw.HediffDef_SexPart/CatPenis.labelNoun,a feline penis,labelNoun
+rjw.HediffDef_SexPart/CatPenis.description,A spine-covered feline penis.,description
+rjw.HediffDef_SexPart/CatVagina.label,feline vagina,label
+rjw.HediffDef_SexPart/CatVagina.labelNoun,a feline vagina,labelNoun
+rjw.HediffDef_SexPart/CatVagina.description,A feline vagina.,description
+rjw.HediffDef_SexPart/DogPenis.label,canine penis,label
+rjw.HediffDef_SexPart/DogPenis.labelNoun,a dog penis,labelNoun
+rjw.HediffDef_SexPart/DogPenis.description,"A bright red dog penis. The knot will expand during sex, locking its lover to their partner for a long time.",description
+rjw.HediffDef_SexPart/DogVagina.label,canine vagina,label
+rjw.HediffDef_SexPart/DogVagina.labelNoun,a dog vagina,labelNoun
+rjw.HediffDef_SexPart/DogVagina.description,A dog vagina.,description
+rjw.HediffDef_SexPart/DragonPenis.label,dragon penis,label
+rjw.HediffDef_SexPart/DragonPenis.labelNoun,a dragon penis,labelNoun
+rjw.HediffDef_SexPart/DragonPenis.description,"A dragon penis. Has a knot that expands similarly to a dog's penis, but the ribbing on both sides takes its lover to greater heights of pleasure.",description
+rjw.HediffDef_SexPart/DragonVagina.label,dragon vagina,label
+rjw.HediffDef_SexPart/DragonVagina.labelNoun,a dragon vagina,labelNoun
+rjw.HediffDef_SexPart/DragonVagina.description,A dragon vagina. Has a similar texture to their outer hide.,description
+rjw.HediffDef_SexPart/RaccoonPenis.label,procyonine penis,label
+rjw.HediffDef_SexPart/RaccoonPenis.labelNoun,a procyonine penis,labelNoun
+rjw.HediffDef_SexPart/RaccoonPenis.description,A raccoon penis.,description
+rjw.HediffDef_SexPart/HemiPenis.label,hemipenis,label
+rjw.HediffDef_SexPart/HemiPenis.labelNoun,a hemipenis,labelNoun
+rjw.HediffDef_SexPart/HemiPenis.description,Twice the members for double the fun.,description
+rjw.HediffDef_SexPart/CrocodilianPenis.label,crocodilian penis,label
+rjw.HediffDef_SexPart/CrocodilianPenis.labelNoun,a crocodilian penis,labelNoun
+rjw.HediffDef_SexPart/CrocodilianPenis.description,A crocodilian penis. Large and permenantly erect.,description
+rjw.HediffDef_SexPart/UdderBreasts.label,udders,label
+rjw.HediffDef_SexPart/UdderBreasts.labelNoun,a set of udders,labelNoun
+rjw.HediffDef_SexPart/UdderBreasts.description,An animalistic breast with four nipples.,description
+rjw.HediffDef_SexPart/NarrowVagina.label,narrow vagina,label
+rjw.HediffDef_SexPart/NarrowVagina.labelNoun,a narrow vagina,labelNoun
+rjw.HediffDef_SexPart/NarrowVagina.description,"A tight, narrow vagina.",description
+rjw.HediffDef_SexPart/NeedlePenis.label,needle penis,label
+rjw.HediffDef_SexPart/NeedlePenis.labelNoun,a needle penis,labelNoun
+rjw.HediffDef_SexPart/NeedlePenis.description,A small and thin penis.,description
+rjw.HediffDef_SexPart/RodentVagina.label,rodent vagina,label
+rjw.HediffDef_SexPart/RodentVagina.labelNoun,a rodent vagina,labelNoun
+rjw.HediffDef_SexPart/RodentVagina.description,A rodent vagina.,description
+rjw.HediffDef_SexPart/RodentPenis.label,rodent penis,label
+rjw.HediffDef_SexPart/RodentPenis.labelNoun,a rodent penis,labelNoun
+rjw.HediffDef_SexPart/RodentPenis.description,A rodent penis.,description
+rjw.HediffDef_SexPart/CloacalPenis.label,cloacal penis,label
+rjw.HediffDef_SexPart/CloacalPenis.labelNoun,a cloacal penis,labelNoun
+rjw.HediffDef_SexPart/CloacalPenis.description,A cloacal penis.,description
+rjw.HediffDef_SexPart/CloacalVagina.label,cloacal vagina,label
+rjw.HediffDef_SexPart/CloacalVagina.labelNoun,a cloacal vagina,labelNoun
+rjw.HediffDef_SexPart/CloacalVagina.description,A cloacal vagina.,description
+rjw.HediffDef_SexPart/CloacalAnus.label,cloacal anus,label
+rjw.HediffDef_SexPart/CloacalAnus.labelNoun,cloacal anus,labelNoun
+rjw.HediffDef_SexPart/CloacalAnus.description,A cloacal anus.,description
+rjw.HediffDef_SexPart/DemonTentaclePenis.label,demon tentacles,label
+rjw.HediffDef_SexPart/DemonTentaclePenis.labelNoun,demon tentacles,labelNoun
+rjw.HediffDef_SexPart/DemonTentaclePenis.description,Tentacles capable of reaching corners of the body you never thought possible.,description
+rjw.HediffDef_SexPart/DemonPenis.label,demon penis,label
+rjw.HediffDef_SexPart/DemonPenis.labelNoun,a demon penis,labelNoun
+rjw.HediffDef_SexPart/DemonPenis.description,"A large, daunting mass that can cause its lovers to succumb to debauchery.",description
+rjw.HediffDef_SexPart/DemonVagina.label,demon vagina,label
+rjw.HediffDef_SexPart/DemonVagina.labelNoun,a demon vagina,labelNoun
+rjw.HediffDef_SexPart/DemonVagina.description,A tight vagina that can send its lovers to heaven.,description
+rjw.HediffDef_SexPart/DemonAnus.label,demon anus,label
+rjw.HediffDef_SexPart/DemonAnus.labelNoun,a demon anus,labelNoun
+rjw.HediffDef_SexPart/DemonAnus.description,A demon anus.,description
+rjw.HediffDef_SexPart/Penis.label,penis,label
+rjw.HediffDef_SexPart/Penis.labelNoun,a penis,labelNoun
+rjw.HediffDef_SexPart/Penis.description,A penis.,description
+rjw.HediffDef_SexPart/Vagina.label,vagina,label
+rjw.HediffDef_SexPart/Vagina.labelNoun,a vagina,labelNoun
+rjw.HediffDef_SexPart/Vagina.description,A vagina.,description
+rjw.HediffDef_SexPart/Anus.label,anus,label
+rjw.HediffDef_SexPart/Anus.labelNoun,an anus,labelNoun
+rjw.HediffDef_SexPart/Anus.description,A anus.,description
+rjw.HediffDef_SexPart/Breasts.label,breasts,label
+rjw.HediffDef_SexPart/Breasts.labelNoun,a pair of breasts,labelNoun
+rjw.HediffDef_SexPart/Breasts.description,A pair of breasts.,description
+rjw.HediffDef_SexPart/FeaturelessChest.label,featureless chest,label
+rjw.HediffDef_SexPart/FeaturelessChest.labelNoun,a featureless chest,labelNoun
+rjw.HediffDef_SexPart/FeaturelessChest.description,a flat chest without any nipples where there should be.,description
+rjw.HediffDef_SexPart/PegDick.label,peg dick,label
+rjw.HediffDef_SexPart/PegDick.labelNoun,a peg dick,labelNoun
+rjw.HediffDef_SexPart/PegDick.description,"A simple, static member.",description
+rjw.HediffDef_SexPart/PegDick.stages.0.label,Micro,label
+rjw.HediffDef_SexPart/PegDick.stages.1.label,Small,label
+rjw.HediffDef_SexPart/PegDick.stages.2.label,Average,label
+rjw.HediffDef_SexPart/PegDick.stages.3.label,Large,label
+rjw.HediffDef_SexPart/PegDick.stages.4.label,Huge,label
+rjw.HediffDef_SexPart/PegDick.stages.5.label,Towering,label
+rjw.HediffDef_SexPart/HydraulicPenis.label,hydraulic penis,label
+rjw.HediffDef_SexPart/HydraulicPenis.labelNoun,a hydraulic penis,labelNoun
+rjw.HediffDef_SexPart/HydraulicPenis.description,"Simulating a normal penis, it can enlarge itself with hydraulics.",description
+rjw.HediffDef_SexPart/HydraulicPenis.stages.0.label,Micro,label
+rjw.HediffDef_SexPart/HydraulicPenis.stages.1.label,Small,label
+rjw.HediffDef_SexPart/HydraulicPenis.stages.2.label,Average,label
+rjw.HediffDef_SexPart/HydraulicPenis.stages.3.label,Large,label
+rjw.HediffDef_SexPart/HydraulicPenis.stages.4.label,Huge,label
+rjw.HediffDef_SexPart/HydraulicPenis.stages.5.label,Towering,label
+rjw.HediffDef_SexPart/HydraulicVagina.label,hydraulic vagina,label
+rjw.HediffDef_SexPart/HydraulicVagina.labelNoun,a hydraulic vagina,labelNoun
+rjw.HediffDef_SexPart/HydraulicVagina.description,It uses simple hydraulics to simulate the tightness of a regular vagina.,description
+rjw.HediffDef_SexPart/HydraulicVagina.stages.0.label,Micro,label
+rjw.HediffDef_SexPart/HydraulicVagina.stages.1.label,Tight,label
+rjw.HediffDef_SexPart/HydraulicVagina.stages.2.label,Average,label
+rjw.HediffDef_SexPart/HydraulicVagina.stages.3.label,Accommodating,label
+rjw.HediffDef_SexPart/HydraulicVagina.stages.4.label,Cavernous,label
+rjw.HediffDef_SexPart/HydraulicVagina.stages.5.label,Abyssal,label
+rjw.HediffDef_SexPart/HydraulicBreasts.label,hydraulic breasts,label
+rjw.HediffDef_SexPart/HydraulicBreasts.labelNoun,a pair of hydraulic breasts,labelNoun
+rjw.HediffDef_SexPart/HydraulicBreasts.description,A pair obviously unnatural implants.,description
+rjw.HediffDef_SexPart/HydraulicBreasts.stages.0.label,Nipples,label
+rjw.HediffDef_SexPart/HydraulicBreasts.stages.1.label,Tiny,label
+rjw.HediffDef_SexPart/HydraulicBreasts.stages.2.label,Small,label
+rjw.HediffDef_SexPart/HydraulicBreasts.stages.3.label,Average,label
+rjw.HediffDef_SexPart/HydraulicBreasts.stages.4.label,Large,label
+rjw.HediffDef_SexPart/HydraulicBreasts.stages.5.label,Huge,label
+rjw.HediffDef_SexPart/HydraulicBreasts.stages.6.label,Enormous,label
+rjw.HediffDef_SexPart/HydraulicBreasts.stages.7.label,Massive,label
+rjw.HediffDef_SexPart/HydraulicBreasts.stages.8.label,Gargantuan,label
+rjw.HediffDef_SexPart/HydraulicBreasts.stages.9.label,Colossal,label
+rjw.HediffDef_SexPart/HydraulicBreasts.stages.10.label,Titanic,label
+rjw.HediffDef_SexPart/HydraulicBreasts.stages.11.label,Astronomical,label
+rjw.HediffDef_SexPart/HydraulicAnus.label,hydraulic anus,label
+rjw.HediffDef_SexPart/HydraulicAnus.labelNoun,a hydraulic anus,labelNoun
+rjw.HediffDef_SexPart/HydraulicAnus.description,An anus that uses simple hydraulics to tighten.,description
+rjw.HediffDef_SexPart/HydraulicAnus.stages.0.label,Micro,label
+rjw.HediffDef_SexPart/HydraulicAnus.stages.1.label,Tight,label
+rjw.HediffDef_SexPart/HydraulicAnus.stages.2.label,Average,label
+rjw.HediffDef_SexPart/HydraulicAnus.stages.3.label,Accommodating,label
+rjw.HediffDef_SexPart/HydraulicAnus.stages.4.label,Cavernous,label
+rjw.HediffDef_SexPart/HydraulicAnus.stages.5.label,Abyssal,label
+rjw.HediffDef_SexPart/BionicPenis.label,bionic penis,label
+rjw.HediffDef_SexPart/BionicPenis.labelNoun,a bionic penis,labelNoun
+rjw.HediffDef_SexPart/BionicPenis.description,"An advanced artificial penis. It uses fine-tuned pressure sensors and PID control loops to analyze its lover's contractions. It can expand, contract and even vibrate to adapt to its lover's preferences.",description
+rjw.HediffDef_SexPart/BionicPenis.stages.0.label,Micro,label
+rjw.HediffDef_SexPart/BionicPenis.stages.1.label,Small,label
+rjw.HediffDef_SexPart/BionicPenis.stages.2.label,Average,label
+rjw.HediffDef_SexPart/BionicPenis.stages.3.label,Large,label
+rjw.HediffDef_SexPart/BionicPenis.stages.4.label,Huge,label
+rjw.HediffDef_SexPart/BionicPenis.stages.5.label,Towering,label
+rjw.HediffDef_SexPart/BionicVagina.label,bionic vagina,label
+rjw.HediffDef_SexPart/BionicVagina.labelNoun,a bionic vagina,labelNoun
+rjw.HediffDef_SexPart/BionicVagina.description,"An advanced bionic vagina. It uses internal pressure sensors to accommodate its user's size, speed.",description
+rjw.HediffDef_SexPart/BionicVagina.stages.0.label,Micro,label
+rjw.HediffDef_SexPart/BionicVagina.stages.1.label,Tight,label
+rjw.HediffDef_SexPart/BionicVagina.stages.2.label,Average,label
+rjw.HediffDef_SexPart/BionicVagina.stages.3.label,Accommodating,label
+rjw.HediffDef_SexPart/BionicVagina.stages.4.label,Cavernous,label
+rjw.HediffDef_SexPart/BionicVagina.stages.5.label,Abyssal,label
+rjw.HediffDef_SexPart/BionicBreasts.label,bionic breasts,label
+rjw.HediffDef_SexPart/BionicBreasts.labelNoun,a bionic breasts,labelNoun
+rjw.HediffDef_SexPart/BionicBreasts.description,An advanced bionic breasts.,description
+rjw.HediffDef_SexPart/BionicBreasts.stages.0.label,Nipples,label
+rjw.HediffDef_SexPart/BionicBreasts.stages.1.label,Tiny,label
+rjw.HediffDef_SexPart/BionicBreasts.stages.2.label,Small,label
+rjw.HediffDef_SexPart/BionicBreasts.stages.3.label,Average,label
+rjw.HediffDef_SexPart/BionicBreasts.stages.4.label,Large,label
+rjw.HediffDef_SexPart/BionicBreasts.stages.5.label,Huge,label
+rjw.HediffDef_SexPart/BionicBreasts.stages.6.label,Enormous,label
+rjw.HediffDef_SexPart/BionicBreasts.stages.7.label,Massive,label
+rjw.HediffDef_SexPart/BionicBreasts.stages.8.label,Gargantuan,label
+rjw.HediffDef_SexPart/BionicBreasts.stages.9.label,Colossal,label
+rjw.HediffDef_SexPart/BionicBreasts.stages.10.label,Titanic,label
+rjw.HediffDef_SexPart/BionicBreasts.stages.11.label,Astronomical,label
+rjw.HediffDef_SexPart/BionicAnus.label,bionic anus,label
+rjw.HediffDef_SexPart/BionicAnus.labelNoun,an bionic anus,labelNoun
+rjw.HediffDef_SexPart/BionicAnus.description,An advanced bionic anus.,description
+rjw.HediffDef_SexPart/BionicAnus.stages.0.label,Micro,label
+rjw.HediffDef_SexPart/BionicAnus.stages.1.label,Tight,label
+rjw.HediffDef_SexPart/BionicAnus.stages.2.label,Average,label
+rjw.HediffDef_SexPart/BionicAnus.stages.3.label,Accommodating,label
+rjw.HediffDef_SexPart/BionicAnus.stages.4.label,Cavernous,label
+rjw.HediffDef_SexPart/BionicAnus.stages.5.label,Abyssal,label
+rjw.HediffDef_SexPart/ArchotechPenis.label,archotech penis,label
+rjw.HediffDef_SexPart/ArchotechPenis.description,An archotech penis.,description
+rjw.HediffDef_SexPart/ArchotechPenis.stages.0.label,Micro,label
+rjw.HediffDef_SexPart/ArchotechPenis.stages.1.label,Small,label
+rjw.HediffDef_SexPart/ArchotechPenis.stages.2.label,Average,label
+rjw.HediffDef_SexPart/ArchotechPenis.stages.3.label,Large,label
+rjw.HediffDef_SexPart/ArchotechPenis.stages.4.label,Huge,label
+rjw.HediffDef_SexPart/ArchotechPenis.stages.5.label,Towering,label
+rjw.HediffDef_SexPart/ArchotechVagina.label,archotech vagina,label
+rjw.HediffDef_SexPart/ArchotechVagina.description,An archotech vagina.,description
+rjw.HediffDef_SexPart/ArchotechVagina.stages.0.label,Micro,label
+rjw.HediffDef_SexPart/ArchotechVagina.stages.1.label,Tight,label
+rjw.HediffDef_SexPart/ArchotechVagina.stages.2.label,Average,label
+rjw.HediffDef_SexPart/ArchotechVagina.stages.3.label,Accommodating,label
+rjw.HediffDef_SexPart/ArchotechVagina.stages.4.label,Cavernous,label
+rjw.HediffDef_SexPart/ArchotechVagina.stages.5.label,Abyssal,label
+rjw.HediffDef_SexPart/ArchotechBreasts.label,archotech breasts,label
+rjw.HediffDef_SexPart/ArchotechBreasts.description,A pair of archotech breasts.,description
+rjw.HediffDef_SexPart/ArchotechBreasts.stages.0.label,Nipples,label
+rjw.HediffDef_SexPart/ArchotechBreasts.stages.1.label,Tiny,label
+rjw.HediffDef_SexPart/ArchotechBreasts.stages.2.label,Small,label
+rjw.HediffDef_SexPart/ArchotechBreasts.stages.3.label,Average,label
+rjw.HediffDef_SexPart/ArchotechBreasts.stages.4.label,Large,label
+rjw.HediffDef_SexPart/ArchotechBreasts.stages.5.label,Huge,label
+rjw.HediffDef_SexPart/ArchotechBreasts.stages.6.label,Enormous,label
+rjw.HediffDef_SexPart/ArchotechBreasts.stages.7.label,Massive,label
+rjw.HediffDef_SexPart/ArchotechBreasts.stages.8.label,Gargantuan,label
+rjw.HediffDef_SexPart/ArchotechBreasts.stages.9.label,Colossal,label
+rjw.HediffDef_SexPart/ArchotechBreasts.stages.10.label,Titanic,label
+rjw.HediffDef_SexPart/ArchotechBreasts.stages.11.label,Astronomical,label
+rjw.HediffDef_SexPart/ArchotechAnus.label,archotech anus,label
+rjw.HediffDef_SexPart/ArchotechAnus.description,An archotech anus.,description
+rjw.HediffDef_SexPart/ArchotechAnus.stages.0.label,Micro,label
+rjw.HediffDef_SexPart/ArchotechAnus.stages.1.label,Tight,label
+rjw.HediffDef_SexPart/ArchotechAnus.stages.2.label,Average,label
+rjw.HediffDef_SexPart/ArchotechAnus.stages.3.label,Accommodating,label
+rjw.HediffDef_SexPart/ArchotechAnus.stages.4.label,Cavernous,label
+rjw.HediffDef_SexPart/ArchotechAnus.stages.5.label,Abyssal,label
+rjw.HediffDef_SexPart/OvipositorF.label,ovipositor (Female),label
+rjw.HediffDef_SexPart/OvipositorF.labelNoun,an ovipositor,labelNoun
+rjw.HediffDef_SexPart/OvipositorF.description,An ovipositor. Lays eggs inside host.,description
+rjw.HediffDef_SexPart/OvipositorM.label,ovipositor (Male),label
+rjw.HediffDef_SexPart/OvipositorM.labelNoun,an ovipositor,labelNoun
+rjw.HediffDef_SexPart/OvipositorM.description,An ovipositor. Fertilizes eggs inside host.,description
+rjw.HediffDef_SexPart/InsectAnus.label,insect anus,label
+rjw.HediffDef_SexPart/InsectAnus.labelNoun,an insect anus,labelNoun
+rjw.HediffDef_SexPart/InsectAnus.description,An insect anus.,description
+rjw.HediffDef_SexPart/ResinPenis.label,resin protrusion,label
+rjw.HediffDef_SexPart/ResinPenis.labelNoun,a resin protrusion,labelNoun
+rjw.HediffDef_SexPart/ResinPenis.description,"Hardened mass of resin, its hard enough.",description
+rjw.HediffDef_SexPart/ResinVagina.label,resin hole,label
+rjw.HediffDef_SexPart/ResinVagina.labelNoun,a resin hole,labelNoun
+rjw.HediffDef_SexPart/ResinVagina.description,A slick hole covered with viscous organic liquids.,description
+rjw.HediffDef_SexPart/ResinAnus.label,resin hole,label
+rjw.HediffDef_SexPart/ResinAnus.labelNoun,a resin hole,labelNoun
+rjw.HediffDef_SexPart/ResinAnus.description,A slick hole covered with viscous organic liquids.,description
+rjw.HediffDef_SexPart/ResinBreasts.label,resin blobs,label
+rjw.HediffDef_SexPart/ResinBreasts.labelNoun,a pair of resin blobs,labelNoun
+rjw.HediffDef_SexPart/ResinBreasts.description,A pair resin blobs filled with viscous organic liquids.,description
+rjw.HediffDef_SexPart/SlimeTentacles.label,slime tentacles,label
+rjw.HediffDef_SexPart/SlimeTentacles.labelNoun,slime tentacles,labelNoun
+rjw.HediffDef_SexPart/SlimeTentacles.description,"Slick, translucent tentacles that can conform into any shape desired.",description
+rjw.HediffDef_SexPart/SlimeVagina.label,slime vagina,label
+rjw.HediffDef_SexPart/SlimeVagina.labelNoun,slime vagina,labelNoun
+rjw.HediffDef_SexPart/SlimeVagina.description,"A slick, translucent vagina that can grow or shrink to accommodate any penis.",description
+rjw.HediffDef_SexPart/SlimeAnus.label,slime anus,label
+rjw.HediffDef_SexPart/SlimeAnus.labelNoun,a slime anus,labelNoun
+rjw.HediffDef_SexPart/SlimeAnus.description,"A slick, translucent anus that can tighten and conform to fit anything.",description
+rjw.HediffDef_SexPart/SlimeBreasts.label,slime breasts,label
+rjw.HediffDef_SexPart/SlimeBreasts.labelNoun,a pair of slime breasts,labelNoun
+rjw.HediffDef_SexPart/SlimeBreasts.description,"A pair of slick, translucent breasts that can grow or shrink to any desired size.",description

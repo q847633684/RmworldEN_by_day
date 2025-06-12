@@ -10,7 +10,7 @@ import time
 # 可翻译字段预览/确认开关
 PREVIEW_TRANSLATABLE_FIELDS = False  # True: 显示预览界面，False: 跳过预览直接导出
 # 日志级别控制
-DEBUG_MODE = True  # True 显示 debug 日志，False 只显示 info 及以上
+DEBUG_MODE = False  # True 显示 debug 日志，False 只显示 info 及以上
 LOG_FILE = "extract_translate.log"
 log_level = logging.DEBUG if DEBUG_MODE else logging.INFO
 log_format = '%(asctime)s - %(levelname)s - %(message)s'

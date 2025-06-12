@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: peg arm -->
+  <PegArm.label>peg arm</PegArm.label>
+  <!-- EN: a peg arm -->
+  <PegArm.labelNoun>a peg arm</PegArm.labelNoun>
+  <!-- EN: A peg arm. -->
+  <PegArm.description>A peg arm.</PegArm.description>
+</LanguageData>

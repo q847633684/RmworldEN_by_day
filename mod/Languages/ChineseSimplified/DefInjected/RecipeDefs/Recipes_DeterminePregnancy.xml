@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: check for pregnancy -->
+  <DeterminePregnancy.label>check for pregnancy</DeterminePregnancy.label>
+  <!-- EN: Determines if a colonist is pregnant or not and if there any abnormalities with pregnancy. -->
+  <DeterminePregnancy.description>Determines if a colonist is pregnant or not and if there any abnormalities with pregnancy.</DeterminePregnancy.description>
+</LanguageData>

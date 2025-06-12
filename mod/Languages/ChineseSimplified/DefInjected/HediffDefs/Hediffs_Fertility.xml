@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: IUD -->
+  <RJW_IUD.label>IUD</RJW_IUD.label>
+  <!-- EN: A small silver device inserted into the womb that greatly reduces the chance of pregnancy. -->
+  <RJW_IUD.description>A small silver device inserted into the womb that greatly reduces the chance of pregnancy.</RJW_IUD.description>
+  <!-- EN: Fertile -->
+  <IncreasedFertility.label>Fertile</IncreasedFertility.label>
+  <!-- EN: Increased fertility, for baby making. -->
+  <IncreasedFertility.description>Increased fertility, for baby making.</IncreasedFertility.description>
+  <!-- EN: Infertile -->
+  <DecreasedFertility.label>Infertile</DecreasedFertility.label>
+  <!-- EN: Low fertility, not for baby making. -->
+  <DecreasedFertility.description>Low fertility, not for baby making.</DecreasedFertility.description>
+  <!-- EN: Archotech pregnancy blocker -->
+  <ImpregnationBlocker.label>Archotech pregnancy blocker</ImpregnationBlocker.label>
+  <!-- EN: A complex device that prevents fertilization and pregnancy. -->
+  <ImpregnationBlocker.description>A complex device that prevents fertilization and pregnancy.</ImpregnationBlocker.description>
+  <!-- EN: Archotech fertility enhancer -->
+  <FertilityEnhancer.label>Archotech fertility enhancer</FertilityEnhancer.label>
+  <!-- EN: A complex device that increases the likelihood of pregnancy. -->
+  <FertilityEnhancer.description>A complex device that increases the likelihood of pregnancy.</FertilityEnhancer.description>
+</LanguageData>
