@@ -217,17 +217,53 @@ def preview_translatable_fields(mod_root_dir, preview=PREVIEW_TRANSLATABLE_FIELD
         return []
 
     if PREVIEW_TRANSLATABLE_FIELDS:
-        print("\n=== 可翻译字段预览 ===")
-        print("请确认需要导出的字段，输入 y 或回车确认，n 跳过该字段。全部确认可直接回车到底。")
-        selected = []
-        for i, (full_path, text, tag, _) in enumerate(all_translations, 1):
-            print(f"{i}. 标签: {tag}")
-            print(f"   内容: {text}")
-            ans = input("导出该字段？[Y/n]: ").strip().lower()
-            if ans == '' or ans == 'y':
-                selected.append((full_path, text, tag, _))
-        print(f"已选择 {len(selected)}/{len(all_translations)} 个字段导出。\n")
-        return selected
+        def parse_indices(input_str, total):
+            """解析用户输入的编号字符串，支持范围和逗号分隔"""
+            indices = set()
+            for part in input_str.split(','):
+                part = part.strip()
+                if '-' in part:
+                    try:
+                        start, end = part.split('-')
+                        indices.update(range(int(start)-1, int(end)))
+                    except Exception:
+                        continue
+                elif part.isdigit():
+                    indices.add(int(part)-1)
+            return {i for i in indices if 0 <= i < total}
+
+        selected = set(range(len(all_translations)))
+        while True:
+            print(f"\n=== 可翻译字段（共{len(all_translations)}，已选{len(selected)}）===")
+            for i, (full_path, text, tag, _) in enumerate(all_translations, 1):
+                mark = "√" if i-1 in selected else " "
+                print(f"{mark}{i}. 路径: {full_path}")
+                print(f"   标签: {tag}")
+                print(f"   内容: {text}")
+                print("-" * 50)
+            print("\n操作说明：a=全选，n=全不选，r=反选，直接回车=确认，或输入排除/选择编号（如1-5,8,10），前加-为排除，+为选择")
+            user_input = input("> ").strip().lower()
+            if user_input == '':
+                break
+            elif user_input == 'a':
+                selected = set(range(len(all_translations)))
+            elif user_input == 'n':
+                selected = set()
+            elif user_input == 'r':
+                selected = set(range(len(all_translations))) - selected
+            elif user_input.startswith('-'):
+                indices = parse_indices(user_input[1:], len(all_translations))
+                selected -= indices
+            elif user_input.startswith('+'):
+                indices = parse_indices(user_input[1:], len(all_translations))
+                selected |= indices
+            else:
+                # 默认排除
+                indices = parse_indices(user_input, len(all_translations))
+                selected -= indices
+            print(f"当前已选 {len(selected)} 个字段。")
+
+        return [all_translations[i] for i in sorted(selected)]
     else:
         # 直接返回所有字段，不再确认
         return all_translations
@@ -391,43 +427,49 @@ def extract_translate(mod_root_dir, active_language="ChineseSimplified", english
     
     english_lang_path = get_language_folder_path(english_language, mod_root_dir)
     english_def_injected_path = os.path.join(english_lang_path, "DefInjected")
-    
+
     if os.path.exists(english_def_injected_path):
-        logging.info(f"找到英文 DefInjected {english_def_injected_path}，优先处理")
-        if not os.path.exists(def_injected_path):
-            os.makedirs(def_injected_path)
-            logging.info(f"创建文件夹：{def_injected_path}")
-        
-        for xml_file in Path(def_injected_path).rglob("*.xml"):
-            try:
-                os.remove(xml_file)
-                logging.info(f"删除文件：{xml_file}")
-            except Exception as e:
-                logging.error(f"无法删除 {xml_file}: {e}")
-        
-        for src_file in sorted(Path(english_def_injected_path).rglob("*.xml")):
-            try:
-                rel_path = os.path.relpath(src_file, english_def_injected_path)
-                dst_file = os.path.join(def_injected_path, rel_path)
-                os.makedirs(os.path.dirname(dst_file), exist_ok=True)
-                shutil.copy2(src_file, dst_file)
-                logging.info(f"复制 {src_file} 到 {dst_file}")
-                
-                tree = ET.parse(dst_file)
-                root = tree.getroot()
-                parent_map = {c: p for p in root.iter() for c in p}
-                for elem in root.findall(".//*"):
-                    if elem.text and elem.text.strip():
-                        original = elem.text
-                        # 字段内容保留原文
-                        comment = ET.Comment(sanitize_xcomment(f" EN: {original} "))
-                        parent = parent_map.get(elem)
-                        if parent is not None:
-                            idx = list(parent).index(elem)
-                            parent.insert(idx, comment)
-                save_xml_to_file(root, dst_file)
-            except Exception as e:
-                logging.error(f"无法处理 {src_file}: {e}")
+        print("检测到英文 DefInjected 目录。请选择处理方式：")
+        print("1. 以英文 DefInjected 为基础（推荐用于已有翻译结构的情况）")
+        print("2. 直接从 Defs 目录重新提取可翻译字段（推荐用于结构有变动或需全量提取时）")
+        choice = input("请输入选项编号（1/2，回车默认1）：").strip()
+        if choice == '2':
+            logging.info("用户选择：从 Defs 目录重新提取可翻译字段")
+            extract_definjected_from_defs(mod_root_dir, active_language)
+            return
+        else:
+            logging.info("用户选择：以英文 DefInjected 为基础")
+            if not os.path.exists(def_injected_path):
+                os.makedirs(def_injected_path)
+                logging.info(f"创建文件夹：{def_injected_path}")
+            for xml_file in Path(def_injected_path).rglob("*.xml"):
+                try:
+                    os.remove(xml_file)
+                    logging.info(f"删除文件：{xml_file}")
+                except Exception as e:
+                    logging.error(f"无法删除 {xml_file}: {e}")
+            for src_file in sorted(Path(english_def_injected_path).rglob("*.xml")):
+                try:
+                    rel_path = os.path.relpath(src_file, english_def_injected_path)
+                    dst_file = os.path.join(def_injected_path, rel_path)
+                    os.makedirs(os.path.dirname(dst_file), exist_ok=True)
+                    shutil.copy2(src_file, dst_file)
+                    logging.info(f"复制 {src_file} 到 {dst_file}")
+                    tree = ET.parse(dst_file)
+                    root = tree.getroot()
+                    parent_map = {c: p for p in root.iter() for c in p}
+                    for elem in root.findall(".//*"):
+                        if elem.text and elem.text.strip():
+                            original = elem.text
+                            # 字段内容保留原文
+                            comment = ET.Comment(sanitize_xcomment(f" EN: {original} "))
+                            parent = parent_map.get(elem)
+                            if parent is not None:
+                                idx = list(parent).index(elem)
+                                parent.insert(idx, comment)
+                    save_xml_to_file(root, dst_file)
+                except Exception as e:
+                    logging.error(f"无法处理 {src_file}: {e}")
     else:
         logging.info(f"未找到英文 DefInjected {english_def_injected_path}，从 Defs 提取")
         extract_definjected_from_defs(mod_root_dir, active_language)
@@ -471,13 +513,13 @@ def main():
             return
 
     # 复制整个 Languages 目录到目标文件夹
-    import shutil
-    src_languages = os.path.join(mod_root_dir, "Languages")
-    dst_languages = os.path.join(export_dir, "Languages")
-    if os.path.exists(src_languages):
-        if os.path.exists(dst_languages):
-            shutil.rmtree(dst_languages)
-        shutil.copytree(src_languages, dst_languages)
+    #import shutil
+    #src_languages = os.path.join(mod_root_dir, "Languages")
+    #dst_languages = os.path.join(export_dir, "Languages")
+    #if os.path.exists(src_languages):
+    #    if os.path.exists(dst_languages):
+    #        shutil.rmtree(dst_languages)
+    #    shutil.copytree(src_languages, dst_languages)
 
     print("开始提取翻译...")
     try:
