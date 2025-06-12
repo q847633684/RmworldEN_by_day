@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<LanguageData>
-
-  <Rape_Fisting.label>fisting</Rape_Fisting.label>
-  <Rape_Fisting.logRulesInitiator.rulesStrings.0>r_logentry->Fistete [RECIPIENT_nameDef] mit Gewalt.</Rape_Fisting.logRulesInitiator.rulesStrings.0>
-  <Rape_Fisting.logRulesRecipient.rulesStrings.0>r_logentry->Wurde gewaltsam von [INITIATOR_nameDef] gefistet.</Rape_Fisting.logRulesRecipient.rulesStrings.0>
-
-
-</LanguageData>

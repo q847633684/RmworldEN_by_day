@@ -6319,3 +6319,357 @@
 2025-06-13 02:48:27,090 - DEBUG - 在 rjw_homekeeper 找到 3 个翻译字段
 2025-06-13 02:48:27,095 - INFO - 已自动导出所有可翻译字段到 mod\extracted_translations.csv
 2025-06-13 02:48:27,095 - INFO - 翻译提取完成
+2025-06-13 07:11:41,545 - ERROR - 模组路径不存在：& C:/Users/q8476/AppData/Local/Programs/Python/Python313/python.exe "c:/Users/q8476/Documents/我的工作/Day_汉化/day.1.提取翻译(EN by CN,CSV,,).py"
+2025-06-13 07:12:36,615 - INFO - 未找到英文 DefInjected test_mod\Languages\English\DefInjected，从 Defs 提取
+2025-06-13 07:12:36,617 - INFO - 删除文件：mod\Languages\ChineseSimplified\DefInjected\Hediffs_Transgender.xml
+2025-06-13 07:12:36,618 - INFO - 删除文件：mod\Languages\ChineseSimplified\DefInjected\test.xml
+2025-06-13 07:12:36,619 - INFO - 删除文件：mod\Languages\ChineseSimplified\DefInjected\BackstoryDefs\rjw_child.xml
+2025-06-13 07:12:36,619 - INFO - 删除文件：mod\Languages\ChineseSimplified\DefInjected\BackstoryDefs\rjw_nymphs.xml
+2025-06-13 07:12:36,620 - INFO - 扫描 Defs 目录：test_mod\Defs
+2025-06-13 07:12:36,621 - INFO - 处理 XML 文件：test_mod\Defs\Hediffs_Transgender.xml
+2025-06-13 07:12:36,623 - DEBUG - 在 test_mod\Defs\Hediffs_Transgender.xml 中找到 16 个 defName 节点
+2025-06-13 07:12:36,624 - DEBUG - 包含可翻译标签 label：male2trap
+2025-06-13 07:12:36,625 - DEBUG - 在 hediff_male2trap 找到 1 个翻译字段
+2025-06-13 07:12:36,625 - DEBUG - 包含可翻译标签 label：male2female
+2025-06-13 07:12:36,625 - DEBUG - 在 hediff_male2female 找到 1 个翻译字段
+2025-06-13 07:12:36,626 - DEBUG - 包含可翻译标签 label：male2futa
+2025-06-13 07:12:36,626 - DEBUG - 在 hediff_male2futa 找到 1 个翻译字段
+2025-06-13 07:12:36,626 - DEBUG - 包含可翻译标签 label：female2trap
+2025-06-13 07:12:36,626 - DEBUG - 在 hediff_female2trap 找到 1 个翻译字段
+2025-06-13 07:12:36,627 - DEBUG - 包含可翻译标签 label：female2male
+2025-06-13 07:12:36,627 - DEBUG - 在 hediff_female2male 找到 1 个翻译字段
+2025-06-13 07:12:36,627 - DEBUG - 包含可翻译标签 label：female2futa
+2025-06-13 07:12:36,627 - DEBUG - 在 hediff_female2futa 找到 1 个翻译字段
+2025-06-13 07:12:36,628 - DEBUG - 包含可翻译标签 label：futa2trap
+2025-06-13 07:12:36,628 - DEBUG - 在 hediff_futa2trap 找到 1 个翻译字段
+2025-06-13 07:12:36,628 - DEBUG - 包含可翻译标签 label：futa2male
+2025-06-13 07:12:36,628 - DEBUG - 在 hediff_futa2male 找到 1 个翻译字段
+2025-06-13 07:12:36,629 - DEBUG - 包含可翻译标签 label：futa2female
+2025-06-13 07:12:36,629 - DEBUG - 在 hediff_futa2female 找到 1 个翻译字段
+2025-06-13 07:12:36,629 - DEBUG - 包含可翻译标签 label：trap2futa
+2025-06-13 07:12:36,629 - DEBUG - 在 hediff_trap2futa 找到 1 个翻译字段
+2025-06-13 07:12:36,630 - DEBUG - 包含可翻译标签 label：trap2male
+2025-06-13 07:12:36,630 - DEBUG - 在 hediff_trap2male 找到 1 个翻译字段
+2025-06-13 07:12:36,630 - DEBUG - 包含可翻译标签 label：trap2female
+2025-06-13 07:12:36,631 - DEBUG - 在 hediff_trap2female 找到 1 个翻译字段
+2025-06-13 07:12:36,631 - DEBUG - 包含可翻译标签 label：was_boy
+2025-06-13 07:12:36,631 - DEBUG - 在 hediff_was_boy 找到 1 个翻译字段
+2025-06-13 07:12:36,631 - DEBUG - 包含可翻译标签 label：was_girl
+2025-06-13 07:12:36,631 - DEBUG - 在 hediff_was_girl 找到 1 个翻译字段
+2025-06-13 07:12:36,632 - DEBUG - 包含可翻译标签 label：was_futa
+2025-06-13 07:12:36,632 - DEBUG - 在 hediff_was_futa 找到 1 个翻译字段
+2025-06-13 07:12:36,632 - DEBUG - 包含可翻译标签 label：was_trap
+2025-06-13 07:12:36,633 - DEBUG - 在 hediff_was_trap 找到 1 个翻译字段
+2025-06-13 07:12:36,633 - INFO - 处理 XML 文件：test_mod\Defs\test.xml
+2025-06-13 07:12:36,635 - DEBUG - 在 test_mod\Defs\test.xml 中找到 6 个 defName 节点
+2025-06-13 07:12:36,636 - DEBUG - 在 TestTraits 找到 0 个翻译字段
+2025-06-13 07:12:36,636 - DEBUG - 包含可翻译标签 label：test mood
+2025-06-13 07:12:36,636 - DEBUG - 包含可翻译标签 description：Complex test description.
+2025-06-13 07:12:36,637 - DEBUG - 在 TestThought 找到 2 个翻译字段
+2025-06-13 07:12:36,637 - DEBUG - 包含可翻译标签 label：test part
+2025-06-13 07:12:36,637 - DEBUG - 包含可翻译标签 labelNoun：a test part
+2025-06-13 07:12:36,638 - DEBUG - 包含可翻译标签 description：Test part description with nested structure.
+2025-06-13 07:12:36,638 - DEBUG - 排除空文本：
+				
+2025-06-13 07:12:36,638 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.
+2025-06-13 07:12:36,639 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].
+2025-06-13 07:12:36,639 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.
+2025-06-13 07:12:36,639 - DEBUG - 排除空文本：
+                    
+2025-06-13 07:12:36,639 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.
+2025-06-13 07:12:36,640 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].
+2025-06-13 07:12:36,640 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.
+2025-06-13 07:12:36,640 - DEBUG - 在 TestPart 找到 9 个翻译字段
+2025-06-13 07:12:36,641 - DEBUG - 在 TestConfig 找到 0 个翻译字段
+2025-06-13 07:12:36,641 - DEBUG - 排除空文本：
+				
+2025-06-13 07:12:36,641 - DEBUG - 包含多词文本：sent-> [INITIATOR_nameDef] rimmed [RECIPIENT_nameDef].
+2025-06-13 07:12:36,642 - DEBUG - 在 RimmingReverseRP 找到 1 个翻译字段
+2025-06-13 07:12:36,642 - DEBUG - 排除空文本：
+				
+2025-06-13 07:12:36,642 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.
+2025-06-13 07:12:36,643 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].
+2025-06-13 07:12:36,643 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.
+2025-06-13 07:12:36,643 - DEBUG - 在 MainReverseRP 找到 3 个翻译字段
+2025-06-13 07:12:36,644 - INFO - 处理 XML 文件：test_mod\Defs\BackstoryDefs\rjw_child.xml
+2025-06-13 07:12:36,645 - DEBUG - 在 test_mod\Defs\BackstoryDefs\rjw_child.xml 中找到 2 个 defName 节点
+2025-06-13 07:12:36,646 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] was born in civil settlement.
+2025-06-13 07:12:36,646 - DEBUG - 包含可翻译标签 title：Child
+2025-06-13 07:12:36,646 - DEBUG - 包含可翻译标签 titleShort：Child
+2025-06-13 07:12:36,647 - DEBUG - 在 rjw_childC 找到 3 个翻译字段
+2025-06-13 07:12:36,647 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] was born in a tribe.
+2025-06-13 07:12:36,647 - DEBUG - 包含可翻译标签 title：Child
+2025-06-13 07:12:36,647 - DEBUG - 包含可翻译标签 titleShort：Child
+2025-06-13 07:12:36,648 - DEBUG - 在 rjw_childT 找到 3 个翻译字段
+2025-06-13 07:12:36,648 - INFO - 处理 XML 文件：test_mod\Defs\BackstoryDefs\rjw_nymphs.xml
+2025-06-13 07:12:36,649 - DEBUG - 在 test_mod\Defs\BackstoryDefs\rjw_nymphs.xml 中找到 7 个 defName 节点
+2025-06-13 07:12:36,649 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] was made to be a sex toy, rather than a human. During [PAWN_possessive] growing period, [PAWN_pronoun] was taught plenty of social and sex related skills to satisfy any demands of its owners.
+2025-06-13 07:12:36,650 - DEBUG - 包含可翻译标签 title：Vat-Grown Sex Slave
+2025-06-13 07:12:36,650 - DEBUG - 包含可翻译标签 titleShort：Sex Slave
+2025-06-13 07:12:36,650 - DEBUG - 在 rjw_vatgrown_sex_slave 找到 3 个翻译字段
+2025-06-13 07:12:36,651 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] is a conqueror by nature and will punch you in a face if you try to say "No" to [PAWN_possessive] advances.
+2025-06-13 07:12:36,651 - DEBUG - 包含可翻译标签 title：Feisty Nymph
+2025-06-13 07:12:36,651 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,652 - DEBUG - 在 rjw_feisty 找到 3 个翻译字段
+2025-06-13 07:12:36,652 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] loves crafting various things, especially things that provide new experiences.
+2025-06-13 07:12:36,652 - DEBUG - 包含可翻译标签 title：Curious Nymph
+2025-06-13 07:12:36,653 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,653 - DEBUG - 在 rjw_curious 找到 3 个翻译字段
+2025-06-13 07:12:36,653 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] has a pair of charming eyes, and [PAWN_possessive] voice is soft and sweet. Due to [PAWN_possessive] previous nurse job, [PAWN_pronoun] tends people quite well.
+2025-06-13 07:12:36,653 - DEBUG - 包含可翻译标签 title：Tender Nymph
+2025-06-13 07:12:36,654 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,654 - DEBUG - 在 rjw_tender 找到 3 个翻译字段
+2025-06-13 07:12:36,654 - DEBUG - 包含可翻译标签 baseDesc：No one can be more loquacious than [PAWN_nameDef]. [PAWN_pronoun] has a flexible tongue, a sharp mind, and hot lips.
+2025-06-13 07:12:36,655 - DEBUG - 包含可翻译标签 title：Chatty Nymph
+2025-06-13 07:12:36,655 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,655 - DEBUG - 在 rjw_chatty 找到 3 个翻译字段
+2025-06-13 07:12:36,656 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] suffered some terrible things, [PAWN_pronoun] looks rather emaciated.
+2025-06-13 07:12:36,656 - DEBUG - 包含可翻译标签 title：Broken Nymph
+2025-06-13 07:12:36,656 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,657 - DEBUG - 在 rjw_broken 找到 3 个翻译字段
+2025-06-13 07:12:36,657 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] was trained to be a housekeeper. Would you like dinner? A bath? Or perhaps...[PAWN_possessive]?.
+2025-06-13 07:12:36,657 - DEBUG - 包含可翻译标签 title：Homekeeper Nymph
+2025-06-13 07:12:36,658 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,658 - DEBUG - 在 rjw_homekeeper 找到 3 个翻译字段
+2025-06-13 07:12:36,661 - DEBUG - 包含可翻译标签 label：male2trap
+2025-06-13 07:12:36,661 - DEBUG - 提取 hediff_male2trap 的字段：[('HediffDef.label', 'male2trap', 'label')]
+2025-06-13 07:12:36,661 - DEBUG - 过滤字段：[('label', 'male2trap', 'label')]
+2025-06-13 07:12:36,662 - DEBUG - 包含可翻译标签 label：male2female
+2025-06-13 07:12:36,662 - DEBUG - 提取 hediff_male2female 的字段：[('HediffDef.label', 'male2female', 'label')]
+2025-06-13 07:12:36,662 - DEBUG - 过滤字段：[('label', 'male2female', 'label')]
+2025-06-13 07:12:36,663 - DEBUG - 包含可翻译标签 label：male2futa
+2025-06-13 07:12:36,663 - DEBUG - 提取 hediff_male2futa 的字段：[('HediffDef.label', 'male2futa', 'label')]
+2025-06-13 07:12:36,663 - DEBUG - 过滤字段：[('label', 'male2futa', 'label')]
+2025-06-13 07:12:36,664 - DEBUG - 包含可翻译标签 label：female2trap
+2025-06-13 07:12:36,664 - DEBUG - 提取 hediff_female2trap 的字段：[('HediffDef.label', 'female2trap', 'label')]
+2025-06-13 07:12:36,664 - DEBUG - 过滤字段：[('label', 'female2trap', 'label')]
+2025-06-13 07:12:36,664 - DEBUG - 包含可翻译标签 label：female2male
+2025-06-13 07:12:36,665 - DEBUG - 提取 hediff_female2male 的字段：[('HediffDef.label', 'female2male', 'label')]
+2025-06-13 07:12:36,665 - DEBUG - 过滤字段：[('label', 'female2male', 'label')]
+2025-06-13 07:12:36,665 - DEBUG - 包含可翻译标签 label：female2futa
+2025-06-13 07:12:36,665 - DEBUG - 提取 hediff_female2futa 的字段：[('HediffDef.label', 'female2futa', 'label')]
+2025-06-13 07:12:36,666 - DEBUG - 过滤字段：[('label', 'female2futa', 'label')]
+2025-06-13 07:12:36,666 - DEBUG - 包含可翻译标签 label：futa2trap
+2025-06-13 07:12:36,666 - DEBUG - 提取 hediff_futa2trap 的字段：[('HediffDef.label', 'futa2trap', 'label')]
+2025-06-13 07:12:36,667 - DEBUG - 过滤字段：[('label', 'futa2trap', 'label')]
+2025-06-13 07:12:36,667 - DEBUG - 包含可翻译标签 label：futa2male
+2025-06-13 07:12:36,667 - DEBUG - 提取 hediff_futa2male 的字段：[('HediffDef.label', 'futa2male', 'label')]
+2025-06-13 07:12:36,668 - DEBUG - 过滤字段：[('label', 'futa2male', 'label')]
+2025-06-13 07:12:36,668 - DEBUG - 包含可翻译标签 label：futa2female
+2025-06-13 07:12:36,668 - DEBUG - 提取 hediff_futa2female 的字段：[('HediffDef.label', 'futa2female', 'label')]
+2025-06-13 07:12:36,669 - DEBUG - 过滤字段：[('label', 'futa2female', 'label')]
+2025-06-13 07:12:36,669 - DEBUG - 包含可翻译标签 label：trap2futa
+2025-06-13 07:12:36,669 - DEBUG - 提取 hediff_trap2futa 的字段：[('HediffDef.label', 'trap2futa', 'label')]
+2025-06-13 07:12:36,669 - DEBUG - 过滤字段：[('label', 'trap2futa', 'label')]
+2025-06-13 07:12:36,670 - DEBUG - 包含可翻译标签 label：trap2male
+2025-06-13 07:12:36,670 - DEBUG - 提取 hediff_trap2male 的字段：[('HediffDef.label', 'trap2male', 'label')]
+2025-06-13 07:12:36,671 - DEBUG - 过滤字段：[('label', 'trap2male', 'label')]
+2025-06-13 07:12:36,671 - DEBUG - 包含可翻译标签 label：trap2female
+2025-06-13 07:12:36,671 - DEBUG - 提取 hediff_trap2female 的字段：[('HediffDef.label', 'trap2female', 'label')]
+2025-06-13 07:12:36,671 - DEBUG - 过滤字段：[('label', 'trap2female', 'label')]
+2025-06-13 07:12:36,672 - DEBUG - 包含可翻译标签 label：was_boy
+2025-06-13 07:12:36,673 - DEBUG - 提取 hediff_was_boy 的字段：[('HediffDef.label', 'was_boy', 'label')]
+2025-06-13 07:12:36,674 - DEBUG - 过滤字段：[('label', 'was_boy', 'label')]
+2025-06-13 07:12:36,674 - DEBUG - 包含可翻译标签 label：was_girl
+2025-06-13 07:12:36,675 - DEBUG - 提取 hediff_was_girl 的字段：[('HediffDef.label', 'was_girl', 'label')]
+2025-06-13 07:12:36,675 - DEBUG - 过滤字段：[('label', 'was_girl', 'label')]
+2025-06-13 07:12:36,675 - DEBUG - 包含可翻译标签 label：was_futa
+2025-06-13 07:12:36,676 - DEBUG - 提取 hediff_was_futa 的字段：[('HediffDef.label', 'was_futa', 'label')]
+2025-06-13 07:12:36,676 - DEBUG - 过滤字段：[('label', 'was_futa', 'label')]
+2025-06-13 07:12:36,676 - DEBUG - 包含可翻译标签 label：was_trap
+2025-06-13 07:12:36,676 - DEBUG - 提取 hediff_was_trap 的字段：[('HediffDef.label', 'was_trap', 'label')]
+2025-06-13 07:12:36,677 - DEBUG - 过滤字段：[('label', 'was_trap', 'label')]
+2025-06-13 07:12:36,678 - DEBUG - 提取 TestTraits 的字段：[]
+2025-06-13 07:12:36,678 - DEBUG - 过滤字段：[]
+2025-06-13 07:12:36,679 - DEBUG - 包含可翻译标签 label：test mood
+2025-06-13 07:12:36,679 - DEBUG - 包含可翻译标签 description：Complex test description.
+2025-06-13 07:12:36,679 - DEBUG - 提取 TestThought 的字段：[('ThoughtDef.stages.1.label', 'test mood', 'label'), ('ThoughtDef.stages.1.description', 'Complex test description.', 'description')]
+2025-06-13 07:12:36,680 - DEBUG - 过滤字段：[('stages.1.label', 'test mood', 'label'), ('stages.1.description', 'Complex test description.', 'description')]
+2025-06-13 07:12:36,680 - DEBUG - 包含可翻译标签 label：test part
+2025-06-13 07:12:36,680 - DEBUG - 包含可翻译标签 labelNoun：a test part
+2025-06-13 07:12:36,680 - DEBUG - 包含可翻译标签 description：Test part description with nested structure.
+2025-06-13 07:12:36,681 - DEBUG - 排除空文本：
+				
+2025-06-13 07:12:36,681 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.
+2025-06-13 07:12:36,681 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].
+2025-06-13 07:12:36,682 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.
+2025-06-13 07:12:36,682 - DEBUG - 排除空文本：
+                    
+2025-06-13 07:12:36,682 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.
+2025-06-13 07:12:36,683 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].
+2025-06-13 07:12:36,683 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.
+2025-06-13 07:12:36,683 - DEBUG - 提取 TestPart 的字段：[('rjw.HediffDef_SexPart.label', 'test part', 'label'), ('rjw.HediffDef_SexPart.labelNoun', 'a test part', 'labelNoun'), ('rjw.HediffDef_SexPart.description', 'Test part description with nested structure.', 'description'), ('rjw.HediffDef_SexPart.rulePack.rulesStrings.0', "sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.", 'li'), ('rjw.HediffDef_SexPart.rulePack.rulesStrings.1', "sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].", 'li'), ('rjw.HediffDef_SexPart.rulePack.rulesStrings.2', 'sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.', 'li'), ('rjw.HediffDef_SexPart.comps.0.rulesStrings.0', "sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.", 'li'), ('rjw.HediffDef_SexPart.comps.0.rulesStrings.1', "sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].", 'li'), ('rjw.HediffDef_SexPart.comps.0.rulesStrings.2', 'sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.', 'li')]
+2025-06-13 07:12:36,684 - DEBUG - 过滤字段：[('label', 'test part', 'label'), ('labelNoun', 'a test part', 'labelNoun'), ('description', 'Test part description with nested structure.', 'description'), ('rulePack.rulesStrings.0', "sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.", 'li'), ('rulePack.rulesStrings.1', "sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].", 'li'), ('rulePack.rulesStrings.2', 'sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.', 'li'), ('comps.0.rulesStrings.0', "sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.", 'li'), ('comps.0.rulesStrings.1', "sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].", 'li'), ('comps.0.rulesStrings.2', 'sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.', 'li')]
+2025-06-13 07:12:36,684 - DEBUG - 提取 TestConfig 的字段：[]
+2025-06-13 07:12:36,685 - DEBUG - 过滤字段：[]
+2025-06-13 07:12:36,686 - DEBUG - 排除空文本：
+				
+2025-06-13 07:12:36,686 - DEBUG - 包含多词文本：sent-> [INITIATOR_nameDef] rimmed [RECIPIENT_nameDef].
+2025-06-13 07:12:36,686 - DEBUG - 提取 RimmingReverseRP 的字段：[('RulePackDef.rulePack.rulesStrings.0', 'sent-> [INITIATOR_nameDef] rimmed [RECIPIENT_nameDef].', 'li')]
+2025-06-13 07:12:36,687 - DEBUG - 过滤字段：[('rulePack.rulesStrings.0', 'sent-> [INITIATOR_nameDef] rimmed [RECIPIENT_nameDef].', 'li')]
+2025-06-13 07:12:36,687 - DEBUG - 排除空文本：
+				
+2025-06-13 07:12:36,687 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.
+2025-06-13 07:12:36,688 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].
+2025-06-13 07:12:36,688 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.
+2025-06-13 07:12:36,689 - DEBUG - 提取 MainReverseRP 的字段：[('RulePackDef.rulePack.rulesStrings.0', "sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.", 'li'), ('RulePackDef.rulePack.rulesStrings.1', "sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].", 'li'), ('RulePackDef.rulePack.rulesStrings.2', 'sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.', 'li')]
+2025-06-13 07:12:36,690 - DEBUG - 过滤字段：[('rulePack.rulesStrings.0', "sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.", 'li'), ('rulePack.rulesStrings.1', "sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].", 'li'), ('rulePack.rulesStrings.2', 'sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.', 'li')]
+2025-06-13 07:12:36,692 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] was born in civil settlement.
+2025-06-13 07:12:36,692 - DEBUG - 包含可翻译标签 title：Child
+2025-06-13 07:12:36,693 - DEBUG - 包含可翻译标签 titleShort：Child
+2025-06-13 07:12:36,693 - DEBUG - 提取 rjw_childC 的字段：[('BackstoryDef.baseDesc', '[PAWN_nameDef] was born in civil settlement.', 'baseDesc'), ('BackstoryDef.title', 'Child', 'title'), ('BackstoryDef.titleShort', 'Child', 'titleShort')]
+2025-06-13 07:12:36,694 - DEBUG - 过滤字段：[('baseDesc', '[PAWN_nameDef] was born in civil settlement.', 'baseDesc'), ('title', 'Child', 'title'), ('titleShort', 'Child', 'titleShort')]
+2025-06-13 07:12:36,694 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] was born in a tribe.
+2025-06-13 07:12:36,694 - DEBUG - 包含可翻译标签 title：Child
+2025-06-13 07:12:36,695 - DEBUG - 包含可翻译标签 titleShort：Child
+2025-06-13 07:12:36,695 - DEBUG - 提取 rjw_childT 的字段：[('BackstoryDef.baseDesc', '[PAWN_nameDef] was born in a tribe.', 'baseDesc'), ('BackstoryDef.title', 'Child', 'title'), ('BackstoryDef.titleShort', 'Child', 'titleShort')]
+2025-06-13 07:12:36,695 - DEBUG - 过滤字段：[('baseDesc', '[PAWN_nameDef] was born in a tribe.', 'baseDesc'), ('title', 'Child', 'title'), ('titleShort', 'Child', 'titleShort')]
+2025-06-13 07:12:36,697 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] was made to be a sex toy, rather than a human. During [PAWN_possessive] growing period, [PAWN_pronoun] was taught plenty of social and sex related skills to satisfy any demands of its owners.
+2025-06-13 07:12:36,697 - DEBUG - 包含可翻译标签 title：Vat-Grown Sex Slave
+2025-06-13 07:12:36,697 - DEBUG - 包含可翻译标签 titleShort：Sex Slave
+2025-06-13 07:12:36,698 - DEBUG - 提取 rjw_vatgrown_sex_slave 的字段：[('BackstoryDef.baseDesc', '[PAWN_nameDef] was made to be a sex toy, rather than a human. During [PAWN_possessive] growing period, [PAWN_pronoun] was taught plenty of social and sex related skills to satisfy any demands of its owners.', 'baseDesc'), ('BackstoryDef.title', 'Vat-Grown Sex Slave', 'title'), ('BackstoryDef.titleShort', 'Sex Slave', 'titleShort')]
+2025-06-13 07:12:36,698 - DEBUG - 过滤字段：[('baseDesc', '[PAWN_nameDef] was made to be a sex toy, rather than a human. During [PAWN_possessive] growing period, [PAWN_pronoun] was taught plenty of social and sex related skills to satisfy any demands of its owners.', 'baseDesc'), ('title', 'Vat-Grown Sex Slave', 'title'), ('titleShort', 'Sex Slave', 'titleShort')]
+2025-06-13 07:12:36,698 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] is a conqueror by nature and will punch you in a face if you try to say "No" to [PAWN_possessive] advances.
+2025-06-13 07:12:36,699 - DEBUG - 包含可翻译标签 title：Feisty Nymph
+2025-06-13 07:12:36,699 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,699 - DEBUG - 提取 rjw_feisty 的字段：[('BackstoryDef.baseDesc', '[PAWN_nameDef] is a conqueror by nature and will punch you in a face if you try to say "No" to [PAWN_possessive] advances.', 'baseDesc'), ('BackstoryDef.title', 'Feisty Nymph', 'title'), ('BackstoryDef.titleShort', 'Nymph', 'titleShort')]
+2025-06-13 07:12:36,700 - DEBUG - 过滤字段：[('baseDesc', '[PAWN_nameDef] is a conqueror by nature and will punch you in a face if you try to say "No" to [PAWN_possessive] advances.', 'baseDesc'), ('title', 'Feisty Nymph', 'title'), ('titleShort', 'Nymph', 'titleShort')]
+2025-06-13 07:12:36,700 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] loves crafting various things, especially things that provide new experiences.
+2025-06-13 07:12:36,701 - DEBUG - 包含可翻译标签 title：Curious Nymph
+2025-06-13 07:12:36,701 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,701 - DEBUG - 提取 rjw_curious 的字段：[('BackstoryDef.baseDesc', '[PAWN_nameDef] loves crafting various things, especially things that provide new experiences.', 'baseDesc'), ('BackstoryDef.title', 'Curious Nymph', 'title'), ('BackstoryDef.titleShort', 'Nymph', 'titleShort')]
+2025-06-13 07:12:36,702 - DEBUG - 过滤字段：[('baseDesc', '[PAWN_nameDef] loves crafting various things, especially things that provide new experiences.', 'baseDesc'), ('title', 'Curious Nymph', 'title'), ('titleShort', 'Nymph', 'titleShort')]
+2025-06-13 07:12:36,702 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] has a pair of charming eyes, and [PAWN_possessive] voice is soft and sweet. Due to [PAWN_possessive] previous nurse job, [PAWN_pronoun] tends people quite well.
+2025-06-13 07:12:36,702 - DEBUG - 包含可翻译标签 title：Tender Nymph
+2025-06-13 07:12:36,703 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,703 - DEBUG - 提取 rjw_tender 的字段：[('BackstoryDef.baseDesc', '[PAWN_nameDef] has a pair of charming eyes, and [PAWN_possessive] voice is soft and sweet. Due to [PAWN_possessive] previous nurse job, [PAWN_pronoun] tends people quite well.', 'baseDesc'), ('BackstoryDef.title', 'Tender Nymph', 'title'), ('BackstoryDef.titleShort', 'Nymph', 'titleShort')]
+2025-06-13 07:12:36,704 - DEBUG - 过滤字段：[('baseDesc', '[PAWN_nameDef] has a pair of charming eyes, and [PAWN_possessive] voice is soft and sweet. Due to [PAWN_possessive] previous nurse job, [PAWN_pronoun] tends people quite well.', 'baseDesc'), ('title', 'Tender Nymph', 'title'), ('titleShort', 'Nymph', 'titleShort')]
+2025-06-13 07:12:36,704 - DEBUG - 包含可翻译标签 baseDesc：No one can be more loquacious than [PAWN_nameDef]. [PAWN_pronoun] has a flexible tongue, a sharp mind, and hot lips.
+2025-06-13 07:12:36,704 - DEBUG - 包含可翻译标签 title：Chatty Nymph
+2025-06-13 07:12:36,705 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,705 - DEBUG - 提取 rjw_chatty 的字段：[('BackstoryDef.baseDesc', 'No one can be more loquacious than [PAWN_nameDef]. [PAWN_pronoun] has a flexible tongue, a sharp mind, and hot lips.', 'baseDesc'), ('BackstoryDef.title', 'Chatty Nymph', 'title'), ('BackstoryDef.titleShort', 'Nymph', 'titleShort')]
+2025-06-13 07:12:36,706 - DEBUG - 过滤字段：[('baseDesc', 'No one can be more loquacious than [PAWN_nameDef]. [PAWN_pronoun] has a flexible tongue, a sharp mind, and hot lips.', 'baseDesc'), ('title', 'Chatty Nymph', 'title'), ('titleShort', 'Nymph', 'titleShort')]
+2025-06-13 07:12:36,706 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] suffered some terrible things, [PAWN_pronoun] looks rather emaciated.
+2025-06-13 07:12:36,707 - DEBUG - 包含可翻译标签 title：Broken Nymph
+2025-06-13 07:12:36,708 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,708 - DEBUG - 提取 rjw_broken 的字段：[('BackstoryDef.baseDesc', '[PAWN_nameDef] suffered some terrible things, [PAWN_pronoun] looks rather emaciated.', 'baseDesc'), ('BackstoryDef.title', 'Broken Nymph', 'title'), ('BackstoryDef.titleShort', 'Nymph', 'titleShort')]
+2025-06-13 07:12:36,709 - DEBUG - 过滤字段：[('baseDesc', '[PAWN_nameDef] suffered some terrible things, [PAWN_pronoun] looks rather emaciated.', 'baseDesc'), ('title', 'Broken Nymph', 'title'), ('titleShort', 'Nymph', 'titleShort')]
+2025-06-13 07:12:36,709 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] was trained to be a housekeeper. Would you like dinner? A bath? Or perhaps...[PAWN_possessive]?.
+2025-06-13 07:12:36,709 - DEBUG - 包含可翻译标签 title：Homekeeper Nymph
+2025-06-13 07:12:36,710 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,710 - DEBUG - 提取 rjw_homekeeper 的字段：[('BackstoryDef.baseDesc', '[PAWN_nameDef] was trained to be a housekeeper. Would you like dinner? A bath? Or perhaps...[PAWN_possessive]?.', 'baseDesc'), ('BackstoryDef.title', 'Homekeeper Nymph', 'title'), ('BackstoryDef.titleShort', 'Nymph', 'titleShort')]
+2025-06-13 07:12:36,710 - DEBUG - 过滤字段：[('baseDesc', '[PAWN_nameDef] was trained to be a housekeeper. Would you like dinner? A bath? Or perhaps...[PAWN_possessive]?.', 'baseDesc'), ('title', 'Homekeeper Nymph', 'title'), ('titleShort', 'Nymph', 'titleShort')]
+2025-06-13 07:12:36,711 - DEBUG - Def Injections: {'mod\\Languages\\ChineseSimplified\\DefInjected\\Hediffs_Transgender.xml': [('hediff_male2trap', [('label', 'male2trap', 'label')]), ('hediff_male2female', [('label', 'male2female', 'label')]), ('hediff_male2futa', [('label', 'male2futa', 'label')]), ('hediff_female2trap', [('label', 'female2trap', 'label')]), ('hediff_female2male', [('label', 'female2male', 'label')]), ('hediff_female2futa', [('label', 'female2futa', 'label')]), ('hediff_futa2trap', [('label', 'futa2trap', 'label')]), ('hediff_futa2male', [('label', 'futa2male', 'label')]), ('hediff_futa2female', [('label', 'futa2female', 'label')]), ('hediff_trap2futa', [('label', 'trap2futa', 'label')]), ('hediff_trap2male', [('label', 'trap2male', 'label')]), ('hediff_trap2female', [('label', 'trap2female', 'label')]), ('hediff_was_boy', [('label', 'was_boy', 'label')]), ('hediff_was_girl', [('label', 'was_girl', 'label')]), ('hediff_was_futa', [('label', 'was_futa', 'label')]), ('hediff_was_trap', [('label', 'was_trap', 'label')])], 'mod\\Languages\\ChineseSimplified\\DefInjected\\test.xml': [('TestThought', [('stages.1.label', 'test mood', 'label'), ('stages.1.description', 'Complex test description.', 'description')]), ('TestPart', [('label', 'test part', 'label'), ('labelNoun', 'a test part', 'labelNoun'), ('description', 'Test part description with nested structure.', 'description'), ('rulePack.rulesStrings.0', "sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.", 'li'), ('rulePack.rulesStrings.1', "sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].", 'li'), ('rulePack.rulesStrings.2', 'sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.', 'li'), ('comps.0.rulesStrings.0', "sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.", 'li'), ('comps.0.rulesStrings.1', "sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].", 'li'), ('comps.0.rulesStrings.2', 'sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.', 'li')]), ('RimmingReverseRP', [('rulePack.rulesStrings.0', 'sent-> [INITIATOR_nameDef] rimmed [RECIPIENT_nameDef].', 'li')]), ('MainReverseRP', [('rulePack.rulesStrings.0', "sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.", 'li'), ('rulePack.rulesStrings.1', "sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].", 'li'), ('rulePack.rulesStrings.2', 'sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.', 'li')])], 'mod\\Languages\\ChineseSimplified\\DefInjected\\BackstoryDefs\\rjw_child.xml': [('rjw_childC', [('baseDesc', '[PAWN_nameDef] was born in civil settlement.', 'baseDesc'), ('title', 'Child', 'title'), ('titleShort', 'Child', 'titleShort')]), ('rjw_childT', [('baseDesc', '[PAWN_nameDef] was born in a tribe.', 'baseDesc'), ('title', 'Child', 'title'), ('titleShort', 'Child', 'titleShort')])], 'mod\\Languages\\ChineseSimplified\\DefInjected\\BackstoryDefs\\rjw_nymphs.xml': [('rjw_vatgrown_sex_slave', [('baseDesc', '[PAWN_nameDef] was made to be a sex toy, rather than a human. During [PAWN_possessive] growing period, [PAWN_pronoun] was taught plenty of social and sex related skills to satisfy any demands of its owners.', 'baseDesc'), ('title', 'Vat-Grown Sex Slave', 'title'), ('titleShort', 'Sex Slave', 'titleShort')]), ('rjw_feisty', [('baseDesc', '[PAWN_nameDef] is a conqueror by nature and will punch you in a face if you try to say "No" to [PAWN_possessive] advances.', 'baseDesc'), ('title', 'Feisty Nymph', 'title'), ('titleShort', 'Nymph', 'titleShort')]), ('rjw_curious', [('baseDesc', '[PAWN_nameDef] loves crafting various things, especially things that provide new experiences.', 'baseDesc'), ('title', 'Curious Nymph', 'title'), ('titleShort', 'Nymph', 'titleShort')]), ('rjw_tender', [('baseDesc', '[PAWN_nameDef] has a pair of charming eyes, and [PAWN_possessive] voice is soft and sweet. Due to [PAWN_possessive] previous nurse job, [PAWN_pronoun] tends people quite well.', 'baseDesc'), ('title', 'Tender Nymph', 'title'), ('titleShort', 'Nymph', 'titleShort')]), ('rjw_chatty', [('baseDesc', 'No one can be more loquacious than [PAWN_nameDef]. [PAWN_pronoun] has a flexible tongue, a sharp mind, and hot lips.', 'baseDesc'), ('title', 'Chatty Nymph', 'title'), ('titleShort', 'Nymph', 'titleShort')]), ('rjw_broken', [('baseDesc', '[PAWN_nameDef] suffered some terrible things, [PAWN_pronoun] looks rather emaciated.', 'baseDesc'), ('title', 'Broken Nymph', 'title'), ('titleShort', 'Nymph', 'titleShort')]), ('rjw_homekeeper', [('baseDesc', '[PAWN_nameDef] was trained to be a housekeeper. Would you like dinner? A bath? Or perhaps...[PAWN_possessive]?.', 'baseDesc'), ('title', 'Homekeeper Nymph', 'title'), ('titleShort', 'Nymph', 'titleShort')])]}
+2025-06-13 07:12:36,713 - INFO - 保存 XML 文件：mod\Languages\ChineseSimplified\DefInjected\Hediffs_Transgender.xml
+2025-06-13 07:12:36,716 - INFO - 保存 XML 文件：mod\Languages\ChineseSimplified\DefInjected\test.xml
+2025-06-13 07:12:36,717 - INFO - 保存 XML 文件：mod\Languages\ChineseSimplified\DefInjected\BackstoryDefs\rjw_child.xml
+2025-06-13 07:12:36,719 - INFO - 保存 XML 文件：mod\Languages\ChineseSimplified\DefInjected\BackstoryDefs\rjw_nymphs.xml
+2025-06-13 07:12:36,720 - WARNING - 英文 Keyed 目录 test_mod\Languages\English\Keyed 不存在，跳过
+2025-06-13 07:12:36,720 - INFO - 扫描 Defs 目录：test_mod\Defs
+2025-06-13 07:12:36,721 - INFO - 处理 XML 文件：test_mod\Defs\Hediffs_Transgender.xml
+2025-06-13 07:12:36,723 - DEBUG - 在 test_mod\Defs\Hediffs_Transgender.xml 中找到 16 个 defName 节点
+2025-06-13 07:12:36,723 - DEBUG - 包含可翻译标签 label：male2trap
+2025-06-13 07:12:36,723 - DEBUG - 在 hediff_male2trap 找到 1 个翻译字段
+2025-06-13 07:12:36,724 - DEBUG - 包含可翻译标签 label：male2female
+2025-06-13 07:12:36,724 - DEBUG - 在 hediff_male2female 找到 1 个翻译字段
+2025-06-13 07:12:36,725 - DEBUG - 包含可翻译标签 label：male2futa
+2025-06-13 07:12:36,725 - DEBUG - 在 hediff_male2futa 找到 1 个翻译字段
+2025-06-13 07:12:36,725 - DEBUG - 包含可翻译标签 label：female2trap
+2025-06-13 07:12:36,725 - DEBUG - 在 hediff_female2trap 找到 1 个翻译字段
+2025-06-13 07:12:36,726 - DEBUG - 包含可翻译标签 label：female2male
+2025-06-13 07:12:36,726 - DEBUG - 在 hediff_female2male 找到 1 个翻译字段
+2025-06-13 07:12:36,726 - DEBUG - 包含可翻译标签 label：female2futa
+2025-06-13 07:12:36,727 - DEBUG - 在 hediff_female2futa 找到 1 个翻译字段
+2025-06-13 07:12:36,727 - DEBUG - 包含可翻译标签 label：futa2trap
+2025-06-13 07:12:36,727 - DEBUG - 在 hediff_futa2trap 找到 1 个翻译字段
+2025-06-13 07:12:36,728 - DEBUG - 包含可翻译标签 label：futa2male
+2025-06-13 07:12:36,728 - DEBUG - 在 hediff_futa2male 找到 1 个翻译字段
+2025-06-13 07:12:36,728 - DEBUG - 包含可翻译标签 label：futa2female
+2025-06-13 07:12:36,728 - DEBUG - 在 hediff_futa2female 找到 1 个翻译字段
+2025-06-13 07:12:36,729 - DEBUG - 包含可翻译标签 label：trap2futa
+2025-06-13 07:12:36,729 - DEBUG - 在 hediff_trap2futa 找到 1 个翻译字段
+2025-06-13 07:12:36,729 - DEBUG - 包含可翻译标签 label：trap2male
+2025-06-13 07:12:36,730 - DEBUG - 在 hediff_trap2male 找到 1 个翻译字段
+2025-06-13 07:12:36,730 - DEBUG - 包含可翻译标签 label：trap2female
+2025-06-13 07:12:36,730 - DEBUG - 在 hediff_trap2female 找到 1 个翻译字段
+2025-06-13 07:12:36,730 - DEBUG - 包含可翻译标签 label：was_boy
+2025-06-13 07:12:36,731 - DEBUG - 在 hediff_was_boy 找到 1 个翻译字段
+2025-06-13 07:12:36,731 - DEBUG - 包含可翻译标签 label：was_girl
+2025-06-13 07:12:36,731 - DEBUG - 在 hediff_was_girl 找到 1 个翻译字段
+2025-06-13 07:12:36,732 - DEBUG - 包含可翻译标签 label：was_futa
+2025-06-13 07:12:36,732 - DEBUG - 在 hediff_was_futa 找到 1 个翻译字段
+2025-06-13 07:12:36,732 - DEBUG - 包含可翻译标签 label：was_trap
+2025-06-13 07:12:36,732 - DEBUG - 在 hediff_was_trap 找到 1 个翻译字段
+2025-06-13 07:12:36,733 - INFO - 处理 XML 文件：test_mod\Defs\test.xml
+2025-06-13 07:12:36,733 - DEBUG - 在 test_mod\Defs\test.xml 中找到 6 个 defName 节点
+2025-06-13 07:12:36,734 - DEBUG - 在 TestTraits 找到 0 个翻译字段
+2025-06-13 07:12:36,734 - DEBUG - 包含可翻译标签 label：test mood
+2025-06-13 07:12:36,734 - DEBUG - 包含可翻译标签 description：Complex test description.
+2025-06-13 07:12:36,735 - DEBUG - 在 TestThought 找到 2 个翻译字段
+2025-06-13 07:12:36,735 - DEBUG - 包含可翻译标签 label：test part
+2025-06-13 07:12:36,735 - DEBUG - 包含可翻译标签 labelNoun：a test part
+2025-06-13 07:12:36,736 - DEBUG - 包含可翻译标签 description：Test part description with nested structure.
+2025-06-13 07:12:36,736 - DEBUG - 排除空文本：
+				
+2025-06-13 07:12:36,736 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.
+2025-06-13 07:12:36,736 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].
+2025-06-13 07:12:36,737 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.
+2025-06-13 07:12:36,737 - DEBUG - 排除空文本：
+                    
+2025-06-13 07:12:36,737 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.
+2025-06-13 07:12:36,738 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].
+2025-06-13 07:12:36,738 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.
+2025-06-13 07:12:36,738 - DEBUG - 在 TestPart 找到 9 个翻译字段
+2025-06-13 07:12:36,739 - DEBUG - 在 TestConfig 找到 0 个翻译字段
+2025-06-13 07:12:36,739 - DEBUG - 排除空文本：
+				
+2025-06-13 07:12:36,739 - DEBUG - 包含多词文本：sent-> [INITIATOR_nameDef] rimmed [RECIPIENT_nameDef].
+2025-06-13 07:12:36,739 - DEBUG - 在 RimmingReverseRP 找到 1 个翻译字段
+2025-06-13 07:12:36,740 - DEBUG - 排除空文本：
+				
+2025-06-13 07:12:36,740 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.
+2025-06-13 07:12:36,740 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].
+2025-06-13 07:12:36,741 - DEBUG - 包含多词文本：sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.
+2025-06-13 07:12:36,741 - DEBUG - 在 MainReverseRP 找到 3 个翻译字段
+2025-06-13 07:12:36,742 - INFO - 处理 XML 文件：test_mod\Defs\BackstoryDefs\rjw_child.xml
+2025-06-13 07:12:36,743 - DEBUG - 在 test_mod\Defs\BackstoryDefs\rjw_child.xml 中找到 2 个 defName 节点
+2025-06-13 07:12:36,743 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] was born in civil settlement.
+2025-06-13 07:12:36,743 - DEBUG - 包含可翻译标签 title：Child
+2025-06-13 07:12:36,744 - DEBUG - 包含可翻译标签 titleShort：Child
+2025-06-13 07:12:36,744 - DEBUG - 在 rjw_childC 找到 3 个翻译字段
+2025-06-13 07:12:36,744 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] was born in a tribe.
+2025-06-13 07:12:36,745 - DEBUG - 包含可翻译标签 title：Child
+2025-06-13 07:12:36,745 - DEBUG - 包含可翻译标签 titleShort：Child
+2025-06-13 07:12:36,745 - DEBUG - 在 rjw_childT 找到 3 个翻译字段
+2025-06-13 07:12:36,746 - INFO - 处理 XML 文件：test_mod\Defs\BackstoryDefs\rjw_nymphs.xml
+2025-06-13 07:12:36,747 - DEBUG - 在 test_mod\Defs\BackstoryDefs\rjw_nymphs.xml 中找到 7 个 defName 节点
+2025-06-13 07:12:36,747 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] was made to be a sex toy, rather than a human. During [PAWN_possessive] growing period, [PAWN_pronoun] was taught plenty of social and sex related skills to satisfy any demands of its owners.
+2025-06-13 07:12:36,747 - DEBUG - 包含可翻译标签 title：Vat-Grown Sex Slave
+2025-06-13 07:12:36,748 - DEBUG - 包含可翻译标签 titleShort：Sex Slave
+2025-06-13 07:12:36,748 - DEBUG - 在 rjw_vatgrown_sex_slave 找到 3 个翻译字段
+2025-06-13 07:12:36,748 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] is a conqueror by nature and will punch you in a face if you try to say "No" to [PAWN_possessive] advances.
+2025-06-13 07:12:36,749 - DEBUG - 包含可翻译标签 title：Feisty Nymph
+2025-06-13 07:12:36,750 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,750 - DEBUG - 在 rjw_feisty 找到 3 个翻译字段
+2025-06-13 07:12:36,751 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] loves crafting various things, especially things that provide new experiences.
+2025-06-13 07:12:36,752 - DEBUG - 包含可翻译标签 title：Curious Nymph
+2025-06-13 07:12:36,752 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,752 - DEBUG - 在 rjw_curious 找到 3 个翻译字段
+2025-06-13 07:12:36,753 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] has a pair of charming eyes, and [PAWN_possessive] voice is soft and sweet. Due to [PAWN_possessive] previous nurse job, [PAWN_pronoun] tends people quite well.
+2025-06-13 07:12:36,753 - DEBUG - 包含可翻译标签 title：Tender Nymph
+2025-06-13 07:12:36,754 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,754 - DEBUG - 在 rjw_tender 找到 3 个翻译字段
+2025-06-13 07:12:36,754 - DEBUG - 包含可翻译标签 baseDesc：No one can be more loquacious than [PAWN_nameDef]. [PAWN_pronoun] has a flexible tongue, a sharp mind, and hot lips.
+2025-06-13 07:12:36,755 - DEBUG - 包含可翻译标签 title：Chatty Nymph
+2025-06-13 07:12:36,755 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,756 - DEBUG - 在 rjw_chatty 找到 3 个翻译字段
+2025-06-13 07:12:36,757 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] suffered some terrible things, [PAWN_pronoun] looks rather emaciated.
+2025-06-13 07:12:36,759 - DEBUG - 包含可翻译标签 title：Broken Nymph
+2025-06-13 07:12:36,760 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,761 - DEBUG - 在 rjw_broken 找到 3 个翻译字段
+2025-06-13 07:12:36,761 - DEBUG - 包含可翻译标签 baseDesc：[PAWN_nameDef] was trained to be a housekeeper. Would you like dinner? A bath? Or perhaps...[PAWN_possessive]?.
+2025-06-13 07:12:36,761 - DEBUG - 包含可翻译标签 title：Homekeeper Nymph
+2025-06-13 07:12:36,761 - DEBUG - 包含可翻译标签 titleShort：Nymph
+2025-06-13 07:12:36,762 - DEBUG - 在 rjw_homekeeper 找到 3 个翻译字段
+2025-06-13 07:12:36,767 - INFO - 已自动导出所有可翻译字段到 mod\extracted_translations.csv
+2025-06-13 07:12:36,767 - INFO - 翻译提取完成

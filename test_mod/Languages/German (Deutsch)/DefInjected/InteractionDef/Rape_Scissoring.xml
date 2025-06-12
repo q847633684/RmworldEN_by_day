@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<LanguageData>
-
-  <Rape_Scissoring.label>scissoring</Rape_Scissoring.label>
-  <Rape_Scissoring.logRulesInitiator.rulesStrings.0>r_logentry->Machte die Schere unter Zwang mit [RECIPIENT_nameDef].</Rape_Scissoring.logRulesInitiator.rulesStrings.0>
-  <Rape_Scissoring.logRulesRecipient.rulesStrings.0>r_logentry->Wurde gezwungen die Schere mit [INITIATOR_nameDef] zu machen.</Rape_Scissoring.logRulesRecipient.rulesStrings.0>
-
-
-</LanguageData>
