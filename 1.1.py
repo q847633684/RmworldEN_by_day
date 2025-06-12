@@ -1,4 +1,3 @@
-
 import os
 import shutil
 import xml.etree.ElementTree as ET
@@ -7,29 +6,12 @@ from pathlib import Path
 import logging
 import time
 
-# 可翻译字段预览/确认开关
-PREVIEW_TRANSLATABLE_FIELDS = True  # True: 显示预览界面，False: 跳过预览直接导出
-# 日志级别控制
-DEBUG_MODE = True  # True 显示 debug 日志，False 只显示 info 及以上
-LOG_FILE = "extract_translate.log"
-log_level = logging.DEBUG if DEBUG_MODE else logging.INFO
-log_format = '%(asctime)s - %(levelname)s - %(message)s'
-# 清空 root logger 的 handler，防止重复
-for handler in logging.root.handlers[:]:
-    logging.root.removeHandler(handler)
-# 控制台 handler
-console_handler = logging.StreamHandler()
-console_handler.setLevel(log_level)
-console_handler.setFormatter(logging.Formatter(log_format))
-# 文件 handler
-file_handler = logging.FileHandler(LOG_FILE, encoding='utf-8')
-file_handler.setLevel(log_level)
-file_handler.setFormatter(logging.Formatter(log_format))
-logging.basicConfig(level=log_level, handlers=[console_handler, file_handler])
+# 设置日志
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # 默认可翻译字段
 DEFAULT_FIELDS = [
-    'label', 'RMBLabel', 'description', 'baseDesc', 'title', 'titleShort',
+    'label', 'description', 'baseDesc', 'title', 'titleShort',
     'rulesStrings', 'labelNoun', 'gerund', 'reportString',
     'text', 'message', 'verb', 'skillLabel', 'pawnLabel'
 ]
@@ -42,21 +24,20 @@ IGNORE_FIELDS = [
     'bodyTypeGlobal', 'bodyTypeFemale', 'bodyTypeMale', 'forcedTraits',
     'initialSeverity', 'minSeverity', 'maxSeverity', 'isBad', 'tendable',
     'scenarioCanAdd', 'comps', 'defaultLabelColor', 'hediffDef',
-    'becomeVisible', 'rulePack', 'retro' ,'Social'
+    'becomeVisible', 'rulePack', 'retro'
 ]
 
 # 正则表达式过滤器
 NON_TEXT_PATTERNS = [
     r'^\s*\(\s*\d+\s*,\s*[\d*\.]+\s*\)\s*$',  # 坐标对
-    r'^\s*[\d.]+\s*$',                          # 纯数字
+    r'^\s*\d+\s*$',                          # 纯数字
     r'^\s*(true|false)\s*$',                  # 布尔值
-    #r'^\s*[A-Za-z0-9_]+\s*$'                  # 单单词标识符
+    r'^\s*[A-Za-z0-9_]+\s*$'                  # 单单词标识符
 ]
 
 def get_language_folder_path(language, mod_root_dir):
     """获取语言文件夹路径"""
-    # 修正为 RimWorld 标准结构，先 Languages 再语言名
-    return os.path.join(mod_root_dir, "Languages", language)
+    return os.path.join(mod_root_dir, language, "Languages")
 
 def sanitize_xcomment(text):
     """清理 XML 注释中的非法字符"""
@@ -121,14 +102,13 @@ def is_translatable_text(text, tag):
     if tag.lower() in [f.lower() for f in DEFAULT_FIELDS]:
         logging.debug(f"包含可翻译标签 {tag}：{text}")
         return True
-    # if len(text.strip().split()) == 1 and not any(c.isspace() for c in text.strip()):
-    #     logging.debug(f"排除单单词：{text}")
-    #     return False
+    if len(text.strip().split()) == 1 and not any(c.isspace() for c in text.strip()):
+        logging.debug(f"排除单单词：{text}")
+        return False
     logging.debug(f"包含多词文本：{text}")
     return True
 
-
-def extract_translatable_fields(node, path="", list_indices=None, translations=None, parent_tag=None):
+def extract_translatable_fields(node, path="", list_indices=None, translations=None):
     """递归提取可翻译字段"""
     if list_indices is None:
         list_indices = {}
@@ -136,43 +116,27 @@ def extract_translatable_fields(node, path="", list_indices=None, translations=N
         translations = []
 
     node_tag = node.tag
-    # 如果当前节点是defName，直接返回，不递归也不加入translations
-    if node_tag == 'defName':
-        return translations
     current_path = f"{path}.{node_tag}" if path else node_tag
 
-    # 用父路径+tag做key，保证每组li独立编号
-    index_key = f"{path}|{node_tag}"
-    if node_tag == 'li':
-        if index_key in list_indices:
-            list_indices[index_key] += 1
+    if node_tag in ('li', 'stage', 'step', 'points'):
+        parent_tag = node_tag
+        if parent_tag in list_indices:
+            list_indices[parent_tag] += 1
         else:
-            list_indices[index_key] = 0
-        current_path = f"{path}.{list_indices[index_key]}" if path else str(list_indices[index_key])
+            list_indices[parent_tag] = 0
+        current_path = f"{path}.{list_indices[parent_tag]}" if path else str(list_indices[parent_tag])
 
-    # 判断是否导出
-    if node_tag == 'li':
-        # 只有父级标签在 DEFAULT_FIELDS 时才导出
-        if parent_tag and parent_tag.lower() in [f.lower() for f in DEFAULT_FIELDS]:
-            if node.text and is_translatable_text(node.text, node_tag):
-                translations.append((current_path, node.text, node_tag))
-    else:
-        # 只有自己在 DEFAULT_FIELDS 时导出
-        if node_tag.lower() in [f.lower() for f in DEFAULT_FIELDS]:
-            if node.text and is_translatable_text(node.text, node_tag):
-                translations.append((current_path, node.text, node_tag))
+    if node.text and is_translatable_text(node.text, node_tag):
+        translations.append((current_path, node.text, node_tag))
 
-    # 递归子节点，li 子节点共享 list_indices，其它子节点 copy
     for child in node:
-        if child.tag == 'li':
-            extract_translatable_fields(child, current_path, list_indices, translations, parent_tag=node_tag)
-        else:
-            extract_translatable_fields(child, current_path, list_indices.copy(), translations, parent_tag=node_tag)
+        child_indices = list_indices.copy()
+        extract_translatable_fields(child, current_path, child_indices, translations)
 
     return translations
 
-def preview_translatable_fields(mod_root_dir, preview=PREVIEW_TRANSLATABLE_FIELDS):
-    """预览可翻译字段，可通过 preview 参数控制是否显示"""
+def preview_translatable_fields(mod_root_dir):
+    """预览可翻译字段"""
     logging.info(f"扫描 Defs 目录：{os.path.join(mod_root_dir, 'Defs')}")
     defs_path = os.path.join(mod_root_dir, "Defs")
     if not os.path.exists(defs_path):
@@ -197,12 +161,7 @@ def preview_translatable_fields(mod_root_dir, preview=PREVIEW_TRANSLATABLE_FIELD
                 translations = extract_translatable_fields(def_node)
                 logging.debug(f"在 {def_name_text} 找到 {len(translations)} 个翻译字段")
                 for field_path, text, tag in translations:
-                    # 移除路径中的 defType（父标签）
-                    # 只保留 defName 作为前缀，后面跟真正的字段路径（去掉 BackstoryDef. 前缀）
-                    clean_path = field_path
-                    if clean_path.startswith(def_type + "."):
-                        clean_path = clean_path[len(def_type) + 1:]
-                    full_path = f"{def_type}/{def_name_text}.{clean_path}"
+                    full_path = f"{def_type}/{def_name_text}.{field_path}"
                     all_translations.append((full_path, text, tag, str(xml_file)))
         except ET.ParseError as e:
             logging.error(f"XML 语法错误 {xml_file}: {e}")
@@ -216,21 +175,27 @@ def preview_translatable_fields(mod_root_dir, preview=PREVIEW_TRANSLATABLE_FIELD
         print("未找到可翻译字段。")
         return []
 
-    if PREVIEW_TRANSLATABLE_FIELDS:
-        print("\n=== 可翻译字段预览 ===")
-        print("请确认需要导出的字段，输入 y 或回车确认，n 跳过该字段。全部确认可直接回车到底。")
-        selected = []
-        for i, (full_path, text, tag, _) in enumerate(all_translations, 1):
-            print(f"{i}. 标签: {tag}")
-            print(f"   内容: {text}")
-            ans = input("导出该字段？[Y/n]: ").strip().lower()
-            if ans == '' or ans == 'y':
-                selected.append((full_path, text, tag, _))
-        print(f"已选择 {len(selected)}/{len(all_translations)} 个字段导出。\n")
-        return selected
-    else:
-        # 直接返回所有字段，不再确认
+    print("\n=== 可翻译字段 ===")
+    for i, (full_path, text, tag, _) in enumerate(all_translations, 1):
+        print(f"{i}. 路径: {full_path}")
+        print(f"   标签: {tag}")
+        print(f"   内容: {text}")
+        print("-" * 50)
+
+    print("\n确认所有字段？（y/n，或输入排除编号，用逗号分隔）")
+    user_input = input("> ").strip().lower()
+
+    if user_input == 'y':
         return all_translations
+    elif user_input == 'n':
+        return []
+    else:
+        try:
+            exclude_indices = [int(x.strip()) - 1 for x in user_input.split(',')]
+            return [t for i, t in enumerate(all_translations) if i not in exclude_indices]
+        except ValueError:
+            print("输入无效，使用所有字段。")
+            return all_translations
 
 def extract_key(mod_root_dir, active_language="ChineseSimplified", english_language="English"):
     """提取翻译键文件"""
@@ -276,16 +241,10 @@ def extract_key(mod_root_dir, active_language="ChineseSimplified", english_langu
                 
                 tree = ET.parse(dst_file)
                 root = tree.getroot()
-                parent_map = {c: p for p in root.iter() for c in p}
                 for elem in root.findall(".//*"):
                     if elem.text and elem.text.strip():
-                        original = elem.text
-                        # 字段内容保留原文
-                        comment = ET.Comment(sanitize_xcomment(f" EN: {original} "))
-                        parent = parent_map.get(elem)
-                        if parent is not None:
-                            idx = list(parent).index(elem)
-                            parent.insert(idx, comment)
+                        comment = ET.Comment(sanitize_xcomment(f" EN: {elem.text} "))
+                        root.append(comment)
                 save_xml_to_file(root, dst_file)
             except Exception as e:
                 logging.error(f"无法处理 {src_file}: {e}")
@@ -295,84 +254,89 @@ def extract_definjected_from_defs(mod_root_dir, active_language="ChineseSimplifi
     active_lang_path = get_language_folder_path(active_language, mod_root_dir)
     def_injected_path = os.path.join(active_lang_path, "DefInjected")
     defs_path = os.path.join(mod_root_dir, "Defs")
-
+    
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
         logging.info(f"创建文件夹：{def_injected_path}")
-
+    
     for xml_file in Path(def_injected_path).rglob("*.xml"):
         try:
             os.remove(xml_file)
             logging.info(f"删除文件：{xml_file}")
         except Exception as e:
             logging.error(f"无法删除 {xml_file}: {e}")
-
+    
     if not os.path.exists(defs_path):
         logging.warning(f"Defs 目录 {defs_path} 不存在，跳过")
         return
-
-    selected_translations = preview_translatable_fields(mod_root_dir, preview=PREVIEW_TRANSLATABLE_FIELDS)
+    
+    selected_translations = preview_translatable_fields(mod_root_dir)
     if not selected_translations:
-        if PREVIEW_TRANSLATABLE_FIELDS:
-            print("未选择字段，跳过生成。")
+        print("未选择字段，跳过生成。")
         return
-
+    
     def_injections = {}
-
+    
     for xml_file in Path(defs_path).rglob("*.xml"):
         try:
             tree = ET.parse(xml_file)
             root = tree.getroot()
-
-            rel_path = os.path.relpath(xml_file, defs_path)  # 计算相对路径
-            output_path = os.path.join(def_injected_path, rel_path)
-
+            
             for def_node in root.findall(".//*[defName]"):
                 def_type = def_node.tag
                 def_name = def_node.find("defName")
                 if def_name is None or not def_name.text:
                     continue
-
+                
                 def_name_text = def_name.text
                 translations = extract_translatable_fields(def_node)
                 logging.debug(f"提取 {def_name_text} 的字段：{translations}")
-                filtered_translations = []
-                prefix = f"{def_type}/{def_name_text}."
-                for full_path, text, tag, file_path in selected_translations:
-                    if str(file_path) == str(xml_file) and full_path.startswith(prefix):
-                        field_path = full_path[len(prefix):]
-                        filtered_translations.append((field_path, text, tag))
+                filtered_translations = [
+                    (field_path, text, tag) for full_path, text, tag, file_path in selected_translations
+                    if str(file_path) == str(xml_file) and full_path == f"{def_type}/{def_name_text}.{field_path}"
+                ]
                 logging.debug(f"过滤字段：{filtered_translations}")
-                if not filtered_translations:
-                    continue
-                # 以 output_path 作为 key，直接导出到 DefInjected 下的相对路径
-                if output_path not in def_injections:
-                    def_injections[output_path] = []
-                def_injections[output_path].append((def_name_text, filtered_translations))
-
+                
+                if filtered_translations:
+                    output_dir = def_injected_path
+                    def_type_short = def_type
+                    if '.' in def_type:
+                        namespace = def_type.split('.')[0]
+                        def_type_short = def_type.split('.')[-1]
+                        output_dir = os.path.join(def_injected_path, namespace, def_type_short)
+                    else:
+                        output_dir = os.path.join(def_injected_path, def_type)
+                    
+                    output_filename = os.path.basename(xml_file)
+                    
+                    if output_filename not in def_injections:
+                        def_injections[output_filename] = []
+                    def_injections[output_filename].append((def_name_text, filtered_translations, output_dir))
+        
         except ET.ParseError as e:
             logging.error(f"XML 语法错误 {xml_file}: {e}")
             continue
         except Exception as e:
             logging.error(f"无法解析 {xml_file}: {e}")
             continue
-
+    
     logging.debug(f"Def Injections: {def_injections}")
-
-    for output_path, defs in def_injections.items():
+    
+    for output_filename, defs in def_injections.items():
         root = ET.Element("LanguageData")
-        for def_name, translations in defs:
-            if not translations:
-                continue
+        for def_name, translations, output_dir in defs:
             for field_path, text, tag in translations:
-                # 去掉 field_path 前缀中的 defType（如 BackstoryDef.）
-                clean_path = field_path
-                # 这里 def_type 变量不可用，但 clean_path 已经是去掉前缀的
-                full_path = f"{def_name}.{clean_path}"
-                comment = ET.Comment(sanitize_xcomment(f" EN: {text} "))
-                root.append(comment)
+                if tag == 'rulesStrings':
+                    full_path = f"{def_name}.{field_path}"
+                else:
+                    field_name = field_path.split('.')[-1]
+                    full_path = f"{def_name}.{field_name}"
                 field_elem = ET.SubElement(root, full_path)
                 field_elem.text = text
+                comment = ET.Comment(sanitize_xcomment(f" EN: {text} "))
+                root.append(comment)
+        
+        output_path = os.path.join(output_dir, output_filename)
         save_xml_to_file(root, output_path)
 
 def extract_translate(mod_root_dir, active_language="ChineseSimplified", english_language="English"):
@@ -415,23 +379,16 @@ def extract_translate(mod_root_dir, active_language="ChineseSimplified", english
                 
                 tree = ET.parse(dst_file)
                 root = tree.getroot()
-                parent_map = {c: p for p in root.iter() for c in p}
                 for elem in root.findall(".//*"):
                     if elem.text and elem.text.strip():
-                        original = elem.text
-                        # 字段内容保留原文
-                        comment = ET.Comment(sanitize_xcomment(f" EN: {original} "))
-                        parent = parent_map.get(elem)
-                        if parent is not None:
-                            idx = list(parent).index(elem)
-                            parent.insert(idx, comment)
+                        comment = ET.Comment(sanitize_xcomment(f" EN: {elem.text} "))
+                        root.append(comment)
                 save_xml_to_file(root, dst_file)
             except Exception as e:
                 logging.error(f"无法处理 {src_file}: {e}")
     else:
         logging.info(f"未找到英文 DefInjected {english_def_injected_path}，从 Defs 提取")
         extract_definjected_from_defs(mod_root_dir, active_language)
-
 
 def cleanup_backstories(mod_root_dir, active_language="ChineseSimplified"):
     """清理旧背景故事文件"""
@@ -456,70 +413,13 @@ def main():
         print("错误：模组路径不存在！")
         logging.error(f"模组路径不存在：{mod_root_dir}")
         return
-
-    print("请输入导出目标文件夹路径（如 D:/output 或留空则为当前目录）：")
-    export_dir = input("> ").strip()
-    if not export_dir:
-        export_dir = os.getcwd()
-    if not os.path.exists(export_dir):
-        try:
-            os.makedirs(export_dir)
-            print(f"已创建导出目录：{export_dir}")
-        except Exception as e:
-            print(f"无法创建导出目录：{e}")
-            logging.error(f"无法创建导出目录：{export_dir}，错误：{e}")
-            return
-
-    # 复制整个 Languages 目录到目标文件夹
-    import shutil
-    src_languages = os.path.join(mod_root_dir, "Languages")
-    dst_languages = os.path.join(export_dir, "Languages")
-    if os.path.exists(src_languages):
-        if os.path.exists(dst_languages):
-            shutil.rmtree(dst_languages)
-        shutil.copytree(src_languages, dst_languages)
-
+    
     print("开始提取翻译...")
     try:
-        # 下面三个函数需要以 mod_root_dir 作为根目录
         extract_translate(mod_root_dir)
         extract_key(mod_root_dir)
         cleanup_backstories(mod_root_dir)
-
-        # 自动导出所有可翻译字段到 extracted_translations.csv（含 DefInjected 和 Keyed）
-        csv_path = os.path.join(export_dir, "extracted_translations.csv")
-        all_translations = preview_translatable_fields(mod_root_dir, preview=False)
-        import csv
-        # Keyed 导出
-        keyed_dir = os.path.join(export_dir, "Languages", "English", "Keyed")
-        keyed_rows = []
-        if os.path.exists(keyed_dir):
-            from pathlib import Path
-            for xml_file in Path(keyed_dir).rglob("*.xml"):
-                try:
-                    tree = ET.parse(xml_file)
-                    root = tree.getroot()
-                    for elem in root:
-                        if elem.tag is ET.Comment:
-                            continue
-                        if elem.text and elem.text.strip():
-                            keyed_rows.append((elem.tag, elem.text.strip(), elem.tag))
-                except Exception as e:
-                    logging.error(f"Keyed导出失败: {xml_file}: {e}")
-
-        with open(csv_path, "w", encoding="utf-8", newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow(["key", "text", "tag"])
-            # DefInjected
-            for full_path, text, tag, _ in all_translations:
-                writer.writerow([full_path, text, tag])
-            # Keyed
-            for key, text, tag in keyed_rows:
-                writer.writerow([key, text, tag])
-        print(f"已自动导出所有可翻译字段到 {csv_path}")
-        logging.info(f"已自动导出所有可翻译字段到 {csv_path}")
-
-        print("翻译提取完成！请检查导出文件夹。")
+        print("翻译提取完成！请检查 Languages 文件夹。")
         logging.info("翻译提取完成")
     except Exception as e:
         print(f"提取错误：{e}")

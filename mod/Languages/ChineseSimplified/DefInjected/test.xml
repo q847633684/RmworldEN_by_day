@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: test mood -->
+  <TestThought.stages.1.label>test mood</TestThought.stages.1.label>
+  <!-- EN: Complex test description. -->
+  <TestThought.stages.1.description>Complex test description.</TestThought.stages.1.description>
+  <!-- EN: test part -->
+  <TestPart.label>test part</TestPart.label>
+  <!-- EN: a test part -->
+  <TestPart.labelNoun>a test part</TestPart.labelNoun>
+  <!-- EN: Test part description with nested structure. -->
+  <TestPart.description>Test part description with nested structure.</TestPart.description>
+  <!-- EN: sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap. -->
+  <TestPart.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.</TestPart.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective]. -->
+  <TestPart.rulePack.rulesStrings.1>sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].</TestPart.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed. -->
+  <TestPart.rulePack.rulesStrings.2>sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.</TestPart.rulePack.rulesStrings.2>
+  <!-- EN: sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap. -->
+  <TestPart.comps.0.rulesStrings.0>sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.</TestPart.comps.0.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective]. -->
+  <TestPart.comps.0.rulesStrings.1>sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].</TestPart.comps.0.rulesStrings.1>
+  <!-- EN: sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed. -->
+  <TestPart.comps.0.rulesStrings.2>sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.</TestPart.comps.0.rulesStrings.2>
+  <!-- EN: sent-> [INITIATOR_nameDef] rimmed [RECIPIENT_nameDef]. -->
+  <RimmingReverseRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] rimmed [RECIPIENT_nameDef].</RimmingReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap. -->
+  <MainReverseRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.</MainReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective]. -->
+  <MainReverseRP.rulePack.rulesStrings.1>sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].</MainReverseRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed. -->
+  <MainReverseRP.rulePack.rulesStrings.2>sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.</MainReverseRP.rulePack.rulesStrings.2>
+</LanguageData>
