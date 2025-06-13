@@ -227,7 +227,7 @@ def main() -> None:
                 input("按回车返回主菜单...")
                 continue
             update_history_list("export_dir_history", export_dir)
-            mod_root_dir = export_dir  # # 兼容导入逻辑，导入流程中“模组根目录”即为“导出目标文件夹”
+            mod_root_dir = export_dir  # 兼容导入逻辑，导入流程中“模组根目录”即为“导出目标文件夹”
             translated_csv_history = get_history_list("translated_csv_history")
             print("最近使用的带翻译列的CSV文件：")
             for idx, p in enumerate(translated_csv_history):
@@ -254,14 +254,54 @@ def main() -> None:
                 input("按回车返回主菜单...")
                 continue
             update_history_list("translated_csv_history", csv_path)
-            from Day_EN.importer import import_translations
-            try:
-                import_translations(csv_path, mod_root_dir)
-                print("批量汉化完成！请检查 Languages 目录。")
-                logging.info("批量汉化完成")
-            except Exception as e:
-                print(f"批量汉化错误：{e}")
-                logging.error(f"批量汉化错误：{e}")
+            print("请选择导入模式：")
+            print("1. 覆盖（不保留原有内容，推荐）")
+            print("2. 合并（保留原有内容，CSV内容优先生效）")
+            print("3. 就地替换（仅替换已有 key，顺序/注释可选保留）")
+            mode_import = input("输入 1/2/3 并回车（默认1）：").strip()
+            if mode_import == "2":
+                from Day_EN.importer import import_translations
+                try:
+                    import_translations(csv_path, mod_root_dir, merge=True)
+                    print("批量汉化完成（合并模式）！请检查 Languages 目录。")
+                    logging.info("批量汉化完成（合并模式）")
+                except Exception as e:
+                    print(f"批量汉化错误：{e}")
+                    logging.error(f"批量汉化错误：{e}")
+            elif mode_import == "3":
+                print("是否保留注释/缩进（需要 lxml，推荐Y）？Y/N（默认Y）：")
+                keep_comment = input("> ").strip().lower()
+                if keep_comment == "n":
+                    # 标准库方案（注释丢失，顺序保留）
+                    try:
+                        from Day_EN.inplace_update_xml_etree import inplace_update_all_xml
+                        inplace_update_all_xml(csv_path, mod_root_dir)
+                        print("批量汉化完成（就地替换，标准库方案）！请检查 Languages 目录。")
+                        logging.info("批量汉化完成（就地替换，标准库方案）")
+                    except Exception as e:
+                        print(f"批量汉化错误：{e}")
+                        logging.error(f"批量汉化错误：{e}")
+                else:
+                    # lxml方案（注释/缩进/顺序保留）
+                    try:
+                        from Day_EN.inplace_update_xml_lxml import inplace_update_all_xml
+                        inplace_update_all_xml(csv_path, mod_root_dir)
+                        print("批量汉化完成（就地替换，lxml方案）！请检查 Languages 目录。")
+                        logging.info("批量汉化完成（就地替换，lxml方案）")
+                    except ImportError:
+                        print("未安装 lxml 库，请先安装：pip install lxml")
+                    except Exception as e:
+                        print(f"批量汉化错误：{e}")
+                        logging.error(f"批量汉化错误：{e}")
+            else:
+                from Day_EN.importer import import_translations
+                try:
+                    import_translations(csv_path, mod_root_dir, merge=False)
+                    print("批量汉化完成（覆盖模式）！请检查 Languages 目录。")
+                    logging.info("批量汉化完成（覆盖模式）")
+                except Exception as e:
+                    print(f"批量汉化错误：{e}")
+                    logging.error(f"批量汉化错误：{e}")
             input("按回车返回主菜单...")
             continue
 
