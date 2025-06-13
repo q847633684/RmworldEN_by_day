@@ -63,48 +63,55 @@ def sanitize_xcomment(text):
     return re.sub(r'-{2,}', ' ', text)
 
 def save_xml_to_file(root, path):
-    """保存 XML 文件，保持原始文本格式"""
-    def element_to_string(elem, level=0):
-        indent = "  " * level
-        result = []
-
-        # 处理注释
-        if elem.tag is ET.Comment:
-            text = elem.text if elem.text is not None else ""
-            return f"{indent}<!--{text}-->\n"
-
-        # 处理元素
-        tag = elem.tag
-        if elem.text and '\n' not in elem.text.strip():
-            # 单行文本不换行
-            result.append(f"{indent}<{tag}>{elem.text}</{tag}>\n")
+    """
+    保存 XML 文件，保持原始文本格式。
+    建议作为独立模块导入：
+        from save_xml_module import save_xml_to_file
+    参数：
+        root: ElementTree 的根节点
+        path: 保存路径
+    作用：
+        - 自动创建目录
+        - 用标准 ElementTree 写入，保证所有内容都在根节点内
+    """
+    def indent_xml(elem, level=0):
+        """
+        递归美化 ElementTree XML 节点，使输出有缩进和换行。
+        """
+        i = "\n" + level * "    "
+        if len(elem):
+            if not elem.text or not elem.text.strip():
+                elem.text = i + "    "
+            for child in elem:
+                indent_xml(child, level + 1)
+            if not elem.tail or not elem.tail.strip():
+                elem.tail = i
         else:
-            result.append(f"{indent}<{tag}>\n")
-            # 处理多行文本
-            if elem.text:
-                text_lines = elem.text.splitlines()
-                for line in text_lines:
-                    result.append(f"{indent}  {line.rstrip()}\n")
-
-        # 处理子元素
-        for child in elem:
-            result.append(element_to_string(child, level + 1))
-
-        # 结束标签（仅在多行或子元素时）
-        if not (elem.text and '\n' not in elem.text.strip()):
-            result.append(f"{indent}</{tag}>\n")
-
-        return "".join(result)
+            if level and (not elem.tail or not elem.tail.strip()):
+                elem.tail = i
 
     try:
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        xml_str = '<?xml version="1.0" encoding="UTF-8"?>\n'
-        xml_str += element_to_string(root)
-        with open(path, 'w', encoding='utf-8') as f:
-            f.write(xml_str)
+        indent_xml(root)  # 美化缩进
+        tree = ET.ElementTree(root)
+        tree.write(path, encoding='utf-8', xml_declaration=True)
         logging.info(f"保存 XML 文件：{path}")
     except Exception as e:
         logging.error(f"无法保存 XML 文件 {path}: {e}")
+
+# 建议：如需复用，可将 save_xml_to_file 单独保存为 save_xml_module.py：
+# --- save_xml_module.py ---
+# import os
+# import xml.etree.ElementTree as ET
+# import logging
+# def save_xml_to_file(root, path):
+#     try:
+#         os.makedirs(os.path.dirname(path), exist_ok=True)
+#         tree = ET.ElementTree(root)
+#         tree.write(path, encoding='utf-8', xml_declaration=True)
+#         logging.info(f"保存 XML 文件：{path}")
+#     except Exception as e:
+#         logging.error(f"无法保存 XML 文件 {path}: {e}")
 
 def is_translatable_text(text, tag):
     """判断文本是否需要翻译"""

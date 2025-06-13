@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
-  <!-- EN: Gave virginity -->
-  <FortunateGaveVirginity.stages.0.label>Gave virginity</FortunateGaveVirginity.stages.0.label>
-  <!-- EN: I gave my virginity. -->
-  <FortunateGaveVirginity.stages.0.description>I gave my virginity.</FortunateGaveVirginity.stages.0.description>
-  <!-- EN: Lost virginity -->
-  <UnfortunateLostVirginity.stages.0.label>Lost virginity</UnfortunateLostVirginity.stages.0.label>
-  <!-- EN: I lost my virginity and I'll never get it back. -->
-  <UnfortunateLostVirginity.stages.0.description>I lost my virginity and I'll never get it back.</UnfortunateLostVirginity.stages.0.description>
-  <!-- EN: Took virginity -->
-  <TookVirginity.stages.0.label>Took virginity</TookVirginity.stages.0.label>
-  <!-- EN: I've taken someone's virginity. -->
-  <TookVirginity.stages.0.description>I've taken someone's virginity.</TookVirginity.stages.0.description>
-</LanguageData>
+    <!-- EN: Gave virginity -->
+    <FortunateGaveVirginity.stages.0.label>Gave virginity</FortunateGaveVirginity.stages.0.label>
+    <!-- EN: I gave my virginity. -->
+    <FortunateGaveVirginity.stages.0.description>I gave my virginity.</FortunateGaveVirginity.stages.0.description>
+    <!-- EN: Lost virginity -->
+    <UnfortunateLostVirginity.stages.0.label>Lost virginity</UnfortunateLostVirginity.stages.0.label>
+    <!-- EN: I lost my virginity and I'll never get it back. -->
+    <UnfortunateLostVirginity.stages.0.description>I lost my virginity and I'll never get it back.</UnfortunateLostVirginity.stages.0.description>
+    <!-- EN: Took virginity -->
+    <TookVirginity.stages.0.label>Took virginity</TookVirginity.stages.0.label>
+    <!-- EN: I've taken someone's virginity. -->
+    <TookVirginity.stages.0.description>I've taken someone's virginity.</TookVirginity.stages.0.description>
+    </LanguageData>

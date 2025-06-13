@@ -1,174 +1,173 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
-	
-	</LanguageData>
-  <!-- EN: Show sexuality -->
-  <SexcardTooltip>Show sexuality</SexcardTooltip>
-  <!-- EN: Quirks:  -->
-  <Quirks>Quirks: </Quirks>
-  <!-- EN: No Quirks, vanilla. -->
-  <NoQuirks>No Quirks, vanilla.</NoQuirks>
-  <!-- EN: 
+    <!-- EN: Show sexuality -->
+    <SexcardTooltip>Show sexuality</SexcardTooltip>
+    <!-- EN: Quirks:  -->
+    <Quirks>Quirks: </Quirks>
+    <!-- EN: No Quirks, vanilla. -->
+    <NoQuirks>No Quirks, vanilla.</NoQuirks>
+    <!-- EN: 
 {pawn} not only produces copious amounts of fluid during sex but {pawn_pronoun} rarely bothers to clean {pawn_possessive}self afterwards.
  -->
-  <MessyQuirk>
+    <MessyQuirk>
 {pawn} not only produces copious amounts of fluid during sex but {pawn_pronoun} rarely bothers to clean {pawn_possessive}self afterwards.
 </MessyQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} really likes feet and prefers foot-related sex acts.
  -->
-  <PodophileQuirk>
+    <PodophileQuirk>
 {pawn} really likes feet and prefers foot-related sex acts.
 </PodophileQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} really likes cum and prefers fellatio sex acts.
  -->
-  <CumslutQuirk>
+    <CumslutQuirk>
 {pawn} really likes cum and prefers fellatio sex acts.
 </CumslutQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} really likes getting fucked in the butt and prefers anal sex acts.
  -->
-  <ButtslutQuirk>
+    <ButtslutQuirk>
 {pawn} really likes getting fucked in the butt and prefers anal sex acts.
 </ButtslutQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} prefers ugly partners. {pawn_pronoun} would also prefer larger and wilder animals if {pawn_pronoun} were into that sort of thing...
  -->
-  <TeratophileQuirk>
+    <TeratophileQuirk>
 {pawn} prefers ugly partners. {pawn_pronoun} would also prefer larger and wilder animals if {pawn_pronoun} were into that sort of thing...
 </TeratophileQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} prefers to keep {pawn_possessive} clothes on during sex.
  -->
-  <EndytophileQuirk>
+    <EndytophileQuirk>
 {pawn} prefers to keep {pawn_possessive} clothes on during sex.
 </EndytophileQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} enjoys having sex where others can see.
  -->
-  <ExhibitionistQuirk>
+    <ExhibitionistQuirk>
 {pawn} enjoys having sex where others can see.
 </ExhibitionistQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} prefers older partners (55+ on a human scale).
  -->
-  <GerontophileQuirk>
+    <GerontophileQuirk>
 {pawn} prefers older partners (55+ on a human scale).
 </GerontophileQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} prefers {pawn_possessive} partners to be asleep
  -->
-  <SomnophileQuirk>
+    <SomnophileQuirk>
 {pawn} prefers {pawn_possessive} partners to be asleep
 </SomnophileQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} prefers smart partners.
  -->
-  <SapiosexualQuirk>
+    <SapiosexualQuirk>
 {pawn} prefers smart partners.
 </SapiosexualQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} has unusually high fertility and so is more likely to have children.
  -->
-  <FertileQuirk>
+    <FertileQuirk>
 {pawn} has unusually high fertility and so is more likely to have children.
 </FertileQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} has unusually low fertility and so is unlikely to have children.
  -->
-  <InfertileQuirk>
+    <InfertileQuirk>
 {pawn} has unusually low fertility and so is unlikely to have children.
 </InfertileQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} really likes the idea of someone becoming pregnant. {pawn_pronoun} prefers partners and sex positions where there is a possibility of pregnancy. {pawn_pronoun} doesn't care if {pawn_pronoun} is getting pregnant or {pawn_possessive} partner is as long as babby is formed.
  -->
-  <ImpregnationFetishQuirk>
+    <ImpregnationFetishQuirk>
 {pawn} really likes the idea of someone becoming pregnant. {pawn_pronoun} prefers partners and sex positions where there is a possibility of pregnancy. {pawn_pronoun} doesn't care if {pawn_pronoun} is getting pregnant or {pawn_possessive} partner is as long as babby is formed.
 </ImpregnationFetishQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} prefers partners who are visibly pregnant.
  -->
-  <PregnancyFetishQuirk>
+    <PregnancyFetishQuirk>
 {pawn} prefers partners who are visibly pregnant.
 </PregnancyFetishQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} has birthed so many eggs that {pawn_possessive} body has adapted to handling them. {pawn_possessive} egg incubation speed has increased.
  -->
-  <IncubatorQuirk>
+    <IncubatorQuirk>
 {pawn} has birthed so many eggs that {pawn_possessive} body has adapted to handling them. {pawn_possessive} egg incubation speed has increased.
 </IncubatorQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} has given birth so many times that {pawn_possessive} body has adapted to breeding. {pawn_possessive} pregnancies are shorter and produce more offspring.
  -->
-  <BreederQuirk>
+    <BreederQuirk>
 {pawn} has given birth so many times that {pawn_possessive} body has adapted to breeding. {pawn_possessive} pregnancies are shorter and produce more offspring.
 </BreederQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} is invigorated by sex. {pawn_pronoun} does not get tired as much during sex.
  -->
-  <VigorousQuirk>
+    <VigorousQuirk>
 {pawn} is invigorated by sex. {pawn_pronoun} does not get tired as much during sex.
 </VigorousQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} enjoys the smooth strength of a chitinous exoskeleton. {pawn_pronoun} prefers arachnoid or insectoid partners.
  -->
-  <ChitinLoverQuirk>
+    <ChitinLoverQuirk>
 {pawn} enjoys the smooth strength of a chitinous exoskeleton. {pawn_pronoun} prefers arachnoid or insectoid partners.
 </ChitinLoverQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} is after the naughty ones. {pawn_pronoun} prefers {pawn_possessive} partners to come from the literal depths of hell, or at least look the part.
  -->
-  <DemonLoverQuirk>
+    <DemonLoverQuirk>
 {pawn} is after the naughty ones. {pawn_pronoun} prefers {pawn_possessive} partners to come from the literal depths of hell, or at least look the part.
 </DemonLoverQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} loves that downy fluff. {pawn_pronoun} prefers avian or dinosaur partners. Because dinosaurs are birds and have feathers, as {pawn_pronoun} will explain at great length if given a chance.
  -->
-  <FeatherLoverQuirk>
+    <FeatherLoverQuirk>
 {pawn} loves that downy fluff. {pawn_pronoun} prefers avian or dinosaur partners. Because dinosaurs are birds and have feathers, as {pawn_pronoun} will explain at great length if given a chance.
 </FeatherLoverQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} prefers a partner with a thick, luxurious, snuggly-soft coat of fur.
  -->
-  <FurLoverQuirk>
+    <FurLoverQuirk>
 {pawn} prefers a partner with a thick, luxurious, snuggly-soft coat of fur.
 </FurLoverQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} likes watering plants. If you know what I mean.
  -->
-  <PlantLoverQuirk>
+    <PlantLoverQuirk>
 {pawn} likes watering plants. If you know what I mean.
 </PlantLoverQuirk>
-  <!-- EN: 
+    <!-- EN: 
 Which is better, 2D or 3D? {pawn} knows that 3D-printed gives you the best of both worlds.
  -->
-  <RobotLoverQuirk>
+    <RobotLoverQuirk>
 Which is better, 2D or 3D? {pawn} knows that 3D-printed gives you the best of both worlds.
 </RobotLoverQuirk>
-  <!-- EN: 
+    <!-- EN: 
 Who wouldn't want to fuck a dragon? Definitely not {pawn}. {pawn} wants to fuck a dragon.
  -->
-  <ScaleLoverQuirk>
+    <ScaleLoverQuirk>
 Who wouldn't want to fuck a dragon? Definitely not {pawn}. {pawn} wants to fuck a dragon.
 </ScaleLoverQuirk>
-  <!-- EN: 
+    <!-- EN: 
 {pawn} prefers {pawn_possessive} partners to have smooth sensitive skin without fur or scales getting in the way. Lucky for {pawn_objective} humans are all over the place.
  -->
-  <SkinLoverQuirk>
+    <SkinLoverQuirk>
 {pawn} prefers {pawn_possessive} partners to have smooth sensitive skin without fur or scales getting in the way. Lucky for {pawn_objective} humans are all over the place.
 </SkinLoverQuirk>
-  <!-- EN: 
+    <!-- EN: 
 Because of their slippery and malleable nature slimes are very, very good at sex. As you will hear over and over if you listen to {pawn} talk for any length of time.
  -->
-  <SlimeLoverQuirk>
+    <SlimeLoverQuirk>
 Because of their slippery and malleable nature slimes are very, very good at sex. As you will hear over and over if you listen to {pawn} talk for any length of time.
 </SlimeLoverQuirk>
-  <!-- EN: Wants to be:  -->
-  <SexPartWants>Wants to be: </SexPartWants>
-  <!-- EN: Edit {0} -->
-  <PartsEditLabel>Edit {0}</PartsEditLabel>
-  <!-- EN: Fluid Multiplier -->
-  <PartsEditFluidMultiplierLabel>Fluid Multiplier</PartsEditFluidMultiplierLabel>
-  <!-- EN: RJW: Edit parts -->
-  <PartsEditDevEntry>RJW: Edit parts</PartsEditDevEntry>
+    <!-- EN: Wants to be:  -->
+    <SexPartWants>Wants to be: </SexPartWants>
+    <!-- EN: Edit {0} -->
+    <PartsEditLabel>Edit {0}</PartsEditLabel>
+    <!-- EN: Fluid Multiplier -->
+    <PartsEditFluidMultiplierLabel>Fluid Multiplier</PartsEditFluidMultiplierLabel>
+    <!-- EN: RJW: Edit parts -->
+    <PartsEditDevEntry>RJW: Edit parts</PartsEditDevEntry>
+    </LanguageData>

@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
-  <!-- EN: make hololock -->
-  <MakeHololock.label>make hololock</MakeHololock.label>
-  <!-- EN: Make a hololock. -->
-  <MakeHololock.description>Make a hololock.</MakeHololock.description>
-  <!-- EN: make chains -->
-  <MakePrisonerChains.label>make chains</MakePrisonerChains.label>
-  <!-- EN: Make a restricvive chains. -->
-  <MakePrisonerChains.description>Make a restricvive chains.</MakePrisonerChains.description>
-</LanguageData>
+    <!-- EN: make hololock -->
+    <MakeHololock.label>make hololock</MakeHololock.label>
+    <!-- EN: Make a hololock. -->
+    <MakeHololock.description>Make a hololock.</MakeHololock.description>
+    <!-- EN: make chains -->
+    <MakePrisonerChains.label>make chains</MakePrisonerChains.label>
+    <!-- EN: Make a restricvive chains. -->
+    <MakePrisonerChains.description>Make a restricvive chains.</MakePrisonerChains.description>
+    </LanguageData>

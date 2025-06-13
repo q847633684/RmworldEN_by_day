@@ -1,117 +1,117 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
-  <!-- EN: equine penis -->
-  <HorsePenis.label>equine penis</HorsePenis.label>
-  <!-- EN: an equine penis -->
-  <HorsePenis.labelNoun>an equine penis</HorsePenis.labelNoun>
-  <!-- EN: A large horse penis. Flares out during sex. -->
-  <HorsePenis.description>A large horse penis. Flares out during sex.</HorsePenis.description>
-  <!-- EN: equine vagina -->
-  <HorseVagina.label>equine vagina</HorseVagina.label>
-  <!-- EN: an equine vagina -->
-  <HorseVagina.labelNoun>an equine vagina</HorseVagina.labelNoun>
-  <!-- EN: A mare vagina. -->
-  <HorseVagina.description>A mare vagina.</HorseVagina.description>
-  <!-- EN: feline penis -->
-  <CatPenis.label>feline penis</CatPenis.label>
-  <!-- EN: a feline penis -->
-  <CatPenis.labelNoun>a feline penis</CatPenis.labelNoun>
-  <!-- EN: A spine-covered feline penis. -->
-  <CatPenis.description>A spine-covered feline penis.</CatPenis.description>
-  <!-- EN: feline vagina -->
-  <CatVagina.label>feline vagina</CatVagina.label>
-  <!-- EN: a feline vagina -->
-  <CatVagina.labelNoun>a feline vagina</CatVagina.labelNoun>
-  <!-- EN: A feline vagina. -->
-  <CatVagina.description>A feline vagina.</CatVagina.description>
-  <!-- EN: canine penis -->
-  <DogPenis.label>canine penis</DogPenis.label>
-  <!-- EN: a dog penis -->
-  <DogPenis.labelNoun>a dog penis</DogPenis.labelNoun>
-  <!-- EN: A bright red dog penis. The knot will expand during sex, locking its lover to their partner for a long time. -->
-  <DogPenis.description>A bright red dog penis. The knot will expand during sex, locking its lover to their partner for a long time.</DogPenis.description>
-  <!-- EN: canine vagina -->
-  <DogVagina.label>canine vagina</DogVagina.label>
-  <!-- EN: a dog vagina -->
-  <DogVagina.labelNoun>a dog vagina</DogVagina.labelNoun>
-  <!-- EN: A dog vagina. -->
-  <DogVagina.description>A dog vagina.</DogVagina.description>
-  <!-- EN: dragon penis -->
-  <DragonPenis.label>dragon penis</DragonPenis.label>
-  <!-- EN: a dragon penis -->
-  <DragonPenis.labelNoun>a dragon penis</DragonPenis.labelNoun>
-  <!-- EN: A dragon penis. Has a knot that expands similarly to a dog's penis, but the ribbing on both sides takes its lover to greater heights of pleasure. -->
-  <DragonPenis.description>A dragon penis. Has a knot that expands similarly to a dog's penis, but the ribbing on both sides takes its lover to greater heights of pleasure.</DragonPenis.description>
-  <!-- EN: dragon vagina -->
-  <DragonVagina.label>dragon vagina</DragonVagina.label>
-  <!-- EN: a dragon vagina -->
-  <DragonVagina.labelNoun>a dragon vagina</DragonVagina.labelNoun>
-  <!-- EN: A dragon vagina. Has a similar texture to their outer hide. -->
-  <DragonVagina.description>A dragon vagina. Has a similar texture to their outer hide.</DragonVagina.description>
-  <!-- EN: procyonine penis -->
-  <RaccoonPenis.label>procyonine penis</RaccoonPenis.label>
-  <!-- EN: a procyonine penis -->
-  <RaccoonPenis.labelNoun>a procyonine penis</RaccoonPenis.labelNoun>
-  <!-- EN: A raccoon penis. -->
-  <RaccoonPenis.description>A raccoon penis.</RaccoonPenis.description>
-  <!-- EN: hemipenis -->
-  <HemiPenis.label>hemipenis</HemiPenis.label>
-  <!-- EN: a hemipenis -->
-  <HemiPenis.labelNoun>a hemipenis</HemiPenis.labelNoun>
-  <!-- EN: Twice the members for double the fun. -->
-  <HemiPenis.description>Twice the members for double the fun.</HemiPenis.description>
-  <!-- EN: crocodilian penis -->
-  <CrocodilianPenis.label>crocodilian penis</CrocodilianPenis.label>
-  <!-- EN: a crocodilian penis -->
-  <CrocodilianPenis.labelNoun>a crocodilian penis</CrocodilianPenis.labelNoun>
-  <!-- EN: A crocodilian penis. Large and permenantly erect. -->
-  <CrocodilianPenis.description>A crocodilian penis. Large and permenantly erect.</CrocodilianPenis.description>
-  <!-- EN: udders -->
-  <UdderBreasts.label>udders</UdderBreasts.label>
-  <!-- EN: a set of udders -->
-  <UdderBreasts.labelNoun>a set of udders</UdderBreasts.labelNoun>
-  <!-- EN: An animalistic breast with four nipples. -->
-  <UdderBreasts.description>An animalistic breast with four nipples.</UdderBreasts.description>
-  <!-- EN: narrow vagina -->
-  <NarrowVagina.label>narrow vagina</NarrowVagina.label>
-  <!-- EN: a narrow vagina -->
-  <NarrowVagina.labelNoun>a narrow vagina</NarrowVagina.labelNoun>
-  <!-- EN: A tight, narrow vagina. -->
-  <NarrowVagina.description>A tight, narrow vagina.</NarrowVagina.description>
-  <!-- EN: needle penis -->
-  <NeedlePenis.label>needle penis</NeedlePenis.label>
-  <!-- EN: a needle penis -->
-  <NeedlePenis.labelNoun>a needle penis</NeedlePenis.labelNoun>
-  <!-- EN: A small and thin penis. -->
-  <NeedlePenis.description>A small and thin penis.</NeedlePenis.description>
-  <!-- EN: rodent vagina -->
-  <RodentVagina.label>rodent vagina</RodentVagina.label>
-  <!-- EN: a rodent vagina -->
-  <RodentVagina.labelNoun>a rodent vagina</RodentVagina.labelNoun>
-  <!-- EN: A rodent vagina. -->
-  <RodentVagina.description>A rodent vagina.</RodentVagina.description>
-  <!-- EN: rodent penis -->
-  <RodentPenis.label>rodent penis</RodentPenis.label>
-  <!-- EN: a rodent penis -->
-  <RodentPenis.labelNoun>a rodent penis</RodentPenis.labelNoun>
-  <!-- EN: A rodent penis. -->
-  <RodentPenis.description>A rodent penis.</RodentPenis.description>
-  <!-- EN: cloacal penis -->
-  <CloacalPenis.label>cloacal penis</CloacalPenis.label>
-  <!-- EN: a cloacal penis -->
-  <CloacalPenis.labelNoun>a cloacal penis</CloacalPenis.labelNoun>
-  <!-- EN: A cloacal penis. -->
-  <CloacalPenis.description>A cloacal penis.</CloacalPenis.description>
-  <!-- EN: cloacal vagina -->
-  <CloacalVagina.label>cloacal vagina</CloacalVagina.label>
-  <!-- EN: a cloacal vagina -->
-  <CloacalVagina.labelNoun>a cloacal vagina</CloacalVagina.labelNoun>
-  <!-- EN: A cloacal vagina. -->
-  <CloacalVagina.description>A cloacal vagina.</CloacalVagina.description>
-  <!-- EN: cloacal anus -->
-  <CloacalAnus.label>cloacal anus</CloacalAnus.label>
-  <!-- EN: cloacal anus -->
-  <CloacalAnus.labelNoun>cloacal anus</CloacalAnus.labelNoun>
-  <!-- EN: A cloacal anus. -->
-  <CloacalAnus.description>A cloacal anus.</CloacalAnus.description>
-</LanguageData>
+    <!-- EN: equine penis -->
+    <HorsePenis.label>equine penis</HorsePenis.label>
+    <!-- EN: an equine penis -->
+    <HorsePenis.labelNoun>an equine penis</HorsePenis.labelNoun>
+    <!-- EN: A large horse penis. Flares out during sex. -->
+    <HorsePenis.description>A large horse penis. Flares out during sex.</HorsePenis.description>
+    <!-- EN: equine vagina -->
+    <HorseVagina.label>equine vagina</HorseVagina.label>
+    <!-- EN: an equine vagina -->
+    <HorseVagina.labelNoun>an equine vagina</HorseVagina.labelNoun>
+    <!-- EN: A mare vagina. -->
+    <HorseVagina.description>A mare vagina.</HorseVagina.description>
+    <!-- EN: feline penis -->
+    <CatPenis.label>feline penis</CatPenis.label>
+    <!-- EN: a feline penis -->
+    <CatPenis.labelNoun>a feline penis</CatPenis.labelNoun>
+    <!-- EN: A spine-covered feline penis. -->
+    <CatPenis.description>A spine-covered feline penis.</CatPenis.description>
+    <!-- EN: feline vagina -->
+    <CatVagina.label>feline vagina</CatVagina.label>
+    <!-- EN: a feline vagina -->
+    <CatVagina.labelNoun>a feline vagina</CatVagina.labelNoun>
+    <!-- EN: A feline vagina. -->
+    <CatVagina.description>A feline vagina.</CatVagina.description>
+    <!-- EN: canine penis -->
+    <DogPenis.label>canine penis</DogPenis.label>
+    <!-- EN: a dog penis -->
+    <DogPenis.labelNoun>a dog penis</DogPenis.labelNoun>
+    <!-- EN: A bright red dog penis. The knot will expand during sex, locking its lover to their partner for a long time. -->
+    <DogPenis.description>A bright red dog penis. The knot will expand during sex, locking its lover to their partner for a long time.</DogPenis.description>
+    <!-- EN: canine vagina -->
+    <DogVagina.label>canine vagina</DogVagina.label>
+    <!-- EN: a dog vagina -->
+    <DogVagina.labelNoun>a dog vagina</DogVagina.labelNoun>
+    <!-- EN: A dog vagina. -->
+    <DogVagina.description>A dog vagina.</DogVagina.description>
+    <!-- EN: dragon penis -->
+    <DragonPenis.label>dragon penis</DragonPenis.label>
+    <!-- EN: a dragon penis -->
+    <DragonPenis.labelNoun>a dragon penis</DragonPenis.labelNoun>
+    <!-- EN: A dragon penis. Has a knot that expands similarly to a dog's penis, but the ribbing on both sides takes its lover to greater heights of pleasure. -->
+    <DragonPenis.description>A dragon penis. Has a knot that expands similarly to a dog's penis, but the ribbing on both sides takes its lover to greater heights of pleasure.</DragonPenis.description>
+    <!-- EN: dragon vagina -->
+    <DragonVagina.label>dragon vagina</DragonVagina.label>
+    <!-- EN: a dragon vagina -->
+    <DragonVagina.labelNoun>a dragon vagina</DragonVagina.labelNoun>
+    <!-- EN: A dragon vagina. Has a similar texture to their outer hide. -->
+    <DragonVagina.description>A dragon vagina. Has a similar texture to their outer hide.</DragonVagina.description>
+    <!-- EN: procyonine penis -->
+    <RaccoonPenis.label>procyonine penis</RaccoonPenis.label>
+    <!-- EN: a procyonine penis -->
+    <RaccoonPenis.labelNoun>a procyonine penis</RaccoonPenis.labelNoun>
+    <!-- EN: A raccoon penis. -->
+    <RaccoonPenis.description>A raccoon penis.</RaccoonPenis.description>
+    <!-- EN: hemipenis -->
+    <HemiPenis.label>hemipenis</HemiPenis.label>
+    <!-- EN: a hemipenis -->
+    <HemiPenis.labelNoun>a hemipenis</HemiPenis.labelNoun>
+    <!-- EN: Twice the members for double the fun. -->
+    <HemiPenis.description>Twice the members for double the fun.</HemiPenis.description>
+    <!-- EN: crocodilian penis -->
+    <CrocodilianPenis.label>crocodilian penis</CrocodilianPenis.label>
+    <!-- EN: a crocodilian penis -->
+    <CrocodilianPenis.labelNoun>a crocodilian penis</CrocodilianPenis.labelNoun>
+    <!-- EN: A crocodilian penis. Large and permenantly erect. -->
+    <CrocodilianPenis.description>A crocodilian penis. Large and permenantly erect.</CrocodilianPenis.description>
+    <!-- EN: udders -->
+    <UdderBreasts.label>udders</UdderBreasts.label>
+    <!-- EN: a set of udders -->
+    <UdderBreasts.labelNoun>a set of udders</UdderBreasts.labelNoun>
+    <!-- EN: An animalistic breast with four nipples. -->
+    <UdderBreasts.description>An animalistic breast with four nipples.</UdderBreasts.description>
+    <!-- EN: narrow vagina -->
+    <NarrowVagina.label>narrow vagina</NarrowVagina.label>
+    <!-- EN: a narrow vagina -->
+    <NarrowVagina.labelNoun>a narrow vagina</NarrowVagina.labelNoun>
+    <!-- EN: A tight, narrow vagina. -->
+    <NarrowVagina.description>A tight, narrow vagina.</NarrowVagina.description>
+    <!-- EN: needle penis -->
+    <NeedlePenis.label>needle penis</NeedlePenis.label>
+    <!-- EN: a needle penis -->
+    <NeedlePenis.labelNoun>a needle penis</NeedlePenis.labelNoun>
+    <!-- EN: A small and thin penis. -->
+    <NeedlePenis.description>A small and thin penis.</NeedlePenis.description>
+    <!-- EN: rodent vagina -->
+    <RodentVagina.label>rodent vagina</RodentVagina.label>
+    <!-- EN: a rodent vagina -->
+    <RodentVagina.labelNoun>a rodent vagina</RodentVagina.labelNoun>
+    <!-- EN: A rodent vagina. -->
+    <RodentVagina.description>A rodent vagina.</RodentVagina.description>
+    <!-- EN: rodent penis -->
+    <RodentPenis.label>rodent penis</RodentPenis.label>
+    <!-- EN: a rodent penis -->
+    <RodentPenis.labelNoun>a rodent penis</RodentPenis.labelNoun>
+    <!-- EN: A rodent penis. -->
+    <RodentPenis.description>A rodent penis.</RodentPenis.description>
+    <!-- EN: cloacal penis -->
+    <CloacalPenis.label>cloacal penis</CloacalPenis.label>
+    <!-- EN: a cloacal penis -->
+    <CloacalPenis.labelNoun>a cloacal penis</CloacalPenis.labelNoun>
+    <!-- EN: A cloacal penis. -->
+    <CloacalPenis.description>A cloacal penis.</CloacalPenis.description>
+    <!-- EN: cloacal vagina -->
+    <CloacalVagina.label>cloacal vagina</CloacalVagina.label>
+    <!-- EN: a cloacal vagina -->
+    <CloacalVagina.labelNoun>a cloacal vagina</CloacalVagina.labelNoun>
+    <!-- EN: A cloacal vagina. -->
+    <CloacalVagina.description>A cloacal vagina.</CloacalVagina.description>
+    <!-- EN: cloacal anus -->
+    <CloacalAnus.label>cloacal anus</CloacalAnus.label>
+    <!-- EN: cloacal anus -->
+    <CloacalAnus.labelNoun>cloacal anus</CloacalAnus.labelNoun>
+    <!-- EN: A cloacal anus. -->
+    <CloacalAnus.description>A cloacal anus.</CloacalAnus.description>
+    </LanguageData>

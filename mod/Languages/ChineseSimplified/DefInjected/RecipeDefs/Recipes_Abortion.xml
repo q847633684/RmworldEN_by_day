@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
-  <!-- EN: Neutralize mechanoid -->
-  <RJW_AbortionMech.label>Neutralize mechanoid</RJW_AbortionMech.label>
-  <!-- EN: Safely neutralize mechanoid nanites. -->
-  <RJW_AbortionMech.description>Safely neutralize mechanoid nanites.</RJW_AbortionMech.description>
-  <!-- EN: Hack mechanoid -->
-  <RJW_HackMech.label>Hack mechanoid</RJW_HackMech.label>
-  <!-- EN: Hack mechanoid AI, cutting it from global mechanoid AI, results docile(unless provoked) mechanoid. -->
-  <RJW_HackMech.description>Hack mechanoid AI, cutting it from global mechanoid AI, results docile(unless provoked) mechanoid.</RJW_HackMech.description>
-</LanguageData>
+    <!-- EN: Neutralize mechanoid -->
+    <RJW_AbortionMech.label>Neutralize mechanoid</RJW_AbortionMech.label>
+    <!-- EN: Safely neutralize mechanoid nanites. -->
+    <RJW_AbortionMech.description>Safely neutralize mechanoid nanites.</RJW_AbortionMech.description>
+    <!-- EN: Hack mechanoid -->
+    <RJW_HackMech.label>Hack mechanoid</RJW_HackMech.label>
+    <!-- EN: Hack mechanoid AI, cutting it from global mechanoid AI, results docile(unless provoked) mechanoid. -->
+    <RJW_HackMech.description>Hack mechanoid AI, cutting it from global mechanoid AI, results docile(unless provoked) mechanoid.</RJW_HackMech.description>
+    </LanguageData>
