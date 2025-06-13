@@ -3,9 +3,9 @@
     <!-- EN: mechanoid implanting -->
     <Rape_MechImplant.label>mechanoid implanting</Rape_MechImplant.label>
     <!-- EN: r_logentry->Assaulted [RECIPIENT_nameDef]. -->
-    <Rape_MechImplant.logRulesInitiator.rulesStrings.0>r_logentry-&gt;Assaulted [RECIPIENT_nameDef].</Rape_MechImplant.logRulesInitiator.rulesStrings.0>
+    <Rape_MechImplant.logRulesInitiator.rulesStrings.0>r_logentry->Assaulted [RECIPIENT_nameDef].</Rape_MechImplant.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Was violated by [INITIATOR_nameDef]. -->
-    <Rape_MechImplant.logRulesRecipient.rulesStrings.0>r_logentry-&gt;Was violated by [INITIATOR_nameDef].</Rape_MechImplant.logRulesRecipient.rulesStrings.0>
+    <Rape_MechImplant.logRulesRecipient.rulesStrings.0>r_logentry->Was violated by [INITIATOR_nameDef].</Rape_MechImplant.logRulesRecipient.rulesStrings.0>
     <!-- EN: Implant chip -->
     <Rape_MechImplant.modExtensions.0.RMBLabel>Implant chip</Rape_MechImplant.modExtensions.0.RMBLabel>
     </LanguageData>

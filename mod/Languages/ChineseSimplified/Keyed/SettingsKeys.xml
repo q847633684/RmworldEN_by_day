@@ -571,11 +571,11 @@ Note that the chance is further lowered by the base animal and human pregnancy s
     <!-- EN: Pregnancy duration modifier. -->
     <normal_pregnancy_duration>Pregnancy duration modifier.</normal_pregnancy_duration>
     <!-- EN: Bigger -> Longer -->
-    <normal_pregnancy_duration_desc>Bigger -&gt; Longer</normal_pregnancy_duration_desc>
+    <normal_pregnancy_duration_desc>Bigger -> Longer</normal_pregnancy_duration_desc>
     <!-- EN: Egg pregnancy duration modifier. -->
     <egg_pregnancy_duration>Egg pregnancy duration modifier.</egg_pregnancy_duration>
     <!-- EN: Bigger -> Longer. -->
-    <egg_pregnancy_duration_desc>Bigger -&gt; Longer.</egg_pregnancy_duration_desc>
+    <egg_pregnancy_duration_desc>Bigger -> Longer.</egg_pregnancy_duration_desc>
     <!-- EN: RimJobWorld - Sex Settings -->
     <RJWSettingsThree>RimJobWorld - Sex Settings</RJWSettingsThree>
     <!-- EN: Sex type frequency:\n[Higher = more common] -->

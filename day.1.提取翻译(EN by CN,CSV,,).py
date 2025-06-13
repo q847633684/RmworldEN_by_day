@@ -95,6 +95,13 @@ def save_xml_to_file(root, path):
         indent_xml(root)  # 美化缩进
         tree = ET.ElementTree(root)
         tree.write(path, encoding='utf-8', xml_declaration=True)
+        # 写完后再把 -&gt; 替换回 ->
+        with open(path, 'r+', encoding='utf-8') as f:
+            content = f.read()
+            content = content.replace('-&gt;', '->')
+            f.seek(0)
+            f.write(content)
+            f.truncate()
         logging.info(f"保存 XML 文件：{path}")
     except Exception as e:
         logging.error(f"无法保存 XML 文件 {path}: {e}")
