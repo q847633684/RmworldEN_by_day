@@ -1,3 +1,23 @@
+import logging
+import os
+from Day_EN.config import LOG_FILE, DEBUG_MODE, LOG_FORMAT
+
+log_level = logging.DEBUG if DEBUG_MODE else logging.INFO
+for handler in logging.root.handlers[:]:
+    logging.root.removeHandler(handler)
+handlers = []
+if DEBUG_MODE:
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(log_level)
+    console_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+    handlers.append(console_handler)
+file_handler = logging.FileHandler(LOG_FILE, encoding='utf-8')
+file_handler.setLevel(log_level)
+file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+handlers.append(file_handler)
+logging.basicConfig(level=log_level, handlers=handlers)
+
+# 移动目录
 def move_dir(src: str, dst: str) -> None:
     """
     将目录 src 移动到 dst，已存在则覆盖。
@@ -12,13 +32,14 @@ def move_dir(src: str, dst: str) -> None:
     shutil.move(src, dst)
     time.sleep(1)
     logging.info(f"重命名 {src} 为 {dst}")
-
+# 导出 DefInjected 目录
 def export_definjected_from_english(
     mod_root_dir: str,
     export_dir: str,
     active_language: str = "ChineseSimplified",
     english_language: str = "English"
 ) -> None:
+    logging.info(f"调用 export_definjected_from_english: mod_root_dir={mod_root_dir}, export_dir={export_dir}, active_language={active_language}, english_language={english_language}")
     """
     以英文 DefInjected 目录为基础，复制到目标语言目录并插入注释。
 
@@ -66,7 +87,7 @@ def export_definjected_from_english(
             save_xml_to_file(root, dst_file)
         except Exception as e:
             logging.error(f"无法处理 {src_file}: {e}")
-
+# 高层调度函数，处理 DefInjected 提取和翻译
 def handle_extract_translate(
     mod_root_dir: str,
     export_dir: str,
@@ -74,16 +95,7 @@ def handle_extract_translate(
     english_language: str = "English",
     extract_definjected_from_defs=None
 ) -> None:
-    """
-    高层调度 extract_translate 的所有分支，供 extractors 调用。
-
-    Args:
-        mod_root_dir (str): 模组根目录路径。
-        export_dir (str): 导出目录。
-        active_language (str): 目标语言。
-        english_language (str): 英文目录名。
-        extract_definjected_from_defs (callable): DefInjected 提取函数。
-    """
+    logging.info(f"调用 handle_extract_translate: mod_root_dir={mod_root_dir}, export_dir={export_dir}, active_language={active_language}, english_language={english_language}")
     import os
     active_lang_path = get_language_folder_path(active_language, export_dir)
     def_injected_path = os.path.join(active_lang_path, "DefInjected")
@@ -112,22 +124,15 @@ def handle_extract_translate(
             )
     else:
         logging.info(f"未找到英文 DefInjected {english_def_injected_path}，从 Defs 提取")
+        print(f"未找到英文 DefInjected 目录 {english_def_injected_path}，将从 Defs 目录提取可翻译字段。")
         if extract_definjected_from_defs:
             extract_definjected_from_defs(mod_root_dir, export_dir, active_language)
-
+# 清理背景故事目录
 def cleanup_backstories_dir(
     mod_root_dir: str,
     export_dir: str,
     active_language: str = "ChineseSimplified"
 ) -> None:
-    """
-    重命名 Backstories 目录为 Backstories DELETE_ME。
-
-    Args:
-        mod_root_dir (str): 模组根目录路径。
-        export_dir (str): 导出目录。
-        active_language (str): 目标语言。
-    """
     import os, shutil
     active_lang_path = get_language_folder_path(active_language, export_dir)
     backstories_path = os.path.join(active_lang_path, "Backstories")
@@ -142,17 +147,17 @@ def cleanup_backstories_dir(
 import os
 import shutil
 import xml.etree.ElementTree as ET
-import logging
 from pathlib import Path
 from typing import List, Tuple, Dict
 from .utils import save_xml_to_file, sanitize_xcomment, get_language_folder_path
-
+# 导出 Keyed 目录
 def export_keyed(
     mod_root_dir: str,
     export_dir: str,
     active_language: str = "ChineseSimplified",
     english_language: str = "English"
 ) -> None:
+    logging.info(f"调用 export_keyed: mod_root_dir={mod_root_dir}, export_dir={export_dir}, active_language={active_language}, english_language={english_language}")
     active_lang_path = get_language_folder_path(active_language, export_dir)
     english_lang_path = get_language_folder_path(english_language, mod_root_dir)
     keyed_path = os.path.join(active_lang_path, "Keyed")
@@ -205,13 +210,14 @@ def export_keyed(
                 save_xml_to_file(root, dst_file)
             except Exception as e:
                 logging.error(f"无法处理 {src_file}: {e}")
-
+# 导出 DefInjected 目录，使用选定的翻译
 def export_definjected(
     mod_root_dir: str,
     export_dir: str,
     selected_translations: List[Tuple[str, str, str, str]],
     active_language: str = "ChineseSimplified"
 ) -> None:
+    logging.info(f"调用 export_definjected: mod_root_dir={mod_root_dir}, export_dir={export_dir}, active_language={active_language}, translations_count={len(selected_translations)}")
     active_lang_path = get_language_folder_path(active_language, export_dir)
     def_injected_path = os.path.join(active_lang_path, "DefInjected")
     defs_path = os.path.join(mod_root_dir, "Defs")
@@ -230,7 +236,7 @@ def export_definjected(
     if not os.path.exists(defs_path):
         logging.warning(f"Defs 目录 {defs_path} 不存在，跳过")
         return
-
+    # 遍历 Defs 目录下所有 XML 文件，提取可翻译字段
     def_injections: Dict[str, List[Tuple[str, List[Tuple[str, str, str]]]]] = {}
 
     for xml_file in Path(defs_path).rglob("*.xml"):
@@ -263,7 +269,7 @@ def export_definjected(
         except Exception as e:
             logging.error(f"无法解析 {xml_file}: {e}")
             continue
-
+            # 将提取的内容写入对应的 XML 文件
     for output_path, defs in def_injections.items():
         root = ET.Element("LanguageData")
         for def_name, translations in defs:
@@ -277,3 +283,42 @@ def export_definjected(
                 field_elem = ET.SubElement(root, full_path)
                 field_elem.text = text
         save_xml_to_file(root, output_path)
+
+# 导出 Keyed 目录到 CSV
+def export_keyed_to_csv(keyed_dir: str, csv_path: str) -> None:
+    #logging.info(f"写入 {output_path}，包含 {len(defs)} 个 Defs")
+    logging.info(f"调用 export_keyed_to_csv: keyed_dir={keyed_dir}, csv_path={csv_path}")
+    # 检查目录是否存在
+    import xml.etree.ElementTree as ET
+    from pathlib import Path
+    import csv
+    rows = []
+    if not os.path.exists(keyed_dir):
+        return
+    for xml_file in Path(keyed_dir).rglob("*.xml"):
+        try:
+            tree = ET.parse(xml_file)
+            root = tree.getroot()
+            for elem in root:
+                if not isinstance(elem.tag, str):
+                    continue
+                if elem.text and elem.text.strip():
+                    rows.append({
+                        "key": elem.tag,
+                        "text": elem.text.strip(),
+                        "file": str(xml_file)
+                    })
+        except Exception as e:
+            logging.error(f"Keyed导出失败: {xml_file}: {e}")
+    if not rows:
+        logging.info(f"Keyed目录 {keyed_dir} 未提取到任何内容，未写入csv。")
+        return
+    # 写入csv，若文件不存在则写header，存在则追加
+    # 确保目录存在
+    write_header = not os.path.exists(csv_path) or os.path.getsize(csv_path) == 0
+    with open(csv_path, "a", encoding="utf-8", newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=["key", "text", "file"])
+        if write_header:
+            writer.writeheader()
+        for row in rows:
+            writer.writerow(row)

@@ -1,4 +1,22 @@
 import logging
+import os
+from Day_EN.config import LOG_FILE, DEBUG_MODE, LOG_FORMAT
+
+log_level = logging.DEBUG if DEBUG_MODE else logging.INFO
+for handler in logging.root.handlers[:]:
+    logging.root.removeHandler(handler)
+handlers = []
+if DEBUG_MODE:
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(log_level)
+    console_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+    handlers.append(console_handler)
+file_handler = logging.FileHandler(LOG_FILE, encoding='utf-8')
+file_handler.setLevel(log_level)
+file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+handlers.append(file_handler)
+logging.basicConfig(level=log_level, handlers=handlers)
+
 from Day_EN.extractors import extract_key, extract_definjected_from_defs, extract_translate, cleanup_backstories, preview_translatable_fields
 from Day_EN.config import PREVIEW_TRANSLATABLE_FIELDS
 import os
@@ -107,46 +125,38 @@ def main() -> None:
             update_history_list("export_dir_history", export_dir)  # 记录导出目标文件夹（翻译模板的路径）
             save_history(history)
             print("开始提取翻译...")
+            logging.info("开始提取翻译")
             try:
                 extract_translate(mod_root_dir, export_dir)
                 extract_key(mod_root_dir, export_dir)
                 cleanup_backstories(mod_root_dir, export_dir)
-                # 自动导出所有可翻译字段到 extracted_translations.csv（含 DefInjected 和 Keyed）
+                # 自动导出所有可翻译字段到 extracted_translations.csv（含 DefInjected）
+
+
+                print(f"导出所有可翻译字段到 {csv_path}...")
+                logging.info(f"导出所有可翻译字段到 {export_dir}/extracted_translations.csv")
                 csv_path = os.path.join(export_dir, "extracted_translations.csv")
                 all_translations = preview_translatable_fields(mod_root_dir, preview=False)
                 import csv
-                # Keyed 导出
-                keyed_dir = os.path.join(export_dir, "Languages", "English", "Keyed")
-                keyed_rows = []
-                if os.path.exists(keyed_dir):
-                    from pathlib import Path
-                    for xml_file in Path(keyed_dir).rglob("*.xml"):
-                        try:
-                            import xml.etree.ElementTree as ET
-                            tree = ET.parse(xml_file)
-                            root = tree.getroot()
-                            for elem in root:
-                                if elem.tag is ET.Comment:
-                                    continue
-                                if elem.text and elem.text.strip():
-                                    keyed_rows.append((elem.tag, elem.text.strip(), elem.tag))
-                        except Exception as e:
-                            logging.error(f"Keyed导出失败: {xml_file}: {e}")
                 with open(csv_path, "w", encoding="utf-8", newline='') as f:
                     writer = csv.writer(f)
                     writer.writerow(["key", "text", "tag"])
                     # DefInjected
                     for full_path, text, tag, _ in all_translations:
                         writer.writerow([full_path, text, tag])
-                    # Keyed
-                    for key, text, tag in keyed_rows:
-                        writer.writerow([key, text, tag])
-                print(f"已自动导出所有可翻译字段到 {csv_path}")
-                logging.info(f"已自动导出所有可翻译字段到 {csv_path}")
-                # 添加提取csv历史（翻译模板的路径）
-                update_history_list("extracted_csv_history", csv_path)  # 写入生成翻译模板的CSV路径
+                # DefInjected 导出日志
+                logging.info(f"DefInjected 共导出 {len(all_translations)} 条到 {csv_path}")
+                print(f"DefInjected 共导出 {len(all_translations)} 条到 {csv_path}")
+
+
+                # Keyed 导出（追加到同一个csv）
+                from Day_EN.exporters import export_keyed_to_csv
+                keyed_dir = os.path.join(export_dir, "Languages", "English", "Keyed")
+                export_keyed_to_csv(keyed_dir, csv_path)
+                logging.info(f"Keyed 导出已追加到 {csv_path}，目录：{keyed_dir}")
+                print(f"Keyed 导出已追加到 {csv_path}，目录：{keyed_dir}")
+                logging.info("翻译提取完成！请在导出目标文件夹中查找 extracted_translations.csv。")
                 print("翻译提取完成！请在导出目标文件夹中查找 extracted_translations.csv。")
-                logging.info("翻译提取完成")
             except Exception as e:
                 print(f"提取错误：{e}")
                 logging.error(f"提取错误：{e}")

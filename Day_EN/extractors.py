@@ -5,29 +5,21 @@ from .config import PREVIEW_TRANSLATABLE_FIELDS
 from .utils import get_language_folder_path
 from .fields import extract_translatable_fields
 from .exporters import export_keyed, export_definjected
-
+# 预览可翻译字段
 def preview_translatable_fields(
     mod_root_dir: str,
     preview: bool = PREVIEW_TRANSLATABLE_FIELDS
 ) -> List[Tuple[str, str, str, str]]:
-    """
-    预览并收集所有可翻译字段。
-
-    Args:
-        mod_root_dir (str): 模组根目录路径。
-        preview (bool): 是否启用交互式预览选择。
-
-    Returns:
-        List[Tuple[str, str, str, str]]: (字段路径, 文本, 标签, 文件路径) 四元组列表。
-    """
     import os
     import xml.etree.ElementTree as ET
     logging.info(f"扫描 Defs 目录：{os.path.join(mod_root_dir, 'Defs')}")
+    print(f"扫描 Defs 目录：{os.path.join(mod_root_dir, 'Defs')}")
     defs_path = os.path.join(mod_root_dir, "Defs")
     if not os.path.exists(defs_path):
         logging.warning(f"Defs 目录 {defs_path} 不存在")
         return []
     all_translations: List[Tuple[str, str, str, str]] = []
+    # 遍历所有 XML 文件
     for xml_file in Path(defs_path).rglob("*.xml"):
         logging.info(f"处理 XML 文件：{xml_file}")
         try:
@@ -61,6 +53,7 @@ def preview_translatable_fields(
         print("未找到可翻译字段。")
         return []
     if preview:
+        # 预览模式，允许用户选择翻译字段
         def parse_indices(input_str: str, total: int) -> Set[int]:
             """解析用户输入的编号字符串，支持范围和逗号分隔。"""
             indices: Set[int] = set()
@@ -108,23 +101,13 @@ def preview_translatable_fields(
     else:
         return all_translations
 
-# extract_key, extract_definjected_from_defs, extract_translate, cleanup_backstories, main
-
+# 高层调度函数，提取 Keyed 类型的翻译文件,只做 Keyed 目录的复制和注释
 def extract_key(
     mod_root_dir: str,
     export_dir: str,
     active_language: str = "ChineseSimplified",
     english_language: str = "English"
 ) -> None:
-    """
-    提取 Keyed 类型的翻译文件（高层调度，仅调用 exporters）。
-
-    Args:
-        mod_root_dir (str): 模组根目录路径。
-        export_dir (str): 导出目录。
-        active_language (str): 目标语言。
-        english_language (str): 英文目录名。
-    """
     from .exporters import export_keyed
     export_keyed(
         mod_root_dir=mod_root_dir,
@@ -132,20 +115,12 @@ def extract_key(
         active_language=active_language,
         english_language=english_language
     )
-
+# 高层调度函数，提取 DefInjected 类型的翻译文件,从 Defs 目录递归提取所有可翻译字段，生成 DefInjected 结构的 xml 文件。
 def extract_definjected_from_defs(
     mod_root_dir: str,
     export_dir: str,
     active_language: str = "ChineseSimplified"
 ) -> None:
-    """
-    从 Defs 目录递归提取所有可翻译字段，生成 DefInjected 结构的 xml 文件（高层调度，仅调用 exporters）。
-
-    Args:
-        mod_root_dir (str): 模组根目录路径。
-        export_dir (str): 导出目录。
-        active_language (str): 目标语言。
-    """
     selected_translations = preview_translatable_fields(mod_root_dir, preview=PREVIEW_TRANSLATABLE_FIELDS)
     if not selected_translations:
         if PREVIEW_TRANSLATABLE_FIELDS:
@@ -158,22 +133,13 @@ def extract_definjected_from_defs(
         selected_translations=selected_translations,
         active_language=active_language
     )
-
+# 高层调度函数，提取 DefInjected 类型的翻译文件（包括 Keyed 和 DefInjected）据用户选择，决定是用英文 DefInjected 目录为基础，还是从 Defs 目录全量提取。
 def extract_translate(
     mod_root_dir: str,
     export_dir: str,
     active_language: str = "ChineseSimplified",
     english_language: str = "English"
 ) -> None:
-    """
-    提取 DefInjected 类型的翻译文件（高层调度）。
-
-    Args:
-        mod_root_dir (str): 模组根目录路径。
-        export_dir (str): 导出目录。
-        active_language (str): 目标语言。
-        english_language (str): 英文目录名。
-    """
     from .exporters import handle_extract_translate
     handle_extract_translate(
         mod_root_dir=mod_root_dir,
@@ -182,7 +148,7 @@ def extract_translate(
         english_language=english_language,
         extract_definjected_from_defs=extract_definjected_from_defs
     )
-
+# 高层调度函数，清理旧的 Backstories 目录
 def cleanup_backstories(
     mod_root_dir: str,
     export_dir: str,
