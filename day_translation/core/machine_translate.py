@@ -1,89 +1,77 @@
 import csv
-import time
-import re
 import logging
-from typing import Optional
+import os
+from typing import List, Dict
+from pathlib import Path
 
 try:
     from aliyunsdkcore.client import AcsClient
-    from aliyunsdkalimt.request.v20181012.TranslateGeneralRequest import TranslateGeneralRequest
+    from aliyunsdkalimt.request.v20181012 import TranslateGeneralRequest
 except ImportError:
+    logging.warning("阿里云 SDK 未安装，机器翻译功能不可用。请运行：pip install aliyun-python-sdk-core aliyun-python-sdk-alimt")
     AcsClient = None
     TranslateGeneralRequest = None
 
-def aliyun_translate(text: str, client, from_lang: str = 'en', to_lang: str = 'zh') -> str:
-    """
-    使用阿里云机器翻译API翻译文本，保留[xxx]占位符。
-    """
-    parts = re.split(r'(\[[^\]]+\])', text)
-    translated_parts = []
-    for part in parts:
-        if re.fullmatch(r'\[[^\]]+\]', part):
-            translated_parts.append(part)
-        elif part.strip():
-            request = TranslateGeneralRequest()
-            request.set_SourceLanguage(from_lang)
-            request.set_TargetLanguage(to_lang)
-            request.set_SourceText(part)
-            request.set_FormatType('text')
-            try:
-                response = client.do_action_with_exception(request)
-                response_str = str(response, encoding='utf-8')
-                import json
-                result = json.loads(response_str)
-                zh = result.get('Data', {}).get('Translated', '')
-                translated_parts.append(zh)
-            except Exception as e:
-                logging.error(f"翻译失败: {part}，错误: {e}")
-                translated_parts.append(part)
-        else:
-            translated_parts.append(part)
-    return ''.join(translated_parts)
-
-def translate_csv(input_path: str, output_path: str, access_key_id: str, access_secret: str, region_id: str = 'cn-hangzhou', sleep_sec: float = 0.5) -> None:
-    """
-    批量翻译CSV文件，写入output_path，新增一列“翻译”。
-    """
+def translate_text(text: str, access_key_id: str, access_secret: str) -> str:
+    """使用阿里云翻译 API 翻译文本"""
     if AcsClient is None or TranslateGeneralRequest is None:
-        raise ImportError('请先安装 aliyun-python-sdk-core 和 aliyun-python-sdk-alimt')
-    if not input_path:
-        input_path = "extracted_translations.csv"
-    if not output_path:
-        output_path = "translated_zh.csv"
-    logging.info(f"翻译 CSV: 从 {input_path} 到 {output_path}")
-    client = AcsClient(access_key_id, access_secret, region_id)
+        raise RuntimeError("阿里云 SDK 未安装，无法进行机器翻译")
     try:
-        with open(input_path, 'r', encoding='utf-8') as infile, \
-             open(output_path, 'w', encoding='utf-8', newline='') as outfile:
-            reader = csv.reader(infile)
-            writer = csv.writer(outfile)
-            header = next(reader)
-            writer.writerow(header + ['translated'])
-            line_num = 1
+        client = AcsClient(access_key_id, access_secret, "cn-hangzhou")
+        request = TranslateGeneralRequest()
+        request.set_accept_format("json")
+        request.set_SourceLanguage("en")
+        request.set_TargetLanguage("zh")
+        request.set_SourceText(text)
+        response = client.do_action_with_exception(request)
+        import json
+        result = json.loads(response)
+        return result.get("Data", {}).get("Translated", text)
+    except Exception as e:
+        logging.error(f"翻译失败: {text}, 错误: {e}")
+        return text
+
+def translate_csv(
+    input_path: str,
+    output_path: str,
+    access_key_id: str,
+    access_secret: str
+) -> None:
+    """翻译 CSV 文件中的文本"""
+    logging.info(f"翻译 CSV: input={input_path}, output={output_path}")
+    if not os.path.exists(input_path):
+        logging.error(f"输入 CSV 文件不存在: {input_path}")
+        return
+    rows: List[Dict[str, str]] = []
+    try:
+        with open(input_path, encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            if "text" not in reader.fieldnames:
+                logging.error(f"CSV 文件缺少 'text' 列: {input_path}")
+                return
             for row in reader:
-                if len(row) < 2:
-                    writer.writerow(row + [''])
-                    line_num += 1
-                    continue
-                key, text = row[0], row[1]
-                if text.strip() == '' or key.strip() == '':
-                    writer.writerow(row + [''])
-                    line_num += 1
-                    continue
-                if re.fullmatch(r'(\s*\[[^\]]+\]\s*)+', text):
-                    writer.writerow(row + [text])
-                    line_num += 1
-                    continue
-                zh = aliyun_translate(text, client)
-                if not zh or zh.strip() == '':
-                    logging.warning(f"第{line_num}行翻译失败。原文：{text}  翻译：{zh}")
-                    writer.writerow(row + [''])
-                else:
-                    writer.writerow(row + [zh])
-                    logging.debug(f"第{line_num}行翻译完成：原文：{text} => 翻译：{zh}")
-                line_num += 1
-                time.sleep(sleep_sec)
-    except FileNotFoundError as e:
-        logging.error(f"CSV 文件未找到: {input_path}，错误: {e}")
+                translated = translate_text(row["text"], access_key_id, access_secret)
+                row["translated"] = translated
+                rows.append(row)
     except csv.Error as e:
-        logging.error(f"CSV 解析失败: {input_path}，错误: {e}")
+        logging.error(f"CSV 解析失败: {input_path}, 错误: {e}")
+        return
+    except OSError as e:
+        logging.error(f"无法读取 CSV: {input_path}, 错误: {e}")
+        return
+    output_dir = os.path.dirname(output_path) or "."
+    if not os.access(output_dir, os.W_OK):
+        logging.error(f"输出目录 {output_dir} 无写入权限")
+        return
+    try:
+        with open(output_path, "w", encoding="utf-8", newline="") as f:
+            fieldnames = rows[0].keys()
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(rows)
+        logging.info(f"翻译完成，保存到: {output_path}")
+        print(f"翻译完成，保存到: {output_path}")
+    except csv.Error as e:
+        logging.error(f"CSV 写入失败: {output_path}, 错误: {e}")
+    except OSError as e:
+        logging.error(f"无法写入 CSV: {output_path}, 错误: {e}")
