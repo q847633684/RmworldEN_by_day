@@ -2,7 +2,7 @@ import os
 import csv
 import xml.etree.ElementTree as ET
 from collections import defaultdict
-from .utils import save_xml_to_file, get_language_folder_path
+from ..utils.utils import save_xml_to_file, get_language_folder_path
 import logging
 from functools import lru_cache
 

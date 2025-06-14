@@ -1,4 +1,3 @@
-```python
 from typing import List, Tuple, Set
 import logging
 import os
@@ -7,9 +6,9 @@ from pathlib import Path
 from functools import lru_cache
 import asyncio
 import aiofiles
-from .config import TranslationConfig
-from .utils import get_language_folder_path
-from .fields import extract_translatable_fields
+from ..utils.config import TranslationConfig
+from ..utils.utils import get_language_folder_path
+from ..utils.fields import extract_translatable_fields
 from .exporters import export_keyed, export_definjected
 
 CONFIG = TranslationConfig()
@@ -198,4 +197,3 @@ def cleanup_backstories(
         )
     except OSError as e:
         logging.error(f"清理背景故事失败: {e}")
-```
