@@ -4,7 +4,7 @@ import shutil
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import List, Tuple, Dict
-import csv
+import csv  # 新增导入
 from .utils import save_xml_to_file, sanitize_xcomment, get_language_folder_path
 
 def move_dir(src: str, dst: str) -> None:
@@ -70,13 +70,13 @@ def handle_extract_translate(
 ) -> None:
     logging.info(f"调用 handle_extract_translate: mod_root_dir={mod_root_dir}, export_dir={export_dir}, active_language={active_language}")
     active_lang_path = get_language_folder_path(active_language, export_dir)
-    def_injured_path = os.path.join(active_lang_path, "DefInjected")
+    def_injected_path = os.path.join(active_lang_path, "DefInjected")
     old_def_linked_path = os.path.join(active_lang_path, "DefLinked")
     english_lang_path = get_language_folder_path(english_language, mod_root_dir)
-    english_def_injured_path = os.path.join(english_lang_path, "DefInjected")
-    if os.path.exists(old_def_linked_path) and not os.path.exists(def_injured_path):
-        move_dir(old_def_linked_path, def_injured_path)
-    if os.path.exists(english_def_injured_path):
+    english_def_injected_path = os.path.join(english_lang_path, "DefInjected")
+    if os.path.exists(old_def_linked_path) and not os.path.exists(def_injected_path):
+        move_dir(old_def_linked_path, def_injected_path)
+    if os.path.exists(english_def_injected_path):
         print("检测到英文 DefInjected 目录。请选择处理方式：")
         print("1. 以英文 DefInjected 为基础（推荐用于已有翻译结构的情况）")
         print("2. 直接从 Defs 目录重新提取可翻译字段（推荐用于结构有变动或需全量提取时）")
@@ -95,8 +95,8 @@ def handle_extract_translate(
                 english_language=english_language
             )
     else:
-        logging.info(f"未找到英文 DefInjected {english_def_injured_path}，从 Defs 提取")
-        print(f"未找到英文 DefInjected 目录 {english_def_injured_path}，将从 Defs 目录提取可翻译字段。")
+        logging.info(f"未找到英文 DefInjected {english_def_injected_path}，从 Defs 提取")
+        print(f"未找到英文 DefInjected 目录 {english_def_injected_path}，将从 Defs 目录提取可翻译字段。")
         if extract_definjected_from_defs:
             extract_definjected_from_defs(mod_root_dir, export_dir, active_language)
 
@@ -169,19 +169,20 @@ def export_definjected(
 ) -> None:
     logging.info(f"调用 export_definjected: mod_root_dir={mod_root_dir}, export_dir={export_dir}, active_language={active_language}, translations_count={len(selected_translations)}")
     active_lang_path = get_language_folder_path(active_language, export_dir)
-    def_injured_path = os.path.join(active_lang_path, "DefInjected")
+    def_injected_path = os.path.join(active_lang_path, "DefInjected")
     defs_path = os.path.join(mod_root_dir, "Defs")
-    if not os.path.exists(def_injured_path):
-        os.makedirs(def_injured_path)
-        logging.info(f"创建文件夹：{def_injured_path}")
-    for xml_file in Path(def_injured_path).rglob("*.xml"):
+    if not os.path.exists(def_injected_path):
+        os.makedirs(def_injected_path)
+        logging.info(f"创建文件夹：{def_injected_path}")
+    for xml_file in Path(def_injected_path).rglob("*.xml"):
         try:
             os.remove(xml_file)
             logging.info(f"删除文件：{xml_file}")
         except OSError as e:
             logging.error(f"无法删除 {xml_file}: {e}")
     if not os.path.exists(defs_path):
-        logging.warning(f"Defs 目录 {defs_path} 不存在，跳过")
+        print(f"错误：Defs 目录 {defs_path} 不存在")
+        logging.error(f"Defs 目录 {defs_path} 不存在，请检查 mod_root_dir")
         return
     def_injections: Dict[str, List[Tuple[str, List[Tuple[str, str, str]]]]] = {}
     for xml_file in Path(defs_path).rglob("*.xml"):
@@ -189,7 +190,7 @@ def export_definjected(
             tree = ET.parse(xml_file)
             root = tree.getroot()
             rel_path = os.path.relpath(xml_file, defs_path)
-            output_path = os.path.join(def_injured_path, rel_path)
+            output_path = os.path.join(def_injected_path, rel_path)
             for def_node in root.findall(".//*[defName]"):
                 def_type = def_node.tag
                 def_name = def_node.find("defName")

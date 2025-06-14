@@ -4,6 +4,11 @@ import xml.etree.ElementTree as ET
 from collections import defaultdict
 from .utils import save_xml_to_file, get_language_folder_path
 import logging
+from functools import lru_cache
+
+@lru_cache(maxsize=128)
+def parse_xml(path: str) -> ET.ElementTree:
+    return ET.parse(path)
 
 def import_translations(
     csv_path: str,
@@ -14,10 +19,13 @@ def import_translations(
     """
     从 CSV 文件批量导入翻译并写入 Keyed/DefInjected 目录。
     """
-    def_injured_path = os.path.join(mod_root_dir, "Languages", language, "DefInjected")
+    def_injected_path = os.path.join(mod_root_dir, "Languages", language, "DefInjected")
     keyed_path = os.path.join(mod_root_dir, "Languages", language, "Keyed")
     translations = defaultdict(list)
     keyed_translations = {}
+    if not os.path.exists(csv_path):
+        logging.error(f"CSV 文件不存在: {csv_path}")
+        return
     if not merge:
         if os.path.isdir(def_injected_path):
             for root_dir, _, files in os.walk(def_injected_path):
@@ -38,9 +46,16 @@ def import_translations(
     try:
         with open(csv_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
+            required_fields = ["key", "text"]
+            if not all(field in reader.fieldnames for field in required_fields):
+                logging.error(f"CSV 缺少必需字段: {required_fields}")
+                return
             for row in reader:
                 key = row["key"]
                 translated = row.get("translated") or row["text"]
+                if not translated.strip():
+                    logging.warning(f"跳过空翻译: key={key}")
+                    continue
                 tag = row.get("tag", "")
                 if "/" in key and "." in key:
                     def_type, rest = key.split("/", 1)
@@ -61,7 +76,7 @@ def import_translations(
         merged_dict = {}
         if merge and os.path.exists(out_path):
             try:
-                tree = ET.parse(out_path)
+                tree = parse_xml(out_path)
                 root0 = tree.getroot()
                 for elem in root0:
                     merged_dict[elem.tag] = elem.text
@@ -86,7 +101,7 @@ def import_translations(
         merged_dict = {}
         if merge and os.path.exists(out_path):
             try:
-                tree = ET.parse(out_path)
+                tree = parse_xml(out_path)
                 root0 = tree.getroot()
                 for elem in root0:
                     merged_dict[elem.tag] = elem.text
@@ -98,7 +113,7 @@ def import_translations(
             elif k in merged_dict:
                 merged_dict[k] = v
         root = ET.Element("LanguageData")
-        for k, v in merged_dict.items():
+        for k, v in sorted(merged_dict.items()):
             elem = ET.SubElement(root, k)
             elem.text = v
         save_xml_to_file(root, out_path)

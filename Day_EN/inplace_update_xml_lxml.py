@@ -29,6 +29,9 @@ def inplace_update_all_xml(csv_path, mod_root_dir):
     """
     批量遍历 DefInjected 和 Keyed 下所有 xml 文件。
     """
+    if not os.path.exists(csv_path):
+        logging.error(f"CSV 文件不存在: {csv_path}")
+        return
     csv_dict = {}
     try:
         with open(csv_path, encoding="utf-8") as f:
@@ -46,6 +49,11 @@ def inplace_update_all_xml(csv_path, mod_root_dir):
         logging.error(f"CSV 解析失败: {csv_path}，错误: {e}")
         return
     def_injected_dir = os.path.join(mod_root_dir, "Languages", "ChineseSimplified", "DefInjected")
+    if not os.path.exists(def_injected_dir):
+        def_injected_dir = os.path.join(mod_root_dir, "Languages", "ChineseSimplified", "DefInjured")
+        if not os.path.exists(def_injected_dir):
+            logging.error(f"未找到 DefInjected 或 DefInjured 目录: {os.path.join(mod_root_dir, 'Languages', 'ChineseSimplified')}")
+            return
     for xml_file in Path(def_injected_dir).rglob("*.xml"):
         inplace_update_xml_lxml(str(xml_file), csv_dict)
     keyed_dir = os.path.join(mod_root_dir, "Languages", "ChineseSimplified", "Keyed")

@@ -121,7 +121,11 @@ def generate_parallel_corpus(mode: str, user_dir: str, output_csv: str = 'parall
                     all_pairs.append((en, zh))
                     seen.add(key)
         en_def = os.path.join(mod_root, 'Languages', 'English', 'DefInjected')
+        if not os.path.exists(en_def):
+            en_def = os.path.join(mod_root, 'Languages', 'English', 'DefInjured')
         zh_def = os.path.join(mod_root, 'Languages', 'ChineseSimplified', 'DefInjected')
+        if not os.path.exists(zh_def):
+            zh_def = os.path.join(mod_root, 'Languages', 'ChineseSimplified', 'DefInjured')
         if os.path.exists(en_def) and os.path.exists(zh_def):
             def_pairs = extract_pairs_from_definjected(en_def, zh_def)
             for en, zh in def_pairs:
@@ -130,6 +134,10 @@ def generate_parallel_corpus(mode: str, user_dir: str, output_csv: str = 'parall
                     all_pairs.append((en, zh))
                     seen.add(key)
     try:
+        output_dir = os.path.dirname(output_csv) or "."
+        if not os.access(output_dir, os.W_OK):
+            logging.error(f"输出目录 {output_dir} 无写入权限")
+            return 0
         with open(output_csv, 'w', encoding='utf-8', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(["en", "zh"])
