@@ -1,29 +1,13 @@
-"""
-parallel_corpus.py
-------------------
-中英平行语料集的生成与检查工具。
-
-包含：
-    - extract_pairs_from_definjected: 提取 DefInjected/Keyed 下的中英文对
-    - extract_pairs_from_file: 提取带 EN: 注释的中英文对
-    - generate_parallel_corpus: 生成 parallel_corpus.csv/tsv
-    - check_parallel_tsv: 检查 parallel_corpus.tsv 格式
-"""
 import os
 import re
 import csv
 import xml.etree.ElementTree as ET
+import logging
 from typing import List, Tuple
 
 def extract_pairs_from_definjected(english_dir: str, chinese_dir: str) -> List[Tuple[str, str]]:
     """
     提取 DefInjected 或 Keyed 下所有同名文件、同名字段的中英文对。
-
-    Args:
-        english_dir (str): 英文 xml 目录（Keyed 或 DefInjected）
-        chinese_dir (str): 中文 xml 目录（Keyed 或 DefInjected）
-    Returns:
-        List[Tuple[str, str]]: (英文文本, 中文文本) 对列表
     """
     pairs = []
     en_dict = {}
@@ -42,8 +26,10 @@ def extract_pairs_from_definjected(english_dir: str, chinese_dir: str) -> List[T
                         text = elem.text.strip()
                         if text:
                             en_dict[key] = text
-            except Exception as e:
-                print(f"[ERROR] 解析英文失败: {en_path}，错误: {e}")
+            except ET.ParseError as e:
+                logging.error(f"解析英文失败: {en_path}，错误: {e}")
+            except FileNotFoundError as e:
+                logging.error(f"英文文件未找到: {en_path}，错误: {e}")
     for root, _, files in os.walk(chinese_dir):
         for file in files:
             if not file.endswith('.xml'):
@@ -58,8 +44,10 @@ def extract_pairs_from_definjected(english_dir: str, chinese_dir: str) -> List[T
                         text = elem.text.strip()
                         if text:
                             zh_dict[key] = text
-            except Exception as e:
-                print(f"[ERROR] 解析中文失败: {zh_path}，错误: {e}")
+            except ET.ParseError as e:
+                logging.error(f"解析中文失败: {zh_path}，错误: {e}")
+            except FileNotFoundError as e:
+                logging.error(f"中文文件未找到: {zh_path}，错误: {e}")
     for key in en_dict:
         if key in zh_dict:
             en_text = en_dict[key]
@@ -80,14 +68,17 @@ def find_xml_files(root: str):
 def extract_pairs_from_file(filepath: str) -> List[Tuple[str, str]]:
     """
     提取单个 xml 文件中带 EN: 注释的中英文对。
-    Args:
-        filepath (str): xml 文件路径
-    Returns:
-        List[Tuple[str, str]]: (英文文本, 中文文本) 对列表
     """
     pairs = []
-    with open(filepath, 'r', encoding='utf-8') as f:
-        lines = f.readlines()
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+    except FileNotFoundError as e:
+        logging.error(f"文件未找到: {filepath}，错误: {e}")
+        return pairs
+    except UnicodeDecodeError as e:
+        logging.error(f"文件解码失败: {filepath}，错误: {e}")
+        return pairs
     en = None
     for line in lines:
         en_match = re.match(r'\s*<!--\s*EN:\s*(.*?)\s*-->', line)
@@ -106,18 +97,8 @@ def extract_pairs_from_file(filepath: str) -> List[Tuple[str, str]]:
 def generate_parallel_corpus(mode: str, user_dir: str, output_csv: str = 'parallel_corpus.csv', output_tsv: str = 'parallel_corpus.tsv') -> int:
     """
     生成中英平行语料集，写入 parallel_corpus.csv/tsv。
-
-    Args:
-        mode (str): '1' 为 EN 注释，'2' 为 Keyed/DefInjected
-        user_dir (str): 根目录
-        output_csv (str): 输出 csv 路径
-        output_tsv (str): 输出 tsv 路径
-    Returns:
-        int: 对数
     """
-    # 统一输出文件名
-    output_csv = "extracted_translations.csv"
-    output_tsv = "extracted_translations.tsv"
+    logging.info(f"生成平行语料集: mode={mode}, user_dir={user_dir}, output_csv={output_csv}, output_tsv={output_tsv}")
     all_pairs = []
     seen = set()
     if mode == '1':
@@ -148,30 +129,34 @@ def generate_parallel_corpus(mode: str, user_dir: str, output_csv: str = 'parall
                 if key not in seen:
                     all_pairs.append((en, zh))
                     seen.add(key)
-    # 写入csv
-    with open(output_csv, 'w', encoding='utf-8', newline='') as f:
-        writer = csv.writer(f)
-        for en, zh in all_pairs:
-            writer.writerow([en, zh])
-    # 写入tsv
-    with open(output_tsv, 'w', encoding='utf-8', newline='') as f:
-        writer = csv.writer(f, delimiter='\t')
-        for en, zh in all_pairs:
-            writer.writerow([en, zh])
+    try:
+        with open(output_csv, 'w', encoding='utf-8', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(["en", "zh"])
+            for en, zh in all_pairs:
+                writer.writerow([en, zh])
+        with open(output_tsv, 'w', encoding='utf-8', newline='') as f:
+            writer = csv.writer(f, delimiter='\t')
+            writer.writerow(["en", "zh"])
+            for en, zh in all_pairs:
+                writer.writerow([en, zh])
+        logging.info(f"生成平行语料集完成，共 {len(all_pairs)} 条，保存到 {output_csv} 和 {output_tsv}")
+    except OSError as e:
+        logging.error(f"写入语料集失败: {output_csv} 或 {output_tsv}，错误: {e}")
     return len(all_pairs)
 
 def check_parallel_tsv(file_path: str = 'parallel_corpus.tsv') -> int:
     """
     检查 parallel_corpus.tsv 格式，输出问题，返回错误数。
-
-    Args:
-        file_path (str): tsv 文件路径
-    Returns:
-        int: 错误数
     """
+    logging.info(f"检查平行语料集: {file_path}")
     errors = []
-    with open(file_path, encoding='utf-8') as f:
-        lines = f.readlines()
+    try:
+        with open(file_path, encoding='utf-8') as f:
+            lines = f.readlines()
+    except FileNotFoundError as e:
+        logging.error(f"文件未找到: {file_path}，错误: {e}")
+        return 1
     for idx, line in enumerate(lines, 1):
         line = line.rstrip('\n\r')
         if not line.strip():
@@ -186,9 +171,9 @@ def check_parallel_tsv(file_path: str = 'parallel_corpus.tsv') -> int:
             if '\u3000' in c or '\u200b' in c:
                 errors.append(f"第{idx}行含有异常字符: {line}")
     if errors:
-        print("发现以下问题：")
+        logging.warning("发现以下问题：")
         for e in errors:
-            print(e)
+            logging.warning(e)
     else:
-        print("检查通过，未发现格式问题。")
+        logging.info("检查通过，未发现格式问题。")
     return len(errors)

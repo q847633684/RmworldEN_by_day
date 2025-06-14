@@ -19,8 +19,8 @@ logging.basicConfig(level=log_level, handlers=handlers)
 
 from Day_EN.extractors import extract_key, extract_definjected_from_defs, extract_translate, cleanup_backstories, preview_translatable_fields
 from Day_EN.config import PREVIEW_TRANSLATABLE_FIELDS
-import os
 import json
+import csv
 
 def main() -> None:
     # 历史路径和AccessKey记忆文件
@@ -30,21 +30,18 @@ def main() -> None:
             try:
                 with open(history_path, "r", encoding="utf-8") as f:
                     return json.load(f)
-            except Exception:
+            except json.JSONDecodeError as e:
+                logging.error(f"历史文件解析错误: {e}")
                 return {}
         return {}
     def save_history(data):
         try:
             with open(history_path, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
-        except Exception:
-            pass
+        except Exception as e:
+            logging.error(f"保存历史文件失败: {e}")
     history = load_history()
-    # 路径历史管理：严格只保留四类
-    # 1. mod_root_dir_history：模组根目录路径（提取/导出/导入用）
-    # 2. export_dir_history：导出目标文件夹路径（提取/翻译模板路径用）
-    # 3. extracted_csv_history：生成翻译模板的CSV路径（提取/机器翻译/导入用）
-    # 4. translated_csv_history：生成带翻译列的CSV路径（机器翻译/导入用）
+    # 路径历史管理
     def update_history_list(key, value, max_items=3):
         arr = history.get(key, [])
         if not isinstance(arr, list):
@@ -71,7 +68,7 @@ def main() -> None:
         print("5. 检查中英平行语料集 (parallel_corpus.tsv)")
         print("0. 退出")
         mode = input("> ").strip()
-        # 只在模式1、4、5需要模组根目录，2/3严格不询问模组根目录
+        mod_root_dir = None
         if mode in ["1", "4", "5"]:
             mod_history = get_history_list("mod_root_dir_history")
             print("最近使用的模组根目录：")
@@ -84,10 +81,7 @@ def main() -> None:
             elif not mod_root_dir:
                 mod_root_dir = mod_history[0] if mod_history else os.getcwd()
             mod_root_dir = os.path.abspath(mod_root_dir)
-        else:
-            mod_root_dir = None
         if mode == "1":
-            # 自动检测Mods结构
             def auto_detect_export_dir(mod_root_dir):
                 langs = ["ChineseSimplified", "Chinese", "English"]
                 for lang in langs:
@@ -102,11 +96,11 @@ def main() -> None:
                 continue
             update_history_list("mod_root_dir_history", mod_root_dir)
             export_history = get_history_list("export_dir_history")
-            print("最近使用的导出目标文件夹（即翻译模板的导出目录）：")
+            print("最近使用的导出目标文件夹：")
             for idx, p in enumerate(export_history):
                 print(f"  {idx+1}. {p}")
             auto_export = auto_detect_export_dir(mod_root_dir)
-            print(f"请输入导出目标文件夹路径（即翻译模板将要导出的文件夹，如 D:/output，留空则为第一个历史，输入序号可快速选择，若无历史则自动检测:{auto_export}）：")
+            print(f"请输入导出目标文件夹路径（留空则为第一个历史，输入序号可快速选择，若无历史则自动检测:{auto_export}）：")
             export_dir = input("> ").strip()
             if export_dir.isdigit() and 1 <= int(export_dir) <= len(export_history):
                 export_dir = export_history[int(export_dir)-1]
@@ -116,59 +110,45 @@ def main() -> None:
             if not os.path.exists(export_dir):
                 try:
                     os.makedirs(export_dir)
-                    print(f"已创建导出目录：{export_dir}")
-                except Exception as e:
+                    logging.info(f"创建导出目录：{export_dir}")
+                except OSError as e:
                     print(f"无法创建导出目录：{e}")
                     logging.error(f"无法创建导出目录：{export_dir}，错误：{e}")
                     input("按回车返回主菜单...")
                     continue
-            update_history_list("export_dir_history", export_dir)  # 记录导出目标文件夹（翻译模板的路径）
-            save_history(history)
+            update_history_list("export_dir_history", export_dir)
             print("开始提取翻译...")
             logging.info("开始提取翻译")
             try:
                 extract_translate(mod_root_dir, export_dir)
                 extract_key(mod_root_dir, export_dir)
                 cleanup_backstories(mod_root_dir, export_dir)
-                # 自动导出所有可翻译字段到 extracted_translations.csv（含 DefInjected）
-
-
-                print(f"导出所有可翻译字段到 {csv_path}...")
-                logging.info(f"导出所有可翻译字段到 {export_dir}/extracted_translations.csv")
                 csv_path = os.path.join(export_dir, "extracted_translations.csv")
+                print(f"导出所有可翻译字段到 {csv_path}...")
+                logging.info(f"导出所有可翻译字段到 {csv_path}")
                 all_translations = preview_translatable_fields(mod_root_dir, preview=False)
-                import csv
                 with open(csv_path, "w", encoding="utf-8", newline='') as f:
                     writer = csv.writer(f)
                     writer.writerow(["key", "text", "tag"])
-                    # DefInjected
                     for full_path, text, tag, _ in all_translations:
                         writer.writerow([full_path, text, tag])
-                # DefInjected 导出日志
                 logging.info(f"DefInjected 共导出 {len(all_translations)} 条到 {csv_path}")
                 print(f"DefInjected 共导出 {len(all_translations)} 条到 {csv_path}")
-
-
-                # Keyed 导出（追加到同一个csv）
                 from Day_EN.exporters import export_keyed_to_csv
-                keyed_dir = os.path.join(export_dir, "Languages", "English", "Keyed")
+                keyed_dir = os.path.join(export_dir, "Languages", "ChineseSimplified", "Keyed")
                 export_keyed_to_csv(keyed_dir, csv_path)
                 logging.info(f"Keyed 导出已追加到 {csv_path}，目录：{keyed_dir}")
                 print(f"Keyed 导出已追加到 {csv_path}，目录：{keyed_dir}")
+                update_history_list("extracted_csv_history", csv_path)
                 logging.info("翻译提取完成！请在导出目标文件夹中查找 extracted_translations.csv。")
                 print("翻译提取完成！请在导出目标文件夹中查找 extracted_translations.csv。")
             except Exception as e:
                 print(f"提取错误：{e}")
                 logging.error(f"提取错误：{e}")
             input("按回车返回主菜单...")
-        if mode == "0":
-            print("已退出。")
-            break
         elif mode == "2":
-            # 机器翻译CSV（阿里云API，自动英译中）
             from Day_EN.machine_translate import translate_csv
-            # 提取csv历史（翻译模板的路径）
-            extracted_csv_history = get_history_list("extracted_csv_history")  # 读取生成翻译模板的CSV路径
+            extracted_csv_history = get_history_list("extracted_csv_history")
             print("提取翻译模板的CSV文件：")
             for idx, p in enumerate(extracted_csv_history):
                 print(f"  {idx+1}. {p}")
@@ -178,9 +158,8 @@ def main() -> None:
                 input_path = extracted_csv_history[int(input_path)-1]
             elif not input_path:
                 input_path = extracted_csv_history[0] if extracted_csv_history else "extracted_translations.csv"
-
             print("请输入翻译后生成的带翻译列 CSV 路径（留空则为第一个历史，输入序号可快速选择，若无历史则默认为 translated_zh.csv）：")
-            translated_history = get_history_list("translated_csv_history")  # 读取生成带翻译列的CSV路径
+            translated_history = get_history_list("translated_csv_history")
             output_path = input("> ").strip()
             if output_path.isdigit() and 1 <= int(output_path) <= len(translated_history):
                 output_path = translated_history[int(output_path)-1]
@@ -188,13 +167,11 @@ def main() -> None:
                 if translated_history:
                     output_path = translated_history[0]
                 else:
-                    # 若没有带翻译列CSV历史，则用生成翻译模板的CSV路径（extracted_csv_history）同目录下的 translated_zh.csv
                     extracted_csv_history = get_history_list("extracted_csv_history")
                     if extracted_csv_history:
                         output_path = os.path.join(os.path.dirname(extracted_csv_history[0]), "translated_zh.csv")
                     else:
                         output_path = "translated_zh.csv"
-            # AccessKey历史
             ak_id = history.get("access_key_id", "")
             ak_secret = history.get("access_secret", "")
             print(f"请输入阿里云AccessKey ID（留空则用上次:{ak_id}）：")
@@ -203,7 +180,6 @@ def main() -> None:
             access_secret = input("> ").strip() or ak_secret
             print("请输入Region ID（默认cn-hangzhou，直接回车可用默认）：")
             region_id = input("> ").strip() or 'cn-hangzhou'
-            # 记忆AccessKey
             if access_key_id:
                 history["access_key_id"] = access_key_id
             if access_secret:
@@ -212,19 +188,17 @@ def main() -> None:
             try:
                 translate_csv(input_path, output_path, access_key_id, access_secret, region_id)
                 print(f"翻译完成，结果已保存到 {output_path}")
-                # 添加翻译好的csv历史
-                update_history_list("translated_csv_history", output_path)  # 记录生成带翻译列的CSV路径
+                update_history_list("translated_csv_history", output_path)
             except Exception as e:
                 print(f"机器翻译出错：{e}")
+                logging.error(f"机器翻译出错：{e}")
             input("按回车返回主菜单...")
-            continue
         elif mode == "3":
-            # 路径历史管理：导入流程只涉及导出目标文件夹（即翻译模板的路径）
             export_dir_history = get_history_list("export_dir_history")
-            print("最近使用的导出目标文件夹（即翻译模板的路径）：")
+            print("最近使用的导出目标文件夹：")
             for idx, p in enumerate(export_dir_history):
                 print(f"  {idx+1}. {p}")
-            print("请输入导出目标文件夹路径（即翻译模板的路径，留空则为第一个历史，输入序号可快速选择，若无历史则为当前目录）：")
+            print("请输入导出目标文件夹路径（留空则为第一个历史，输入序号可快速选择，若无历史则为当前目录）：")
             export_dir = input("> ").strip()
             if export_dir.isdigit() and 1 <= int(export_dir) <= len(export_dir_history):
                 export_dir = export_dir_history[int(export_dir)-1]
@@ -237,7 +211,7 @@ def main() -> None:
                 input("按回车返回主菜单...")
                 continue
             update_history_list("export_dir_history", export_dir)
-            mod_root_dir = export_dir  # 兼容导入逻辑，导入流程中“模组根目录”即为“导出目标文件夹”
+            mod_root_dir = export_dir
             translated_csv_history = get_history_list("translated_csv_history")
             print("最近使用的带翻译列的CSV文件：")
             for idx, p in enumerate(translated_csv_history):
@@ -250,7 +224,6 @@ def main() -> None:
                 if translated_csv_history:
                     csv_path = translated_csv_history[0]
                 else:
-                    # 若没有带翻译列CSV历史，则用生成翻译模板的CSV路径（extracted_csv_history）同目录下的 translated_zh.csv
                     extracted_csv_history = get_history_list("extracted_csv_history")
                     if extracted_csv_history:
                         csv_path = os.path.join(os.path.dirname(extracted_csv_history[0]), "translated_zh.csv")
@@ -281,8 +254,12 @@ def main() -> None:
             elif mode_import == "3":
                 print("是否保留注释/缩进（需要 lxml，推荐Y）？Y/N（默认Y）：")
                 keep_comment = input("> ").strip().lower()
+                try:
+                    import lxml
+                except ImportError:
+                    print("未安装 lxml，推荐安装：pip install lxml，或选择标准库方案")
+                    keep_comment = "n"
                 if keep_comment == "n":
-                    # 标准库方案（注释丢失，顺序保留）
                     try:
                         from Day_EN.inplace_update_xml_etree import inplace_update_all_xml
                         inplace_update_all_xml(csv_path, mod_root_dir)
@@ -292,7 +269,6 @@ def main() -> None:
                         print(f"批量汉化错误：{e}")
                         logging.error(f"批量汉化错误：{e}")
                 else:
-                    # lxml方案（注释/缩进/顺序保留）
                     try:
                         from Day_EN.inplace_update_xml_lxml import inplace_update_all_xml
                         inplace_update_all_xml(csv_path, mod_root_dir)
@@ -313,10 +289,7 @@ def main() -> None:
                     print(f"批量汉化错误：{e}")
                     logging.error(f"批量汉化错误：{e}")
             input("按回车返回主菜单...")
-            continue
-
         elif mode == "4":
-            # 生成中英平行语料集（模块化调用）
             from Day_EN.parallel_corpus import generate_parallel_corpus
             print("请选择提取方式：")
             print("1. 提取带 EN: 注释的中文翻译文件")
@@ -331,20 +304,16 @@ def main() -> None:
                 input("按回车返回主菜单...")
                 continue
             user_dir = input(dir_tip).strip() or '.'
-            count = generate_parallel_corpus(mode2, user_dir, output_csv="extracted_translations.csv", output_tsv="extracted_translations.tsv")
-            print(f'已生成 extracted_translations.csv 和 extracted_translations.tsv，共{count}条中英对。')
+            count = generate_parallel_corpus(mode2, user_dir, output_csv="parallel_corpus.csv", output_tsv="parallel_corpus.tsv")
+            print(f'已生成 parallel_corpus.csv 和 parallel_corpus.tsv，共{count}条中英对。')
             input("按回车返回主菜单...")
-            continue
-
         elif mode == "5":
-            # 检查中英平行语料集（模块化调用）
             from Day_EN.parallel_corpus import check_parallel_tsv
-            check_parallel_tsv('extracted_translations.tsv')
+            check_parallel_tsv('parallel_corpus.tsv')
             input("按回车返回主菜单...")
-            continue
-
-
-        
+        elif mode == "0":
+            print("已退出。")
+            break
 
 if __name__ == "__main__":
     main()
