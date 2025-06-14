@@ -1,61 +1,64 @@
-from lxml import etree
-import csv
 import os
-from pathlib import Path
 import logging
+from pathlib import Path
+from typing import Dict
+from lxml import etree
+from ..utils.config import TranslationConfig
 
-def inplace_update_xml_lxml(xml_path, csv_dict):
-    """
-    只替换已有key内容，不新增，保留格式。
-    """
-    try:
-        parser = etree.XMLParser(remove_blank_text=False)
-        tree = etree.parse(xml_path, parser)
-        root = tree.getroot()
-        changed = False
-        for elem in root:
-            if isinstance(elem.tag, str) and elem.tag in csv_dict:
-                elem.text = csv_dict[elem.tag]
-                changed = True
-        if changed:
-            tree.write(xml_path, encoding="utf-8", xml_declaration=True, pretty_print=True)
-            logging.info(f"更新 XML 文件: {xml_path}")
-    except etree.ParseError as e:
-        logging.error(f"XML 解析失败: {xml_path}，错误: {e}")
-    except FileNotFoundError as e:
-        logging.error(f"文件未找到: {xml_path}，错误: {e}")
+CONFIG = TranslationConfig()
 
-def inplace_update_all_xml(csv_path, mod_root_dir):
+def inplace_update_all_xml(csv_path: str, mod_root_dir: str) -> None:
     """
-    批量遍历 DefInjected 和 Keyed 下所有 xml 文件。
+    使用 lxml 更新所有 XML 文件中的翻译。
+
+    Args:
+        csv_path: 翻译 CSV 文件路径
+        mod_root_dir: 模组根目录
     """
-    if not os.path.exists(csv_path):
-        logging.error(f"CSV 文件不存在: {csv_path}")
-        return
-    csv_dict = {}
+    logging.info(f"使用 lxml 更新 XML: csv_path={csv_path}, mod_dir={mod_root_dir}")
+    translations: Dict[str, str] = {}
     try:
+        import csv
         with open(csv_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
-                key = row["key"]
-                if "/" in key and "." in key:
-                    key = key.split("/")[-1]
-                value = row.get("translated") or row["text"]
-                csv_dict[key] = value
-    except FileNotFoundError as e:
-        logging.error(f"CSV 文件未找到: {csv_path}，错误: {e}")
-        return
+                translations[row["key"]] = row.get("translated", row["text"])
     except csv.Error as e:
-        logging.error(f"CSV 解析失败: {csv_path}，错误: {e}")
+        logging.error(f"CSV 解析失败: {csv_path}, 错误: {e}")
         return
-    def_injected_dir = os.path.join(mod_root_dir, "Languages", "ChineseSimplified", "DefInjected")
-    if not os.path.exists(def_injected_dir):
-        def_injected_dir = os.path.join(mod_root_dir, "Languages", "ChineseSimplified", "DefInjured")
-        if not os.path.exists(def_injected_dir):
-            logging.error(f"未找到 DefInjected 或 DefInjured 目录: {os.path.join(mod_root_dir, 'Languages', 'ChineseSimplified')}")
+    except OSError as e:
+        logging.error(f"无法读取 CSV: {csv_path}, 错误: {e}")
+        return
+    def_injected_path = os.path.join(mod_root_dir, "Languages", CONFIG.default_language, CONFIG.def_injected_dir)
+    if not os.path.exists(def_injected_path):
+        def_injured_path = os.path.join(mod_root_dir, "Languages", CONFIG.default_language, "DefInjured")
+        if os.path.exists(def_injured_path):
+            def_injected_path = def_injured_path
+        else:
+            logging.error(f"未找到 DefInjected 或 DefInjured 目录: {def_injected_path}")
             return
-    for xml_file in Path(def_injected_dir).rglob("*.xml"):
-        inplace_update_xml_lxml(str(xml_file), csv_dict)
-    keyed_dir = os.path.join(mod_root_dir, "Languages", "ChineseSimplified", "Keyed")
-    for xml_file in Path(keyed_dir).rglob("*.xml"):
-        inplace_update_xml_lxml(str(xml_file), csv_dict)
+    keyed_path = os.path.join(mod_root_dir, "Languages", CONFIG.default_language, CONFIG.keyed_dir)
+    try:
+        parser = etree.XMLParser(remove_comments=False)
+        for xml_file in list(Path(def_injected_path).rglob("*.xml")) + list(Path(keyed_path).rglob("*.xml")):
+            try:
+                tree = etree.parse(xml_file, parser)
+                root = tree.getroot()
+                modified = False
+                for elem in root.xpath(".//*[text()]"):
+                    key = elem.get("key")
+                    if not key:
+                        path = "/".join(elem.xpath("ancestor-or-self::*/@defName | ancestor-or-self::*/name()"))
+                        key = f"{path}.{elem.tag}"
+                    if key in translations:
+                        elem.text = translations[key]
+                        modified = True
+                if modified:
+                    tree.write(xml_file, encoding="utf-8", xml_declaration=True)
+                    logging.info(f"更新文件: {xml_file}")
+            except etree.ParseError as e:
+                logging.error(f"XML 解析失败: {xml_file}: {e}")
+            except OSError as e:
+                logging.error(f"无法处理 {xml_file}: {e}")
+    except Exception as e:
+        logging.error(f"更新 XML 失败: {e}")

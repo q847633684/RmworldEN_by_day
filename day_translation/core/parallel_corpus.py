@@ -1,187 +1,113 @@
 import os
-import re
+import logging
 import csv
 import xml.etree.ElementTree as ET
-import logging
+from pathlib import Path
 from typing import List, Tuple
+from ..utils.config import TranslationConfig
+from ..utils.utils import get_language_folder_path
 
-def extract_pairs_from_definjected(english_dir: str, chinese_dir: str) -> List[Tuple[str, str]]:
+CONFIG = TranslationConfig()
+
+def generate_parallel_corpus(mode: str, mod_root_dir: str) -> int:
     """
-    提取 DefInjected 或 Keyed 下所有同名文件、同名字段的中英文对。
+    生成中英平行语料集。
+
+    Args:
+        mode: 模式（1=从 XML 注释提取，2=从 DefInjected 和 Keyed 提取）
+        mod_root_dir: 模组根目录
+
+    Returns:
+        生成的语料条数
     """
-    pairs = []
-    en_dict = {}
-    zh_dict = {}
-    for root, _, files in os.walk(english_dir):
-        for file in files:
-            if not file.endswith('.xml'):
-                continue
-            en_path = os.path.join(root, file)
+    logging.info(f"生成平行语料集: mode={mode}, mod_dir={mod_root_dir}")
+    output_path = "parallel_corpus.csv"
+    translations: List[Tuple[str, str]] = []
+    if mode == "1":
+        lang_path = get_language_folder_path(CONFIG.default_language, mod_root_dir)
+        def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
+        keyed_path = os.path.join(lang_path, CONFIG.keyed_dir)
+        for xml_file in list(Path(def_injected_path).rglob("*.xml")) + list(Path(keyed_path).rglob("*.xml")):
             try:
-                en_tree = ET.parse(en_path)
-                en_root = en_tree.getroot()
-                for elem in en_root:
-                    if elem.text and elem.tag:
-                        key = elem.tag
-                        text = elem.text.strip()
-                        if text:
-                            en_dict[key] = text
+                tree = ET.parse(xml_file)
+                root = tree.getroot()
+                for elem in root.findall(".//*"):
+                    prev = None
+                    for child in list(elem):
+                        if child.tag == ET.Comment and child.text and child.text.strip().startswith("EN: "):
+                            prev = child
+                        elif prev is not None and child.text and child.text.strip():
+                            en_text = prev.text.strip()[4:]  # Remove "EN: "
+                            zh_text = child.text.strip()
+                            translations.append((en_text, zh_text))
+                            prev = None
             except ET.ParseError as e:
-                logging.error(f"解析英文失败: {en_path}，错误: {e}")
-            except FileNotFoundError as e:
-                logging.error(f"英文文件未找到: {en_path}，错误: {e}")
-    for root, _, files in os.walk(chinese_dir):
-        for file in files:
-            if not file.endswith('.xml'):
+                logging.error(f"XML 解析失败: {xml_file}: {e}")
+            except OSError as e:
+                logging.error(f"无法读取 {xml_file}: {e}")
+    elif mode == "2":
+        en_path = get_language_folder_path(CONFIG.source_language, mod_root_dir)
+        zh_path = get_language_folder_path(CONFIG.default_language, mod_root_dir)
+        for dir_name in [CONFIG.def_injected_dir, CONFIG.keyed_dir]:
+            en_dir = os.path.join(en_path, dir_name)
+            zh_dir = os.path.join(zh_path, dir_name)
+            if not os.path.exists(en_dir) or not os.path.exists(zh_dir):
                 continue
-            zh_path = os.path.join(root, file)
-            try:
-                zh_tree = ET.parse(zh_path)
-                zh_root = zh_tree.getroot()
-                for elem in zh_root:
-                    if elem.text and elem.tag:
-                        key = elem.tag
-                        text = elem.text.strip()
-                        if text:
-                            zh_dict[key] = text
-            except ET.ParseError as e:
-                logging.error(f"解析中文失败: {zh_path}，错误: {e}")
-            except FileNotFoundError as e:
-                logging.error(f"中文文件未找到: {zh_path}，错误: {e}")
-    for key in en_dict:
-        if key in zh_dict:
-            en_text = en_dict[key]
-            zh_text = zh_dict[key]
-            if en_text and zh_text and en_text != zh_text:
-                pairs.append((en_text, zh_text))
-    return pairs
-
-def find_xml_files(root: str):
-    """
-    递归查找目录下所有 xml 文件。
-    """
-    for dirpath, _, filenames in os.walk(root):
-        for filename in filenames:
-            if filename.endswith('.xml'):
-                yield os.path.join(dirpath, filename)
-
-def extract_pairs_from_file(filepath: str) -> List[Tuple[str, str]]:
-    """
-    提取单个 xml 文件中带 EN: 注释的中英文对。
-    """
-    pairs = []
+            for xml_file in Path(zh_dir).rglob("*.xml"):
+                rel_path = os.path.relpath(xml_file, zh_dir)
+                en_file = os.path.join(en_dir, rel_path)
+                if not os.path.exists(en_file):
+                    continue
+                try:
+                    zh_tree = ET.parse(xml_file)
+                    en_tree = ET.parse(en_file)
+                    zh_root = zh_tree.getroot()
+                    en_root = en_tree.getroot()
+                    for zh_elem, en_elem in zip(zh_root.findall(".//*"), en_root.findall(".//*")):
+                        if zh_elem.tag == en_elem.tag and zh_elem.text and en_elem.text:
+                            translations.append((en_elem.text.strip(), zh_elem.text.strip()))
+                except ET.ParseError as e:
+                    logging.error(f"XML 解析失败: {xml_file}: {e}")
+                except OSError as e:
+                    logging.error(f"无法读取 {xml_file}: {e}")
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
-    except FileNotFoundError as e:
-        logging.error(f"文件未找到: {filepath}，错误: {e}")
-        return pairs
-    except UnicodeDecodeError as e:
-        logging.error(f"文件解码失败: {filepath}，错误: {e}")
-        return pairs
-    en = None
-    for line in lines:
-        en_match = re.match(r'\s*<!--\s*EN:\s*(.*?)\s*-->', line)
-        zh_match = re.match(r'\s*<[^>]+>(.*?)</[^>]+>', line)
-        if en_match:
-            en = en_match.group(1).strip()
-        elif en and zh_match:
-            zh = zh_match.group(1).strip()
-            if en and zh and en != zh:
-                pairs.append((en, zh))
-            en = None
-        else:
-            en = None
-    return pairs
-
-def generate_parallel_corpus(mode: str, user_dir: str, output_csv: str = 'parallel_corpus.csv', output_tsv: str = 'parallel_corpus.tsv') -> int:
-    """
-    生成中英平行语料集，写入 parallel_corpus.csv/tsv。
-    """
-    logging.info(f"生成平行语料集: mode={mode}, user_dir={user_dir}, output_csv={output_csv}, output_tsv={output_tsv}")
-    all_pairs = []
-    seen = set()
-    if mode == '1':
-        for xml_file in find_xml_files(user_dir):
-            pairs = extract_pairs_from_file(xml_file)
-            for en, zh in pairs:
-                key = (en, zh)
-                if key not in seen:
-                    all_pairs.append((en, zh))
-                    seen.add(key)
-    elif mode == '2':
-        mod_root = user_dir
-        en_keyed = os.path.join(mod_root, 'Languages', 'English', 'Keyed')
-        zh_keyed = os.path.join(mod_root, 'Languages', 'ChineseSimplified', 'Keyed')
-        if os.path.exists(en_keyed) and os.path.exists(zh_keyed):
-            keyed_pairs = extract_pairs_from_definjected(en_keyed, zh_keyed)
-            for en, zh in keyed_pairs:
-                key = (en, zh)
-                if key not in seen:
-                    all_pairs.append((en, zh))
-                    seen.add(key)
-        en_def = os.path.join(mod_root, 'Languages', 'English', 'DefInjected')
-        if not os.path.exists(en_def):
-            en_def = os.path.join(mod_root, 'Languages', 'English', 'DefInjured')
-        zh_def = os.path.join(mod_root, 'Languages', 'ChineseSimplified', 'DefInjected')
-        if not os.path.exists(zh_def):
-            zh_def = os.path.join(mod_root, 'Languages', 'ChineseSimplified', 'DefInjured')
-        if os.path.exists(en_def) and os.path.exists(zh_def):
-            def_pairs = extract_pairs_from_definjected(en_def, zh_def)
-            for en, zh in def_pairs:
-                key = (en, zh)
-                if key not in seen:
-                    all_pairs.append((en, zh))
-                    seen.add(key)
-    try:
-        output_dir = os.path.dirname(output_csv) or "."
-        if not os.access(output_dir, os.W_OK):
-            logging.error(f"输出目录 {output_dir} 无写入权限")
-            return 0
-        with open(output_csv, 'w', encoding='utf-8', newline='') as f:
+        with open(output_path, "w", encoding="utf-8", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["en", "zh"])
-            for en, zh in all_pairs:
-                writer.writerow([en, zh])
-        with open(output_tsv, 'w', encoding='utf-8', newline='') as f:
-            writer = csv.writer(f, delimiter='\t')
-            writer.writerow(["en", "zh"])
-            for en, zh in all_pairs:
-                writer.writerow([en, zh])
-        logging.info(f"生成平行语料集完成，共 {len(all_pairs)} 条，保存到 {output_csv} 和 {output_tsv}")
+            writer.writerow(["English", "Chinese"])
+            writer.writerows(translations)
+        logging.info(f"生成语料集: {output_path}, 共 {len(translations)} 条")
+        return len(translations)
+    except csv.Error as e:
+        logging.error(f"CSV 写入失败: {output_path}, 错误: {e}")
+        return 0
     except OSError as e:
-        logging.error(f"写入语料集失败: {output_csv} 或 {output_tsv}，错误: {e}")
-    return len(all_pairs)
+        logging.error(f"无法写入 CSV: {output_path}, 错误: {e}")
+        return 0
 
-def check_parallel_tsv(file_path: str = 'parallel_corpus.tsv') -> int:
+def check_parallel_tsv() -> int:
     """
-    检查 parallel_corpus.tsv 格式，输出问题，返回错误数。
+    检查平行语料集格式。
+
+    Returns:
+        错误条数
     """
-    logging.info(f"检查平行语料集: {file_path}")
-    errors = []
-    try:
-        with open(file_path, encoding='utf-8') as f:
-            lines = f.readlines()
-    except FileNotFoundError as e:
-        logging.error(f"文件未找到: {file_path}，错误: {e}")
+    tsv_path = "parallel_corpus.csv"
+    errors = 0
+    if not os.path.exists(tsv_path):
+        logging.error(f"语料集文件不存在: {tsv_path}")
         return 1
-    for idx, line in enumerate(lines, 1):
-        line = line.rstrip('\n\r')
-        if not line.strip():
-            errors.append(f"第{idx}行是空行")
-            continue
-        cols = line.split('\t')
-        if len(cols) != 2:
-            errors.append(f"第{idx}行列数不是2列: {line}")
-        if any(c.strip() == '' for c in cols):
-            errors.append(f"第{idx}行有空单元格: {line}")
-        for c in cols:
-            if '\u3000' in c or '\u200b' in c:
-                errors.append(f"第{idx}行含有异常字符: {line}")
-    if errors:
-        logging.warning("发现以下问题：")
-        for e in errors:
-            logging.warning(e)
-    else:
-        logging.info("检查通过，未发现格式问题。")
-    return len(errors)
+    try:
+        with open(tsv_path, encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if not row.get("English") or not row.get("Chinese"):
+                    logging.error(f"无效语料: {row}")
+                    errors += 1
+        logging.info(f"语料集检查完成，发现 {errors} 个问题")
+        return errors
+    except csv.Error as e:
+        logging.error(f"CSV 解析失败: {tsv_path}, 错误: {e}")
+        return 1
+    except OSError as e:
+        logging.error(f"无法读取 CSV: {tsv_path}, 错误: {e}")
+        return 1
