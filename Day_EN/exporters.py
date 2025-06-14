@@ -4,6 +4,7 @@ import shutil
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import List, Tuple, Dict
+import csv
 from .utils import save_xml_to_file, sanitize_xcomment, get_language_folder_path
 
 def move_dir(src: str, dst: str) -> None:

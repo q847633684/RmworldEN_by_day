@@ -3,9 +3,9 @@
     <!-- EN: double-penetration -->
     <Sex_Reverse_DoublePenetration.label>double-penetration</Sex_Reverse_DoublePenetration.label>
     <!-- EN: r_logentry->Was double-penetrated by [RECIPIENT_nameDef]. -->
-    <Sex_Reverse_DoublePenetration.logRulesInitiator.rulesStrings.0>r_logentry->Was double-penetrated by [RECIPIENT_nameDef].</Sex_Reverse_DoublePenetration.logRulesInitiator.rulesStrings.0>
+    <Sex_Reverse_DoublePenetration.logRulesInitiator.rulesStrings.0>r_logentry-&gt;Was double-penetrated by [RECIPIENT_nameDef].</Sex_Reverse_DoublePenetration.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Double-penetrated [INITIATOR_nameDef]. -->
-    <Sex_Reverse_DoublePenetration.logRulesRecipient.rulesStrings.0>r_logentry->Double-penetrated [INITIATOR_nameDef].</Sex_Reverse_DoublePenetration.logRulesRecipient.rulesStrings.0>
+    <Sex_Reverse_DoublePenetration.logRulesRecipient.rulesStrings.0>r_logentry-&gt;Double-penetrated [INITIATOR_nameDef].</Sex_Reverse_DoublePenetration.logRulesRecipient.rulesStrings.0>
     <!-- EN: Get double-penetrated -->
     <Sex_Reverse_DoublePenetration.modExtensions.0.RMBLabel>Get double-penetrated</Sex_Reverse_DoublePenetration.modExtensions.0.RMBLabel>
     </LanguageData>

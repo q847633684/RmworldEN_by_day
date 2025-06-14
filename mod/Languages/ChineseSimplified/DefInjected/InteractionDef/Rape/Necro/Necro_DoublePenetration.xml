@@ -3,9 +3,9 @@
     <!-- EN: double-penetration -->
     <Necro_DoublePenetration.label>double-penetration</Necro_DoublePenetration.label>
     <!-- EN: r_logentry->Double-penetrated [RECIPIENT_nameDef]. -->
-    <Necro_DoublePenetration.logRulesInitiator.rulesStrings.0>r_logentry->Double-penetrated [RECIPIENT_nameDef].</Necro_DoublePenetration.logRulesInitiator.rulesStrings.0>
+    <Necro_DoublePenetration.logRulesInitiator.rulesStrings.0>r_logentry-&gt;Double-penetrated [RECIPIENT_nameDef].</Necro_DoublePenetration.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Was double-penetrated by [INITIATOR_nameDef]. -->
-    <Necro_DoublePenetration.logRulesRecipient.rulesStrings.0>r_logentry->Was double-penetrated by [INITIATOR_nameDef].</Necro_DoublePenetration.logRulesRecipient.rulesStrings.0>
+    <Necro_DoublePenetration.logRulesRecipient.rulesStrings.0>r_logentry-&gt;Was double-penetrated by [INITIATOR_nameDef].</Necro_DoublePenetration.logRulesRecipient.rulesStrings.0>
     <!-- EN: Double-penetrate -->
     <Necro_DoublePenetration.modExtensions.0.RMBLabel>Double-penetrate</Necro_DoublePenetration.modExtensions.0.RMBLabel>
     </LanguageData>
