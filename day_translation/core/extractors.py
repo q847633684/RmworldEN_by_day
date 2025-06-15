@@ -15,22 +15,22 @@ CONFIG = TranslationConfig()
 
 @lru_cache(maxsize=1)
 def preview_translatable_fields(
-    mod_root_dir: str,
+    mod_dir: str,  # 改为 mod_dir
     preview: bool = CONFIG.preview_translatable_fields
 ) -> List[Tuple[str, str, str, str]]:
     """
     扫描 Defs 目录，提取可翻译字段。
 
     Args:
-        mod_root_dir: 模组根目录
+        mod_dir: 模组根目录
         preview: 是否交互式预览字段
 
     Returns:
         List of tuples (full_path, text, tag, file_path)
     """
-    logging.info(f"扫描 Defs 目录：{os.path.join(mod_root_dir, 'Defs')}")
-    print(f"扫描 Defs 目录：{os.path.join(mod_root_dir, 'Defs')}")
-    defs_path = Path(mod_root_dir) / "Defs"
+    logging.info(f"扫描 Defs 目录：{os.path.join(mod_dir, 'Defs')}")
+    print(f"扫描 Defs 目录：{os.path.join(mod_dir, 'Defs')}")
+    defs_path = Path(mod_dir) / "Defs"
     if not defs_path.exists():
         logging.warning(f"Defs 目录 {defs_path} 不存在")
         return []
@@ -125,16 +125,16 @@ def preview_translatable_fields(
     return all_translations
 
 def extract_key(
-    mod_root_dir: str,
+    mod_dir: str,  # 改为 mod_dir
     export_dir: str,
     language: str = CONFIG.default_language,
     source_language: str = CONFIG.source_language
 ) -> None:
     """提取 Keyed 翻译"""
-    logging.info(f"提取 Keyed 翻译: mod_dir={mod_root_dir}, export_dir={export_dir}")
+    logging.info(f"提取 Keyed 翻译: mod_dir={mod_dir}, export_dir={export_dir}")
     try:
         export_keyed(
-            mod_dir=mod_root_dir,
+            mod_dir=mod_dir,
             export_dir=export_dir,
             language=language,
             source_language=source_language
@@ -143,19 +143,19 @@ def extract_key(
         logging.error(f"提取 Keyed 翻译失败: {e}")
 
 def extract_definjected_from_defs(
-    mod_root_dir: str,
+    mod_dir: str,  # 改为 mod_dir
     export_dir: str,
     language: str = CONFIG.default_language
 ) -> None:
     """从 Defs 提取 DefInjected 翻译"""
-    selected_translations = preview_translatable_fields(mod_root_dir, preview=CONFIG.preview_translatable_fields)
+    selected_translations = preview_translatable_fields(mod_dir, preview=CONFIG.preview_translatable_fields)
     if not selected_translations:
         if CONFIG.preview_translatable_fields:
             print("未选择字段，跳过生成。")
         return
     try:
         export_definjected(
-            mod_dir=mod_root_dir,
+            mod_dir=mod_dir,
             export_dir=export_dir,
             selected_translations=selected_translations,
             language=language
@@ -164,7 +164,7 @@ def extract_definjected_from_defs(
         logging.error(f"提取 DefInjected 翻译失败: {e}")
 
 def extract_translate(
-    mod_root_dir: str,
+    mod_dir: str,  # 改为 mod_dir
     export_dir: str,
     language: str = CONFIG.default_language,
     source_language: str = CONFIG.source_language
@@ -173,7 +173,7 @@ def extract_translate(
     from .exporters import handle_extract_translate
     try:
         handle_extract_translate(
-            mod_dir=mod_root_dir,
+            mod_dir=mod_dir,
             export_dir=export_dir,
             language=language,
             source_language=source_language,

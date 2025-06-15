@@ -38,13 +38,13 @@ class TranslationFacade:
         """提取所有翻译数据，避免重复扫描"""
         logging.info(f"提取翻译: mod_dir={self.mod_dir}, export_dir={self.export_dir}")
         extractors.extract_translate(
-            mod_root_dir=self.mod_dir,
+            mod_dir=self.mod_dir,
             export_dir=self.export_dir,
             language=self.language,
             source_language=self.source_language
         )
         extractors.extract_key(
-            mod_root_dir=self.mod_dir,
+            mod_dir=self.mod_dir,
             export_dir=self.export_dir,
             language=self.language,
             source_language=self.source_language
@@ -55,7 +55,7 @@ class TranslationFacade:
             language=self.language
         )
         translations = extractors.preview_translatable_fields(
-            mod_root_dir=self.mod_dir,
+            mod_dir=self.mod_dir,
             preview=CONFIG.preview_translatable_fields
         )
         keyed_dir = str(Path(self.export_dir) / "Languages" / self.language / CONFIG.keyed_dir)
@@ -67,7 +67,7 @@ class TranslationFacade:
         logging.info(f"导入翻译: csv_file={csv_file}, merge={merge}")
         importers.import_translations(
             csv_path=csv_file,
-            mod_root_dir=self.mod_dir,
+            mod_dir=self.mod_dir,
             language=self.language,
             merge=merge
         )

@@ -9,23 +9,23 @@ from ..utils.utils import get_language_folder_path
 
 CONFIG = TranslationConfig()
 
-def generate_parallel_corpus(mode: str, mod_root_dir: str) -> int:
+def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
     """
     生成中英平行语料集。
 
     Args:
         mode: 模式（1=从 XML 注释提取，2=从 DefInjected 和 Keyed 提取）
-        mod_root_dir: 模组根目录
+        mod_dir: 模组根目录
 
     Returns:
         生成的语料条数
     """
-    logging.info(f"生成平行语料集: mode={mode}, mod_dir={mod_root_dir}")
+    logging.info(f"生成平行语料集: mode={mode}, mod_dir={mod_dir}")
     output_path = "parallel_corpus.csv"
-    mod_root_dir = str(Path(mod_root_dir).resolve())  # 解析绝对路径
+    mod_dir = str(Path(mod_dir).resolve())  # 解析绝对路径
     translations: List[Tuple[str, str]] = []
     if mode == "1":
-        lang_path = get_language_folder_path(CONFIG.default_language, mod_root_dir)
+        lang_path = get_language_folder_path(CONFIG.default_language, mod_dir)
         def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
         keyed_path = os.path.join(lang_path, CONFIG.keyed_dir)
         for xml_file in list(Path(def_injected_path).rglob("*.xml")) + list(Path(keyed_path).rglob("*.xml")):
@@ -47,8 +47,8 @@ def generate_parallel_corpus(mode: str, mod_root_dir: str) -> int:
             except OSError as e:
                 logging.error(f"无法读取 {xml_file}: {e}")
     elif mode == "2":
-        en_path = get_language_folder_path(CONFIG.source_language, mod_root_dir)
-        zh_path = get_language_folder_path(CONFIG.default_language, mod_root_dir)
+        en_path = get_language_folder_path(CONFIG.source_language, mod_dir)
+        zh_path = get_language_folder_path(CONFIG.default_language, mod_dir)
         for dir_name in [CONFIG.def_injected_dir, CONFIG.keyed_dir]:
             en_dir = os.path.join(en_path, dir_name)
             zh_dir = os.path.join(zh_path, dir_name)

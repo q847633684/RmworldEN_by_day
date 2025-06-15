@@ -7,15 +7,15 @@ from ..utils.config import TranslationConfig
 
 CONFIG = TranslationConfig()
 
-def inplace_update_all_xml(csv_path: str, mod_root_dir: str) -> None:
+def inplace_update_all_xml(csv_path: str, mod_dir: str) -> None:
     """
     使用 ElementTree 更新所有 XML 文件中的翻译。
 
     Args:
         csv_path: 翻译 CSV 文件路径
-        mod_root_dir: 模组根目录
+        mod_dir: 模组根目录
     """
-    logging.info(f"使用 ElementTree 更新 XML: csv_path={csv_path}, mod_dir={mod_root_dir}")
+    logging.info(f"使用 ElementTree 更新 XML: csv_path={csv_path}, mod_dir={mod_dir}")
     translations: Dict[str, str] = {}
     try:
         import csv
@@ -29,15 +29,15 @@ def inplace_update_all_xml(csv_path: str, mod_root_dir: str) -> None:
     except OSError as e:
         logging.error(f"无法读取 CSV: {csv_path}, 错误: {e}")
         return
-    def_injected_path = os.path.join(mod_root_dir, "Languages", CONFIG.default_language, CONFIG.def_injected_dir)
+    def_injected_path = os.path.join(mod_dir, "Languages", CONFIG.default_language, CONFIG.def_injected_dir)
     if not os.path.exists(def_injected_path):
-        def_injured_path = os.path.join(mod_root_dir, "Languages", CONFIG.default_language, "DefInjured")
+        def_injured_path = os.path.join(mod_dir, "Languages", CONFIG.default_language, "DefInjured")
         if os.path.exists(def_injured_path):
             def_injected_path = def_injured_path
         else:
             logging.error(f"未找到 DefInjected 或 DefInjured 目录: {def_injected_path}")
             return
-    keyed_path = os.path.join(mod_root_dir, "Languages", CONFIG.default_language, CONFIG.keyed_dir)
+    keyed_path = os.path.join(mod_dir, "Languages", CONFIG.default_language, CONFIG.keyed_dir)
     try:
         for xml_file in list(Path(def_injected_path).rglob("*.xml")) + list(Path(keyed_path).rglob("*.xml")):
             try:

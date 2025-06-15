@@ -60,7 +60,7 @@ def export_definjected_from_english(
                     if parent is not None:
                         idx = list(parent).index(elem)
                         parent.insert(idx, comment)
-            save_xml_to_file(root, dst_file)
+            save_xml_to_file(root, dst_file, pretty_print=True)  # 启用格式化
         except ET.ParseError as e:
             logging.error(f"XML解析失败: {src_file}: {e}")
         except OSError as e:
@@ -167,7 +167,7 @@ def export_keyed(
                     if parent is not None:
                         idx = list(parent).index(elem)
                         parent.insert(idx, comment)
-            save_xml_to_file(root, dst_file)
+            save_xml_to_file(root, dst_file, pretty_print=True)  # 启用格式化
         except ET.ParseError as e:
             logging.error(f"XML解析失败: {src_file}: {e}")
         except OSError as e:
@@ -255,8 +255,7 @@ def export_definjected(
                 root.append(comment)
                 field_elem = ET.SubElement(root, f"{def_name}.{field_path}")
                 field_elem.text = text
-        save_xml_to_file(root, output_path)
-
+        save_xml_to_file(root, output_path, pretty_print=True)  # 启用格式化
 def export_keyed_to_csv(keyed_dir: str, csv_path: str) -> None:
     """导出 Keyed 翻译到 CSV"""
     logging.info(f"导出 Keyed 到 CSV: keyed_dir={keyed_dir}, csv_path={csv_path}")
