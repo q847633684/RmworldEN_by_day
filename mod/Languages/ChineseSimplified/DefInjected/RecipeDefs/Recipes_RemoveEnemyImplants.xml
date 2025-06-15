@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: remove restraints -->
-    <RJW_RemoveRestraints.label>remove restraints</RJW_RemoveRestraints.label>
+    <RJW_RemoveRestraints.label>移除束缚</RJW_RemoveRestraints.label>
     <!-- EN: Removes restraints. -->
-    <RJW_RemoveRestraints.description>Removes restraints.</RJW_RemoveRestraints.description>
+    <RJW_RemoveRestraints.description>移除束缚。</RJW_RemoveRestraints.description>
     <!-- EN: remove cocoon -->
-    <RJW_RemoveCocoon.label>remove cocoon</RJW_RemoveCocoon.label>
+    <RJW_RemoveCocoon.label>移除茧</RJW_RemoveCocoon.label>
     <!-- EN: Removes cocoon. -->
-    <RJW_RemoveCocoon.description>Removes cocoon.</RJW_RemoveCocoon.description>
+    <RJW_RemoveCocoon.description>破茧。</RJW_RemoveCocoon.description>
     </LanguageData>

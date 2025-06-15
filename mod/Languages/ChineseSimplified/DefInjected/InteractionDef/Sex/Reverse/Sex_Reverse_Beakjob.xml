@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: beakjob -->
-    <Sex_Reverse_Beakjob.label>beakjob</Sex_Reverse_Beakjob.label>
+    <Sex_Reverse_Beakjob.label>野兽 job</Sex_Reverse_Beakjob.label>
     <!-- EN: r_logentry->Gave a beakjob to [RECIPIENT_nameDef]. -->
-    <Sex_Reverse_Beakjob.logRulesInitiator.rulesStrings.0>r_logentry-&gt;Gave a beakjob to [RECIPIENT_nameDef].</Sex_Reverse_Beakjob.logRulesInitiator.rulesStrings.0>
+    <Sex_Reverse_Beakjob.logRulesInitiator.rulesStrings.0>R_logentry-&gt; 咬了一口[RECIPIENT_nameDef]没有。</Sex_Reverse_Beakjob.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Received a beakjob from [INITIATOR_nameDef]. -->
-    <Sex_Reverse_Beakjob.logRulesRecipient.rulesStrings.0>r_logentry-&gt;Received a beakjob from [INITIATOR_nameDef].</Sex_Reverse_Beakjob.logRulesRecipient.rulesStrings.0>
+    <Sex_Reverse_Beakjob.logRulesRecipient.rulesStrings.0>R_logentry-&gt; 收到一个野兽 job 来自[INITIATOR_nameDef]没有。</Sex_Reverse_Beakjob.logRulesRecipient.rulesStrings.0>
     <!-- EN: Give beakjob -->
-    <Sex_Reverse_Beakjob.modExtensions.0.RMBLabel>Give beakjob</Sex_Reverse_Beakjob.modExtensions.0.RMBLabel>
+    <Sex_Reverse_Beakjob.modExtensions.0.RMBLabel>给野兽 job</Sex_Reverse_Beakjob.modExtensions.0.RMBLabel>
     </LanguageData>

@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: anal -->
-    <Rape_Anal.label>anal</Rape_Anal.label>
+    <Rape_Anal.label>肛门</Rape_Anal.label>
     <!-- EN: r_logentry->Raped anally [RECIPIENT_nameDef]. -->
-    <Rape_Anal.logRulesInitiator.rulesStrings.0>r_logentry-&gt;Raped anally [RECIPIENT_nameDef].</Rape_Anal.logRulesInitiator.rulesStrings.0>
+    <Rape_Anal.logRulesInitiator.rulesStrings.0>R_logentry-&gt; 被强奸[RECIPIENT_nameDef]没有。</Rape_Anal.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Was anally raped by [INITIATOR_nameDef]. -->
-    <Rape_Anal.logRulesRecipient.rulesStrings.0>r_logentry-&gt;Was anally raped by [INITIATOR_nameDef].</Rape_Anal.logRulesRecipient.rulesStrings.0>
+    <Rape_Anal.logRulesRecipient.rulesStrings.0>R_logentry-&gt; 被[INITIATOR_nameDef]没有。</Rape_Anal.logRulesRecipient.rulesStrings.0>
     <!-- EN: Fuck anally -->
-    <Rape_Anal.modExtensions.0.RMBLabel>Fuck anally</Rape_Anal.modExtensions.0.RMBLabel>
+    <Rape_Anal.modExtensions.0.RMBLabel>他妈的盟友</Rape_Anal.modExtensions.0.RMBLabel>
     </LanguageData>

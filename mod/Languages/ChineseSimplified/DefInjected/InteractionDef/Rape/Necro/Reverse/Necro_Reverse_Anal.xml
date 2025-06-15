@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: anal -->
-    <Necro_Reverse_Anal.label>anal</Necro_Reverse_Anal.label>
+    <Necro_Reverse_Anal.label>肛门</Necro_Reverse_Anal.label>
     <!-- EN: r_logentry->Raped anally [RECIPIENT_nameDef]. -->
-    <Necro_Reverse_Anal.logRulesInitiator.rulesStrings.0>r_logentry-&gt;Raped anally [RECIPIENT_nameDef].</Necro_Reverse_Anal.logRulesInitiator.rulesStrings.0>
+    <Necro_Reverse_Anal.logRulesInitiator.rulesStrings.0>R_logentry-&gt; 被强奸[RECIPIENT_nameDef]没有。</Necro_Reverse_Anal.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Was anally raped by [INITIATOR_nameDef]. -->
-    <Necro_Reverse_Anal.logRulesRecipient.rulesStrings.0>r_logentry-&gt;Was anally raped by [INITIATOR_nameDef].</Necro_Reverse_Anal.logRulesRecipient.rulesStrings.0>
+    <Necro_Reverse_Anal.logRulesRecipient.rulesStrings.0>R_logentry-&gt; 被[INITIATOR_nameDef]没有。</Necro_Reverse_Anal.logRulesRecipient.rulesStrings.0>
     <!-- EN: Ride anally -->
-    <Necro_Reverse_Anal.modExtensions.0.RMBLabel>Ride anally</Necro_Reverse_Anal.modExtensions.0.RMBLabel>
+    <Necro_Reverse_Anal.modExtensions.0.RMBLabel>骑着马</Necro_Reverse_Anal.modExtensions.0.RMBLabel>
     </LanguageData>

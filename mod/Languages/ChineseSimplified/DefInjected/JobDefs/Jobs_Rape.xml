@@ -1,19 +1,19 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: gettin' raped. -->
-    <GettinRaped.reportString>gettin' raped.</GettinRaped.reportString>
+    <GettinRaped.reportString>被强奸!</GettinRaped.reportString>
     <!-- EN: rapin' CP -->
-    <RapeComfortPawn.reportString>rapin' CP</RapeComfortPawn.reportString>
+    <RapeComfortPawn.reportString>强奸</RapeComfortPawn.reportString>
     <!-- EN: raping. -->
-    <RandomRape.reportString>raping.</RandomRape.reportString>
+    <RandomRape.reportString>强奸。</RandomRape.reportString>
     <!-- EN: rapin' enemy -->
-    <RapeEnemy.reportString>rapin' enemy</RapeEnemy.reportString>
+    <RapeEnemy.reportString>掠夺敌人</RapeEnemy.reportString>
     <!-- EN: rapin' enemy -->
-    <RapeEnemyByInsect.reportString>rapin' enemy</RapeEnemyByInsect.reportString>
+    <RapeEnemyByInsect.reportString>掠夺敌人</RapeEnemyByInsect.reportString>
     <!-- EN: rapin' enemy -->
-    <RapeEnemyByAnimal.reportString>rapin' enemy</RapeEnemyByAnimal.reportString>
+    <RapeEnemyByAnimal.reportString>掠夺敌人</RapeEnemyByAnimal.reportString>
     <!-- EN: rapin' enemy -->
-    <RapeEnemyByMech.reportString>rapin' enemy</RapeEnemyByMech.reportString>
+    <RapeEnemyByMech.reportString>掠夺敌人</RapeEnemyByMech.reportString>
     <!-- EN: rapin' enemy -->
-    <RapeEnemyToParasite.reportString>rapin' enemy</RapeEnemyToParasite.reportString>
+    <RapeEnemyToParasite.reportString>掠夺敌人</RapeEnemyToParasite.reportString>
     </LanguageData>

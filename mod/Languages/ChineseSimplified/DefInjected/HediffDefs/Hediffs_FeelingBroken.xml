@@ -1,15 +1,15 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: Feeling broken -->
-    <FeelingBroken.label>Feeling broken</FeelingBroken.label>
+    <FeelingBroken.label>精神崩溃</FeelingBroken.label>
     <!-- EN: Mind broken. No longer capable of emotion. -->
-    <FeelingBroken.description>Mind broken. No longer capable of emotion.</FeelingBroken.description>
+    <FeelingBroken.description>精神崩溃了。无法再表达感情了。</FeelingBroken.description>
     <!-- EN: early-stage -->
-    <FeelingBroken.stages.0.label>early-stage</FeelingBroken.stages.0.label>
+    <FeelingBroken.stages.0.label>头晕目眩</FeelingBroken.stages.0.label>
     <!-- EN: in a trance -->
-    <FeelingBroken.stages.1.label>in a trance</FeelingBroken.stages.1.label>
+    <FeelingBroken.stages.1.label>我的身体已碎</FeelingBroken.stages.1.label>
     <!-- EN: broken -->
-    <FeelingBroken.stages.2.label>broken</FeelingBroken.stages.2.label>
+    <FeelingBroken.stages.2.label>乞求更多</FeelingBroken.stages.2.label>
     <!-- EN: Extremely broken -->
-    <FeelingBroken.stages.3.label>Extremely broken</FeelingBroken.stages.3.label>
+    <FeelingBroken.stages.3.label>极度崩溃</FeelingBroken.stages.3.label>
     </LanguageData>

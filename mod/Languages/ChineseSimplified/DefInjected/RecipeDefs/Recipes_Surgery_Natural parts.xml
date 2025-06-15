@@ -1,65 +1,65 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: attach penis -->
-    <AttachPenis.label>attach penis</AttachPenis.label>
+    <AttachPenis.label>附着阴茎</AttachPenis.label>
     <!-- EN: install vagina -->
-    <InstallVagina.label>install vagina</InstallVagina.label>
+    <InstallVagina.label>安装阴道</InstallVagina.label>
     <!-- EN: install feline vagina -->
-    <InstallCatVagina.label>install feline vagina</InstallCatVagina.label>
+    <InstallCatVagina.label>安装猫科动物阴道</InstallCatVagina.label>
     <!-- EN: install canine vagina -->
-    <InstallDogVagina.label>install canine vagina</InstallDogVagina.label>
+    <InstallDogVagina.label>安装犬科动物阴道</InstallDogVagina.label>
     <!-- EN: install equine vagina -->
-    <InstallHorseVagina.label>install equine vagina</InstallHorseVagina.label>
+    <InstallHorseVagina.label>安装马阴道</InstallHorseVagina.label>
     <!-- EN: install dragon vagina -->
-    <InstallDragonVagina.label>install dragon vagina</InstallDragonVagina.label>
+    <InstallDragonVagina.label>安装龙阴道</InstallDragonVagina.label>
     <!-- EN: install narrow vagina -->
-    <InstallNarrowVagina.label>install narrow vagina</InstallNarrowVagina.label>
+    <InstallNarrowVagina.label>安装窄小的阴道</InstallNarrowVagina.label>
     <!-- EN: install cloacal vagina -->
-    <InstallCloacalVagina.label>install cloacal vagina</InstallCloacalVagina.label>
+    <InstallCloacalVagina.label>安装泄殖腔阴道</InstallCloacalVagina.label>
     <!-- EN: install rodent vagina -->
-    <InstallRodentVagina.label>install rodent vagina</InstallRodentVagina.label>
+    <InstallRodentVagina.label>安装啮齿动物阴道</InstallRodentVagina.label>
     <!-- EN: install female Ovipositor -->
-    <InstallOvipositorF.label>install female Ovipositor</InstallOvipositorF.label>
+    <InstallOvipositorF.label>安装雌性产卵器</InstallOvipositorF.label>
     <!-- EN: Installs a female Ovipositor. -->
-    <InstallOvipositorF.description>Installs a female Ovipositor.</InstallOvipositorF.description>
+    <InstallOvipositorF.description>安装雌性产卵器。</InstallOvipositorF.description>
     <!-- EN: attach equine penis -->
-    <AttachHorsePenis.label>attach equine penis</AttachHorsePenis.label>
+    <AttachHorsePenis.label>拴上马鞭</AttachHorsePenis.label>
     <!-- EN: attach procyonine penis -->
-    <AttachRaccoonPenis.label>attach procyonine penis</AttachRaccoonPenis.label>
+    <AttachRaccoonPenis.label>附着嵌合阴茎</AttachRaccoonPenis.label>
     <!-- EN: attach feline penis -->
-    <AttachCatPenis.label>attach feline penis</AttachCatPenis.label>
+    <AttachCatPenis.label>附着猫科动物的阴茎</AttachCatPenis.label>
     <!-- EN: attach canine penis -->
-    <AttachDogPenis.label>attach canine penis</AttachDogPenis.label>
+    <AttachDogPenis.label>连接犬科动物的阴茎</AttachDogPenis.label>
     <!-- EN: attach dragon penis -->
-    <AttachDragonPenis.label>attach dragon penis</AttachDragonPenis.label>
+    <AttachDragonPenis.label>安装龙血</AttachDragonPenis.label>
     <!-- EN: attach hemipenis -->
-    <AttachHemiPenis.label>attach hemipenis</AttachHemiPenis.label>
+    <AttachHemiPenis.label>附着侧肢</AttachHemiPenis.label>
     <!-- EN: Attaches a dual-shafted hemipenis. -->
-    <AttachHemiPenis.description>Attaches a dual-shafted hemipenis.</AttachHemiPenis.description>
+    <AttachHemiPenis.description>植入一个双假肢。</AttachHemiPenis.description>
     <!-- EN: attach crocodilian penis -->
-    <AttachCrocodilianPenis.label>attach crocodilian penis</AttachCrocodilianPenis.label>
+    <AttachCrocodilianPenis.label>附着鳄鱼的鸡巴</AttachCrocodilianPenis.label>
     <!-- EN: attach needle penis -->
-    <AttachNeedlePenis.label>attach needle penis</AttachNeedlePenis.label>
+    <AttachNeedlePenis.label>安装刺针阴茎</AttachNeedlePenis.label>
     <!-- EN: attach cloacal penis -->
-    <AttachCloacalPenis.label>attach cloacal penis</AttachCloacalPenis.label>
+    <AttachCloacalPenis.label>附上泄殖腔的阴茎</AttachCloacalPenis.label>
     <!-- EN: attach rodent penis -->
-    <AttachRodentPenis.label>attach rodent penis</AttachRodentPenis.label>
+    <AttachRodentPenis.label>安装啮齿动物的阴茎</AttachRodentPenis.label>
     <!-- EN: attach male Ovipositor -->
-    <AttachOvipositorM.label>attach male Ovipositor</AttachOvipositorM.label>
+    <AttachOvipositorM.label>附上产卵男性</AttachOvipositorM.label>
     <!-- EN: Attaches a male Ovipositor, replaces other bodyparts if present. -->
-    <AttachOvipositorM.description>Attaches a male Ovipositor, replaces other bodyparts if present.</AttachOvipositorM.description>
+    <AttachOvipositorM.description>搭载一名雄性卵细胞，如果有的话可以替换其他身体部位。</AttachOvipositorM.description>
     <!-- EN: attach breasts -->
-    <AttachBreasts.label>attach breasts</AttachBreasts.label>
+    <AttachBreasts.label>贴胸</AttachBreasts.label>
     <!-- EN: attach featureless chest -->
-    <AttachFeaturelesschest.label>attach featureless chest</AttachFeaturelesschest.label>
+    <AttachFeaturelesschest.label>安装无特征胸部</AttachFeaturelesschest.label>
     <!-- EN: Attaches a smooth, non-mammalian chest, replaces other bodyparts if present. -->
-    <AttachFeaturelesschest.description>Attaches a smooth, non-mammalian chest, replaces other bodyparts if present.</AttachFeaturelesschest.description>
+    <AttachFeaturelesschest.description>连接一个光滑的非哺乳类动物胸部，如果有的话将取代其他身体部位。</AttachFeaturelesschest.description>
     <!-- EN: install average anus -->
-    <InstallAnus.label>install average anus</InstallAnus.label>
+    <InstallAnus.label>安装平均肛门</InstallAnus.label>
     <!-- EN: install cloacal anus -->
-    <InstallCloacalAnus.label>install cloacal anus</InstallCloacalAnus.label>
+    <InstallCloacalAnus.label>安装泄殖腔肛门</InstallCloacalAnus.label>
     <!-- EN: install Insect anus -->
-    <InstallInsectAnus.label>install Insect anus</InstallInsectAnus.label>
+    <InstallInsectAnus.label>安装昆虫肛门</InstallInsectAnus.label>
     <!-- EN: Installs a Insect anus, replaces other bodyparts if present. -->
-    <InstallInsectAnus.description>Installs a Insect anus, replaces other bodyparts if present.</InstallInsectAnus.description>
+    <InstallInsectAnus.description>安装一个昆虫肛门，替换其他身体部位 (如果存在)。</InstallInsectAnus.description>
     </LanguageData>

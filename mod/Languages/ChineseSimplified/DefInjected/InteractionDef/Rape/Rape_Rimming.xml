@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: rimming -->
-    <Rape_Rimming.label>rimming</Rape_Rimming.label>
+    <Rape_Rimming.label>卷曲</Rape_Rimming.label>
     <!-- EN: r_logentry->Forced [RECIPIENT_nameDef] to give anal rimming. -->
-    <Rape_Rimming.logRulesInitiator.rulesStrings.0>r_logentry-&gt;Forced [RECIPIENT_nameDef] to give anal rimming.</Rape_Rimming.logRulesInitiator.rulesStrings.0>
+    <Rape_Rimming.logRulesInitiator.rulesStrings.0>R_logentry-&gt; 强制[RECIPIENT_nameDef]使肛门能够卷曲。</Rape_Rimming.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Was forced to rimm anus of [INITIATOR_nameDef]. -->
-    <Rape_Rimming.logRulesRecipient.rulesStrings.0>r_logentry-&gt;Was forced to rimm anus of [INITIATOR_nameDef].</Rape_Rimming.logRulesRecipient.rulesStrings.0>
+    <Rape_Rimming.logRulesRecipient.rulesStrings.0>R_logentry-&gt; 被强迫[INITIATOR_nameDef]没有。</Rape_Rimming.logRulesRecipient.rulesStrings.0>
     <!-- EN: Get anal rimming -->
-    <Rape_Rimming.modExtensions.0.RMBLabel>Get anal rimming</Rape_Rimming.modExtensions.0.RMBLabel>
+    <Rape_Rimming.modExtensions.0.RMBLabel>收集肛门</Rape_Rimming.modExtensions.0.RMBLabel>
     </LanguageData>

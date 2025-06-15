@@ -1,117 +1,117 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: equine penis -->
-    <HorsePenis.label>equine penis</HorsePenis.label>
+    <HorsePenis.label>马鞭</HorsePenis.label>
     <!-- EN: an equine penis -->
-    <HorsePenis.labelNoun>an equine penis</HorsePenis.labelNoun>
+    <HorsePenis.labelNoun>马的阴茎</HorsePenis.labelNoun>
     <!-- EN: A large horse penis. Flares out during sex. -->
-    <HorsePenis.description>A large horse penis. Flares out during sex.</HorsePenis.description>
+    <HorsePenis.description>一根大马鞭。性爱过程中会出现眩光。</HorsePenis.description>
     <!-- EN: equine vagina -->
-    <HorseVagina.label>equine vagina</HorseVagina.label>
+    <HorseVagina.label>马阴道</HorseVagina.label>
     <!-- EN: an equine vagina -->
-    <HorseVagina.labelNoun>an equine vagina</HorseVagina.labelNoun>
+    <HorseVagina.labelNoun>马阴道</HorseVagina.labelNoun>
     <!-- EN: A mare vagina. -->
-    <HorseVagina.description>A mare vagina.</HorseVagina.description>
+    <HorseVagina.description>一个母马的阴道。</HorseVagina.description>
     <!-- EN: feline penis -->
-    <CatPenis.label>feline penis</CatPenis.label>
+    <CatPenis.label>猫科动物的阴茎</CatPenis.label>
     <!-- EN: a feline penis -->
-    <CatPenis.labelNoun>a feline penis</CatPenis.labelNoun>
+    <CatPenis.labelNoun>一个猫科动物的阴茎</CatPenis.labelNoun>
     <!-- EN: A spine-covered feline penis. -->
-    <CatPenis.description>A spine-covered feline penis.</CatPenis.description>
+    <CatPenis.description>布满脊椎的猫科动物阴茎。</CatPenis.description>
     <!-- EN: feline vagina -->
-    <CatVagina.label>feline vagina</CatVagina.label>
+    <CatVagina.label>猫科动物的阴道</CatVagina.label>
     <!-- EN: a feline vagina -->
-    <CatVagina.labelNoun>a feline vagina</CatVagina.labelNoun>
+    <CatVagina.labelNoun>一个猫科动物的阴道</CatVagina.labelNoun>
     <!-- EN: A feline vagina. -->
-    <CatVagina.description>A feline vagina.</CatVagina.description>
+    <CatVagina.description>一个猫科动物的阴道。</CatVagina.description>
     <!-- EN: canine penis -->
-    <DogPenis.label>canine penis</DogPenis.label>
+    <DogPenis.label>犬科动物的阴茎</DogPenis.label>
     <!-- EN: a dog penis -->
-    <DogPenis.labelNoun>a dog penis</DogPenis.labelNoun>
+    <DogPenis.labelNoun>一个狗阴茎</DogPenis.labelNoun>
     <!-- EN: A bright red dog penis. The knot will expand during sex, locking its lover to their partner for a long time. -->
-    <DogPenis.description>A bright red dog penis. The knot will expand during sex, locking its lover to their partner for a long time.</DogPenis.description>
+    <DogPenis.description>鲜红的狗屁鸡巴。这个结会在性爱过程中扩大，将它的情人锁定在伴侣身边很长时间。</DogPenis.description>
     <!-- EN: canine vagina -->
-    <DogVagina.label>canine vagina</DogVagina.label>
+    <DogVagina.label>犬科动物的阴道</DogVagina.label>
     <!-- EN: a dog vagina -->
-    <DogVagina.labelNoun>a dog vagina</DogVagina.labelNoun>
+    <DogVagina.labelNoun>一个狗的阴道</DogVagina.labelNoun>
     <!-- EN: A dog vagina. -->
-    <DogVagina.description>A dog vagina.</DogVagina.description>
+    <DogVagina.description>一个狗的阴道。</DogVagina.description>
     <!-- EN: dragon penis -->
-    <DragonPenis.label>dragon penis</DragonPenis.label>
+    <DragonPenis.label>龙血</DragonPenis.label>
     <!-- EN: a dragon penis -->
-    <DragonPenis.labelNoun>a dragon penis</DragonPenis.labelNoun>
+    <DragonPenis.labelNoun>一个龙头</DragonPenis.labelNoun>
     <!-- EN: A dragon penis. Has a knot that expands similarly to a dog's penis, but the ribbing on both sides takes its lover to greater heights of pleasure. -->
-    <DragonPenis.description>A dragon penis. Has a knot that expands similarly to a dog's penis, but the ribbing on both sides takes its lover to greater heights of pleasure.</DragonPenis.description>
+    <DragonPenis.description>一个龙头。有一个类似于狗的阴茎的结，但两侧的肋骨会让它的爱人获得更大的快乐。</DragonPenis.description>
     <!-- EN: dragon vagina -->
-    <DragonVagina.label>dragon vagina</DragonVagina.label>
+    <DragonVagina.label>龙阴道</DragonVagina.label>
     <!-- EN: a dragon vagina -->
-    <DragonVagina.labelNoun>a dragon vagina</DragonVagina.labelNoun>
+    <DragonVagina.labelNoun>一个龙阴道</DragonVagina.labelNoun>
     <!-- EN: A dragon vagina. Has a similar texture to their outer hide. -->
-    <DragonVagina.description>A dragon vagina. Has a similar texture to their outer hide.</DragonVagina.description>
+    <DragonVagina.description>一个龙的阴道。具有与外壳相似的纹理。</DragonVagina.description>
     <!-- EN: procyonine penis -->
-    <RaccoonPenis.label>procyonine penis</RaccoonPenis.label>
+    <RaccoonPenis.label>长柄鸡巴</RaccoonPenis.label>
     <!-- EN: a procyonine penis -->
-    <RaccoonPenis.labelNoun>a procyonine penis</RaccoonPenis.labelNoun>
+    <RaccoonPenis.labelNoun>一个原骨阴茎</RaccoonPenis.labelNoun>
     <!-- EN: A raccoon penis. -->
-    <RaccoonPenis.description>A raccoon penis.</RaccoonPenis.description>
+    <RaccoonPenis.description>一只浣熊的阴茎。</RaccoonPenis.description>
     <!-- EN: hemipenis -->
-    <HemiPenis.label>hemipenis</HemiPenis.label>
+    <HemiPenis.label>半肢</HemiPenis.label>
     <!-- EN: a hemipenis -->
-    <HemiPenis.labelNoun>a hemipenis</HemiPenis.labelNoun>
+    <HemiPenis.labelNoun>一个侧肢</HemiPenis.labelNoun>
     <!-- EN: Twice the members for double the fun. -->
-    <HemiPenis.description>Twice the members for double the fun.</HemiPenis.description>
+    <HemiPenis.description>双倍的成员和双倍的乐趣。</HemiPenis.description>
     <!-- EN: crocodilian penis -->
-    <CrocodilianPenis.label>crocodilian penis</CrocodilianPenis.label>
+    <CrocodilianPenis.label>鳄鱼鸡巴</CrocodilianPenis.label>
     <!-- EN: a crocodilian penis -->
-    <CrocodilianPenis.labelNoun>a crocodilian penis</CrocodilianPenis.labelNoun>
+    <CrocodilianPenis.labelNoun>一个鳄鱼的阴茎</CrocodilianPenis.labelNoun>
     <!-- EN: A crocodilian penis. Large and permenantly erect. -->
-    <CrocodilianPenis.description>A crocodilian penis. Large and permenantly erect.</CrocodilianPenis.description>
+    <CrocodilianPenis.description>一条鳄鱼的阴茎。体型大且永久直立。</CrocodilianPenis.description>
     <!-- EN: udders -->
-    <UdderBreasts.label>udders</UdderBreasts.label>
+    <UdderBreasts.label>乳房</UdderBreasts.label>
     <!-- EN: a set of udders -->
-    <UdderBreasts.labelNoun>a set of udders</UdderBreasts.labelNoun>
+    <UdderBreasts.labelNoun>一个乳房</UdderBreasts.labelNoun>
     <!-- EN: An animalistic breast with four nipples. -->
-    <UdderBreasts.description>An animalistic breast with four nipples.</UdderBreasts.description>
+    <UdderBreasts.description>有四个乳头的泛灵乳房。</UdderBreasts.description>
     <!-- EN: narrow vagina -->
-    <NarrowVagina.label>narrow vagina</NarrowVagina.label>
+    <NarrowVagina.label>狭窄的阴道</NarrowVagina.label>
     <!-- EN: a narrow vagina -->
-    <NarrowVagina.labelNoun>a narrow vagina</NarrowVagina.labelNoun>
+    <NarrowVagina.labelNoun>狭窄的阴道</NarrowVagina.labelNoun>
     <!-- EN: A tight, narrow vagina. -->
-    <NarrowVagina.description>A tight, narrow vagina.</NarrowVagina.description>
+    <NarrowVagina.description>狭窄的阴道。</NarrowVagina.description>
     <!-- EN: needle penis -->
-    <NeedlePenis.label>needle penis</NeedlePenis.label>
+    <NeedlePenis.label>刺针阴茎</NeedlePenis.label>
     <!-- EN: a needle penis -->
-    <NeedlePenis.labelNoun>a needle penis</NeedlePenis.labelNoun>
+    <NeedlePenis.labelNoun>一个刺针阴茎</NeedlePenis.labelNoun>
     <!-- EN: A small and thin penis. -->
-    <NeedlePenis.description>A small and thin penis.</NeedlePenis.description>
+    <NeedlePenis.description>纤细的阴茎。</NeedlePenis.description>
     <!-- EN: rodent vagina -->
-    <RodentVagina.label>rodent vagina</RodentVagina.label>
+    <RodentVagina.label>啮齿动物的阴道</RodentVagina.label>
     <!-- EN: a rodent vagina -->
-    <RodentVagina.labelNoun>a rodent vagina</RodentVagina.labelNoun>
+    <RodentVagina.labelNoun>啮齿动物的阴道</RodentVagina.labelNoun>
     <!-- EN: A rodent vagina. -->
-    <RodentVagina.description>A rodent vagina.</RodentVagina.description>
+    <RodentVagina.description>啮齿动物的阴道。</RodentVagina.description>
     <!-- EN: rodent penis -->
-    <RodentPenis.label>rodent penis</RodentPenis.label>
+    <RodentPenis.label>啮齿动物的阴茎</RodentPenis.label>
     <!-- EN: a rodent penis -->
-    <RodentPenis.labelNoun>a rodent penis</RodentPenis.labelNoun>
+    <RodentPenis.labelNoun>啮齿动物的阴茎</RodentPenis.labelNoun>
     <!-- EN: A rodent penis. -->
-    <RodentPenis.description>A rodent penis.</RodentPenis.description>
+    <RodentPenis.description>啮齿动物的阴茎。</RodentPenis.description>
     <!-- EN: cloacal penis -->
-    <CloacalPenis.label>cloacal penis</CloacalPenis.label>
+    <CloacalPenis.label>泄殖腔的阴茎</CloacalPenis.label>
     <!-- EN: a cloacal penis -->
-    <CloacalPenis.labelNoun>a cloacal penis</CloacalPenis.labelNoun>
+    <CloacalPenis.labelNoun>泄殖腔的阴茎</CloacalPenis.labelNoun>
     <!-- EN: A cloacal penis. -->
-    <CloacalPenis.description>A cloacal penis.</CloacalPenis.description>
+    <CloacalPenis.description>泄殖腔的阴茎。</CloacalPenis.description>
     <!-- EN: cloacal vagina -->
-    <CloacalVagina.label>cloacal vagina</CloacalVagina.label>
+    <CloacalVagina.label>泄殖腔阴道</CloacalVagina.label>
     <!-- EN: a cloacal vagina -->
-    <CloacalVagina.labelNoun>a cloacal vagina</CloacalVagina.labelNoun>
+    <CloacalVagina.labelNoun>一个泄殖腔阴道</CloacalVagina.labelNoun>
     <!-- EN: A cloacal vagina. -->
-    <CloacalVagina.description>A cloacal vagina.</CloacalVagina.description>
+    <CloacalVagina.description>泄殖腔的阴道。</CloacalVagina.description>
     <!-- EN: cloacal anus -->
-    <CloacalAnus.label>cloacal anus</CloacalAnus.label>
+    <CloacalAnus.label>泄殖腔肛门</CloacalAnus.label>
     <!-- EN: cloacal anus -->
-    <CloacalAnus.labelNoun>cloacal anus</CloacalAnus.labelNoun>
+    <CloacalAnus.labelNoun>泄殖腔肛门</CloacalAnus.labelNoun>
     <!-- EN: A cloacal anus. -->
-    <CloacalAnus.description>A cloacal anus.</CloacalAnus.description>
+    <CloacalAnus.description>泄殖腔的肛门。</CloacalAnus.description>
     </LanguageData>

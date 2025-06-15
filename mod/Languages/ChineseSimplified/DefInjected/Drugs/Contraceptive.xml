@@ -1,13 +1,13 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: contraception pill -->
-    <RJW_Contraceptive.label>contraception pill</RJW_Contraceptive.label>
+    <RJW_Contraceptive.label>避孕</RJW_Contraceptive.label>
     <!-- EN: Deliver severe hit to fertility for one quadrum. -->
-    <RJW_Contraceptive.description>Deliver severe hit to fertility for one quadrum.</RJW_Contraceptive.description>
+    <RJW_Contraceptive.description>避孕药丸会对一象的生育能力造成严重打击。</RJW_Contraceptive.description>
     <!-- EN: contraceptive -->
-    <RJW_Contraceptive.label>contraceptive</RJW_Contraceptive.label>
+    <RJW_Contraceptive.label>避孕</RJW_Contraceptive.label>
     <!-- EN: Contraception pills deliver severe hit to fertility for one quadrum. -->
-    <RJW_Contraceptive.description>Contraception pills deliver severe hit to fertility for one quadrum.</RJW_Contraceptive.description>
+    <RJW_Contraceptive.description>避孕药丸会对一象的生育能力造成严重打击。</RJW_Contraceptive.description>
     <!-- EN: Contracepted -->
-    <RJW_Contraceptive.stages.0.label>Contracepted</RJW_Contraceptive.stages.0.label>
+    <RJW_Contraceptive.stages.0.label>已避孕</RJW_Contraceptive.stages.0.label>
     </LanguageData>

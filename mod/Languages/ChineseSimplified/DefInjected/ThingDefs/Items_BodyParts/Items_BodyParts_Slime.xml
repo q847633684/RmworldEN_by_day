@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: slime glob -->
-    <SlimeGlob.label>slime glob</SlimeGlob.label>
+    <SlimeGlob.label>黏液球</SlimeGlob.label>
     <!-- EN: An oozy slime glob. Useless for humans. -->
-    <SlimeGlob.description>An oozy slime glob. Useless for humans.</SlimeGlob.description>
+    <SlimeGlob.description>一团黏液。对人类毫无用处。</SlimeGlob.description>
     </LanguageData>

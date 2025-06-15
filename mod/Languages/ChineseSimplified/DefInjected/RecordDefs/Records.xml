@@ -1,83 +1,83 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: masturbating done -->
-    <CountOfFappin.label>masturbating done</CountOfFappin.label>
+    <CountOfFappin.label>自慰完毕</CountOfFappin.label>
     <!-- EN: The number of times I masturbated. -->
-    <CountOfFappin.description>The number of times I masturbated.</CountOfFappin.description>
+    <CountOfFappin.description>我自慰的次数。</CountOfFappin.description>
     <!-- EN: total sex had -->
-    <CountOfSex.label>total sex had</CountOfSex.label>
+    <CountOfSex.label>完全性别数</CountOfSex.label>
     <!-- EN: The number of times I had sex. -->
-    <CountOfSex.description>The number of times I had sex.</CountOfSex.description>
+    <CountOfSex.description>我发生性关系的次数。</CountOfSex.description>
     <!-- EN: sex with humanlikes -->
-    <CountOfSexWithHumanlikes.label>sex with humanlikes</CountOfSexWithHumanlikes.label>
+    <CountOfSexWithHumanlikes.label>与人类发生性关系</CountOfSexWithHumanlikes.label>
     <!-- EN: The number of times I had sex with humanlikes. -->
-    <CountOfSexWithHumanlikes.description>The number of times I had sex with humanlikes.</CountOfSexWithHumanlikes.description>
+    <CountOfSexWithHumanlikes.description>我和人类发生性关系的次数。</CountOfSexWithHumanlikes.description>
     <!-- EN: sex with animals -->
-    <CountOfSexWithAnimals.label>sex with animals</CountOfSexWithAnimals.label>
+    <CountOfSexWithAnimals.label>与动物发生性关系</CountOfSexWithAnimals.label>
     <!-- EN: The number of times I had sex with animals. -->
-    <CountOfSexWithAnimals.description>The number of times I had sex with animals.</CountOfSexWithAnimals.description>
+    <CountOfSexWithAnimals.description>我和动物发生性关系的次数。</CountOfSexWithAnimals.description>
     <!-- EN: sex with insects -->
-    <CountOfSexWithInsects.label>sex with insects</CountOfSexWithInsects.label>
+    <CountOfSexWithInsects.label>与昆虫性爱</CountOfSexWithInsects.label>
     <!-- EN: The number of times I had sex with insects. -->
-    <CountOfSexWithInsects.description>The number of times I had sex with insects.</CountOfSexWithInsects.description>
+    <CountOfSexWithInsects.description>我和虫子发生性关系的次数。</CountOfSexWithInsects.description>
     <!-- EN: sex with other -->
-    <CountOfSexWithOthers.label>sex with other</CountOfSexWithOthers.label>
+    <CountOfSexWithOthers.label>和他人发生性关系</CountOfSexWithOthers.label>
     <!-- EN: The number of times I had sex with weird stuff. -->
-    <CountOfSexWithOthers.description>The number of times I had sex with weird stuff.</CountOfSexWithOthers.description>
+    <CountOfSexWithOthers.description>我和怪人发生性关系的次数。</CountOfSexWithOthers.description>
     <!-- EN: raped humanlikes -->
-    <CountOfRapedHumanlikes.label>raped humanlikes</CountOfRapedHumanlikes.label>
+    <CountOfRapedHumanlikes.label>被强奸的人类</CountOfRapedHumanlikes.label>
     <!-- EN: The number of times I raped humanlikes. -->
-    <CountOfRapedHumanlikes.description>The number of times I raped humanlikes.</CountOfRapedHumanlikes.description>
+    <CountOfRapedHumanlikes.description>我强奸人类的次数。</CountOfRapedHumanlikes.description>
     <!-- EN: raped animals -->
-    <CountOfRapedAnimals.label>raped animals</CountOfRapedAnimals.label>
+    <CountOfRapedAnimals.label>强奸了动物</CountOfRapedAnimals.label>
     <!-- EN: The number of times I raped animals. -->
-    <CountOfRapedAnimals.description>The number of times I raped animals.</CountOfRapedAnimals.description>
+    <CountOfRapedAnimals.description>我强奸动物的次数。</CountOfRapedAnimals.description>
     <!-- EN: raped insects -->
-    <CountOfRapedInsects.label>raped insects</CountOfRapedInsects.label>
+    <CountOfRapedInsects.label>强奸了虫子</CountOfRapedInsects.label>
     <!-- EN: The number of times I raped insects. -->
-    <CountOfRapedInsects.description>The number of times I raped insects.</CountOfRapedInsects.description>
+    <CountOfRapedInsects.description>我强奸昆虫的次数。</CountOfRapedInsects.description>
     <!-- EN: raped other -->
-    <CountOfRapedOthers.label>raped other</CountOfRapedOthers.label>
+    <CountOfRapedOthers.label>强奸了其他人</CountOfRapedOthers.label>
     <!-- EN: The number of times I raped weird stuff. -->
-    <CountOfRapedOthers.description>The number of times I raped weird stuff.</CountOfRapedOthers.description>
+    <CountOfRapedOthers.description>我强奸怪人的次数。</CountOfRapedOthers.description>
     <!-- EN: raped corpses -->
-    <CountOfSexWithCorpse.label>raped corpses</CountOfSexWithCorpse.label>
+    <CountOfSexWithCorpse.label>被强奸的尸体</CountOfSexWithCorpse.label>
     <!-- EN: The number of times I raped corpses. -->
-    <CountOfSexWithCorpse.description>The number of times I raped corpses.</CountOfSexWithCorpse.description>
+    <CountOfSexWithCorpse.description>我强奸尸体的次数。</CountOfSexWithCorpse.description>
     <!-- EN: raped by humanlikes -->
-    <CountOfBeenRapedByHumanlikes.label>raped by humanlikes</CountOfBeenRapedByHumanlikes.label>
+    <CountOfBeenRapedByHumanlikes.label>被人类强奸</CountOfBeenRapedByHumanlikes.label>
     <!-- EN: The number of times I was raped by humanlikes. -->
-    <CountOfBeenRapedByHumanlikes.description>The number of times I was raped by humanlikes.</CountOfBeenRapedByHumanlikes.description>
+    <CountOfBeenRapedByHumanlikes.description>我被人类强奸的次数。</CountOfBeenRapedByHumanlikes.description>
     <!-- EN: raped by animals -->
-    <CountOfBeenRapedByAnimals.label>raped by animals</CountOfBeenRapedByAnimals.label>
+    <CountOfBeenRapedByAnimals.label>被动物强奸</CountOfBeenRapedByAnimals.label>
     <!-- EN: The number of times I was raped by animals. -->
-    <CountOfBeenRapedByAnimals.description>The number of times I was raped by animals.</CountOfBeenRapedByAnimals.description>
+    <CountOfBeenRapedByAnimals.description>我被动物强奸的次数。</CountOfBeenRapedByAnimals.description>
     <!-- EN: raped by insects -->
-    <CountOfBeenRapedByInsects.label>raped by insects</CountOfBeenRapedByInsects.label>
+    <CountOfBeenRapedByInsects.label>被虫子强奸</CountOfBeenRapedByInsects.label>
     <!-- EN: The number of times I was raped by insects. -->
-    <CountOfBeenRapedByInsects.description>The number of times I was raped by insects.</CountOfBeenRapedByInsects.description>
+    <CountOfBeenRapedByInsects.description>我被虫子强奸的次数。</CountOfBeenRapedByInsects.description>
     <!-- EN: raped by other -->
-    <CountOfBeenRapedByOthers.label>raped by other</CountOfBeenRapedByOthers.label>
+    <CountOfBeenRapedByOthers.label>被人强奸</CountOfBeenRapedByOthers.label>
     <!-- EN: The number of times I was raped by weird stuff. -->
-    <CountOfBeenRapedByOthers.description>The number of times I was raped by weird stuff.</CountOfBeenRapedByOthers.description>
+    <CountOfBeenRapedByOthers.description>我被诡异东西强奸的次数。</CountOfBeenRapedByOthers.description>
     <!-- EN: raped as a comfort -->
-    <GetRapedAsComfortPrisoner.label>raped as a comfort</GetRapedAsComfortPrisoner.label>
+    <GetRapedAsComfortPrisoner.label>作为安慰被强奸</GetRapedAsComfortPrisoner.label>
     <!-- EN: The number of times I was used to comfort someone. -->
-    <GetRapedAsComfortPrisoner.description>The number of times I was used to comfort someone.</GetRapedAsComfortPrisoner.description>
+    <GetRapedAsComfortPrisoner.description>我被用来安慰别人的次数。</GetRapedAsComfortPrisoner.description>
     <!-- EN: birthed humanlikes -->
-    <CountOfBirthHuman.label>birthed humanlikes</CountOfBirthHuman.label>
+    <CountOfBirthHuman.label>孕育人类</CountOfBirthHuman.label>
     <!-- EN: How many humanlikes I have birthed. -->
-    <CountOfBirthHuman.description>How many humanlikes I have birthed.</CountOfBirthHuman.description>
+    <CountOfBirthHuman.description>我所生的人类数量。</CountOfBirthHuman.description>
     <!-- EN: birthed animals -->
-    <CountOfBirthAnimal.label>birthed animals</CountOfBirthAnimal.label>
+    <CountOfBirthAnimal.label>生育的动物</CountOfBirthAnimal.label>
     <!-- EN: How many animals I have birthed. -->
-    <CountOfBirthAnimal.description>How many animals I have birthed.</CountOfBirthAnimal.description>
+    <CountOfBirthAnimal.description>我所生的动物数量。</CountOfBirthAnimal.description>
     <!-- EN: birthed eggs -->
-    <CountOfBirthEgg.label>birthed eggs</CountOfBirthEgg.label>
+    <CountOfBirthEgg.label>产子卵</CountOfBirthEgg.label>
     <!-- EN: How many eggs I have birthed. -->
-    <CountOfBirthEgg.description>How many eggs I have birthed.</CountOfBirthEgg.description>
+    <CountOfBirthEgg.description>我所生的卵数量。</CountOfBirthEgg.description>
     <!-- EN: condoms used -->
-    <CountOfCondomsUsed.label>condoms used</CountOfCondomsUsed.label>
+    <CountOfCondomsUsed.label>使用避孕套</CountOfCondomsUsed.label>
     <!-- EN: The number of condoms I've used. -->
-    <CountOfCondomsUsed.description>The number of condoms I've used.</CountOfCondomsUsed.description>
+    <CountOfCondomsUsed.description>我使用的避孕套数量。</CountOfCondomsUsed.description>
     </LanguageData>

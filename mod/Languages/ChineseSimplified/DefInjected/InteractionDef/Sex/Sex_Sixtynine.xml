@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: 69ing -->
-    <Sex_Sixtynine.label>69ing</Sex_Sixtynine.label>
+    <Sex_Sixtynine.label>69 岁</Sex_Sixtynine.label>
     <!-- EN: r_logentry->69'd with [RECIPIENT_nameDef]. -->
-    <Sex_Sixtynine.logRulesInitiator.rulesStrings.0>r_logentry-&gt;69'd with [RECIPIENT_nameDef].</Sex_Sixtynine.logRulesInitiator.rulesStrings.0>
+    <Sex_Sixtynine.logRulesInitiator.rulesStrings.0>R_logentry-&gt; 69 岁[RECIPIENT_nameDef]没有。</Sex_Sixtynine.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->69'd with [INITIATOR_nameDef]. -->
-    <Sex_Sixtynine.logRulesRecipient.rulesStrings.0>r_logentry-&gt;69'd with [INITIATOR_nameDef].</Sex_Sixtynine.logRulesRecipient.rulesStrings.0>
+    <Sex_Sixtynine.logRulesRecipient.rulesStrings.0>R_logentry-&gt; 69 岁[INITIATOR_nameDef]没有。</Sex_Sixtynine.logRulesRecipient.rulesStrings.0>
     <!-- EN: Do sixtynine -->
-    <Sex_Sixtynine.modExtensions.0.RMBLabel>Do sixtynine</Sex_Sixtynine.modExtensions.0.RMBLabel>
+    <Sex_Sixtynine.modExtensions.0.RMBLabel>做六合树</Sex_Sixtynine.modExtensions.0.RMBLabel>
     </LanguageData>

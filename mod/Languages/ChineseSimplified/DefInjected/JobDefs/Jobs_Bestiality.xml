@@ -1,13 +1,13 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: gettin' bred. -->
-    <GettinBred.reportString>gettin' bred.</GettinBred.reportString>
+    <GettinBred.reportString>被培育中。</GettinBred.reportString>
     <!-- EN: breeding -->
-    <Breed.reportString>breeding</Breed.reportString>
+    <Breed.reportString>培育</Breed.reportString>
     <!-- EN: mating -->
-    <RJW_Mate.reportString>mating</RJW_Mate.reportString>
+    <RJW_Mate.reportString>配角</RJW_Mate.reportString>
     <!-- EN: lovin' animal -->
-    <Bestiality.reportString>lovin' animal</Bestiality.reportString>
+    <Bestiality.reportString>爱爱的动物</Bestiality.reportString>
     <!-- EN: lovin' animal -->
-    <BestialityForFemale.reportString>lovin' animal</BestialityForFemale.reportString>
+    <BestialityForFemale.reportString>爱爱的动物</BestialityForFemale.reportString>
     </LanguageData>

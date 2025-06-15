@@ -1,21 +1,21 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: ovipositor (Female) -->
-    <OvipositorF.label>ovipositor (Female)</OvipositorF.label>
+    <OvipositorF.label>产卵者 (雌性)</OvipositorF.label>
     <!-- EN: an ovipositor -->
-    <OvipositorF.labelNoun>an ovipositor</OvipositorF.labelNoun>
+    <OvipositorF.labelNoun>一个产卵者</OvipositorF.labelNoun>
     <!-- EN: An ovipositor. Lays eggs inside host. -->
-    <OvipositorF.description>An ovipositor. Lays eggs inside host.</OvipositorF.description>
+    <OvipositorF.description>一个产卵者。在宿主体内产卵。</OvipositorF.description>
     <!-- EN: ovipositor (Male) -->
-    <OvipositorM.label>ovipositor (Male)</OvipositorM.label>
+    <OvipositorM.label>产卵者 (男性)</OvipositorM.label>
     <!-- EN: an ovipositor -->
-    <OvipositorM.labelNoun>an ovipositor</OvipositorM.labelNoun>
+    <OvipositorM.labelNoun>一个产卵者</OvipositorM.labelNoun>
     <!-- EN: An ovipositor. Fertilizes eggs inside host. -->
-    <OvipositorM.description>An ovipositor. Fertilizes eggs inside host.</OvipositorM.description>
+    <OvipositorM.description>一个产卵者。使宿主体内的卵受精。</OvipositorM.description>
     <!-- EN: insect anus -->
-    <InsectAnus.label>insect anus</InsectAnus.label>
+    <InsectAnus.label>虫肛门</InsectAnus.label>
     <!-- EN: an insect anus -->
-    <InsectAnus.labelNoun>an insect anus</InsectAnus.labelNoun>
+    <InsectAnus.labelNoun>肛门 (虫)</InsectAnus.labelNoun>
     <!-- EN: An insect anus. -->
-    <InsectAnus.description>An insect anus.</InsectAnus.description>
+    <InsectAnus.description>一个昆虫的肛门。</InsectAnus.description>
     </LanguageData>

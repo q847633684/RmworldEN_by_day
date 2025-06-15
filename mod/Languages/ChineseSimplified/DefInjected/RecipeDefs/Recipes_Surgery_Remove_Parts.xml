@@ -1,15 +1,15 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: remove genitals -->
-    <RemoveGenitals.label>remove genitals</RemoveGenitals.label>
+    <RemoveGenitals.label>移除生殖器</RemoveGenitals.label>
     <!-- EN: Removes sex organs. -->
-    <RemoveGenitals.description>Removes sex organs.</RemoveGenitals.description>
+    <RemoveGenitals.description>移除性器官。</RemoveGenitals.description>
     <!-- EN: remove breasts -->
-    <RemoveBreasts.label>remove breasts</RemoveBreasts.label>
+    <RemoveBreasts.label>移除乳房</RemoveBreasts.label>
     <!-- EN: Removes breasts. -->
-    <RemoveBreasts.description>Removes breasts.</RemoveBreasts.description>
+    <RemoveBreasts.description>移除乳房。</RemoveBreasts.description>
     <!-- EN: remove anus -->
-    <RemoveAnus.label>remove anus</RemoveAnus.label>
+    <RemoveAnus.label>移除肛门</RemoveAnus.label>
     <!-- EN: Removes anus. -->
-    <RemoveAnus.description>Removes anus.</RemoveAnus.description>
+    <RemoveAnus.description>移除肛门。</RemoveAnus.description>
     </LanguageData>

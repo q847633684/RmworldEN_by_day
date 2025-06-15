@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: breastjob -->
-    <Sex_Breastjob.label>breastjob</Sex_Breastjob.label>
+    <Sex_Breastjob.label>守职</Sex_Breastjob.label>
     <!-- EN: r_logentry->Received a breastjob from [RECIPIENT_nameDef]. -->
-    <Sex_Breastjob.logRulesInitiator.rulesStrings.0>r_logentry-&gt;Received a breastjob from [RECIPIENT_nameDef].</Sex_Breastjob.logRulesInitiator.rulesStrings.0>
+    <Sex_Breastjob.logRulesInitiator.rulesStrings.0>R_logentry-&gt; 接受了一份母乳喂养[RECIPIENT_nameDef]没有。</Sex_Breastjob.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Gave a breastjob to [INITIATOR_nameDef]. -->
-    <Sex_Breastjob.logRulesRecipient.rulesStrings.0>r_logentry-&gt;Gave a breastjob to [INITIATOR_nameDef].</Sex_Breastjob.logRulesRecipient.rulesStrings.0>
+    <Sex_Breastjob.logRulesRecipient.rulesStrings.0>R_logentry-&gt; 给一个母乳喂养[INITIATOR_nameDef]没有。</Sex_Breastjob.logRulesRecipient.rulesStrings.0>
     <!-- EN: Receive breastjob -->
-    <Sex_Breastjob.modExtensions.0.RMBLabel>Receive breastjob</Sex_Breastjob.modExtensions.0.RMBLabel>
+    <Sex_Breastjob.modExtensions.0.RMBLabel>接受母乳喂养</Sex_Breastjob.modExtensions.0.RMBLabel>
     </LanguageData>

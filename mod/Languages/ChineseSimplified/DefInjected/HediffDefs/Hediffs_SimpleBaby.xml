@@ -1,17 +1,17 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <LanguageData>
     <!-- EN: child is growing -->
-    <RJW_BabyState.label>child is growing</RJW_BabyState.label>
+    <RJW_BabyState.label>孩子正在成长</RJW_BabyState.label>
     <!-- EN: A growing child. -->
-    <RJW_BabyState.description>A growing child.</RJW_BabyState.description>
+    <RJW_BabyState.description>成长中的孩子。</RJW_BabyState.description>
     <!-- EN: baby -->
-    <RJW_BabyState.stages.0.label>baby</RJW_BabyState.stages.0.label>
+    <RJW_BabyState.stages.0.label>婴儿</RJW_BabyState.stages.0.label>
     <!-- EN: toddler -->
-    <RJW_BabyState.stages.1.label>toddler</RJW_BabyState.stages.1.label>
+    <RJW_BabyState.stages.1.label>蹒跚学步的孩子</RJW_BabyState.stages.1.label>
     <!-- EN: child -->
-    <RJW_BabyState.stages.2.label>child</RJW_BabyState.stages.2.label>
+    <RJW_BabyState.stages.2.label>孩子</RJW_BabyState.stages.2.label>
     <!-- EN: Too young to work -->
-    <RJW_NoManipulationFlag.label>Too young to work</RJW_NoManipulationFlag.label>
+    <RJW_NoManipulationFlag.label>年轻不能工作</RJW_NoManipulationFlag.label>
     <!-- EN: Too young to work. -->
-    <RJW_NoManipulationFlag.description>Too young to work.</RJW_NoManipulationFlag.description>
+    <RJW_NoManipulationFlag.description>还太年轻，无法工作。</RJW_NoManipulationFlag.description>
     </LanguageData>
