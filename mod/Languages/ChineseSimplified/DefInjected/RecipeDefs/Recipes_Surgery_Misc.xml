@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: install peg arm -->
-    <InstallPegArm.label>安装木臂</InstallPegArm.label>
+    <InstallPegArm.label>install peg arm</InstallPegArm.label>
     <!-- EN: Install a peg arm. -->
-    <InstallPegArm.description>安装木臂。</InstallPegArm.description>
+    <InstallPegArm.description>Install a peg arm.</InstallPegArm.description>
     </LanguageData>

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: peg arm -->
-    <PegArm.label>木臂</PegArm.label>
+    <PegArm.label>peg arm</PegArm.label>
     <!-- EN: a peg arm -->
-    <PegArm.labelNoun>一个木臂</PegArm.labelNoun>
+    <PegArm.labelNoun>a peg arm</PegArm.labelNoun>
     <!-- EN: A peg arm. -->
-    <PegArm.description>木臂。</PegArm.description>
+    <PegArm.description>A peg arm.</PegArm.description>
     </LanguageData>

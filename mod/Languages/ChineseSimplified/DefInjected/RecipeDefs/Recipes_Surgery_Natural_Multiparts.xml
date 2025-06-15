@@ -1,43 +1,43 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: add vagina -->
-    <AddMultiVagina.label>添加阴道</AddMultiVagina.label>
+    <AddMultiVagina.label>add vagina</AddMultiVagina.label>
     <!-- EN: add equine vagina -->
-    <AddMultiHorseVagina.label>添加马阴道</AddMultiHorseVagina.label>
+    <AddMultiHorseVagina.label>add equine vagina</AddMultiHorseVagina.label>
     <!-- EN: add feline vagina -->
-    <AddMultiCatVagina.label>添加猫科动物的阴道</AddMultiCatVagina.label>
+    <AddMultiCatVagina.label>add feline vagina</AddMultiCatVagina.label>
     <!-- EN: add canine vagina -->
-    <AddMultiDogVagina.label>添加犬科动物阴道</AddMultiDogVagina.label>
+    <AddMultiDogVagina.label>add canine vagina</AddMultiDogVagina.label>
     <!-- EN: add dragon vagina -->
-    <AddMultiDragonVagina.label>添加龙阴道</AddMultiDragonVagina.label>
+    <AddMultiDragonVagina.label>add dragon vagina</AddMultiDragonVagina.label>
     <!-- EN: add female ovipositor -->
-    <AddMultiOvipositorF.label>添加雌性产卵器</AddMultiOvipositorF.label>
+    <AddMultiOvipositorF.label>add female ovipositor</AddMultiOvipositorF.label>
     <!-- EN: Adds additional female ovipositor. -->
-    <AddMultiOvipositorF.description>增加额外的雌性产卵器。</AddMultiOvipositorF.description>
+    <AddMultiOvipositorF.description>Adds additional female ovipositor.</AddMultiOvipositorF.description>
     <!-- EN: add penis -->
-    <AddMultiPenis.label>添加阴茎</AddMultiPenis.label>
+    <AddMultiPenis.label>add penis</AddMultiPenis.label>
     <!-- EN: add equine penis -->
-    <AddMultiHorsePenis.label>添加马鞭</AddMultiHorsePenis.label>
+    <AddMultiHorsePenis.label>add equine penis</AddMultiHorsePenis.label>
     <!-- EN: add feline penis -->
-    <AddMultiCatPenis.label>添加猫科动物的阴茎</AddMultiCatPenis.label>
+    <AddMultiCatPenis.label>add feline penis</AddMultiCatPenis.label>
     <!-- EN: add canine penis -->
-    <AddMultiDogPenis.label>添加犬科动物的阴茎</AddMultiDogPenis.label>
+    <AddMultiDogPenis.label>add canine penis</AddMultiDogPenis.label>
     <!-- EN: add dragon penis -->
-    <AddMultiDragonPenis.label>添加龙血</AddMultiDragonPenis.label>
+    <AddMultiDragonPenis.label>add dragon penis</AddMultiDragonPenis.label>
     <!-- EN: add procyonine penis -->
-    <AddMultiRaccoonPenis.label>添加私处</AddMultiRaccoonPenis.label>
+    <AddMultiRaccoonPenis.label>add procyonine penis</AddMultiRaccoonPenis.label>
     <!-- EN: add hemipenis -->
-    <AddMultiHemiPenis.label>添加侧肢</AddMultiHemiPenis.label>
+    <AddMultiHemiPenis.label>add hemipenis</AddMultiHemiPenis.label>
     <!-- EN: add crocodilian penis -->
-    <AddMultiCrocodilianPenis.label>添加鳄鱼的阴茎</AddMultiCrocodilianPenis.label>
+    <AddMultiCrocodilianPenis.label>add crocodilian penis</AddMultiCrocodilianPenis.label>
     <!-- EN: add male ovipositor -->
-    <AddMultiOvipositorM.label>添加: 雄性产卵器</AddMultiOvipositorM.label>
+    <AddMultiOvipositorM.label>add male ovipositor</AddMultiOvipositorM.label>
     <!-- EN: Adds additional male ovipositor. -->
-    <AddMultiOvipositorM.description>增加额外的产卵器。</AddMultiOvipositorM.description>
+    <AddMultiOvipositorM.description>Adds additional male ovipositor.</AddMultiOvipositorM.description>
     <!-- EN: add breasts -->
-    <AddMultiBreasts.label>添加乳房</AddMultiBreasts.label>
+    <AddMultiBreasts.label>add breasts</AddMultiBreasts.label>
     <!-- EN: add anus -->
-    <AddMultiAnus.label>添加肛门</AddMultiAnus.label>
+    <AddMultiAnus.label>add anus</AddMultiAnus.label>
     <!-- EN: add insect anus -->
-    <AddMultiInsectAnus.label>添加虫肛门</AddMultiInsectAnus.label>
+    <AddMultiInsectAnus.label>add insect anus</AddMultiInsectAnus.label>
     </LanguageData>

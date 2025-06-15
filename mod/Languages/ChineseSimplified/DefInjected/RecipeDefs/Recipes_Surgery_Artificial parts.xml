@@ -1,51 +1,51 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: install hydraulic penis -->
-    <InstallHydraulicPenis.label>安装水力阴茎</InstallHydraulicPenis.label>
+    <InstallHydraulicPenis.label>install hydraulic penis</InstallHydraulicPenis.label>
     <!-- EN: Installs a hydraulic penis, replaces other bodyparts if present. -->
-    <InstallHydraulicPenis.description>安装水力阴茎，替换其他身体部位 (如果存在)。</InstallHydraulicPenis.description>
+    <InstallHydraulicPenis.description>Installs a hydraulic penis, replaces other bodyparts if present.</InstallHydraulicPenis.description>
     <!-- EN: install hydraulic vagina -->
-    <InstallHydraulicVagina.label>安装水力阴道</InstallHydraulicVagina.label>
+    <InstallHydraulicVagina.label>install hydraulic vagina</InstallHydraulicVagina.label>
     <!-- EN: Installs a hydraulic vagina, replaces other bodyparts if present. -->
-    <InstallHydraulicVagina.description>安装液压阴道，替换其他身体部位 (如果有的话)。</InstallHydraulicVagina.description>
+    <InstallHydraulicVagina.description>Installs a hydraulic vagina, replaces other bodyparts if present.</InstallHydraulicVagina.description>
     <!-- EN: install hydraulic breasts -->
-    <InstallHydraulicBreasts.label>安装液压乳房</InstallHydraulicBreasts.label>
+    <InstallHydraulicBreasts.label>install hydraulic breasts</InstallHydraulicBreasts.label>
     <!-- EN: Installs a pair of hydraulic breasts, replaces other bodyparts if present. -->
-    <InstallHydraulicBreasts.description>安装一对液压乳房，替换其他身体部件 (如果有的话)。</InstallHydraulicBreasts.description>
+    <InstallHydraulicBreasts.description>Installs a pair of hydraulic breasts, replaces other bodyparts if present.</InstallHydraulicBreasts.description>
     <!-- EN: install hydraulic anus -->
-    <InstallHydraulicAnus.label>安装液压肛门</InstallHydraulicAnus.label>
+    <InstallHydraulicAnus.label>install hydraulic anus</InstallHydraulicAnus.label>
     <!-- EN: Installs a hydraulic anus, replaces other bodyparts if present. -->
-    <InstallHydraulicAnus.description>安装液压肛门，替换其他身体部位 (如果有)。</InstallHydraulicAnus.description>
+    <InstallHydraulicAnus.description>Installs a hydraulic anus, replaces other bodyparts if present.</InstallHydraulicAnus.description>
     <!-- EN: install bionic vagina -->
-    <InstallBionicVagina.label>安装仿生阴道</InstallBionicVagina.label>
+    <InstallBionicVagina.label>install bionic vagina</InstallBionicVagina.label>
     <!-- EN: Installs a bionic vagina, replaces other bodyparts if present. -->
-    <InstallBionicVagina.description>安装仿生阴道，替代身体的其他部位 (如果有的话)。</InstallBionicVagina.description>
+    <InstallBionicVagina.description>Installs a bionic vagina, replaces other bodyparts if present.</InstallBionicVagina.description>
     <!-- EN: install bionic penis -->
-    <InstallBionicPenis.label>安装仿生阴茎</InstallBionicPenis.label>
+    <InstallBionicPenis.label>install bionic penis</InstallBionicPenis.label>
     <!-- EN: Attaches a bionic penis, replaces other bodyparts if present. -->
-    <InstallBionicPenis.description>植入一个仿生阴茎，可以替换其他身体部位 (如果有的话)。</InstallBionicPenis.description>
+    <InstallBionicPenis.description>Attaches a bionic penis, replaces other bodyparts if present.</InstallBionicPenis.description>
     <!-- EN: install bionic breasts -->
-    <InstallBionicBreasts.label>安装仿生乳房</InstallBionicBreasts.label>
+    <InstallBionicBreasts.label>install bionic breasts</InstallBionicBreasts.label>
     <!-- EN: Installs a pair of bionic breasts, replaces other bodyparts if present. -->
-    <InstallBionicBreasts.description>安装一对仿生乳房，如果有的话可以替换其他身体部件。</InstallBionicBreasts.description>
+    <InstallBionicBreasts.description>Installs a pair of bionic breasts, replaces other bodyparts if present.</InstallBionicBreasts.description>
     <!-- EN: install bionic anus -->
-    <InstallBionicAnus.label>安装仿生肛门</InstallBionicAnus.label>
+    <InstallBionicAnus.label>install bionic anus</InstallBionicAnus.label>
     <!-- EN: Installs a bionic anus, replaces other bodyparts if present. -->
-    <InstallBionicAnus.description>安装仿生肛门，可以替换其他身体部位 (如果有的话)。</InstallBionicAnus.description>
+    <InstallBionicAnus.description>Installs a bionic anus, replaces other bodyparts if present.</InstallBionicAnus.description>
     <!-- EN: install archotech penis -->
-    <InstallArchotechPenis.label>安装超凡智能阴茎</InstallArchotechPenis.label>
+    <InstallArchotechPenis.label>install archotech penis</InstallArchotechPenis.label>
     <!-- EN: Attaches a archotech penis, replaces other bodyparts if present. -->
-    <InstallArchotechPenis.description>植入一个超凡智能的阴茎，替换其他身体部位 (如果有的话)。</InstallArchotechPenis.description>
+    <InstallArchotechPenis.description>Attaches a archotech penis, replaces other bodyparts if present.</InstallArchotechPenis.description>
     <!-- EN: install archotech vagina -->
-    <InstallArchotechVagina.label>安装超凡智能阴道</InstallArchotechVagina.label>
+    <InstallArchotechVagina.label>install archotech vagina</InstallArchotechVagina.label>
     <!-- EN: Installs a archotech vagina, replaces other bodyparts if present. -->
-    <InstallArchotechVagina.description>安装超凡仿生阴道，替换其他身体部位 (如果有的话)。</InstallArchotechVagina.description>
+    <InstallArchotechVagina.description>Installs a archotech vagina, replaces other bodyparts if present.</InstallArchotechVagina.description>
     <!-- EN: install archotech anus -->
-    <InstallArchotechAnus.label>安装超凡仿生肛门</InstallArchotechAnus.label>
+    <InstallArchotechAnus.label>install archotech anus</InstallArchotechAnus.label>
     <!-- EN: Installs a archotech anus, replaces other bodyparts if present. -->
-    <InstallArchotechAnus.description>安装超凡仿生肛门，替换其他身体部位 (如果有的话)。</InstallArchotechAnus.description>
+    <InstallArchotechAnus.description>Installs a archotech anus, replaces other bodyparts if present.</InstallArchotechAnus.description>
     <!-- EN: install archotech breasts -->
-    <InstallArchotechBreasts.label>安装超凡仿生胸</InstallArchotechBreasts.label>
+    <InstallArchotechBreasts.label>install archotech breasts</InstallArchotechBreasts.label>
     <!-- EN: Installs a pair of archotech breasts, replaces other bodyparts if present. -->
-    <InstallArchotechBreasts.description>安装一对暗黑超凡乳房，替换其他身体部位 (如果有的话)。</InstallArchotechBreasts.description>
+    <InstallArchotechBreasts.description>Installs a pair of archotech breasts, replaces other bodyparts if present.</InstallArchotechBreasts.description>
     </LanguageData>

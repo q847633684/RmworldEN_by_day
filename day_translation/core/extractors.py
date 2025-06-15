@@ -5,7 +5,12 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from functools import lru_cache
 import asyncio
-import aiofiles
+try:
+    import aiofiles
+    AIOFILES_AVAILABLE = True
+except ImportError:
+    AIOFILES_AVAILABLE = False
+    logging.warning("aiofiles 未安装，将使用同步方式读取文件")
 from ..utils.config import TranslationConfig
 from ..utils.utils import get_language_folder_path
 from ..utils.fields import extract_translatable_fields
@@ -20,58 +25,25 @@ def preview_translatable_fields(
 ) -> List[Tuple[str, str, str, str]]:
     """
     扫描 Defs 目录，提取可翻译字段。
-
-    Args:
-        mod_dir: 模组根目录
-        preview: 是否交互式预览字段
-
-    Returns:
-        List of tuples (full_path, text, tag, file_path)
     """
     logging.info(f"扫描 Defs 目录：{os.path.join(mod_dir, 'Defs')}")
     print(f"扫描 Defs 目录：{os.path.join(mod_dir, 'Defs')}")
+    
     defs_path = Path(mod_dir) / "Defs"
     if not defs_path.exists():
         logging.warning(f"Defs 目录 {defs_path} 不存在")
         return []
 
-    async def read_xml(file: Path) -> List[Tuple[str, str, str, str]]:
-        """异步读取并解析 XML 文件"""
-        translations = []
+    # 根据是否有 aiofiles 选择处理方式
+    if AIOFILES_AVAILABLE:
         try:
-            async with aiofiles.open(file, encoding="utf-8") as f:
-                content = await f.read()
-            tree = ET.fromstring(content)
-            def_nodes = tree.findall(".//*[defName]")
-            for def_node in def_nodes:
-                def_type = def_node.tag
-                def_name = def_node.find("defName")
-                if def_name is None or not def_name.text:
-                    logging.debug(f"在 {file} 未找到 defName，跳过")
-                    continue
-                def_name_text = def_name.text
-                fields = extract_translatable_fields(def_node)
-                for field_path, text, tag in fields:
-                    clean_path = field_path
-                    if clean_path.startswith(f"{def_type}."):
-                        clean_path = clean_path[len(def_type) + 1:]
-                    full_path = f"{def_type}/{def_name_text}.{clean_path}"
-                    translations.append((full_path, text, tag, str(file)))
-        except ET.ParseError as e:
-            logging.error(f"XML 语法错误 {file}: {e}")
-        except OSError as e:
-            logging.error(f"无法读取 {file}: {e}")
-        return translations
+            all_translations = asyncio.run(scan_defs(defs_path))
+        except Exception as e:
+            logging.warning(f"异步处理失败: {e}，改用同步方式")
+            all_translations = scan_defs_sync(defs_path)
+    else:
+        all_translations = scan_defs_sync(defs_path)
 
-    async def scan_defs() -> List[Tuple[str, str, str, str]]:
-        """异步扫描 Defs 目录"""
-        all_translations = []
-        tasks = [read_xml(file) for file in defs_path.rglob("*.xml")]
-        for task in await asyncio.gather(*tasks):
-            all_translations.extend(task)
-        return all_translations
-
-    all_translations = asyncio.run(scan_defs())
     if not all_translations:
         logging.info("未找到可翻译字段")
         print("未找到可翻译字段。")
@@ -181,3 +153,82 @@ def extract_translate(
         )
     except (ET.ParseError, OSError) as e:
         logging.error(f"提取翻译失败: {e}")
+
+def scan_defs_sync(defs_path: Path) -> List[Tuple[str, str, str, str]]:
+    """同步扫描 Defs 目录"""
+    all_translations = []
+    for file in defs_path.rglob("*.xml"):
+        translations = read_xml_sync(file)
+        all_translations.extend(translations)
+    return all_translations
+
+def read_xml_sync(file: Path) -> List[Tuple[str, str, str, str]]:
+    """同步读取 XML 文件"""
+    translations = []
+    try:
+        with open(file, encoding="utf-8") as f:
+            content = f.read()
+        tree = ET.fromstring(content)
+        def_nodes = tree.findall(".//*[defName]")
+        for def_node in def_nodes:
+            def_type = def_node.tag
+            def_name = def_node.find("defName")
+            if def_name is None or not def_name.text:
+                logging.debug(f"在 {file} 未找到 defName，跳过")
+                continue
+            def_name_text = def_name.text
+            fields = extract_translatable_fields(def_node)
+            for field_path, text, tag in fields:
+                clean_path = field_path
+                if clean_path.startswith(f"{def_type}."):
+                    clean_path = clean_path[len(def_type) + 1:]
+                full_path = f"{def_type}/{def_name_text}.{clean_path}"
+                translations.append((full_path, text, tag, str(file)))
+    except ET.ParseError as e:
+        logging.error(f"XML 语法错误 {file}: {e}")
+    except OSError as e:
+        logging.error(f"无法读取 {file}: {e}")
+    return translations
+
+async def read_xml(file: Path) -> List[Tuple[str, str, str, str]]:
+    """异步读取并解析 XML 文件"""
+    translations = []
+    try:
+        if AIOFILES_AVAILABLE:
+            async with aiofiles.open(file, encoding="utf-8") as f:
+                content = await f.read()
+        else:
+            with open(file, encoding="utf-8") as f:
+                content = f.read()
+        tree = ET.fromstring(content)
+        def_nodes = tree.findall(".//*[defName]")
+        for def_node in def_nodes:
+            def_type = def_node.tag
+            def_name = def_node.find("defName")
+            if def_name is None or not def_name.text:
+                logging.debug(f"在 {file} 未找到 defName，跳过")
+                continue
+            def_name_text = def_name.text
+            fields = extract_translatable_fields(def_node)
+            for field_path, text, tag in fields:
+                clean_path = field_path
+                if clean_path.startswith(f"{def_type}."):
+                    clean_path = clean_path[len(def_type) + 1:]
+                full_path = f"{def_type}/{def_name_text}.{clean_path}"
+                translations.append((full_path, text, tag, str(file)))
+    except ET.ParseError as e:
+        logging.error(f"XML 语法错误 {file}: {e}")
+    except OSError as e:
+        logging.error(f"无法读取 {file}: {e}")
+    return translations
+
+async def scan_defs(defs_path: Path) -> List[Tuple[str, str, str, str]]:
+    """异步扫描 Defs 目录"""
+    all_translations = []
+    tasks = [read_xml(file) for file in defs_path.rglob("*.xml")]
+    for task in await asyncio.gather(*tasks, return_exceptions=True):
+        if isinstance(task, Exception):
+            logging.error(f"异步任务失败: {task}")
+        else:
+            all_translations.extend(task)
+    return all_translations

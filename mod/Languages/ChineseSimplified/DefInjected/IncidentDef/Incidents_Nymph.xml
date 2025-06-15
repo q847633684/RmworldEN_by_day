@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: nymph joins -->
-    <NymphJoins.label>若虫加入</NymphJoins.label>
+    <NymphJoins.label>nymph joins</NymphJoins.label>
     <!-- EN: nymph visitor -->
-    <NymphVisitor.label>灵能访客</NymphVisitor.label>
+    <NymphVisitor.label>nymph visitor</NymphVisitor.label>
     <!-- EN: nymph raid(easy) -->
-    <NymphVisitorGroupEasy.label>若虫袭击 (容易)</NymphVisitorGroupEasy.label>
+    <NymphVisitorGroupEasy.label>nymph raid(easy)</NymphVisitorGroupEasy.label>
     <!-- EN: nymph raid(hard) -->
-    <NymphVisitorGroupHard.label>若虫袭击 (艰难)</NymphVisitorGroupHard.label>
+    <NymphVisitorGroupHard.label>nymph raid(hard)</NymphVisitorGroupHard.label>
     </LanguageData>

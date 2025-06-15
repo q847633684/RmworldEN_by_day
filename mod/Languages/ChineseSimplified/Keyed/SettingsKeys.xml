@@ -1,545 +1,545 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: RimJobWorld - Basic Settings -->
-    <RJWSettingsOne>RimJobWorld-基本设置</RJWSettingsOne>
+    <RJWSettingsOne>RimJobWorld - Basic Settings</RJWSettingsOne>
     <!-- EN: Nymphomaniac Join -->
-    <NymphTamed>尼玛派教徒加入</NymphTamed>
+    <NymphTamed>Nymphomaniac Join</NymphTamed>
     <!-- EN: Spawns pawn with ('Hypersexual' trait) to join the colony. -->
-    <NymphTamed_desc>生成具有 (“超然” 特性) 的 pawn，让其加入殖民地。</NymphTamed_desc>
+    <NymphTamed_desc>Spawns pawn with ('Hypersexual' trait) to join the colony.</NymphTamed_desc>
     <!-- EN: Nymphomaniac Wild -->
-    <NymphWild>慕男狂 (野生)</NymphWild>
+    <NymphWild>Nymphomaniac Wild</NymphWild>
     <!-- EN: Spawns wild pawn with ('Hypersexual' trait) to attack the colony. -->
-    <NymphWild_desc>生成具有 (“清醒” 特性) 的野生兽，对殖民地发起攻击。</NymphWild_desc>
+    <NymphWild_desc>Spawns wild pawn with ('Hypersexual' trait) to attack the colony.</NymphWild_desc>
     <!-- EN: Nymphomaniacs raid(easy) -->
-    <NymphRaidEasy>慕男狂袭击 (容易)</NymphRaidEasy>
+    <NymphRaidEasy>Nymphomaniacs raid(easy)</NymphRaidEasy>
     <!-- EN: Nymphomaniacs decided to visit your colony.\nbaseChance is 0.1. -->
-    <NymphRaidEasy_desc>慕男狂主义者决定访问你的殖民地。\ n 最终几率是 0.1。</NymphRaidEasy_desc>
+    <NymphRaidEasy_desc>Nymphomaniacs decided to visit your colony.\nbaseChance is 0.1.</NymphRaidEasy_desc>
     <!-- EN: Nymphomaniacs raid(hard) -->
-    <NymphRaidHard>慕男狂迷的袭击 (艰难)</NymphRaidHard>
+    <NymphRaidHard>Nymphomaniacs raid(hard)</NymphRaidHard>
     <!-- EN: Nymphomaniacs decided it is now their colony.\n(Game Over).\nbaseChance is 0.01. -->
-    <NymphRaidHard_desc>慕男狂们决定将这里变成他们的殖民地。\ n (游戏结束)。\ n 最终几率是 0.01。</NymphRaidHard_desc>
+    <NymphRaidHard_desc>Nymphomaniacs decided it is now their colony.\n(Game Over).\nbaseChance is 0.01.</NymphRaidHard_desc>
     <!-- EN: Limp nymph raids -->
-    <NymphRaidRP>脆弱的若虫袭击</NymphRaidRP>
+    <NymphRaidRP>Limp nymph raids</NymphRaidRP>
     <!-- EN: Switches nymph raids to use raid points for those who are too weak for intended nymph raids difficulty. -->
-    <NymphRaidRP_desc>开关若虫袭击来为那些对于袭击难度来说太弱的人使用袭击点数。</NymphRaidRP_desc>
+    <NymphRaidRP_desc>Switches nymph raids to use raid points for those who are too weak for intended nymph raids difficulty.</NymphRaidRP_desc>
     <!-- EN: Permanent manhunter nymphs -->
-    <NymphPermanentManhunter>永久猎杀人类若虫</NymphPermanentManhunter>
+    <NymphPermanentManhunter>Permanent manhunter nymphs</NymphPermanentManhunter>
     <!-- EN: Permanent manhunter mentalstate. -->
-    <NymphPermanentManhunter_desc>永久猎杀人类的精神状态。</NymphPermanentManhunter_desc>
+    <NymphPermanentManhunter_desc>Permanent manhunter mentalstate.</NymphPermanentManhunter_desc>
     <!-- EN: Nymph Sappers -->
-    <NymphSappers>仙兽工兵</NymphSappers>
+    <NymphSappers>Nymph Sappers</NymphSappers>
     <!-- EN: Knock-knock! Horny can smell you behind that door! You can run but you cant hide. -->
-    <NymphSappers_desc>敲敲!角质!能在门后闻到你的味道!你可以跑但无法躲藏。</NymphSappers_desc>
+    <NymphSappers_desc>Knock-knock! Horny can smell you behind that door! You can run but you cant hide.</NymphSappers_desc>
     <!-- EN: Nypmhs rape when frustrated. -->
-    <NymphFrustratedRape>失魂落魄的 Nypmhs 遭到强奸。</NymphFrustratedRape>
+    <NymphFrustratedRape>Nypmhs rape when frustrated.</NymphFrustratedRape>
     <!-- EN: When Nympths are frustrated, and no partners are available, they will randomly rape someone/something -->
-    <NymphFrustratedRape_desc>当尼姆斯感到沮丧，并且没有伴侣可用时，他们会随机强奸某人/某事</NymphFrustratedRape_desc>
+    <NymphFrustratedRape_desc>When Nympths are frustrated, and no partners are available, they will randomly rape someone/something</NymphFrustratedRape_desc>
     <!-- EN: Enable futas -->
-    <FemaleFuta>启用蒲团</FemaleFuta>
+    <FemaleFuta>Enable futas</FemaleFuta>
     <!-- EN: Spawn females as futas(+ penis) -->
-    <FemaleFuta_desc>将雌性繁殖为蒲团 (+ 阴茎)</FemaleFuta_desc>
+    <FemaleFuta_desc>Spawn females as futas(+ penis)</FemaleFuta_desc>
     <!-- EN: Enable traps -->
-    <MaleTrap>启用陷阱</MaleTrap>
+    <MaleTrap>Enable traps</MaleTrap>
     <!-- EN: Spawn males as traps(+ breasts) -->
-    <MaleTrap_desc>生成雄性作为陷阱 (+ 乳房)</MaleTrap_desc>
+    <MaleTrap_desc>Spawn males as traps(+ breasts)</MaleTrap_desc>
     <!-- EN: Male nymph spawn chance -->
-    <male_nymph_chance>公若虫产卵几率</male_nymph_chance>
+    <male_nymph_chance>Male nymph spawn chance</male_nymph_chance>
     <!-- EN: Male nymph spawn chance \n\nValid range: 0 - 100\nDefault: 0 -->
-    <male_nymph_chance_desc>公若虫繁殖几率 \ n 有效范围: 0-100 \ n 默认值: 0</male_nymph_chance_desc>
+    <male_nymph_chance_desc>Male nymph spawn chance \n\nValid range: 0 - 100\nDefault: 0</male_nymph_chance_desc>
     <!-- EN: Futa/Trap nymph spawn chance -->
-    <futa_nymph_chance>未来/陷阱若虫繁殖几率</futa_nymph_chance>
+    <futa_nymph_chance>Futa/Trap nymph spawn chance</futa_nymph_chance>
     <!-- EN: Futa/Trap nymph spawn chance \n\nValid range: 0 - 100\nDefault: 0 -->
-    <futa_nymph_chance_desc>未来/陷阱若虫繁殖几率 \ n 有效范围: 0-100 \ n 默认值: 0</futa_nymph_chance_desc>
+    <futa_nymph_chance_desc>Futa/Trap nymph spawn chance \n\nValid range: 0 - 100\nDefault: 0</futa_nymph_chance_desc>
     <!-- EN: Futa/Trap natives spawn chance -->
-    <futa_natives_chance>Futa/Trap 土著生成几率</futa_natives_chance>
+    <futa_natives_chance>Futa/Trap natives spawn chance</futa_natives_chance>
     <!-- EN: Futa/Trap natives spawn chance \n(industrial techlevel and below) \n\nValid range: 0 - 100\nDefault: 0 -->
-    <futa_natives_chance_desc>Futa/陷阱土著繁殖几率 \ n (工业技术等级及以下) \ n 有效范围: 0-100 \ n 默认值: 0</futa_natives_chance_desc>
+    <futa_natives_chance_desc>Futa/Trap natives spawn chance \n(industrial techlevel and below) \n\nValid range: 0 - 100\nDefault: 0</futa_natives_chance_desc>
     <!-- EN: Futa/Trap spacers spawn chance -->
-    <futa_spacers_chance>Futa/Trap 太空飞船产卵几率</futa_spacers_chance>
+    <futa_spacers_chance>Futa/Trap spacers spawn chance</futa_spacers_chance>
     <!-- EN: Futa/Trap spacers spawn chance \n\nValid range: 0 - 100\nDefault: 5 -->
-    <futa_spacers_chance_desc>Futa/陷阱间隔器生成几率 \ n 有效范围: 0-100 \ n 默认值: 5</futa_spacers_chance_desc>
+    <futa_spacers_chance_desc>Futa/Trap spacers spawn chance \n\nValid range: 0 - 100\nDefault: 5</futa_spacers_chance_desc>
     <!-- EN: Sex need decay rate (%) -->
-    <sexneed_decay_rate_name>性别需求衰减速率 (%)</sexneed_decay_rate_name>
+    <sexneed_decay_rate_name>Sex need decay rate (%)</sexneed_decay_rate_name>
     <!-- EN: 0% for no decay.\n1000000% for Rapeturnus Planet. Recommended range: 50% to 200%. -->
-    <sexneed_decay_rate_desc>0% (未衰变)。\ n100000 % (狂暴星球)。推荐范围: 50% 至 200%.</sexneed_decay_rate_desc>
+    <sexneed_decay_rate_desc>0% for no decay.\n1000000% for Rapeturnus Planet. Recommended range: 50% to 200%.</sexneed_decay_rate_desc>
     <!-- EN: Sex need fix -->
-    <sexneed_fix_name>性欲需求修复</sexneed_fix_name>
+    <sexneed_fix_name>Sex need fix</sexneed_fix_name>
     <!-- EN: Fixes incorrect sex need thresholds, likely significantly reduces triggers for sex and rape. -->
-    <sexneed_fix_desc>修复了不正确的性别需求阈值，可能会大大降低性和强奸的触发因素。</sexneed_fix_desc>
+    <sexneed_fix_desc>Fixes incorrect sex need thresholds, likely significantly reduces triggers for sex and rape.</sexneed_fix_desc>
     <!-- EN: Animal mating cooldown -->
-    <Animal_mating_cooldown>动物交配冷却时间</Animal_mating_cooldown>
+    <Animal_mating_cooldown>Animal mating cooldown</Animal_mating_cooldown>
     <!-- EN: How many hours animal waits before mating/breeding.\n0 - based on sexdrive -->
-    <Animal_mating_cooldown_desc>动物在交配/繁殖前的等待时间。\ n0-基于性欲</Animal_mating_cooldown_desc>
+    <Animal_mating_cooldown_desc>How many hours animal waits before mating/breeding.\n0 - based on sexdrive</Animal_mating_cooldown_desc>
     <!-- EN: Allow youth sex -->
-    <AllowYouthSex>允许年轻人的性别</AllowYouthSex>
+    <AllowYouthSex>Allow youth sex</AllowYouthSex>
     <!-- EN: Allow sex between humanlikes that are in reproductive lifestage but their growth havent reached 100%. -->
-    <AllowYouthSex_desc>允许处于生育生命阶段但成长速度尚未达到 100% 的人类之间的性别匹配。</AllowYouthSex_desc>
+    <AllowYouthSex_desc>Allow sex between humanlikes that are in reproductive lifestage but their growth havent reached 100%.</AllowYouthSex_desc>
     <!-- EN: Legacy Sex age limiters -->
-    <sex_age_legacymode>遗留的性别年龄限制器</sex_age_legacymode>
+    <sex_age_legacymode>Legacy Sex age limiters</sex_age_legacymode>
     <!-- EN: Legacy age limiters for Humanlike Pawns, pretty much broken for races with non human life expectancy, but ppl want this back so whatever.\n When disabled uses race reproductive lifestage as teen, and pawn growth (100%) as adult. -->
-    <sex_age_legacymode_desc>对于人类般的 Pawns 来说，遗留的年龄限制器，对于那些没有人类预期寿命的种族来说几乎是崩溃的，但是人们希望这个回来，所以无论如何。 \ n 当残疾人使用种族生殖生命阶段作为青少年，和典当成长 (100%) 作为成年人。</sex_age_legacymode_desc>
+    <sex_age_legacymode_desc>Legacy age limiters for Humanlike Pawns, pretty much broken for races with non human life expectancy, but ppl want this back so whatever.\n When disabled uses race reproductive lifestage as teen, and pawn growth (100%) as adult.</sex_age_legacymode_desc>
     <!-- EN: Sex min. age -->
-    <SexMinimumAge>性别、最小年龄</SexMinimumAge>
+    <SexMinimumAge>Sex min. age</SexMinimumAge>
     <!-- EN: Humanlike Pawns younger than this will not have sex at all. -->
-    <SexMinimumAge_desc>比这更年轻的人类 Pawns 根本不会发生性关系。</SexMinimumAge_desc>
+    <SexMinimumAge_desc>Humanlike Pawns younger than this will not have sex at all.</SexMinimumAge_desc>
     <!-- EN: Age of consent -->
-    <SexFreeForAllAge>同意年龄</SexFreeForAllAge>
+    <SexFreeForAllAge>Age of consent</SexFreeForAllAge>
     <!-- EN: Humanlike Pawns younger than this will only have sex with pawns with 2 years age difference. -->
-    <SexFreeForAllAge_desc>比这更年轻的人类 Pawns 只会与年龄相差 2 岁的人类 pawns 发生性关系。</SexFreeForAllAge_desc>
+    <SexFreeForAllAge_desc>Humanlike Pawns younger than this will only have sex with pawns with 2 years age difference.</SexFreeForAllAge_desc>
     <!-- EN: Enable bestiality -->
-    <bestiality_enabled>启用动物</bestiality_enabled>
+    <bestiality_enabled>Enable bestiality</bestiality_enabled>
     <!-- EN: Enable acts of bestiality. Desired and not so much. -->
-    <bestiality_enabled_desc>允许野兽行为。渴望但不多。</bestiality_enabled_desc>
+    <bestiality_enabled_desc>Enable acts of bestiality. Desired and not so much.</bestiality_enabled_desc>
     <!-- EN: Enable animal-on-animal -->
-    <animal_on_animal_enabled>启用动物对动物</animal_on_animal_enabled>
+    <animal_on_animal_enabled>Enable animal-on-animal</animal_on_animal_enabled>
     <!-- EN: Enable wild animals mating. Tamed animals will mate within their own species regardless of this setting(vanilla behavior).\nEnable interspecies sex between (designated) animals, which may result in pregnancy. -->
-    <animal_on_animal_enabled_desc>允许野生动物交配。驯服的动物将在自己的物种内进行伴侣，无论此设置如何 (香草的行为)。\ n 启用动物之间的种间性别 (指定的)，这可能会导致怀孕。</animal_on_animal_enabled_desc>
+    <animal_on_animal_enabled_desc>Enable wild animals mating. Tamed animals will mate within their own species regardless of this setting(vanilla behavior).\nEnable interspecies sex between (designated) animals, which may result in pregnancy.</animal_on_animal_enabled_desc>
     <!-- EN: Enable animal-on-human -->
-    <animal_on_human_enabled>启用人形</animal_on_human_enabled>
+    <animal_on_human_enabled>Enable animal-on-human</animal_on_human_enabled>
     <!-- EN: Enable acts of bestiality initiated by colony animals trying to mate Humanlike Pawns. -->
-    <animal_on_human_enabled_desc>启用殖民地动物发起的野兽行为，这些动物试图与人类进行配偶。</animal_on_human_enabled_desc>
+    <animal_on_human_enabled_desc>Enable acts of bestiality initiated by colony animals trying to mate Humanlike Pawns.</animal_on_human_enabled_desc>
     <!-- EN: Enable necrophilia -->
-    <necrophilia_enabled>启用死灵</necrophilia_enabled>
+    <necrophilia_enabled>Enable necrophilia</necrophilia_enabled>
     <!-- EN: Enable sex with corpses. Usually limited to pawns with Necrophiliac trait, but others can sometimes do it if they are sexually frustrated. -->
-    <necrophilia_enabled_desc>启用与尸体的性爱。通常只限于有死灵特性的 pawns，但其他人有时会在性沮丧时这么做。</necrophilia_enabled_desc>
+    <necrophilia_enabled_desc>Enable sex with corpses. Usually limited to pawns with Necrophiliac trait, but others can sometimes do it if they are sexually frustrated.</necrophilia_enabled_desc>
     <!-- EN: Enable RJW sounds -->
-    <sounds_enabled>启用 RJW 声音</sounds_enabled>
+    <sounds_enabled>Enable RJW sounds</sounds_enabled>
     <!-- EN: Enables RJW-specific sounds. Note that this has no effect on core settings: if you have sound completely disabled, this does nothing. -->
-    <sounds_enabled_desc>启用 RJW 特定的声音。请注意，这对核心设置没有影响: 如果你完全禁用了声音，则不会做任何事情。</sounds_enabled_desc>
+    <sounds_enabled_desc>Enables RJW-specific sounds. Note that this has no effect on core settings: if you have sound completely disabled, this does nothing.</sounds_enabled_desc>
     <!-- EN: Sex volume -->
-    <sounds_sex_volume>性别卷</sounds_sex_volume>
+    <sounds_sex_volume>Sex volume</sounds_sex_volume>
     <!-- EN: Change sex volume -->
-    <sounds_sex_volume_desc>改变性别音量</sounds_sex_volume_desc>
+    <sounds_sex_volume_desc>Change sex volume</sounds_sex_volume_desc>
     <!-- EN: Cum volume -->
-    <sounds_cum_volume>暨体</sounds_cum_volume>
+    <sounds_cum_volume>Cum volume</sounds_cum_volume>
     <!-- EN: Change cum volume -->
-    <sounds_cum_volume_desc>改变量</sounds_cum_volume_desc>
+    <sounds_cum_volume_desc>Change cum volume</sounds_cum_volume_desc>
     <!-- EN: Voice volume -->
-    <sounds_voice_volume>音量</sounds_voice_volume>
+    <sounds_voice_volume>Voice volume</sounds_voice_volume>
     <!-- EN: Change voice volume -->
-    <sounds_voice_volume_desc>改变音量</sounds_voice_volume_desc>
+    <sounds_voice_volume_desc>Change voice volume</sounds_voice_volume_desc>
     <!-- EN: Orgasm volume -->
-    <sounds_orgasm_volume>高潮音量</sounds_orgasm_volume>
+    <sounds_orgasm_volume>Orgasm volume</sounds_orgasm_volume>
     <!-- EN: Change orgasm volume -->
-    <sounds_orgasm_volume_desc>改变高潮音量</sounds_orgasm_volume_desc>
+    <sounds_orgasm_volume_desc>Change orgasm volume</sounds_orgasm_volume_desc>
     <!-- EN: Animal on animal volume modifier -->
-    <sounds_animal_on_animal_volume>动物体积修改器</sounds_animal_on_animal_volume>
+    <sounds_animal_on_animal_volume>Animal on animal volume modifier</sounds_animal_on_animal_volume>
     <!-- EN: Additional volume modifier for Animal on animal sex -->
-    <sounds_animal_on_animal_volume_desc>动物性别附加体积修改器</sounds_animal_on_animal_volume_desc>
+    <sounds_animal_on_animal_volume_desc>Additional volume modifier for Animal on animal sex</sounds_animal_on_animal_volume_desc>
     <!-- EN: Enable cum filth -->
-    <cum_filth>启用累积污物</cum_filth>
+    <cum_filth>Enable cum filth</cum_filth>
     <!-- EN: Enables cum filth after sex. Note that disabling this will make the game easier, because of the lack of filth and need for cleaning. -->
-    <cum_filth_desc>在性别之后启用精液污物。请注意，禁用此选项将使游戏变得更容易，因为缺少污物和需要清洁。</cum_filth_desc>
+    <cum_filth_desc>Enables cum filth after sex. Note that disabling this will make the game easier, because of the lack of filth and need for cleaning.</cum_filth_desc>
     <!-- EN: Hero mode -->
-    <RPG_hero_control_name>英雄模式</RPG_hero_control_name>
+    <RPG_hero_control_name>Hero mode</RPG_hero_control_name>
     <!-- EN: Player can set 1 pawn as a player character and have direct unconditional control -->
-    <RPG_hero_control_desc>玩家可以将 1 个 pawn 设置为玩家角色，并拥有直接的、无条件的控制权。</RPG_hero_control_desc>
+    <RPG_hero_control_desc>Player can set 1 pawn as a player character and have direct unconditional control</RPG_hero_control_desc>
     <!-- EN: Hero mode (HC) -->
-    <RPG_hero_control_HC_name>英雄模式 (HC)</RPG_hero_control_HC_name>
+    <RPG_hero_control_HC_name>Hero mode (HC)</RPG_hero_control_HC_name>
     <!-- EN: HARDCORE: Player can only control hero, get some lube, you'll need a lot of it.\n(intended for multiplayer) -->
-    <RPG_hero_control_HC_desc>硬核: 玩家只能控制英雄，获得一些润滑油，你需要很多。\ n (多人游戏专用)</RPG_hero_control_HC_desc>
+    <RPG_hero_control_HC_desc>HARDCORE: Player can only control hero, get some lube, you'll need a lot of it.\n(intended for multiplayer)</RPG_hero_control_HC_desc>
     <!-- EN: Hero mode (Ironman) -->
-    <RPG_hero_control_Ironman_name>英雄模式 (铁人)</RPG_hero_control_Ironman_name>
+    <RPG_hero_control_Ironman_name>Hero mode (Ironman)</RPG_hero_control_Ironman_name>
     <!-- EN: HARDCORE: Player can set hero only once -->
-    <RPG_hero_control_Ironman_desc>硬核: 玩家只能设置一次英雄</RPG_hero_control_Ironman_desc>
+    <RPG_hero_control_Ironman_desc>HARDCORE: Player can set hero only once</RPG_hero_control_Ironman_desc>
     <!-- EN: Advanced age scaling -->
-    <UseAdvancedAgeScaling>衰老</UseAdvancedAgeScaling>
+    <UseAdvancedAgeScaling>Advanced age scaling</UseAdvancedAgeScaling>
     <!-- EN: Use different age scaling for non human races (long or short lifespans) -->
-    <UseAdvancedAgeScaling_desc>对非人种 (寿命长短) 使用不同的年龄乘数</UseAdvancedAgeScaling_desc>
+    <UseAdvancedAgeScaling_desc>Use different age scaling for non human races (long or short lifespans)</UseAdvancedAgeScaling_desc>
     <!-- EN: Designated pawn freewill -->
-    <designated_freewill>指定遗骸</designated_freewill>
+    <designated_freewill>Designated pawn freewill</designated_freewill>
     <!-- EN: Pawn designated for comfort or mating can initiate sex. -->
-    <designated_freewill_desc>为舒适或配合而指定的 Pawn 可以开始性爱。</designated_freewill_desc>
+    <designated_freewill_desc>Pawn designated for comfort or mating can initiate sex.</designated_freewill_desc>
     <!-- EN: Enable rape -->
-    <rape_enabled>启用强奸</rape_enabled>
+    <rape_enabled>Enable rape</rape_enabled>
     <!-- EN: See what you like? Take it by force, you can make a hat out of it later. -->
-    <rape_enabled_desc>你喜欢什么？用武力拿走它，你可以在以后用它做一顶帽子。</rape_enabled_desc>
+    <rape_enabled_desc>See what you like? Take it by force, you can make a hat out of it later.</rape_enabled_desc>
     <!-- EN: Spank me daddy! -->
-    <PrisonersBeating>打我爸爸屁股!</PrisonersBeating>
+    <PrisonersBeating>Spank me daddy!</PrisonersBeating>
     <!-- EN: Beat the hell out of victims while raping them. -->
-    <PrisonersBeating_desc>强奸受害者时将其殴打致死。</PrisonersBeating_desc>
+    <PrisonersBeating_desc>Beat the hell out of victims while raping them.</PrisonersBeating_desc>
     <!-- EN: Senpai! Please, be gentle! -->
-    <GentlePrisonersBeating>森派!求求你了，温柔点!</GentlePrisonersBeating>
+    <GentlePrisonersBeating>Senpai! Please, be gentle!</GentlePrisonersBeating>
     <!-- EN: Reduce beating damage to ~0-1. -->
-    <GentlePrisonersBeating_desc>击打伤害降低至 ~ 0-1。</GentlePrisonersBeating_desc>
+    <GentlePrisonersBeating_desc>Reduce beating damage to ~0-1.</GentlePrisonersBeating_desc>
     <!-- EN: Strip victims -->
-    <rape_stripping>剥光受害者的衣服</rape_stripping>
+    <rape_stripping>Strip victims</rape_stripping>
     <!-- EN: Strip rape victims (Non comfort rape - bestiality, enemies, etc. will strip victims) -->
-    <rape_stripping_desc>剥光强奸受害者 (非安慰强奸 -- 兽行、敌人等都会剥光受害者)</rape_stripping_desc>
+    <rape_stripping_desc>Strip rape victims (Non comfort rape - bestiality, enemies, etc. will strip victims)</rape_stripping_desc>
     <!-- EN: Enable comfort rape by colonists -->
-    <ColonistCanCP>允许殖民者舒适强奸</ColonistCanCP>
+    <ColonistCanCP>Enable comfort rape by colonists</ColonistCanCP>
     <!-- EN: Colonists are allowed to rape comfort pawns. -->
-    <ColonistCanCP_desc>殖民者被允许强奸安慰的 pawns。</ColonistCanCP_desc>
+    <ColonistCanCP_desc>Colonists are allowed to rape comfort pawns.</ColonistCanCP_desc>
     <!-- EN: Enable comfort rape by visitors -->
-    <VisitorsCanCP>允许访客舒适强奸</VisitorsCanCP>
+    <VisitorsCanCP>Enable comfort rape by visitors</VisitorsCanCP>
     <!-- EN: Visitors are allowed to rape comfort pawns. -->
-    <VisitorsCanCP_desc>游客可以强奸安慰兽。</VisitorsCanCP_desc>
+    <VisitorsCanCP_desc>Visitors are allowed to rape comfort pawns.</VisitorsCanCP_desc>
     <!-- EN: Enable comfort rape by animals -->
-    <AnimalsCanCP>允许动物舒适强奸</AnimalsCanCP>
+    <AnimalsCanCP>Enable comfort rape by animals</AnimalsCanCP>
     <!-- EN: Animals are allowed to rape comfort pawns. Requires zoophilia to be enabled. -->
-    <AnimalsCanCP_desc>动物被允许强奸安慰的 pawns。需要启用 zoopossessive。</AnimalsCanCP_desc>
+    <AnimalsCanCP_desc>Animals are allowed to rape comfort pawns. Requires zoophilia to be enabled.</AnimalsCanCP_desc>
     <!-- EN: Girls go rapin' (%) -->
-    <NonFutaWomenRaping_MaxVulnerability>女孩们会去强奸 (%)</NonFutaWomenRaping_MaxVulnerability>
+    <NonFutaWomenRaping_MaxVulnerability>Girls go rapin' (%)</NonFutaWomenRaping_MaxVulnerability>
     <!-- EN: Only women with vulnerability lower than this will ever rape others. \nAnimals vulnerability is always 100%. \nTo check 'vulnerability' status, go to 'view information about this object' > stats.\n\nValid range: 0 - 300% -->
-    <NonFutaWomenRaping_MaxVulnerability_desc>只有脆弱程度低于此的女性才会强奸他人。\ N 动物漏洞始终为 100%。\ N 要检查 “漏洞” 状态，请转到 “查看有关此对象的信息”> 统计信息。\ n 有效范围: 0-300%</NonFutaWomenRaping_MaxVulnerability_desc>
+    <NonFutaWomenRaping_MaxVulnerability_desc>Only women with vulnerability lower than this will ever rape others. \nAnimals vulnerability is always 100%. \nTo check 'vulnerability' status, go to 'view information about this object' &gt; stats.\n\nValid range: 0 - 300%</NonFutaWomenRaping_MaxVulnerability_desc>
     <!-- EN: 'To-be raped' vulnerability (%) -->
-    <Rapee_MinVulnerability_human>“待强奸” 漏洞 (%)</Rapee_MinVulnerability_human>
+    <Rapee_MinVulnerability_human>'To-be raped' vulnerability (%)</Rapee_MinVulnerability_human>
     <!-- EN: Human pawns with vulnerability higher than this will be raping targets. \nTo check 'vulnerability' status, go to 'view information about this object' > stats.\n\nValid range: 0 - 300% -->
-    <Rapee_MinVulnerability_human_desc>脆弱程度高于此的人类 pawns 将会成为强奸的目标。\ N 要检查 “漏洞” 状态，请转到 “查看有关此对象的信息”> 统计信息。\ n 有效范围: 0-300%</Rapee_MinVulnerability_human_desc>
+    <Rapee_MinVulnerability_human_desc>Human pawns with vulnerability higher than this will be raping targets. \nTo check 'vulnerability' status, go to 'view information about this object' &gt; stats.\n\nValid range: 0 - 300%</Rapee_MinVulnerability_human_desc>
     <!-- EN: Animals' to-be-raped vulnerability (%) -->
-    <Rapee_MinVulnerability_animals>动物待强奸的脆弱程度 (%)</Rapee_MinVulnerability_animals>
+    <Rapee_MinVulnerability_animals>Animals' to-be-raped vulnerability (%)</Rapee_MinVulnerability_animals>
     <!-- EN: Animals with vulnerability higher than this will be raping targets for zoophiles. \nTo check 'vulnerability' status, go to 'view information about this object' > stats.\n\nValid range: 0 - 300% -->
-    <Rapee_MinVulnerability_animals_desc>脆弱程度高于此数值的动物将会成为亲动物的强奸目标。\ N 要检查 “漏洞” 状态，请转到 “查看有关此对象的信息”> 统计信息。\ n 有效范围: 0-300%</Rapee_MinVulnerability_animals_desc>
+    <Rapee_MinVulnerability_animals_desc>Animals with vulnerability higher than this will be raping targets for zoophiles. \nTo check 'vulnerability' status, go to 'view information about this object' &gt; stats.\n\nValid range: 0 - 300%</Rapee_MinVulnerability_animals_desc>
     <!-- EN: RimJobWorld - Casual Sex Settings -->
-    <RJWSettingsFour>RimJobWorld-随意的性别设置</RJWSettingsFour>
+    <RJWSettingsFour>RimJobWorld - Casual Sex Settings</RJWSettingsFour>
     <!-- EN: Enable hookups (overall) -->
-    <SettingHookupsEnabled>启用连接 (总体)</SettingHookupsEnabled>
+    <SettingHookupsEnabled>Enable hookups (overall)</SettingHookupsEnabled>
     <!-- EN: Controls whether single pawns can have casual sex with other single pawns -->
-    <SettingHookupsEnabled_desc>控制独爪兽是否可以和其他独爪兽进行随意的性关系</SettingHookupsEnabled_desc>
+    <SettingHookupsEnabled_desc>Controls whether single pawns can have casual sex with other single pawns</SettingHookupsEnabled_desc>
     <!-- EN: Enable quickies. -->
-    <SettingQuickHookupsEnabled>启用速射。</SettingQuickHookupsEnabled>
+    <SettingQuickHookupsEnabled>Enable quickies.</SettingQuickHookupsEnabled>
     <!-- EN: Controls whether single pawns can have casual quick sex with other single pawns\nWarning: This can interrupt working pawns. -->
-    <SettingQuickHookupsEnabled_desc>控制独爪兽是否能与其他独爪兽随意纵欲 \ n 警告: 这会中断正在工作的独爪兽。</SettingQuickHookupsEnabled_desc>
+    <SettingQuickHookupsEnabled_desc>Controls whether single pawns can have casual quick sex with other single pawns\nWarning: This can interrupt working pawns.</SettingQuickHookupsEnabled_desc>
     <!-- EN: Disable hookups during work hours -->
-    <SettingNoHookupsDuringWorkHours>在工作时间禁用连接</SettingNoHookupsDuringWorkHours>
+    <SettingNoHookupsDuringWorkHours>Disable hookups during work hours</SettingNoHookupsDuringWorkHours>
     <!-- EN: Controls whether pawns can seek casual sex during work hours.\nNymphomaniacs ignore this. -->
-    <SettingNoHookupsDuringWorkHours_desc>控制 pawns 是否能在工作时间寻求随意的性爱，\ n 注意忽略这一点。</SettingNoHookupsDuringWorkHours_desc>
+    <SettingNoHookupsDuringWorkHours_desc>Controls whether pawns can seek casual sex during work hours.\nNymphomaniacs ignore this.</SettingNoHookupsDuringWorkHours_desc>
     <!-- EN: Colonists can hookup -->
-    <SettingColonistsCanHookup>殖民者可以勾搭</SettingColonistsCanHookup>
+    <SettingColonistsCanHookup>Colonists can hookup</SettingColonistsCanHookup>
     <!-- EN: Controls whether colonists are allowed to look for casual sex. -->
-    <SettingColonistsCanHookup_desc>控制是否允许殖民者寻找偶然的性别。</SettingColonistsCanHookup_desc>
+    <SettingColonistsCanHookup_desc>Controls whether colonists are allowed to look for casual sex.</SettingColonistsCanHookup_desc>
     <!-- EN: Colonists can hookup with visitors -->
-    <SettingColonistsCanHookupWithVisitor>殖民者可以与访客建立关系</SettingColonistsCanHookupWithVisitor>
+    <SettingColonistsCanHookupWithVisitor>Colonists can hookup with visitors</SettingColonistsCanHookupWithVisitor>
     <!-- EN: Controls whether pawns can have casual sex with visitors to the colony. -->
-    <SettingColonistsCanHookupWithVisitor_desc>控制 pawns 是否可以与殖民地的访客进行随意的性爱。</SettingColonistsCanHookupWithVisitor_desc>
+    <SettingColonistsCanHookupWithVisitor_desc>Controls whether pawns can have casual sex with visitors to the colony.</SettingColonistsCanHookupWithVisitor_desc>
     <!-- EN: Non-prisoners can hookup with prisoners -->
-    <SettingCanHookupWithPrisoner>非囚犯可以与囚犯勾搭</SettingCanHookupWithPrisoner>
+    <SettingCanHookupWithPrisoner>Non-prisoners can hookup with prisoners</SettingCanHookupWithPrisoner>
     <!-- EN: Controls whether non-prisoner pawns can look for consensual sex with prisoners.\nThis is unaffected by the Comfort Prisoner designation and is considered consensual by both parties. -->
-    <SettingCanHookupWithPrisoner_desc>控制非囚犯的 pawns 是否可以寻找与囚犯的自愿性行为。\ n 这与舒适的囚犯头衔无关，且被双方视为自愿。</SettingCanHookupWithPrisoner_desc>
+    <SettingCanHookupWithPrisoner_desc>Controls whether non-prisoner pawns can look for consensual sex with prisoners.\nThis is unaffected by the Comfort Prisoner designation and is considered consensual by both parties.</SettingCanHookupWithPrisoner_desc>
     <!-- EN: Visitors can hookup with colonists -->
-    <SettingVisitorsCanHookupWithColonists>游客可以接触殖民者</SettingVisitorsCanHookupWithColonists>
+    <SettingVisitorsCanHookupWithColonists>Visitors can hookup with colonists</SettingVisitorsCanHookupWithColonists>
     <!-- EN: Controls whether visiting pawns include colonists as potential partners for casual sex. -->
-    <SettingVisitorsCanHookupWithColonists_desc>控制来访的殖民者是否包括作为随意性行为的潜在伴侣。</SettingVisitorsCanHookupWithColonists_desc>
+    <SettingVisitorsCanHookupWithColonists_desc>Controls whether visiting pawns include colonists as potential partners for casual sex.</SettingVisitorsCanHookupWithColonists_desc>
     <!-- EN: Visitors can hookup with other visitors -->
-    <SettingVisitorsCanHookupWithVisitors>访客可以加入</SettingVisitorsCanHookupWithVisitors>
+    <SettingVisitorsCanHookupWithVisitors>Visitors can hookup with other visitors</SettingVisitorsCanHookupWithVisitors>
     <!-- EN: Controls whether visiting pawns include other visitors as potential partners for casual sex. -->
-    <SettingVisitorsCanHookupWithVisitors_desc>控制来访的 pawns 是否包括其他作为性伴侣的访客。</SettingVisitorsCanHookupWithVisitors_desc>
+    <SettingVisitorsCanHookupWithVisitors_desc>Controls whether visiting pawns include other visitors as potential partners for casual sex.</SettingVisitorsCanHookupWithVisitors_desc>
     <!-- EN: Prisoners can hookup with colonists -->
-    <SettingPrisonersCanHookupWithNonPrisoner>囚犯可以和殖民者约会</SettingPrisonersCanHookupWithNonPrisoner>
+    <SettingPrisonersCanHookupWithNonPrisoner>Prisoners can hookup with colonists</SettingPrisonersCanHookupWithNonPrisoner>
     <!-- EN: Controls whether prisoners include non-prisoners as potential partners for casual sex.\nPawns, including prisoners, can only have sex with someone they can reach, so if the prisoner can't leave their cell this is moot. -->
-    <SettingPrisonersCanHookupWithNonPrisoner_desc>控制囚犯是否将非囚犯作为随意性行为的潜在伴侣。 \ N 包括囚犯在内的 pawns 只能与他们能接触到的人发生性关系，所以如果囚犯不能离开他们的牢房，这就没有意义了。</SettingPrisonersCanHookupWithNonPrisoner_desc>
+    <SettingPrisonersCanHookupWithNonPrisoner_desc>Controls whether prisoners include non-prisoners as potential partners for casual sex.\nPawns, including prisoners, can only have sex with someone they can reach, so if the prisoner can't leave their cell this is moot.</SettingPrisonersCanHookupWithNonPrisoner_desc>
     <!-- EN: Prisoners can hookup with prisoners -->
-    <SettingPrisonersCanHookupWithPrisoner>囚犯可以与囚犯勾搭</SettingPrisonersCanHookupWithPrisoner>
+    <SettingPrisonersCanHookupWithPrisoner>Prisoners can hookup with prisoners</SettingPrisonersCanHookupWithPrisoner>
     <!-- EN: Controls whether prisoners include other prisoners as potential partners for casual sex.\nPawns, including prisoners, can only have sex with someone they can reach, so if the prisoner can't leave their cell this is moot. -->
-    <SettingPrisonersCanHookupWithPrisoner_desc>控制囚犯是否将其他囚犯作为随意性行为的潜在伴侣。 \ N 包括囚犯在内的 pawns 只能与他们能接触到的人发生性关系，所以如果囚犯不能离开他们的牢房，这就没有意义了。</SettingPrisonersCanHookupWithPrisoner_desc>
+    <SettingPrisonersCanHookupWithPrisoner_desc>Controls whether prisoners include other prisoners as potential partners for casual sex.\nPawns, including prisoners, can only have sex with someone they can reach, so if the prisoner can't leave their cell this is moot.</SettingPrisonersCanHookupWithPrisoner_desc>
     <!-- EN: Nymphos can pick anyone -->
-    <SettingNymphosCanPickAnyone>尼姆派教徒可以选择任何人</SettingNymphosCanPickAnyone>
+    <SettingNymphosCanPickAnyone>Nymphos can pick anyone</SettingNymphosCanPickAnyone>
     <!-- EN: Controls whether nymphomaniac ('Hypersexual' trait) pawns will pick anyone available.\nThey still obey the cheating and homewrecking settings below. -->
-    <SettingNymphosCanPickAnyone_desc>控制是否选择任何殖民者。\ n 他们仍然服从下面的作弊和自毁设置。</SettingNymphosCanPickAnyone_desc>
+    <SettingNymphosCanPickAnyone_desc>Controls whether nymphomaniac ('Hypersexual' trait) pawns will pick anyone available.\nThey still obey the cheating and homewrecking settings below.</SettingNymphosCanPickAnyone_desc>
     <!-- EN: Nymphos can cheat -->
-    <SettingNymphosCanCheat>尼虫可以作弊</SettingNymphosCanCheat>
+    <SettingNymphosCanCheat>Nymphos can cheat</SettingNymphosCanCheat>
     <!-- EN: Controls whether nymphomaniac ('Hypersexual' trait) pawns can cheat if they're sexually frustrated. -->
-    <SettingNymphosCanCheat_desc>控制慕男狂 (“性情暴躁”) 的 pawns 在性方面感到沮丧时是否会出轨。</SettingNymphosCanCheat_desc>
+    <SettingNymphosCanCheat_desc>Controls whether nymphomaniac ('Hypersexual' trait) pawns can cheat if they're sexually frustrated.</SettingNymphosCanCheat_desc>
     <!-- EN: Nymphos can homewreck -->
-    <SettingNymphosCanHomewreck>尼姆猪可能会回家</SettingNymphosCanHomewreck>
+    <SettingNymphosCanHomewreck>Nymphos can homewreck</SettingNymphosCanHomewreck>
     <!-- EN: Controls whether nymphomaniac ('Hypersexual' trait) pawns will bang people who already have partners. -->
-    <SettingNymphosCanHomewreck_desc>控制慕男狂 (“超凡狂人” 特性) 的 pawns 是否会对已经有性伴侣的人实施攻击。</SettingNymphosCanHomewreck_desc>
+    <SettingNymphosCanHomewreck_desc>Controls whether nymphomaniac ('Hypersexual' trait) pawns will bang people who already have partners.</SettingNymphosCanHomewreck_desc>
     <!-- EN: Nymphos can homewreck(Reverse) -->
-    <SettingNymphosCanHomewreckReverse>尼姆猪会坠毁 (逆转)</SettingNymphosCanHomewreckReverse>
+    <SettingNymphosCanHomewreckReverse>Nymphos can homewreck(Reverse)</SettingNymphosCanHomewreckReverse>
     <!-- EN: Controls whether nymphomaniac ('Hypersexual' trait) pawns will accept sex even if they have partner. -->
-    <SettingNymphosCanHomewreckReverse_desc>控制慕男狂 (“超快” 特性) 的 pawns 是否会接受性行为，即使他们有伴侣。</SettingNymphosCanHomewreckReverse_desc>
+    <SettingNymphosCanHomewreckReverse_desc>Controls whether nymphomaniac ('Hypersexual' trait) pawns will accept sex even if they have partner.</SettingNymphosCanHomewreckReverse_desc>
     <!-- EN: Hookup % chance per hour -->
-    <SettingHookupChanceForNonNymphos>勾搭几率 %/时</SettingHookupChanceForNonNymphos>
+    <SettingHookupChanceForNonNymphos>Hookup % chance per hour</SettingHookupChanceForNonNymphos>
     <!-- EN: The chance that a horny pawn will look for casual sex.\nOnly checked once per hour and only when the pawn finishes their current task. Default is 30% -->
-    <SettingHookupChanceForNonNymphos_desc>角质的小卒寻找随意性别的几率。\ n 仅每小时检查一次，并且只在小卒完成当前任务时才进行。默认值是 30%</SettingHookupChanceForNonNymphos_desc>
+    <SettingHookupChanceForNonNymphos_desc>The chance that a horny pawn will look for casual sex.\nOnly checked once per hour and only when the pawn finishes their current task. Default is 30%</SettingHookupChanceForNonNymphos_desc>
     <!-- EN: Hookup minimum fuckability -->
-    <SettingMinimumFuckabilityToHookup>勾搭 (最低)</SettingMinimumFuckabilityToHookup>
+    <SettingMinimumFuckabilityToHookup>Hookup minimum fuckability</SettingMinimumFuckabilityToHookup>
     <!-- EN: Controls how attractive(RJW) both pawns must be other to consider a hookup.\n Default is 10%. -->
-    <SettingMinimumFuckabilityToHookup_desc>控制两个 pawns 的吸引力 (RJW) 必须是其他的才能考虑勾搭。\ n 默认值是 10%。</SettingMinimumFuckabilityToHookup_desc>
+    <SettingMinimumFuckabilityToHookup_desc>Controls how attractive(RJW) both pawns must be other to consider a hookup.\n Default is 10%.</SettingMinimumFuckabilityToHookup_desc>
     <!-- EN: Hookup minimum attractiveness -->
-    <SettingMinimumAttractivenessToHookup>吸引力</SettingMinimumAttractivenessToHookup>
+    <SettingMinimumAttractivenessToHookup>Hookup minimum attractiveness</SettingMinimumAttractivenessToHookup>
     <!-- EN: Controls how attractive(Rimworld) pawns to each other to consider a hookup.\n Default is 50%.\n Nymphomaniac > 0. -->
-    <SettingMinimumAttractivenessToHookup_desc>控制 pawns 对彼此的吸引力 (Rimworld)，以考虑勾搭。\ n 默认值为 50%。\ n Nymphomaniac> 0。</SettingMinimumAttractivenessToHookup_desc>
+    <SettingMinimumAttractivenessToHookup_desc>Controls how attractive(Rimworld) pawns to each other to consider a hookup.\n Default is 50%.\n Nymphomaniac &gt; 0.</SettingMinimumAttractivenessToHookup_desc>
     <!-- EN: Hookup minimum opinion  -->
-    <SettingMinimumRelationshipToHookup>最低限度的意见</SettingMinimumRelationshipToHookup>
+    <SettingMinimumRelationshipToHookup>Hookup minimum opinion </SettingMinimumRelationshipToHookup>
     <!-- EN: Controls minimum pawns opinion for each other to consider a hookup.\n Default is 20.\n Nymphomaniac > 0. -->
-    <SettingMinimumRelationshipToHookup_desc>控制 pawns 对于彼此考虑勾搭的最低看法。\ n 默认值为 20。\ n Nymphomaniac> 0。</SettingMinimumRelationshipToHookup_desc>
+    <SettingMinimumRelationshipToHookup_desc>Controls minimum pawns opinion for each other to consider a hookup.\n Default is 20.\n Nymphomaniac &gt; 0.</SettingMinimumRelationshipToHookup_desc>
     <!-- EN: RimJobWorld - Debug -->
-    <RJWDebugSettings>RimJobWorld-调试</RJWDebugSettings>
+    <RJWDebugSettings>RimJobWorld - Debug</RJWDebugSettings>
     <!-- EN: Enable "submit" button on drafted pawns -->
-    <submit_button_enabled>对被征召的殖民者启用 “提交” 按钮</submit_button_enabled>
+    <submit_button_enabled>Enable "submit" button on drafted pawns</submit_button_enabled>
     <!-- EN: Submit button allows you to skip more deadly part and get right to more humiliating one. \nDisable this if honor comes before life for you. \nRemember, if you change your mind, it will always be here, waiting for you. -->
-    <submit_button_enabled_desc>提交按钮可让您跳过更致命的部分，并获得更多的羞辱权。\ N 如果荣誉摆在你的生命之前，请禁用此选项。\ N 记住，如果你改变主意，它会永远在这里等着你。</submit_button_enabled_desc>
+    <submit_button_enabled_desc>Submit button allows you to skip more deadly part and get right to more humiliating one. \nDisable this if honor comes before life for you. \nRemember, if you change your mind, it will always be here, waiting for you.</submit_button_enabled_desc>
     <!-- EN: Show RJW designations -->
-    <RJW_designation_box>显示 RJW 标记</RJW_designation_box>
+    <RJW_designation_box>Show RJW designations</RJW_designation_box>
     <!-- EN: Toggles showing RJW group of buttons in the pawn control GUI. -->
-    <RJW_designation_box_desc>开关控制图形用户界面中显示 RJW 按钮组。</RJW_designation_box_desc>
+    <RJW_designation_box_desc>Toggles showing RJW group of buttons in the pawn control GUI.</RJW_designation_box_desc>
     <!-- EN: Rjw parts stacking -->
-    <StackRjwParts_name>Rjw 零件堆叠</StackRjwParts_name>
+    <StackRjwParts_name>Rjw parts stacking</StackRjwParts_name>
     <!-- EN: Stack rjw parts in pawn health tab \n(Label x count) -->
-    <StackRjwParts_desc>在「健康」标签内堆叠 rjw 部件 \ n (Label x count)</StackRjwParts_desc>
+    <StackRjwParts_desc>Stack rjw parts in pawn health tab \n(Label x count)</StackRjwParts_desc>
     <!-- EN: Sex distance(Cells) -->
-    <maxDistanceCellsCasual_name>性别距离 (细胞)</maxDistanceCellsCasual_name>
+    <maxDistanceCellsCasual_name>Sex distance(Cells)</maxDistanceCellsCasual_name>
     <!-- EN: Max distance in Cells AI willing to go to reach destination/target.\n\nFast distance check - ignores obstacles (e.g. walls, mountains).\nDefault 100 cells. -->
-    <maxDistanceCellsCasual_desc>抵达目的地/目标所需的最大距离 (格数)。\ n 快速距离检查-忽略障碍物 (例如，墙、山)。\ n 默认值为 100 格。</maxDistanceCellsCasual_desc>
+    <maxDistanceCellsCasual_desc>Max distance in Cells AI willing to go to reach destination/target.\n\nFast distance check - ignores obstacles (e.g. walls, mountains).\nDefault 100 cells.</maxDistanceCellsCasual_desc>
     <!-- EN: Rape distance(Cells) -->
-    <maxDistanceCellsRape_name>强奸距离 (格)</maxDistanceCellsRape_name>
+    <maxDistanceCellsRape_name>Rape distance(Cells)</maxDistanceCellsRape_name>
     <!-- EN: Max distance in Cells AI willing to go to reach destination/target.\n\nFast distance check - ignores obstacles (e.g. walls, mountains).\nDefault 100 cells. -->
-    <maxDistanceCellsRape_desc>抵达目的地/目标所需的最大距离 (格数)。\ n 快速距离检查-忽略障碍物 (例如，墙、山)。\ n 默认值为 100 格。</maxDistanceCellsRape_desc>
+    <maxDistanceCellsRape_desc>Max distance in Cells AI willing to go to reach destination/target.\n\nFast distance check - ignores obstacles (e.g. walls, mountains).\nDefault 100 cells.</maxDistanceCellsRape_desc>
     <!-- EN: Sex distance(PawnPath) -->
-    <maxDistancePathCost_name>性别距离 (PawnPath)</maxDistancePathCost_name>
+    <maxDistancePathCost_name>Sex distance(PawnPath)</maxDistancePathCost_name>
     <!-- EN: Max distance AI pather considers in order to reach sex destination/target. Slow complex calculation affected by obstacles, pawn speed and ground modifiers.\nDefault 1000.\n0 - disable check. -->
-    <maxDistancePathCost_desc>AI paster 考虑的最大距离，以达到性别目的地/目标。受障碍物，pawn 速度和地面修改器影响的缓慢复杂计算。\ n 默认值 1000。\ n0-禁用检查。</maxDistancePathCost_desc>
+    <maxDistancePathCost_desc>Max distance AI pather considers in order to reach sex destination/target. Slow complex calculation affected by obstacles, pawn speed and ground modifiers.\nDefault 1000.\n0 - disable check.</maxDistancePathCost_desc>
     <!-- EN: Override designation checks -->
-    <override_RJW_designation_checks_name>覆盖指派检查</override_RJW_designation_checks_name>
+    <override_RJW_designation_checks_name>Override designation checks</override_RJW_designation_checks_name>
     <!-- EN: Allows to set designations on all colonists ignoring conditions.\n YOU CHEATER -->
-    <override_RJW_designation_checks_desc>允许为所有忽略条件的殖民者设置标记。\ n 你这个骗子</override_RJW_designation_checks_desc>
+    <override_RJW_designation_checks_desc>Allows to set designations on all colonists ignoring conditions.\n YOU CHEATER</override_RJW_designation_checks_desc>
     <!-- EN: Direct control -->
-    <override_control>直接控制</override_control>
+    <override_control>Direct control</override_control>
     <!-- EN: Player can manually tell pawns to do sex related activities.\n YOU CHEATER -->
-    <override_control_desc>玩家可以手动告诉 pawns 进行与性有关的活动。\ n 你是骗子</override_control_desc>
+    <override_control_desc>Player can manually tell pawns to do sex related activities.\n YOU CHEATER</override_control_desc>
     <!-- EN: Gain Rapist trait -->
-    <AddTrait_Rapist>获得强奸特性</AddTrait_Rapist>
+    <AddTrait_Rapist>Gain Rapist trait</AddTrait_Rapist>
     <!-- EN: Chance to gain rapist trait after 10 sex acts, >12% of which are rapes\n YOU CHEATER -->
-    <AddTrait_Rapist_desc>在 10 次性行为后获得强奸特性的几率，> 12% 是强奸 \ n 你这个骗子</AddTrait_Rapist_desc>
+    <AddTrait_Rapist_desc>Chance to gain rapist trait after 10 sex acts, &gt;12% of which are rapes\n YOU CHEATER</AddTrait_Rapist_desc>
     <!-- EN: Gain Masochist trait -->
-    <AddTrait_Masocist>获得受虐狂特性</AddTrait_Masocist>
+    <AddTrait_Masocist>Gain Masochist trait</AddTrait_Masocist>
     <!-- EN: Chance to gain masochist trait after being raped, 5% after feeling broken stage\n YOU CHEATER -->
-    <AddTrait_Masocist_desc>在被强奸后获得受虐狂特性的几率，5% 在感觉崩溃后，阶段 \ n 你是骗子</AddTrait_Masocist_desc>
+    <AddTrait_Masocist_desc>Chance to gain masochist trait after being raped, 5% after feeling broken stage\n YOU CHEATER</AddTrait_Masocist_desc>
     <!-- EN: Gain Hypersexual trait -->
-    <AddTrait_Nymphomaniac>获得性欲过度</AddTrait_Nymphomaniac>
+    <AddTrait_Nymphomaniac>Gain Hypersexual trait</AddTrait_Nymphomaniac>
     <!-- EN: Chance to gain hypersexual trait after 10 sex acts, while under HumpShroom addiction\n YOU CHEATER -->
-    <AddTrait_Nymphomaniac_desc>在 10 次性行为后成瘾时有几率获得纵欲 \ n 你是骗子</AddTrait_Nymphomaniac_desc>
+    <AddTrait_Nymphomaniac_desc>Chance to gain hypersexual trait after 10 sex acts, while under HumpShroom addiction\n YOU CHEATER</AddTrait_Nymphomaniac_desc>
     <!-- EN: Gain Necrophiliac trait -->
-    <AddTrait_Necrophiliac>获得死灵特性</AddTrait_Necrophiliac>
+    <AddTrait_Necrophiliac>Gain Necrophiliac trait</AddTrait_Necrophiliac>
     <!-- EN: Chance to gain necrophiliac trait after 10 sex acts, >50% of which with corpses\n YOU CHEATER -->
-    <AddTrait_Necrophiliac_desc>在 10 次性行为后获得死灵特性的几率，> 50% 有尸体 \ n 你这个骗子</AddTrait_Necrophiliac_desc>
+    <AddTrait_Necrophiliac_desc>Chance to gain necrophiliac trait after 10 sex acts, &gt;50% of which with corpses\n YOU CHEATER</AddTrait_Necrophiliac_desc>
     <!-- EN: Gain Nerves trait -->
-    <AddTrait_Nerves>获得神经特性</AddTrait_Nerves>
+    <AddTrait_Nerves>Gain Nerves trait</AddTrait_Nerves>
     <!-- EN: Gain nerves trait after being raped\n YOU CHEATER -->
-    <AddTrait_Nerves_desc>在被强奸后获得神经特性 \ n 作弊者</AddTrait_Nerves_desc>
+    <AddTrait_Nerves_desc>Gain nerves trait after being raped\n YOU CHEATER</AddTrait_Nerves_desc>
     <!-- EN: Gain Zoophiliac trait -->
-    <AddTrait_Zoophiliac>获得亲兽特性</AddTrait_Zoophiliac>
+    <AddTrait_Zoophiliac>Gain Zoophiliac trait</AddTrait_Zoophiliac>
     <!-- EN: Chance to gain zoophiliac trait after 10 sex acts, >50% of which with animals\n YOU CHEATER -->
-    <AddTrait_Zoophiliac_desc>在 10 次性行为后获得亲兽特性的几率，> 50% 有动物 \ n 你这个骗子</AddTrait_Zoophiliac_desc>
+    <AddTrait_Zoophiliac_desc>Chance to gain zoophiliac trait after 10 sex acts, &gt;50% of which with animals\n YOU CHEATER</AddTrait_Zoophiliac_desc>
     <!-- EN: Gain FootSlut trait -->
-    <AddTrait_FootSlut>获得脚踏者特性</AddTrait_FootSlut>
+    <AddTrait_FootSlut>Gain FootSlut trait</AddTrait_FootSlut>
     <!-- EN: Chance to gain footslut trait after 10 sex acts, when getting Footjob\n YOU CHEATER -->
-    <AddTrait_FootSlut_desc>当你进行了 10 次性行为后，有机会获得足夫特性 \ n 你这个骗子</AddTrait_FootSlut_desc>
+    <AddTrait_FootSlut_desc>Chance to gain footslut trait after 10 sex acts, when getting Footjob\n YOU CHEATER</AddTrait_FootSlut_desc>
     <!-- EN: Gain CumSlut trait -->
-    <AddTrait_CumSlut>获得粗鲁的特性</AddTrait_CumSlut>
+    <AddTrait_CumSlut>Gain CumSlut trait</AddTrait_CumSlut>
     <!-- EN: Chance to gain cumslut trait after 10 sex acts, when doing Fellatio\n YOU CHEATER -->
-    <AddTrait_CumSlut_desc>在进行 10 次性行为后，当进行口交时，有机会获得多个 slut 种特性 \ n 你这个骗子</AddTrait_CumSlut_desc>
+    <AddTrait_CumSlut_desc>Chance to gain cumslut trait after 10 sex acts, when doing Fellatio\n YOU CHEATER</AddTrait_CumSlut_desc>
     <!-- EN: Gain ButtSlut trait -->
-    <AddTrait_ButtSlut>获得屁股女人的特性</AddTrait_ButtSlut>
+    <AddTrait_ButtSlut>Gain ButtSlut trait</AddTrait_ButtSlut>
     <!-- EN: Chance to gain buttslut trait after 10 sex acts, when getting Anal\n YOU CHEATER -->
-    <AddTrait_ButtSlut_desc>在进行了 10 次性行为后，当获得肛门时，获得屁股感觉特性的几率 \ n 你是个骗子</AddTrait_ButtSlut_desc>
+    <AddTrait_ButtSlut_desc>Chance to gain buttslut trait after 10 sex acts, when getting Anal\n YOU CHEATER</AddTrait_ButtSlut_desc>
     <!-- EN: RMB DeepTalk -->
-    <Allow_RMB_DeepTalk>人民币深谈</Allow_RMB_DeepTalk>
+    <Allow_RMB_DeepTalk>RMB DeepTalk</Allow_RMB_DeepTalk>
     <!-- EN: Allows RMB-Social-DeepTalk interaction (+12 relations)\n YOU CHEATER -->
-    <Allow_RMB_DeepTalk_desc>允许人民币-社交-深度交谈 (+ 12 个关系) \ n 你有骗子</Allow_RMB_DeepTalk_desc>
+    <Allow_RMB_DeepTalk_desc>Allows RMB-Social-DeepTalk interaction (+12 relations)\n YOU CHEATER</Allow_RMB_DeepTalk_desc>
     <!-- EN: Disable bestiality pregnancy relations -->
-    <Disable_bestiality_pregnancy_relations>禁用兽性妊娠关系</Disable_bestiality_pregnancy_relations>
+    <Disable_bestiality_pregnancy_relations>Disable bestiality pregnancy relations</Disable_bestiality_pregnancy_relations>
     <!-- EN: Disable relations(mother/father/siblings) from bestiality pregnancy.\n YOU CHEATER -->
-    <Disable_bestiality_pregnancy_relations_desc>禁止家族成员 (母亲/父亲/兄弟姐妹) 怀孕。\ n 你是个骗子</Disable_bestiality_pregnancy_relations_desc>
+    <Disable_bestiality_pregnancy_relations_desc>Disable relations(mother/father/siblings) from bestiality pregnancy.\n YOU CHEATER</Disable_bestiality_pregnancy_relations_desc>
     <!-- EN: Disable egg pregnancy relations -->
-    <Disable_egg_pregnancy_relations>禁用卵子妊娠关系</Disable_egg_pregnancy_relations>
+    <Disable_egg_pregnancy_relations>Disable egg pregnancy relations</Disable_egg_pregnancy_relations>
     <!-- EN: Disable relations(mother/father/siblings) from egg pregnancy.\n YOU CHEATER -->
-    <Disable_egg_pregnancy_relations_desc>解除关系 (母亲/父亲/兄弟姐妹) 的卵怀孕。\ n 你是骗子</Disable_egg_pregnancy_relations_desc>
+    <Disable_egg_pregnancy_relations_desc>Disable relations(mother/father/siblings) from egg pregnancy.\n YOU CHEATER</Disable_egg_pregnancy_relations_desc>
     <!-- EN: Disable meditation focus drain -->
-    <Disable_MeditationFocusDrain>禁用灵媒</Disable_MeditationFocusDrain>
+    <Disable_MeditationFocusDrain>Disable meditation focus drain</Disable_MeditationFocusDrain>
     <!-- EN: When pawns are frustrated, they don't lose focus.\n YOU CHEATER -->
-    <Disable_MeditationFocusDrain_desc>当殖民者感到沮丧时，他们不会失去注意力。\ n 你是个骗子</Disable_MeditationFocusDrain_desc>
+    <Disable_MeditationFocusDrain_desc>When pawns are frustrated, they don't lose focus.\n YOU CHEATER</Disable_MeditationFocusDrain_desc>
     <!-- EN: Disable recreation drain -->
-    <Disable_RecreationDrain>禁用娱乐耗散</Disable_RecreationDrain>
+    <Disable_RecreationDrain>Disable recreation drain</Disable_RecreationDrain>
     <!-- EN: When pawns have boring/bad sex due to traits/quirks, they don't lose recreation need.\n YOU CHEATER -->
-    <Disable_RecreationDrain_desc>当 pawns 由于其特性/怪癖而导致无趣/糟糕的性爱时，他们不会失去娱乐需求。\ n 你这个骗子</Disable_RecreationDrain_desc>
+    <Disable_RecreationDrain_desc>When pawns have boring/bad sex due to traits/quirks, they don't lose recreation need.\n YOU CHEATER</Disable_RecreationDrain_desc>
     <!-- EN: Forbid kidnap -->
-    <ForbidKidnap>禁止绑架</ForbidKidnap>
+    <ForbidKidnap>Forbid kidnap</ForbidKidnap>
     <!-- EN: No kidnaping. -->
-    <ForbidKidnap_desc>没有绑架。</ForbidKidnap_desc>
+    <ForbidKidnap_desc>No kidnaping.</ForbidKidnap_desc>
     <!-- EN: Legacy parts adder -->
-    <legacy_PartsAdder>遗留部件加法器</legacy_PartsAdder>
+    <legacy_PartsAdder>Legacy parts adder</legacy_PartsAdder>
     <!-- EN: Built-in parts distributor, it tries to guess what parts Vanilla and HAR races get based on their name, maybe still usefull if you dont have racesupport patches -->
-    <legacy_PartsAdder_desc>内置的零件经销商，它会根据香草和 HAR 种族的名字来猜测它们的零件种类，如果你没有赛车支持区，可能仍然有用</legacy_PartsAdder_desc>
+    <legacy_PartsAdder_desc>Built-in parts distributor, it tries to guess what parts Vanilla and HAR races get based on their name, maybe still usefull if you dont have racesupport patches</legacy_PartsAdder_desc>
     <!-- EN: Override vanilla lovin -->
-    <override_lovin>覆盖香草迷</override_lovin>
+    <override_lovin>Override vanilla lovin</override_lovin>
     <!-- EN: Use casual sex instead of vanilla lovin -->
-    <override_lovin_desc>用随意的性别而不是香草的爱</override_lovin_desc>
+    <override_lovin_desc>Use casual sex instead of vanilla lovin</override_lovin_desc>
     <!-- EN: Override vanilla matin -->
-    <override_matin>覆盖香草日精</override_matin>
+    <override_matin>Override vanilla matin</override_matin>
     <!-- EN: Use breeding instead of vanilla matin -->
-    <override_matin_desc>用育种家代替香草日场</override_matin_desc>
+    <override_matin_desc>Use breeding instead of vanilla matin</override_matin_desc>
     <!-- EN: Matin crossbreed -->
-    <matin_crossbreed>日场杂交</matin_crossbreed>
+    <matin_crossbreed>Matin crossbreed</matin_crossbreed>
     <!-- EN: Animals with same animalType(Vanilla: Canines, Dryads) will be considered same species and can mate each other. -->
-    <matin_crossbreed_desc>具有相同动物类型的动物 (香草: 犬科动物、树精) 将被视为相同的物种，可以相互交配。</matin_crossbreed_desc>
+    <matin_crossbreed_desc>Animals with same animalType(Vanilla: Canines, Dryads) will be considered same species and can mate each other.</matin_crossbreed_desc>
     <!-- EN: Wild mode -->
-    <WildMode_name>野生模式</WildMode_name>
+    <WildMode_name>Wild mode</WildMode_name>
     <!-- EN: EXPERIMENTAL - DO NOT REPORT BUGS IF THIS IS ENABLED. \n\nNo rules for sex. Most limiting requirements are turned off. Enjoy the wildest side of Rimworld. -->
-    <WildMode_desc>实验性-如果启用，请勿报告 bug。\ n 没有性别规则。大多数限制要求已关闭。享受边缘世界最狂野的一面。</WildMode_desc>
+    <WildMode_desc>EXPERIMENTAL - DO NOT REPORT BUGS IF THIS IS ENABLED. \n\nNo rules for sex. Most limiting requirements are turned off. Enjoy the wildest side of Rimworld.</WildMode_desc>
     <!-- EN: Hippie mode -->
-    <HippieMode_name>嬉皮模式</HippieMode_name>
+    <HippieMode_name>Hippie mode</HippieMode_name>
     <!-- EN: EXPERIMENTAL - DO NOT REPORT BUGS IF THIS IS ENABLED. \n\nIgnore Relationships for casual hookups. -->
-    <HippieMode_desc>实验性的-如果启用此选项，请勿报告 bug。</HippieMode_desc>
+    <HippieMode_desc>EXPERIMENTAL - DO NOT REPORT BUGS IF THIS IS ENABLED. \n\nIgnore Relationships for casual hookups.</HippieMode_desc>
     <!-- EN: GenderlessAsFuta -->
-    <GenderlessAsFuta_name>性别自由</GenderlessAsFuta_name>
+    <GenderlessAsFuta_name>GenderlessAsFuta</GenderlessAsFuta_name>
     <!-- EN: USEATYOUROWNRISK. \n\nGenderless Pawns will be set as Female and have both sets of genitals. -->
-    <GenderlessAsFuta_desc>USEATYOUROWNRISK。\ n 没有性别的 Pawns 将被设置为女性，并同时拥有两套生殖器。</GenderlessAsFuta_desc>
+    <GenderlessAsFuta_desc>USEATYOUROWNRISK. \n\nGenderless Pawns will be set as Female and have both sets of genitals.</GenderlessAsFuta_desc>
     <!-- EN: Development mode -->
-    <DevMode_name>开发者模式</DevMode_name>
+    <DevMode_name>Development mode</DevMode_name>
     <!-- EN: Enables RimJobWorld logging and stuff. You don't usually want this enabled. -->
-    <DevMode_desc>启用 RimJobWorld 日志之类的功能。你通常不希望启用此选项。</DevMode_desc>
+    <DevMode_desc>Enables RimJobWorld logging and stuff. You don't usually want this enabled.</DevMode_desc>
     <!-- EN: Debug log hookup search info -->
-    <DebugLogJoinInBed>Debug 日志连接搜索信息</DebugLogJoinInBed>
+    <DebugLogJoinInBed>Debug log hookup search info</DebugLogJoinInBed>
     <!-- EN: Enables some very spamming debug logs to help find bugs in JoinInBed operations. \nOnly devs (or someone helping them find a bug) should enable this. -->
-    <DebugLogJoinInBed_desc>启用一些垃圾邮件日志，以帮助在 joinbed 操作中发现错误。\ N 只有开发者 (或帮助他们发现 bug 的人) 应该启用此选项。</DebugLogJoinInBed_desc>
+    <DebugLogJoinInBed_desc>Enables some very spamming debug logs to help find bugs in JoinInBed operations. \nOnly devs (or someone helping them find a bug) should enable this.</DebugLogJoinInBed_desc>
     <!-- EN: Debug log rape info -->
-    <DebugRape>Debug 日志强奸信息</DebugRape>
+    <DebugRape>Debug log rape info</DebugRape>
     <!-- EN: Enables some very spamming debug logs to help find bugs in rape operations.\nOnly devs (or someone helping them find a bug) should enable this. -->
-    <DebugRape_desc>启用一些非常垃圾的调试日志，以帮助在强奸行动中发现错误。\ n 只有开发者 (或帮助他们发现错误的人) 应该启用这个选项。</DebugRape_desc>
+    <DebugRape_desc>Enables some very spamming debug logs to help find bugs in rape operations.\nOnly devs (or someone helping them find a bug) should enable this.</DebugRape_desc>
     <!-- EN: Debug log interaction info -->
-    <DebugInteraction>调试日志交互信息</DebugInteraction>
+    <DebugInteraction>Debug log interaction info</DebugInteraction>
     <!-- EN: Verbose mode for the interaction module. -->
-    <DebugInteraction_desc>交互模块的详细模式。</DebugInteraction_desc>
+    <DebugInteraction_desc>Verbose mode for the interaction module.</DebugInteraction_desc>
     <!-- EN: Debug log nymph info -->
-    <DebugNymph>调试日志若虫信息</DebugNymph>
+    <DebugNymph>Debug log nymph info</DebugNymph>
     <!-- EN: Verbose mode for the nymph module. -->
-    <DebugNymph_desc>灵能模组的详细模式。</DebugNymph_desc>
+    <DebugNymph_desc>Verbose mode for the nymph module.</DebugNymph_desc>
     <!-- EN: RimJobWorld - Pregnancy Settings -->
-    <RJWSettingsTwo>RimJobWorld-怀孕设置</RJWSettingsTwo>
+    <RJWSettingsTwo>RimJobWorld - Pregnancy Settings</RJWSettingsTwo>
     <!-- EN: Biotech DLC pregnancy -->
-    <UseVanillaPregnancy>生物技术 DLC 怀孕</UseVanillaPregnancy>
+    <UseVanillaPregnancy>Biotech DLC pregnancy</UseVanillaPregnancy>
     <!-- EN: Use Biotech DLC pregnancy for pregnancies involving a human female. -->
-    <UseVanillaPregnancy_desc>将生物技术 DLC 妊娠用于涉及一名人类女性的妊娠。</UseVanillaPregnancy_desc>
+    <UseVanillaPregnancy_desc>Use Biotech DLC pregnancy for pregnancies involving a human female.</UseVanillaPregnancy_desc>
     <!-- EN: Enable humanlike pregnancies -->
-    <RJWH_pregnancy>启用人类怀孕</RJWH_pregnancy>
+    <RJWH_pregnancy>Enable humanlike pregnancies</RJWH_pregnancy>
     <!-- EN: Enable pregnancy for human-on-human sex. If the Biotech DLC is not installed, RJW will use its own pregnancy system. -->
-    <RJWH_pregnancy_desc>对人性别启用妊娠。如果未安装生物技术 DLC，RJW 将使用自己的妊娠系统。</RJWH_pregnancy_desc>
+    <RJWH_pregnancy_desc>Enable pregnancy for human-on-human sex. If the Biotech DLC is not installed, RJW will use its own pregnancy system.</RJWH_pregnancy_desc>
     <!-- EN: Human Pregnancy chances (%) -->
-    <PregnantCoeffecientForHuman>人类怀孕几率 (%)</PregnantCoeffecientForHuman>
+    <PregnantCoeffecientForHuman>Human Pregnancy chances (%)</PregnantCoeffecientForHuman>
     <!-- EN: Human pregnancy chances in percent.\n\nValid range: 0 - 100% -->
-    <PregnantCoeffecientForHuman_desc>人类怀孕几率 (百分比)。\ n 有效范围: 0-100%</PregnantCoeffecientForHuman_desc>
+    <PregnantCoeffecientForHuman_desc>Human pregnancy chances in percent.\n\nValid range: 0 - 100%</PregnantCoeffecientForHuman_desc>
     <!-- EN: Enable bestiality pregnancies -->
-    <RJWB_pregnancy>允许怀孕</RJWB_pregnancy>
+    <RJWB_pregnancy>Enable bestiality pregnancies</RJWB_pregnancy>
     <!-- EN: Use RJW pregnancy for human-animal pregnancies. -->
-    <RJWB_pregnancy_desc>将 RJW 怀孕用于人兽间的妊娠。</RJWB_pregnancy_desc>
+    <RJWB_pregnancy_desc>Use RJW pregnancy for human-animal pregnancies.</RJWB_pregnancy_desc>
     <!-- EN: Animal pregnancy chances (%) -->
-    <PregnantCoeffecientForAnimals>怀孕几率 (%)</PregnantCoeffecientForAnimals>
+    <PregnantCoeffecientForAnimals>Animal pregnancy chances (%)</PregnantCoeffecientForAnimals>
     <!-- EN: Animal pregnancy chances in percent.\n\nValid range: 0 - 100% -->
-    <PregnantCoeffecientForAnimals_desc>动物怀孕几率 (百分比)。\ n 有效范围: 0-100%</PregnantCoeffecientForAnimals_desc>
+    <PregnantCoeffecientForAnimals_desc>Animal pregnancy chances in percent.\n\nValid range: 0 - 100%</PregnantCoeffecientForAnimals_desc>
     <!-- EN: Interspecies impregnation modifier (%) -->
-    <InterspeciesImpregnantionModifier>种间浸渍修改器 (%)</InterspeciesImpregnantionModifier>
+    <InterspeciesImpregnantionModifier>Interspecies impregnation modifier (%)</InterspeciesImpregnantionModifier>
     <!-- EN: Interspecies impregnation modifier in percent. At 20% this cuts the normal chance to fifth of same-species, and so on.\n\nValid range: 0 - 100% -->
-    <InterspeciesImpregnantionModifier_desc>种间浸渍修改器，单位百分比。20% 会将正常几率降低到同物种的第五名，等等。\ n 有效距离: 0-100%</InterspeciesImpregnantionModifier_desc>
+    <InterspeciesImpregnantionModifier_desc>Interspecies impregnation modifier in percent. At 20% this cuts the normal chance to fifth of same-species, and so on.\n\nValid range: 0 - 100%</InterspeciesImpregnantionModifier_desc>
     <!-- EN: DNA inheritance -->
-    <UseParentMethod>基因遗传</UseParentMethod>
+    <UseParentMethod>DNA inheritance</UseParentMethod>
     <!-- EN: ON:Babies have random parent dna.\nOFF:Babies are like mothers. -->
-    <UseParentMethod_desc>开启: 婴儿拥有随机的父母 dna。\ nOFF: 婴儿就像母亲一样。</UseParentMethod_desc>
+    <UseParentMethod_desc>ON:Babies have random parent dna.\nOFF:Babies are like mothers.</UseParentMethod_desc>
     <!-- EN: Humanlike DNA inheritance -->
-    <OffspringLookLikeTheirMother>人类基因遗传</OffspringLookLikeTheirMother>
+    <OffspringLookLikeTheirMother>Humanlike DNA inheritance</OffspringLookLikeTheirMother>
     <!-- EN: Governs humanlike pregnancies. \n100% means born babies will be of mothers race. \nAt 0% means born babies will be of father race.\n\nValid range: 0 - 100% -->
-    <OffspringLookLikeTheirMother_desc>控制人类怀孕。\ n 100% 意味着婴儿将是母亲种族。\ N 0% 意味着出生的婴儿将是父亲种族。\ n 有效范围: 0-100%</OffspringLookLikeTheirMother_desc>
+    <OffspringLookLikeTheirMother_desc>Governs humanlike pregnancies. \n100% means born babies will be of mothers race. \nAt 0% means born babies will be of father race.\n\nValid range: 0 - 100%</OffspringLookLikeTheirMother_desc>
     <!-- EN: Bestiality DNA inheritance (Mother/Father) -->
-    <OffspringIsHuman>兽性 DNA 遗传 (母亲/父亲)</OffspringIsHuman>
+    <OffspringIsHuman>Bestiality DNA inheritance (Mother/Father)</OffspringIsHuman>
     <!-- EN: Governs Humanlike-Animal and Animal-Animal pregnancies.\n100% means born babies will be of "mother" race. \nAt 0% means born babies will be of "father" race.\n\nValid range: 0 - 100% -->
-    <OffspringIsHuman_desc>控制人类-动物和动物-动物的怀孕。\ n 100% 意味着婴儿将属于 “母亲” 种族。\ N 0% 意味着出生的婴儿将是 “父亲” 种族。\ n 有效范围: 0-100%</OffspringIsHuman_desc>
+    <OffspringIsHuman_desc>Governs Humanlike-Animal and Animal-Animal pregnancies.\n100% means born babies will be of "mother" race. \nAt 0% means born babies will be of "father" race.\n\nValid range: 0 - 100%</OffspringIsHuman_desc>
     <!-- EN: Bestiality DNA inheritance (Human/Beast) -->
-    <OffspringIsHuman2>兽性 DNA 遗传 (人/兽)</OffspringIsHuman2>
+    <OffspringIsHuman2>Bestiality DNA inheritance (Human/Beast)</OffspringIsHuman2>
     <!-- EN: Governs Humanlike-Animal pregnancies.\n\n left - born babies will be of beast race. \n\n right - born babies will be of humanlike race. \n\n anything else - use the Mother/Father logic -->
-    <OffspringIsHuman2_desc>控制人类-动物的怀孕。\ n 左出生的婴儿将属于野兽种族。\ N 正确出生的婴儿将属于人类种族。\ N 其他任意事物-使用母亲/父亲的逻辑</OffspringIsHuman2_desc>
+    <OffspringIsHuman2_desc>Governs Humanlike-Animal pregnancies.\n\n left - born babies will be of beast race. \n\n right - born babies will be of humanlike race. \n\n anything else - use the Mother/Father logic</OffspringIsHuman2_desc>
     <!-- EN: Enable animal pregnancies -->
-    <RJWA_pregnancy>启用动物怀孕</RJWA_pregnancy>
+    <RJWA_pregnancy>Enable animal pregnancies</RJWA_pregnancy>
     <!-- EN: Use RJW pregnancy for animal-animal pregnancies. -->
-    <RJWA_pregnancy_desc>使用 RJW 怀孕 (用于动物间的妊娠)。</RJWA_pregnancy_desc>
+    <RJWA_pregnancy_desc>Use RJW pregnancy for animal-animal pregnancies.</RJWA_pregnancy_desc>
     <!-- EN: Enable notifications for animal pregnancies -->
-    <RJWA_pregnancy_notifications>启用动物怀孕通知</RJWA_pregnancy_notifications>
+    <RJWA_pregnancy_notifications>Enable notifications for animal pregnancies</RJWA_pregnancy_notifications>
     <!-- EN: Notifications will be sent for animal getting pregnant, contractions starting and healthy birth.\n\nThis can be noisy for colonies with a lot of ranching, where it is recommended to disable this setting. \n\nCritical notifications will be sent regardless of this setting  -->
-    <RJWA_pregnancy_notifications_desc>将发送动物怀孕、宫缩开始和健康出生的通知。\ n 这对于有大量牧场的殖民地来说可能会很吵，建议禁用此设置。\ N 无论如何设置，关键通知都将被发送。</RJWA_pregnancy_notifications_desc>
+    <RJWA_pregnancy_notifications_desc>Notifications will be sent for animal getting pregnant, contractions starting and healthy birth.\n\nThis can be noisy for colonies with a lot of ranching, where it is recommended to disable this setting. \n\nCritical notifications will be sent regardless of this setting </RJWA_pregnancy_notifications_desc>
     <!-- EN: Enable egg pregnancies -->
-    <RJWI_pregnancy>启用卵受精</RJWI_pregnancy>
+    <RJWI_pregnancy>Enable egg pregnancies</RJWI_pregnancy>
     <!-- EN: Use RJW pregnancy for ovipositor egg pregnancies. -->
-    <RJWI_pregnancy_desc>使用 “RJW 妊娠” 进行产卵妊娠。</RJWI_pregnancy_desc>
+    <RJWI_pregnancy_desc>Use RJW pregnancy for ovipositor egg pregnancies.</RJWI_pregnancy_desc>
     <!-- EN: Egg implanting filter -->
-    <egg_pregnancy_implant_anyone>卵植入过滤器</egg_pregnancy_implant_anyone>
+    <egg_pregnancy_implant_anyone>Egg implanting filter</egg_pregnancy_implant_anyone>
     <!-- EN: ON:Anyone with female ovipositor can implant eggs.\nOFF:Only predefined parent type can implant eggs. -->
-    <egg_pregnancy_implant_anyone_desc>开启: 任何拥有雌性卵育者的人都可以植入卵。\ nOFF: 只有预定义的母体类型才能植入卵。</egg_pregnancy_implant_anyone_desc>
+    <egg_pregnancy_implant_anyone_desc>ON:Anyone with female ovipositor can implant eggs.\nOFF:Only predefined parent type can implant eggs.</egg_pregnancy_implant_anyone_desc>
     <!-- EN: Egg fertilizing filter -->
-    <egg_pregnancy_fertilize_anyone>卵受精过滤器</egg_pregnancy_fertilize_anyone>
+    <egg_pregnancy_fertilize_anyone>Egg fertilizing filter</egg_pregnancy_fertilize_anyone>
     <!-- EN: ON:Anyone with male ovipositor can fertilize eggs.\nOFF:Only predefined parent type or same as implanter can fertilize eggs. -->
-    <egg_pregnancy_fertilize_anyone_desc>开: 任何拥有雄性卵受精装置的人都能使卵受精。\ nOFF: 只有预定义的母体类型或与植入者相同的品种才能使卵受精。</egg_pregnancy_fertilize_anyone_desc>
+    <egg_pregnancy_fertilize_anyone_desc>ON:Anyone with male ovipositor can fertilize eggs.\nOFF:Only predefined parent type or same as implanter can fertilize eggs.</egg_pregnancy_fertilize_anyone_desc>
     <!-- EN: Egg pregnancies carry genes -->
-    <egg_pregnancy_genes>怀孕基因携带</egg_pregnancy_genes>
+    <egg_pregnancy_genes>Egg pregnancies carry genes</egg_pregnancy_genes>
     <!-- EN: Allows for human-human-ovipositor eggs to use normal gene inheritance. -->
-    <egg_pregnancy_genes_desc>允许人-卵使用正常的基因遗传。</egg_pregnancy_genes_desc>
+    <egg_pregnancy_genes_desc>Allows for human-human-ovipositor eggs to use normal gene inheritance.</egg_pregnancy_genes_desc>
     <!-- EN: Enable anal egg pregnancies -->
-    <RJWI_analPregnancy>启用肛门卵妊娠</RJWI_analPregnancy>
+    <RJWI_analPregnancy>Enable anal egg pregnancies</RJWI_analPregnancy>
     <!-- EN: Allow insects to impregnate pawns anally. -->
-    <RJWI_analPregnancy_desc>允许虫族使虫族怀孕。</RJWI_analPregnancy_desc>
+    <RJWI_analPregnancy_desc>Allow insects to impregnate pawns anally.</RJWI_analPregnancy_desc>
     <!-- EN: Enable oral egg pregnancies -->
-    <RJWI_oralPregnancy>允许经口产卵</RJWI_oralPregnancy>
+    <RJWI_oralPregnancy>Enable oral egg pregnancies</RJWI_oralPregnancy>
     <!-- EN: Allow insects to impregnate pawns orally. -->
-    <RJWI_oralPregnancy_desc>允许虫族通过口器使虫族浸渍。</RJWI_oralPregnancy_desc>
+    <RJWI_oralPregnancy_desc>Allow insects to impregnate pawns orally.</RJWI_oralPregnancy_desc>
     <!-- EN: Egg orifice fertilizing filter -->
-    <RJWI_FertilizationCheck>卵孔受精过滤器</RJWI_FertilizationCheck>
+    <RJWI_FertilizationCheck>Egg orifice fertilizing filter</RJWI_FertilizationCheck>
     <!-- EN: Fertilize eggs only in "sexed" orifice. -->
-    <RJWI_FertilizationCheck_desc>让卵子只在 “性感” 孔受精。</RJWI_FertilizationCheck_desc>
+    <RJWI_FertilizationCheck_desc>Fertilize eggs only in "sexed" orifice.</RJWI_FertilizationCheck_desc>
     <!-- EN: Egg size modifier -->
-    <egg_pregnancy_eggs_size>卵大小修改器</egg_pregnancy_eggs_size>
+    <egg_pregnancy_eggs_size>Egg size modifier</egg_pregnancy_eggs_size>
     <!-- EN: 0 - can be implanted with unlimited eggs. -->
-    <egg_pregnancy_eggs_size_desc>0-可以植入无限制的卵。</egg_pregnancy_eggs_size_desc>
+    <egg_pregnancy_eggs_size_desc>0 - can be implanted with unlimited eggs.</egg_pregnancy_eggs_size_desc>
     <!-- EN: Ovipositor capacity factor -->
-    <egg_pregnancy_ovipositor_capacity_factor>产卵能力系数</egg_pregnancy_ovipositor_capacity_factor>
+    <egg_pregnancy_ovipositor_capacity_factor>Ovipositor capacity factor</egg_pregnancy_ovipositor_capacity_factor>
     <!-- EN: multiplies the normal capacity of female ovipositors -->
-    <egg_pregnancy_ovipositor_capacity_factor_desc>乘以女性产卵学家的正常容量</egg_pregnancy_ovipositor_capacity_factor_desc>
+    <egg_pregnancy_ovipositor_capacity_factor_desc>multiplies the normal capacity of female ovipositors</egg_pregnancy_ovipositor_capacity_factor_desc>
     <!-- EN: Enable mechanoid implants -->
-    <MechanoidImplanting>启用机械体植入物</MechanoidImplanting>
+    <MechanoidImplanting>Enable mechanoid implants</MechanoidImplanting>
     <!-- EN: Allow probing and implanting by mechanoids. -->
-    <MechanoidImplanting_desc>允许机械体探测和植入。</MechanoidImplanting_desc>
+    <MechanoidImplanting_desc>Allow probing and implanting by mechanoids.</MechanoidImplanting_desc>
     <!-- EN: Safer mechanoid implants(') -->
-    <SaferMechanoidImplanting>更安全的机械体植入物 (')</SaferMechanoidImplanting>
+    <SaferMechanoidImplanting>Safer mechanoid implants(')</SaferMechanoidImplanting>
     <!-- EN: Mechanoid implants will not kill pawns('if pregnancy was checked), instead apply 5 damage to each body part contained within the torso. Mechanoids will still be hostile -->
-    <SaferMechanoidImplanting_desc>植入于体内的机械体不会杀死 pawns (如果确认怀孕)，只会对躯干内的每个身体部位造成 5 点伤害。机械体仍将处于敌对状态</SaferMechanoidImplanting_desc>
+    <SaferMechanoidImplanting_desc>Mechanoid implants will not kill pawns('if pregnancy was checked), instead apply 5 damage to each body part contained within the torso. Mechanoids will still be hostile</SaferMechanoidImplanting_desc>
     <!-- EN: Filter inherited traits -->
-    <genetic_trait_filter>筛选继承的特性</genetic_trait_filter>
+    <genetic_trait_filter>Filter inherited traits</genetic_trait_filter>
     <!-- EN: If enabled, it will use the rjw/Defs/NonInheritedTraits.xml to filter out the traits that should not be passed to next generation. If disabled, everything is a fair game. -->
-    <genetic_trait_filter_desc>如果启用，它将使用 rjw/Defs/NonInheritedTraits.xml 过滤掉不应该传递给下一代的特性。如果禁用，一切都是公平的游戏。</genetic_trait_filter_desc>
+    <genetic_trait_filter_desc>If enabled, it will use the rjw/Defs/NonInheritedTraits.xml to filter out the traits that should not be passed to next generation. If disabled, everything is a fair game.</genetic_trait_filter_desc>
     <!-- EN: Max inherited traits from mother -->
-    <max_num_momtraits_inherited>Max 继承了母亲的特性</max_num_momtraits_inherited>
+    <max_num_momtraits_inherited>Max inherited traits from mother</max_num_momtraits_inherited>
     <!-- EN: Max inherited traits from father -->
-    <max_num_poptraits_inherited>Max 从父亲那里继承了特性</max_num_poptraits_inherited>
+    <max_num_poptraits_inherited>Max inherited traits from father</max_num_poptraits_inherited>
     <!-- EN: Male infertility age  -->
-    <RJW_fertility_endAge_male>男性不育年龄</RJW_fertility_endAge_male>
+    <RJW_fertility_endAge_male>Male infertility age </RJW_fertility_endAge_male>
     <!-- EN: Adjusted by lifespan for alien races. Same scale is used for animals and humanlikes. -->
-    <RJW_fertility_endAge_male_desc>根据异形种族的寿命进行调整。相同的规模用于动物和人类。</RJW_fertility_endAge_male_desc>
+    <RJW_fertility_endAge_male_desc>Adjusted by lifespan for alien races. Same scale is used for animals and humanlikes.</RJW_fertility_endAge_male_desc>
     <!-- EN: Female infertility age (humanlikes) -->
-    <RJW_fertility_endAge_female_humanlike>女性不育年龄 (人)</RJW_fertility_endAge_female_humanlike>
+    <RJW_fertility_endAge_female_humanlike>Female infertility age (humanlikes)</RJW_fertility_endAge_female_humanlike>
     <!-- EN: Unlike most animals, human females become infertile at early age. Same ratio is used for all alien races, for balance. -->
-    <RJW_fertility_endAge_female_humanlike_desc>与大多数动物不同，人类雌性动物在小时候变得不育。为平衡，所有异域种族使用相同的比率。</RJW_fertility_endAge_female_humanlike_desc>
+    <RJW_fertility_endAge_female_humanlike_desc>Unlike most animals, human females become infertile at early age. Same ratio is used for all alien races, for balance.</RJW_fertility_endAge_female_humanlike_desc>
     <!-- EN: Female infertility age (animals) -->
-    <RJW_fertility_endAge_female_animal>女性不育年龄 (动物)</RJW_fertility_endAge_female_animal>
+    <RJW_fertility_endAge_female_animal>Female infertility age (animals)</RJW_fertility_endAge_female_animal>
     <!-- EN: Unlike humans, most female animals remain fertile until death. -->
-    <RJW_fertility_endAge_female_animal_desc>与人类不同，大多数雌性动物在死亡前保持生育能力。</RJW_fertility_endAge_female_animal_desc>
+    <RJW_fertility_endAge_female_animal_desc>Unlike humans, most female animals remain fertile until death.</RJW_fertility_endAge_female_animal_desc>
     <!-- EN:  in human years -->
-    <In_human_years>在人类年</In_human_years>
+    <In_human_years> in human years</In_human_years>
     <!-- EN: % of life expectancy -->
-    <XofLifeExpectancy>占预期寿命的 %</XofLifeExpectancy>
+    <XofLifeExpectancy>% of life expectancy</XofLifeExpectancy>
     <!-- EN: Interspecies disabled. -->
-    <InterspeciesDisabled>已禁用物种间。</InterspeciesDisabled>
+    <InterspeciesDisabled>Interspecies disabled.</InterspeciesDisabled>
     <!-- EN: Equal to same-species. -->
-    <InterspeciesMaximum>等同于同一个物种。</InterspeciesMaximum>
+    <InterspeciesMaximum>Equal to same-species.</InterspeciesMaximum>
     <!-- EN: Always mother's species. -->
-    <AlwaysMother>总是母亲的物种。</AlwaysMother>
+    <AlwaysMother>Always mother's species.</AlwaysMother>
     <!-- EN: Always father's species. -->
-    <AlwaysFather>总是父亲的物种。</AlwaysFather>
+    <AlwaysFather>Always father's species.</AlwaysFather>
     <!-- EN: Beast species. -->
-    <AlwaysBeast>兽种。</AlwaysBeast>
+    <AlwaysBeast>Beast species.</AlwaysBeast>
     <!-- EN: Humanlike species. -->
-    <AlwaysHumanlike>人类。</AlwaysHumanlike>
+    <AlwaysHumanlike>Humanlike species.</AlwaysHumanlike>
     <!-- EN: Use Mother/Father -->
-    <UsesOffspringIsHuman>使用母亲/父亲</UsesOffspringIsHuman>
+    <UsesOffspringIsHuman>Use Mother/Father</UsesOffspringIsHuman>
     <!-- EN: Enable complex interspecies impregnation calculation -->
-    <ComplexImpregnation>启用复杂的种间浸渍计算</ComplexImpregnation>
+    <ComplexImpregnation>Enable complex interspecies impregnation calculation</ComplexImpregnation>
     <!-- EN: When enabled, the impregnation chance between species depends on the difference in the body structure and size.
 Examples:
   Human/Winged humanoid : ~95%
@@ -552,191 +552,192 @@ Examples:
 
 Note that the chance is further lowered by the base animal and human pregnancy sliders.
  -->
-    <ComplexImpregnation_desc>启用时，物种之间的浸渍几率取决于身体结构和尺寸的差异。
-例子:
-人形/翼形人形: ~ 95%
-人/哈皮: ~ 75%
-人/犬: ~ 30%
-人/鸡: ~ 5%
-狼/狗: ~ 95%
-狼/鸡: ~ 5%
-公鸡/哈比: ~ 30%
+    <ComplexImpregnation_desc>When enabled, the impregnation chance between species depends on the difference in the body structure and size.
+Examples:
+  Human/Winged humanoid : ~95%
+  Human/Harpy : ~75%
+  Human/Dog : ~30%
+  Human/Chicken : ~5%
+  Wolf/Dog : ~95%
+  Wolf/Chicken : ~5%
+  Rooster/Harpy : ~30%
 
-请注意，基础动物和人类怀孕滑块会进一步降低此几率。</ComplexImpregnation_desc>
+Note that the chance is further lowered by the base animal and human pregnancy sliders.
+</ComplexImpregnation_desc>
     <!-- EN: Phantasy pregnancy -->
-    <phantasy_pregnancy>幻想怀孕</phantasy_pregnancy>
+    <phantasy_pregnancy>Phantasy pregnancy</phantasy_pregnancy>
     <!-- EN: World is filled with wicked nanomachines that accelerate children growth until they reach reproductive lifestage.\n\nHas no effect on non humans and non reproductive races.\n\nLikely doesn't work with other pregnancy mods. -->
-    <phantasy_pregnancy_desc>这个世界充满了邪恶的纳米机器，可以加速儿童的成长，直到他们达到生殖生命阶段。 \ n 对非人类和非生殖种族没有影响。 \ n 其他妊娠 mod 很可能无法使用。</phantasy_pregnancy_desc>
+    <phantasy_pregnancy_desc>World is filled with wicked nanomachines that accelerate children growth until they reach reproductive lifestage.\n\nHas no effect on non humans and non reproductive races.\n\nLikely doesn't work with other pregnancy mods.</phantasy_pregnancy_desc>
     <!-- EN: Pregnancy duration modifier. -->
-    <normal_pregnancy_duration>妊娠时间修改器。</normal_pregnancy_duration>
+    <normal_pregnancy_duration>Pregnancy duration modifier.</normal_pregnancy_duration>
     <!-- EN: Bigger -> Longer -->
-    <normal_pregnancy_duration_desc>更大-> 更长</normal_pregnancy_duration_desc>
+    <normal_pregnancy_duration_desc>Bigger -&gt; Longer</normal_pregnancy_duration_desc>
     <!-- EN: Egg pregnancy duration modifier. -->
-    <egg_pregnancy_duration>卵妊娠持续修改器。</egg_pregnancy_duration>
+    <egg_pregnancy_duration>Egg pregnancy duration modifier.</egg_pregnancy_duration>
     <!-- EN: Bigger -> Longer. -->
-    <egg_pregnancy_duration_desc>更大-> 更长。</egg_pregnancy_duration_desc>
+    <egg_pregnancy_duration_desc>Bigger -&gt; Longer.</egg_pregnancy_duration_desc>
     <!-- EN: RimJobWorld - Sex Settings -->
-    <RJWSettingsThree>RimJobWorld-性别设置</RJWSettingsThree>
+    <RJWSettingsThree>RimJobWorld - Sex Settings</RJWSettingsThree>
     <!-- EN: Sex type frequency:\n[Higher = more common] -->
-    <SexTypeFrequency>性别频率: \ n[Higher = more common]</SexTypeFrequency>
+    <SexTypeFrequency>Sex type frequency:\n[Higher = more common]</SexTypeFrequency>
     <!-- EN: Vaginal penetration frequency -->
-    <vaginal>阴道穿透频率</vaginal>
+    <vaginal>Vaginal penetration frequency</vaginal>
     <!-- EN: Frequency of vaginal sex. Note that this frequency is further adjusted by factors such as available orifices, etc.\n\nValid range: 1 - 200\nDefault: 120 -->
-    <vaginal_desc>阴道性爱的频率。请注意，此频率会根据其他因素如可用的洞口等进一步调整。\ n 有效范围: 1-200 \ n 默认值: 120</vaginal_desc>
+    <vaginal_desc>Frequency of vaginal sex. Note that this frequency is further adjusted by factors such as available orifices, etc.\n\nValid range: 1 - 200\nDefault: 120</vaginal_desc>
     <!-- EN: Cunnilingus frequency -->
-    <cunnilingus>农奴频率</cunnilingus>
+    <cunnilingus>Cunnilingus frequency</cunnilingus>
     <!-- EN: Frequency of oral stimulation of vagina. Note that this frequency is further adjusted by factors such as available orifices, rape, etc.\n\nValid range: 1 - 200\nDefault: 80 -->
-    <cunnilingus_desc>口服刺激阴道的频率。请注意，此频率会因其他因素而进一步调整，如可用的孔眼，油菜等。\ n 有效范围: 1-200 \ n 默认值: 80</cunnilingus_desc>
+    <cunnilingus_desc>Frequency of oral stimulation of vagina. Note that this frequency is further adjusted by factors such as available orifices, rape, etc.\n\nValid range: 1 - 200\nDefault: 80</cunnilingus_desc>
     <!-- EN: Anal penetration frequency -->
-    <anal>肛门插入频率</anal>
+    <anal>Anal penetration frequency</anal>
     <!-- EN: Frequency of anal penetration (penile). Note that this frequency is further adjusted by factors such as available orifices, rape, etc.\n\nValid range: 1 - 200\nDefault: 80 -->
-    <anal_desc>肛门穿透 (阴茎) 的频率。请注意，此频率会因其他因素而进一步调整，如可用的孔眼，油菜等。\ n 有效范围: 1-200 \ n 默认值: 80</anal_desc>
+    <anal_desc>Frequency of anal penetration (penile). Note that this frequency is further adjusted by factors such as available orifices, rape, etc.\n\nValid range: 1 - 200\nDefault: 80</anal_desc>
     <!-- EN: Rimming frequency -->
-    <rimming>卷曲频率</rimming>
+    <rimming>Rimming frequency</rimming>
     <!-- EN: Frequency of oral stimulation of anus. Note that this frequency is further adjusted by factors such as available orifices, etc.\n\nValid range: 1 - 200\nDefault: 40 -->
-    <rimming_desc>口腔内刺激肛门的频率。请注意，此频率会根据其他因素如可用的洞口等进一步调整。\ n 有效范围: 1-200 \ n 默认值: 40</rimming_desc>
+    <rimming_desc>Frequency of oral stimulation of anus. Note that this frequency is further adjusted by factors such as available orifices, etc.\n\nValid range: 1 - 200\nDefault: 40</rimming_desc>
     <!-- EN: Fellatio frequency -->
-    <fellatio>口交频率</fellatio>
+    <fellatio>Fellatio frequency</fellatio>
     <!-- EN: Frequency of fellatio, also known as blowjob. Note that this frequency is further adjusted by factors such as available orifices, etc.\n\nValid range: 1 - 200\nDefault: 80 -->
-    <fellatio_desc>口交的频率，也被称为口交。请注意，此频率会根据其他因素如可用的孔眼等进一步调整。\ n 有效范围: 1-200 \ n 默认值: 80</fellatio_desc>
+    <fellatio_desc>Frequency of fellatio, also known as blowjob. Note that this frequency is further adjusted by factors such as available orifices, etc.\n\nValid range: 1 - 200\nDefault: 80</fellatio_desc>
     <!-- EN: Handjob frequency -->
-    <handjob>体力劳动频率</handjob>
+    <handjob>Handjob frequency</handjob>
     <!-- EN: Frequency of handjobs. Requires working hands. Note that this frequency is further adjusted by factors such as whoring, etc.\n\nValid range: 1 - 200\nDefault: 80 -->
-    <handjob_desc>治疗的频率。需要用到工作手。请注意，此频率会根据其他因素进一步调整。\ n 有效范围: 1-200 \ n 默认值: 80</handjob_desc>
+    <handjob_desc>Frequency of handjobs. Requires working hands. Note that this frequency is further adjusted by factors such as whoring, etc.\n\nValid range: 1 - 200\nDefault: 80</handjob_desc>
     <!-- EN: Mutual masturbation frequency -->
-    <mutual_masturbation>互相自慰频率</mutual_masturbation>
+    <mutual_masturbation>Mutual masturbation frequency</mutual_masturbation>
     <!-- EN: Frequency of mutual masturbation (two colonists masturbating each other). Note that this frequency is further adjusted by factors such as rape, etc.\n\nValid range: 1 - 200\nDefault: 70 -->
-    <mutual_masturbation_desc>互相自慰的频率 (两个殖民者互相自慰)。注意此频率会因强奸等因素而进一步调整。\ n 有效范围: 1-200 \ n 默认值: 70</mutual_masturbation_desc>
+    <mutual_masturbation_desc>Frequency of mutual masturbation (two colonists masturbating each other). Note that this frequency is further adjusted by factors such as rape, etc.\n\nValid range: 1 - 200\nDefault: 70</mutual_masturbation_desc>
     <!-- EN: Double-penetration frequency -->
-    <double_penetration>双穿透频率</double_penetration>
+    <double_penetration>Double-penetration frequency</double_penetration>
     <!-- EN: Frequency of double-penetration, simultaneous anal and vaginal. Requires a multi-penis, such as a hemipenis. Note that this frequency is further adjusted by factors such as available orifices, etc.\n\nValid range: 1 - 200\nDefault:60 -->
-    <double_penetration_desc>肛门和阴道双重穿透的频率。需要多个阴茎，如半个阴茎。请注意，此频率会根据其他因素进一步调整，例如可用的洞口等。\ n 有效范围: 1-200 \ n 默认值: 60</double_penetration_desc>
+    <double_penetration_desc>Frequency of double-penetration, simultaneous anal and vaginal. Requires a multi-penis, such as a hemipenis. Note that this frequency is further adjusted by factors such as available orifices, etc.\n\nValid range: 1 - 200\nDefault:60</double_penetration_desc>
     <!-- EN: Breastjob frequency -->
-    <breastjob>母乳喂养频率</breastjob>
+    <breastjob>Breastjob frequency</breastjob>
     <!-- EN: Frequency of breastjobs. Requires one pawn to have breasts, and the other to have a penis. Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 50 -->
-    <breastjob_desc>哺乳的频率。需要一个 pawn 有乳房，另一个需要有阴茎。注意: 这个频率会因为一些因素而进一步调整，例如: 乞讨，强奸等等。\ n 有效范围: 1-200 \ n 默认值: 50</breastjob_desc>
+    <breastjob_desc>Frequency of breastjobs. Requires one pawn to have breasts, and the other to have a penis. Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 50</breastjob_desc>
     <!-- EN: Vaginal fingering frequency -->
-    <fingering>阴道指频</fingering>
+    <fingering>Vaginal fingering frequency</fingering>
     <!-- EN: Frequency of vaginal fingering. Requires one pawn to have a vagina, and the other to have a working hand. Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 50 -->
-    <fingering_desc>阴道指法的频率。需要一个小卒有一个阴道，另一个必须有一只工作手。注意: 这个频率会因为一些因素而进一步调整，例如: 乞讨，强奸等等。\ n 有效范围: 1-200 \ n 默认值: 50</fingering_desc>
+    <fingering_desc>Frequency of vaginal fingering. Requires one pawn to have a vagina, and the other to have a working hand. Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 50</fingering_desc>
     <!-- EN: Scissoring frequency -->
-    <scissoring>畸变频率</scissoring>
+    <scissoring>Scissoring frequency</scissoring>
     <!-- EN: Frequency of scissoring (type of tribadism where partners interlock their legs and grind their vulvae together). Requires both pawns to have vaginas.\n\nValid range: 1 - 200\nDefault: 50 -->
-    <scissoring_desc>剪毛的频率 (一种部落主义，其中一员会将他们的腿连锁，同时将他们的外阴撕成碎片)。需要两个 pawns 都有阴道。\ n 有效范围: 1-200 \ n 默认值: 50</scissoring_desc>
+    <scissoring_desc>Frequency of scissoring (type of tribadism where partners interlock their legs and grind their vulvae together). Requires both pawns to have vaginas.\n\nValid range: 1 - 200\nDefault: 50</scissoring_desc>
     <!-- EN: Footjob frequency -->
-    <footjob>步行频率</footjob>
+    <footjob>Footjob frequency</footjob>
     <!-- EN: Frequency of footjobs (stimulation of penis by foot). Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 30 -->
-    <footjob_desc>脚部工作 (用脚部刺激阴茎) 的频率。注意: 这个频率会因为一些因素而进一步调整，比如妓女和强奸等等。\ n 有效范围: 1-200 \ n 默认值: 30</footjob_desc>
+    <footjob_desc>Frequency of footjobs (stimulation of penis by foot). Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 30</footjob_desc>
     <!-- EN: Anal fisting frequency -->
-    <fisting>肛门拳频率</fisting>
+    <fisting>Anal fisting frequency</fisting>
     <!-- EN: Frequency of anal fisting (vaginal not yet implemented). Requires one partner to have a working hand. Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 30 -->
-    <fisting_desc>肛门拳的频率 (尚未实施阴道)。需要一个工作伙伴有一只手。注意: 这个频率会因为一些因素而进一步调整，比如妓女和强奸等等。\ n 有效范围: 1-200 \ n 默认值: 30</fisting_desc>
+    <fisting_desc>Frequency of anal fisting (vaginal not yet implemented). Requires one partner to have a working hand. Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 30</fisting_desc>
     <!-- EN: 69 frequency -->
-    <sixtynine>69 频率</sixtynine>
+    <sixtynine>69 frequency</sixtynine>
     <!-- EN: Frequency of 69 (mutual oral). Requires both partners to have genitalia. Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 69 -->
-    <sixtynine_desc>频率 69 (互相口头)。需要两位伴侣都拥有生殖器。注意: 这个频率会因为一些因素而进一步调整，例如: 乞讨，强奸等等。\ n 有效范围: 1-200 \ n 默认值: 69</sixtynine_desc>
+    <sixtynine_desc>Frequency of 69 (mutual oral). Requires both partners to have genitalia. Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 69</sixtynine_desc>
     <!-- EN: Fapping everywhere -->
-    <FapEverywhere>四处伪装</FapEverywhere>
+    <FapEverywhere>Fapping everywhere</FapEverywhere>
     <!-- EN: Pawn will masturbate where it wants. -->
-    <FapEverywhere_desc>Pawn 会随意自慰。</FapEverywhere_desc>
+    <FapEverywhere_desc>Pawn will masturbate where it wants.</FapEverywhere_desc>
     <!-- EN: Fapping in bed -->
-    <FapInBed>在床上缝制</FapInBed>
+    <FapInBed>Fapping in bed</FapInBed>
     <!-- EN: Pawn will masturbate in its bed. -->
-    <FapInBed_desc>Pawn 将在其床上自慰。</FapInBed_desc>
+    <FapInBed_desc>Pawn will masturbate in its bed.</FapInBed_desc>
     <!-- EN: Fapping with genitals blocked -->
-    <FapInBelts>生殖器被击中</FapInBelts>
+    <FapInBelts>Fapping with genitals blocked</FapInBelts>
     <!-- EN: Pawn can masturbate while having their genitals blocked. -->
-    <FapInBelts_desc>Pawn 可能会在手淫时阻塞生殖器。</FapInBelts_desc>
+    <FapInBelts_desc>Pawn can masturbate while having their genitals blocked.</FapInBelts_desc>
     <!-- EN: Fapping with hands blocked -->
-    <FapInArmbinders>用手拍打伤口</FapInArmbinders>
+    <FapInArmbinders>Fapping with hands blocked</FapInArmbinders>
     <!-- EN: Pawn can masturbate while having their hands blocked. -->
-    <FapInArmbinders_desc>Pawn 可能会在手淫时挡住手。</FapInArmbinders_desc>
+    <FapInArmbinders_desc>Pawn can masturbate while having their hands blocked.</FapInArmbinders_desc>
     <!-- EN: Allowed male sex:  -->
-    <Malesex>允许男性性别:</Malesex>
+    <Malesex>Allowed male sex: </Malesex>
     <!-- EN: Allowed female sex:  -->
-    <FeMalesex>允许女性性别:</FeMalesex>
+    <FeMalesex>Allowed female sex: </FeMalesex>
     <!-- EN: All -->
-    <AllowedSex.All>全部</AllowedSex.All>
+    <AllowedSex.All>All</AllowedSex.All>
     <!-- EN: Gay -->
-    <AllowedSex.Homo>同性恋</AllowedSex.Homo>
+    <AllowedSex.Homo>Gay</AllowedSex.Homo>
     <!-- EN: Straight -->
-    <AllowedSex.Nohomo>直发</AllowedSex.Nohomo>
+    <AllowedSex.Nohomo>Straight</AllowedSex.Nohomo>
     <!-- EN: Preferred clothing for sex:  -->
-    <SexClothing>性爱偏好服装:</SexClothing>
+    <SexClothing>Preferred clothing for sex: </SexClothing>
     <!-- EN: Nude -->
-    <SexClothingNude>裸体</SexClothingNude>
+    <SexClothingNude>Nude</SexClothingNude>
     <!-- EN: Headwear only -->
-    <SexClothingHeadwear>仅限头饰</SexClothingHeadwear>
+    <SexClothingHeadwear>Headwear only</SexClothingHeadwear>
     <!-- EN: Fully clothed -->
-    <SexClothingFull>着衣</SexClothingFull>
+    <SexClothingFull>Fully clothed</SexClothingFull>
     <!-- EN: Rape attempt alert:  -->
-    <RapeAttemptAlert>强奸未遂警报:</RapeAttemptAlert>
+    <RapeAttemptAlert>Rape attempt alert: </RapeAttemptAlert>
     <!-- EN: Always enabled -->
-    <RapeAttemptAlertAlways>总是启用的</RapeAttemptAlertAlways>
+    <RapeAttemptAlertAlways>Always enabled</RapeAttemptAlertAlways>
     <!-- EN: Only if target is humanlike -->
-    <RapeAttemptAlertHumanlike>只有当目标是人类时</RapeAttemptAlertHumanlike>
+    <RapeAttemptAlertHumanlike>Only if target is humanlike</RapeAttemptAlertHumanlike>
     <!-- EN: Only if target is colonist -->
-    <RapeAttemptAlertColonist>仅当目标是殖民者时</RapeAttemptAlertColonist>
+    <RapeAttemptAlertColonist>Only if target is colonist</RapeAttemptAlertColonist>
     <!-- EN: Only show notification -->
-    <RapeAttemptAlertSilent>仅显示通知</RapeAttemptAlertSilent>
+    <RapeAttemptAlertSilent>Only show notification</RapeAttemptAlertSilent>
     <!-- EN: Disabled -->
-    <RapeAttemptAlertDisabled>禁用</RapeAttemptAlertDisabled>
+    <RapeAttemptAlertDisabled>Disabled</RapeAttemptAlertDisabled>
     <!-- EN: Rape alert:  -->
-    <RapeAlert>强奸警报:</RapeAlert>
+    <RapeAlert>Rape alert: </RapeAlert>
     <!-- EN: Always enabled -->
-    <RapeAlertAlways>总是启用的</RapeAlertAlways>
+    <RapeAlertAlways>Always enabled</RapeAlertAlways>
     <!-- EN: Only if target is humanlike -->
-    <RapeAlertHumanlike>只有当目标是人类时</RapeAlertHumanlike>
+    <RapeAlertHumanlike>Only if target is humanlike</RapeAlertHumanlike>
     <!-- EN: Only if target is colonist -->
-    <RapeAlertColonist>仅当目标是殖民者时</RapeAlertColonist>
+    <RapeAlertColonist>Only if target is colonist</RapeAlertColonist>
     <!-- EN: Only show notification -->
-    <RapeAlertSilent>仅显示通知</RapeAlertSilent>
+    <RapeAlertSilent>Only show notification</RapeAlertSilent>
     <!-- EN: Disabled -->
-    <RapeAlertDisabled>禁用</RapeAlertDisabled>
+    <RapeAlertDisabled>Disabled</RapeAlertDisabled>
     <!-- EN: Show for CP -->
-    <RapeAlertCP>显示</RapeAlertCP>
+    <RapeAlertCP>Show for CP</RapeAlertCP>
     <!-- EN: Show alert when pawn designated for comforting is getting raped. -->
-    <RapeAlertCP_desc>当被指定安慰的 pawn 被强奸时显示警报。</RapeAlertCP_desc>
+    <RapeAlertCP_desc>Show alert when pawn designated for comforting is getting raped.</RapeAlertCP_desc>
     <!-- EN: Show for Breeding -->
-    <RapeAlertBreeding>培育展示</RapeAlertBreeding>
+    <RapeAlertBreeding>Show for Breeding</RapeAlertBreeding>
     <!-- EN: Show alert when pawn designated for breeding is getting raped. -->
-    <RapeAlertBreeding_desc>当被指定用于繁殖的 pawn 被强奸时显示警报。</RapeAlertBreeding_desc>
+    <RapeAlertBreeding_desc>Show alert when pawn designated for breeding is getting raped.</RapeAlertBreeding_desc>
     <!-- EN: Sexuality spread source:  -->
-    <SexualitySpread1>性欲传播来源:</SexualitySpread1>
+    <SexualitySpread1>Sexuality spread source: </SexualitySpread1>
     <!-- EN: Sexuality generation spread for RJW.\nTHIS IS FOR SEX ONLY\nHAS NO EFFECT ON RELATIONSHIP -->
-    <SexualitySpread2>对 RJW 进行性欲传递。\ n 这只针对性别 \ n 对关系没有影响</SexualitySpread2>
+    <SexualitySpread2>Sexuality generation spread for RJW.\nTHIS IS FOR SEX ONLY\nHAS NO EFFECT ON RELATIONSHIP</SexualitySpread2>
     <!-- EN: [Imported from Vanilla Rimworld] -->
     <SexualitySpreadVanilla>[Imported from Vanilla Rimworld]</SexualitySpreadVanilla>
     <!-- EN: [Imported from Psychology] -->
     <SexualitySpreadPsychology>[Imported from Psychology]</SexualitySpreadPsychology>
     <!-- EN: [imported from [SYR]Individuality] -->
-    <SexualitySpreadIndividuality>[imported from [SYR]Personality]</SexualitySpreadIndividuality>
+    <SexualitySpreadIndividuality>[imported from [SYR]Individuality]</SexualitySpreadIndividuality>
     <!-- EN:   Asexual:  -->
-    <SexualityAsexual>无性恋:</SexualityAsexual>
+    <SexualityAsexual>  Asexual: </SexualityAsexual>
     <!-- EN:   Pansexual:  -->
-    <SexualityPansexual>泛性:</SexualityPansexual>
+    <SexualityPansexual>  Pansexual: </SexualityPansexual>
     <!-- EN:   Heterosexual:  -->
-    <SexualityHeterosexual>异性恋者:</SexualityHeterosexual>
+    <SexualityHeterosexual>  Heterosexual: </SexualityHeterosexual>
     <!-- EN:   Bisexual:  -->
-    <SexualityBisexual>双性恋者:</SexualityBisexual>
+    <SexualityBisexual>  Bisexual: </SexualityBisexual>
     <!-- EN:   Gay:  -->
-    <SexualityGay>同性恋:</SexualityGay>
+    <SexualityGay>  Gay: </SexualityGay>
     <!-- EN: Low or non-existent sex drive, generally not interested in sex. -->
-    <SexualityAsexual_desc>性欲低落或根本不存在，一般对性不感兴趣。</SexualityAsexual_desc>
+    <SexualityAsexual_desc>Low or non-existent sex drive, generally not interested in sex.</SexualityAsexual_desc>
     <!-- EN: Pansexuals disregard gender entirely. -->
-    <SexualityPansexual_desc>泛性别者完全无视性别。</SexualityPansexual_desc>
+    <SexualityPansexual_desc>Pansexuals disregard gender entirely.</SexualityPansexual_desc>
     <!-- EN: Heterosexuals are attracted to 'opposite' sex. -->
-    <SexualityHeterosexual_desc>异性恋者被 “相反” 的性别所吸引。</SexualityHeterosexual_desc>
+    <SexualityHeterosexual_desc>Heterosexuals are attracted to 'opposite' sex.</SexualityHeterosexual_desc>
     <!-- EN: Bisexuals are attracted to both males and females. -->
-    <SexualityBisexual_desc>双性恋者会被男性和女性吸引。</SexualityBisexual_desc>
+    <SexualityBisexual_desc>Bisexuals are attracted to both males and females.</SexualityBisexual_desc>
     <!-- EN: Homosexuals are attracted to same sex. -->
-    <SexualityGay_desc>同性恋被同性吸引。</SexualityGay_desc>
+    <SexualityGay_desc>Homosexuals are attracted to same sex.</SexualityGay_desc>
     <!-- EN: Max quirks -->
-    <MaxQuirks>最大怪癖</MaxQuirks>
+    <MaxQuirks>Max quirks</MaxQuirks>
     <!-- EN: Max quirks pawn can get when created. -->
-    <MaxQuirks_desc>Pawn 创建后可以获得的最大古怪点数。</MaxQuirks_desc>
+    <MaxQuirks_desc>Max quirks pawn can get when created.</MaxQuirks_desc>
     <!-- EN: Sex trait notifications -->
-    <SendTraitGainLetters>性别特征通知</SendTraitGainLetters>
+    <SendTraitGainLetters>Sex trait notifications</SendTraitGainLetters>
     <!-- EN: Enable to receive letters when a pawn gains a trait from sex. Unimportant pawns such as traders will never trigger notifications regardless of this setting. -->
-    <SendTraitGainLetters_desc>当小卒从性别中获得一项特性时能够接收信件。无论如何，不重要的 pawns (如商人) 都不会触发通知。</SendTraitGainLetters_desc>
+    <SendTraitGainLetters_desc>Enable to receive letters when a pawn gains a trait from sex. Unimportant pawns such as traders will never trigger notifications regardless of this setting.</SendTraitGainLetters_desc>
     </LanguageData>

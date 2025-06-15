@@ -1,19 +1,19 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: egg (unfert.) -->
-    <RJW_EggUnfertilized.label>卵 (未受精。)</RJW_EggUnfertilized.label>
+    <RJW_EggUnfertilized.label>egg (unfert.)</RJW_EggUnfertilized.label>
     <!-- EN: An unfertilized egg. -->
-    <RJW_EggUnfertilized.description>一个未受精的卵。</RJW_EggUnfertilized.description>
+    <RJW_EggUnfertilized.description>An unfertilized egg.</RJW_EggUnfertilized.description>
     <!-- EN: egg (fert.) -->
-    <RJW_EggFertilized.label>卵 (受精。)</RJW_EggFertilized.label>
+    <RJW_EggFertilized.label>egg (fert.)</RJW_EggFertilized.label>
     <!-- EN: A fertilized egg. -->
-    <RJW_EggFertilized.description>一个受精卵。</RJW_EggFertilized.description>
+    <RJW_EggFertilized.description>A fertilized egg.</RJW_EggFertilized.description>
     <!-- EN: egg (unfert.) -->
-    <RJW_EggInsectUnfertilized.label>卵 (未受精。)</RJW_EggInsectUnfertilized.label>
+    <RJW_EggInsectUnfertilized.label>egg (unfert.)</RJW_EggInsectUnfertilized.label>
     <!-- EN: An unfertilized insect egg. -->
-    <RJW_EggInsectUnfertilized.description>一个未受精的昆虫卵。</RJW_EggInsectUnfertilized.description>
+    <RJW_EggInsectUnfertilized.description>An unfertilized insect egg.</RJW_EggInsectUnfertilized.description>
     <!-- EN: egg (fert.) -->
-    <RJW_EggInsectFertilized.label>卵 (受精。)</RJW_EggInsectFertilized.label>
+    <RJW_EggInsectFertilized.label>egg (fert.)</RJW_EggInsectFertilized.label>
     <!-- EN: A fertilized insect egg. -->
-    <RJW_EggInsectFertilized.description>一个已受精的昆虫卵。</RJW_EggInsectFertilized.description>
+    <RJW_EggInsectFertilized.description>A fertilized insect egg.</RJW_EggInsectFertilized.description>
     </LanguageData>

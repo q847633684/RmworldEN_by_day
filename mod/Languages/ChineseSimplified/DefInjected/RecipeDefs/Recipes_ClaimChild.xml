@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: Claim child -->
-    <claimChild.label>收养孩子</claimChild.label>
+    <claimChild.label>Claim child</claimChild.label>
     <!-- EN: Makes the child belong to the colony. -->
-    <claimChild.description>使孩子成为殖民地的一员。</claimChild.description>
+    <claimChild.description>Makes the child belong to the colony.</claimChild.description>
     </LanguageData>

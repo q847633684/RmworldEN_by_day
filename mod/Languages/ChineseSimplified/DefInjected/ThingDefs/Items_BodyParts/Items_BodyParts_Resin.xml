@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: resin -->
-    <ResinGlob.label>树脂</ResinGlob.label>
+    <ResinGlob.label>resin</ResinGlob.label>
     <!-- EN: A mixture of highly viscous organic compounds typically harvested from plants. -->
-    <ResinGlob.description>高度粘稠的有机化合物的混合物，通常是从植物中收获的。</ResinGlob.description>
+    <ResinGlob.description>A mixture of highly viscous organic compounds typically harvested from plants.</ResinGlob.description>
     </LanguageData>

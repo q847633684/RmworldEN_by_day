@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: doing quickie with TargetA. -->
-    <Quickie.reportString>正在使用 TargetA 加快速度。</Quickie.reportString>
+    <Quickie.reportString>doing quickie with TargetA.</Quickie.reportString>
     <!-- EN: lovin'. -->
-    <GettingQuickie.reportString>爱爱。</GettingQuickie.reportString>
+    <GettingQuickie.reportString>lovin'.</GettingQuickie.reportString>
     </LanguageData>

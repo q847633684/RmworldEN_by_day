@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: sex satisfaction -->
-    <SexSatisfaction.label>性满足</SexSatisfaction.label>
+    <SexSatisfaction.label>sex satisfaction</SexSatisfaction.label>
     <!-- EN: Determines how much satisfaction a pawn receives from sex. -->
-    <SexSatisfaction.description>决定一个小卒从性别中获得多少满足感。</SexSatisfaction.description>
+    <SexSatisfaction.description>Determines how much satisfaction a pawn receives from sex.</SexSatisfaction.description>
     <!-- EN: vulnerability -->
-    <Vulnerability.label>弱点</Vulnerability.label>
+    <Vulnerability.label>vulnerability</Vulnerability.label>
     <!-- EN: Measures how likely a pawn is to be taken advantage of sexually -->
-    <Vulnerability.description>测量小卒被性利用的可能性</Vulnerability.description>
+    <Vulnerability.description>Measures how likely a pawn is to be taken advantage of sexually</Vulnerability.description>
     <!-- EN: sex drive -->
-    <SexFrequency.label>性欲旺盛</SexFrequency.label>
+    <SexFrequency.label>sex drive</SexFrequency.label>
     <!-- EN: Measures how sexually active the pawn is. -->
-    <SexFrequency.description>测量小卒的性活跃度。</SexFrequency.description>
+    <SexFrequency.description>Measures how sexually active the pawn is.</SexFrequency.description>
     </LanguageData>

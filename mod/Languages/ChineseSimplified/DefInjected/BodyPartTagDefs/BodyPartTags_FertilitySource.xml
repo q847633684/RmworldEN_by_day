@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: fertility_source -->
-    <RJW_Fertility.label>肥沃度</RJW_Fertility.label>
+    <RJW_Fertility.label>fertility_source</RJW_Fertility.label>
     <!-- EN: Necessary for reproduction -->
-    <RJW_Fertility.description>繁育所必需</RJW_Fertility.description>
+    <RJW_Fertility.description>Necessary for reproduction</RJW_Fertility.description>
     </LanguageData>

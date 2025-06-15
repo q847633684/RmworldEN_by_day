@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: rapist -->
-    <Rapist.degreeDatas.0.label>狂暴者</Rapist.degreeDatas.0.label>
+    <Rapist.degreeDatas.0.label>rapist</Rapist.degreeDatas.0.label>
     <!-- EN: [PAWN_nameDef] doesn't take "No" as an answer. -->
-    <Rapist.degreeDatas.0.description>[PAWN_nameDef]不把 “否” 当作答案。</Rapist.degreeDatas.0.description>
+    <Rapist.degreeDatas.0.description>[PAWN_nameDef] doesn't take "No" as an answer.</Rapist.degreeDatas.0.description>
     <!-- EN: necrophile -->
-    <Necrophiliac.degreeDatas.0.label>死忠者</Necrophiliac.degreeDatas.0.label>
+    <Necrophiliac.degreeDatas.0.label>necrophile</Necrophiliac.degreeDatas.0.label>
     <!-- EN: Dead people can't say no, can they? -->
-    <Necrophiliac.degreeDatas.0.description>死人不会说不，是吗？</Necrophiliac.degreeDatas.0.description>
+    <Necrophiliac.degreeDatas.0.description>Dead people can't say no, can they?</Necrophiliac.degreeDatas.0.description>
     <!-- EN: zoophile -->
-    <Zoophile.degreeDatas.0.label>亲兽</Zoophile.degreeDatas.0.label>
+    <Zoophile.degreeDatas.0.label>zoophile</Zoophile.degreeDatas.0.label>
     <!-- EN: [PAWN_nameDef] likes to walk on the wild side. -->
-    <Zoophile.degreeDatas.0.description>[PAWN_nameDef]喜欢在野性的一面行走。</Zoophile.degreeDatas.0.description>
+    <Zoophile.degreeDatas.0.description>[PAWN_nameDef] likes to walk on the wild side.</Zoophile.degreeDatas.0.description>
     </LanguageData>

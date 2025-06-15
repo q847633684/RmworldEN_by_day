@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: generic insect egg -->
-    <RJW_UnknownEgg.label>通用虫卵</RJW_UnknownEgg.label>
+    <RJW_UnknownEgg.label>generic insect egg</RJW_UnknownEgg.label>
     <!-- EN: insectoid egg -->
-    <RJW_InsectHiveEgg.label>虫族卵</RJW_InsectHiveEgg.label>
+    <RJW_InsectHiveEgg.label>insectoid egg</RJW_InsectHiveEgg.label>
     <!-- EN: implanted mechanoid -->
-    <RJW_MechanoidImplant.label>植入机械体</RJW_MechanoidImplant.label>
+    <RJW_MechanoidImplant.label>implanted mechanoid</RJW_MechanoidImplant.label>
     </LanguageData>

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: Unable to reproduce. -->
-    <Sterilized.description>无法繁育。</Sterilized.description>
+    <Sterilized.description>Unable to reproduce.</Sterilized.description>
     <!-- EN: sterilized -->
-    <Sterilized.label>已绝育</Sterilized.label>
+    <Sterilized.label>sterilized</Sterilized.label>
     </LanguageData>

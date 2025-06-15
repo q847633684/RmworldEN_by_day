@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: struggling -->
-    <StruggleInBondageGear.reportString>挣扎中</StruggleInBondageGear.reportString>
+    <StruggleInBondageGear.reportString>struggling</StruggleInBondageGear.reportString>
     <!-- EN: unlocking -->
-    <UnlockBondageGear.reportString>解锁</UnlockBondageGear.reportString>
+    <UnlockBondageGear.reportString>unlocking</UnlockBondageGear.reportString>
     <!-- EN: equipping -->
-    <GiveBondageGear.reportString>装备</GiveBondageGear.reportString>
+    <GiveBondageGear.reportString>equipping</GiveBondageGear.reportString>
     </LanguageData>

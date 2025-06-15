@@ -1,65 +1,65 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: Interact -->
-    <RJW_RMB>互动</RJW_RMB>
+    <RJW_RMB>Interact</RJW_RMB>
     <!-- EN:  refuses to have sex with  -->
-    <RJW_RMB_NoSex>拒绝与</RJW_RMB_NoSex>
+    <RJW_RMB_NoSex> refuses to have sex with </RJW_RMB_NoSex>
     <!-- EN: Socialize with {0_labelShort} -->
-    <RJW_RMB_Social>与 {0_labelShort} 社交</RJW_RMB_Social>
+    <RJW_RMB_Social>Socialize with {0_labelShort}</RJW_RMB_Social>
     <!-- EN: Masturbate -->
-    <RJW_RMB_Masturbate>自慰</RJW_RMB_Masturbate>
+    <RJW_RMB_Masturbate>Masturbate</RJW_RMB_Masturbate>
     <!-- EN: Have sex with {0_labelShort} -->
-    <RJW_RMB_Sex>和 {0_labelShort} 做爱</RJW_RMB_Sex>
+    <RJW_RMB_Sex>Have sex with {0_labelShort}</RJW_RMB_Sex>
     <!-- EN: Bestiality {0_labelShort} -->
-    <RJW_RMB_Bestiality>兽性 {0_labelShort}</RJW_RMB_Bestiality>
+    <RJW_RMB_Bestiality>Bestiality {0_labelShort}</RJW_RMB_Bestiality>
     <!-- EN: (Reverse)Sex {0_labelShort} -->
-    <RJW_RMB_Sex_Reverse>(反向) 性别 {0_labelShort}</RJW_RMB_Sex_Reverse>
+    <RJW_RMB_Sex_Reverse>(Reverse)Sex {0_labelShort}</RJW_RMB_Sex_Reverse>
     <!-- EN: (Reverse)Bestiality {0_labelShort} -->
-    <RJW_RMB_Bestiality_Reverse>(反向) 兽性 {0_labelShort}</RJW_RMB_Bestiality_Reverse>
+    <RJW_RMB_Bestiality_Reverse>(Reverse)Bestiality {0_labelShort}</RJW_RMB_Bestiality_Reverse>
     <!-- EN: Insult -->
-    <RJW_RMB_Insult>侮辱</RJW_RMB_Insult>
+    <RJW_RMB_Insult>Insult</RJW_RMB_Insult>
     <!-- EN: Start a fight -->
-    <RJW_RMB_SocialFight>开始战斗</RJW_RMB_SocialFight>
+    <RJW_RMB_SocialFight>Start a fight</RJW_RMB_SocialFight>
     <!-- EN: Chat -->
-    <RJW_RMB_Chat>闲谈</RJW_RMB_Chat>
+    <RJW_RMB_Chat>Chat</RJW_RMB_Chat>
     <!-- EN: Deep talk -->
-    <RJW_RMB_DeepTalk>深入交流</RJW_RMB_DeepTalk>
+    <RJW_RMB_DeepTalk>Deep talk</RJW_RMB_DeepTalk>
     <!-- EN: Attempt romance -->
-    <RJW_RMB_RomanceAttempt>尝试恋爱</RJW_RMB_RomanceAttempt>
+    <RJW_RMB_RomanceAttempt>Attempt romance</RJW_RMB_RomanceAttempt>
     <!-- EN: Make marriage proposal -->
-    <RJW_RMB_MarriageProposal>求婚</RJW_RMB_MarriageProposal>
+    <RJW_RMB_MarriageProposal>Make marriage proposal</RJW_RMB_MarriageProposal>
     <!-- EN: Masturbate on chair or bed -->
-    <RJW_RMB_Masturbate_Bed>在椅子或床上自慰</RJW_RMB_Masturbate_Bed>
+    <RJW_RMB_Masturbate_Bed>Masturbate on chair or bed</RJW_RMB_Masturbate_Bed>
     <!-- EN: Masturbate at -->
-    <RJW_RMB_Masturbate_At>自慰于</RJW_RMB_Masturbate_At>
+    <RJW_RMB_Masturbate_At>Masturbate at</RJW_RMB_Masturbate_At>
     <!-- EN: Masturbate here -->
-    <RJW_RMB_Masturbate_Here>在这里自慰</RJW_RMB_Masturbate_Here>
+    <RJW_RMB_Masturbate_Here>Masturbate here</RJW_RMB_Masturbate_Here>
     <!-- EN: Masturbate with -->
-    <RJW_RMB_Masturbate_With>与</RJW_RMB_Masturbate_With>
+    <RJW_RMB_Masturbate_With>Masturbate with</RJW_RMB_Masturbate_With>
     <!-- EN: Rape {0_labelShort} -->
-    <RJW_RMB_Rape>强奸 {0_labelShort}</RJW_RMB_Rape>
+    <RJW_RMB_Rape>Rape {0_labelShort}</RJW_RMB_Rape>
     <!-- EN: (Reverse)Rape {0_labelShort} -->
-    <RJW_RMB_Rape_Reverse>(反向) 强奸 {0_labelShort}</RJW_RMB_Rape_Reverse>
+    <RJW_RMB_Rape_Reverse>(Reverse)Rape {0_labelShort}</RJW_RMB_Rape_Reverse>
     <!-- EN: Violate corpse of {0_labelShort} -->
-    <RJW_RMB_RapeCorpse>侵犯 {0_labelShort} 的尸体</RJW_RMB_RapeCorpse>
+    <RJW_RMB_RapeCorpse>Violate corpse of {0_labelShort}</RJW_RMB_RapeCorpse>
     <!-- EN: (Reverse)Violate corpse of {0_labelShort} -->
-    <RJW_RMB_RapeCorpse_Reverse>(反向) 侵犯 {0_labelShort} 的尸体</RJW_RMB_RapeCorpse_Reverse>
+    <RJW_RMB_RapeCorpse_Reverse>(Reverse)Violate corpse of {0_labelShort}</RJW_RMB_RapeCorpse_Reverse>
     <!-- EN: Breed {0_labelShort} -->
-    <RJW_RMB_RapeAnimal>培育 {0_labelShort}</RJW_RMB_RapeAnimal>
+    <RJW_RMB_RapeAnimal>Breed {0_labelShort}</RJW_RMB_RapeAnimal>
     <!-- EN: (Reverse)Be Bred by {0_labelShort} -->
-    <RJW_RMB_RapeAnimal_Reverse>(反向) 由 {0_labelShort} 培育</RJW_RMB_RapeAnimal_Reverse>
+    <RJW_RMB_RapeAnimal_Reverse>(Reverse)Be Bred by {0_labelShort}</RJW_RMB_RapeAnimal_Reverse>
     <!-- EN: Hack implanted mech -->
-    <RJW_RMB_HackMechPregnancy>植入机械体</RJW_RMB_HackMechPregnancy>
+    <RJW_RMB_HackMechPregnancy>Hack implanted mech</RJW_RMB_HackMechPregnancy>
     <!-- EN: Low opinion of target -->
-    <RJW_RMB_ReasonLowOpinionOfTarget>目标评价低</RJW_RMB_ReasonLowOpinionOfTarget>
+    <RJW_RMB_ReasonLowOpinionOfTarget>Low opinion of target</RJW_RMB_ReasonLowOpinionOfTarget>
     <!-- EN: Not sexually attracted to target -->
-    <RJW_RMB_ReasonUnappealingTarget>未被目标性吸引</RJW_RMB_ReasonUnappealingTarget>
+    <RJW_RMB_ReasonUnappealingTarget>Not sexually attracted to target</RJW_RMB_ReasonUnappealingTarget>
     <!-- EN: Low opinion of me -->
-    <RJW_RMB_ReasonLowOpinionOfPawn>对我的评价低</RJW_RMB_ReasonLowOpinionOfPawn>
+    <RJW_RMB_ReasonLowOpinionOfPawn>Low opinion of me</RJW_RMB_ReasonLowOpinionOfPawn>
     <!-- EN: Not sexually attracted to me -->
-    <RJW_RMB_ReasonUnappealingPawn>对我没有性欲</RJW_RMB_ReasonUnappealingPawn>
+    <RJW_RMB_ReasonUnappealingPawn>Not sexually attracted to me</RJW_RMB_ReasonUnappealingPawn>
     <!-- EN: Need assigned bed -->
-    <RJW_RMB_ReasonNeedBed>缺少床</RJW_RMB_ReasonNeedBed>
+    <RJW_RMB_ReasonNeedBed>Need assigned bed</RJW_RMB_ReasonNeedBed>
     <!-- EN: Can't reach assigned bed -->
-    <RJW_RMB_ReasonCantReachBed>无法到达指定的床铺</RJW_RMB_ReasonCantReachBed>
+    <RJW_RMB_ReasonCantReachBed>Can't reach assigned bed</RJW_RMB_ReasonCantReachBed>
     </LanguageData>

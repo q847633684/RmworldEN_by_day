@@ -1,23 +1,23 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: penis -->
-    <Penis.label>阴阳怪气</Penis.label>
+    <Penis.label>penis</Penis.label>
     <!-- EN: A penis. -->
-    <Penis.description>一个阴茎。</Penis.description>
+    <Penis.description>A penis.</Penis.description>
     <!-- EN: vagina -->
-    <Vagina.label>阴道</Vagina.label>
+    <Vagina.label>vagina</Vagina.label>
     <!-- EN: A vagina. -->
-    <Vagina.description>一个阴道。</Vagina.description>
+    <Vagina.description>A vagina.</Vagina.description>
     <!-- EN: breasts -->
-    <Breasts.label>乳房</Breasts.label>
+    <Breasts.label>breasts</Breasts.label>
     <!-- EN: A pair of breasts. -->
-    <Breasts.description>一对乳房。</Breasts.description>
+    <Breasts.description>A pair of breasts.</Breasts.description>
     <!-- EN: anus -->
-    <Anus.label>肛门</Anus.label>
+    <Anus.label>anus</Anus.label>
     <!-- EN: An anus. -->
-    <Anus.description>一个肛门。</Anus.description>
+    <Anus.description>An anus.</Anus.description>
     <!-- EN: featureless chest -->
-    <FeaturelessChest.label>无特征胸部</FeaturelessChest.label>
+    <FeaturelessChest.label>featureless chest</FeaturelessChest.label>
     <!-- EN: Smooth, featureless chest. Primarily found on non-mammalian creatures. -->
-    <FeaturelessChest.description>一个没有任何应该有的乳头的平坦胸部。</FeaturelessChest.description>
+    <FeaturelessChest.description>Smooth, featureless chest. Primarily found on non-mammalian creatures.</FeaturelessChest.description>
     </LanguageData>

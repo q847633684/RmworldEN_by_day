@@ -1,19 +1,19 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: Condom -->
-    <Condom.label>避孕套</Condom.label>
+    <Condom.label>Condom</Condom.label>
     <!-- EN: Prevents a single case of pregnancy. Hint: Auto used from pawn inventory or stack next to bed. -->
-    <Condom.description>防止一例怀孕。提示: 自动从典当库存或堆叠在床边使用。</Condom.description>
+    <Condom.description>Prevents a single case of pregnancy. Hint: Auto used from pawn inventory or stack next to bed.</Condom.description>
     <!-- EN: Used Condom -->
-    <UsedCondom.label>使用避孕套</UsedCondom.label>
+    <UsedCondom.label>Used Condom</UsedCondom.label>
     <!-- EN: A condom filled with sperm. MMMM So good and tasty! -->
-    <UsedCondom.description>一个装有精子的避孕套。嗯，好好吃!</UsedCondom.description>
+    <UsedCondom.description>A condom filled with sperm. MMMM So good and tasty!</UsedCondom.description>
     <!-- EN: make condom x10 -->
-    <MakeCondom.label>制作避孕套 x10</MakeCondom.label>
+    <MakeCondom.label>make condom x10</MakeCondom.label>
     <!-- EN: Craft 10 condoms. -->
-    <MakeCondom.description>解锁制作 10 个避孕套。</MakeCondom.description>
+    <MakeCondom.description>Craft 10 condoms.</MakeCondom.description>
     <!-- EN: Had to wear condom -->
-    <SexWithCondom.stages.0.label>必须戴避孕套</SexWithCondom.stages.0.label>
+    <SexWithCondom.stages.0.label>Had to wear condom</SexWithCondom.stages.0.label>
     <!-- EN: Had to wear condom -->
-    <SexWithCondom.stages.0.description>必须戴避孕套</SexWithCondom.stages.0.description>
+    <SexWithCondom.stages.0.description>Had to wear condom</SexWithCondom.stages.0.description>
     </LanguageData>

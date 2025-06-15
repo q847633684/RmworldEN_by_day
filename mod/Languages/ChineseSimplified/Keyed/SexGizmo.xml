@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: Orgasm -->
-    <RJW_SexGizmo_Orgasm>高潮</RJW_SexGizmo_Orgasm>
+    <RJW_SexGizmo_Orgasm>Orgasm</RJW_SexGizmo_Orgasm>
     <!-- EN: Stamina -->
-    <RJW_SexGizmo_RestNeed>耐久度</RJW_SexGizmo_RestNeed>
+    <RJW_SexGizmo_RestNeed>Stamina</RJW_SexGizmo_RestNeed>
     <!-- EN: Satisfaction -->
-    <RJW_SexGizmo_SexNeed>满足感</RJW_SexGizmo_SexNeed>
+    <RJW_SexGizmo_SexNeed>Satisfaction</RJW_SexGizmo_SexNeed>
     <!-- EN: SexOverdrive - sex wont end until pawn collapses or interrupted otherwise. -->
-    <RJW_SexGizmo_SexOverdriveTooltip>性欲释放-直到 pawn 倒塌或以其他方式中断之前，性欲不会结束。</RJW_SexGizmo_SexOverdriveTooltip>
+    <RJW_SexGizmo_SexOverdriveTooltip>SexOverdrive - sex wont end until pawn collapses or interrupted otherwise.</RJW_SexGizmo_SexOverdriveTooltip>
     <!-- EN: Hit once. -->
-    <RJW_SexGizmo_HitPawn>命中一次。</RJW_SexGizmo_HitPawn>
+    <RJW_SexGizmo_HitPawn>Hit once.</RJW_SexGizmo_HitPawn>
     <!-- EN: Wrap pawn into cocoon. -->
-    <RJW_SexGizmo_Cocoon>将爪牙裹成茧。</RJW_SexGizmo_Cocoon>
+    <RJW_SexGizmo_Cocoon>Wrap pawn into cocoon.</RJW_SexGizmo_Cocoon>
     <!-- EN: Stuff with eggs. -->
-    <RJW_SexGizmo_Egg>装有鸡蛋的东西。</RJW_SexGizmo_Egg>
+    <RJW_SexGizmo_Egg>Stuff with eggs.</RJW_SexGizmo_Egg>
     </LanguageData>

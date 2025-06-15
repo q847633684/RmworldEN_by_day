@@ -6,8 +6,8 @@ class TranslationConfig:
     """翻译项目配置"""
     log_file: str = "main.log"
     log_format: str = "%(asctime)s - %(levelname)s - %(message)s"
-    debug_mode: bool = False
-    preview_translatable_fields: bool = False
+    debug_mode: bool = True  # 开发时设为 True
+    preview_translatable_fields: bool = False  # 测试时可设为 False 跳过预览
     default_language: str = "ChineseSimplified"
     source_language: str = "English"
     def_injected_dir: str = "DefInjected"
@@ -32,4 +32,15 @@ class TranslationConfig:
         r"^\s*\(\s*\d+\s*,\s*[\d*\.]+\s*\)\s*$",
         r"^\s*[\d.]+\s*$",
         r"^\s*(true|false)\s*$",
+        r"^\s*[A-Za-z_][A-Za-z0-9_]*\s*$",  # 变量名
+        r"^\s*#[0-9A-Fa-f]{6}\s*$",  # 颜色代码
     ])
+    
+    # 新增：批量处理配置
+    batch_mode_enabled: bool = True
+    max_concurrent_files: int = 10
+    
+    # 新增：用户体验配置
+    show_progress_bar: bool = True
+    auto_backup: bool = True
+    backup_suffix: str = ".backup"

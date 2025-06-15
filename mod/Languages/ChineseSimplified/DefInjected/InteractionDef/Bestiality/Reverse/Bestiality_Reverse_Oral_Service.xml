@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: MouthFuck -->
-    <Bestiality_Reverse_Oral_Service.label>口器</Bestiality_Reverse_Oral_Service.label>
+    <Bestiality_Reverse_Oral_Service.label>MouthFuck</Bestiality_Reverse_Oral_Service.label>
     <!-- EN: r_logentry->Orally serviced [RECIPIENT_nameDef]. -->
-    <Bestiality_Reverse_Oral_Service.logRulesInitiator.rulesStrings.0>R_logentry-> 口头服务[RECIPIENT_nameDef]没有。</Bestiality_Reverse_Oral_Service.logRulesInitiator.rulesStrings.0>
+    <Bestiality_Reverse_Oral_Service.logRulesInitiator.rulesStrings.0>r_logentry-&gt;Orally serviced [RECIPIENT_nameDef].</Bestiality_Reverse_Oral_Service.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Was orally serviced by [INITIATOR_nameDef]. -->
-    <Bestiality_Reverse_Oral_Service.logRulesRecipient.rulesStrings.0>R_logentry-> 接受了口头治疗[INITIATOR_nameDef]没有。</Bestiality_Reverse_Oral_Service.logRulesRecipient.rulesStrings.0>
+    <Bestiality_Reverse_Oral_Service.logRulesRecipient.rulesStrings.0>r_logentry-&gt;Was orally serviced by [INITIATOR_nameDef].</Bestiality_Reverse_Oral_Service.logRulesRecipient.rulesStrings.0>
     <!-- EN: Service orally -->
-    <Bestiality_Reverse_Oral_Service.modExtensions.0.RMBLabel>口头仪式</Bestiality_Reverse_Oral_Service.modExtensions.0.RMBLabel>
+    <Bestiality_Reverse_Oral_Service.modExtensions.0.RMBLabel>Service orally</Bestiality_Reverse_Oral_Service.modExtensions.0.RMBLabel>
     </LanguageData>

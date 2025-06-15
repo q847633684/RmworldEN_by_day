@@ -1,69 +1,69 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: animal chat -->
-    <AnimalSexChat.label>与动物交流</AnimalSexChat.label>
+    <AnimalSexChat.label>animal chat</AnimalSexChat.label>
     <!-- EN: r_logentry(p=20)->[INITIATOR_nameDef] [zooact] [RECIPIENT_nameDef]. -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.0>R_logentry (p = 20)->[INITIATOR_nameDef] [zooact] [RECIPIENT_nameDef]没有。</AnimalSexChat.logRulesInitiator.rulesStrings.0>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.0>r_logentry(p=20)-&gt;[INITIATOR_nameDef] [zooact] [RECIPIENT_nameDef].</AnimalSexChat.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->[INITIATOR_nameDef] sat near [RECIPIENT_nameDef] and talked to [INITIATOR_objective]self about [TalkTopicSex]. -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.1>R_logentry->[INITIATOR_nameDef]坐在附近[RECIPIENT_nameDef]和他人交谈[INITIATOR_objective]自我[TalkTopicSex]没有。</AnimalSexChat.logRulesInitiator.rulesStrings.1>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.1>r_logentry-&gt;[INITIATOR_nameDef] sat near [RECIPIENT_nameDef] and talked to [INITIATOR_objective]self about [TalkTopicSex].</AnimalSexChat.logRulesInitiator.rulesStrings.1>
     <!-- EN: r_logentry->[INITIATOR_nameDef] sat near [RECIPIENT_nameDef] and talked to [INITIATOR_objective]self about [TalkTopicAny]. -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.2>R_logentry->[INITIATOR_nameDef]坐在附近[RECIPIENT_nameDef]和他人交谈[INITIATOR_objective]自我[TalkTopicAny]没有。</AnimalSexChat.logRulesInitiator.rulesStrings.2>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.2>r_logentry-&gt;[INITIATOR_nameDef] sat near [RECIPIENT_nameDef] and talked to [INITIATOR_objective]self about [TalkTopicAny].</AnimalSexChat.logRulesInitiator.rulesStrings.2>
     <!-- EN: r_logentry->[INITIATOR_nameDef] approached [RECIPIENT_nameDef] while whispering to [INITIATOR_objective]self about [TalkTopicSex]. -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.3>R_logentry->[INITIATOR_nameDef]已接近[RECIPIENT_nameDef]窃窃私语[INITIATOR_objective]自我[TalkTopicSex]没有。</AnimalSexChat.logRulesInitiator.rulesStrings.3>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.3>r_logentry-&gt;[INITIATOR_nameDef] approached [RECIPIENT_nameDef] while whispering to [INITIATOR_objective]self about [TalkTopicSex].</AnimalSexChat.logRulesInitiator.rulesStrings.3>
     <!-- EN: r_logentry->[INITIATOR_nameDef] approached [RECIPIENT_nameDef] while whispering to [INITIATOR_objective]self about [TalkTopicAny]. -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.4>R_logentry->[INITIATOR_nameDef]已接近[RECIPIENT_nameDef]窃窃私语[INITIATOR_objective]自我[TalkTopicAny]没有。</AnimalSexChat.logRulesInitiator.rulesStrings.4>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.4>r_logentry-&gt;[INITIATOR_nameDef] approached [RECIPIENT_nameDef] while whispering to [INITIATOR_objective]self about [TalkTopicAny].</AnimalSexChat.logRulesInitiator.rulesStrings.4>
     <!-- EN: r_logentry(p=2)->[INITIATOR_nameDef] came near [RECIPIENT_nameDef] while talking to [INITIATOR_objective]self about [TalkTopicSex]. -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.5>R_logentry (p = 2)->[INITIATOR_nameDef]靠近[RECIPIENT_nameDef]一边和[INITIATOR_objective]自我[TalkTopicSex]没有。</AnimalSexChat.logRulesInitiator.rulesStrings.5>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.5>r_logentry(p=2)-&gt;[INITIATOR_nameDef] came near [RECIPIENT_nameDef] while talking to [INITIATOR_objective]self about [TalkTopicSex].</AnimalSexChat.logRulesInitiator.rulesStrings.5>
     <!-- EN: r_logentry->[INITIATOR_nameDef] came near [RECIPIENT_nameDef] while talking to [INITIATOR_objective]self about [TalkTopicAny]. -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.6>R_logentry->[INITIATOR_nameDef]靠近[RECIPIENT_nameDef]一边和[INITIATOR_objective]自我[TalkTopicAny]没有。</AnimalSexChat.logRulesInitiator.rulesStrings.6>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.6>r_logentry-&gt;[INITIATOR_nameDef] came near [RECIPIENT_nameDef] while talking to [INITIATOR_objective]self about [TalkTopicAny].</AnimalSexChat.logRulesInitiator.rulesStrings.6>
     <!-- EN: r_logentry->[INITIATOR_nameDef] tried to make [RECIPIENT_nameDef] sit still. -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.7>R_logentry->[INITIATOR_nameDef]试图制造[RECIPIENT_nameDef]坐着别动。</AnimalSexChat.logRulesInitiator.rulesStrings.7>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.7>r_logentry-&gt;[INITIATOR_nameDef] tried to make [RECIPIENT_nameDef] sit still.</AnimalSexChat.logRulesInitiator.rulesStrings.7>
     <!-- EN: r_logentry->[INITIATOR_nameDef] attempted to hold [RECIPIENT_nameDef] still. -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.8>R_logentry->[INITIATOR_nameDef]试图收容[RECIPIENT_nameDef]安静。</AnimalSexChat.logRulesInitiator.rulesStrings.8>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.8>r_logentry-&gt;[INITIATOR_nameDef] attempted to hold [RECIPIENT_nameDef] still.</AnimalSexChat.logRulesInitiator.rulesStrings.8>
     <!-- EN: r_logentry->[INITIATOR_nameDef] slapped [RECIPIENT_nameDef] in a show of dominance. -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.9>R_logentry->[INITIATOR_nameDef]被拍打[RECIPIENT_nameDef]以示统治。</AnimalSexChat.logRulesInitiator.rulesStrings.9>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.9>r_logentry-&gt;[INITIATOR_nameDef] slapped [RECIPIENT_nameDef] in a show of dominance.</AnimalSexChat.logRulesInitiator.rulesStrings.9>
     <!-- EN: r_logentry->[INITIATOR_nameDef] gently stroked [RECIPIENT_nameDef]'s genitals. -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.10>R_logentry->[INITIATOR_nameDef]轻轻抚慰[RECIPIENT_nameDef]它的生殖器。</AnimalSexChat.logRulesInitiator.rulesStrings.10>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.10>r_logentry-&gt;[INITIATOR_nameDef] gently stroked [RECIPIENT_nameDef]'s genitals.</AnimalSexChat.logRulesInitiator.rulesStrings.10>
     <!-- EN: r_logentry->[INITIATOR_nameDef] grasped a vulnerable body part of [RECIPIENT_nameDef], demanding obedience. -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.11>R_logentry->[INITIATOR_nameDef]抓住脆弱的身体部位[RECIPIENT_nameDef],要求服从。</AnimalSexChat.logRulesInitiator.rulesStrings.11>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.11>r_logentry-&gt;[INITIATOR_nameDef] grasped a vulnerable body part of [RECIPIENT_nameDef], demanding obedience.</AnimalSexChat.logRulesInitiator.rulesStrings.11>
     <!-- EN: zooact->demanded obedience from -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.12>Zooact-> 要求服从</AnimalSexChat.logRulesInitiator.rulesStrings.12>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.12>zooact-&gt;demanded obedience from</AnimalSexChat.logRulesInitiator.rulesStrings.12>
     <!-- EN: zooact->made calming noises towards -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.13>Zoop-> 悄无声息地靠近</AnimalSexChat.logRulesInitiator.rulesStrings.13>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.13>zooact-&gt;made calming noises towards</AnimalSexChat.logRulesInitiator.rulesStrings.13>
     <!-- EN: zooact->offered slow, friendly gestures to -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.14>Zooact-> 缓慢地作出友善的动作对</AnimalSexChat.logRulesInitiator.rulesStrings.14>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.14>zooact-&gt;offered slow, friendly gestures to</AnimalSexChat.logRulesInitiator.rulesStrings.14>
     <!-- EN: zooact->made shushing noises at -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.15>Zooact-> 发出嘘的声音给</AnimalSexChat.logRulesInitiator.rulesStrings.15>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.15>zooact-&gt;made shushing noises at</AnimalSexChat.logRulesInitiator.rulesStrings.15>
     <!-- EN: zooact->made happy clicking noises at -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.16>Zooact-> 发出欢快的敲击声给</AnimalSexChat.logRulesInitiator.rulesStrings.16>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.16>zooact-&gt;made happy clicking noises at</AnimalSexChat.logRulesInitiator.rulesStrings.16>
     <!-- EN: zooact->gestured gently and approached -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.17>Zoop-> 温柔地靠近</AnimalSexChat.logRulesInitiator.rulesStrings.17>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.17>zooact-&gt;gestured gently and approached</AnimalSexChat.logRulesInitiator.rulesStrings.17>
     <!-- EN: zooact->slowly approached -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.18>Zoop-> 慢慢接近</AnimalSexChat.logRulesInitiator.rulesStrings.18>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.18>zooact-&gt;slowly approached</AnimalSexChat.logRulesInitiator.rulesStrings.18>
     <!-- EN: zooact->gently touched -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.19>Zoop-> 轻轻触摸</AnimalSexChat.logRulesInitiator.rulesStrings.19>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.19>zooact-&gt;gently touched</AnimalSexChat.logRulesInitiator.rulesStrings.19>
     <!-- EN: zooact->gently caressed -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.20>Zoop-> 温柔地爱抚</AnimalSexChat.logRulesInitiator.rulesStrings.20>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.20>zooact-&gt;gently caressed</AnimalSexChat.logRulesInitiator.rulesStrings.20>
     <!-- EN: zooact->firmly stroked -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.21>Zoop-> 坚定地触摸</AnimalSexChat.logRulesInitiator.rulesStrings.21>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.21>zooact-&gt;firmly stroked</AnimalSexChat.logRulesInitiator.rulesStrings.21>
     <!-- EN: zooact->calmed and encouraged -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.22>Zoop-> 安抚并鼓励</AnimalSexChat.logRulesInitiator.rulesStrings.22>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.22>zooact-&gt;calmed and encouraged</AnimalSexChat.logRulesInitiator.rulesStrings.22>
     <!-- EN: zooact->matched breathing with -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.23>Zoop-> 保持同步呼吸频率</AnimalSexChat.logRulesInitiator.rulesStrings.23>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.23>zooact-&gt;matched breathing with</AnimalSexChat.logRulesInitiator.rulesStrings.23>
     <!-- EN: zooact->took a low stance while approaching -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.24>Zooact-> 靠近时态度低落</AnimalSexChat.logRulesInitiator.rulesStrings.24>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.24>zooact-&gt;took a low stance while approaching</AnimalSexChat.logRulesInitiator.rulesStrings.24>
     <!-- EN: zooact->showed no fear or anger to -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.25>Zooact-> 无所畏惧地接近</AnimalSexChat.logRulesInitiator.rulesStrings.25>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.25>zooact-&gt;showed no fear or anger to</AnimalSexChat.logRulesInitiator.rulesStrings.25>
     <!-- EN: zooact->firmly yet softly touched -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.26>Zoop-> 坚定而温柔地触摸</AnimalSexChat.logRulesInitiator.rulesStrings.26>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.26>zooact-&gt;firmly yet softly touched</AnimalSexChat.logRulesInitiator.rulesStrings.26>
     <!-- EN: zooact->showed a relaxed attitude towards -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.27>Zooact-> 一脸轻松表情地接近</AnimalSexChat.logRulesInitiator.rulesStrings.27>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.27>zooact-&gt;showed a relaxed attitude towards</AnimalSexChat.logRulesInitiator.rulesStrings.27>
     <!-- EN: zooact->showed [INITIATOR_possessive] genitals to -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.28>Zoop-> 展示[INITIATOR_possessive]生殖器至</AnimalSexChat.logRulesInitiator.rulesStrings.28>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.28>zooact-&gt;showed [INITIATOR_possessive] genitals to</AnimalSexChat.logRulesInitiator.rulesStrings.28>
     <!-- EN: zooact->presented [INITIATOR_possessive] genitals to -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.29>Zoop-> 呈现[INITIATOR_possessive]生殖器至</AnimalSexChat.logRulesInitiator.rulesStrings.29>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.29>zooact-&gt;presented [INITIATOR_possessive] genitals to</AnimalSexChat.logRulesInitiator.rulesStrings.29>
     <!-- EN: zooact->whispered a story about [TalkTopicAny] to -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.30>Zoop-> 低声讲述一个故事[TalkTopicAny]到</AnimalSexChat.logRulesInitiator.rulesStrings.30>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.30>zooact-&gt;whispered a story about [TalkTopicAny] to</AnimalSexChat.logRulesInitiator.rulesStrings.30>
     <!-- EN: zooact->whispered a story about [TalkTopicSex] to -->
-    <AnimalSexChat.logRulesInitiator.rulesStrings.31>Zoop-> 低声讲述一个故事[TalkTopicSex]到</AnimalSexChat.logRulesInitiator.rulesStrings.31>
+    <AnimalSexChat.logRulesInitiator.rulesStrings.31>zooact-&gt;whispered a story about [TalkTopicSex] to</AnimalSexChat.logRulesInitiator.rulesStrings.31>
     </LanguageData>

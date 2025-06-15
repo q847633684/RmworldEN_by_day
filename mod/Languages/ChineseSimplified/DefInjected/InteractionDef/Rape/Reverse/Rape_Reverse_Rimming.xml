@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: rimming -->
-    <Rape_Reverse_Rimming.label>卷曲</Rape_Reverse_Rimming.label>
+    <Rape_Reverse_Rimming.label>rimming</Rape_Reverse_Rimming.label>
     <!-- EN: r_logentry->Forcefully rimmed [RECIPIENT_nameDef]'s anus. -->
-    <Rape_Reverse_Rimming.logRulesInitiator.rulesStrings.0>R_logentry-> 强力上缘[RECIPIENT_nameDef]肛门。</Rape_Reverse_Rimming.logRulesInitiator.rulesStrings.0>
+    <Rape_Reverse_Rimming.logRulesInitiator.rulesStrings.0>r_logentry-&gt;Forcefully rimmed [RECIPIENT_nameDef]'s anus.</Rape_Reverse_Rimming.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Was forcibly rimmed by [INITIATOR_nameDef]. -->
-    <Rape_Reverse_Rimming.logRulesRecipient.rulesStrings.0>R_logentry-> 被[INITIATOR_nameDef]没有。</Rape_Reverse_Rimming.logRulesRecipient.rulesStrings.0>
+    <Rape_Reverse_Rimming.logRulesRecipient.rulesStrings.0>r_logentry-&gt;Was forcibly rimmed by [INITIATOR_nameDef].</Rape_Reverse_Rimming.logRulesRecipient.rulesStrings.0>
     <!-- EN: Do anal rimming -->
-    <Rape_Reverse_Rimming.modExtensions.0.RMBLabel>做肛门套</Rape_Reverse_Rimming.modExtensions.0.RMBLabel>
+    <Rape_Reverse_Rimming.modExtensions.0.RMBLabel>Do anal rimming</Rape_Reverse_Rimming.modExtensions.0.RMBLabel>
     </LanguageData>

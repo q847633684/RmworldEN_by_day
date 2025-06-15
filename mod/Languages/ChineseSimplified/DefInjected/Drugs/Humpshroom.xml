@@ -1,39 +1,39 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: humpshroom shroom -->
-    <PlantHumpShroom.label>驼峰蘑菇</PlantHumpShroom.label>
+    <PlantHumpShroom.label>humpshroom shroom</PlantHumpShroom.label>
     <!-- EN: Thick shroom with tough flesh, thick juice and smooth soft skin. Exhibits aphrodisiac effects when consumed, refills psyfocus. -->
-    <PlantHumpShroom.description>拥有厚实的蘑菇，拥有坚韧的血肉、厚实的果汁和光滑柔软的皮肤。展示服用后的壮阳药效果，补充精神力。</PlantHumpShroom.description>
+    <PlantHumpShroom.description>Thick shroom with tough flesh, thick juice and smooth soft skin. Exhibits aphrodisiac effects when consumed, refills psyfocus.</PlantHumpShroom.description>
     <!-- EN: Hump shroom -->
-    <HumpShroom.label>驼峰</HumpShroom.label>
+    <HumpShroom.label>Hump shroom</HumpShroom.label>
     <!-- EN: A shroom with tough flesh, thick juice and smooth soft skin. Exhibits aphrodisiac effects when consumed, refills psyfocus. -->
-    <HumpShroom.description>拥有坚韧的肉块、厚实的果汁和光滑柔软的皮肤的蘑菇。展示服用后的壮阳药效果，补充精神力。</HumpShroom.description>
+    <HumpShroom.description>A shroom with tough flesh, thick juice and smooth soft skin. Exhibits aphrodisiac effects when consumed, refills psyfocus.</HumpShroom.description>
     <!-- EN: induced libido -->
-    <HumpShroomEffect.label>性欲激发</HumpShroomEffect.label>
+    <HumpShroomEffect.label>induced libido</HumpShroomEffect.label>
     <!-- EN: Hump shroom aphrodisiac effects. -->
-    <HumpShroomEffect.description>驼峰蘑菇的壮阳药效果。</HumpShroomEffect.description>
+    <HumpShroomEffect.description>Hump shroom aphrodisiac effects.</HumpShroomEffect.description>
     <!-- EN: Humpshroom aftertaste -->
-    <HumpShroomEffect.stages.0.label>驼峰余韵</HumpShroomEffect.stages.0.label>
+    <HumpShroomEffect.stages.0.label>Humpshroom aftertaste</HumpShroomEffect.stages.0.label>
     <!-- EN: Tastes funny. -->
-    <HumpShroomEffect.stages.0.description>味道不错。</HumpShroomEffect.stages.0.description>
+    <HumpShroomEffect.stages.0.description>Tastes funny.</HumpShroomEffect.stages.0.description>
     <!-- EN: humpshroom -->
-    <HumpShroom.label>驼峰</HumpShroom.label>
+    <HumpShroom.label>humpshroom</HumpShroom.label>
     <!-- EN: humpshroom -->
-    <Chemical_HumpShroom.label>驼峰</Chemical_HumpShroom.label>
+    <Chemical_HumpShroom.label>humpshroom</Chemical_HumpShroom.label>
     <!-- EN: Person is now hooked on shrooms. Without them, their bedroom performance may fall. -->
-    <Chemical_HumpShroom.description>人们现在迷上了蘑菇。没有他们，他们的卧室表现可能会下降。</Chemical_HumpShroom.description>
+    <Chemical_HumpShroom.description>Person is now hooked on shrooms. Without them, their bedroom performance may fall.</Chemical_HumpShroom.description>
     <!-- EN: humpshroom tolerance -->
-    <HumpShroomTolerance.label>驼峰耐受</HumpShroomTolerance.label>
+    <HumpShroomTolerance.label>humpshroom tolerance</HumpShroomTolerance.label>
     <!-- EN: Hump shroom effects tolerance. -->
-    <HumpShroomTolerance.description>驼峰蘑菇效果耐受。</HumpShroomTolerance.description>
+    <HumpShroomTolerance.description>Hump shroom effects tolerance.</HumpShroomTolerance.description>
     <!-- EN: humpshroom addiction -->
-    <HumpShroomAddiction.label>驼峰成瘾性</HumpShroomAddiction.label>
+    <HumpShroomAddiction.label>humpshroom addiction</HumpShroomAddiction.label>
     <!-- EN: Hump shroom effects addiction. -->
-    <HumpShroomAddiction.description>驼峰蘑菇会影响成瘾。</HumpShroomAddiction.description>
+    <HumpShroomAddiction.description>Hump shroom effects addiction.</HumpShroomAddiction.description>
     <!-- EN: withdrawal -->
-    <HumpShroomAddiction.stages.1.label>戒断反应</HumpShroomAddiction.stages.1.label>
+    <HumpShroomAddiction.stages.1.label>withdrawal</HumpShroomAddiction.stages.1.label>
     <!-- EN: humpshroom withdrawal -->
-    <HumpShroomWithdrawal.stages.1.label>驼峰撤退</HumpShroomWithdrawal.stages.1.label>
+    <HumpShroomWithdrawal.stages.1.label>humpshroom withdrawal</HumpShroomWithdrawal.stages.1.label>
     <!-- EN: I just feel nothing down there. -->
-    <HumpShroomWithdrawal.stages.1.description>我只是在下面什么感觉都没有。</HumpShroomWithdrawal.stages.1.description>
+    <HumpShroomWithdrawal.stages.1.description>I just feel nothing down there.</HumpShroomWithdrawal.stages.1.description>
     </LanguageData>

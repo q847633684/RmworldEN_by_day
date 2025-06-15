@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: ovipositor (Male) -->
-    <OvipositorM.label>产卵者 (男性)</OvipositorM.label>
+    <OvipositorM.label>ovipositor (Male)</OvipositorM.label>
     <!-- EN: Ovipositor used to fertilize eggs. -->
-    <OvipositorM.description>一个产卵者。使宿主体内的卵受精。</OvipositorM.description>
+    <OvipositorM.description>Ovipositor used to fertilize eggs.</OvipositorM.description>
     <!-- EN: ovipositor (Female) -->
-    <OvipositorF.label>产卵者 (雌性)</OvipositorF.label>
+    <OvipositorF.label>ovipositor (Female)</OvipositorF.label>
     <!-- EN: Ovipositor used to lay eggs. -->
-    <OvipositorF.description>一个产卵者。在宿主体内产卵。</OvipositorF.description>
+    <OvipositorF.description>Ovipositor used to lay eggs.</OvipositorF.description>
     <!-- EN: insect anus -->
-    <InsectAnus.label>虫肛门</InsectAnus.label>
+    <InsectAnus.label>insect anus</InsectAnus.label>
     <!-- EN: Insect anus. -->
-    <InsectAnus.description>一个昆虫的肛门。</InsectAnus.description>
+    <InsectAnus.description>Insect anus.</InsectAnus.description>
     </LanguageData>

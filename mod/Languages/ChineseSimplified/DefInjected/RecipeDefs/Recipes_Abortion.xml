@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: Neutralize mechanoid -->
-    <RJW_AbortionMech.label>压制机械体</RJW_AbortionMech.label>
+    <RJW_AbortionMech.label>Neutralize mechanoid</RJW_AbortionMech.label>
     <!-- EN: Safely neutralize mechanoid nanites. -->
-    <RJW_AbortionMech.description>安全地中和机械体纳米粒子。</RJW_AbortionMech.description>
+    <RJW_AbortionMech.description>Safely neutralize mechanoid nanites.</RJW_AbortionMech.description>
     <!-- EN: Hack mechanoid -->
-    <RJW_HackMech.label>破解机械体</RJW_HackMech.label>
+    <RJW_HackMech.label>Hack mechanoid</RJW_HackMech.label>
     <!-- EN: Hack mechanoid AI, cutting it from global mechanoid AI, results docile(unless provoked) mechanoid. -->
-    <RJW_HackMech.description>破解机械体人工智能，并将其从全球机械体人工智能中删除，结果是温顺的 (除非被激怒) 机械体。</RJW_HackMech.description>
+    <RJW_HackMech.description>Hack mechanoid AI, cutting it from global mechanoid AI, results docile(unless provoked) mechanoid.</RJW_HackMech.description>
     </LanguageData>

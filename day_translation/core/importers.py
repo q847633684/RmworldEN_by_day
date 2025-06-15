@@ -68,22 +68,22 @@ def import_translations(
 
     if os.path.exists(def_injected_path):
         try:
-            update_lxml(csv_path, def_injected_path, merge=merge)
+            update_lxml(csv_path, mod_dir)
             logging.info(f"更新 DefInjected: {def_injected_path}")
         except Exception as e:
             logging.warning(f"LXML 更新 DefInjected 失败: {e}，尝试使用 ElementTree")
-            update_etree(csv_path, def_injected_path, merge=merge)
+            update_etree(csv_path, mod_dir)
             logging.info(f"使用 ElementTree 更新 DefInjected: {def_injected_path}")
     else:
         logging.warning(f"未找到 DefInjected 或 DefInjured 目录: {def_injected_path}")
 
     if os.path.exists(keyed_path):
         try:
-            update_lxml(csv_path, keyed_path, merge=merge)
+            update_lxml(csv_path, mod_dir)
             logging.info(f"更新 Keyed: {keyed_path}")
         except Exception as e:
             logging.warning(f"LXML 更新 Keyed 失败: {e}，尝试使用 ElementTree")
-            update_etree(csv_path, keyed_path, merge=merge)
+            update_etree(csv_path, mod_dir)
             logging.info(f"使用 ElementTree 更新 Keyed: {keyed_path}")
     else:
         logging.warning(f"未找到 Keyed 目录: {keyed_path}")

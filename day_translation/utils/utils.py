@@ -1,6 +1,8 @@
 import xml.etree.ElementTree as ET
 import os
+import json
 from pathlib import Path
+from typing import Dict, List
 import logging
 import re
 
@@ -39,20 +41,47 @@ def save_xml_to_file(root: ET.Element, file_path: str, pretty_print: bool = True
 
 def update_history_list(key: str, value: str) -> None:
     """更新历史记录列表"""
-    history_file = "history.json"
+    history_file = os.path.join(os.path.expanduser("~"), ".day_translation_history.json")
     history: Dict[str, List[str]] = {}
+    
     if os.path.exists(history_file):
         try:
             with open(history_file, "r", encoding="utf-8") as f:
                 history = json.load(f)
-        except (json.JSONDecodeError, OSError):
+        except (json.JSONDecodeError, OSError) as e:
+            logging.warning(f"历史文件读取失败: {e}")
             history = {}
+    
     history_list = history.get(key, [])
-    if value not in history_list:
-        history_list.append(value)
-        history[key] = history_list[-10:]  # 保留最后 10 条记录
+    if not isinstance(history_list, list):
+        history_list = []
+    
+    # 移除重复项并添加到开头
+    if value in history_list:
+        history_list.remove(value)
+    history_list.insert(0, value)
+    
+    # 保留最后 10 条记录
+    history[key] = history_list[:10]
+    
+    try:
+        with open(history_file, "w", encoding="utf-8") as f:
+            json.dump(history, f, ensure_ascii=False, indent=2)
+    except OSError as e:
+        logging.warning(f"无法更新历史记录: {e}")
+
+def get_history_list(key: str) -> List[str]:
+    """获取历史记录列表"""
+    history_file = os.path.join(os.path.expanduser("~"), ".day_translation_history.json")
+    
+    if os.path.exists(history_file):
         try:
-            with open(history_file, "w", encoding="utf-8") as f:
-                json.dump(history, f, ensure_ascii=False, indent=2)
-        except OSError as e:
-            print(f"无法更新历史记录: {e}")
+            with open(history_file, "r", encoding="utf-8") as f:
+                history = json.load(f)
+            history_list = history.get(key, [])
+            if isinstance(history_list, list):
+                return history_list
+        except (json.JSONDecodeError, OSError):
+            pass
+    
+    return []

@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: rimming -->
-    <Sex_Rimming.label>卷曲</Sex_Rimming.label>
+    <Sex_Rimming.label>rimming</Sex_Rimming.label>
     <!-- EN: r_logentry->Rimmed by [RECIPIENT_nameDef]. -->
-    <Sex_Rimming.logRulesInitiator.rulesStrings.0>R_logentry-> 边缘[RECIPIENT_nameDef]没有。</Sex_Rimming.logRulesInitiator.rulesStrings.0>
+    <Sex_Rimming.logRulesInitiator.rulesStrings.0>r_logentry-&gt;Rimmed by [RECIPIENT_nameDef].</Sex_Rimming.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Rimmed [INITIATOR_nameDef]. -->
-    <Sex_Rimming.logRulesRecipient.rulesStrings.0>R_logentry-> 边缘[INITIATOR_nameDef]没有。</Sex_Rimming.logRulesRecipient.rulesStrings.0>
+    <Sex_Rimming.logRulesRecipient.rulesStrings.0>r_logentry-&gt;Rimmed [INITIATOR_nameDef].</Sex_Rimming.logRulesRecipient.rulesStrings.0>
     <!-- EN: Receive anal rimming -->
-    <Sex_Rimming.modExtensions.0.RMBLabel>接受肛门套</Sex_Rimming.modExtensions.0.RMBLabel>
+    <Sex_Rimming.modExtensions.0.RMBLabel>Receive anal rimming</Sex_Rimming.modExtensions.0.RMBLabel>
     </LanguageData>

@@ -1,33 +1,33 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: chains -->
-    <Chains.label>枷锁</Chains.label>
+    <Chains.label>chains</Chains.label>
     <!-- EN: chains -->
-    <Chains.labelNoun>枷锁</Chains.labelNoun>
+    <Chains.labelNoun>chains</Chains.labelNoun>
     <!-- EN: A series of chains that restrict its wearer. -->
-    <Chains.description>一系列限制它的佩戴者的锁链。</Chains.description>
+    <Chains.description>A series of chains that restrict its wearer.</Chains.description>
     <!-- EN: bound hands -->
-    <BoundHands.label>绑定双手</BoundHands.label>
+    <BoundHands.label>bound hands</BoundHands.label>
     <!-- EN: bound hands -->
-    <BoundHands.labelNoun>绑定双手</BoundHands.labelNoun>
+    <BoundHands.labelNoun>bound hands</BoundHands.labelNoun>
     <!-- EN: Bound hands. -->
-    <BoundHands.description>双手被绑住。</BoundHands.description>
+    <BoundHands.description>Bound hands.</BoundHands.description>
     <!-- EN: bound legs -->
-    <BoundLegs.label>腿部</BoundLegs.label>
+    <BoundLegs.label>bound legs</BoundLegs.label>
     <!-- EN: bound legs -->
-    <BoundLegs.labelNoun>腿部</BoundLegs.labelNoun>
+    <BoundLegs.labelNoun>bound legs</BoundLegs.labelNoun>
     <!-- EN: Bound legs. -->
-    <BoundLegs.description>腿部被束缚。</BoundLegs.description>
+    <BoundLegs.description>Bound legs.</BoundLegs.description>
     <!-- EN: Restraints -->
-    <RJW_Restraints.label>限制</RJW_Restraints.label>
+    <RJW_Restraints.label>Restraints</RJW_Restraints.label>
     <!-- EN: restraints -->
-    <RJW_Restraints.labelNoun>限制</RJW_Restraints.labelNoun>
+    <RJW_Restraints.labelNoun>restraints</RJW_Restraints.labelNoun>
     <!-- EN: A set of restraints. -->
-    <RJW_Restraints.description>一套束缚。</RJW_Restraints.description>
+    <RJW_Restraints.description>A set of restraints.</RJW_Restraints.description>
     <!-- EN: Cocoon -->
-    <RJW_Cocoon.label>茧</RJW_Cocoon.label>
+    <RJW_Cocoon.label>Cocoon</RJW_Cocoon.label>
     <!-- EN: A cocoon -->
-    <RJW_Cocoon.labelNoun>一个茧</RJW_Cocoon.labelNoun>
+    <RJW_Cocoon.labelNoun>A cocoon</RJW_Cocoon.labelNoun>
     <!-- EN: A cocoon that tends to its host until ready to procreate. -->
-    <RJW_Cocoon.description>照料宿主直到可以生育的茧。</RJW_Cocoon.description>
+    <RJW_Cocoon.description>A cocoon that tends to its host until ready to procreate.</RJW_Cocoon.description>
     </LanguageData>

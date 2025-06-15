@@ -1,27 +1,27 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: Hololock -->
-    <Hololock.label>全息洛克</Hololock.label>
+    <Hololock.label>Hololock</Hololock.label>
     <!-- EN: A high-tech locking mechanism. Features include:
 - Extremely hardy, plasteel-reinforced build
 - Key and lock paired using a cryptographic UID holographically embedded in a jade substrate, ensuring counterfeit keys are impossible to produce
 - Self-destruct failsafe triggers when the lock is tampered with, ensuring that the protected item is destroyed rather than captured by the enemy
 
 Originally designed for military use, the hololock has since become popular in the BDSM community, where it is customary to engrave a key and lock pair with matching names so they are easier to identify. -->
-    <Hololock.description>一个高科技的锁定机构。特性包括:
--极度耐寒，玻璃钢纤维增强
--密钥和锁定是使用密码 UID 全息地嵌入翡翠基底中配对的，确保不可能生产假冒的密钥
--自毁的故障保护触发器，当锁被篡改，确保受保护的物品被摧毁而不是被敌人俘虏
+    <Hololock.description>A high-tech locking mechanism. Features include:
+- Extremely hardy, plasteel-reinforced build
+- Key and lock paired using a cryptographic UID holographically embedded in a jade substrate, ensuring counterfeit keys are impossible to produce
+- Self-destruct failsafe triggers when the lock is tampered with, ensuring that the protected item is destroyed rather than captured by the enemy
 
-全息锁最初是为军事用途设计的，后来在 BDSM 社区中变得流行，在那里习惯雕刻一把钥匙并锁定一对具有匹配名称的钥匙，以便于识别。</Hololock.description>
+Originally designed for military use, the hololock has since become popular in the BDSM community, where it is customary to engrave a key and lock pair with matching names so they are easier to identify.</Hololock.description>
     <!-- EN: Holokey -->
-    <Holokey.label>全息钥匙</Holokey.label>
+    <Holokey.label>Holokey</Holokey.label>
     <!-- EN: A high-tech key. Releases the lock on an item with a matching cryptographic stamp. -->
-    <Holokey.description>一把高科技钥匙。解锁带有匹配密码的物品。</Holokey.description>
+    <Holokey.description>A high-tech key. Releases the lock on an item with a matching cryptographic stamp.</Holokey.description>
     <!-- EN: chains -->
-    <PrisonerChains.label>枷锁</PrisonerChains.label>
+    <PrisonerChains.label>chains</PrisonerChains.label>
     <!-- EN: Chains with cuffs. Useful for restricting someone's movement and manipulation freedom. Prevents* hand-to-hand fighting attempts.
 *gag is advised for complete neutralization -->
-    <PrisonerChains.description>带镣铐的铁链。对限制某人的移动和操作自由很有用。豁免 * 肉搏。
-* 建议堵嘴完全中和</PrisonerChains.description>
+    <PrisonerChains.description>Chains with cuffs. Useful for restricting someone's movement and manipulation freedom. Prevents* hand-to-hand fighting attempts.
+*gag is advised for complete neutralization</PrisonerChains.description>
     </LanguageData>

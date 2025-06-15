@@ -1,23 +1,23 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: IUD -->
-    <RJW_IUD.label>节育器</RJW_IUD.label>
+    <RJW_IUD.label>IUD</RJW_IUD.label>
     <!-- EN: A small silver device inserted into the womb that greatly reduces the chance of pregnancy. -->
-    <RJW_IUD.description>置入子宫内的小型白银装置，大大降低了怀孕的几率。</RJW_IUD.description>
+    <RJW_IUD.description>A small silver device inserted into the womb that greatly reduces the chance of pregnancy.</RJW_IUD.description>
     <!-- EN: Fertile -->
-    <IncreasedFertility.label>强繁殖力</IncreasedFertility.label>
+    <IncreasedFertility.label>Fertile</IncreasedFertility.label>
     <!-- EN: Increased fertility, for baby making. -->
-    <IncreasedFertility.description>提高生育能力，用于制造婴儿。</IncreasedFertility.description>
+    <IncreasedFertility.description>Increased fertility, for baby making.</IncreasedFertility.description>
     <!-- EN: Infertile -->
-    <DecreasedFertility.label>不育</DecreasedFertility.label>
+    <DecreasedFertility.label>Infertile</DecreasedFertility.label>
     <!-- EN: Low fertility, not for baby making. -->
-    <DecreasedFertility.description>低生育能力，不可生育。</DecreasedFertility.description>
+    <DecreasedFertility.description>Low fertility, not for baby making.</DecreasedFertility.description>
     <!-- EN: Archotech pregnancy blocker -->
-    <ImpregnationBlocker.label>超凡智能怀孕阻滞器</ImpregnationBlocker.label>
+    <ImpregnationBlocker.label>Archotech pregnancy blocker</ImpregnationBlocker.label>
     <!-- EN: A complex device that prevents fertilization and pregnancy. -->
-    <ImpregnationBlocker.description>一个阻止受精和怀孕的复杂设备。</ImpregnationBlocker.description>
+    <ImpregnationBlocker.description>A complex device that prevents fertilization and pregnancy.</ImpregnationBlocker.description>
     <!-- EN: Archotech fertility enhancer -->
-    <FertilityEnhancer.label>超凡科技生育增强装置</FertilityEnhancer.label>
+    <FertilityEnhancer.label>Archotech fertility enhancer</FertilityEnhancer.label>
     <!-- EN: A complex device that increases the likelihood of pregnancy. -->
-    <FertilityEnhancer.description>一个复杂的设备，增加怀孕的可能性。</FertilityEnhancer.description>
+    <FertilityEnhancer.description>A complex device that increases the likelihood of pregnancy.</FertilityEnhancer.description>
     </LanguageData>

@@ -1,121 +1,173 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: Show sexuality -->
-    <SexcardTooltip>显示性欲</SexcardTooltip>
+    <SexcardTooltip>Show sexuality</SexcardTooltip>
     <!-- EN: Quirks:  -->
-    <Quirks>怪癖:</Quirks>
+    <Quirks>Quirks: </Quirks>
     <!-- EN: No Quirks, vanilla. -->
-    <NoQuirks>没有怪癖，香草。</NoQuirks>
+    <NoQuirks>No Quirks, vanilla.</NoQuirks>
     <!-- EN: 
 {pawn} not only produces copious amounts of fluid during sex but {pawn_pronoun} rarely bothers to clean {pawn_possessive}self afterwards.
  -->
-    <MessyQuirk>{Pawn} 不仅能在性爱过程中分泌大量的体液，而且之后 {pawn_pronoun} 也很少会去清理自己。</MessyQuirk>
+    <MessyQuirk>
+{pawn} not only produces copious amounts of fluid during sex but {pawn_pronoun} rarely bothers to clean {pawn_possessive}self afterwards.
+</MessyQuirk>
     <!-- EN: 
 {pawn} really likes feet and prefers foot-related sex acts.
  -->
-    <PodophileQuirk>{Pawn} 非常喜欢脚，更喜欢与脚有关的性行为。</PodophileQuirk>
+    <PodophileQuirk>
+{pawn} really likes feet and prefers foot-related sex acts.
+</PodophileQuirk>
     <!-- EN: 
 {pawn} really likes cum and prefers fellatio sex acts.
  -->
-    <CumslutQuirk>{Pawn} 很喜欢高潮，更喜欢口交。</CumslutQuirk>
+    <CumslutQuirk>
+{pawn} really likes cum and prefers fellatio sex acts.
+</CumslutQuirk>
     <!-- EN: 
 {pawn} really likes getting fucked in the butt and prefers anal sex acts.
  -->
-    <ButtslutQuirk>{Pawn} 很喜欢被操，并且更喜欢肛交。</ButtslutQuirk>
+    <ButtslutQuirk>
+{pawn} really likes getting fucked in the butt and prefers anal sex acts.
+</ButtslutQuirk>
     <!-- EN: 
 {pawn} prefers ugly partners. {pawn_pronoun} would also prefer larger and wilder animals if {pawn_pronoun} were into that sort of thing...
  -->
-    <TeratophileQuirk>{Pawn} 更喜欢丑陋的伴侣。如果 {pawn_pronoun} 喜欢那种东西，{pawn_pronoun} 也更喜欢体型更大、更狂野的动物……</TeratophileQuirk>
+    <TeratophileQuirk>
+{pawn} prefers ugly partners. {pawn_pronoun} would also prefer larger and wilder animals if {pawn_pronoun} were into that sort of thing...
+</TeratophileQuirk>
     <!-- EN: 
 {pawn} prefers to keep {pawn_possessive} clothes on during sex.
  -->
-    <EndytophileQuirk>{Pawn} 喜欢在性爱时穿上 {pawn_possessive} 衣物。</EndytophileQuirk>
+    <EndytophileQuirk>
+{pawn} prefers to keep {pawn_possessive} clothes on during sex.
+</EndytophileQuirk>
     <!-- EN: 
 {pawn} enjoys having sex where others can see.
  -->
-    <ExhibitionistQuirk>{Pawn} 喜欢在别人看见的地方发生性关系。</ExhibitionistQuirk>
+    <ExhibitionistQuirk>
+{pawn} enjoys having sex where others can see.
+</ExhibitionistQuirk>
     <!-- EN: 
 {pawn} prefers older partners (55+ on a human scale).
  -->
-    <GerontophileQuirk>{Pawn} 更喜欢年长的伴侣 (55 岁以上，人类规模)。</GerontophileQuirk>
+    <GerontophileQuirk>
+{pawn} prefers older partners (55+ on a human scale).
+</GerontophileQuirk>
     <!-- EN: 
 {pawn} prefers {pawn_possessive} partners to be asleep
  -->
-    <SomnophileQuirk>{Pawn} 更喜欢 {pawn_possessive} 伴侣睡觉</SomnophileQuirk>
+    <SomnophileQuirk>
+{pawn} prefers {pawn_possessive} partners to be asleep
+</SomnophileQuirk>
     <!-- EN: 
 {pawn} prefers smart partners.
  -->
-    <SapiosexualQuirk>{Pawn} 更喜欢聪明的伴侣。</SapiosexualQuirk>
+    <SapiosexualQuirk>
+{pawn} prefers smart partners.
+</SapiosexualQuirk>
     <!-- EN: 
 {pawn} has unusually high fertility and so is more likely to have children.
  -->
-    <FertileQuirk>{Pawn} 的生育能力异常高，所以更容易有孩子。</FertileQuirk>
+    <FertileQuirk>
+{pawn} has unusually high fertility and so is more likely to have children.
+</FertileQuirk>
     <!-- EN: 
 {pawn} has unusually low fertility and so is unlikely to have children.
  -->
-    <InfertileQuirk>{Pawn} 的生育能力异常低，所以不太可能有孩子。</InfertileQuirk>
+    <InfertileQuirk>
+{pawn} has unusually low fertility and so is unlikely to have children.
+</InfertileQuirk>
     <!-- EN: 
 {pawn} really likes the idea of someone becoming pregnant. {pawn_pronoun} prefers partners and sex positions where there is a possibility of pregnancy. {pawn_pronoun} doesn't care if {pawn_pronoun} is getting pregnant or {pawn_possessive} partner is as long as babby is formed.
  -->
-    <ImpregnationFetishQuirk>{Pawn} 很喜欢这个人怀孕的念头。 {pawn_pronoun} 更喜欢有可能怀孕的伴侣和性别。只要婴儿出生，{pawn_pronoun} 就不在乎 {pawn_pronoun} 是怀孕了还是 {pawn_possessive} 伴侣已经怀孕了。</ImpregnationFetishQuirk>
+    <ImpregnationFetishQuirk>
+{pawn} really likes the idea of someone becoming pregnant. {pawn_pronoun} prefers partners and sex positions where there is a possibility of pregnancy. {pawn_pronoun} doesn't care if {pawn_pronoun} is getting pregnant or {pawn_possessive} partner is as long as babby is formed.
+</ImpregnationFetishQuirk>
     <!-- EN: 
 {pawn} prefers partners who are visibly pregnant.
  -->
-    <PregnancyFetishQuirk>{Pawn} 更喜欢明显怀孕的伴侣。</PregnancyFetishQuirk>
+    <PregnancyFetishQuirk>
+{pawn} prefers partners who are visibly pregnant.
+</PregnancyFetishQuirk>
     <!-- EN: 
 {pawn} has birthed so many eggs that {pawn_possessive} body has adapted to handling them. {pawn_possessive} egg incubation speed has increased.
  -->
-    <IncubatorQuirk>{Pawn} 产下了如此多的卵，以至于 {pawn_possessive} 身体已经适应了处理它们。{pawn_possessive} 卵孵化速度加快了。</IncubatorQuirk>
+    <IncubatorQuirk>
+{pawn} has birthed so many eggs that {pawn_possessive} body has adapted to handling them. {pawn_possessive} egg incubation speed has increased.
+</IncubatorQuirk>
     <!-- EN: 
 {pawn} has given birth so many times that {pawn_possessive} body has adapted to breeding. {pawn_possessive} pregnancies are shorter and produce more offspring.
  -->
-    <BreederQuirk>{Pawn} 已经产子很多次了，以至于 {pawn_possessive} 身体已经适应了生育。{pawn_possessive} 怀孕时间更短，后代也更多。</BreederQuirk>
+    <BreederQuirk>
+{pawn} has given birth so many times that {pawn_possessive} body has adapted to breeding. {pawn_possessive} pregnancies are shorter and produce more offspring.
+</BreederQuirk>
     <!-- EN: 
 {pawn} is invigorated by sex. {pawn_pronoun} does not get tired as much during sex.
  -->
-    <VigorousQuirk>{Pawn} 因性而充满活力。{pawn_pronoun} 在性爱过程中不会感到疲劳。</VigorousQuirk>
+    <VigorousQuirk>
+{pawn} is invigorated by sex. {pawn_pronoun} does not get tired as much during sex.
+</VigorousQuirk>
     <!-- EN: 
 {pawn} enjoys the smooth strength of a chitinous exoskeleton. {pawn_pronoun} prefers arachnoid or insectoid partners.
  -->
-    <ChitinLoverQuirk>{Pawn} 拥有几丁质外骨骼的光滑强度。{pawn_pronoun} 更喜欢蛛网膜或虫族伙伴。</ChitinLoverQuirk>
+    <ChitinLoverQuirk>
+{pawn} enjoys the smooth strength of a chitinous exoskeleton. {pawn_pronoun} prefers arachnoid or insectoid partners.
+</ChitinLoverQuirk>
     <!-- EN: 
 {pawn} is after the naughty ones. {pawn_pronoun} prefers {pawn_possessive} partners to come from the literal depths of hell, or at least look the part.
  -->
-    <DemonLoverQuirk>{Pawn} 在追顽皮的孩子。{pawn_pronoun} 更喜欢 {pawn_possessive} 同伴们从地狱的深处降临，或者至少看看这个角色。</DemonLoverQuirk>
+    <DemonLoverQuirk>
+{pawn} is after the naughty ones. {pawn_pronoun} prefers {pawn_possessive} partners to come from the literal depths of hell, or at least look the part.
+</DemonLoverQuirk>
     <!-- EN: 
 {pawn} loves that downy fluff. {pawn_pronoun} prefers avian or dinosaur partners. Because dinosaurs are birds and have feathers, as {pawn_pronoun} will explain at great length if given a chance.
  -->
-    <FeatherLoverQuirk>{Pawn} 喜欢这种淡黄色的绒毛。{pawn_pronoun} 更喜欢鸟类或恐龙的伴侣。因为恐龙是有羽毛的鸟类，如果有机会的话，{pawn_pronoun} 会非常详细地解释。</FeatherLoverQuirk>
+    <FeatherLoverQuirk>
+{pawn} loves that downy fluff. {pawn_pronoun} prefers avian or dinosaur partners. Because dinosaurs are birds and have feathers, as {pawn_pronoun} will explain at great length if given a chance.
+</FeatherLoverQuirk>
     <!-- EN: 
 {pawn} prefers a partner with a thick, luxurious, snuggly-soft coat of fur.
  -->
-    <FurLoverQuirk>{Pawn} 更喜欢拥有一件厚实、奢华且贴身的毛皮作为伴侣。</FurLoverQuirk>
+    <FurLoverQuirk>
+{pawn} prefers a partner with a thick, luxurious, snuggly-soft coat of fur.
+</FurLoverQuirk>
     <!-- EN: 
 {pawn} likes watering plants. If you know what I mean.
  -->
-    <PlantLoverQuirk>{Pawn} 喜欢给植物浇水。如果你明白我的意思。</PlantLoverQuirk>
+    <PlantLoverQuirk>
+{pawn} likes watering plants. If you know what I mean.
+</PlantLoverQuirk>
     <!-- EN: 
 Which is better, 2D or 3D? {pawn} knows that 3D-printed gives you the best of both worlds.
  -->
-    <RobotLoverQuirk>2D 和 3D 哪个更好？{pawn} 知道 3D 打印能让你两个世界都拥有最好的一面。</RobotLoverQuirk>
+    <RobotLoverQuirk>
+Which is better, 2D or 3D? {pawn} knows that 3D-printed gives you the best of both worlds.
+</RobotLoverQuirk>
     <!-- EN: 
 Who wouldn't want to fuck a dragon? Definitely not {pawn}. {pawn} wants to fuck a dragon.
  -->
-    <ScaleLoverQuirk>谁不想干龙？绝对不是 {pawn}。{pawn} 想要和一条龙做爱。</ScaleLoverQuirk>
+    <ScaleLoverQuirk>
+Who wouldn't want to fuck a dragon? Definitely not {pawn}. {pawn} wants to fuck a dragon.
+</ScaleLoverQuirk>
     <!-- EN: 
 {pawn} prefers {pawn_possessive} partners to have smooth sensitive skin without fur or scales getting in the way. Lucky for {pawn_objective} humans are all over the place.
  -->
-    <SkinLoverQuirk>{Pawn} 更喜欢 {pawn_possessive} 伴侣拥有光滑且敏感的皮肤，并且不会被毛发和鳞片阻挡。幸运的是到处都是 {pawn_objective} 人类。</SkinLoverQuirk>
+    <SkinLoverQuirk>
+{pawn} prefers {pawn_possessive} partners to have smooth sensitive skin without fur or scales getting in the way. Lucky for {pawn_objective} humans are all over the place.
+</SkinLoverQuirk>
     <!-- EN: 
 Because of their slippery and malleable nature slimes are very, very good at sex. As you will hear over and over if you listen to {pawn} talk for any length of time.
  -->
-    <SlimeLoverQuirk>因为光滑可塑，自然纤细的人非常非常擅长性。如果你长时间听 {pawn} 说话，你会一遍又一遍地听到。</SlimeLoverQuirk>
+    <SlimeLoverQuirk>
+Because of their slippery and malleable nature slimes are very, very good at sex. As you will hear over and over if you listen to {pawn} talk for any length of time.
+</SlimeLoverQuirk>
     <!-- EN: Wants to be:  -->
-    <SexPartWants>希望成为:</SexPartWants>
+    <SexPartWants>Wants to be: </SexPartWants>
     <!-- EN: Edit {0} -->
-    <PartsEditLabel>编辑 {0}</PartsEditLabel>
+    <PartsEditLabel>Edit {0}</PartsEditLabel>
     <!-- EN: Fluid Multiplier -->
-    <PartsEditFluidMultiplierLabel>流体乘数</PartsEditFluidMultiplierLabel>
+    <PartsEditFluidMultiplierLabel>Fluid Multiplier</PartsEditFluidMultiplierLabel>
     <!-- EN: RJW: Edit parts -->
-    <PartsEditDevEntry>RJW: 编辑部件</PartsEditDevEntry>
+    <PartsEditDevEntry>RJW: Edit parts</PartsEditDevEntry>
     </LanguageData>
