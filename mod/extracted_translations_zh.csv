@@ -883,111 +883,111 @@ ThingDef/ResinGlob.label,resin,label,树脂
 ThingDef/ResinGlob.description,A mixture of highly viscous organic compounds typically harvested from plants.,description,高度粘稠的有机化合物的混合物，通常是从植物中收获的。
 ThingDef/SlimeGlob.label,slime glob,label,黏液球
 ThingDef/SlimeGlob.description,An oozy slime glob. Useless for humans.,description,一团黏液。对人类毫无用处。
-RulePackDef/Bestiality_AnalRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was anally bred by [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被[INITIATOR_nameDef]没有。
-RulePackDef/Bestiality_VaginalRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was vaginally bred by [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]由[INITIATOR_nameDef]没有。
-RulePackDef/Bestiality_OralRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was orally bred by [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被口育[INITIATOR_nameDef]没有。
-RulePackDef/Bestiality_DoublePenRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was double penetrated by [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被穿透[INITIATOR_nameDef]没有。
-RulePackDef/Bestiality_Reverse_AnalRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] anally.,li,已发送->[INITIATOR_nameDef]被取笑[RECIPIENT_nameDef]安装中[INITIATOR_nameDef]盟友。
-RulePackDef/Bestiality_Reverse_AnalRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]出席[RECIPIENT_nameDef]没有。
-RulePackDef/Bestiality_Reverse_VaginalRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] vaginally.,li,已发送->[INITIATOR_nameDef]被取笑[RECIPIENT_nameDef]安装中[INITIATOR_nameDef]正在阴道中。
-RulePackDef/Bestiality_Reverse_VaginalRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]出席[RECIPIENT_nameDef]没有。
-RulePackDef/Bestiality_Reverse_OralRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] orally.,li,已发送->[INITIATOR_nameDef]被取笑[RECIPIENT_nameDef]安装中[INITIATOR_nameDef]口头上的。
-RulePackDef/Bestiality_Reverse_OralRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]出席[RECIPIENT_nameDef]没有。
-RulePackDef/Bestiality_Reverse_Double_Penetration.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into double penetrating [INITIATOR_nameDef].,li,已发送->[INITIATOR_nameDef]被取笑[RECIPIENT_nameDef]变成双穿透[INITIATOR_nameDef]没有。
-RulePackDef/Bestiality_Reverse_Double_Penetration.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]出席[RECIPIENT_nameDef]没有。
-RulePackDef/Masturbation_HandjobPRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] penis.,li,已发送->[INITIATOR_nameDef]释放一些紧张性使用[INITIATOR_possessive]阴茎。
-RulePackDef/Masturbation_HandjobVRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] vagina.,li,已发送->[INITIATOR_nameDef]释放一些紧张性使用[INITIATOR_possessive]阴道。
-RulePackDef/Masturbation_HandjobARP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] anus.,li,已发送->[INITIATOR_nameDef]释放一些紧张性使用[INITIATOR_possessive]肛门。
-RulePackDef/Masturbation_HandjobBRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] breasts.,li,已发送->[INITIATOR_nameDef]释放一些紧张性使用[INITIATOR_possessive]乳房。
-RulePackDef/Masturbation_AutoFellatioRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] autofellated [INITIATOR_possessive] penis.,li,已发送->[INITIATOR_nameDef]自律[INITIATOR_possessive]阴茎。
-RulePackDef/Masturbation_AutoBreastjobRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] stroked [INITIATOR_possessive] penis with [INITIATOR_possessive] breasts.,li,已发送->[INITIATOR_nameDef]轻触[INITIATOR_possessive]阴茎伴[INITIATOR_possessive]乳房。
-RulePackDef/AnalRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was anally raped by [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被敌我强奸[INITIATOR_nameDef]没有。
-RulePackDef/VaginalRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was vaginally raped by [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被[INITIATOR_nameDef]没有。
-RulePackDef/FellatioRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to fellate [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被迫假装[INITIATOR_nameDef]没有。
-RulePackDef/BeakjobRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to give a beakjob to [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被迫给[INITIATOR_nameDef]没有。
-RulePackDef/OtherRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was raped.,li,已发送->[RECIPIENT_nameDef]被强奸了。
-RulePackDef/ForcedRimmingRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to lick [INITIATOR_nameDef]'s anus.,li,已发送->[RECIPIENT_nameDef]被迫舔[INITIATOR_nameDef]肛门。
-RulePackDef/ForcedCunnilingusRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to lick [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被迫舔[INITIATOR_nameDef]没有。
-RulePackDef/ForcedFellatioRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to fellate [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被迫假装[INITIATOR_nameDef]没有。
-RulePackDef/ForcedBreastjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to give a breastjob to [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被迫给[INITIATOR_nameDef]没有。
-RulePackDef/HandjobRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] pinned [RECIPIENT_nameDef] down and forcefully jacked [RECIPIENT_objective] off.,li,已发送->[INITIATOR_nameDef]被压住[RECIPIENT_nameDef]击倒在地[RECIPIENT_objective]关。
-RulePackDef/HandjobRapeRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] humiliated [RECIPIENT_nameDef] by forcibly jerking [RECIPIENT_objective] off.,li,已发送->[INITIATOR_nameDef]羞辱[RECIPIENT_nameDef]剧烈抽搐[RECIPIENT_objective]关。
-RulePackDef/FootjobRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] gave a forced footjob to [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]强制步行给[RECIPIENT_nameDef]没有。
-RulePackDef/MaleRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forced [RECIPIENT_nameDef] to cum.,li,已发送->[INITIATOR_nameDef]强制[RECIPIENT_nameDef]To 射精。
-RulePackDef/ForcedHandjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to give a handjob to [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被迫给[INITIATOR_nameDef]没有。
-RulePackDef/ForcedHandjobRP.rulePack.rulesStrings.1,sent-> [RECIPIENT_nameDef] was forced to jerk off [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被迫猛击[INITIATOR_nameDef]没有。
-RulePackDef/ForcedFootjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to give a footjob to [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被迫给[INITIATOR_nameDef]没有。
-RulePackDef/DoubleRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was double-penetrated and raped vaginally and anally.,li,已发送->[RECIPIENT_nameDef]曾遭到双重强奸。
-RulePackDef/FingeringRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly fingered [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]手指被戳中[RECIPIENT_nameDef]没有。
-RulePackDef/ForcedFingeringRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to finger [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被强迫用手指戳[INITIATOR_nameDef]没有。
-RulePackDef/ScissoringRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly scissored with [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]强制剪发[RECIPIENT_nameDef]没有。
-RulePackDef/ForcedScissoringRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to scissor with [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被迫与[INITIATOR_nameDef]没有。
-RulePackDef/FistingRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly fisted [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]被强制使用[RECIPIENT_nameDef]没有。
-RulePackDef/ForcedSixtynineRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] coerced [RECIPIENT_nameDef] into 69ing with [INITIATOR_objective].,li,已发送->[INITIATOR_nameDef]被强迫[RECIPIENT_nameDef]进入 69 岁与[INITIATOR_objective]没有。
-RulePackDef/ForcedSixtynineRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] forced [RECIPIENT_nameDef] to 69 with [INITIATOR_objective].,li,已发送->[INITIATOR_nameDef]强制[RECIPIENT_nameDef]到 69 岁[INITIATOR_objective]没有。
-RulePackDef/MechImplantingRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] implanted something inside [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]在里面植入了东西[RECIPIENT_nameDef]没有。
-RulePackDef/DeepthroatRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly deepthroated [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]被强制操作[RECIPIENT_nameDef]没有。
-RulePackDef/AnalReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcefully rode [RECIPIENT_nameDef] anally.,li,已发送->[INITIATOR_nameDef]强力骑乘[RECIPIENT_nameDef]盟友。
-RulePackDef/VaginalReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcefully rode [RECIPIENT_nameDef] vaginally.,li,已发送->[INITIATOR_nameDef]强力骑乘[RECIPIENT_nameDef]正在阴道中。
-RulePackDef/HandjobReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] pinned [RECIPIENT_nameDef] down and forcefully jacked [RECIPIENT_objective] off.,li,已发送->[INITIATOR_nameDef]被压住[RECIPIENT_nameDef]击倒在地[RECIPIENT_objective]关。
-RulePackDef/HandjobReverseRapeRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] humiliated [RECIPIENT_nameDef] by forcibly jerking [RECIPIENT_objective] off.,li,已发送->[INITIATOR_nameDef]羞辱[RECIPIENT_nameDef]剧烈抽搐[RECIPIENT_objective]关。
-RulePackDef/FootjobReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcefully gave a footjob to [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]强制地给[RECIPIENT_nameDef]没有。
-RulePackDef/FingeringReverseRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was force fingered by [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被强制指触[INITIATOR_nameDef]没有。
-RulePackDef/FistingReverseRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to fist [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被强迫握拳[INITIATOR_nameDef]没有。
-RulePackDef/BreastjobReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly performed a breastjob on [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]强行对其进行了哺乳[RECIPIENT_nameDef]没有。
-RulePackDef/BreastjobReverseRapeRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] tackled [RECIPIENT_nameDef] down and squeezed [RECIPIENT_objective] between [INITIATOR_possessive] breasts.,li,已发送->[INITIATOR_nameDef]已被抓住[RECIPIENT_nameDef]被压榨[RECIPIENT_objective]之间[INITIATOR_possessive]乳房。
-RulePackDef/DoubleReverseRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced into using both [INITIATOR_nameDef] holes.,li,已发送->[RECIPIENT_nameDef]被迫同时使用[INITIATOR_nameDef]破洞。
-RulePackDef/ScissoringReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly scissored with [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]强制剪发[RECIPIENT_nameDef]没有。
-RulePackDef/RimmingReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly rimmed [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]强制收拢[RECIPIENT_nameDef]没有。
-RulePackDef/CunnilingusReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly licked [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]被强行舔[RECIPIENT_nameDef]没有。
-RulePackDef/FellatioReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly fellated [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]被强迫[RECIPIENT_nameDef]没有。
-RulePackDef/BeakjobReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly gave [RECIPIENT_nameDef] a beakjob.,li,已发送->[INITIATOR_nameDef]强制给予[RECIPIENT_nameDef]一份工作。
-RulePackDef/SixtynineReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly sixtynined [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]六合二为一的强制仪式[RECIPIENT_nameDef]没有。
-RulePackDef/DeepthroatReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] went down on [RECIPIENT_nameDef] and forcibly deepthroated [RECIPIENT_objective].,li,已发送->[INITIATOR_nameDef]继续下去[RECIPIENT_nameDef]并强制执行[RECIPIENT_objective]没有。
-RulePackDef/RimmingRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] rimmed [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]边缘[INITIATOR_nameDef]没有。
-RulePackDef/CunnilingusRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] went down on [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]继续下去[INITIATOR_nameDef]没有。
-RulePackDef/FellatioRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] sucked off [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被吸走[INITIATOR_nameDef]没有。
-RulePackDef/BeakjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] fellated [INITIATOR_nameDef] with [RECIPIENT_possessive] beak.,li,已发送->[RECIPIENT_nameDef]激动[INITIATOR_nameDef]伴[RECIPIENT_possessive]鸟喙。
-RulePackDef/SixtynineRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] 69'd with [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]69 岁[INITIATOR_nameDef]没有。
-RulePackDef/MutualMakeoutRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] make out with [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]与[INITIATOR_nameDef]没有。
-RulePackDef/DeepthroatRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] deepthroated [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]深喉[INITIATOR_nameDef]没有。
-RulePackDef/RimmingReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] rimmed [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]边缘[RECIPIENT_nameDef]没有。
-RulePackDef/CunnilingusReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] went down on [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]继续下去[RECIPIENT_nameDef]没有。
-RulePackDef/FellatioReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] sucked off [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]被吸走[RECIPIENT_nameDef]没有。
-RulePackDef/BeakjobReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] fellated [RECIPIENT_nameDef] with [INITIATOR_possessive] beak.,li,已发送->[INITIATOR_nameDef]激动[RECIPIENT_nameDef]伴[INITIATOR_possessive]鸟喙。
-RulePackDef/SixtynineReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] 69'd with [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]69 岁[RECIPIENT_nameDef]没有。
-RulePackDef/DeepthroatReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] deepthroated [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]深喉[RECIPIENT_nameDef]没有。
-RulePackDef/MainReverseRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.,li,已发送->[RECIPIENT_nameDef]加入[INITIATOR_nameDef]的膝盖。
-RulePackDef/MainReverseRP.rulePack.rulesStrings.1,sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].,li,已发送->[RECIPIENT_nameDef]被取笑[INITIATOR_nameDef]直到[INITIATOR_pronoun]受不了了![RECIPIENT_objective]没有。
-RulePackDef/MainReverseRP.rulePack.rulesStrings.2,sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.,li,已发送->[RECIPIENT_nameDef]已被抓住[INITIATOR_nameDef]击倒在地[RECIPIENT_objective]到床上去。
-RulePackDef/DefaultSexReverseRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] had sex with [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]和孩子做过爱[INITIATOR_nameDef]没有。
-RulePackDef/AnalSexReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] was fucked anally by [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]被盟友干了[RECIPIENT_nameDef]没有。
-RulePackDef/VaginalSexReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] was fucked vaginally by [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]被阴道操[RECIPIENT_nameDef]没有。
-RulePackDef/HandjobReverseRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] received a handjob from [INITIATOR_nameDef].,li,"已发送->[RECIPIENT_nameDef]接到一个手辅,[INITIATOR_nameDef]没有。"
-RulePackDef/HandjobReverseRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] squeezed [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]被挤压[RECIPIENT_nameDef]没有。
-RulePackDef/HandjobReverseRP.rulePack.rulesStrings.2,sent-> [INITIATOR_nameDef] jerked off [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]猛击[RECIPIENT_nameDef]没有。
-RulePackDef/FootjobReverseRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] received a footjob from [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]得到一份工作[INITIATOR_nameDef]没有。
-RulePackDef/FootjobReverseRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] squeezed [RECIPIENT_nameDef] with [INITIATOR_possessive] feet.,li,已发送->[INITIATOR_nameDef]被挤压[RECIPIENT_nameDef]伴[INITIATOR_possessive]脚部。
-RulePackDef/FingeringReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] fingered [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]用手指触摸[RECIPIENT_nameDef]没有。
-RulePackDef/FistingReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] anally fisted [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]麻痹[RECIPIENT_nameDef]没有。
-RulePackDef/DoublePenetrationReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into using both [RECIPIENT_possessive] poles on [INITIATOR_objective].,li,已发送->[INITIATOR_nameDef]被取笑[RECIPIENT_nameDef]同时使用[RECIPIENT_possessive]杆开[INITIATOR_objective]没有。
-RulePackDef/DoublePenetrationReverseRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into using both [RECIPIENT_possessive] poles on both [INITIATOR_possessive] holes.,li,已发送->[INITIATOR_nameDef]被取笑[RECIPIENT_nameDef]同时使用[RECIPIENT_possessive]两个杆都有[INITIATOR_possessive]破洞。
-RulePackDef/BreastjobReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] gave [RECIPIENT_nameDef] a breastjob.,li,已发送->[INITIATOR_nameDef]给予[RECIPIENT_nameDef]一份保育员。
-RulePackDef/BreastjobReverseRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] stroked [RECIPIENT_nameDef] with [INITIATOR_possessive] breasts.,li,已发送->[INITIATOR_nameDef]轻触[RECIPIENT_nameDef]伴[INITIATOR_possessive]乳房。
-RulePackDef/AnalSexRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] had anal sex with [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]进行过肛交[RECIPIENT_nameDef]没有。
-RulePackDef/VaginalSexRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] had vaginal sex with [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]经阴道与他人发生性关系[RECIPIENT_nameDef]没有。
-RulePackDef/OtherSexRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] had sex with [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]和孩子做过爱[RECIPIENT_nameDef]没有。
-RulePackDef/DoublePenetrationRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was double-penetrated by [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]被穿透[INITIATOR_nameDef]没有。
-RulePackDef/BreastjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] gave [INITIATOR_nameDef] a breastjob.,li,已发送->[RECIPIENT_nameDef]给予[INITIATOR_nameDef]一份保育员。
-RulePackDef/HandjobRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] received a handjob from [RECIPIENT_nameDef].,li,"已发送->[INITIATOR_nameDef]接到一个手辅,[RECIPIENT_nameDef]没有。"
-RulePackDef/HandjobRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] was jerked off by [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]被打乱[RECIPIENT_nameDef]没有。
-RulePackDef/FootjobRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] received a footjob from [RECIPIENT_nameDef].,li,已发送->[INITIATOR_nameDef]得到一份工作[RECIPIENT_nameDef]没有。
-RulePackDef/FingeringRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] fingered [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]用手指触摸[INITIATOR_nameDef]没有。
-RulePackDef/ScissoringRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] scissored with [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]剪发[INITIATOR_nameDef]没有。
-RulePackDef/MutualMasturbationRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] masturbated each other.,li,已发送->[INITIATOR_nameDef]和[RECIPIENT_nameDef]互相自慰。
-RulePackDef/MutualTailholdingRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] intertwined tails.,li,已发送->[INITIATOR_nameDef]和[RECIPIENT_nameDef]缠绕在一起的尾巴。
-RulePackDef/MutualHandholdingRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] holded each other's hands.,li,已发送->[INITIATOR_nameDef]和[RECIPIENT_nameDef]互相握住对方的手。
-RulePackDef/FistingRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] anally fisted [INITIATOR_nameDef].,li,已发送->[RECIPIENT_nameDef]麻痹[INITIATOR_nameDef]没有。
+RulePackDef/Bestiality_AnalRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was anally bred by [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被[INITIATOR_nameDef]没有。
+RulePackDef/Bestiality_VaginalRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was vaginally bred by [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]由[INITIATOR_nameDef]没有。
+RulePackDef/Bestiality_OralRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was orally bred by [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被口育[INITIATOR_nameDef]没有。
+RulePackDef/Bestiality_DoublePenRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was double penetrated by [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被穿透[INITIATOR_nameDef]没有。
+RulePackDef/Bestiality_Reverse_AnalRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] anally.,li,sent-> [INITIATOR_nameDef]被取笑[RECIPIENT_nameDef]安装中[INITIATOR_nameDef]盟友。
+RulePackDef/Bestiality_Reverse_AnalRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]出席[RECIPIENT_nameDef]没有。
+RulePackDef/Bestiality_Reverse_VaginalRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] vaginally.,li,sent-> [INITIATOR_nameDef]被取笑[RECIPIENT_nameDef]安装中[INITIATOR_nameDef]正在阴道中。
+RulePackDef/Bestiality_Reverse_VaginalRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]出席[RECIPIENT_nameDef]没有。
+RulePackDef/Bestiality_Reverse_OralRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] orally.,li,sent-> [INITIATOR_nameDef]被取笑[RECIPIENT_nameDef]安装中[INITIATOR_nameDef]口头上的。
+RulePackDef/Bestiality_Reverse_OralRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]出席[RECIPIENT_nameDef]没有。
+RulePackDef/Bestiality_Reverse_Double_Penetration.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into double penetrating [INITIATOR_nameDef].,li,sent-> [INITIATOR_nameDef]被取笑[RECIPIENT_nameDef]变成双穿透[INITIATOR_nameDef]没有。
+RulePackDef/Bestiality_Reverse_Double_Penetration.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]出席[RECIPIENT_nameDef]没有。
+RulePackDef/Masturbation_HandjobPRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] penis.,li,sent-> [INITIATOR_nameDef]释放一些紧张性使用[INITIATOR_possessive]阴茎。
+RulePackDef/Masturbation_HandjobVRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] vagina.,li,sent-> [INITIATOR_nameDef]释放一些紧张性使用[INITIATOR_possessive]阴道。
+RulePackDef/Masturbation_HandjobARP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] anus.,li,sent-> [INITIATOR_nameDef]释放一些紧张性使用[INITIATOR_possessive]肛门。
+RulePackDef/Masturbation_HandjobBRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] breasts.,li,sent-> [INITIATOR_nameDef]释放一些紧张性使用[INITIATOR_possessive]乳房。
+RulePackDef/Masturbation_AutoFellatioRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] autofellated [INITIATOR_possessive] penis.,li,sent-> [INITIATOR_nameDef]自律[INITIATOR_possessive]阴茎。
+RulePackDef/Masturbation_AutoBreastjobRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] stroked [INITIATOR_possessive] penis with [INITIATOR_possessive] breasts.,li,sent-> [INITIATOR_nameDef]轻触[INITIATOR_possessive]阴茎伴[INITIATOR_possessive]乳房。
+RulePackDef/AnalRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was anally raped by [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被敌我强奸[INITIATOR_nameDef]没有。
+RulePackDef/VaginalRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was vaginally raped by [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被[INITIATOR_nameDef]没有。
+RulePackDef/FellatioRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to fellate [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被迫假装[INITIATOR_nameDef]没有。
+RulePackDef/BeakjobRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to give a beakjob to [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被迫给[INITIATOR_nameDef]没有。
+RulePackDef/OtherRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was raped.,li,sent-> [RECIPIENT_nameDef]被强奸了。
+RulePackDef/ForcedRimmingRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to lick [INITIATOR_nameDef]'s anus.,li,sent-> [RECIPIENT_nameDef]被迫舔[INITIATOR_nameDef]肛门。
+RulePackDef/ForcedCunnilingusRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to lick [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被迫舔[INITIATOR_nameDef]没有。
+RulePackDef/ForcedFellatioRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to fellate [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被迫假装[INITIATOR_nameDef]没有。
+RulePackDef/ForcedBreastjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to give a breastjob to [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被迫给[INITIATOR_nameDef]没有。
+RulePackDef/HandjobRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] pinned [RECIPIENT_nameDef] down and forcefully jacked [RECIPIENT_objective] off.,li,sent-> [INITIATOR_nameDef]被压住[RECIPIENT_nameDef]击倒在地[RECIPIENT_objective]关。
+RulePackDef/HandjobRapeRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] humiliated [RECIPIENT_nameDef] by forcibly jerking [RECIPIENT_objective] off.,li,sent-> [INITIATOR_nameDef]羞辱[RECIPIENT_nameDef]剧烈抽搐[RECIPIENT_objective]关。
+RulePackDef/FootjobRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] gave a forced footjob to [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]强制步行给[RECIPIENT_nameDef]没有。
+RulePackDef/MaleRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forced [RECIPIENT_nameDef] to cum.,li,sent-> [INITIATOR_nameDef]强制[RECIPIENT_nameDef]To 射精。
+RulePackDef/ForcedHandjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to give a handjob to [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被迫给[INITIATOR_nameDef]没有。
+RulePackDef/ForcedHandjobRP.rulePack.rulesStrings.1,sent-> [RECIPIENT_nameDef] was forced to jerk off [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被迫猛击[INITIATOR_nameDef]没有。
+RulePackDef/ForcedFootjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to give a footjob to [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被迫给[INITIATOR_nameDef]没有。
+RulePackDef/DoubleRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was double-penetrated and raped vaginally and anally.,li,sent-> [RECIPIENT_nameDef]曾遭到双重强奸。
+RulePackDef/FingeringRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly fingered [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]手指被戳中[RECIPIENT_nameDef]没有。
+RulePackDef/ForcedFingeringRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to finger [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被强迫用手指戳[INITIATOR_nameDef]没有。
+RulePackDef/ScissoringRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly scissored with [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]强制剪发[RECIPIENT_nameDef]没有。
+RulePackDef/ForcedScissoringRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to scissor with [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被迫与[INITIATOR_nameDef]没有。
+RulePackDef/FistingRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly fisted [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]被强制使用[RECIPIENT_nameDef]没有。
+RulePackDef/ForcedSixtynineRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] coerced [RECIPIENT_nameDef] into 69ing with [INITIATOR_objective].,li,sent-> [INITIATOR_nameDef]被强迫[RECIPIENT_nameDef]进入 69 岁与[INITIATOR_objective]没有。
+RulePackDef/ForcedSixtynineRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] forced [RECIPIENT_nameDef] to 69 with [INITIATOR_objective].,li,sent-> [INITIATOR_nameDef]强制[RECIPIENT_nameDef]到 69 岁[INITIATOR_objective]没有。
+RulePackDef/MechImplantingRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] implanted something inside [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]在里面植入了东西[RECIPIENT_nameDef]没有。
+RulePackDef/DeepthroatRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly deepthroated [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]被强制操作[RECIPIENT_nameDef]没有。
+RulePackDef/AnalReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcefully rode [RECIPIENT_nameDef] anally.,li,sent-> [INITIATOR_nameDef]强力骑乘[RECIPIENT_nameDef]盟友。
+RulePackDef/VaginalReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcefully rode [RECIPIENT_nameDef] vaginally.,li,sent-> [INITIATOR_nameDef]强力骑乘[RECIPIENT_nameDef]正在阴道中。
+RulePackDef/HandjobReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] pinned [RECIPIENT_nameDef] down and forcefully jacked [RECIPIENT_objective] off.,li,sent-> [INITIATOR_nameDef]被压住[RECIPIENT_nameDef]击倒在地[RECIPIENT_objective]关。
+RulePackDef/HandjobReverseRapeRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] humiliated [RECIPIENT_nameDef] by forcibly jerking [RECIPIENT_objective] off.,li,sent-> [INITIATOR_nameDef]羞辱[RECIPIENT_nameDef]剧烈抽搐[RECIPIENT_objective]关。
+RulePackDef/FootjobReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcefully gave a footjob to [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]强制地给[RECIPIENT_nameDef]没有。
+RulePackDef/FingeringReverseRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was force fingered by [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被强制指触[INITIATOR_nameDef]没有。
+RulePackDef/FistingReverseRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced to fist [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被强迫握拳[INITIATOR_nameDef]没有。
+RulePackDef/BreastjobReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly performed a breastjob on [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]强行对其进行了哺乳[RECIPIENT_nameDef]没有。
+RulePackDef/BreastjobReverseRapeRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] tackled [RECIPIENT_nameDef] down and squeezed [RECIPIENT_objective] between [INITIATOR_possessive] breasts.,li,sent-> [INITIATOR_nameDef]已被抓住[RECIPIENT_nameDef]被压榨[RECIPIENT_objective]之间[INITIATOR_possessive]乳房。
+RulePackDef/DoubleReverseRapeRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was forced into using both [INITIATOR_nameDef] holes.,li,sent-> [RECIPIENT_nameDef]被迫同时使用[INITIATOR_nameDef]破洞。
+RulePackDef/ScissoringReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly scissored with [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]强制剪发[RECIPIENT_nameDef]没有。
+RulePackDef/RimmingReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly rimmed [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]强制收拢[RECIPIENT_nameDef]没有。
+RulePackDef/CunnilingusReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly licked [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]被强行舔[RECIPIENT_nameDef]没有。
+RulePackDef/FellatioReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly fellated [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]被强迫[RECIPIENT_nameDef]没有。
+RulePackDef/BeakjobReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly gave [RECIPIENT_nameDef] a beakjob.,li,sent-> [INITIATOR_nameDef]强制给予[RECIPIENT_nameDef]一份工作。
+RulePackDef/SixtynineReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] forcibly sixtynined [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]六合二为一的强制仪式[RECIPIENT_nameDef]没有。
+RulePackDef/DeepthroatReverseRapeRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] went down on [RECIPIENT_nameDef] and forcibly deepthroated [RECIPIENT_objective].,li,sent-> [INITIATOR_nameDef]继续下去[RECIPIENT_nameDef]并强制执行[RECIPIENT_objective]没有。
+RulePackDef/RimmingRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] rimmed [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]边缘[INITIATOR_nameDef]没有。
+RulePackDef/CunnilingusRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] went down on [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]继续下去[INITIATOR_nameDef]没有。
+RulePackDef/FellatioRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] sucked off [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被吸走[INITIATOR_nameDef]没有。
+RulePackDef/BeakjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] fellated [INITIATOR_nameDef] with [RECIPIENT_possessive] beak.,li,sent-> [RECIPIENT_nameDef]激动[INITIATOR_nameDef]伴[RECIPIENT_possessive]鸟喙。
+RulePackDef/SixtynineRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] 69'd with [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]69 岁[INITIATOR_nameDef]没有。
+RulePackDef/MutualMakeoutRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] make out with [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]与[INITIATOR_nameDef]没有。
+RulePackDef/DeepthroatRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] deepthroated [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]深喉[INITIATOR_nameDef]没有。
+RulePackDef/RimmingReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] rimmed [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]边缘[RECIPIENT_nameDef]没有。
+RulePackDef/CunnilingusReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] went down on [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]继续下去[RECIPIENT_nameDef]没有。
+RulePackDef/FellatioReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] sucked off [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]被吸走[RECIPIENT_nameDef]没有。
+RulePackDef/BeakjobReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] fellated [RECIPIENT_nameDef] with [INITIATOR_possessive] beak.,li,sent-> [INITIATOR_nameDef]激动[RECIPIENT_nameDef]伴[INITIATOR_possessive]鸟喙。
+RulePackDef/SixtynineReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] 69'd with [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]69 岁[RECIPIENT_nameDef]没有。
+RulePackDef/DeepthroatReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] deepthroated [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]深喉[RECIPIENT_nameDef]没有。
+RulePackDef/MainReverseRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.,li,sent-> [RECIPIENT_nameDef]加入[INITIATOR_nameDef]的膝盖。
+RulePackDef/MainReverseRP.rulePack.rulesStrings.1,sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].,li,sent-> [RECIPIENT_nameDef]被取笑[INITIATOR_nameDef]直到[INITIATOR_pronoun]受不了了![RECIPIENT_objective]没有。
+RulePackDef/MainReverseRP.rulePack.rulesStrings.2,sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.,li,sent-> [RECIPIENT_nameDef]已被抓住[INITIATOR_nameDef]击倒在地[RECIPIENT_objective]到床上去。
+RulePackDef/DefaultSexReverseRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] had sex with [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]和孩子做过爱[INITIATOR_nameDef]没有。
+RulePackDef/AnalSexReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] was fucked anally by [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]被盟友干了[RECIPIENT_nameDef]没有。
+RulePackDef/VaginalSexReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] was fucked vaginally by [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]被阴道操[RECIPIENT_nameDef]没有。
+RulePackDef/HandjobReverseRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] received a handjob from [INITIATOR_nameDef].,li,"sent-> [RECIPIENT_nameDef]接到一个手辅,[INITIATOR_nameDef]没有。"
+RulePackDef/HandjobReverseRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] squeezed [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]被挤压[RECIPIENT_nameDef]没有。
+RulePackDef/HandjobReverseRP.rulePack.rulesStrings.2,sent-> [INITIATOR_nameDef] jerked off [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]猛击[RECIPIENT_nameDef]没有。
+RulePackDef/FootjobReverseRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] received a footjob from [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]得到一份工作[INITIATOR_nameDef]没有。
+RulePackDef/FootjobReverseRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] squeezed [RECIPIENT_nameDef] with [INITIATOR_possessive] feet.,li,sent-> [INITIATOR_nameDef]被挤压[RECIPIENT_nameDef]伴[INITIATOR_possessive]脚部。
+RulePackDef/FingeringReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] fingered [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]用手指触摸[RECIPIENT_nameDef]没有。
+RulePackDef/FistingReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] anally fisted [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]麻痹[RECIPIENT_nameDef]没有。
+RulePackDef/DoublePenetrationReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into using both [RECIPIENT_possessive] poles on [INITIATOR_objective].,li,sent-> [INITIATOR_nameDef]被取笑[RECIPIENT_nameDef]同时使用[RECIPIENT_possessive]杆开[INITIATOR_objective]没有。
+RulePackDef/DoublePenetrationReverseRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into using both [RECIPIENT_possessive] poles on both [INITIATOR_possessive] holes.,li,sent-> [INITIATOR_nameDef]被取笑[RECIPIENT_nameDef]同时使用[RECIPIENT_possessive]两个杆都有[INITIATOR_possessive]破洞。
+RulePackDef/BreastjobReverseRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] gave [RECIPIENT_nameDef] a breastjob.,li,sent-> [INITIATOR_nameDef]给予[RECIPIENT_nameDef]一份保育员。
+RulePackDef/BreastjobReverseRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] stroked [RECIPIENT_nameDef] with [INITIATOR_possessive] breasts.,li,sent-> [INITIATOR_nameDef]轻触[RECIPIENT_nameDef]伴[INITIATOR_possessive]乳房。
+RulePackDef/AnalSexRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] had anal sex with [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]进行过肛交[RECIPIENT_nameDef]没有。
+RulePackDef/VaginalSexRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] had vaginal sex with [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]经阴道与他人发生性关系[RECIPIENT_nameDef]没有。
+RulePackDef/OtherSexRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] had sex with [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]和孩子做过爱[RECIPIENT_nameDef]没有。
+RulePackDef/DoublePenetrationRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] was double-penetrated by [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]被穿透[INITIATOR_nameDef]没有。
+RulePackDef/BreastjobRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] gave [INITIATOR_nameDef] a breastjob.,li,sent-> [RECIPIENT_nameDef]给予[INITIATOR_nameDef]一份保育员。
+RulePackDef/HandjobRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] received a handjob from [RECIPIENT_nameDef].,li,"sent-> [INITIATOR_nameDef]接到一个手辅,[RECIPIENT_nameDef]没有。"
+RulePackDef/HandjobRP.rulePack.rulesStrings.1,sent-> [INITIATOR_nameDef] was jerked off by [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]被打乱[RECIPIENT_nameDef]没有。
+RulePackDef/FootjobRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] received a footjob from [RECIPIENT_nameDef].,li,sent-> [INITIATOR_nameDef]得到一份工作[RECIPIENT_nameDef]没有。
+RulePackDef/FingeringRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] fingered [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]用手指触摸[INITIATOR_nameDef]没有。
+RulePackDef/ScissoringRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] scissored with [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]剪发[INITIATOR_nameDef]没有。
+RulePackDef/MutualMasturbationRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] masturbated each other.,li,sent-> [INITIATOR_nameDef]和[RECIPIENT_nameDef]互相自慰。
+RulePackDef/MutualTailholdingRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] intertwined tails.,li,sent-> [INITIATOR_nameDef]和[RECIPIENT_nameDef]缠绕在一起的尾巴。
+RulePackDef/MutualHandholdingRP.rulePack.rulesStrings.0,sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] holded each other's hands.,li,sent-> [INITIATOR_nameDef]和[RECIPIENT_nameDef]互相握住对方的手。
+RulePackDef/FistingRP.rulePack.rulesStrings.0,sent-> [RECIPIENT_nameDef] anally fisted [INITIATOR_nameDef].,li,sent-> [RECIPIENT_nameDef]麻痹[INITIATOR_nameDef]没有。
 InteractionDef/Bestiality_Anal.label,anal breeding,label,肛门繁殖
 InteractionDef/Bestiality_Anal.logRulesInitiator.rulesStrings.0,r_logentry->Mounted [RECIPIENT_nameDef].,li,R_logentry-> 已植入[RECIPIENT_nameDef]没有。
 InteractionDef/Bestiality_Anal.logRulesRecipient.rulesStrings.0,r_logentry->Was anally mounted by [INITIATOR_nameDef].,li,R_logentry-> 被[INITIATOR_nameDef]没有。
@@ -1576,3 +1576,575 @@ rjw.HediffDef_SexPart/SlimeAnus.description,"A slick, translucent anus that can 
 rjw.HediffDef_SexPart/SlimeBreasts.label,slime breasts,label,黏液
 rjw.HediffDef_SexPart/SlimeBreasts.labelNoun,a pair of slime breasts,labelNoun,一对黏液乳
 rjw.HediffDef_SexPart/SlimeBreasts.description,"A pair of slick, translucent breasts that can grow or shrink to any desired size.",description,一对光滑的半透明乳房，可以长成或缩小到任何想要的尺寸。
+key,text,tag,translated
+Hediff_InsectEgg_egg,egg,Hediff_InsectEgg_egg,卵
+Hediff_InsectEgg_small,Small egg,Hediff_InsectEgg_small,小卵
+Hediff_InsectEgg_medium,Medium egg,Hediff_InsectEgg_medium,中卵
+Hediff_InsectEgg_big,Big egg,Hediff_InsectEgg_big,大卵
+Hediff_InsectEgg_huge,Huge egg,Hediff_InsectEgg_huge,巨蛋
+Hediff_InsectEgg_fertilized,Fertilized,Hediff_InsectEgg_fertilized,已受精
+Hediff_InsectEgg_unfertilized,Unfertilized,Hediff_InsectEgg_unfertilized,未受精
+PawnCantRapeCP,The target isn't healthy enough or is in a forbidden location.,PawnCantRapeCP,目标身体不够健康或处于被禁止的位置。
+PawnCantRapeCP0,"The pawn doesn't need sex, is not healthy, or cannot rape.",PawnCantRapeCP0,小卒不需要性别，不健康，或者不能强奸。
+PawnCantRapeCP1,The pawn is not single or their partner is nearby.,PawnCantRapeCP1,当家的并不单身，伴侣也在附近。
+PawnCantRapeCP2,The pawn is not a zoophile so they can't rape animals.,PawnCantRapeCP2,小卒不是亲族，所以他们不能强奸动物。
+CommandSubmit,Submit,CommandSubmit,提交
+CommandSubmitDesc,Lay down and accept whatever is to cum.,CommandSubmitDesc,躺下来接受任何要暨的东西。
+RJW_PregnantTitle,{0} is pregnant.,RJW_PregnantTitle,{0} 怀孕了。
+RJW_PregnantText,"{0} is pregnant and is going to be a mother soon. Be aware, starvation and trauma may result in loss of child.",RJW_PregnantText,{0} 怀孕了，即将成为母亲。请注意，饥饿和创伤可能会导致儿童死亡。
+RJW_Contractions,{0} is having contractions! Baby(ies) is(are) on the way!,RJW_Contractions,{0} 正在宫缩!婴儿已经在路上了!
+RJW_GaveBirthTitle,Birthing done.,RJW_GaveBirthTitle,分娩完毕。
+RJW_GaveBirthText,{0} has successfully given birth to,RJW_GaveBirthText,{0} 已成功生孩子
+RJW_ABaby,her baby.,RJW_ABaby,她的孩子。
+RJW_NBabies,her {0} babies.,RJW_NBabies,她的 {0} 个孩子。
+RJW_PregnantNormal,Have a healthy baby...,RJW_PregnantNormal,生一个健康的宝宝...
+RJW_PregnantStrange,Something is unusual about the baby...,RJW_PregnantStrange,这个婴儿有些不寻常.
+RJW_PregnantMechStrange,Something is very strange about the baby...,RJW_PregnantMechStrange,这个婴儿有点奇怪.
+RJW_GaveBirthEggTitle,Birthed egg.,RJW_GaveBirthEggTitle,产子。
+RJW_GaveBirthEggText,{0} laid eggs,RJW_GaveBirthEggText,{0} 产卵
+RJW_EggContractions,{0} is having contractions! Eggs are on the way!,RJW_EggContractions,{0} 正在宫缩!鸡蛋在路上了!
+RJW_AlertRape,{RAPIST} is trying to rape {TARGET}.,RJW_AlertRape,{RAPIST} 正试图强奸 {TARGET}。
+RJW_AlertAssault,{RAPIST} is trying to assault {TARGET}.,RJW_AlertAssault,{RAPIST} 正试图袭击 {TARGET}。
+RJW_AlertBreed,{RAPIST} is trying to breed {TARGET}.,RJW_AlertBreed,{RAPIST} 正试图培育 {TARGET}。
+RJW_AlertRapeRelated,"{RAPIST} is trying to rape {TARGET}, {RAPIST_possessive} {RELATION}.",RJW_AlertRapeRelated,{RAPIST} 正试图强奸 {TARGET}，{RAPIST_possessive} {RELATION}。
+RJW_AlertAssaultRelated,"{RAPIST} is trying to assault {TARGET}, {RAPIST_possessive} {RELATION}.",RJW_AlertAssaultRelated,{RAPIST} 正试图袭击 {TARGET}，{RAPIST_possessive} {RELATION}。
+RJW_AlertBreedRelated,"{RAPIST} is trying to breed {TARGET}, {RAPIST_possessive} {RELATION}.",RJW_AlertBreedRelated,{RAPIST} 正试图培育 {TARGET}，{RAPIST_possessive} {RELATION}。
+RJW_AlertBeeingRaped,{TARGET} is getting raped.,RJW_AlertBeeingRaped,{TARGET} 正在被强奸。
+GoToModSettings,This space is reserved for optional RJW features that are either turned off or unavailable for the selected pawn/animal.\nCheck the fucking mod options and stop asking if THIS is normal.,GoToModSettings,此空间已预留给可选的 RJW 特性，这些特性对所选的 pawn/animal 是否不可用。\ n 查看他妈的 mod 选项，并停止询问这是否正常。
+ForComfort,Use for comfort,ForComfort,舒适使用
+ForComfortDesc,Mark for comforting sex,ForComfortDesc,标记为安慰的性爱
+ForComfortRefuseDesc,Won't agree to be used for comfort\nReq: masochist trait,ForComfortRefuseDesc,不会同意用于安慰 \ n 请求: 受虐狂特性
+ForService,Assign to whorin',ForService,指定给妓女
+ForServiceDesc,"Mark for whoring
+- Will try to hook up with visitors.
+- Entertains other colonists if not busy.
+- Tries to refrain from masturbation while on the job, may cause frustration.",ForServiceDesc,"标记为妓女
+-会尝试与访客勾搭。
+-如果不忙的话就取悦其他殖民者。
+-当你在工作时尽量避免自慰，这可能会让你感到沮丧。"
+ForServiceRefuseDesc,Won't agree to be a whore,ForServiceRefuseDesc,不会同意做妓女
+ForBreeding,For animals,ForBreeding,动物专用
+ForBreedingDesc,Mark for animal breeding,ForBreedingDesc,标记为动物培育
+ForBreedingRefuseDesc,Won't agree to be mounted by animals\nReq: zoophile trait,ForBreedingRefuseDesc,不会同意被动物骑乘 \ n 请求: 亲兽特性
+ForBreedingAnimalDesc,Allow this animal to mount designated breeders,ForBreedingAnimalDesc,允许此动物登上指定的饲养员
+BreedMessage,is trying to breed,BreedMessage,正在尝试繁殖
+ForMilking,Designate dairy,ForMilking,指派乳制品
+ForMilkingDesc,Harvest biological materials from this being,ForMilkingDesc,从此生物身上摘取生物材料
+ForHero,Designate Hero,ForHero,指定英雄
+ForHeroDesc,"Set pawn as player character
+-Can only be set once.
+-Can't be turned off.",ForHeroDesc,"将 pawn 设置为玩家角色
+-只能设置一次。
+-无法关闭。"
+ForHeroRefuse1Desc,This is hero of other player,ForHeroRefuse1Desc,这是其他玩家的英雄
+ForHeroRefuse2Desc,You have no right to change designation,ForHeroRefuse2Desc,你没有权利更改名称
+ForHeroRefuseHCDesc,Non hero colonist in HC mode,ForHeroRefuseHCDesc,HC 模式下的非英雄殖民者
+RJW_PartInfo_braCup,Bra cup: {0},RJW_PartInfo_braCup,胸罩罩杯: {0}
+RJW_PartInfo_braSizeNone,Bra size: -,RJW_PartInfo_braSizeNone,胸罩尺寸:-
+RJW_PartInfo_eggs,Eggs: {0},RJW_PartInfo_eggs,卵: {0}
+RJW_PartInfo_fluidTypeFluidAmount,{0}: {1},RJW_PartInfo_fluidTypeFluidAmount,{0: :{ 1}
+RJW_PartInfo_braSize,Bra size: {0}:{1},RJW_PartInfo_braSize,胸罩尺寸: {0}: {1}
+RJW_PartInfo_overbust,Overbust: {0},RJW_PartInfo_overbust,超胸: {0}
+RJW_PartInfo_underbust,Underbust: {0},RJW_PartInfo_underbust,半熟: {0}
+RJW_PartInfo_weight,Weight: {0},RJW_PartInfo_weight,重量: {0}
+RJW_PartInfo_properties,Properties: {0},RJW_PartInfo_properties,属性: {0}
+RJW_PartInfo_severity,Severity: {0},RJW_PartInfo_severity,严重程度: {0}
+RJW_PartInfo_fluidMultiplier,Fluid Multiplier: {0},RJW_PartInfo_fluidMultiplier,流体乘数: {0}
+RJW_PartInfo_girth,Girth: {0},RJW_PartInfo_girth,肚带: {0}
+RJW_PartInfo_length,Length: {0},RJW_PartInfo_length,长度: {0}
+RJW_PartInfo_depth,Depth: {0},RJW_PartInfo_depth,深度: {0}
+RJW_PartInfo_maxGirth,Max Girth: {0},RJW_PartInfo_maxGirth,最大肚带: {0}
+RJW_PartInfo_maxLength,Max Length: {0},RJW_PartInfo_maxLength,最大长度: {0}
+RJW_PartInfo_fluidTypeFluidAmountHeading,Fluid: {0} ({1}ml),RJW_PartInfo_fluidTypeFluidAmountHeading,流体: {0} ({1} ml)
+RJW_PartInfo_unknownSpecies,Unknown species,RJW_PartInfo_unknownSpecies,未知物种
+RJW_PartInfo_unknownOwner,Unknown,RJW_PartInfo_unknownOwner,未知
+RJW_StatEntry_PreviousOwner,previous owner,RJW_StatEntry_PreviousOwner,上一个拥有者
+RJW_StatEntry_OriginalOwnerRace,original race,RJW_StatEntry_OriginalOwnerRace,原始种族
+RJW_StatEntry_OriginalOwnerSize,original size,RJW_StatEntry_OriginalOwnerSize,原始尺寸
+RJW_StatEntry_PartSize,size,RJW_StatEntry_PartSize,大小
+RJW_StatEntry_PartCupSize,cup size,RJW_StatEntry_PartCupSize,杯子大小
+RJW_StatEntry_PartLength,length,RJW_StatEntry_PartLength,长度
+RJW_StatEntry_PartGirth,girth,RJW_StatEntry_PartGirth,肚带
+RJW_StatEntry_PartMaxGirth,max girth,RJW_StatEntry_PartMaxGirth,最大肚带
+RJW_StatEntry_PartDepth,depth,RJW_StatEntry_PartDepth,深度
+RJW_StatEntry_PartWeight,weight,RJW_StatEntry_PartWeight,重量
+RJW_StatEntry_PartTags,properties,RJW_StatEntry_PartTags,特性
+RJW_StatEntry_Fluid,fluid,RJW_StatEntry_Fluid,演进
+RJW_StatEntry_FluidAmount,fluid amount,RJW_StatEntry_FluidAmount,液体量
+RJW_StatEntry_FluidAmount_ejaculation,ejaculation amount,RJW_StatEntry_FluidAmount_ejaculation,射精量
+RJW_StatEntry_FluidAmount_wetness,wetness,RJW_StatEntry_FluidAmount_wetness,潮湿
+AgeImpactor,Age:,AgeImpactor,年龄:
+VanillaFertilityImpactor,Fertility stat: {VALUE}%,VanillaFertilityImpactor,肥沃度属性: {VALUE} %
+RJW_nymph_incident_raid_title,Nymphs!!!,RJW_nymph_incident_raid_title,若虫!
+RJW_nymph_incident_raid_description,A group of nymphs has wandered into your settlement.,RJW_nymph_incident_raid_description,一群若仙来到了你的定居点。
+RJW_nymph_incident_wander_title,Nymph!,RJW_nymph_incident_wander_title,若虫!
+RJW_nymph_incident_wander_description,A wandering nymph has decided to visit your settlement.,RJW_nymph_incident_wander_description,一位游荡的仙女决定访问你的定居点。
+RJW_nymph_incident_join_title,Nymph Joins,RJW_nymph_incident_join_title,若虫加入
+RJW_nymph_incident_join_description,A wandering nymph has decided to join your settlement.,RJW_nymph_incident_join_description,一位游荡的仙女决定加入你的定居点。
+PawnLacksFunctionalGenitals,{PAWN} has no working genitals.,PawnLacksFunctionalGenitals,{PAWN} 没有工作的生殖器。
+PawnLacksVagina,{PAWN} does not have a vagina.,PawnLacksVagina,{PAWN} 没有阴道。
+PawnLacksFunctionalPenis,{PAWN} does not have a functional penis.,PawnLacksFunctionalPenis,{PAWN} 没有正常的阴茎。
+VaginalWeight,vaginal sex chance,VaginalWeight,阴道性爱几率
+LetterLabelGainedTraitFromSex,Trait gained : {PAWN},LetterLabelGainedTraitFromSex,特性获得: {PAWN}
+GainedTraitFromSex,A sexual experience has caused {PAWN} to gain the {TRAIT} trait.,GainedTraitFromSex,一次性经历使 {PAWN} 获得了 {TRAIT} 特性。
+GainedTraitFromSexNymphomaniac,Aphrodisiac-assisted overstimulation has permanently rewired {PAWN}'s brain. {PAWN_pronoun} has gained the {TRAIT} trait.,GainedTraitFromSexNymphomaniac,壮阳药辅助的过度刺激永久性地重塑了 {PAWN} 的大脑。{PAWN_pronoun} 获得了 {TRAIT} 特性。
+GainedTraitFromSexFootSlut,The feat of feasting on the feel of feet is feeding a fiendish new fetish in {PAWN}. {PAWN} is now a {TRAIT},GainedTraitFromSexFootSlut,用脚部盛宴的壮举正在滋养 {PAWN} 一种邪恶的新迷恋。{PAWN} 现在是 {TRAIT} 了
+LetterLabelGainedMultipleTraitsFromSex,Traits gained: {PAWN},LetterLabelGainedMultipleTraitsFromSex,特性获得: {PAWN}
+GainedMultipleTraitsFromSex,A powerful sexual experience has caused {PAWN} to gain the following traits:,GainedMultipleTraitsFromSex,强大的性体验使 {PAWN} 获得了以下特性:
+GainedMultipleTraitsFromSexListItem,- {0},GainedMultipleTraitsFromSexListItem,-{0}
+PawnColumnWorker_RJWGender_IsHerm,Herm,PawnColumnWorker_RJWGender_IsHerm,赫姆
+PawnColumnWorker_IsSlave,Is pawn Slave?,PawnColumnWorker_IsSlave,当家是奴隶吗？
+PawnColumnWorker_IsPrisoner,Is pawn Prisoner?,PawnColumnWorker_IsPrisoner,典当是囚犯吗？
+PawnColumnWorker_IsComfort,Is pawn Comfort Pawn?,PawnColumnWorker_IsComfort,Pawn 是舒适的 Pawn 吗？
+PawnColumnWorker_IsBreeder,Is pawn Breeder?,PawnColumnWorker_IsBreeder,当铺的饲养员？
+MainTabWindow_Designators,Designators,MainTabWindow_Designators,标记者
+RJW_RMB,Interact,RJW_RMB,互动
+RJW_RMB_NoSex,refuses to have sex with,RJW_RMB_NoSex,拒绝与
+RJW_RMB_Social,Socialize with {0_labelShort},RJW_RMB_Social,与 {0_labelShort} 社交
+RJW_RMB_Masturbate,Masturbate,RJW_RMB_Masturbate,自慰
+RJW_RMB_Sex,Have sex with {0_labelShort},RJW_RMB_Sex,和 {0_labelShort} 做爱
+RJW_RMB_Bestiality,Bestiality {0_labelShort},RJW_RMB_Bestiality,兽性 {0_labelShort}
+RJW_RMB_Sex_Reverse,(Reverse)Sex {0_labelShort},RJW_RMB_Sex_Reverse,(反向) 性别 {0_labelShort}
+RJW_RMB_Bestiality_Reverse,(Reverse)Bestiality {0_labelShort},RJW_RMB_Bestiality_Reverse,(反向) 兽性 {0_labelShort}
+RJW_RMB_Insult,Insult,RJW_RMB_Insult,侮辱
+RJW_RMB_SocialFight,Start a fight,RJW_RMB_SocialFight,开始战斗
+RJW_RMB_Chat,Chat,RJW_RMB_Chat,闲谈
+RJW_RMB_DeepTalk,Deep talk,RJW_RMB_DeepTalk,深入交流
+RJW_RMB_RomanceAttempt,Attempt romance,RJW_RMB_RomanceAttempt,尝试恋爱
+RJW_RMB_MarriageProposal,Make marriage proposal,RJW_RMB_MarriageProposal,求婚
+RJW_RMB_Masturbate_Bed,Masturbate on chair or bed,RJW_RMB_Masturbate_Bed,在椅子或床上自慰
+RJW_RMB_Masturbate_At,Masturbate at,RJW_RMB_Masturbate_At,自慰于
+RJW_RMB_Masturbate_Here,Masturbate here,RJW_RMB_Masturbate_Here,在这里自慰
+RJW_RMB_Masturbate_With,Masturbate with,RJW_RMB_Masturbate_With,与
+RJW_RMB_Rape,Rape {0_labelShort},RJW_RMB_Rape,强奸 {0_labelShort}
+RJW_RMB_Rape_Reverse,(Reverse)Rape {0_labelShort},RJW_RMB_Rape_Reverse,(反向) 强奸 {0_labelShort}
+RJW_RMB_RapeCorpse,Violate corpse of {0_labelShort},RJW_RMB_RapeCorpse,侵犯 {0_labelShort} 的尸体
+RJW_RMB_RapeCorpse_Reverse,(Reverse)Violate corpse of {0_labelShort},RJW_RMB_RapeCorpse_Reverse,(反向) 侵犯 {0_labelShort} 的尸体
+RJW_RMB_RapeAnimal,Breed {0_labelShort},RJW_RMB_RapeAnimal,培育 {0_labelShort}
+RJW_RMB_RapeAnimal_Reverse,(Reverse)Be Bred by {0_labelShort},RJW_RMB_RapeAnimal_Reverse,(反向) 由 {0_labelShort} 培育
+RJW_RMB_HackMechPregnancy,Hack implanted mech,RJW_RMB_HackMechPregnancy,植入机械体
+RJW_RMB_ReasonLowOpinionOfTarget,Low opinion of target,RJW_RMB_ReasonLowOpinionOfTarget,目标评价低
+RJW_RMB_ReasonUnappealingTarget,Not sexually attracted to target,RJW_RMB_ReasonUnappealingTarget,未被目标性吸引
+RJW_RMB_ReasonLowOpinionOfPawn,Low opinion of me,RJW_RMB_ReasonLowOpinionOfPawn,对我的评价低
+RJW_RMB_ReasonUnappealingPawn,Not sexually attracted to me,RJW_RMB_ReasonUnappealingPawn,对我没有性欲
+RJW_RMB_ReasonNeedBed,Need assigned bed,RJW_RMB_ReasonNeedBed,缺少床
+RJW_RMB_ReasonCantReachBed,Can't reach assigned bed,RJW_RMB_ReasonCantReachBed,无法到达指定的床铺
+RJWSettingsOne,RimJobWorld - Basic Settings,RJWSettingsOne,RimJobWorld-基本设置
+NymphTamed,Nymphomaniac Join,NymphTamed,尼玛派教徒加入
+NymphTamed_desc,Spawns pawn with ('Hypersexual' trait) to join the colony.,NymphTamed_desc,生成具有 (“超然” 特性) 的 pawn，让其加入殖民地。
+NymphWild,Nymphomaniac Wild,NymphWild,慕男狂 (野生)
+NymphWild_desc,Spawns wild pawn with ('Hypersexual' trait) to attack the colony.,NymphWild_desc,生成具有 (“清醒” 特性) 的野生兽，对殖民地发起攻击。
+NymphRaidEasy,Nymphomaniacs raid(easy),NymphRaidEasy,慕男狂袭击 (容易)
+NymphRaidEasy_desc,Nymphomaniacs decided to visit your colony.\nbaseChance is 0.1.,NymphRaidEasy_desc,慕男狂主义者决定访问你的殖民地。\ n 最终几率是 0.1。
+NymphRaidHard,Nymphomaniacs raid(hard),NymphRaidHard,慕男狂迷的袭击 (艰难)
+NymphRaidHard_desc,Nymphomaniacs decided it is now their colony.\n(Game Over).\nbaseChance is 0.01.,NymphRaidHard_desc,慕男狂们决定将这里变成他们的殖民地。\ n (游戏结束)。\ n 最终几率是 0.01。
+NymphRaidRP,Limp nymph raids,NymphRaidRP,脆弱的若虫袭击
+NymphRaidRP_desc,Switches nymph raids to use raid points for those who are too weak for intended nymph raids difficulty.,NymphRaidRP_desc,开关若虫袭击来为那些对于袭击难度来说太弱的人使用袭击点数。
+NymphPermanentManhunter,Permanent manhunter nymphs,NymphPermanentManhunter,永久猎杀人类若虫
+NymphPermanentManhunter_desc,Permanent manhunter mentalstate.,NymphPermanentManhunter_desc,永久猎杀人类的精神状态。
+NymphSappers,Nymph Sappers,NymphSappers,仙兽工兵
+NymphSappers_desc,Knock-knock! Horny can smell you behind that door! You can run but you cant hide.,NymphSappers_desc,敲敲!角质!能在门后闻到你的味道!你可以跑但无法躲藏。
+NymphFrustratedRape,Nypmhs rape when frustrated.,NymphFrustratedRape,失魂落魄的 Nypmhs 遭到强奸。
+NymphFrustratedRape_desc,"When Nympths are frustrated, and no partners are available, they will randomly rape someone/something",NymphFrustratedRape_desc,当尼姆斯感到沮丧，并且没有伴侣可用时，他们会随机强奸某人/某事
+FemaleFuta,Enable futas,FemaleFuta,启用蒲团
+FemaleFuta_desc,Spawn females as futas(+ penis),FemaleFuta_desc,将雌性繁殖为蒲团 (+ 阴茎)
+MaleTrap,Enable traps,MaleTrap,启用陷阱
+MaleTrap_desc,Spawn males as traps(+ breasts),MaleTrap_desc,生成雄性作为陷阱 (+ 乳房)
+male_nymph_chance,Male nymph spawn chance,male_nymph_chance,公若虫产卵几率
+male_nymph_chance_desc,Male nymph spawn chance \n\nValid range: 0 - 100\nDefault: 0,male_nymph_chance_desc,公若虫繁殖几率 \ n 有效范围: 0-100 \ n 默认值: 0
+futa_nymph_chance,Futa/Trap nymph spawn chance,futa_nymph_chance,未来/陷阱若虫繁殖几率
+futa_nymph_chance_desc,Futa/Trap nymph spawn chance \n\nValid range: 0 - 100\nDefault: 0,futa_nymph_chance_desc,未来/陷阱若虫繁殖几率 \ n 有效范围: 0-100 \ n 默认值: 0
+futa_natives_chance,Futa/Trap natives spawn chance,futa_natives_chance,Futa/Trap 土著生成几率
+futa_natives_chance_desc,Futa/Trap natives spawn chance \n(industrial techlevel and below) \n\nValid range: 0 - 100\nDefault: 0,futa_natives_chance_desc,Futa/陷阱土著繁殖几率 \ n (工业技术等级及以下) \ n 有效范围: 0-100 \ n 默认值: 0
+futa_spacers_chance,Futa/Trap spacers spawn chance,futa_spacers_chance,Futa/Trap 太空飞船产卵几率
+futa_spacers_chance_desc,Futa/Trap spacers spawn chance \n\nValid range: 0 - 100\nDefault: 5,futa_spacers_chance_desc,Futa/陷阱间隔器生成几率 \ n 有效范围: 0-100 \ n 默认值: 5
+sexneed_decay_rate_name,Sex need decay rate (%),sexneed_decay_rate_name,性别需求衰减速率 (%)
+sexneed_decay_rate_desc,0% for no decay.\n1000000% for Rapeturnus Planet. Recommended range: 50% to 200%.,sexneed_decay_rate_desc,0% (未衰变)。\ n100000 % (狂暴星球)。推荐范围: 50% 至 200%.
+sexneed_fix_name,Sex need fix,sexneed_fix_name,性欲需求修复
+sexneed_fix_desc,"Fixes incorrect sex need thresholds, likely significantly reduces triggers for sex and rape.",sexneed_fix_desc,修复了不正确的性别需求阈值，可能会大大降低性和强奸的触发因素。
+Animal_mating_cooldown,Animal mating cooldown,Animal_mating_cooldown,动物交配冷却时间
+Animal_mating_cooldown_desc,How many hours animal waits before mating/breeding.\n0 - based on sexdrive,Animal_mating_cooldown_desc,动物在交配/繁殖前的等待时间。\ n0-基于性欲
+AllowYouthSex,Allow youth sex,AllowYouthSex,允许年轻人的性别
+AllowYouthSex_desc,Allow sex between humanlikes that are in reproductive lifestage but their growth havent reached 100%.,AllowYouthSex_desc,允许处于生育生命阶段但成长速度尚未达到 100% 的人类之间的性别匹配。
+sex_age_legacymode,Legacy Sex age limiters,sex_age_legacymode,遗留的性别年龄限制器
+sex_age_legacymode_desc,"Legacy age limiters for Humanlike Pawns, pretty much broken for races with non human life expectancy, but ppl want this back so whatever.\n When disabled uses race reproductive lifestage as teen, and pawn growth (100%) as adult.",sex_age_legacymode_desc,对于人类般的 Pawns 来说，遗留的年龄限制器，对于那些没有人类预期寿命的种族来说几乎是崩溃的，但是人们希望这个回来，所以无论如何。 \ n 当残疾人使用种族生殖生命阶段作为青少年，和典当成长 (100%) 作为成年人。
+SexMinimumAge,Sex min. age,SexMinimumAge,性别、最小年龄
+SexMinimumAge_desc,Humanlike Pawns younger than this will not have sex at all.,SexMinimumAge_desc,比这更年轻的人类 Pawns 根本不会发生性关系。
+SexFreeForAllAge,Age of consent,SexFreeForAllAge,同意年龄
+SexFreeForAllAge_desc,Humanlike Pawns younger than this will only have sex with pawns with 2 years age difference.,SexFreeForAllAge_desc,比这更年轻的人类 Pawns 只会与年龄相差 2 岁的人类 pawns 发生性关系。
+bestiality_enabled,Enable bestiality,bestiality_enabled,启用动物
+bestiality_enabled_desc,Enable acts of bestiality. Desired and not so much.,bestiality_enabled_desc,允许野兽行为。渴望但不多。
+animal_on_animal_enabled,Enable animal-on-animal,animal_on_animal_enabled,启用动物对动物
+animal_on_animal_enabled_desc,"Enable wild animals mating. Tamed animals will mate within their own species regardless of this setting(vanilla behavior).\nEnable interspecies sex between (designated) animals, which may result in pregnancy.",animal_on_animal_enabled_desc,允许野生动物交配。驯服的动物将在自己的物种内进行伴侣，无论此设置如何 (香草的行为)。\ n 启用动物之间的种间性别 (指定的)，这可能会导致怀孕。
+animal_on_human_enabled,Enable animal-on-human,animal_on_human_enabled,启用人形
+animal_on_human_enabled_desc,Enable acts of bestiality initiated by colony animals trying to mate Humanlike Pawns.,animal_on_human_enabled_desc,启用殖民地动物发起的野兽行为，这些动物试图与人类进行配偶。
+necrophilia_enabled,Enable necrophilia,necrophilia_enabled,启用死灵
+necrophilia_enabled_desc,"Enable sex with corpses. Usually limited to pawns with Necrophiliac trait, but others can sometimes do it if they are sexually frustrated.",necrophilia_enabled_desc,启用与尸体的性爱。通常只限于有死灵特性的 pawns，但其他人有时会在性沮丧时这么做。
+sounds_enabled,Enable RJW sounds,sounds_enabled,启用 RJW 声音
+sounds_enabled_desc,"Enables RJW-specific sounds. Note that this has no effect on core settings: if you have sound completely disabled, this does nothing.",sounds_enabled_desc,启用 RJW 特定的声音。请注意，这对核心设置没有影响: 如果你完全禁用了声音，则不会做任何事情。
+sounds_sex_volume,Sex volume,sounds_sex_volume,性别卷
+sounds_sex_volume_desc,Change sex volume,sounds_sex_volume_desc,改变性别音量
+sounds_cum_volume,Cum volume,sounds_cum_volume,暨体
+sounds_cum_volume_desc,Change cum volume,sounds_cum_volume_desc,改变量
+sounds_voice_volume,Voice volume,sounds_voice_volume,音量
+sounds_voice_volume_desc,Change voice volume,sounds_voice_volume_desc,改变音量
+sounds_orgasm_volume,Orgasm volume,sounds_orgasm_volume,高潮音量
+sounds_orgasm_volume_desc,Change orgasm volume,sounds_orgasm_volume_desc,改变高潮音量
+sounds_animal_on_animal_volume,Animal on animal volume modifier,sounds_animal_on_animal_volume,动物体积修改器
+sounds_animal_on_animal_volume_desc,Additional volume modifier for Animal on animal sex,sounds_animal_on_animal_volume_desc,动物性别附加体积修改器
+cum_filth,Enable cum filth,cum_filth,启用累积污物
+cum_filth_desc,"Enables cum filth after sex. Note that disabling this will make the game easier, because of the lack of filth and need for cleaning.",cum_filth_desc,在性别之后启用精液污物。请注意，禁用此选项将使游戏变得更容易，因为缺少污物和需要清洁。
+RPG_hero_control_name,Hero mode,RPG_hero_control_name,英雄模式
+RPG_hero_control_desc,Player can set 1 pawn as a player character and have direct unconditional control,RPG_hero_control_desc,玩家可以将 1 个 pawn 设置为玩家角色，并拥有直接的、无条件的控制权。
+RPG_hero_control_HC_name,Hero mode (HC),RPG_hero_control_HC_name,英雄模式 (HC)
+RPG_hero_control_HC_desc,"HARDCORE: Player can only control hero, get some lube, you'll need a lot of it.\n(intended for multiplayer)",RPG_hero_control_HC_desc,硬核: 玩家只能控制英雄，获得一些润滑油，你需要很多。\ n (多人游戏专用)
+RPG_hero_control_Ironman_name,Hero mode (Ironman),RPG_hero_control_Ironman_name,英雄模式 (铁人)
+RPG_hero_control_Ironman_desc,HARDCORE: Player can set hero only once,RPG_hero_control_Ironman_desc,硬核: 玩家只能设置一次英雄
+UseAdvancedAgeScaling,Advanced age scaling,UseAdvancedAgeScaling,衰老
+UseAdvancedAgeScaling_desc,Use different age scaling for non human races (long or short lifespans),UseAdvancedAgeScaling_desc,对非人种 (寿命长短) 使用不同的年龄乘数
+designated_freewill,Designated pawn freewill,designated_freewill,指定遗骸
+designated_freewill_desc,Pawn designated for comfort or mating can initiate sex.,designated_freewill_desc,为舒适或配合而指定的 Pawn 可以开始性爱。
+rape_enabled,Enable rape,rape_enabled,启用强奸
+rape_enabled_desc,"See what you like? Take it by force, you can make a hat out of it later.",rape_enabled_desc,你喜欢什么？用武力拿走它，你可以在以后用它做一顶帽子。
+PrisonersBeating,Spank me daddy!,PrisonersBeating,打我爸爸屁股!
+PrisonersBeating_desc,Beat the hell out of victims while raping them.,PrisonersBeating_desc,强奸受害者时将其殴打致死。
+GentlePrisonersBeating,"Senpai! Please, be gentle!",GentlePrisonersBeating,森派!求求你了，温柔点!
+GentlePrisonersBeating_desc,Reduce beating damage to ~0-1.,GentlePrisonersBeating_desc,击打伤害降低至 ~ 0-1。
+rape_stripping,Strip victims,rape_stripping,剥光受害者的衣服
+rape_stripping_desc,"Strip rape victims (Non comfort rape - bestiality, enemies, etc. will strip victims)",rape_stripping_desc,剥光强奸受害者 (非安慰强奸 -- 兽行、敌人等都会剥光受害者)
+ColonistCanCP,Enable comfort rape by colonists,ColonistCanCP,允许殖民者舒适强奸
+ColonistCanCP_desc,Colonists are allowed to rape comfort pawns.,ColonistCanCP_desc,殖民者被允许强奸安慰的 pawns。
+VisitorsCanCP,Enable comfort rape by visitors,VisitorsCanCP,允许访客舒适强奸
+VisitorsCanCP_desc,Visitors are allowed to rape comfort pawns.,VisitorsCanCP_desc,游客可以强奸安慰兽。
+AnimalsCanCP,Enable comfort rape by animals,AnimalsCanCP,允许动物舒适强奸
+AnimalsCanCP_desc,Animals are allowed to rape comfort pawns. Requires zoophilia to be enabled.,AnimalsCanCP_desc,动物被允许强奸安慰的 pawns。需要启用 zoopossessive。
+NonFutaWomenRaping_MaxVulnerability,Girls go rapin' (%),NonFutaWomenRaping_MaxVulnerability,女孩们会去强奸 (%)
+NonFutaWomenRaping_MaxVulnerability_desc,"Only women with vulnerability lower than this will ever rape others. \nAnimals vulnerability is always 100%. \nTo check 'vulnerability' status, go to 'view information about this object' > stats.\n\nValid range: 0 - 300%",NonFutaWomenRaping_MaxVulnerability_desc,只有脆弱程度低于此的女性才会强奸他人。\ N 动物漏洞始终为 100%。\ N 要检查 “漏洞” 状态，请转到 “查看有关此对象的信息”> 统计信息。\ n 有效范围: 0-300%
+Rapee_MinVulnerability_human,'To-be raped' vulnerability (%),Rapee_MinVulnerability_human,“待强奸” 漏洞 (%)
+Rapee_MinVulnerability_human_desc,"Human pawns with vulnerability higher than this will be raping targets. \nTo check 'vulnerability' status, go to 'view information about this object' > stats.\n\nValid range: 0 - 300%",Rapee_MinVulnerability_human_desc,脆弱程度高于此的人类 pawns 将会成为强奸的目标。\ N 要检查 “漏洞” 状态，请转到 “查看有关此对象的信息”> 统计信息。\ n 有效范围: 0-300%
+Rapee_MinVulnerability_animals,Animals' to-be-raped vulnerability (%),Rapee_MinVulnerability_animals,动物待强奸的脆弱程度 (%)
+Rapee_MinVulnerability_animals_desc,"Animals with vulnerability higher than this will be raping targets for zoophiles. \nTo check 'vulnerability' status, go to 'view information about this object' > stats.\n\nValid range: 0 - 300%",Rapee_MinVulnerability_animals_desc,脆弱程度高于此数值的动物将会成为亲动物的强奸目标。\ N 要检查 “漏洞” 状态，请转到 “查看有关此对象的信息”> 统计信息。\ n 有效范围: 0-300%
+RJWSettingsFour,RimJobWorld - Casual Sex Settings,RJWSettingsFour,RimJobWorld-随意的性别设置
+SettingHookupsEnabled,Enable hookups (overall),SettingHookupsEnabled,启用连接 (总体)
+SettingHookupsEnabled_desc,Controls whether single pawns can have casual sex with other single pawns,SettingHookupsEnabled_desc,控制独爪兽是否可以和其他独爪兽进行随意的性关系
+SettingQuickHookupsEnabled,Enable quickies.,SettingQuickHookupsEnabled,启用速射。
+SettingQuickHookupsEnabled_desc,Controls whether single pawns can have casual quick sex with other single pawns\nWarning: This can interrupt working pawns.,SettingQuickHookupsEnabled_desc,控制独爪兽是否能与其他独爪兽随意纵欲 \ n 警告: 这会中断正在工作的独爪兽。
+SettingNoHookupsDuringWorkHours,Disable hookups during work hours,SettingNoHookupsDuringWorkHours,在工作时间禁用连接
+SettingNoHookupsDuringWorkHours_desc,Controls whether pawns can seek casual sex during work hours.\nNymphomaniacs ignore this.,SettingNoHookupsDuringWorkHours_desc,控制 pawns 是否能在工作时间寻求随意的性爱，\ n 注意忽略这一点。
+SettingColonistsCanHookup,Colonists can hookup,SettingColonistsCanHookup,殖民者可以勾搭
+SettingColonistsCanHookup_desc,Controls whether colonists are allowed to look for casual sex.,SettingColonistsCanHookup_desc,控制是否允许殖民者寻找偶然的性别。
+SettingColonistsCanHookupWithVisitor,Colonists can hookup with visitors,SettingColonistsCanHookupWithVisitor,殖民者可以与访客建立关系
+SettingColonistsCanHookupWithVisitor_desc,Controls whether pawns can have casual sex with visitors to the colony.,SettingColonistsCanHookupWithVisitor_desc,控制 pawns 是否可以与殖民地的访客进行随意的性爱。
+SettingCanHookupWithPrisoner,Non-prisoners can hookup with prisoners,SettingCanHookupWithPrisoner,非囚犯可以与囚犯勾搭
+SettingCanHookupWithPrisoner_desc,Controls whether non-prisoner pawns can look for consensual sex with prisoners.\nThis is unaffected by the Comfort Prisoner designation and is considered consensual by both parties.,SettingCanHookupWithPrisoner_desc,控制非囚犯的 pawns 是否可以寻找与囚犯的自愿性行为。\ n 这与舒适的囚犯头衔无关，且被双方视为自愿。
+SettingVisitorsCanHookupWithColonists,Visitors can hookup with colonists,SettingVisitorsCanHookupWithColonists,游客可以接触殖民者
+SettingVisitorsCanHookupWithColonists_desc,Controls whether visiting pawns include colonists as potential partners for casual sex.,SettingVisitorsCanHookupWithColonists_desc,控制来访的殖民者是否包括作为随意性行为的潜在伴侣。
+SettingVisitorsCanHookupWithVisitors,Visitors can hookup with other visitors,SettingVisitorsCanHookupWithVisitors,访客可以加入
+SettingVisitorsCanHookupWithVisitors_desc,Controls whether visiting pawns include other visitors as potential partners for casual sex.,SettingVisitorsCanHookupWithVisitors_desc,控制来访的 pawns 是否包括其他作为性伴侣的访客。
+SettingPrisonersCanHookupWithNonPrisoner,Prisoners can hookup with colonists,SettingPrisonersCanHookupWithNonPrisoner,囚犯可以和殖民者约会
+SettingPrisonersCanHookupWithNonPrisoner_desc,"Controls whether prisoners include non-prisoners as potential partners for casual sex.\nPawns, including prisoners, can only have sex with someone they can reach, so if the prisoner can't leave their cell this is moot.",SettingPrisonersCanHookupWithNonPrisoner_desc,控制囚犯是否将非囚犯作为随意性行为的潜在伴侣。 \ N 包括囚犯在内的 pawns 只能与他们能接触到的人发生性关系，所以如果囚犯不能离开他们的牢房，这就没有意义了。
+SettingPrisonersCanHookupWithPrisoner,Prisoners can hookup with prisoners,SettingPrisonersCanHookupWithPrisoner,囚犯可以与囚犯勾搭
+SettingPrisonersCanHookupWithPrisoner_desc,"Controls whether prisoners include other prisoners as potential partners for casual sex.\nPawns, including prisoners, can only have sex with someone they can reach, so if the prisoner can't leave their cell this is moot.",SettingPrisonersCanHookupWithPrisoner_desc,控制囚犯是否将其他囚犯作为随意性行为的潜在伴侣。 \ N 包括囚犯在内的 pawns 只能与他们能接触到的人发生性关系，所以如果囚犯不能离开他们的牢房，这就没有意义了。
+SettingNymphosCanPickAnyone,Nymphos can pick anyone,SettingNymphosCanPickAnyone,尼姆派教徒可以选择任何人
+SettingNymphosCanPickAnyone_desc,Controls whether nymphomaniac ('Hypersexual' trait) pawns will pick anyone available.\nThey still obey the cheating and homewrecking settings below.,SettingNymphosCanPickAnyone_desc,控制是否选择任何殖民者。\ n 他们仍然服从下面的作弊和自毁设置。
+SettingNymphosCanCheat,Nymphos can cheat,SettingNymphosCanCheat,尼虫可以作弊
+SettingNymphosCanCheat_desc,Controls whether nymphomaniac ('Hypersexual' trait) pawns can cheat if they're sexually frustrated.,SettingNymphosCanCheat_desc,控制慕男狂 (“性情暴躁”) 的 pawns 在性方面感到沮丧时是否会出轨。
+SettingNymphosCanHomewreck,Nymphos can homewreck,SettingNymphosCanHomewreck,尼姆猪可能会回家
+SettingNymphosCanHomewreck_desc,Controls whether nymphomaniac ('Hypersexual' trait) pawns will bang people who already have partners.,SettingNymphosCanHomewreck_desc,控制慕男狂 (“超凡狂人” 特性) 的 pawns 是否会对已经有性伴侣的人实施攻击。
+SettingNymphosCanHomewreckReverse,Nymphos can homewreck(Reverse),SettingNymphosCanHomewreckReverse,尼姆猪会坠毁 (逆转)
+SettingNymphosCanHomewreckReverse_desc,Controls whether nymphomaniac ('Hypersexual' trait) pawns will accept sex even if they have partner.,SettingNymphosCanHomewreckReverse_desc,控制慕男狂 (“超快” 特性) 的 pawns 是否会接受性行为，即使他们有伴侣。
+SettingHookupChanceForNonNymphos,Hookup % chance per hour,SettingHookupChanceForNonNymphos,勾搭几率 %/时
+SettingHookupChanceForNonNymphos_desc,The chance that a horny pawn will look for casual sex.\nOnly checked once per hour and only when the pawn finishes their current task. Default is 30%,SettingHookupChanceForNonNymphos_desc,角质的小卒寻找随意性别的几率。\ n 仅每小时检查一次，并且只在小卒完成当前任务时才进行。默认值是 30%
+SettingMinimumFuckabilityToHookup,Hookup minimum fuckability,SettingMinimumFuckabilityToHookup,勾搭 (最低)
+SettingMinimumFuckabilityToHookup_desc,Controls how attractive(RJW) both pawns must be other to consider a hookup.\n Default is 10%.,SettingMinimumFuckabilityToHookup_desc,控制两个 pawns 的吸引力 (RJW) 必须是其他的才能考虑勾搭。\ n 默认值是 10%。
+SettingMinimumAttractivenessToHookup,Hookup minimum attractiveness,SettingMinimumAttractivenessToHookup,吸引力
+SettingMinimumAttractivenessToHookup_desc,Controls how attractive(Rimworld) pawns to each other to consider a hookup.\n Default is 50%.\n Nymphomaniac > 0.,SettingMinimumAttractivenessToHookup_desc,控制 pawns 对彼此的吸引力 (Rimworld)，以考虑勾搭。\ n 默认值为 50%。\ n Nymphomaniac> 0。
+SettingMinimumRelationshipToHookup,Hookup minimum opinion,SettingMinimumRelationshipToHookup,最低限度的意见
+SettingMinimumRelationshipToHookup_desc,Controls minimum pawns opinion for each other to consider a hookup.\n Default is 20.\n Nymphomaniac > 0.,SettingMinimumRelationshipToHookup_desc,控制 pawns 对于彼此考虑勾搭的最低看法。\ n 默认值为 20。\ n Nymphomaniac> 0。
+RJWDebugSettings,RimJobWorld - Debug,RJWDebugSettings,RimJobWorld-调试
+submit_button_enabled,"Enable ""submit"" button on drafted pawns",submit_button_enabled,对被征召的殖民者启用 “提交” 按钮
+submit_button_enabled_desc,"Submit button allows you to skip more deadly part and get right to more humiliating one. \nDisable this if honor comes before life for you. \nRemember, if you change your mind, it will always be here, waiting for you.",submit_button_enabled_desc,提交按钮可让您跳过更致命的部分，并获得更多的羞辱权。\ N 如果荣誉摆在你的生命之前，请禁用此选项。\ N 记住，如果你改变主意，它会永远在这里等着你。
+RJW_designation_box,Show RJW designations,RJW_designation_box,显示 RJW 标记
+RJW_designation_box_desc,Toggles showing RJW group of buttons in the pawn control GUI.,RJW_designation_box_desc,开关控制图形用户界面中显示 RJW 按钮组。
+StackRjwParts_name,Rjw parts stacking,StackRjwParts_name,Rjw 零件堆叠
+StackRjwParts_desc,Stack rjw parts in pawn health tab \n(Label x count),StackRjwParts_desc,在「健康」标签内堆叠 rjw 部件 \ n (Label x count)
+maxDistanceCellsCasual_name,Sex distance(Cells),maxDistanceCellsCasual_name,性别距离 (细胞)
+maxDistanceCellsCasual_desc,"Max distance in Cells AI willing to go to reach destination/target.\n\nFast distance check - ignores obstacles (e.g. walls, mountains).\nDefault 100 cells.",maxDistanceCellsCasual_desc,抵达目的地/目标所需的最大距离 (格数)。\ n 快速距离检查-忽略障碍物 (例如，墙、山)。\ n 默认值为 100 格。
+maxDistanceCellsRape_name,Rape distance(Cells),maxDistanceCellsRape_name,强奸距离 (格)
+maxDistanceCellsRape_desc,"Max distance in Cells AI willing to go to reach destination/target.\n\nFast distance check - ignores obstacles (e.g. walls, mountains).\nDefault 100 cells.",maxDistanceCellsRape_desc,抵达目的地/目标所需的最大距离 (格数)。\ n 快速距离检查-忽略障碍物 (例如，墙、山)。\ n 默认值为 100 格。
+maxDistancePathCost_name,Sex distance(PawnPath),maxDistancePathCost_name,性别距离 (PawnPath)
+maxDistancePathCost_desc,"Max distance AI pather considers in order to reach sex destination/target. Slow complex calculation affected by obstacles, pawn speed and ground modifiers.\nDefault 1000.\n0 - disable check.",maxDistancePathCost_desc,AI paster 考虑的最大距离，以达到性别目的地/目标。受障碍物，pawn 速度和地面修改器影响的缓慢复杂计算。\ n 默认值 1000。\ n0-禁用检查。
+override_RJW_designation_checks_name,Override designation checks,override_RJW_designation_checks_name,覆盖指派检查
+override_RJW_designation_checks_desc,Allows to set designations on all colonists ignoring conditions.\n YOU CHEATER,override_RJW_designation_checks_desc,允许为所有忽略条件的殖民者设置标记。\ n 你这个骗子
+override_control,Direct control,override_control,直接控制
+override_control_desc,Player can manually tell pawns to do sex related activities.\n YOU CHEATER,override_control_desc,玩家可以手动告诉 pawns 进行与性有关的活动。\ n 你是骗子
+AddTrait_Rapist,Gain Rapist trait,AddTrait_Rapist,获得强奸特性
+AddTrait_Rapist_desc,"Chance to gain rapist trait after 10 sex acts, >12% of which are rapes\n YOU CHEATER",AddTrait_Rapist_desc,在 10 次性行为后获得强奸特性的几率，> 12% 是强奸 \ n 你这个骗子
+AddTrait_Masocist,Gain Masochist trait,AddTrait_Masocist,获得受虐狂特性
+AddTrait_Masocist_desc,"Chance to gain masochist trait after being raped, 5% after feeling broken stage\n YOU CHEATER",AddTrait_Masocist_desc,在被强奸后获得受虐狂特性的几率，5% 在感觉崩溃后，阶段 \ n 你是骗子
+AddTrait_Nymphomaniac,Gain Hypersexual trait,AddTrait_Nymphomaniac,获得性欲过度
+AddTrait_Nymphomaniac_desc,"Chance to gain hypersexual trait after 10 sex acts, while under HumpShroom addiction\n YOU CHEATER",AddTrait_Nymphomaniac_desc,在 10 次性行为后成瘾时有几率获得纵欲 \ n 你是骗子
+AddTrait_Necrophiliac,Gain Necrophiliac trait,AddTrait_Necrophiliac,获得死灵特性
+AddTrait_Necrophiliac_desc,"Chance to gain necrophiliac trait after 10 sex acts, >50% of which with corpses\n YOU CHEATER",AddTrait_Necrophiliac_desc,在 10 次性行为后获得死灵特性的几率，> 50% 有尸体 \ n 你这个骗子
+AddTrait_Nerves,Gain Nerves trait,AddTrait_Nerves,获得神经特性
+AddTrait_Nerves_desc,Gain nerves trait after being raped\n YOU CHEATER,AddTrait_Nerves_desc,在被强奸后获得神经特性 \ n 作弊者
+AddTrait_Zoophiliac,Gain Zoophiliac trait,AddTrait_Zoophiliac,获得亲兽特性
+AddTrait_Zoophiliac_desc,"Chance to gain zoophiliac trait after 10 sex acts, >50% of which with animals\n YOU CHEATER",AddTrait_Zoophiliac_desc,在 10 次性行为后获得亲兽特性的几率，> 50% 有动物 \ n 你这个骗子
+AddTrait_FootSlut,Gain FootSlut trait,AddTrait_FootSlut,获得脚踏者特性
+AddTrait_FootSlut_desc,"Chance to gain footslut trait after 10 sex acts, when getting Footjob\n YOU CHEATER",AddTrait_FootSlut_desc,当你进行了 10 次性行为后，有机会获得足夫特性 \ n 你这个骗子
+AddTrait_CumSlut,Gain CumSlut trait,AddTrait_CumSlut,获得粗鲁的特性
+AddTrait_CumSlut_desc,"Chance to gain cumslut trait after 10 sex acts, when doing Fellatio\n YOU CHEATER",AddTrait_CumSlut_desc,在进行 10 次性行为后，当进行口交时，有机会获得多个 slut 种特性 \ n 你这个骗子
+AddTrait_ButtSlut,Gain ButtSlut trait,AddTrait_ButtSlut,获得屁股女人的特性
+AddTrait_ButtSlut_desc,"Chance to gain buttslut trait after 10 sex acts, when getting Anal\n YOU CHEATER",AddTrait_ButtSlut_desc,在进行了 10 次性行为后，当获得肛门时，获得屁股感觉特性的几率 \ n 你是个骗子
+Allow_RMB_DeepTalk,RMB DeepTalk,Allow_RMB_DeepTalk,人民币深谈
+Allow_RMB_DeepTalk_desc,Allows RMB-Social-DeepTalk interaction (+12 relations)\n YOU CHEATER,Allow_RMB_DeepTalk_desc,允许人民币-社交-深度交谈 (+ 12 个关系) \ n 你有骗子
+Disable_bestiality_pregnancy_relations,Disable bestiality pregnancy relations,Disable_bestiality_pregnancy_relations,禁用兽性妊娠关系
+Disable_bestiality_pregnancy_relations_desc,Disable relations(mother/father/siblings) from bestiality pregnancy.\n YOU CHEATER,Disable_bestiality_pregnancy_relations_desc,禁止家族成员 (母亲/父亲/兄弟姐妹) 怀孕。\ n 你是个骗子
+Disable_egg_pregnancy_relations,Disable egg pregnancy relations,Disable_egg_pregnancy_relations,禁用卵子妊娠关系
+Disable_egg_pregnancy_relations_desc,Disable relations(mother/father/siblings) from egg pregnancy.\n YOU CHEATER,Disable_egg_pregnancy_relations_desc,解除关系 (母亲/父亲/兄弟姐妹) 的卵怀孕。\ n 你是骗子
+Disable_MeditationFocusDrain,Disable meditation focus drain,Disable_MeditationFocusDrain,禁用灵媒
+Disable_MeditationFocusDrain_desc,"When pawns are frustrated, they don't lose focus.\n YOU CHEATER",Disable_MeditationFocusDrain_desc,当殖民者感到沮丧时，他们不会失去注意力。\ n 你是个骗子
+Disable_RecreationDrain,Disable recreation drain,Disable_RecreationDrain,禁用娱乐耗散
+Disable_RecreationDrain_desc,"When pawns have boring/bad sex due to traits/quirks, they don't lose recreation need.\n YOU CHEATER",Disable_RecreationDrain_desc,当 pawns 由于其特性/怪癖而导致无趣/糟糕的性爱时，他们不会失去娱乐需求。\ n 你这个骗子
+ForbidKidnap,Forbid kidnap,ForbidKidnap,禁止绑架
+ForbidKidnap_desc,No kidnaping.,ForbidKidnap_desc,没有绑架。
+legacy_PartsAdder,Legacy parts adder,legacy_PartsAdder,遗留部件加法器
+legacy_PartsAdder_desc,"Built-in parts distributor, it tries to guess what parts Vanilla and HAR races get based on their name, maybe still usefull if you dont have racesupport patches",legacy_PartsAdder_desc,内置的零件经销商，它会根据香草和 HAR 种族的名字来猜测它们的零件种类，如果你没有赛车支持区，可能仍然有用
+override_lovin,Override vanilla lovin,override_lovin,覆盖香草迷
+override_lovin_desc,Use casual sex instead of vanilla lovin,override_lovin_desc,用随意的性别而不是香草的爱
+override_matin,Override vanilla matin,override_matin,覆盖香草日精
+override_matin_desc,Use breeding instead of vanilla matin,override_matin_desc,用育种家代替香草日场
+matin_crossbreed,Matin crossbreed,matin_crossbreed,日场杂交
+matin_crossbreed_desc,"Animals with same animalType(Vanilla: Canines, Dryads) will be considered same species and can mate each other.",matin_crossbreed_desc,具有相同动物类型的动物 (香草: 犬科动物、树精) 将被视为相同的物种，可以相互交配。
+WildMode_name,Wild mode,WildMode_name,野生模式
+WildMode_desc,EXPERIMENTAL - DO NOT REPORT BUGS IF THIS IS ENABLED. \n\nNo rules for sex. Most limiting requirements are turned off. Enjoy the wildest side of Rimworld.,WildMode_desc,实验性-如果启用，请勿报告 bug。\ n 没有性别规则。大多数限制要求已关闭。享受边缘世界最狂野的一面。
+HippieMode_name,Hippie mode,HippieMode_name,嬉皮模式
+HippieMode_desc,EXPERIMENTAL - DO NOT REPORT BUGS IF THIS IS ENABLED. \n\nIgnore Relationships for casual hookups.,HippieMode_desc,实验性的-如果启用此选项，请勿报告 bug。
+GenderlessAsFuta_name,GenderlessAsFuta,GenderlessAsFuta_name,性别自由
+GenderlessAsFuta_desc,USEATYOUROWNRISK. \n\nGenderless Pawns will be set as Female and have both sets of genitals.,GenderlessAsFuta_desc,USEATYOUROWNRISK。\ n 没有性别的 Pawns 将被设置为女性，并同时拥有两套生殖器。
+DevMode_name,Development mode,DevMode_name,开发者模式
+DevMode_desc,Enables RimJobWorld logging and stuff. You don't usually want this enabled.,DevMode_desc,启用 RimJobWorld 日志之类的功能。你通常不希望启用此选项。
+DebugLogJoinInBed,Debug log hookup search info,DebugLogJoinInBed,Debug 日志连接搜索信息
+DebugLogJoinInBed_desc,Enables some very spamming debug logs to help find bugs in JoinInBed operations. \nOnly devs (or someone helping them find a bug) should enable this.,DebugLogJoinInBed_desc,启用一些垃圾邮件日志，以帮助在 joinbed 操作中发现错误。\ N 只有开发者 (或帮助他们发现 bug 的人) 应该启用此选项。
+DebugRape,Debug log rape info,DebugRape,Debug 日志强奸信息
+DebugRape_desc,Enables some very spamming debug logs to help find bugs in rape operations.\nOnly devs (or someone helping them find a bug) should enable this.,DebugRape_desc,启用一些非常垃圾的调试日志，以帮助在强奸行动中发现错误。\ n 只有开发者 (或帮助他们发现错误的人) 应该启用这个选项。
+DebugInteraction,Debug log interaction info,DebugInteraction,调试日志交互信息
+DebugInteraction_desc,Verbose mode for the interaction module.,DebugInteraction_desc,交互模块的详细模式。
+DebugNymph,Debug log nymph info,DebugNymph,调试日志若虫信息
+DebugNymph_desc,Verbose mode for the nymph module.,DebugNymph_desc,灵能模组的详细模式。
+RJWSettingsTwo,RimJobWorld - Pregnancy Settings,RJWSettingsTwo,RimJobWorld-怀孕设置
+UseVanillaPregnancy,Biotech DLC pregnancy,UseVanillaPregnancy,生物技术 DLC 怀孕
+UseVanillaPregnancy_desc,Use Biotech DLC pregnancy for pregnancies involving a human female.,UseVanillaPregnancy_desc,将生物技术 DLC 妊娠用于涉及一名人类女性的妊娠。
+RJWH_pregnancy,Enable humanlike pregnancies,RJWH_pregnancy,启用人类怀孕
+RJWH_pregnancy_desc,"Enable pregnancy for human-on-human sex. If the Biotech DLC is not installed, RJW will use its own pregnancy system.",RJWH_pregnancy_desc,对人性别启用妊娠。如果未安装生物技术 DLC，RJW 将使用自己的妊娠系统。
+PregnantCoeffecientForHuman,Human Pregnancy chances (%),PregnantCoeffecientForHuman,人类怀孕几率 (%)
+PregnantCoeffecientForHuman_desc,Human pregnancy chances in percent.\n\nValid range: 0 - 100%,PregnantCoeffecientForHuman_desc,人类怀孕几率 (百分比)。\ n 有效范围: 0-100%
+RJWB_pregnancy,Enable bestiality pregnancies,RJWB_pregnancy,允许怀孕
+RJWB_pregnancy_desc,Use RJW pregnancy for human-animal pregnancies.,RJWB_pregnancy_desc,将 RJW 怀孕用于人兽间的妊娠。
+PregnantCoeffecientForAnimals,Animal pregnancy chances (%),PregnantCoeffecientForAnimals,怀孕几率 (%)
+PregnantCoeffecientForAnimals_desc,Animal pregnancy chances in percent.\n\nValid range: 0 - 100%,PregnantCoeffecientForAnimals_desc,动物怀孕几率 (百分比)。\ n 有效范围: 0-100%
+InterspeciesImpregnantionModifier,Interspecies impregnation modifier (%),InterspeciesImpregnantionModifier,种间浸渍修改器 (%)
+InterspeciesImpregnantionModifier_desc,"Interspecies impregnation modifier in percent. At 20% this cuts the normal chance to fifth of same-species, and so on.\n\nValid range: 0 - 100%",InterspeciesImpregnantionModifier_desc,种间浸渍修改器，单位百分比。20% 会将正常几率降低到同物种的第五名，等等。\ n 有效距离: 0-100%
+UseParentMethod,DNA inheritance,UseParentMethod,基因遗传
+UseParentMethod_desc,ON:Babies have random parent dna.\nOFF:Babies are like mothers.,UseParentMethod_desc,开启: 婴儿拥有随机的父母 dna。\ nOFF: 婴儿就像母亲一样。
+OffspringLookLikeTheirMother,Humanlike DNA inheritance,OffspringLookLikeTheirMother,人类基因遗传
+OffspringLookLikeTheirMother_desc,Governs humanlike pregnancies. \n100% means born babies will be of mothers race. \nAt 0% means born babies will be of father race.\n\nValid range: 0 - 100%,OffspringLookLikeTheirMother_desc,控制人类怀孕。\ n 100% 意味着婴儿将是母亲种族。\ N 0% 意味着出生的婴儿将是父亲种族。\ n 有效范围: 0-100%
+OffspringIsHuman,Bestiality DNA inheritance (Mother/Father),OffspringIsHuman,兽性 DNA 遗传 (母亲/父亲)
+OffspringIsHuman_desc,"Governs Humanlike-Animal and Animal-Animal pregnancies.\n100% means born babies will be of ""mother"" race. \nAt 0% means born babies will be of ""father"" race.\n\nValid range: 0 - 100%",OffspringIsHuman_desc,控制人类-动物和动物-动物的怀孕。\ n 100% 意味着婴儿将属于 “母亲” 种族。\ N 0% 意味着出生的婴儿将是 “父亲” 种族。\ n 有效范围: 0-100%
+OffspringIsHuman2,Bestiality DNA inheritance (Human/Beast),OffspringIsHuman2,兽性 DNA 遗传 (人/兽)
+OffspringIsHuman2_desc,Governs Humanlike-Animal pregnancies.\n\n left - born babies will be of beast race. \n\n right - born babies will be of humanlike race. \n\n anything else - use the Mother/Father logic,OffspringIsHuman2_desc,控制人类-动物的怀孕。\ n 左出生的婴儿将属于野兽种族。\ N 正确出生的婴儿将属于人类种族。\ N 其他任意事物-使用母亲/父亲的逻辑
+RJWA_pregnancy,Enable animal pregnancies,RJWA_pregnancy,启用动物怀孕
+RJWA_pregnancy_desc,Use RJW pregnancy for animal-animal pregnancies.,RJWA_pregnancy_desc,使用 RJW 怀孕 (用于动物间的妊娠)。
+RJWA_pregnancy_notifications,Enable notifications for animal pregnancies,RJWA_pregnancy_notifications,启用动物怀孕通知
+RJWA_pregnancy_notifications_desc,"Notifications will be sent for animal getting pregnant, contractions starting and healthy birth.\n\nThis can be noisy for colonies with a lot of ranching, where it is recommended to disable this setting. \n\nCritical notifications will be sent regardless of this setting",RJWA_pregnancy_notifications_desc,将发送动物怀孕、宫缩开始和健康出生的通知。\ n 这对于有大量牧场的殖民地来说可能会很吵，建议禁用此设置。\ N 无论如何设置，关键通知都将被发送。
+RJWI_pregnancy,Enable egg pregnancies,RJWI_pregnancy,启用卵受精
+RJWI_pregnancy_desc,Use RJW pregnancy for ovipositor egg pregnancies.,RJWI_pregnancy_desc,使用 “RJW 妊娠” 进行产卵妊娠。
+egg_pregnancy_implant_anyone,Egg implanting filter,egg_pregnancy_implant_anyone,卵植入过滤器
+egg_pregnancy_implant_anyone_desc,ON:Anyone with female ovipositor can implant eggs.\nOFF:Only predefined parent type can implant eggs.,egg_pregnancy_implant_anyone_desc,开启: 任何拥有雌性卵育者的人都可以植入卵。\ nOFF: 只有预定义的母体类型才能植入卵。
+egg_pregnancy_fertilize_anyone,Egg fertilizing filter,egg_pregnancy_fertilize_anyone,卵受精过滤器
+egg_pregnancy_fertilize_anyone_desc,ON:Anyone with male ovipositor can fertilize eggs.\nOFF:Only predefined parent type or same as implanter can fertilize eggs.,egg_pregnancy_fertilize_anyone_desc,开: 任何拥有雄性卵受精装置的人都能使卵受精。\ nOFF: 只有预定义的母体类型或与植入者相同的品种才能使卵受精。
+egg_pregnancy_genes,Egg pregnancies carry genes,egg_pregnancy_genes,怀孕基因携带
+egg_pregnancy_genes_desc,Allows for human-human-ovipositor eggs to use normal gene inheritance.,egg_pregnancy_genes_desc,允许人-卵使用正常的基因遗传。
+RJWI_analPregnancy,Enable anal egg pregnancies,RJWI_analPregnancy,启用肛门卵妊娠
+RJWI_analPregnancy_desc,Allow insects to impregnate pawns anally.,RJWI_analPregnancy_desc,允许虫族使虫族怀孕。
+RJWI_oralPregnancy,Enable oral egg pregnancies,RJWI_oralPregnancy,允许经口产卵
+RJWI_oralPregnancy_desc,Allow insects to impregnate pawns orally.,RJWI_oralPregnancy_desc,允许虫族通过口器使虫族浸渍。
+RJWI_FertilizationCheck,Egg orifice fertilizing filter,RJWI_FertilizationCheck,卵孔受精过滤器
+RJWI_FertilizationCheck_desc,"Fertilize eggs only in ""sexed"" orifice.",RJWI_FertilizationCheck_desc,让卵子只在 “性感” 孔受精。
+egg_pregnancy_eggs_size,Egg size modifier,egg_pregnancy_eggs_size,卵大小修改器
+egg_pregnancy_eggs_size_desc,0 - can be implanted with unlimited eggs.,egg_pregnancy_eggs_size_desc,0-可以植入无限制的卵。
+egg_pregnancy_ovipositor_capacity_factor,Ovipositor capacity factor,egg_pregnancy_ovipositor_capacity_factor,产卵能力系数
+egg_pregnancy_ovipositor_capacity_factor_desc,multiplies the normal capacity of female ovipositors,egg_pregnancy_ovipositor_capacity_factor_desc,乘以女性产卵学家的正常容量
+MechanoidImplanting,Enable mechanoid implants,MechanoidImplanting,启用机械体植入物
+MechanoidImplanting_desc,Allow probing and implanting by mechanoids.,MechanoidImplanting_desc,允许机械体探测和植入。
+SaferMechanoidImplanting,Safer mechanoid implants('),SaferMechanoidImplanting,更安全的机械体植入物 (')
+SaferMechanoidImplanting_desc,"Mechanoid implants will not kill pawns('if pregnancy was checked), instead apply 5 damage to each body part contained within the torso. Mechanoids will still be hostile",SaferMechanoidImplanting_desc,植入于体内的机械体不会杀死 pawns (如果确认怀孕)，只会对躯干内的每个身体部位造成 5 点伤害。机械体仍将处于敌对状态
+genetic_trait_filter,Filter inherited traits,genetic_trait_filter,筛选继承的特性
+genetic_trait_filter_desc,"If enabled, it will use the rjw/Defs/NonInheritedTraits.xml to filter out the traits that should not be passed to next generation. If disabled, everything is a fair game.",genetic_trait_filter_desc,如果启用，它将使用 rjw/Defs/NonInheritedTraits.xml 过滤掉不应该传递给下一代的特性。如果禁用，一切都是公平的游戏。
+max_num_momtraits_inherited,Max inherited traits from mother,max_num_momtraits_inherited,Max 继承了母亲的特性
+max_num_poptraits_inherited,Max inherited traits from father,max_num_poptraits_inherited,Max 从父亲那里继承了特性
+RJW_fertility_endAge_male,Male infertility age,RJW_fertility_endAge_male,男性不育年龄
+RJW_fertility_endAge_male_desc,Adjusted by lifespan for alien races. Same scale is used for animals and humanlikes.,RJW_fertility_endAge_male_desc,根据异形种族的寿命进行调整。相同的规模用于动物和人类。
+RJW_fertility_endAge_female_humanlike,Female infertility age (humanlikes),RJW_fertility_endAge_female_humanlike,女性不育年龄 (人)
+RJW_fertility_endAge_female_humanlike_desc,"Unlike most animals, human females become infertile at early age. Same ratio is used for all alien races, for balance.",RJW_fertility_endAge_female_humanlike_desc,与大多数动物不同，人类雌性动物在小时候变得不育。为平衡，所有异域种族使用相同的比率。
+RJW_fertility_endAge_female_animal,Female infertility age (animals),RJW_fertility_endAge_female_animal,女性不育年龄 (动物)
+RJW_fertility_endAge_female_animal_desc,"Unlike humans, most female animals remain fertile until death.",RJW_fertility_endAge_female_animal_desc,与人类不同，大多数雌性动物在死亡前保持生育能力。
+In_human_years,in human years,In_human_years,在人类年
+XofLifeExpectancy,% of life expectancy,XofLifeExpectancy,占预期寿命的 %
+InterspeciesDisabled,Interspecies disabled.,InterspeciesDisabled,已禁用物种间。
+InterspeciesMaximum,Equal to same-species.,InterspeciesMaximum,等同于同一个物种。
+AlwaysMother,Always mother's species.,AlwaysMother,总是母亲的物种。
+AlwaysFather,Always father's species.,AlwaysFather,总是父亲的物种。
+AlwaysBeast,Beast species.,AlwaysBeast,兽种。
+AlwaysHumanlike,Humanlike species.,AlwaysHumanlike,人类。
+UsesOffspringIsHuman,Use Mother/Father,UsesOffspringIsHuman,使用母亲/父亲
+ComplexImpregnation,Enable complex interspecies impregnation calculation,ComplexImpregnation,启用复杂的种间浸渍计算
+ComplexImpregnation_desc,"When enabled, the impregnation chance between species depends on the difference in the body structure and size.
+Examples:
+  Human/Winged humanoid : ~95%
+  Human/Harpy : ~75%
+  Human/Dog : ~30%
+  Human/Chicken : ~5%
+  Wolf/Dog : ~95%
+  Wolf/Chicken : ~5%
+  Rooster/Harpy : ~30%
+
+Note that the chance is further lowered by the base animal and human pregnancy sliders.",ComplexImpregnation_desc,"启用时，物种之间的浸渍几率取决于身体结构和尺寸的差异。
+例子:
+人形/翼形人形: ~ 95%
+人/哈皮: ~ 75%
+人/犬: ~ 30%
+人/鸡: ~ 5%
+狼/狗: ~ 95%
+狼/鸡: ~ 5%
+公鸡/哈比: ~ 30%
+
+请注意，基础动物和人类怀孕滑块会进一步降低此几率。"
+phantasy_pregnancy,Phantasy pregnancy,phantasy_pregnancy,幻想怀孕
+phantasy_pregnancy_desc,World is filled with wicked nanomachines that accelerate children growth until they reach reproductive lifestage.\n\nHas no effect on non humans and non reproductive races.\n\nLikely doesn't work with other pregnancy mods.,phantasy_pregnancy_desc,这个世界充满了邪恶的纳米机器，可以加速儿童的成长，直到他们达到生殖生命阶段。 \ n 对非人类和非生殖种族没有影响。 \ n 其他妊娠 mod 很可能无法使用。
+normal_pregnancy_duration,Pregnancy duration modifier.,normal_pregnancy_duration,妊娠时间修改器。
+normal_pregnancy_duration_desc,Bigger -> Longer,normal_pregnancy_duration_desc,更大-> 更长
+egg_pregnancy_duration,Egg pregnancy duration modifier.,egg_pregnancy_duration,卵妊娠持续修改器。
+egg_pregnancy_duration_desc,Bigger -> Longer.,egg_pregnancy_duration_desc,更大-> 更长。
+RJWSettingsThree,RimJobWorld - Sex Settings,RJWSettingsThree,RimJobWorld-性别设置
+SexTypeFrequency,Sex type frequency:\n[Higher = more common],SexTypeFrequency,性别频率: \ n[Higher = more common]
+vaginal,Vaginal penetration frequency,vaginal,阴道穿透频率
+vaginal_desc,"Frequency of vaginal sex. Note that this frequency is further adjusted by factors such as available orifices, etc.\n\nValid range: 1 - 200\nDefault: 120",vaginal_desc,阴道性爱的频率。请注意，此频率会根据其他因素如可用的洞口等进一步调整。\ n 有效范围: 1-200 \ n 默认值: 120
+cunnilingus,Cunnilingus frequency,cunnilingus,农奴频率
+cunnilingus_desc,"Frequency of oral stimulation of vagina. Note that this frequency is further adjusted by factors such as available orifices, rape, etc.\n\nValid range: 1 - 200\nDefault: 80",cunnilingus_desc,口服刺激阴道的频率。请注意，此频率会因其他因素而进一步调整，如可用的孔眼，油菜等。\ n 有效范围: 1-200 \ n 默认值: 80
+anal,Anal penetration frequency,anal,肛门插入频率
+anal_desc,"Frequency of anal penetration (penile). Note that this frequency is further adjusted by factors such as available orifices, rape, etc.\n\nValid range: 1 - 200\nDefault: 80",anal_desc,肛门穿透 (阴茎) 的频率。请注意，此频率会因其他因素而进一步调整，如可用的孔眼，油菜等。\ n 有效范围: 1-200 \ n 默认值: 80
+rimming,Rimming frequency,rimming,卷曲频率
+rimming_desc,"Frequency of oral stimulation of anus. Note that this frequency is further adjusted by factors such as available orifices, etc.\n\nValid range: 1 - 200\nDefault: 40",rimming_desc,口腔内刺激肛门的频率。请注意，此频率会根据其他因素如可用的洞口等进一步调整。\ n 有效范围: 1-200 \ n 默认值: 40
+fellatio,Fellatio frequency,fellatio,口交频率
+fellatio_desc,"Frequency of fellatio, also known as blowjob. Note that this frequency is further adjusted by factors such as available orifices, etc.\n\nValid range: 1 - 200\nDefault: 80",fellatio_desc,口交的频率，也被称为口交。请注意，此频率会根据其他因素如可用的孔眼等进一步调整。\ n 有效范围: 1-200 \ n 默认值: 80
+handjob,Handjob frequency,handjob,体力劳动频率
+handjob_desc,"Frequency of handjobs. Requires working hands. Note that this frequency is further adjusted by factors such as whoring, etc.\n\nValid range: 1 - 200\nDefault: 80",handjob_desc,治疗的频率。需要用到工作手。请注意，此频率会根据其他因素进一步调整。\ n 有效范围: 1-200 \ n 默认值: 80
+mutual_masturbation,Mutual masturbation frequency,mutual_masturbation,互相自慰频率
+mutual_masturbation_desc,"Frequency of mutual masturbation (two colonists masturbating each other). Note that this frequency is further adjusted by factors such as rape, etc.\n\nValid range: 1 - 200\nDefault: 70",mutual_masturbation_desc,互相自慰的频率 (两个殖民者互相自慰)。注意此频率会因强奸等因素而进一步调整。\ n 有效范围: 1-200 \ n 默认值: 70
+double_penetration,Double-penetration frequency,double_penetration,双穿透频率
+double_penetration_desc,"Frequency of double-penetration, simultaneous anal and vaginal. Requires a multi-penis, such as a hemipenis. Note that this frequency is further adjusted by factors such as available orifices, etc.\n\nValid range: 1 - 200\nDefault:60",double_penetration_desc,肛门和阴道双重穿透的频率。需要多个阴茎，如半个阴茎。请注意，此频率会根据其他因素进一步调整，例如可用的洞口等。\ n 有效范围: 1-200 \ n 默认值: 60
+breastjob,Breastjob frequency,breastjob,母乳喂养频率
+breastjob_desc,"Frequency of breastjobs. Requires one pawn to have breasts, and the other to have a penis. Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 50",breastjob_desc,哺乳的频率。需要一个 pawn 有乳房，另一个需要有阴茎。注意: 这个频率会因为一些因素而进一步调整，例如: 乞讨，强奸等等。\ n 有效范围: 1-200 \ n 默认值: 50
+fingering,Vaginal fingering frequency,fingering,阴道指频
+fingering_desc,"Frequency of vaginal fingering. Requires one pawn to have a vagina, and the other to have a working hand. Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 50",fingering_desc,阴道指法的频率。需要一个小卒有一个阴道，另一个必须有一只工作手。注意: 这个频率会因为一些因素而进一步调整，例如: 乞讨，强奸等等。\ n 有效范围: 1-200 \ n 默认值: 50
+scissoring,Scissoring frequency,scissoring,畸变频率
+scissoring_desc,Frequency of scissoring (type of tribadism where partners interlock their legs and grind their vulvae together). Requires both pawns to have vaginas.\n\nValid range: 1 - 200\nDefault: 50,scissoring_desc,剪毛的频率 (一种部落主义，其中一员会将他们的腿连锁，同时将他们的外阴撕成碎片)。需要两个 pawns 都有阴道。\ n 有效范围: 1-200 \ n 默认值: 50
+footjob,Footjob frequency,footjob,步行频率
+footjob_desc,"Frequency of footjobs (stimulation of penis by foot). Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 30",footjob_desc,脚部工作 (用脚部刺激阴茎) 的频率。注意: 这个频率会因为一些因素而进一步调整，比如妓女和强奸等等。\ n 有效范围: 1-200 \ n 默认值: 30
+fisting,Anal fisting frequency,fisting,肛门拳频率
+fisting_desc,"Frequency of anal fisting (vaginal not yet implemented). Requires one partner to have a working hand. Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 30",fisting_desc,肛门拳的频率 (尚未实施阴道)。需要一个工作伙伴有一只手。注意: 这个频率会因为一些因素而进一步调整，比如妓女和强奸等等。\ n 有效范围: 1-200 \ n 默认值: 30
+sixtynine,69 frequency,sixtynine,69 频率
+sixtynine_desc,"Frequency of 69 (mutual oral). Requires both partners to have genitalia. Note that this frequency is further adjusted by factors such as whoring, rape, etc.\n\nValid range: 1 - 200\nDefault: 69",sixtynine_desc,频率 69 (互相口头)。需要两位伴侣都拥有生殖器。注意: 这个频率会因为一些因素而进一步调整，例如: 乞讨，强奸等等。\ n 有效范围: 1-200 \ n 默认值: 69
+FapEverywhere,Fapping everywhere,FapEverywhere,四处伪装
+FapEverywhere_desc,Pawn will masturbate where it wants.,FapEverywhere_desc,Pawn 会随意自慰。
+FapInBed,Fapping in bed,FapInBed,在床上缝制
+FapInBed_desc,Pawn will masturbate in its bed.,FapInBed_desc,Pawn 将在其床上自慰。
+FapInBelts,Fapping with genitals blocked,FapInBelts,生殖器被击中
+FapInBelts_desc,Pawn can masturbate while having their genitals blocked.,FapInBelts_desc,Pawn 可能会在手淫时阻塞生殖器。
+FapInArmbinders,Fapping with hands blocked,FapInArmbinders,用手拍打伤口
+FapInArmbinders_desc,Pawn can masturbate while having their hands blocked.,FapInArmbinders_desc,Pawn 可能会在手淫时挡住手。
+Malesex,Allowed male sex:,Malesex,允许男性性别:
+FeMalesex,Allowed female sex:,FeMalesex,允许女性性别:
+AllowedSex.All,All,AllowedSex.All,全部
+AllowedSex.Homo,Gay,AllowedSex.Homo,同性恋
+AllowedSex.Nohomo,Straight,AllowedSex.Nohomo,直发
+SexClothing,Preferred clothing for sex:,SexClothing,性爱偏好服装:
+SexClothingNude,Nude,SexClothingNude,裸体
+SexClothingHeadwear,Headwear only,SexClothingHeadwear,仅限头饰
+SexClothingFull,Fully clothed,SexClothingFull,着衣
+RapeAttemptAlert,Rape attempt alert:,RapeAttemptAlert,强奸未遂警报:
+RapeAttemptAlertAlways,Always enabled,RapeAttemptAlertAlways,总是启用的
+RapeAttemptAlertHumanlike,Only if target is humanlike,RapeAttemptAlertHumanlike,只有当目标是人类时
+RapeAttemptAlertColonist,Only if target is colonist,RapeAttemptAlertColonist,仅当目标是殖民者时
+RapeAttemptAlertSilent,Only show notification,RapeAttemptAlertSilent,仅显示通知
+RapeAttemptAlertDisabled,Disabled,RapeAttemptAlertDisabled,禁用
+RapeAlert,Rape alert:,RapeAlert,强奸警报:
+RapeAlertAlways,Always enabled,RapeAlertAlways,总是启用的
+RapeAlertHumanlike,Only if target is humanlike,RapeAlertHumanlike,只有当目标是人类时
+RapeAlertColonist,Only if target is colonist,RapeAlertColonist,仅当目标是殖民者时
+RapeAlertSilent,Only show notification,RapeAlertSilent,仅显示通知
+RapeAlertDisabled,Disabled,RapeAlertDisabled,禁用
+RapeAlertCP,Show for CP,RapeAlertCP,显示
+RapeAlertCP_desc,Show alert when pawn designated for comforting is getting raped.,RapeAlertCP_desc,当被指定安慰的 pawn 被强奸时显示警报。
+RapeAlertBreeding,Show for Breeding,RapeAlertBreeding,培育展示
+RapeAlertBreeding_desc,Show alert when pawn designated for breeding is getting raped.,RapeAlertBreeding_desc,当被指定用于繁殖的 pawn 被强奸时显示警报。
+SexualitySpread1,Sexuality spread source:,SexualitySpread1,性欲传播来源:
+SexualitySpread2,Sexuality generation spread for RJW.\nTHIS IS FOR SEX ONLY\nHAS NO EFFECT ON RELATIONSHIP,SexualitySpread2,对 RJW 进行性欲传递。\ n 这只针对性别 \ n 对关系没有影响
+SexualitySpreadVanilla,[Imported from Vanilla Rimworld],SexualitySpreadVanilla,[Imported from Vanilla Rimworld]
+SexualitySpreadPsychology,[Imported from Psychology],SexualitySpreadPsychology,[Imported from Psychology]
+SexualitySpreadIndividuality,[imported from [SYR]Individuality],SexualitySpreadIndividuality,[imported from [SYR]Personality]
+SexualityAsexual,Asexual:,SexualityAsexual,无性恋:
+SexualityPansexual,Pansexual:,SexualityPansexual,泛性:
+SexualityHeterosexual,Heterosexual:,SexualityHeterosexual,异性恋者:
+SexualityBisexual,Bisexual:,SexualityBisexual,双性恋者:
+SexualityGay,Gay:,SexualityGay,同性恋:
+SexualityAsexual_desc,"Low or non-existent sex drive, generally not interested in sex.",SexualityAsexual_desc,性欲低落或根本不存在，一般对性不感兴趣。
+SexualityPansexual_desc,Pansexuals disregard gender entirely.,SexualityPansexual_desc,泛性别者完全无视性别。
+SexualityHeterosexual_desc,Heterosexuals are attracted to 'opposite' sex.,SexualityHeterosexual_desc,异性恋者被 “相反” 的性别所吸引。
+SexualityBisexual_desc,Bisexuals are attracted to both males and females.,SexualityBisexual_desc,双性恋者会被男性和女性吸引。
+SexualityGay_desc,Homosexuals are attracted to same sex.,SexualityGay_desc,同性恋被同性吸引。
+MaxQuirks,Max quirks,MaxQuirks,最大怪癖
+MaxQuirks_desc,Max quirks pawn can get when created.,MaxQuirks_desc,Pawn 创建后可以获得的最大古怪点数。
+SendTraitGainLetters,Sex trait notifications,SendTraitGainLetters,性别特征通知
+SendTraitGainLetters_desc,Enable to receive letters when a pawn gains a trait from sex. Unimportant pawns such as traders will never trigger notifications regardless of this setting.,SendTraitGainLetters_desc,当小卒从性别中获得一项特性时能够接收信件。无论如何，不重要的 pawns (如商人) 都不会触发通知。
+RJW_SexGizmo_Orgasm,Orgasm,RJW_SexGizmo_Orgasm,高潮
+RJW_SexGizmo_RestNeed,Stamina,RJW_SexGizmo_RestNeed,耐久度
+RJW_SexGizmo_SexNeed,Satisfaction,RJW_SexGizmo_SexNeed,满足感
+RJW_SexGizmo_SexOverdriveTooltip,SexOverdrive - sex wont end until pawn collapses or interrupted otherwise.,RJW_SexGizmo_SexOverdriveTooltip,性欲释放-直到 pawn 倒塌或以其他方式中断之前，性欲不会结束。
+RJW_SexGizmo_HitPawn,Hit once.,RJW_SexGizmo_HitPawn,命中一次。
+RJW_SexGizmo_Cocoon,Wrap pawn into cocoon.,RJW_SexGizmo_Cocoon,将爪牙裹成茧。
+RJW_SexGizmo_Egg,Stuff with eggs.,RJW_SexGizmo_Egg,装有鸡蛋的东西。
+SexcardTooltip,Show sexuality,SexcardTooltip,显示性欲
+Quirks,Quirks:,Quirks,怪癖:
+NoQuirks,"No Quirks, vanilla.",NoQuirks,没有怪癖，香草。
+MessyQuirk,{pawn} not only produces copious amounts of fluid during sex but {pawn_pronoun} rarely bothers to clean {pawn_possessive}self afterwards.,MessyQuirk,{Pawn} 不仅能在性爱过程中分泌大量的体液，而且之后 {pawn_pronoun} 也很少会去清理自己。
+PodophileQuirk,{pawn} really likes feet and prefers foot-related sex acts.,PodophileQuirk,{Pawn} 非常喜欢脚，更喜欢与脚有关的性行为。
+CumslutQuirk,{pawn} really likes cum and prefers fellatio sex acts.,CumslutQuirk,{Pawn} 很喜欢高潮，更喜欢口交。
+ButtslutQuirk,{pawn} really likes getting fucked in the butt and prefers anal sex acts.,ButtslutQuirk,{Pawn} 很喜欢被操，并且更喜欢肛交。
+TeratophileQuirk,{pawn} prefers ugly partners. {pawn_pronoun} would also prefer larger and wilder animals if {pawn_pronoun} were into that sort of thing...,TeratophileQuirk,{Pawn} 更喜欢丑陋的伴侣。如果 {pawn_pronoun} 喜欢那种东西，{pawn_pronoun} 也更喜欢体型更大、更狂野的动物……
+EndytophileQuirk,{pawn} prefers to keep {pawn_possessive} clothes on during sex.,EndytophileQuirk,{Pawn} 喜欢在性爱时穿上 {pawn_possessive} 衣物。
+ExhibitionistQuirk,{pawn} enjoys having sex where others can see.,ExhibitionistQuirk,{Pawn} 喜欢在别人看见的地方发生性关系。
+GerontophileQuirk,{pawn} prefers older partners (55+ on a human scale).,GerontophileQuirk,{Pawn} 更喜欢年长的伴侣 (55 岁以上，人类规模)。
+SomnophileQuirk,{pawn} prefers {pawn_possessive} partners to be asleep,SomnophileQuirk,{Pawn} 更喜欢 {pawn_possessive} 伴侣睡觉
+SapiosexualQuirk,{pawn} prefers smart partners.,SapiosexualQuirk,{Pawn} 更喜欢聪明的伴侣。
+FertileQuirk,{pawn} has unusually high fertility and so is more likely to have children.,FertileQuirk,{Pawn} 的生育能力异常高，所以更容易有孩子。
+InfertileQuirk,{pawn} has unusually low fertility and so is unlikely to have children.,InfertileQuirk,{Pawn} 的生育能力异常低，所以不太可能有孩子。
+ImpregnationFetishQuirk,{pawn} really likes the idea of someone becoming pregnant. {pawn_pronoun} prefers partners and sex positions where there is a possibility of pregnancy. {pawn_pronoun} doesn't care if {pawn_pronoun} is getting pregnant or {pawn_possessive} partner is as long as babby is formed.,ImpregnationFetishQuirk,{Pawn} 很喜欢这个人怀孕的念头。 {pawn_pronoun} 更喜欢有可能怀孕的伴侣和性别。只要婴儿出生，{pawn_pronoun} 就不在乎 {pawn_pronoun} 是怀孕了还是 {pawn_possessive} 伴侣已经怀孕了。
+PregnancyFetishQuirk,{pawn} prefers partners who are visibly pregnant.,PregnancyFetishQuirk,{Pawn} 更喜欢明显怀孕的伴侣。
+IncubatorQuirk,{pawn} has birthed so many eggs that {pawn_possessive} body has adapted to handling them. {pawn_possessive} egg incubation speed has increased.,IncubatorQuirk,{Pawn} 产下了如此多的卵，以至于 {pawn_possessive} 身体已经适应了处理它们。{pawn_possessive} 卵孵化速度加快了。
+BreederQuirk,{pawn} has given birth so many times that {pawn_possessive} body has adapted to breeding. {pawn_possessive} pregnancies are shorter and produce more offspring.,BreederQuirk,{Pawn} 已经产子很多次了，以至于 {pawn_possessive} 身体已经适应了生育。{pawn_possessive} 怀孕时间更短，后代也更多。
+VigorousQuirk,{pawn} is invigorated by sex. {pawn_pronoun} does not get tired as much during sex.,VigorousQuirk,{Pawn} 因性而充满活力。{pawn_pronoun} 在性爱过程中不会感到疲劳。
+ChitinLoverQuirk,{pawn} enjoys the smooth strength of a chitinous exoskeleton. {pawn_pronoun} prefers arachnoid or insectoid partners.,ChitinLoverQuirk,{Pawn} 拥有几丁质外骨骼的光滑强度。{pawn_pronoun} 更喜欢蛛网膜或虫族伙伴。
+DemonLoverQuirk,"{pawn} is after the naughty ones. {pawn_pronoun} prefers {pawn_possessive} partners to come from the literal depths of hell, or at least look the part.",DemonLoverQuirk,{Pawn} 在追顽皮的孩子。{pawn_pronoun} 更喜欢 {pawn_possessive} 同伴们从地狱的深处降临，或者至少看看这个角色。
+FeatherLoverQuirk,"{pawn} loves that downy fluff. {pawn_pronoun} prefers avian or dinosaur partners. Because dinosaurs are birds and have feathers, as {pawn_pronoun} will explain at great length if given a chance.",FeatherLoverQuirk,{Pawn} 喜欢这种淡黄色的绒毛。{pawn_pronoun} 更喜欢鸟类或恐龙的伴侣。因为恐龙是有羽毛的鸟类，如果有机会的话，{pawn_pronoun} 会非常详细地解释。
+FurLoverQuirk,"{pawn} prefers a partner with a thick, luxurious, snuggly-soft coat of fur.",FurLoverQuirk,{Pawn} 更喜欢拥有一件厚实、奢华且贴身的毛皮作为伴侣。
+PlantLoverQuirk,{pawn} likes watering plants. If you know what I mean.,PlantLoverQuirk,{Pawn} 喜欢给植物浇水。如果你明白我的意思。
+RobotLoverQuirk,"Which is better, 2D or 3D? {pawn} knows that 3D-printed gives you the best of both worlds.",RobotLoverQuirk,2D 和 3D 哪个更好？{pawn} 知道 3D 打印能让你两个世界都拥有最好的一面。
+ScaleLoverQuirk,Who wouldn't want to fuck a dragon? Definitely not {pawn}. {pawn} wants to fuck a dragon.,ScaleLoverQuirk,谁不想干龙？绝对不是 {pawn}。{pawn} 想要和一条龙做爱。
+SkinLoverQuirk,{pawn} prefers {pawn_possessive} partners to have smooth sensitive skin without fur or scales getting in the way. Lucky for {pawn_objective} humans are all over the place.,SkinLoverQuirk,{Pawn} 更喜欢 {pawn_possessive} 伴侣拥有光滑且敏感的皮肤，并且不会被毛发和鳞片阻挡。幸运的是到处都是 {pawn_objective} 人类。
+SlimeLoverQuirk,"Because of their slippery and malleable nature slimes are very, very good at sex. As you will hear over and over if you listen to {pawn} talk for any length of time.",SlimeLoverQuirk,因为光滑可塑，自然纤细的人非常非常擅长性。如果你长时间听 {pawn} 说话，你会一遍又一遍地听到。
+SexPartWants,Wants to be:,SexPartWants,希望成为:
+PartsEditLabel,Edit {0},PartsEditLabel,编辑 {0}
+PartsEditFluidMultiplierLabel,Fluid Multiplier,PartsEditFluidMultiplierLabel,流体乘数
+PartsEditDevEntry,RJW: Edit parts,PartsEditDevEntry,RJW: 编辑部件

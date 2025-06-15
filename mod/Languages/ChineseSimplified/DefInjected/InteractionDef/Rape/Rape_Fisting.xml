@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: fisting -->
     <Rape_Fisting.label>拳手</Rape_Fisting.label>
     <!-- EN: r_logentry->Forcefully fisted [RECIPIENT_nameDef]. -->
-    <Rape_Fisting.logRulesInitiator.rulesStrings.0>R_logentry-&gt; 狠狠地拳[RECIPIENT_nameDef]没有。</Rape_Fisting.logRulesInitiator.rulesStrings.0>
+    <Rape_Fisting.logRulesInitiator.rulesStrings.0>R_logentry-> 狠狠地拳[RECIPIENT_nameDef]没有。</Rape_Fisting.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Was forcibly fisted by [INITIATOR_nameDef]. -->
-    <Rape_Fisting.logRulesRecipient.rulesStrings.0>R_logentry-&gt; 被[INITIATOR_nameDef]没有。</Rape_Fisting.logRulesRecipient.rulesStrings.0>
+    <Rape_Fisting.logRulesRecipient.rulesStrings.0>R_logentry-> 被[INITIATOR_nameDef]没有。</Rape_Fisting.logRulesRecipient.rulesStrings.0>
     <!-- EN: Do anal fisting -->
     <Rape_Fisting.modExtensions.0.RMBLabel>肛门拳</Rape_Fisting.modExtensions.0.RMBLabel>
     </LanguageData>

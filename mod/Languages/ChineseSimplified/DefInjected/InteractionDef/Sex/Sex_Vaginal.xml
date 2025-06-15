@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: vaginal -->
     <Sex_Vaginal.label>阴道的</Sex_Vaginal.label>
     <!-- EN: r_logentry->Had vaginal sex with [RECIPIENT_nameDef]. -->
-    <Sex_Vaginal.logRulesInitiator.rulesStrings.0>R_logentry-&gt; 通过阴道与他人发生性关系[RECIPIENT_nameDef]没有。</Sex_Vaginal.logRulesInitiator.rulesStrings.0>
+    <Sex_Vaginal.logRulesInitiator.rulesStrings.0>R_logentry-> 通过阴道与他人发生性关系[RECIPIENT_nameDef]没有。</Sex_Vaginal.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Had vaginal sex with [INITIATOR_nameDef]. -->
-    <Sex_Vaginal.logRulesRecipient.rulesStrings.0>R_logentry-&gt; 通过阴道与他人发生性关系[INITIATOR_nameDef]没有。</Sex_Vaginal.logRulesRecipient.rulesStrings.0>
+    <Sex_Vaginal.logRulesRecipient.rulesStrings.0>R_logentry-> 通过阴道与他人发生性关系[INITIATOR_nameDef]没有。</Sex_Vaginal.logRulesRecipient.rulesStrings.0>
     <!-- EN: Have vaginal sex -->
     <Sex_Vaginal.modExtensions.0.RMBLabel>进行阴道性交</Sex_Vaginal.modExtensions.0.RMBLabel>
     </LanguageData>

@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: cunnilingus -->
     <Sex_Cunnilingus.label>农奴</Sex_Cunnilingus.label>
     <!-- EN: r_logentry->Received cunnilingus from [RECIPIENT_nameDef]. -->
-    <Sex_Cunnilingus.logRulesInitiator.rulesStrings.0>R_logentry-&gt; 接受了来自[RECIPIENT_nameDef]没有。</Sex_Cunnilingus.logRulesInitiator.rulesStrings.0>
+    <Sex_Cunnilingus.logRulesInitiator.rulesStrings.0>R_logentry-> 接受了来自[RECIPIENT_nameDef]没有。</Sex_Cunnilingus.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Gave cunnilingus to [INITIATOR_nameDef]. -->
-    <Sex_Cunnilingus.logRulesRecipient.rulesStrings.0>R_logentry-&gt; 将阴唇给[INITIATOR_nameDef]没有。</Sex_Cunnilingus.logRulesRecipient.rulesStrings.0>
+    <Sex_Cunnilingus.logRulesRecipient.rulesStrings.0>R_logentry-> 将阴唇给[INITIATOR_nameDef]没有。</Sex_Cunnilingus.logRulesRecipient.rulesStrings.0>
     <!-- EN: Receive cunnilingus -->
     <Sex_Cunnilingus.modExtensions.0.RMBLabel>接受楔形动物</Sex_Cunnilingus.modExtensions.0.RMBLabel>
     </LanguageData>

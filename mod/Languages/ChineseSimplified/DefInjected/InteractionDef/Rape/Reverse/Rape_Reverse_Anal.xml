@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: anal -->
     <Rape_Reverse_Anal.label>肛门</Rape_Reverse_Anal.label>
     <!-- EN: r_logentry->Raped anally [RECIPIENT_nameDef]. -->
-    <Rape_Reverse_Anal.logRulesInitiator.rulesStrings.0>R_logentry-&gt; 被强奸[RECIPIENT_nameDef]没有。</Rape_Reverse_Anal.logRulesInitiator.rulesStrings.0>
+    <Rape_Reverse_Anal.logRulesInitiator.rulesStrings.0>R_logentry-> 被强奸[RECIPIENT_nameDef]没有。</Rape_Reverse_Anal.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Was anally raped by [INITIATOR_nameDef]. -->
-    <Rape_Reverse_Anal.logRulesRecipient.rulesStrings.0>R_logentry-&gt; 被[INITIATOR_nameDef]没有。</Rape_Reverse_Anal.logRulesRecipient.rulesStrings.0>
+    <Rape_Reverse_Anal.logRulesRecipient.rulesStrings.0>R_logentry-> 被[INITIATOR_nameDef]没有。</Rape_Reverse_Anal.logRulesRecipient.rulesStrings.0>
     <!-- EN: Ride anally -->
     <Rape_Reverse_Anal.modExtensions.0.RMBLabel>骑着马</Rape_Reverse_Anal.modExtensions.0.RMBLabel>
     </LanguageData>

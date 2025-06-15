@@ -7,6 +7,7 @@ import logging
 def inplace_update_xml_lxml(xml_path, csv_dict):
     """
     只替换已有key内容，不新增，保留格式。
+    写出时保留原始字符（不转义 > < &）。
     """
     try:
         parser = etree.XMLParser(remove_blank_text=False)
@@ -18,7 +19,15 @@ def inplace_update_xml_lxml(xml_path, csv_dict):
                 elem.text = csv_dict[elem.tag]
                 changed = True
         if changed:
-            tree.write(xml_path, encoding="utf-8", xml_declaration=True, pretty_print=True)
+            # 写到字符串，替换转义字符，再写回文件
+            xml_bytes = etree.tostring(tree, encoding="utf-8", xml_declaration=True, pretty_print=True)
+            xml_str = xml_bytes.decode("utf-8")
+            # 注意替换顺序，先 &amp; 再 &lt; &gt;
+            xml_str = xml_str.replace("&amp;", "&")
+            xml_str = xml_str.replace("&lt;", "<")
+            xml_str = xml_str.replace("&gt;", ">")
+            with open(xml_path, "w", encoding="utf-8") as f:
+                f.write(xml_str)
             logging.info(f"更新 XML 文件: {xml_path}")
     except etree.ParseError as e:
         logging.error(f"XML 解析失败: {xml_path}，错误: {e}")

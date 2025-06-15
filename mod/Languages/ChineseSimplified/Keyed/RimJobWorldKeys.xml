@@ -1,213 +1,211 @@
 <?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: The target isn't healthy enough or is in a forbidden location. -->
-    <PawnCantRapeCP>The target isn't healthy enough or is in a forbidden location.</PawnCantRapeCP>
+    <PawnCantRapeCP>目标身体不够健康或处于被禁止的位置。</PawnCantRapeCP>
     <!-- EN: The pawn doesn't need sex, is not healthy, or cannot rape. -->
-    <PawnCantRapeCP0>The pawn doesn't need sex, is not healthy, or cannot rape.</PawnCantRapeCP0>
+    <PawnCantRapeCP0>小卒不需要性别，不健康，或者不能强奸。</PawnCantRapeCP0>
     <!-- EN: The pawn is not single or their partner is nearby. -->
-    <PawnCantRapeCP1>The pawn is not single or their partner is nearby.</PawnCantRapeCP1>
+    <PawnCantRapeCP1>当家的并不单身，伴侣也在附近。</PawnCantRapeCP1>
     <!-- EN: The pawn is not a zoophile so they can't rape animals. -->
-    <PawnCantRapeCP2>The pawn is not a zoophile so they can't rape animals.</PawnCantRapeCP2>
+    <PawnCantRapeCP2>小卒不是亲族，所以他们不能强奸动物。</PawnCantRapeCP2>
     <!-- EN: Submit -->
-    <CommandSubmit>Submit</CommandSubmit>
+    <CommandSubmit>提交</CommandSubmit>
     <!-- EN: Lay down and accept whatever is to cum. -->
-    <CommandSubmitDesc>Lay down and accept whatever is to cum.</CommandSubmitDesc>
+    <CommandSubmitDesc>躺下来接受任何要暨的东西。</CommandSubmitDesc>
     <!-- EN: {0} is pregnant. -->
-    <RJW_PregnantTitle>{0} is pregnant.</RJW_PregnantTitle>
+    <RJW_PregnantTitle>{0} 怀孕了。</RJW_PregnantTitle>
     <!-- EN: {0} is pregnant and is going to be a mother soon. Be aware, starvation and trauma may result in loss of child. -->
-    <RJW_PregnantText>{0} is pregnant and is going to be a mother soon. Be aware, starvation and trauma may result in loss of child.</RJW_PregnantText>
+    <RJW_PregnantText>{0} 怀孕了，即将成为母亲。请注意，饥饿和创伤可能会导致儿童死亡。</RJW_PregnantText>
     <!-- EN: {0} is having contractions! Baby(ies) is(are) on the way! -->
-    <RJW_Contractions>{0} is having contractions! Baby(ies) is(are) on the way!</RJW_Contractions>
+    <RJW_Contractions>{0} 正在宫缩!婴儿已经在路上了!</RJW_Contractions>
     <!-- EN: Birthing done. -->
-    <RJW_GaveBirthTitle>Birthing done.</RJW_GaveBirthTitle>
+    <RJW_GaveBirthTitle>分娩完毕。</RJW_GaveBirthTitle>
     <!-- EN: {0} has successfully given birth to  -->
-    <RJW_GaveBirthText>{0} has successfully given birth to </RJW_GaveBirthText>
+    <RJW_GaveBirthText>{0} 已成功生孩子</RJW_GaveBirthText>
     <!-- EN: her baby. -->
-    <RJW_ABaby>her baby.</RJW_ABaby>
+    <RJW_ABaby>她的孩子。</RJW_ABaby>
     <!-- EN: her {0} babies. -->
-    <RJW_NBabies>her {0} babies.</RJW_NBabies>
+    <RJW_NBabies>她的 {0} 个孩子。</RJW_NBabies>
     <!-- EN: Have a healthy baby... -->
-    <RJW_PregnantNormal>Have a healthy baby...</RJW_PregnantNormal>
+    <RJW_PregnantNormal>生一个健康的宝宝...</RJW_PregnantNormal>
     <!-- EN: Something is unusual about the baby... -->
-    <RJW_PregnantStrange>Something is unusual about the baby...</RJW_PregnantStrange>
+    <RJW_PregnantStrange>这个婴儿有些不寻常.</RJW_PregnantStrange>
     <!-- EN: Something is very strange about the baby... -->
-    <RJW_PregnantMechStrange>Something is very strange about the baby...</RJW_PregnantMechStrange>
+    <RJW_PregnantMechStrange>这个婴儿有点奇怪.</RJW_PregnantMechStrange>
     <!-- EN: Birthed egg. -->
-    <RJW_GaveBirthEggTitle>Birthed egg.</RJW_GaveBirthEggTitle>
+    <RJW_GaveBirthEggTitle>产子。</RJW_GaveBirthEggTitle>
     <!-- EN: {0} laid eggs -->
-    <RJW_GaveBirthEggText>{0} laid eggs</RJW_GaveBirthEggText>
+    <RJW_GaveBirthEggText>{0} 产卵</RJW_GaveBirthEggText>
     <!-- EN: {0} is having contractions! Eggs are on the way! -->
-    <RJW_EggContractions>{0} is having contractions! Eggs are on the way!</RJW_EggContractions>
+    <RJW_EggContractions>{0} 正在宫缩!鸡蛋在路上了!</RJW_EggContractions>
     <!-- EN: {RAPIST} is trying to rape {TARGET}. -->
-    <RJW_AlertRape>{RAPIST} is trying to rape {TARGET}.</RJW_AlertRape>
+    <RJW_AlertRape>{RAPIST} 正试图强奸 {TARGET}。</RJW_AlertRape>
     <!-- EN: {RAPIST} is trying to assault {TARGET}. -->
-    <RJW_AlertAssault>{RAPIST} is trying to assault {TARGET}.</RJW_AlertAssault>
+    <RJW_AlertAssault>{RAPIST} 正试图袭击 {TARGET}。</RJW_AlertAssault>
     <!-- EN: {RAPIST} is trying to breed {TARGET}. -->
-    <RJW_AlertBreed>{RAPIST} is trying to breed {TARGET}.</RJW_AlertBreed>
+    <RJW_AlertBreed>{RAPIST} 正试图培育 {TARGET}。</RJW_AlertBreed>
     <!-- EN: {RAPIST} is trying to rape {TARGET}, {RAPIST_possessive} {RELATION}. -->
-    <RJW_AlertRapeRelated>{RAPIST} is trying to rape {TARGET}, {RAPIST_possessive} {RELATION}.</RJW_AlertRapeRelated>
+    <RJW_AlertRapeRelated>{RAPIST} 正试图强奸 {TARGET}，{RAPIST_possessive} {RELATION}。</RJW_AlertRapeRelated>
     <!-- EN: {RAPIST} is trying to assault {TARGET}, {RAPIST_possessive} {RELATION}. -->
-    <RJW_AlertAssaultRelated>{RAPIST} is trying to assault {TARGET}, {RAPIST_possessive} {RELATION}.</RJW_AlertAssaultRelated>
+    <RJW_AlertAssaultRelated>{RAPIST} 正试图袭击 {TARGET}，{RAPIST_possessive} {RELATION}。</RJW_AlertAssaultRelated>
     <!-- EN: {RAPIST} is trying to breed {TARGET}, {RAPIST_possessive} {RELATION}. -->
-    <RJW_AlertBreedRelated>{RAPIST} is trying to breed {TARGET}, {RAPIST_possessive} {RELATION}.</RJW_AlertBreedRelated>
+    <RJW_AlertBreedRelated>{RAPIST} 正试图培育 {TARGET}，{RAPIST_possessive} {RELATION}。</RJW_AlertBreedRelated>
     <!-- EN: {TARGET} is getting raped. -->
-    <RJW_AlertBeeingRaped>{TARGET} is getting raped.</RJW_AlertBeeingRaped>
+    <RJW_AlertBeeingRaped>{TARGET} 正在被强奸。</RJW_AlertBeeingRaped>
     <!-- EN: This space is reserved for optional RJW features that are either turned off or unavailable for the selected pawn/animal.\nCheck the fucking mod options and stop asking if THIS is normal. -->
-    <GoToModSettings>This space is reserved for optional RJW features that are either turned off or unavailable for the selected pawn/animal.\nCheck the fucking mod options and stop asking if THIS is normal.</GoToModSettings>
+    <GoToModSettings>此空间已预留给可选的 RJW 特性，这些特性对所选的 pawn/animal 是否不可用。\ n 查看他妈的 mod 选项，并停止询问这是否正常。</GoToModSettings>
     <!-- EN: Use for comfort -->
-    <ForComfort>Use for comfort</ForComfort>
+    <ForComfort>舒适使用</ForComfort>
     <!-- EN: Mark for comforting sex -->
-    <ForComfortDesc>Mark for comforting sex</ForComfortDesc>
+    <ForComfortDesc>标记为安慰的性爱</ForComfortDesc>
     <!-- EN: Won't agree to be used for comfort\nReq: masochist trait -->
-    <ForComfortRefuseDesc>Won't agree to be used for comfort\nReq: masochist trait</ForComfortRefuseDesc>
+    <ForComfortRefuseDesc>不会同意用于安慰 \ n 请求: 受虐狂特性</ForComfortRefuseDesc>
     <!-- EN: Assign to whorin' -->
-    <ForService>Assign to whorin'</ForService>
+    <ForService>指定给妓女</ForService>
     <!-- EN: Mark for whoring
 - Will try to hook up with visitors.
 - Entertains other colonists if not busy.
 - Tries to refrain from masturbation while on the job, may cause frustration.
  -->
-    <ForServiceDesc>Mark for whoring
-- Will try to hook up with visitors.
-- Entertains other colonists if not busy.
-- Tries to refrain from masturbation while on the job, may cause frustration.
-</ForServiceDesc>
+    <ForServiceDesc>标记为妓女
+-会尝试与访客勾搭。
+-如果不忙的话就取悦其他殖民者。
+-当你在工作时尽量避免自慰，这可能会让你感到沮丧。</ForServiceDesc>
     <!-- EN: Won't agree to be a whore -->
-    <ForServiceRefuseDesc>Won't agree to be a whore</ForServiceRefuseDesc>
+    <ForServiceRefuseDesc>不会同意做妓女</ForServiceRefuseDesc>
     <!-- EN: For animals -->
-    <ForBreeding>For animals</ForBreeding>
+    <ForBreeding>动物专用</ForBreeding>
     <!-- EN: Mark for animal breeding -->
-    <ForBreedingDesc>Mark for animal breeding</ForBreedingDesc>
+    <ForBreedingDesc>标记为动物培育</ForBreedingDesc>
     <!-- EN: Won't agree to be mounted by animals\nReq: zoophile trait -->
-    <ForBreedingRefuseDesc>Won't agree to be mounted by animals\nReq: zoophile trait</ForBreedingRefuseDesc>
+    <ForBreedingRefuseDesc>不会同意被动物骑乘 \ n 请求: 亲兽特性</ForBreedingRefuseDesc>
     <!-- EN: Allow this animal to mount designated breeders -->
-    <ForBreedingAnimalDesc>Allow this animal to mount designated breeders</ForBreedingAnimalDesc>
+    <ForBreedingAnimalDesc>允许此动物登上指定的饲养员</ForBreedingAnimalDesc>
     <!-- EN:  is trying to breed  -->
-    <BreedMessage> is trying to breed </BreedMessage>
+    <BreedMessage>正在尝试繁殖</BreedMessage>
     <!-- EN: Designate dairy -->
-    <ForMilking>Designate dairy</ForMilking>
+    <ForMilking>指派乳制品</ForMilking>
     <!-- EN: Harvest biological materials from this being -->
-    <ForMilkingDesc>Harvest biological materials from this being</ForMilkingDesc>
+    <ForMilkingDesc>从此生物身上摘取生物材料</ForMilkingDesc>
     <!-- EN: Designate Hero -->
-    <ForHero>Designate Hero</ForHero>
+    <ForHero>指定英雄</ForHero>
     <!-- EN: Set pawn as player character
 -Can only be set once.
 -Can't be turned off.
  -->
-    <ForHeroDesc>Set pawn as player character
--Can only be set once.
--Can't be turned off.
-</ForHeroDesc>
+    <ForHeroDesc>将 pawn 设置为玩家角色
+-只能设置一次。
+-无法关闭。</ForHeroDesc>
     <!-- EN: This is hero of other player -->
-    <ForHeroRefuse1Desc>This is hero of other player</ForHeroRefuse1Desc>
+    <ForHeroRefuse1Desc>这是其他玩家的英雄</ForHeroRefuse1Desc>
     <!-- EN: You have no right to change designation -->
-    <ForHeroRefuse2Desc>You have no right to change designation</ForHeroRefuse2Desc>
+    <ForHeroRefuse2Desc>你没有权利更改名称</ForHeroRefuse2Desc>
     <!-- EN: Non hero colonist in HC mode -->
-    <ForHeroRefuseHCDesc>Non hero colonist in HC mode</ForHeroRefuseHCDesc>
+    <ForHeroRefuseHCDesc>HC 模式下的非英雄殖民者</ForHeroRefuseHCDesc>
     <!-- EN: Bra cup: {0} -->
-    <RJW_PartInfo_braCup>Bra cup: {0}</RJW_PartInfo_braCup>
+    <RJW_PartInfo_braCup>胸罩罩杯: {0}</RJW_PartInfo_braCup>
     <!-- EN: Bra size: - -->
-    <RJW_PartInfo_braSizeNone>Bra size: -</RJW_PartInfo_braSizeNone>
+    <RJW_PartInfo_braSizeNone>胸罩尺寸:-</RJW_PartInfo_braSizeNone>
     <!-- EN: Eggs: {0} -->
-    <RJW_PartInfo_eggs>Eggs: {0}</RJW_PartInfo_eggs>
+    <RJW_PartInfo_eggs>卵: {0}</RJW_PartInfo_eggs>
     <!-- EN: {0}: {1} -->
-    <RJW_PartInfo_fluidTypeFluidAmount>{0}: {1}</RJW_PartInfo_fluidTypeFluidAmount>
+    <RJW_PartInfo_fluidTypeFluidAmount>{0: :{ 1}</RJW_PartInfo_fluidTypeFluidAmount>
     <!-- EN: Bra size: {0}:{1} -->
-    <RJW_PartInfo_braSize>Bra size: {0}:{1}</RJW_PartInfo_braSize>
+    <RJW_PartInfo_braSize>胸罩尺寸: {0}: {1}</RJW_PartInfo_braSize>
     <!-- EN: Overbust: {0} -->
-    <RJW_PartInfo_overbust>Overbust: {0}</RJW_PartInfo_overbust>
+    <RJW_PartInfo_overbust>超胸: {0}</RJW_PartInfo_overbust>
     <!-- EN: Underbust: {0} -->
-    <RJW_PartInfo_underbust>Underbust: {0}</RJW_PartInfo_underbust>
+    <RJW_PartInfo_underbust>半熟: {0}</RJW_PartInfo_underbust>
     <!-- EN: Weight: {0} -->
-    <RJW_PartInfo_weight>Weight: {0}</RJW_PartInfo_weight>
+    <RJW_PartInfo_weight>重量: {0}</RJW_PartInfo_weight>
     <!-- EN: Properties: {0} -->
-    <RJW_PartInfo_properties>Properties: {0}</RJW_PartInfo_properties>
+    <RJW_PartInfo_properties>属性: {0}</RJW_PartInfo_properties>
     <!-- EN: Severity: {0} -->
-    <RJW_PartInfo_severity>Severity: {0}</RJW_PartInfo_severity>
+    <RJW_PartInfo_severity>严重程度: {0}</RJW_PartInfo_severity>
     <!-- EN: Fluid Multiplier: {0} -->
-    <RJW_PartInfo_fluidMultiplier>Fluid Multiplier: {0}</RJW_PartInfo_fluidMultiplier>
+    <RJW_PartInfo_fluidMultiplier>流体乘数: {0}</RJW_PartInfo_fluidMultiplier>
     <!-- EN: Girth: {0} -->
-    <RJW_PartInfo_girth>Girth: {0}</RJW_PartInfo_girth>
+    <RJW_PartInfo_girth>肚带: {0}</RJW_PartInfo_girth>
     <!-- EN: Length: {0} -->
-    <RJW_PartInfo_length>Length: {0}</RJW_PartInfo_length>
+    <RJW_PartInfo_length>长度: {0}</RJW_PartInfo_length>
     <!-- EN: Depth: {0} -->
-    <RJW_PartInfo_depth>Depth: {0}</RJW_PartInfo_depth>
+    <RJW_PartInfo_depth>深度: {0}</RJW_PartInfo_depth>
     <!-- EN: Max Girth: {0} -->
-    <RJW_PartInfo_maxGirth>Max Girth: {0}</RJW_PartInfo_maxGirth>
+    <RJW_PartInfo_maxGirth>最大肚带: {0}</RJW_PartInfo_maxGirth>
     <!-- EN: Max Length: {0} -->
-    <RJW_PartInfo_maxLength>Max Length: {0}</RJW_PartInfo_maxLength>
+    <RJW_PartInfo_maxLength>最大长度: {0}</RJW_PartInfo_maxLength>
     <!-- EN: Fluid: {0} ({1}ml) -->
-    <RJW_PartInfo_fluidTypeFluidAmountHeading>Fluid: {0} ({1}ml)</RJW_PartInfo_fluidTypeFluidAmountHeading>
+    <RJW_PartInfo_fluidTypeFluidAmountHeading>流体: {0} ({1} ml)</RJW_PartInfo_fluidTypeFluidAmountHeading>
     <!-- EN: Unknown species -->
-    <RJW_PartInfo_unknownSpecies>Unknown species</RJW_PartInfo_unknownSpecies>
+    <RJW_PartInfo_unknownSpecies>未知物种</RJW_PartInfo_unknownSpecies>
     <!-- EN: Unknown -->
-    <RJW_PartInfo_unknownOwner>Unknown</RJW_PartInfo_unknownOwner>
+    <RJW_PartInfo_unknownOwner>未知</RJW_PartInfo_unknownOwner>
     <!-- EN: previous owner -->
-    <RJW_StatEntry_PreviousOwner>previous owner</RJW_StatEntry_PreviousOwner>
+    <RJW_StatEntry_PreviousOwner>上一个拥有者</RJW_StatEntry_PreviousOwner>
     <!-- EN: original race -->
-    <RJW_StatEntry_OriginalOwnerRace>original race</RJW_StatEntry_OriginalOwnerRace>
+    <RJW_StatEntry_OriginalOwnerRace>原始种族</RJW_StatEntry_OriginalOwnerRace>
     <!-- EN: original size -->
-    <RJW_StatEntry_OriginalOwnerSize>original size</RJW_StatEntry_OriginalOwnerSize>
+    <RJW_StatEntry_OriginalOwnerSize>原始尺寸</RJW_StatEntry_OriginalOwnerSize>
     <!-- EN: size -->
-    <RJW_StatEntry_PartSize>size</RJW_StatEntry_PartSize>
+    <RJW_StatEntry_PartSize>大小</RJW_StatEntry_PartSize>
     <!-- EN: cup size -->
-    <RJW_StatEntry_PartCupSize>cup size</RJW_StatEntry_PartCupSize>
+    <RJW_StatEntry_PartCupSize>杯子大小</RJW_StatEntry_PartCupSize>
     <!-- EN: length -->
-    <RJW_StatEntry_PartLength>length</RJW_StatEntry_PartLength>
+    <RJW_StatEntry_PartLength>长度</RJW_StatEntry_PartLength>
     <!-- EN: girth -->
-    <RJW_StatEntry_PartGirth>girth</RJW_StatEntry_PartGirth>
+    <RJW_StatEntry_PartGirth>肚带</RJW_StatEntry_PartGirth>
     <!-- EN: max girth -->
-    <RJW_StatEntry_PartMaxGirth>max girth</RJW_StatEntry_PartMaxGirth>
+    <RJW_StatEntry_PartMaxGirth>最大肚带</RJW_StatEntry_PartMaxGirth>
     <!-- EN: depth -->
-    <RJW_StatEntry_PartDepth>depth</RJW_StatEntry_PartDepth>
+    <RJW_StatEntry_PartDepth>深度</RJW_StatEntry_PartDepth>
     <!-- EN: weight -->
-    <RJW_StatEntry_PartWeight>weight</RJW_StatEntry_PartWeight>
+    <RJW_StatEntry_PartWeight>重量</RJW_StatEntry_PartWeight>
     <!-- EN: properties -->
-    <RJW_StatEntry_PartTags>properties</RJW_StatEntry_PartTags>
+    <RJW_StatEntry_PartTags>特性</RJW_StatEntry_PartTags>
     <!-- EN: fluid -->
-    <RJW_StatEntry_Fluid>fluid</RJW_StatEntry_Fluid>
+    <RJW_StatEntry_Fluid>演进</RJW_StatEntry_Fluid>
     <!-- EN: fluid amount -->
-    <RJW_StatEntry_FluidAmount>fluid amount</RJW_StatEntry_FluidAmount>
+    <RJW_StatEntry_FluidAmount>液体量</RJW_StatEntry_FluidAmount>
     <!-- EN: ejaculation amount -->
-    <RJW_StatEntry_FluidAmount_ejaculation>ejaculation amount</RJW_StatEntry_FluidAmount_ejaculation>
+    <RJW_StatEntry_FluidAmount_ejaculation>射精量</RJW_StatEntry_FluidAmount_ejaculation>
     <!-- EN: wetness -->
-    <RJW_StatEntry_FluidAmount_wetness>wetness</RJW_StatEntry_FluidAmount_wetness>
+    <RJW_StatEntry_FluidAmount_wetness>潮湿</RJW_StatEntry_FluidAmount_wetness>
     <!-- EN: Age:  -->
-    <AgeImpactor>Age: </AgeImpactor>
+    <AgeImpactor>年龄:</AgeImpactor>
     <!-- EN: Fertility stat: {VALUE}% -->
-    <VanillaFertilityImpactor>Fertility stat: {VALUE}%</VanillaFertilityImpactor>
+    <VanillaFertilityImpactor>肥沃度属性: {VALUE} %</VanillaFertilityImpactor>
     <!-- EN: Nymphs!!! -->
-    <RJW_nymph_incident_raid_title>Nymphs!!!</RJW_nymph_incident_raid_title>
+    <RJW_nymph_incident_raid_title>若虫!</RJW_nymph_incident_raid_title>
     <!-- EN: A group of nymphs has wandered into your settlement. -->
-    <RJW_nymph_incident_raid_description>A group of nymphs has wandered into your settlement.</RJW_nymph_incident_raid_description>
+    <RJW_nymph_incident_raid_description>一群若仙来到了你的定居点。</RJW_nymph_incident_raid_description>
     <!-- EN: Nymph! -->
-    <RJW_nymph_incident_wander_title>Nymph!</RJW_nymph_incident_wander_title>
+    <RJW_nymph_incident_wander_title>若虫!</RJW_nymph_incident_wander_title>
     <!-- EN: A wandering nymph has decided to visit your settlement. -->
-    <RJW_nymph_incident_wander_description>A wandering nymph has decided to visit your settlement.</RJW_nymph_incident_wander_description>
+    <RJW_nymph_incident_wander_description>一位游荡的仙女决定访问你的定居点。</RJW_nymph_incident_wander_description>
     <!-- EN: Nymph Joins -->
-    <RJW_nymph_incident_join_title>Nymph Joins</RJW_nymph_incident_join_title>
+    <RJW_nymph_incident_join_title>若虫加入</RJW_nymph_incident_join_title>
     <!-- EN: A wandering nymph has decided to join your settlement. -->
-    <RJW_nymph_incident_join_description>A wandering nymph has decided to join your settlement.</RJW_nymph_incident_join_description>
+    <RJW_nymph_incident_join_description>一位游荡的仙女决定加入你的定居点。</RJW_nymph_incident_join_description>
     <!-- EN: {PAWN} has no working genitals. -->
-    <PawnLacksFunctionalGenitals>{PAWN} has no working genitals.</PawnLacksFunctionalGenitals>
+    <PawnLacksFunctionalGenitals>{PAWN} 没有工作的生殖器。</PawnLacksFunctionalGenitals>
     <!-- EN: {PAWN} does not have a vagina. -->
-    <PawnLacksVagina>{PAWN} does not have a vagina.</PawnLacksVagina>
+    <PawnLacksVagina>{PAWN} 没有阴道。</PawnLacksVagina>
     <!-- EN: {PAWN} does not have a functional penis. -->
-    <PawnLacksFunctionalPenis>{PAWN} does not have a functional penis.</PawnLacksFunctionalPenis>
+    <PawnLacksFunctionalPenis>{PAWN} 没有正常的阴茎。</PawnLacksFunctionalPenis>
     <!-- EN: vaginal sex chance -->
-    <VaginalWeight>vaginal sex chance</VaginalWeight>
+    <VaginalWeight>阴道性爱几率</VaginalWeight>
     <!-- EN: Trait gained : {PAWN} -->
-    <LetterLabelGainedTraitFromSex>Trait gained : {PAWN}</LetterLabelGainedTraitFromSex>
+    <LetterLabelGainedTraitFromSex>特性获得: {PAWN}</LetterLabelGainedTraitFromSex>
     <!-- EN: A sexual experience has caused {PAWN} to gain the {TRAIT} trait. -->
-    <GainedTraitFromSex>A sexual experience has caused {PAWN} to gain the {TRAIT} trait.</GainedTraitFromSex>
+    <GainedTraitFromSex>一次性经历使 {PAWN} 获得了 {TRAIT} 特性。</GainedTraitFromSex>
     <!-- EN: Aphrodisiac-assisted overstimulation has permanently rewired {PAWN}'s brain. {PAWN_pronoun} has gained the {TRAIT} trait. -->
-    <GainedTraitFromSexNymphomaniac>Aphrodisiac-assisted overstimulation has permanently rewired {PAWN}'s brain. {PAWN_pronoun} has gained the {TRAIT} trait.</GainedTraitFromSexNymphomaniac>
+    <GainedTraitFromSexNymphomaniac>壮阳药辅助的过度刺激永久性地重塑了 {PAWN} 的大脑。{PAWN_pronoun} 获得了 {TRAIT} 特性。</GainedTraitFromSexNymphomaniac>
     <!-- EN: The feat of feasting on the feel of feet is feeding a fiendish new fetish in {PAWN}. {PAWN} is now a {TRAIT} -->
-    <GainedTraitFromSexFootSlut>The feat of feasting on the feel of feet is feeding a fiendish new fetish in {PAWN}. {PAWN} is now a {TRAIT}</GainedTraitFromSexFootSlut>
+    <GainedTraitFromSexFootSlut>用脚部盛宴的壮举正在滋养 {PAWN} 一种邪恶的新迷恋。{PAWN} 现在是 {TRAIT} 了</GainedTraitFromSexFootSlut>
     <!-- EN: Traits gained: {PAWN} -->
-    <LetterLabelGainedMultipleTraitsFromSex>Traits gained: {PAWN}</LetterLabelGainedMultipleTraitsFromSex>
+    <LetterLabelGainedMultipleTraitsFromSex>特性获得: {PAWN}</LetterLabelGainedMultipleTraitsFromSex>
     <!-- EN: A powerful sexual experience has caused {PAWN} to gain the following traits: -->
-    <GainedMultipleTraitsFromSex>A powerful sexual experience has caused {PAWN} to gain the following traits:</GainedMultipleTraitsFromSex>
+    <GainedMultipleTraitsFromSex>强大的性体验使 {PAWN} 获得了以下特性:</GainedMultipleTraitsFromSex>
     <!-- EN:   - {0} -->
-    <GainedMultipleTraitsFromSexListItem>  - {0}</GainedMultipleTraitsFromSexListItem>
+    <GainedMultipleTraitsFromSexListItem>-{0}</GainedMultipleTraitsFromSexListItem>
     </LanguageData>

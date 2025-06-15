@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
     <!-- EN: anal -->
     <Sex_Reverse_Anal.label>肛门</Sex_Reverse_Anal.label>
     <!-- EN: r_logentry->Was fucked anally by [RECIPIENT_nameDef]. -->
-    <Sex_Reverse_Anal.logRulesInitiator.rulesStrings.0>R_logentry-&gt; 被盟友干了[RECIPIENT_nameDef]没有。</Sex_Reverse_Anal.logRulesInitiator.rulesStrings.0>
+    <Sex_Reverse_Anal.logRulesInitiator.rulesStrings.0>R_logentry-> 被盟友干了[RECIPIENT_nameDef]没有。</Sex_Reverse_Anal.logRulesInitiator.rulesStrings.0>
     <!-- EN: r_logentry->Fucked anally [INITIATOR_nameDef]. -->
-    <Sex_Reverse_Anal.logRulesRecipient.rulesStrings.0>R_logentry-&gt; 性交[INITIATOR_nameDef]没有。</Sex_Reverse_Anal.logRulesRecipient.rulesStrings.0>
+    <Sex_Reverse_Anal.logRulesRecipient.rulesStrings.0>R_logentry-> 性交[INITIATOR_nameDef]没有。</Sex_Reverse_Anal.logRulesRecipient.rulesStrings.0>
     <!-- EN: Get fucked anally -->
     <Sex_Reverse_Anal.modExtensions.0.RMBLabel>盟友被操</Sex_Reverse_Anal.modExtensions.0.RMBLabel>
     </LanguageData>
