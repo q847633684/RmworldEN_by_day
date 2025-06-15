@@ -14,30 +14,37 @@ def is_non_text(text: str) -> bool:
         return True
     except ValueError:
         pass
-    return any(text.startswith(p) for p in CONFIG.ignore_prefixes)
+    # 硬编码忽略前缀
+    ignore_prefixes = ["#", "@", "$", "%", "&"]
+    return any(text.startswith(p) for p in ignore_prefixes)
 
-def extract_translatable_fields(node: ET.Element, prefix: str = "", li_index: int = -1) -> List[Tuple[str, str, str]]:
+def extract_translatable_fields(node: ET.Element, prefix: str = "", li_indices: List[int] = None) -> List[Tuple[str, str, str]]:
     """
-    提取 XML 节点中的可翻译字段，处理 <li> 标签的索引。
+    提取 XML 节点中的可翻译字段，支持 <li> 数字索引和嵌套结构。
 
     Args:
         node: XML 节点
         prefix: 字段路径前缀
-        li_index: 当前 <li> 标签的索引（-1 表示非 <li>）
+        li_indices: 当前 <li> 的索引列表（支持多层嵌套）
 
     Returns:
         List of tuples (field_path, text, tag)
     """
+    if li_indices is None:
+        li_indices = []
     fields = []
     for idx, child in enumerate(node):
+        current_indices = li_indices
         new_prefix = prefix
         if child.tag == "li":
-            new_prefix = f"{prefix}li[{idx}]" if prefix else f"li[{idx}]"
+            current_indices = li_indices + [idx]
+            index_str = ".".join(str(i) for i in current_indices)
+            new_prefix = f"{prefix}{index_str}" if prefix else index_str
         else:
             new_prefix = f"{prefix}{child.tag}" if prefix else child.tag
         if child.text and child.text.strip() and not is_non_text(child.text):
             fields.append((new_prefix, child.text.strip(), child.tag))
         if len(child) > 0:
             child_prefix = f"{new_prefix}." if child.tag != "li" else new_prefix
-            fields.extend(extract_translatable_fields(child, child_prefix, idx if child.tag == "li" else -1))
+            fields.extend(extract_translatable_fields(child, child_prefix, current_indices))
     return fields

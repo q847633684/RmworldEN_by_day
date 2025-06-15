@@ -1,36 +1,41 @@
-import os
-import json
-from typing import List, Dict
 import xml.etree.ElementTree as ET
-from xml.dom import minidom
+import os
 from pathlib import Path
+import logging
+import re
 
-def get_language_folder_path(language: str, root_dir: str) -> str:
+def get_language_folder_path(language: str, mod_dir: str) -> str:
     """获取语言文件夹路径"""
-    return os.path.join(root_dir, "Languages", language)
+    return os.path.join(mod_dir, "Languages", language)
 
-def sanitize_xcomment(comment: str) -> str:
-    """清理 XML 注释内容，移除无效字符"""
-    if not comment:
-        return ""
-    return comment.replace("--", "-").strip()
+def sanitize_xcomment(text: str) -> str:
+    """清理 XML 注释文本"""
+    return re.sub(r"-->|--", "-", text.strip())
+
+def sanitize_xml(text: str) -> str:
+    """清理 XML 内容，转义特殊字符"""
+    if not isinstance(text, str):
+        text = str(text)
+    text = text.replace("&", "&amp;")  # 必须先转义 &
+    text = text.replace("<", "&lt;")
+    text = text.replace(">", "&gt;")
+    text = text.replace('"', "&quot;")
+    text = text.replace("'", "&apos;")
+    # 移除控制字符
+    text = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F]', '', text)
+    return text
 
 def save_xml_to_file(root: ET.Element, file_path: str, pretty_print: bool = True) -> None:
-    """保存 XML 到文件，支持格式化输出"""
+    """保存 XML 到文件"""
+    tree = ET.ElementTree(root)
+    if pretty_print:
+        ET.indent(root, space="  ")  # Python 3.9+
     try:
-        tree = ET.ElementTree(root)
-        if pretty_print:
-            # 使用 minidom 进行格式化
-            xml_str = minidom.parseString(ET.tostring(root, encoding='unicode')).toprettyxml(indent="  ")
-            # 移除 <?xml ...?> 声明（如果需要）
-            xml_str = '\n'.join(line for line in xml_str.split('\n') if not line.startswith('<?xml'))
-            with open(file_path, "w", encoding="utf-8") as f:
-                f.write(xml_str)
-        else:
-            tree.write(file_path, encoding="utf-8", xml_declaration=False)
-    except (OSError, ET.ParseError) as e:
-        print(f"无法保存 XML 文件 {file_path}: {e}")
-        raise
+        Path(file_path).parent.mkdir(parents=True, exist_ok=True)
+        tree.write(file_path, encoding="utf-8", xml_declaration=True)
+        logging.info(f"保存 XML 文件: {file_path}")
+    except OSError as e:
+        logging.error(f"无法保存 XML 文件 {file_path}: {e}")
 
 def update_history_list(key: str, value: str) -> None:
     """更新历史记录列表"""

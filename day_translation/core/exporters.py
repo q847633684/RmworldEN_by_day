@@ -8,7 +8,7 @@ import csv
 from multiprocessing import Pool
 from tqdm import tqdm
 from ..utils.config import TranslationConfig
-from ..utils.utils import save_xml_to_file, sanitize_xcomment, get_language_folder_path
+from ..utils.utils import save_xml_to_file, sanitize_xcomment, get_language_folder_path, sanitize_xml
 
 CONFIG = TranslationConfig()
 
@@ -60,7 +60,7 @@ def export_definjected_from_english(
                     if parent is not None:
                         idx = list(parent).index(elem)
                         parent.insert(idx, comment)
-            save_xml_to_file(root, dst_file, pretty_print=True)  # 启用格式化
+            save_xml_to_file(root, dst_file, pretty_print=True)
         except ET.ParseError as e:
             logging.error(f"XML解析失败: {src_file}: {e}")
         except OSError as e:
@@ -167,7 +167,7 @@ def export_keyed(
                     if parent is not None:
                         idx = list(parent).index(elem)
                         parent.insert(idx, comment)
-            save_xml_to_file(root, dst_file, pretty_print=True)  # 启用格式化
+            save_xml_to_file(root, dst_file, pretty_print=True)
         except ET.ParseError as e:
             logging.error(f"XML解析失败: {src_file}: {e}")
         except OSError as e:
@@ -251,11 +251,35 @@ def export_definjected(
         root = ET.Element("LanguageData")
         for def_name, translations in defs:
             for field_path, text, tag in translations:
-                comment = ET.Comment(sanitize_xcomment(f" EN: {text} "))
-                root.append(comment)
-                field_elem = ET.SubElement(root, f"{def_name}.{field_path}")
-                field_elem.text = text
-        save_xml_to_file(root, output_path, pretty_print=True)  # 启用格式化
+                try:
+                    comment = ET.Comment(sanitize_xcomment(f" EN: {text} "))
+                    root.append(comment)
+                    # 处理嵌套路径
+                    parts = field_path.split(".")
+                    current = root
+                    tag_name = f"{def_name}.{parts[0]}"  # 初始标签
+                    for part in parts[1:]:
+                        try:
+                            idx = int(part)  # 检查是否为数字索引
+                            li_tags = [child for child in current if child.tag == str(idx)]
+                            if not li_tags:
+                                li_tag = ET.SubElement(current, str(idx))
+                                li_tags.append(li_tag)
+                            current = li_tags[0]
+                            tag_name += f".{idx}"
+                        except ValueError:
+                            # 非数字索引，正常标签
+                            sub_elem = current.find(part)
+                            if sub_elem is None:
+                                sub_elem = ET.SubElement(current, part)
+                            current = sub_elem
+                            tag_name += f".{part}"
+                    current.text = sanitize_xml(text)  # 清理文本
+                except Exception as e:
+                    logging.error(f"生成 XML 失败: output_path={output_path}, def_name={def_name}, field_path={field_path}, error={e}")
+                    continue
+        save_xml_to_file(root, output_path, pretty_print=True)
+
 def export_keyed_to_csv(keyed_dir: str, csv_path: str) -> None:
     """导出 Keyed 翻译到 CSV"""
     logging.info(f"导出 Keyed 到 CSV: keyed_dir={keyed_dir}, csv_path={csv_path}")
@@ -275,7 +299,7 @@ def export_keyed_to_csv(keyed_dir: str, csv_path: str) -> None:
                 if isinstance(elem.tag, str) and elem.text and elem.text.strip():
                     rows.append({
                         "key": elem.tag,
-                        "text": elem.text.strip(),
+                        "text": sanitize_xml(elem.text.strip()),  # 清理文本
                         "tag": elem.tag
                     })
                 elem.clear()

@@ -25,5 +25,5 @@ IGNORE_FIELDS: List[str] = [
 NON_TEXT_PATTERNS: List[str] = [
     r'^\s*\(\s*\d+\s*,\s*[\d*\.]+\s*\)\s*$',
     r'^\s*[\d.]+\s*$',
-    r'^\s*(true|false)\s*$',Add commentMore actions
+    r'^\s*(true|false)\s*$',
 ]

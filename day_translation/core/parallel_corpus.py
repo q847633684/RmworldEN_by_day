@@ -1,11 +1,11 @@
-import os
 import logging
+import os
 import csv
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import List, Tuple
 from ..utils.config import TranslationConfig
-from ..utils.utils import get_language_folder_path
+from ..utils.utils import get_language_folder_path, sanitize_xcomment
 
 CONFIG = TranslationConfig()
 
@@ -21,68 +21,76 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
         生成的语料条数
     """
     logging.info(f"生成平行语料集: mode={mode}, mod_dir={mod_dir}")
-    output_path = "parallel_corpus.csv"
-    mod_dir = str(Path(mod_dir).resolve())  # 解析绝对路径
-    translations: List[Tuple[str, str]] = []
+    mod_dir = str(Path(mod_dir).resolve())
+    output_path = str(Path(mod_dir).parent / "parallel_corpus.csv")
+    lang_path = get_language_folder_path(CONFIG.default_language, mod_dir)
+    src_lang_path = get_language_folder_path(CONFIG.source_language, mod_dir)
+    
+    corpus: List[Tuple[str, str]] = []
     if mode == "1":
-        lang_path = get_language_folder_path(CONFIG.default_language, mod_dir)
         def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
         keyed_path = os.path.join(lang_path, CONFIG.keyed_dir)
-        for xml_file in list(Path(def_injected_path).rglob("*.xml")) + list(Path(keyed_path).rglob("*.xml")):
-            try:
-                tree = ET.parse(xml_file)
-                root = tree.getroot()
-                for elem in root.findall(".//*"):
-                    prev = None
-                    for child in list(elem):
-                        if child.tag == ET.Comment and child.text and child.text.strip().startswith("EN: "):
-                            prev = child
-                        elif prev is not None and child.text and child.text.strip():
-                            en_text = prev.text.strip()[4:]  # Remove "EN: "
-                            zh_text = child.text.strip()
-                            translations.append((en_text, zh_text))
-                            prev = None
-            except ET.ParseError as e:
-                logging.error(f"XML 解析失败: {xml_file}: {e}")
-            except OSError as e:
-                logging.error(f"无法读取 {xml_file}: {e}")
-    elif mode == "2":
-        en_path = get_language_folder_path(CONFIG.source_language, mod_dir)
-        zh_path = get_language_folder_path(CONFIG.default_language, mod_dir)
-        for dir_name in [CONFIG.def_injected_dir, CONFIG.keyed_dir]:
-            en_dir = os.path.join(en_path, dir_name)
-            zh_dir = os.path.join(zh_path, dir_name)
-            if not os.path.exists(en_dir) or not os.path.exists(zh_dir):
+        for xml_path in [def_injected_path, keyed_path]:
+            if not os.path.exists(xml_path):
                 continue
-            for xml_file in Path(zh_dir).rglob("*.xml"):
-                rel_path = os.path.relpath(xml_file, zh_dir)
-                en_file = os.path.join(en_dir, rel_path)
-                if not os.path.exists(en_file):
-                    continue
+            for xml_file in Path(xml_path).rglob("*.xml"):
                 try:
-                    zh_tree = ET.parse(xml_file)
-                    en_tree = ET.parse(en_file)
-                    zh_root = zh_tree.getroot()
-                    en_root = en_tree.getroot()
-                    for zh_elem, en_elem in zip(zh_root.findall(".//*"), en_root.findall(".//*")):
-                        if zh_elem.tag == en_elem.tag and zh_elem.text and en_elem.text:
-                            translations.append((en_elem.text.strip(), zh_elem.text.strip()))
+                    tree = ET.parse(xml_file)
+                    root = tree.getroot()
+                    for comment in root.iterfind(".//comment()"):
+                        comment_text = comment.text.strip()
+                        if comment_text.startswith("EN:"):
+                            en_text = sanitize_xcomment(comment_text[3:].strip())
+                            next_elem = comment.getnext()
+                            if next_elem is not None and next_elem.text:
+                                zh_text = next_elem.text.strip()
+                                corpus.append((en_text, zh_text))
                 except ET.ParseError as e:
                     logging.error(f"XML 解析失败: {xml_file}: {e}")
                 except OSError as e:
                     logging.error(f"无法读取 {xml_file}: {e}")
+    elif mode == "2":
+        def_injected_path = os.path.join(src_lang_path, CONFIG.def_injected_dir)
+        keyed_path = os.path.join(src_lang_path, CONFIG.keyed_dir)
+        zh_def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
+        zh_keyed_path = os.path.join(lang_path, CONFIG.keyed_dir)
+        for src_path, zh_path in [(def_injected_path, zh_def_injected_path), (keyed_path, zh_keyed_path)]:
+            if not os.path.exists(src_path) or not os.path.exists(zh_path):
+                continue
+            for src_file in Path(src_path).rglob("*.xml"):
+                rel_path = os.path.relpath(src_file, src_path)
+                zh_file = os.path.join(zh_path, rel_path)
+                if not os.path.exists(zh_file):
+                    continue
+                try:
+                    src_tree = ET.parse(src_file)
+                    zh_tree = ET.parse(zh_file)
+                    src_root = src_tree.getroot()
+                    zh_root = zh_tree.getroot()
+                    for src_elem, zh_elem in zip(src_root.iter(), zh_root.iter()):
+                        if src_elem.tag == zh_elem.tag and src_elem.text and zh_elem.text:
+                            en_text = src_elem.text.strip()
+                            zh_text = zh_elem.text.strip()
+                            if en_text and zh_text:
+                                corpus.append((en_text, zh_text))
+                except ET.ParseError as e:
+                    logging.error(f"XML 解析失败: {src_file} 或 {zh_file}: {e}")
+                except OSError as e:
+                    logging.error(f"无法读取 {src_file} 或 {zh_file}: {e}")
+    
+    if not corpus:
+        logging.warning("未提取到平行语料")
+        return 0
+    
     try:
         with open(output_path, "w", encoding="utf-8", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(["English", "Chinese"])
-            writer.writerows(translations)
-        logging.info(f"生成语料集: {output_path}, 共 {len(translations)} 条")
-        return len(translations)
-    except csv.Error as e:
-        logging.error(f"CSV 写入失败: {output_path}, 错误: {e}")
-        return 0
-    except OSError as e:
-        logging.error(f"无法写入 CSV: {output_path}, 错误: {e}")
+            writer.writerows(corpus)
+        logging.info(f"生成平行语料集: {output_path}，共 {len(corpus)} 条")
+        return len(corpus)
+    except (csv.Error, OSError) as e:
+        logging.error(f"写入语料集失败: {output_path}: {e}")
         return 0
 
 def check_parallel_tsv() -> int:
@@ -92,23 +100,26 @@ def check_parallel_tsv() -> int:
     Returns:
         错误条数
     """
-    tsv_path = "parallel_corpus.csv"
+    logging.info("检查平行语料集格式")
+    corpus_path = "parallel_corpus.csv"
     errors = 0
-    if not os.path.exists(tsv_path):
-        logging.error(f"语料集文件不存在: {tsv_path}")
+    if not os.path.exists(corpus_path):
+        logging.error(f"语料集文件 {corpus_path} 不存在")
         return 1
     try:
-        with open(tsv_path, encoding="utf-8") as f:
+        with open(corpus_path, "r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
+            if not reader.fieldnames or "English" not in reader.fieldnames or "Chinese" not in reader.fieldnames:
+                logging.error(f"语料集缺少必要列: {corpus_path}")
+                return 1
             for row in reader:
-                if not row.get("English") or not row.get("Chinese"):
-                    logging.error(f"无效语料: {row}")
+                en_text = row.get("English", "").strip()
+                zh_text = row.get("Chinese", "").strip()
+                if not en_text or not zh_text:
+                    logging.error(f"无效行: {row}")
                     errors += 1
-        logging.info(f"语料集检查完成，发现 {errors} 个问题")
-        return errors
-    except csv.Error as e:
-        logging.error(f"CSV 解析失败: {tsv_path}, 错误: {e}")
-        return 1
-    except OSError as e:
-        logging.error(f"无法读取 CSV: {tsv_path}, 错误: {e}")
-        return 1
+    except (csv.Error, OSError) as e:
+        logging.error(f"检查语料集失败: {corpus_path}: {e}")
+        errors += 1
+    logging.info(f"检查完成，发现 {errors} 个问题")
+    return errors

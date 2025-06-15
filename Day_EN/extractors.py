@@ -1,4 +1,5 @@
 from typing import List, Tuple, Set
+import logging
 from pathlib import Path
 from .config import PREVIEW_TRANSLATABLE_FIELDS
 from .utils import get_language_folder_path
@@ -153,6 +154,14 @@ def cleanup_backstories(
     export_dir: str,
     active_language: str = "ChineseSimplified"
 ) -> None:
+    """
+    清理旧的 Backstories 目录。
+
+    Args:
+        mod_root_dir (str): 模组根目录路径。
+        export_dir (str): 导出目录。
+        active_language (str): 目标语言。
+    """
     from .exporters import cleanup_backstories_dir
     cleanup_backstories_dir(
         mod_root_dir=mod_root_dir,

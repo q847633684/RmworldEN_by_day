@@ -15,7 +15,7 @@ CONFIG = TranslationConfig()
 
 @lru_cache(maxsize=1)
 def preview_translatable_fields(
-    mod_dir: str,  # 改为 mod_dir
+    mod_dir: str,
     preview: bool = CONFIG.preview_translatable_fields
 ) -> List[Tuple[str, str, str, str]]:
     """
@@ -125,7 +125,7 @@ def preview_translatable_fields(
     return all_translations
 
 def extract_key(
-    mod_dir: str,  # 改为 mod_dir
+    mod_dir: str,
     export_dir: str,
     language: str = CONFIG.default_language,
     source_language: str = CONFIG.source_language
@@ -143,7 +143,7 @@ def extract_key(
         logging.error(f"提取 Keyed 翻译失败: {e}")
 
 def extract_definjected_from_defs(
-    mod_dir: str,  # 改为 mod_dir
+    mod_dir: str,
     export_dir: str,
     language: str = CONFIG.default_language
 ) -> None:
@@ -164,7 +164,7 @@ def extract_definjected_from_defs(
         logging.error(f"提取 DefInjected 翻译失败: {e}")
 
 def extract_translate(
-    mod_dir: str,  # 改为 mod_dir
+    mod_dir: str,
     export_dir: str,
     language: str = CONFIG.default_language,
     source_language: str = CONFIG.source_language

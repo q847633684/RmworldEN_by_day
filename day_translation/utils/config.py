@@ -12,6 +12,7 @@ class TranslationConfig:
     source_language: str = "English"
     def_injected_dir: str = "DefInjected"
     keyed_dir: str = "Keyed"
+    ignore_prefixes: List[str] = field(default_factory=lambda: ["#", "@", "$", "%", "&"])
     output_csv: str = "extracted_translations.csv"
     default_fields: List[str] = field(default_factory=lambda: [
         "label", "RMBLabel", "description", "baseDesc", "title", "titleShort",
