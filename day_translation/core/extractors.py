@@ -134,10 +134,10 @@ def extract_key(
     logging.info(f"提取 Keyed 翻译: mod_dir={mod_root_dir}, export_dir={export_dir}")
     try:
         export_keyed(
-            mod_root_dir=mod_root_dir,
+            mod_dir=mod_root_dir,
             export_dir=export_dir,
-            active_language=language,
-            english_language=source_language
+            language=language,
+            source_language=source_language
         )
     except (ET.ParseError, OSError) as e:
         logging.error(f"提取 Keyed 翻译失败: {e}")
@@ -155,10 +155,10 @@ def extract_definjected_from_defs(
         return
     try:
         export_definjected(
-            mod_root_dir=mod_root_dir,
+            mod_dir=mod_root_dir,
             export_dir=export_dir,
             selected_translations=selected_translations,
-            active_language=language
+            language=language
         )
     except (ET.ParseError, OSError) as e:
         logging.error(f"提取 DefInjected 翻译失败: {e}")
@@ -173,27 +173,11 @@ def extract_translate(
     from .exporters import handle_extract_translate
     try:
         handle_extract_translate(
-            mod_root_dir=mod_root_dir,
+            mod_dir=mod_root_dir,
             export_dir=export_dir,
-            active_language=language,
-            english_language=source_language,
+            language=language,
+            source_language=source_language,
             extract_definjected_from_defs=extract_definjected_from_defs
         )
     except (ET.ParseError, OSError) as e:
         logging.error(f"提取翻译失败: {e}")
-
-def cleanup_backstories(
-    mod_root_dir: str,
-    export_dir: str,
-    language: str = CONFIG.default_language
-) -> None:
-    """清理背景故事目录"""
-    from .exporters import cleanup_backstories_dir
-    try:
-        cleanup_backstories_dir(
-            mod_root_dir=mod_root_dir,
-            export_dir=export_dir,
-            active_language=language
-        )
-    except OSError as e:
-        logging.error(f"清理背景故事失败: {e}")

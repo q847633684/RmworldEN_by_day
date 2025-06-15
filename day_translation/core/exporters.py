@@ -75,6 +75,8 @@ def handle_extract_translate(
 ) -> None:
     """处理翻译提取逻辑，选择 DefInjected 或 Defs"""
     logging.info(f"处理翻译提取: mod_dir={mod_dir}, export_dir={export_dir}")
+    mod_dir = str(Path(mod_dir).resolve())
+    export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
     def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
     old_def_linked_path = os.path.join(lang_path, "DefLinked")
@@ -111,6 +113,7 @@ def cleanup_backstories_dir(
     language: str = CONFIG.default_language
 ) -> None:
     """清理背景故事目录"""
+    export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
     backstories_path = os.path.join(lang_path, "Backstories")
     if os.path.exists(backstories_path):
@@ -130,6 +133,8 @@ def export_keyed(
 ) -> None:
     """导出 Keyed 翻译，添加 EN 注释"""
     logging.info(f"导出 Keyed: mod_dir={mod_dir}, export_dir={export_dir}")
+    mod_dir = str(Path(mod_dir).resolve())
+    export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
     keyed_path = os.path.join(lang_path, CONFIG.keyed_dir)
     if not os.path.exists(keyed_path):
@@ -196,6 +201,11 @@ def process_def_file(
         logging.error(f"XML 语法错误 {xml_file}: {e}")
         return str(xml_file), []
 
+def process_def_file_wrapper(args: Tuple[Path, List[Tuple[str, str, str, str]]]) -> Tuple[str, List[Tuple[str, List[Tuple[str, str, str]]]]]:
+    """包装函数，供 multiprocessing 使用"""
+    xml_file, selected_translations = args
+    return process_def_file(xml_file, selected_translations)
+
 def export_definjected(
     mod_dir: str,
     export_dir: str,
@@ -204,6 +214,8 @@ def export_definjected(
 ) -> None:
     """从 Defs 导出 DefInjected 翻译，并行处理"""
     logging.info(f"导出 DefInjected: mod_dir={mod_dir}, translations_count={len(selected_translations)}")
+    mod_dir = str(Path(mod_dir).resolve())
+    export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
     def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
     defs_path = os.path.join(mod_dir, "Defs")
@@ -223,7 +235,8 @@ def export_definjected(
     with Pool(processes=os.cpu_count()) as pool:
         results = list(tqdm(
             pool.imap_unordered(
-                lambda x: process_def_file(x, selected_translations), xml_files
+                process_def_file_wrapper,
+                [(x, selected_translations) for x in xml_files]
             ),
             total=len(xml_files),
             desc="处理 Defs XML"
@@ -247,6 +260,8 @@ def export_definjected(
 def export_keyed_to_csv(keyed_dir: str, csv_path: str) -> None:
     """导出 Keyed 翻译到 CSV"""
     logging.info(f"导出 Keyed 到 CSV: keyed_dir={keyed_dir}, csv_path={csv_path}")
+    keyed_dir = str(Path(keyed_dir).resolve())
+    csv_path = str(Path(csv_path).resolve())
     rows = []
     if not os.path.exists(keyed_dir):
         logging.warning(f"Keyed 目录 {keyed_dir} 不存在，跳过 CSV 导出")
@@ -276,10 +291,8 @@ def export_keyed_to_csv(keyed_dir: str, csv_path: str) -> None:
     if not os.access(output_dir, os.W_OK):
         logging.error(f"输出目录 {output_dir} 无写入权限")
         return
-    write_header = not os.path.exists(csv_path) or os.path.getsize(csv_path) == 0
-    with open(csv_path, "a", encoding="utf-8", newline="") as f:
+    with open(csv_path, "w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=["key", "text", "tag"])
-        if write_header:
-            writer.writeheader()
+        writer.writeheader()
         writer.writerows(rows)
     logging.info(f"Keyed 共导出 {len(rows)} 条到 {csv_path}")

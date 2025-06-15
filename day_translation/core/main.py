@@ -6,7 +6,7 @@ from typing import List, Tuple, Optional
 from pathlib import Path
 from . import extractors, importers, parallel_corpus, machine_translate
 from ..utils.config import TranslationConfig
-from .exporters import export_keyed_to_csv
+from .exporters import export_keyed_to_csv, cleanup_backstories_dir
 from ..utils.utils import update_history_list
 
 CONFIG = TranslationConfig()
@@ -16,7 +16,9 @@ def setup_logging() -> None:
     logging.basicConfig(
         filename=CONFIG.log_file,
         level=logging.DEBUG if CONFIG.debug_mode else logging.INFO,
-        format=CONFIG.log_format
+        format=CONFIG.log_format,
+        encoding="utf-8",
+        errors="replace"
     )
     console = logging.StreamHandler(sys.stdout)
     console.setLevel(logging.INFO)
@@ -26,11 +28,11 @@ def setup_logging() -> None:
 class TranslationFacade:
     """翻译操作的门面类，封装高层次逻辑"""
     def __init__(self, mod_dir: str, export_dir: str, language: str = CONFIG.default_language):
-        self.mod_dir = mod_dir
-        self.export_dir = export_dir
+        self.mod_dir = str(Path(mod_dir).resolve())
+        self.export_dir = str(Path(export_dir).resolve())
         self.language = language
         self.source_language = CONFIG.source_language
-        self.csv_path = str(Path(export_dir) / CONFIG.output_csv)
+        self.csv_path = str(Path(self.export_dir) / CONFIG.output_csv)
 
     def extract_all(self) -> List[Tuple[str, str, str, str]]:
         """提取所有翻译数据，避免重复扫描"""
@@ -38,19 +40,19 @@ class TranslationFacade:
         extractors.extract_translate(
             mod_root_dir=self.mod_dir,
             export_dir=self.export_dir,
-            active_language=self.language,
-            english_language=self.source_language
+            language=self.language,
+            source_language=self.source_language
         )
         extractors.extract_key(
             mod_root_dir=self.mod_dir,
             export_dir=self.export_dir,
-            active_language=self.language,
-            english_language=self.source_language
+            language=self.language,
+            source_language=self.source_language
         )
-        extractors.cleanup_backstories(
-            mod_root_dir=self.mod_dir,
+        cleanup_backstories_dir(
+            mod_dir=self.mod_dir,
             export_dir=self.export_dir,
-            active_language=self.language
+            language=self.language
         )
         translations = extractors.preview_translatable_fields(
             mod_root_dir=self.mod_dir,
@@ -132,7 +134,7 @@ def main() -> None:
         if not os.path.exists(mod_dir):
             print(f"模组目录 {mod_dir} 不存在")
             continue
-        export_dir = input("请输入导出目录路径：").strip()
+        export_dir = input("请输入导出目录路径（建议绝对路径，如 C:\\Users\\q8476\\Documents\\output）：").strip()
         facade = TranslationFacade(mod_dir, export_dir)
         try:
             if choice == "1":
@@ -142,7 +144,7 @@ def main() -> None:
                 access_secret = input("请输入阿里云 AccessKey Secret：").strip()
                 machine_translate.translate_csv(
                     input_path=facade.csv_path,
-                    output_path=str(Path(export_dir) / "translated_zh.csv"),
+                    output_path=str(Path(facade.export_dir) / "translated_zh.csv"),
                     access_key_id=access_key_id,
                     access_secret=access_secret
                 )

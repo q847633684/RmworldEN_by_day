@@ -22,6 +22,7 @@ def generate_parallel_corpus(mode: str, mod_root_dir: str) -> int:
     """
     logging.info(f"生成平行语料集: mode={mode}, mod_dir={mod_root_dir}")
     output_path = "parallel_corpus.csv"
+    mod_root_dir = str(Path(mod_root_dir).resolve())  # 解析绝对路径
     translations: List[Tuple[str, str]] = []
     if mode == "1":
         lang_path = get_language_folder_path(CONFIG.default_language, mod_root_dir)

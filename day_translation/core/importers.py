@@ -25,6 +25,8 @@ def import_translations(
         merge: 是否合并已有翻译
     """
     logging.info(f"导入翻译: csv_path={csv_path}, mod_dir={mod_root_dir}, language={language}, merge={merge}")
+    csv_path = str(Path(csv_path).resolve())  # 解析绝对路径
+    mod_root_dir = str(Path(mod_root_dir).resolve())
     if not os.path.exists(csv_path):
         logging.error(f"CSV 文件不存在: {csv_path}")
         return
@@ -42,23 +44,23 @@ def import_translations(
     except OSError as e:
         logging.error(f"无法读取 CSV: {csv_path}, 错误: {e}")
         return
-    def_injected_path = os.path.join(mod_root_dir, "Languages", language, CONFIG.def_injected_dir)
-    if not os.path.exists(def_injected_path):
-        def_injured_path = os.path.join(mod_root_dir, "Languages", language, "DefInjured")
-        if os.path.exists(def_injured_path):
+    def_injected_path = Path(mod_root_dir) / "Languages" / language / CONFIG.def_injected_dir
+    if not def_injected_path.exists():
+        def_injured_path = Path(mod_root_dir) / "Languages" / language / "DefInjured"
+        if def_injured_path.exists():
             def_injected_path = def_injured_path
         else:
             logging.error(f"未找到 DefInjected 或 DefInjured 目录: {def_injected_path}")
             return
-    keyed_path = os.path.join(mod_root_dir, "Languages", language, CONFIG.keyed_dir)
+    keyed_path = Path(mod_root_dir) / "Languages" / language / CONFIG.keyed_dir
     try:
         if merge:
             update_lxml(csv_path, mod_root_dir)
         else:
-            for xml_file in Path(def_injected_path).rglob("*.xml"):
+            for xml_file in def_injected_path.rglob("*.xml"):
                 os.remove(xml_file)
                 logging.info(f"删除文件: {xml_file}")
-            for xml_file in Path(keyed_path).rglob("*.xml"):
+            for xml_file in keyed_path.rglob("*.xml"):
                 os.remove(xml_file)
                 logging.info(f"删除文件: {xml_file}")
             update_etree(csv_path, mod_root_dir)
