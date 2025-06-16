@@ -19,3 +19,42 @@ Traceback (most recent call last):
     with open(csv_path, "w", encoding="utf-8", newline="") as f:
          ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 PermissionError: [Errno 13] Permission denied: 'mod'
+2025-06-16 12:12:17,188 - DEBUG - 日志配置完成
+2025-06-16 12:12:17,208 - DEBUG - 显示欢迎界面
+2025-06-16 12:12:17,211 - DEBUG - 命令行参数: mod_dir=None, mode=None
+2025-06-16 12:12:17,211 - INFO - 启动 Day Translation...
+2025-06-16 12:12:17,212 - DEBUG - 添加 sys.path: C:\Users\q8476\Documents\我的工作\Day_汉化
+2025-06-16 12:12:17,213 - INFO - 启动主工作流
+2025-06-16 12:12:23,835 - DEBUG - 用户选择模式: 1
+2025-06-16 12:12:32,314 - DEBUG - 用户输入: , history_key=mod_dir_history
+2025-06-16 12:13:35,275 - DEBUG - 用户输入: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, history_key=mod_dir_history
+2025-06-16 12:13:35,276 - DEBUG - 验证目录: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, 结果=True
+2025-06-16 12:13:35,278 - DEBUG - 更新历史记录: mod_dir_history=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5
+2025-06-16 12:13:35,283 - DEBUG - 模组目录: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5
+2025-06-16 12:13:35,284 - DEBUG - 初始化 TranslationFacade: mod_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, language=ChineseSimplified
+2025-06-16 14:21:37,091 - DEBUG - 用户输入: mod, history_key=csv_export_history
+2025-06-16 14:21:37,092 - DEBUG - 验证文件: mod, 结果=True
+2025-06-16 14:21:37,094 - DEBUG - 更新历史记录: csv_export_history=mod
+2025-06-16 14:21:37,094 - INFO - 提取翻译到: mod
+2025-06-16 14:21:37,095 - INFO - 提取 Keyed 翻译: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, 语言: English
+2025-06-16 14:21:37,120 - INFO - 提取到 0 条 Keyed 翻译
+2025-06-16 14:21:37,121 - DEBUG - 提取到 0 条 Keyed 翻译
+2025-06-16 14:21:37,121 - INFO - 扫描 Defs: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, 语言: English
+2025-06-16 14:21:37,733 - INFO - 提取到 4644 条 DefInjected 翻译
+2025-06-16 14:21:37,754 - DEBUG - 总计提取到 4644 条翻译
+2025-06-16 14:21:37,755 - DEBUG - 保存 CSV: path=mod, 翻译条数=4644
+2025-06-16 14:21:37,756 - ERROR - 无法保存 CSV: [Errno 13] Permission denied: 'mod'
+2025-06-16 14:21:37,756 - ERROR - 模式 1 执行错误: [Errno 13] Permission denied: 'mod'
+Traceback (most recent call last):
+  File "c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\core\main.py", line 267, in main
+    facade.extract_translations(export_csv)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\core\main.py", line 70, in extract_translations
+    self._save_to_csv(translations, export_csv)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\core\main.py", line 161, in _save_to_csv
+    with open(csv_path, "w", encoding="utf-8", newline="") as f:
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'mod'
+2025-06-16 14:22:21,145 - DEBUG - 用户选择模式: 1
+2025-06-16 14:22:27,468 - DEBUG - 用户输入: , history_key=mod_dir_history

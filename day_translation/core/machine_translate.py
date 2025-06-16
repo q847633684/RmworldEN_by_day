@@ -6,6 +6,7 @@ import time
 from typing import List, Dict
 from pathlib import Path
 from tqdm import tqdm
+from colorama import Fore, Style
 
 try:
     from aliyunsdkcore.client import AcsClient
@@ -16,12 +17,30 @@ except ImportError:
     TranslateGeneralRequest = None
 
 def translate_text(text: str, access_key_id: str, access_secret: str, region_id: str = 'cn-hangzhou') -> str:
-    """使用阿里云翻译 API 翻译文本，保留 [xxx] 占位符"""
+    """
+    使用阿里云翻译 API 翻译文本，保留 [xxx] 占位符
+
+    Args:
+        text (str): 待翻译文本
+        access_key_id (str): 阿里云访问密钥 ID
+        access_secret (str): 阿里云访问密钥 Secret
+        region_id (str): 阿里云区域 ID，默认为 'cn-hangzhou'
+
+    Returns:
+        str: 翻译后的文本
+
+    Raises:
+        RuntimeError: 如果阿里云 SDK 未安装
+        Exception: 如果翻译 API 调用失败
+    """
+    logging.debug(f"翻译文本: {text[:50]}...")
     if AcsClient is None or TranslateGeneralRequest is None:
+        logging.error("阿里云 SDK 未安装")
         raise RuntimeError("阿里云 SDK 未安装，无法进行机器翻译")
     
     # 检查是否只包含占位符
     if re.fullmatch(r'(\s*\[[^\]]+\]\s*)+', text):
+        logging.debug(f"文本仅含占位符，跳过翻译: {text}")
         return text
     
     try:
@@ -33,10 +52,11 @@ def translate_text(text: str, access_key_id: str, access_secret: str, region_id:
         
         for part in parts:
             if re.fullmatch(r'\[[^\]]+\]', part):
-                # 这是占位符，直接保留
+                # 占位符，直接保留
                 translated_parts.append(part)
+                logging.debug(f"保留占位符: {part}")
             elif part.strip():
-                # 这是需要翻译的文本
+                # 需要翻译的文本
                 request = TranslateGeneralRequest()
                 request.set_accept_format("json")
                 request.set_SourceLanguage("en")
@@ -47,29 +67,43 @@ def translate_text(text: str, access_key_id: str, access_secret: str, region_id:
                 result = json.loads(response)
                 translated_text = result.get("Data", {}).get("Translated", part)
                 translated_parts.append(translated_text)
+                logging.debug(f"翻译部分: {part[:30]}... -> {translated_text[:30]}...")
             else:
                 # 空白部分
                 translated_parts.append(part)
         
-        return ''.join(translated_parts)
+        translated = ''.join(translated_parts)
+        logging.debug(f"翻译完成: {text[:30]}... -> {translated[:30]}...")
+        return translated
         
     except Exception as e:
-        logging.error(f"翻译失败: {text}, 错误: {e}")
+        logging.error(f"翻译失败: {text[:50]}..., 错误: {e}")
         return text
 
 def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
-    """翻译 CSV 文件 - 统一接口"""
+    """
+    翻译 CSV 文件，生成包含翻译列的输出文件
+
+    Args:
+        input_path (str): 输入 CSV 文件路径
+        output_path (str, optional): 输出 CSV 文件路径，默认为 None
+        **kwargs: 可选参数（如 access_key_id, access_secret, region_id, sleep_sec）
+
+    Raises:
+        FileNotFoundError: 如果输入文件不存在
+        KeyError: 如果 CSV 缺少 'text' 列
+    """
     if output_path is None:
-        # 自动生成输出路径
         input_file = Path(input_path)
         output_path = str(input_file.parent / f"{input_file.stem}_translated{input_file.suffix}")
     
-    # 从环境变量或配置获取 API 密钥
+    # 获取 API 密钥
     access_key_id = kwargs.get('access_key_id') or os.getenv('ALIYUN_ACCESS_KEY_ID')
     access_secret = kwargs.get('access_secret') or os.getenv('ALIYUN_ACCESS_SECRET')
     
     if not access_key_id or not access_secret:
-        print("❌ 缺少阿里云 API 密钥，请设置环境变量或传入参数")
+        logging.error("缺少阿里云 API 密钥")
+        print(f"{Fore.RED}❌ 缺少阿里云 API 密钥，请设置环境变量或传入参数{Style.RESET_ALL}")
         print("设置方法：")
         print("  export ALIYUN_ACCESS_KEY_ID='your_key'")
         print("  export ALIYUN_ACCESS_SECRET='your_secret'")
@@ -82,7 +116,7 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
     
     if not os.path.exists(input_path):
         logging.error(f"输入 CSV 文件不存在: {input_path}")
-        print(f"❌ 文件不存在: {input_path}")
+        print(f"{Fore.RED}❌ 文件不存在: {input_path}{Style.RESET_ALL}")
         return
     
     try:
@@ -92,7 +126,7 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
             reader = csv.DictReader(f)
             if "text" not in reader.fieldnames:
                 logging.error(f"CSV 文件缺少 'text' 列: {input_path}")
-                print(f"❌ CSV 文件缺少 'text' 列")
+                print(f"{Fore.RED}❌ CSV 文件缺少 'text' 列{Style.RESET_ALL}")
                 return
             
             total_rows = sum(1 for _ in reader)
@@ -100,32 +134,33 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
             reader = csv.DictReader(f)
             next(reader)  # 跳过表头
             
-            print(f"开始翻译 {total_rows} 条记录...")
+            print(f"{Fore.BLUE}开始翻译 {total_rows} 条记录...{Style.RESET_ALL}")
             
-            for line_num, row in enumerate(tqdm(reader, total=total_rows, desc="翻译进度"), 2):
+            for line_num, row in enumerate(tqdm(reader, total=total_rows, desc="翻译进度", unit="行"), 2):
                 text = row["text"].strip()
+                logging.debug(f"处理第 {line_num} 行: {text[:50]}...")
                 if not text:
                     row["translated"] = ""
                 elif re.fullmatch(r'(\s*\[[^\]]+\]\s*)+', text):
-                    # 只包含占位符，不翻译
                     row["translated"] = text
+                    logging.debug(f"第 {line_num} 行仅含占位符，跳过")
                 else:
                     try:
                         translated = translate_text(text, access_key_id, access_secret, region_id)
                         row["translated"] = translated
                         if translated and translated.strip():
-                            print(f"✅ 第{line_num}行: {text[:30]}... => {translated[:30]}...")
+                            print(f"{Fore.GREEN}✅ 第{line_num}行: {text[:30]}... => {translated[:30]}...{Style.RESET_ALL}")
                         else:
-                            print(f"⚠️ 第{line_num}行翻译为空: {text[:50]}...")
-                            logging.warning(f"第{line_num}行翻译失败。原文：{text}")
+                            print(f"{Fore.YELLOW}⚠️ 第{line_num}行翻译为空: {text[:50]}...{Style.RESET_ALL}")
+                            logging.warning(f"第{line_num}行翻译失败。原文：{text[:50]}...")
                     except Exception as e:
                         logging.error(f"第{line_num}行翻译异常: {e}")
-                        row["translated"] = text  # 翻译失败时保留原文
+                        row["translated"] = text
+                        print(f"{Fore.RED}❌ 第{line_num}行翻译失败: {text[:50]}...{Style.RESET_ALL}")
                 
                 rows.append(row)
-                time.sleep(sleep_sec)  # 速率控制
+                time.sleep(sleep_sec)
                 
-        # 写入结果
         output_dir = os.path.dirname(output_path) or "."
         os.makedirs(output_dir, exist_ok=True)
         
@@ -137,8 +172,8 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
                 writer.writerows(rows)
         
         logging.info(f"翻译完成，保存到: {output_path}")
-        print(f"🎉 翻译完成，保存到: {output_path}")
+        print(f"{Fore.GREEN}🎉 翻译完成，保存到: {output_path}{Style.RESET_ALL}")
         
     except Exception as e:
-        logging.error(f"翻译过程出错: {e}")
-        print(f"❌ 翻译失败: {e}")
+        logging.error(f"翻译过程出错: {e}", exc_info=True)
+        print(f"{Fore.RED}❌ 翻译失败: {e}{Style.RESET_ALL}")
