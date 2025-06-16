@@ -173,3 +173,4 @@ AttributeError: 'TranslationConfig' object has no attribute 'get_remembered_path
 2025-06-17 01:09:11,767 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
 2025-06-17 01:09:11,772 - INFO - 启动 Day Translation...
 2025-06-17 01:09:11,773 - INFO - 启动主工作流
+2025-06-17 01:15:32,780 - INFO - 程序结束

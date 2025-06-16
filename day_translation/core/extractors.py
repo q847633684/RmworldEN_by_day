@@ -2,11 +2,11 @@ from pathlib import Path
 from typing import List, Tuple, Set
 import logging
 from ..utils.utils import XMLProcessor, get_language_folder_path
-from ..utils.config import TranslationConfig
+from ..utils.config import get_config
 from .filters import ContentFilter
 from colorama import Fore, Style
 
-CONFIG = TranslationConfig()
+CONFIG = get_config()
 
 def extract_keyed_translations(mod_dir: str, language: str = CONFIG.source_language) -> List[Tuple[str, str, str, str]]:
     """提取 Keyed 翻译"""

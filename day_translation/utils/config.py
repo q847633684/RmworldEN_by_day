@@ -41,6 +41,11 @@ class TranslationConfig:
 
     def _setup_logging(self) -> None:
         """设置日志系统"""
+        # 检查是否已经初始化过日志系统
+        root_logger = logging.getLogger()
+        if root_logger.handlers:
+            return  # 已经初始化，直接返回
+                      
         try:
             log_dir = os.path.dirname(self.log_file)
             if log_dir:
@@ -254,3 +259,13 @@ class TranslationConfig:
             raise ConfigError("ignore_fields 必须是列表")
         if not isinstance(config['non_text_patterns'], list):
             raise ConfigError("non_text_patterns 必须是列表")
+
+# 全局配置实例（单例）
+_global_config_instance = None
+
+def get_config() -> TranslationConfig:
+    """获取全局配置实例（单例模式）"""
+    global _global_config_instance
+    if _global_config_instance is None:
+        _global_config_instance = TranslationConfig()
+    return _global_config_instance

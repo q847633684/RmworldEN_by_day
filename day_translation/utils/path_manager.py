@@ -11,9 +11,9 @@ from dataclasses import dataclass, field
 from colorama import Fore, Style
 
 from .user_config import load_user_config, save_user_config
-from .config import TranslationConfig
+from .config import get_config
 
-CONFIG = TranslationConfig()
+CONFIG = get_config()
 
 @dataclass
 class PathValidationResult:

@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import List, Tuple, Optional, Dict, Any
 from tqdm import tqdm
 from colorama import init, Fore, Style
-from ..utils.config import TranslationConfig, ConfigError
+from ..utils.config import ConfigError, get_config
 from ..utils.utils import get_history_list, update_history_list
 from ..utils.config_generator import generate_default_config
 from ..utils.user_config import load_user_config, save_user_config
@@ -24,7 +24,7 @@ from ..utils.filter_config import UnifiedFilterRules
 # 初始化 colorama 以支持 Windows 终端颜色
 init()
 
-CONFIG = TranslationConfig()
+CONFIG = get_config()
 
 class TranslationError(Exception):
     """翻译操作的基础异常类"""

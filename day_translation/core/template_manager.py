@@ -11,10 +11,10 @@ from colorama import Fore, Style
 
 from .extractors import extract_keyed_translations, scan_defs_sync
 from .generators import TemplateGenerator
-from ..utils.config import TranslationConfig
+from ..utils.config import get_config
 from ..utils.utils import XMLProcessor, get_language_folder_path, handle_exceptions
 
-CONFIG = TranslationConfig()
+CONFIG = get_config()
 
 class TemplateManager:
     """翻译模板管理器，负责模板的完整生命周期管理"""

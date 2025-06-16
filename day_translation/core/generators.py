@@ -2,11 +2,11 @@ from pathlib import Path
 from typing import List, Tuple, Dict
 import logging
 import xml.etree.ElementTree as ET
-from ..utils.config import TranslationConfig
+from ..utils.config import get_config
 from ..utils.utils import XMLProcessor, save_json, sanitize_xml
 from colorama import Fore, Style
 
-CONFIG = TranslationConfig()
+CONFIG = get_config()
 TranslationData = Tuple[str, str, str, str]
 
 class TemplateGenerator:

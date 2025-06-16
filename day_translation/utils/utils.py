@@ -14,9 +14,9 @@ except ImportError:
     LXML_AVAILABLE = False
     logging.warning("lxml 未安装，将使用 ElementTree")
 
-from .config import TranslationConfig
+from .config import get_config
 
-CONFIG = TranslationConfig()
+CONFIG = get_config()
 
 @dataclass
 class XMLProcessorConfig:
