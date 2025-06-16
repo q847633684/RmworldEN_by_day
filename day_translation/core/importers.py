@@ -7,7 +7,7 @@ from typing import Dict, Optional
 import logging
 import os
 from colorama import Fore, Style
-from ..utils.utils import XMLProcessor, get_language_folder_path, handle_exceptions
+from ..utils.utils import XMLProcessor, XMLProcessorConfig, get_language_folder_path, handle_exceptions
 from ..utils.config import TranslationConfig
 from .template_manager import TemplateManager
 
@@ -64,7 +64,9 @@ def import_translations(csv_path: str, mod_dir: str, language: str = CONFIG.defa
     """
     try:
         template_manager = TemplateManager(mod_dir, language)
-        return template_manager.import_translations(csv_path, merge)
+        # 直接调用本模块的 update_all_xml 函数，统一使用 XMLProcessor 处理 XML 更新
+        update_all_xml(mod_dir, load_translations_from_csv(csv_path), language, merge)
+        return True
     except Exception as e:
         logging.error(f"导入翻译时发生错误: {e}", exc_info=True)
         print(f"{Fore.RED}❌ 导入失败: {e}{Style.RESET_ALL}")

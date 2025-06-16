@@ -1,0 +1,116 @@
+2025-06-17 00:04:44,974 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:04:44,992 - INFO - 已加载用户配置
+2025-06-17 00:04:45,012 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:04:45,021 - INFO - 已加载用户配置
+2025-06-17 00:04:45,421 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:04:45,422 - INFO - 已加载用户配置
+2025-06-17 00:04:45,437 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:04:45,438 - INFO - 已加载用户配置
+2025-06-17 00:04:45,440 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:04:45,441 - INFO - 已加载用户配置
+2025-06-17 00:04:45,507 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:04:45,508 - INFO - 已加载用户配置
+2025-06-17 00:04:45,519 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:04:45,520 - INFO - 已加载用户配置
+2025-06-17 00:04:45,529 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:04:45,532 - INFO - 已加载用户配置
+2025-06-17 00:04:45,543 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:04:45,552 - INFO - 已加载用户配置
+2025-06-17 00:04:49,461 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:04:49,464 - INFO - 已加载用户配置
+2025-06-17 00:04:49,491 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:04:49,492 - INFO - 已加载用户配置
+2025-06-17 00:04:49,494 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:04:49,495 - INFO - 已加载用户配置
+2025-06-17 00:04:49,504 - INFO - 启动 Day Translation...
+2025-06-17 00:04:49,505 - INFO - 启动主工作流
+2025-06-17 00:05:55,180 - ERROR - 未预期的错误
+Traceback (most recent call last):
+  File "c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\core\main.py", line 411, in main
+    mod_dir = path_manager.get_path(path_type="mod_dir", prompt="请输入模组目录（例如：C:\\Mods\\MyMod）: ", validator_type="mod", default=CONFIG.get_remembered_path("mod_dir"))
+                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TranslationConfig' object has no attribute 'get_remembered_path'
+2025-06-17 00:06:00,142 - ERROR - 未预期的错误
+Traceback (most recent call last):
+  File "c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\core\main.py", line 411, in main
+    mod_dir = path_manager.get_path(path_type="mod_dir", prompt="请输入模组目录（例如：C:\\Mods\\MyMod）: ", validator_type="mod", default=CONFIG.get_remembered_path("mod_dir"))
+                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TranslationConfig' object has no attribute 'get_remembered_path'
+2025-06-17 00:06:03,452 - ERROR - 未预期的错误
+Traceback (most recent call last):
+  File "c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\core\main.py", line 411, in main
+    mod_dir = path_manager.get_path(path_type="mod_dir", prompt="请输入模组目录（例如：C:\\Mods\\MyMod）: ", validator_type="mod", default=CONFIG.get_remembered_path("mod_dir"))
+                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TranslationConfig' object has no attribute 'get_remembered_path'
+2025-06-17 00:06:13,692 - ERROR - 未预期的错误
+Traceback (most recent call last):
+  File "c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\core\main.py", line 411, in main
+    mod_dir = path_manager.get_path(path_type="mod_dir", prompt="请输入模组目录（例如：C:\\Mods\\MyMod）: ", validator_type="mod", default=CONFIG.get_remembered_path("mod_dir"))
+                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TranslationConfig' object has no attribute 'get_remembered_path'
+2025-06-17 00:08:04,686 - INFO - 程序结束
+2025-06-17 00:08:06,670 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:08:06,672 - INFO - 已加载用户配置
+2025-06-17 00:08:06,695 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:08:06,705 - INFO - 已加载用户配置
+2025-06-17 00:08:06,778 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:08:06,781 - INFO - 已加载用户配置
+2025-06-17 00:08:06,840 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:08:06,843 - INFO - 已加载用户配置
+2025-06-17 00:08:06,845 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:08:06,846 - INFO - 已加载用户配置
+2025-06-17 00:08:06,922 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:08:06,924 - INFO - 已加载用户配置
+2025-06-17 00:08:06,946 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:08:06,951 - INFO - 已加载用户配置
+2025-06-17 00:08:06,980 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:08:06,987 - INFO - 已加载用户配置
+2025-06-17 00:08:07,013 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:08:07,015 - INFO - 已加载用户配置
+2025-06-17 00:08:07,580 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:08:07,581 - INFO - 已加载用户配置
+2025-06-17 00:08:07,608 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:08:07,609 - INFO - 已加载用户配置
+2025-06-17 00:08:07,613 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:08:07,614 - INFO - 已加载用户配置
+2025-06-17 00:08:07,622 - INFO - 启动 Day Translation...
+2025-06-17 00:08:07,623 - INFO - 启动主工作流
+2025-06-17 00:08:10,908 - ERROR - 未预期的错误
+Traceback (most recent call last):
+  File "c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\core\main.py", line 411, in main
+    mod_dir = path_manager.get_path(path_type="mod_dir", prompt="请输入模组目录（例如：C:\\Mods\\MyMod）: ", validator_type="mod", default=CONFIG.get_remembered_path("mod_dir"))
+                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TranslationConfig' object has no attribute 'get_remembered_path'
+2025-06-17 00:24:15,442 - ERROR - 未预期的错误
+Traceback (most recent call last):
+  File "c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\core\main.py", line 411, in main
+    prompt="请输入模组目录（例如：C:\\Mods\\MyMod）: ",
+    
+AttributeError: 'TranslationConfig' object has no attribute 'get_remembered_path'
+2025-06-17 00:25:18,746 - INFO - 程序结束
+2025-06-17 00:25:22,004 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:25:22,006 - INFO - 已加载用户配置
+2025-06-17 00:25:22,013 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:25:22,017 - INFO - 已加载用户配置
+2025-06-17 00:25:22,154 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:25:22,170 - INFO - 已加载用户配置
+2025-06-17 00:25:22,206 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:25:22,223 - INFO - 已加载用户配置
+2025-06-17 00:25:22,228 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:25:22,254 - INFO - 已加载用户配置
+2025-06-17 00:25:22,363 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:25:22,368 - INFO - 已加载用户配置
+2025-06-17 00:25:22,372 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:25:22,374 - INFO - 已加载用户配置
+2025-06-17 00:25:22,382 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:25:22,385 - INFO - 已加载用户配置
+2025-06-17 00:25:22,399 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:25:22,405 - INFO - 已加载用户配置
+2025-06-17 00:25:23,088 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:25:23,089 - INFO - 已加载用户配置
+2025-06-17 00:25:23,102 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:25:23,103 - INFO - 已加载用户配置
+2025-06-17 00:25:23,106 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 00:25:23,107 - INFO - 已加载用户配置
+2025-06-17 00:25:23,115 - INFO - 启动 Day Translation...
+2025-06-17 00:25:23,116 - INFO - 启动主工作流

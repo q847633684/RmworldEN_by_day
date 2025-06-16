@@ -348,19 +348,19 @@ def main():
                                 continue
                             try:
                                 if item == "1":
-                                    value = path_manager.get_path(path_type="default_language", prompt="请输入默认语言（例如：ChineseSimplified）: ", validator_type="str", default=CONFIG.get_remembered_path("default_language"))
+                                    value = path_manager.get_path(path_type="default_language", prompt="请输入默认语言（例如：ChineseSimplified）: ", validator_type="str", default=path_manager.get_remembered_path("default_language"))
                                     if value:
                                         CONFIG.update_config('default_language', value)
                                 elif item == "2":
-                                    value = path_manager.get_path(path_type="source_language", prompt="请输入源语言（例如：English）: ", validator_type="str", default=CONFIG.get_remembered_path("source_language"))
+                                    value = path_manager.get_path(path_type="source_language", prompt="请输入源语言（例如：English）: ", validator_type="str", default=path_manager.get_remembered_path("source_language"))
                                     if value:
                                         CONFIG.update_config('source_language', value)
                                 elif item == "3":
-                                    value = path_manager.get_path(path_type="output_csv", prompt="请输入输出CSV路径（例如：output.csv）: ", validator_type="csv", default=CONFIG.get_remembered_path("output_csv"))
+                                    value = path_manager.get_path(path_type="output_csv", prompt="请输入输出CSV路径（例如：output.csv）: ", validator_type="csv", default=path_manager.get_remembered_path("output_csv"))
                                     if value:
                                         CONFIG.update_config('output_csv', value)
                                 elif item == "4":
-                                    value = path_manager.get_path(path_type="log_file", prompt="请输入日志文件路径（例如：translation.log）: ", validator_type="file", default=CONFIG.get_remembered_path("log_file"))
+                                    value = path_manager.get_path(path_type="log_file", prompt="请输入日志文件路径（例如：translation.log）: ", validator_type="file", default=path_manager.get_remembered_path("log_file"))
                                     if value:
                                         CONFIG.update_config('log_file', value)
                                 elif item == "5":
@@ -378,7 +378,7 @@ def main():
                                  CONFIG.reset_config()
                                  print(f"{Fore.GREEN}✅ 配置已重置{Style.RESET_ALL}")
                         elif config_mode == "4":
-                             config_path = path_manager.get_path(path_type="config_export", prompt="请输入导出配置路径（例如：config_export.json）: ", validator_type="json", default=CONFIG.get_remembered_path("config_export"))
+                             config_path = path_manager.get_path(path_type="config_export", prompt="请输入导出配置路径（例如：config_export.json）: ", validator_type="json", default=path_manager.get_remembered_path("config_export"))
                              if config_path:
                                  try:
                                      CONFIG.export_config(config_path)
@@ -386,7 +386,7 @@ def main():
                                  except ConfigError as e:
                                      print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
                         elif config_mode == "5":
-                             config_path = path_manager.get_path(path_type="config_import", prompt="请输入导入配置路径（例如：config_import.json）: ", validator_type="json", default=CONFIG.get_remembered_path("config_import"))
+                             config_path = path_manager.get_path(path_type="config_import", prompt="请输入导入配置路径（例如：config_import.json）: ", validator_type="json", default=path_manager.get_remembered_path("config_import"))
                              if config_path:
                                  try:
                                      CONFIG.import_config(config_path)
@@ -395,7 +395,7 @@ def main():
                                  except ConfigError as e:
                                      print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
                         elif config_mode == "6":
-                             rules_path = path_manager.get_path(path_type="rules_config", prompt="请输入自定义规则配置文件路径（例如：rules.json）: ", validator_type="json", default=CONFIG.get_remembered_path("rules_config"))
+                             rules_path = path_manager.get_path(path_type="rules_config", prompt="请输入自定义规则配置文件路径（例如：rules.json）: ", validator_type="json", default=path_manager.get_remembered_path("rules_config"))
                              if rules_path:
                                  try:
                                      CONFIG.load_custom_rules(rules_path)
@@ -405,10 +405,13 @@ def main():
                                      print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
                         else:
                              print(f"{Fore.RED}无效选择{Style.RESET_ALL}")
-                        continue
-
-                # 其他模式需要模组目录
-                mod_dir = path_manager.get_path(path_type="mod_dir", prompt="请输入模组目录（例如：C:\\Mods\\MyMod）: ", validator_type="mod", default=CONFIG.get_remembered_path("mod_dir"))
+                        continue                # 其他模式需要模组目录
+                mod_dir = path_manager.get_path(
+                    path_type="mod_dir", 
+                    prompt="请输入模组目录（例如：C:\\Mods\\MyMod）: ", 
+                    validator_type="mod", 
+                    default=path_manager.get_remembered_path("mod_dir")
+                )
                 if not mod_dir:
                     continue
                     
@@ -420,7 +423,7 @@ def main():
                         path_type="export_csv",
                         prompt="请输入导出 CSV 路径（例如：output.csv）: ",
                         validator_type="csv",
-                        default=CONFIG.get_remembered_path("export_csv")
+                        default=path_manager.get_remembered_path("export_csv")
                     )
                     if not export_csv:
                         continue
@@ -431,7 +434,7 @@ def main():
                             path_type="en_keyed_dir",
                             prompt="请输入英文 Keyed 目录（例如：C:\\Mods\\Keyed）: ",
                             validator_type="dir",
-                            default=CONFIG.get_remembered_path("en_keyed_dir")
+                            default=path_manager.get_remembered_path("en_keyed_dir")
                         )
                         if not en_keyed_dir:
                             continue
@@ -444,7 +447,7 @@ def main():
                         path_type="import_csv",
                         prompt="请输入要翻译的 CSV 路径（例如：input.csv）: ",
                         validator_type="csv",
-                        default=CONFIG.get_remembered_path("import_csv")
+                        default=path_manager.get_remembered_path("import_csv")
                     )
                     if not csv_path:
                         continue
@@ -455,7 +458,7 @@ def main():
                             path_type="output_csv",
                             prompt="请输入输出 CSV 路径（例如：translated.csv）: ",
                             validator_type="csv",
-                            default=CONFIG.get_remembered_path("output_csv")
+                            default=path_manager.get_remembered_path("output_csv")
                         )
                         if not output_csv:
                             continue
@@ -468,7 +471,7 @@ def main():
                         path_type="import_csv",
                         prompt="请输入翻译后的 CSV 路径（例如：translated.csv）: ",
                         validator_type="csv",
-                        default=CONFIG.get_remembered_path("import_csv")
+                        default=path_manager.get_remembered_path("import_csv")
                     )
                     if not csv_path:
                         continue
@@ -486,7 +489,7 @@ def main():
                         path_type="export_csv",
                         prompt="请输入导出 CSV 路径（例如：output.csv）: ",
                         validator_type="csv",
-                        default=CONFIG.get_remembered_path("export_csv")
+                        default=path_manager.get_remembered_path("export_csv")
                     )
                     if not export_csv:
                         continue
@@ -497,7 +500,7 @@ def main():
                             path_type="en_keyed_dir",
                             prompt="请输入英文 Keyed 目录（例如：C:\\Mods\\Keyed）: ",
                             validator_type="dir",
-                            default=CONFIG.get_remembered_path("en_keyed_dir")
+                            default=path_manager.get_remembered_path("en_keyed_dir")
                         )
                         if not en_keyed_dir:
                             continue
@@ -511,7 +514,7 @@ def main():
                                 path_type="output_csv",
                                 prompt="请输入翻译后 CSV 路径（例如：translated.csv）: ",
                                 validator_type="csv",
-                                default=CONFIG.get_remembered_path("output_csv")
+                                default=path_manager.get_remembered_path("output_csv")
                             )
                             if not output_csv:
                                 continue
@@ -529,7 +532,7 @@ def main():
                             prompt="请输入模组目录（输入空行结束）: ",
                             validator_type="mod",
                             required=False,
-                            default=CONFIG.get_remembered_path("batch_mod_dir")
+                            default=path_manager.get_remembered_path("batch_mod_dir")
                         )
                         if not mod_dir:
                             break
@@ -545,7 +548,7 @@ def main():
                             path_type="batch_csv",
                             prompt="请输入翻译 CSV 路径（例如：batch.csv）: ",
                             validator_type="csv",
-                            default=CONFIG.get_remembered_path("batch_csv")
+                            default=path_manager.get_remembered_path("batch_csv")
                         )
                         if not csv_path:
                             continue
