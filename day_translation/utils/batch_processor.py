@@ -1,10 +1,11 @@
-from typing import List, Dict
+from typing import List
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 import logging
-from ..core.generators import TemplateGenerator
+import os
+from ..utils.config_generator import generate_default_config
 from ..core.importers import load_translations_from_csv
-from ..utils.utils import XMLProcessor, get_language_folder_path
+from ..utils.utils import XMLProcessor, get_language_folder_path, generate_element_key
 from ..utils.config import TranslationConfig
 from ..core.filters import ContentFilter
 
@@ -21,8 +22,7 @@ class BatchProcessor:
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             for mod_dir in mod_list:
                 mod_dir = str(Path(mod_dir).resolve())
-                generator = TemplateGenerator(mod_dir, language)
-                executor.submit(generator.generate_config_template, os.path.join(mod_dir, "translation_config.json"))
+                executor.submit(generate_default_config, os.path.join(mod_dir, "translation_config.json"))
                 if csv_path:
                     executor.submit(self._update_mod_xml, mod_dir, csv_path, language)
         logging.info(f"批量处理完成: {len(mod_list)} 个模组")

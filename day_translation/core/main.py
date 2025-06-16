@@ -1,4 +1,5 @@
 import logging
+import os
 from pathlib import Path
 from typing import List, Tuple, Optional
 from ..utils.config import TranslationConfig
@@ -60,8 +61,10 @@ class TranslationFacade:
         import_translations(csv_path, self.mod_dir, self.language, merge)
 
     def machine_translate(self, csv_path: str, output_csv: str = None) -> None:
-        """机器翻译"""
-        translate_csv(csv_path, output_csv)
+        """机器翻译，使用阿里云翻译 API"""
+        access_key_id = os.getenv('ALIYUN_ACCESS_KEY_ID') or input("请输入 ALIYUN_ACCESS_KEY_ID: ")
+        access_secret = os.getenv('ALIYUN_ACCESS_SECRET') or input("请输入 ALIYUN_ACCESS_SECRET: ")
+        translate_csv(csv_path, output_csv, access_key_id=access_key_id, access_secret=access_secret)
 
     def generate_corpus(self) -> List[Tuple[str, str]]:
         """生成平行语料"""
