@@ -40,17 +40,3 @@ class BatchProcessor:
                 tree = self.processor.parse_xml(str(xml_file))
                 if tree and self.processor.update_translations(tree, translations, generate_element_key):
                     self.processor.save_xml(tree, str(xml_file))
-
-def generate_element_key(elem: Any, root: Any, parent_map: Dict = None) -> str:
-    """生成元素键"""
-    key = elem.get("key") or elem.tag
-    if parent_map:
-        path_parts = []
-        current = elem
-        while current is not None and current != root:
-            if current.tag != "LanguageData":
-                path_parts.append(current.tag)
-            current = parent_map.get(current)
-        path_parts.reverse()
-        key = ".".join(path_parts) if path_parts else key
-    return key
