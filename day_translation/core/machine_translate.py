@@ -33,14 +33,14 @@ def translate_text(text: str, access_key_id: str, access_secret: str, region_id:
         RuntimeError: 如果阿里云 SDK 未安装
         Exception: 如果翻译 API 调用失败
     """
-    logging.debug(f"翻译文本: {text[:50]}...")
+    print(f"{Fore.BLUE}翻译文本: {text[:50]}...{Style.RESET_ALL}")
     if AcsClient is None or TranslateGeneralRequest is None:
-        logging.error("阿里云 SDK 未安装")
+        print(f"{Fore.RED}阿里云 SDK 未安装{Style.RESET_ALL}")
         raise RuntimeError("阿里云 SDK 未安装，无法进行机器翻译")
     
     # 检查是否只包含占位符
     if re.fullmatch(r'(\s*\[[^\]]+\]\s*)+', text):
-        logging.debug(f"文本仅含占位符，跳过翻译: {text}")
+        print(f"{Fore.BLUE}文本仅含占位符，跳过翻译: {text}{Style.RESET_ALL}")
         return text
     
     try:
@@ -54,7 +54,7 @@ def translate_text(text: str, access_key_id: str, access_secret: str, region_id:
             if re.fullmatch(r'\[[^\]]+\]', part):
                 # 占位符，直接保留
                 translated_parts.append(part)
-                logging.debug(f"保留占位符: {part}")
+                print(f"{Fore.BLUE}保留占位符: {part}{Style.RESET_ALL}")
             elif part.strip():
                 # 需要翻译的文本
                 request = TranslateGeneralRequest()
@@ -67,17 +67,17 @@ def translate_text(text: str, access_key_id: str, access_secret: str, region_id:
                 result = json.loads(response)
                 translated_text = result.get("Data", {}).get("Translated", part)
                 translated_parts.append(translated_text)
-                logging.debug(f"翻译部分: {part[:30]}... -> {translated_text[:30]}...")
+                print(f"{Fore.BLUE}翻译部分: {part[:30]}... -> {translated_text[:30]}...{Style.RESET_ALL}")
             else:
                 # 空白部分
                 translated_parts.append(part)
         
         translated = ''.join(translated_parts)
-        logging.debug(f"翻译完成: {text[:30]}... -> {translated[:30]}...")
+        print(f"{Fore.GREEN}翻译完成: {text[:30]}... -> {translated[:30]}...{Style.RESET_ALL}")
         return translated
         
     except Exception as e:
-        logging.error(f"翻译失败: {text[:50]}..., 错误: {e}")
+        print(f"{Fore.RED}翻译失败: {text[:50]}..., 错误: {e}{Style.RESET_ALL}")
         return text
 
 def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
@@ -102,7 +102,6 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
     access_secret = kwargs.get('access_secret') or os.getenv('ALIYUN_ACCESS_SECRET')
     
     if not access_key_id or not access_secret:
-        logging.error("缺少阿里云 API 密钥")
         print(f"{Fore.RED}❌ 缺少阿里云 API 密钥，请设置环境变量或传入参数{Style.RESET_ALL}")
         print("设置方法：")
         print("  export ALIYUN_ACCESS_KEY_ID='your_key'")
@@ -112,10 +111,9 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
     region_id = kwargs.get('region_id', 'cn-hangzhou')
     sleep_sec = kwargs.get('sleep_sec', 0.5)
     
-    logging.info(f"翻译 CSV: input={input_path}, output={output_path}, region_id={region_id}")
+    print(f"{Fore.BLUE}翻译 CSV: input={input_path}, output={output_path}, region_id={region_id}")
     
     if not os.path.exists(input_path):
-        logging.error(f"输入 CSV 文件不存在: {input_path}")
         print(f"{Fore.RED}❌ 文件不存在: {input_path}{Style.RESET_ALL}")
         return
     
@@ -125,8 +123,7 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
         with open(input_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             if "text" not in reader.fieldnames:
-                logging.error(f"CSV 文件缺少 'text' 列: {input_path}")
-                print(f"{Fore.RED}❌ CSV 文件缺少 'text' 列{Style.RESET_ALL}")
+                print(f"{Fore.RED}❌ CSV 文件缺少 'text' 列: {input_path}{Style.RESET_ALL}")
                 return
             
             total_rows = sum(1 for _ in reader)
@@ -138,12 +135,12 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
             
             for line_num, row in enumerate(tqdm(reader, total=total_rows, desc="翻译进度", unit="行"), 2):
                 text = row["text"].strip()
-                logging.debug(f"处理第 {line_num} 行: {text[:50]}...")
+                print(f"{Fore.BLUE}处理第 {line_num} 行: {text[:50]}...{Style.RESET_ALL}")
                 if not text:
                     row["translated"] = ""
                 elif re.fullmatch(r'(\s*\[[^\]]+\]\s*)+', text):
                     row["translated"] = text
-                    logging.debug(f"第 {line_num} 行仅含占位符，跳过")
+                    print(f"{Fore.BLUE}第 {line_num} 行仅含占位符，跳过{Style.RESET_ALL}")
                 else:
                     try:
                         translated = translate_text(text, access_key_id, access_secret, region_id)
@@ -152,11 +149,10 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
                             print(f"{Fore.GREEN}✅ 第{line_num}行: {text[:30]}... => {translated[:30]}...{Style.RESET_ALL}")
                         else:
                             print(f"{Fore.YELLOW}⚠️ 第{line_num}行翻译为空: {text[:50]}...{Style.RESET_ALL}")
-                            logging.warning(f"第{line_num}行翻译失败。原文：{text[:50]}...")
+                            print(f"{Fore.YELLOW}第{line_num}行翻译失败。原文：{text[:50]}...{Style.RESET_ALL}")
                     except Exception as e:
-                        logging.error(f"第{line_num}行翻译异常: {e}")
-                        row["translated"] = text
                         print(f"{Fore.RED}❌ 第{line_num}行翻译失败: {text[:50]}...{Style.RESET_ALL}")
+                        row["translated"] = text
                 
                 rows.append(row)
                 time.sleep(sleep_sec)
@@ -171,9 +167,7 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
                 writer.writeheader()
                 writer.writerows(rows)
         
-        logging.info(f"翻译完成，保存到: {output_path}")
         print(f"{Fore.GREEN}🎉 翻译完成，保存到: {output_path}{Style.RESET_ALL}")
         
     except Exception as e:
-        logging.error(f"翻译过程出错: {e}", exc_info=True)
         print(f"{Fore.RED}❌ 翻译失败: {e}{Style.RESET_ALL}")

@@ -1,11 +1,27 @@
-from dataclasses import dataclass
+"""
+配置管理模块 - 负责翻译配置的加载、保存、验证和管理
+"""
+from dataclasses import dataclass, asdict
 import os
+import json
 import logging
-from typing import Set, List
+from pathlib import Path
+from typing import Set, List, Dict, Any, Optional
+from colorama import Fore, Style
+
 from .filter_config import UnifiedFilterRules
+from .user_config import get_config_path, load_user_config, save_user_config
+
+CONFIG_VERSION = "1.0.0"
+
+class ConfigError(Exception):
+    """配置相关错误"""
+    pass
 
 @dataclass
 class TranslationConfig:
+    """翻译配置类，负责管理所有配置项"""
+    version: str = CONFIG_VERSION
     default_language: str = "ChineseSimplified"
     source_language: str = "English"
     def_injected_dir: str = "DefInjected"
@@ -17,30 +33,226 @@ class TranslationConfig:
     preview_transatable_fields: int = 0
 
     def __post_init__(self):
+        """初始化后处理"""
+        self._validate_config()
         self._rules = UnifiedFilterRules.get_rules()
-        self.log_dir = os.path.dirname(self.log_file)
-        if self.log_dir:
-            os.makedirs(self.log_dir, exist_ok=True)
+        self._setup_logging()
+        self._load_user_config()
+
+    def _setup_logging(self) -> None:
+        """设置日志系统"""
+        try:
+            log_dir = os.path.dirname(self.log_file)
+            if log_dir:
+                os.makedirs(log_dir, exist_ok=True)
+            logging.basicConfig(
+                level=logging.DEBUG if self.debug_mode else logging.INFO,
+                format=self.log_format,
+                handlers=[
+                    logging.FileHandler(self.log_file, encoding="utf-8"),
+                    logging.StreamHandler()
+                ]
+            )
+            logging.info(f"日志系统初始化完成: {self.log_file}")
+        except Exception as e:
+            print(f"{Fore.RED}日志系统初始化失败: {e}{Style.RESET_ALL}")
+            raise ConfigError(f"日志系统初始化失败: {str(e)}")
+
+    def _load_user_config(self) -> None:
+        """加载用户配置"""
+        try:
+            user_config = load_user_config()
+            if user_config:
+                self._update_from_dict(user_config)
+                logging.info("已加载用户配置")
+        except Exception as e:
+            logging.warning(f"加载用户配置失败: {e}")
+
+    def _validate_config(self) -> None:
+        """验证配置项的有效性"""
+        if not isinstance(self.default_language, str) or not self.default_language:
+            raise ConfigError("default_language 必须是有效的语言代码")
+        if not isinstance(self.source_language, str) or not self.source_language:
+            raise ConfigError("source_language 必须是有效的语言代码")
+        if not isinstance(self.def_injected_dir, str) or not self.def_injected_dir:
+            raise ConfigError("def_injected_dir 不能为空")
+        if not isinstance(self.keyed_dir, str) or not self.keyed_dir:
+            raise ConfigError("keyed_dir 不能为空")
+        if not isinstance(self.output_csv, str) or not self.output_csv:
+            raise ConfigError("output_csv 必须是有效的文件路径")
+        if not isinstance(self.log_file, str) or not self.log_file:
+            raise ConfigError("log_file 必须是有效的文件路径")
+        if not isinstance(self.log_format, str) or not self.log_format:
+            raise ConfigError("log_format 不能为空")
+        if not isinstance(self.preview_transatable_fields, int) or self.preview_transatable_fields < 0:
+            raise ConfigError("preview_transatable_fields 必须是非负整数")
+
+    def _update_from_dict(self, config_dict: Dict[str, Any]) -> None:
+        """从字典更新配置"""
+        for key, value in config_dict.items():
+            if hasattr(self, key) and not key.startswith('_'):
+                setattr(self, key, value)
+        self._validate_config()
 
     @property
     def default_fields(self) -> Set[str]:
+        """获取默认字段集合"""
         return self._rules.DEFAULT_FIELDS
 
     @property
     def ignore_fields(self) -> Set[str]:
+        """获取忽略字段集合"""
         return self._rules.IGNORE_FIELDS
 
     @property
     def non_text_patterns(self) -> List[str]:
+        """获取非文本模式列表"""
         return self._rules.NON_TEXT_PATTERNS
 
-    def load_custom_config(self, config_file: str) -> None:
-        """加载自定义配置文件"""
-        import json
+    def update_config(self, key: str, value: Any) -> None:
+        """
+        更新配置项
+        
+        Args:
+            key (str): 配置项名称
+            value (Any): 配置项值
+            
+        Raises:
+            ConfigError: 如果配置项无效
+        """
+        if not hasattr(self, key) or key.startswith('_'):
+            raise ConfigError(f"无效的配置项: {key}")
+            
+        old_value = getattr(self, key)
+        try:
+            setattr(self, key, value)
+            self._validate_config()
+            logging.info(f"更新配置: {key} = {value}")
+        except Exception as e:
+            setattr(self, key, old_value)
+            raise ConfigError(f"更新配置失败: {str(e)}")
+
+    def show_config(self) -> None:
+        """显示当前配置"""
+        print(f"\n{Fore.BLUE}=== 当前配置 ==={Style.RESET_ALL}")
+        for key, value in asdict(self).items():
+            if not key.startswith('_'):
+                print(f"{key}: {value}")
+
+    def export_config(self, config_file: str) -> None:
+        """
+        导出配置到文件
+        
+        Args:
+            config_file (str): 配置文件路径
+            
+        Raises:
+            ConfigError: 如果导出失败
+        """
+        try:
+            config_dict = asdict(self)
+            # 移除内部属性
+            config_dict.pop('_rules', None)
+            
+            os.makedirs(os.path.dirname(config_file), exist_ok=True)
+            with open(config_file, 'w', encoding='utf-8') as f:
+                json.dump(config_dict, f, indent=4, ensure_ascii=False)
+            logging.info(f"配置已导出到: {config_file}")
+        except Exception as e:
+            raise ConfigError(f"导出配置失败: {str(e)}")
+
+    def import_config(self, config_file: str) -> None:
+        """
+        从文件导入配置
+        
+        Args:
+            config_file (str): 配置文件路径
+            
+        Raises:
+            ConfigError: 如果导入失败
+        """
+        try:
+            with open(config_file, 'r', encoding='utf-8') as f:
+                config_dict = json.load(f)
+                
+            # 验证配置文件版本
+            config_version = config_dict.get('version', '0.0.0')
+            if config_version != self.version:
+                logging.warning(f"配置文件版本不匹配: 当前版本 {self.version}, 配置文件版本 {config_version}")
+                if not self._is_compatible_version(config_version):
+                    raise ConfigError(f"不兼容的配置文件版本: {config_version}")
+                    
+            self._update_from_dict(config_dict)
+            logging.info(f"配置已从 {config_file} 导入")
+        except Exception as e:
+            raise ConfigError(f"导入配置失败: {str(e)}")
+
+    def reset_config(self) -> None:
+        """重置配置为默认值"""
+        default_config = TranslationConfig()
+        self._update_from_dict(asdict(default_config))
+        logging.info("配置已重置为默认值")
+
+    def save_user_config(self) -> None:
+        """保存用户配置"""
+        try:
+            user_config = asdict(self)
+            # 移除内部属性
+            user_config.pop('_rules', None)
+            save_user_config(user_config)
+            logging.info("用户配置已保存")
+        except Exception as e:
+            logging.error(f"保存用户配置失败: {e}")
+
+    def _is_compatible_version(self, version: str) -> bool:
+        """检查版本兼容性"""
+        try:
+            current_major = int(self.version.split('.')[0])
+            config_major = int(version.split('.')[0])
+            return current_major == config_major
+        except (ValueError, IndexError):
+            return False
+
+    def load_custom_rules(self, config_file: str) -> None:
+        """
+        加载自定义规则配置
+        
+        Args:
+            config_file (str): 规则配置文件路径
+            
+        Raises:
+            ConfigError: 如果加载失败
+        """
         try:
             with open(config_file, 'r', encoding='utf-8') as f:
                 config = json.load(f)
+            
+            # 验证配置文件版本
+            config_version = config.get('version', '0.0.0')
+            if config_version != self.version:
+                logging.warning(f"规则配置文件版本不匹配: 当前版本 {self.version}, 配置文件版本 {config_version}")
+                if not self._is_compatible_version(config_version):
+                    raise ConfigError(f"不兼容的规则配置文件版本: {config_version}")
+            
+            # 验证规则配置
+            self._validate_rules_config(config)
+            
             self._rules = UnifiedFilterRules.from_custom_config(config)
-            logging.info(f"加载自定义配置: {config_file}")
+            logging.info(f"加载自定义规则配置: {config_file}")
         except Exception as e:
-            logging.warning(f"加载自定义配置失败，使用默认规则: {e}")
+            logging.warning(f"加载自定义规则配置失败，使用默认规则: {e}")
+            raise ConfigError(f"加载自定义规则配置失败: {str(e)}")
+
+    def _validate_rules_config(self, config: Dict[str, Any]) -> None:
+        """验证规则配置项"""
+        required_fields = {'version', 'default_fields', 'ignore_fields', 'non_text_patterns'}
+        missing_fields = required_fields - set(config.keys())
+        if missing_fields:
+            raise ConfigError(f"规则配置文件缺少必需字段: {missing_fields}")
+        
+        if not isinstance(config['default_fields'], list):
+            raise ConfigError("default_fields 必须是列表")
+        if not isinstance(config['ignore_fields'], list):
+            raise ConfigError("ignore_fields 必须是列表")
+        if not isinstance(config['non_text_patterns'], list):
+            raise ConfigError("non_text_patterns 必须是列表")

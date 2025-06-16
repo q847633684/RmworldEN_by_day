@@ -1,11 +1,16 @@
+"""
+平行语料集生成模块 - 实现中英平行语料集的提取和生成
+"""
+
 import logging
 import os
 import csv
-import xml.etree.ElementTree as ET
+import re
 from pathlib import Path
 from typing import List, Tuple
 from ..utils.config import TranslationConfig
-from ..utils.utils import get_language_folder_path, sanitize_xcomment
+from ..utils.utils import XMLProcessor, get_language_folder_path, sanitize_xcomment
+from colorama import Fore, Style
 
 CONFIG = TranslationConfig()
 
@@ -24,7 +29,6 @@ def extract_pairs_from_file(filepath: str) -> List[Tuple[str, str]]:
     
     en = None
     for line in lines:
-        import re
         en_match = re.match(r'\s*<!--\s*EN:\s*(.*?)\s*-->', line)
         zh_match = re.match(r'\s*<[^>]+>(.*?)</[^>]+>', line)
         
@@ -51,7 +55,7 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
     Returns:
         生成的语料条数
     """
-    logging.info(f"生成平行语料集: mode={mode}, mod_dir={mod_dir}")
+    print(f"{Fore.BLUE}正在生成平行语料集: mode={mode}, mod_dir={mod_dir}...{Style.RESET_ALL}")
     mod_dir = str(Path(mod_dir).resolve())
     
     output_csv = str(Path(mod_dir).parent / "parallel_corpus.csv")
@@ -62,6 +66,8 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
     
     corpus: List[Tuple[str, str]] = []
     seen = set()
+    
+    processor = XMLProcessor()
     
     if mode == "1":
         # 从带 EN: 注释的文件提取
@@ -94,23 +100,25 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
                 if not os.path.exists(zh_file):
                     continue
                 try:
-                    src_tree = ET.parse(src_file)
-                    zh_tree = ET.parse(zh_file)
-                    src_root = src_tree.getroot()
-                    zh_root = zh_tree.getroot()
+                    src_tree = processor.parse_xml(str(src_file))
+                    zh_tree = processor.parse_xml(str(zh_file))
+                    if src_tree is None or zh_tree is None:
+                        continue
+                        
+                    src_root = src_tree.getroot() if processor.use_lxml else src_tree
+                    zh_root = zh_tree.getroot() if processor.use_lxml else zh_tree
+                    
                     for src_elem, zh_elem in zip(src_root.iter(), zh_root.iter()):
                         if src_elem.tag == zh_elem.tag and src_elem.text and zh_elem.text:
                             en_text = src_elem.text.strip()
                             zh_text = zh_elem.text.strip()
                             if en_text and zh_text:
                                 corpus.append((en_text, zh_text))
-                except ET.ParseError as e:
-                    logging.error(f"XML 解析失败: {src_file} 或 {zh_file}: {e}")
-                except OSError as e:
-                    logging.error(f"无法读取 {src_file} 或 {zh_file}: {e}")
+                except Exception as e:
+                    logging.error(f"处理文件失败: {src_file} 或 {zh_file}: {e}")
     
     if not corpus:
-        logging.warning("未提取到平行语料")
+        print(f"{Fore.YELLOW}未提取到平行语料{Style.RESET_ALL}")
         return 0
     
     try:
@@ -125,16 +133,16 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
             writer.writerow(["en", "zh"])
             writer.writerows(corpus)
             
-        logging.info(f"生成平行语料集: {output_csv} 和 {output_tsv}，共 {len(corpus)} 条")
+        print(f"{Fore.GREEN}生成平行语料集: {output_csv} 和 {output_tsv}，共 {len(corpus)} 条{Style.RESET_ALL}")
         return len(corpus)
     except (csv.Error, OSError) as e:
-        logging.error(f"写入语料集失败: {e}")
+        print(f"{Fore.RED}写入语料集失败: {e}{Style.RESET_ALL}")
         return 0
 
 def check_parallel_tsv(file_path: str = "parallel_corpus.tsv") -> int:
     """检查平行语料集格式"""
     if not os.path.exists(file_path):
-        print(f"文件不存在: {file_path}")
+        print(f"{Fore.RED}文件不存在: {file_path}{Style.RESET_ALL}")
         return 1
     
     errors = 0
@@ -149,17 +157,17 @@ def check_parallel_tsv(file_path: str = "parallel_corpus.tsv") -> int:
             
             parts = line.split('\t')
             if len(parts) != 2:
-                print(f"第 {i} 行格式错误: 应为2列，实际{len(parts)}列")
+                print(f"{Fore.YELLOW}第 {i} 行格式错误: 应为2列，实际{len(parts)}列{Style.RESET_ALL}")
                 errors += 1
             elif not parts[0].strip() or not parts[1].strip():
-                print(f"第 {i} 行有空内容")
+                print(f"{Fore.YELLOW}第 {i} 行有空内容{Style.RESET_ALL}")
                 errors += 1
         
         if errors == 0:
-            print("格式检查通过")
+            print(f"{Fore.GREEN}格式检查通过{Style.RESET_ALL}")
     
     except Exception as e:
-        print(f"检查失败: {e}")
+        print(f"{Fore.RED}检查失败: {e}{Style.RESET_ALL}")
         errors += 1
     
     return errors

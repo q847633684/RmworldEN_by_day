@@ -4,6 +4,7 @@ import logging
 import xml.etree.ElementTree as ET
 from ..utils.config import TranslationConfig
 from ..utils.utils import XMLProcessor, save_json, sanitize_xml
+from colorama import Fore, Style
 
 CONFIG = TranslationConfig()
 TranslationData = Tuple[str, str, str, str]
@@ -21,7 +22,7 @@ class TemplateGenerator:
         return self.mod_dir
 
     def generate_keyed_template(self, en_keyed_dir: str, export_dir: str = None) -> None:
-        logging.info("正在生成中文 Keyed 翻译模板...")
+        print(f"{Fore.GREEN}正在生成中文 Keyed 翻译模板...{Style.RESET_ALL}")
         base_dir = self.get_template_base_dir(export_dir)
         zh_keyed_dir = base_dir / "Languages" / self.language / CONFIG.keyed_dir
         zh_keyed_dir.mkdir(parents=True, exist_ok=True)
@@ -33,7 +34,7 @@ class TemplateGenerator:
                 rel_path = en_xml_file.relative_to(en_path)
                 zh_xml_file = zh_keyed_dir / rel_path
                 self.processor.save_xml(ET.ElementTree(zh_root), str(zh_xml_file))
-                logging.info(f"生成 Keyed 模板: {zh_xml_file.name}")
+                print(f"{Fore.GREEN}生成 Keyed 模板: {zh_xml_file.name}{Style.RESET_ALL}")
 
     def generate_keyed_template_from_data(self, keyed_translations: List[TranslationData], export_dir: str = None) -> None:
         logging.info("正在生成中文 Keyed 翻译模板...")
@@ -47,7 +48,7 @@ class TemplateGenerator:
             logging.info(f"生成 Keyed 模板: {zh_xml_file.name}")
 
     def generate_definjected_template(self, defs_translations: List[TranslationData], export_dir: str = None) -> None:
-        logging.info("正在生成 DefInjected 翻译模板...")
+        print(f"{Fore.GREEN}正在生成 DefInjected 翻译模板...{Style.RESET_ALL}")
         base_dir = self.get_template_base_dir(export_dir)
         zh_definjected_dir = base_dir / "Languages" / self.language / CONFIG.def_injected_dir
         def_groups = self._group_defs_by_type(defs_translations)
@@ -56,7 +57,7 @@ class TemplateGenerator:
             output_file = type_dir / f"{def_type}Defs.xml"
             root = self._create_definjected_xml_from_data(fields)
             self.processor.save_xml(ET.ElementTree(root), str(output_file))
-            logging.info(f"生成 DefInjected 模板: {def_type}Defs.xml")
+            print(f"{Fore.GREEN}生成 DefInjected 模板: {def_type}Defs.xml{Style.RESET_ALL}")
 
     def _create_keyed_xml_from_source(self, source_root: ET.Element) -> ET.Element:
         zh_root = ET.Element("LanguageData")

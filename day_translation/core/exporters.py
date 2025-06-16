@@ -1,3 +1,7 @@
+"""
+导出功能模块 - 实现翻译模板导出、DefInjected 导出等功能
+"""
+
 import logging
 import os
 import shutil
@@ -8,7 +12,8 @@ import csv
 from multiprocessing import Pool
 from tqdm import tqdm
 from ..utils.config import TranslationConfig
-from ..utils.utils import save_xml_to_file, sanitize_xcomment, get_language_folder_path, sanitize_xml
+from ..utils.utils import XMLProcessor, save_xml_to_file, sanitize_xcomment, get_language_folder_path, sanitize_xml
+from colorama import Fore, Style
 
 CONFIG = TranslationConfig()
 
@@ -19,7 +24,7 @@ def move_dir(src: str, dst: str) -> None:
     shutil.move(src, dst)
     import time
     time.sleep(1)
-    logging.info(f"重命名 {src} 为 {dst}")
+    print(f"{Fore.GREEN}重命名 {src} 为 {dst}{Style.RESET_ALL}")
 
 def export_definjected_from_english(
     mod_dir: str,
@@ -27,21 +32,25 @@ def export_definjected_from_english(
     language: str = CONFIG.default_language,
     source_language: str = CONFIG.source_language
 ) -> None:
-    """从英文 DefInjected 导出翻译，添加 EN 注释"""
+    """从英文导出 DefInjected 翻译，添加 EN 注释"""
     logging.info(f"导出 DefInjected: mod_dir={mod_dir}, export_dir={export_dir}")
+    mod_dir = str(Path(mod_dir).resolve())
+    export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
     def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
     src_lang_path = get_language_folder_path(source_language, mod_dir)
     src_def_injected_path = os.path.join(src_lang_path, CONFIG.def_injected_dir)
+    
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
         logging.info(f"创建文件夹：{def_injected_path}")
-    for xml_file in Path(def_injected_path).rglob("*.xml"):
-        try:
-            os.remove(xml_file)
-            logging.info(f"删除文件：{xml_file}")
-        except OSError as e:
-            logging.error(f"无法删除 {xml_file}: {e}")
+        
+    if not os.path.exists(src_def_injected_path):
+        logging.warning(f"英文 DefInjected 目录 {src_def_injected_path} 不存在，跳过")
+        return
+        
+    processor = XMLProcessor()
+    
     for src_file in sorted(Path(src_def_injected_path).rglob("*.xml")):
         try:
             rel_path = os.path.relpath(src_file, src_def_injected_path)
@@ -49,22 +58,17 @@ def export_definjected_from_english(
             os.makedirs(os.path.dirname(dst_file), exist_ok=True)
             shutil.copy2(src_file, dst_file)
             logging.info(f"复制 {src_file} 到 {dst_file}")
-            tree = ET.parse(dst_file)
-            root = tree.getroot()
-            parent_map = {c: p for p in root.iter() for c in p}
-            for elem in root.findall(".//*"):
-                if elem.text and elem.text.strip():
-                    original = elem.text
-                    comment = ET.Comment(sanitize_xcomment(f"EN: {original}"))
-                    parent = parent_map.get(elem)
-                    if parent is not None:
-                        idx = list(parent).index(elem)
-                        parent.insert(idx, comment)
-            save_xml_to_file(root, dst_file, pretty_print=True)
-        except ET.ParseError as e:
-            logging.error(f"XML解析失败: {src_file}: {e}")
-        except OSError as e:
-            logging.error(f"无法处理 {src_file}: {e}")
+            
+            tree = processor.parse_xml(str(dst_file))
+            if tree is None:
+                continue
+                
+            # 添加英文注释
+            processor.add_comments(tree, comment_prefix="EN")
+            processor.save_xml(tree, str(dst_file))
+            
+        except Exception as e:
+            logging.error(f"处理文件失败: {src_file}: {e}")
 
 def handle_extract_translate(
     mod_dir: str,
@@ -137,18 +141,24 @@ def export_keyed(
     export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
     keyed_path = os.path.join(lang_path, CONFIG.keyed_dir)
+    src_lang_path = get_language_folder_path(source_language, mod_dir)
+    src_keyed_path = os.path.join(src_lang_path, CONFIG.keyed_dir)
+    
     if not os.path.exists(keyed_path):
         os.makedirs(keyed_path)
         logging.info(f"创建文件夹：{keyed_path}")
-    src_lang_path = get_language_folder_path(source_language, mod_dir)
-    src_keyed_path = os.path.join(src_lang_path, CONFIG.keyed_dir)
+        
     if not os.path.exists(src_keyed_path):
         logging.warning(f"英文 Keyed 目录 {src_keyed_path} 不存在，跳过")
         return
+        
     xml_files = list(Path(src_keyed_path).rglob("*.xml"))
     if not xml_files:
         logging.warning(f"英文 Keyed 目录 {src_keyed_path} 没有 XML 文件，跳过")
         return
+        
+    processor = XMLProcessor()
+    
     for src_file in xml_files:
         try:
             rel_path = os.path.relpath(src_file, src_keyed_path)
@@ -156,37 +166,39 @@ def export_keyed(
             os.makedirs(os.path.dirname(dst_file), exist_ok=True)
             shutil.copy2(src_file, dst_file)
             logging.info(f"复制 {src_file} 到 {dst_file}")
-            tree = ET.parse(dst_file)
-            root = tree.getroot()
-            parent_map = {c: p for p in root.iter() for c in p}
-            for elem in root.findall(".//*"):
-                if elem.text and elem.text.strip():
-                    original = elem.text
-                    comment = ET.Comment(sanitize_xcomment(f" EN: {original} "))
-                    parent = parent_map.get(elem)
-                    if parent is not None:
-                        idx = list(parent).index(elem)
-                        parent.insert(idx, comment)
-            save_xml_to_file(root, dst_file, pretty_print=True)
-        except ET.ParseError as e:
-            logging.error(f"XML解析失败: {src_file}: {e}")
-        except OSError as e:
-            logging.error(f"无法处理 {src_file}: {e}")
+            
+            tree = processor.parse_xml(str(dst_file))
+            if tree is None:
+                continue
+                
+            # 添加英文注释
+            processor.add_comments(tree, comment_prefix="EN")
+            processor.save_xml(tree, str(dst_file))
+            
+        except Exception as e:
+            logging.error(f"处理文件失败: {src_file}: {e}")
 
 def process_def_file(
-    xml_file: Path, selected_translations: List[Tuple[str, str, str, str]]
+    xml_file: Path,
+    selected_translations: List[Tuple[str, str, str, str]],
+    processor: XMLProcessor
 ) -> Tuple[str, List[Tuple[str, List[Tuple[str, str, str]]]]]:
     """处理单个 Def XML 文件"""
     try:
-        tree = ET.parse(xml_file)
-        root = tree.getroot()
+        tree = processor.parse_xml(str(xml_file))
+        if tree is None:
+            return str(xml_file), []
+            
+        root = tree.getroot() if processor.use_lxml else tree
         output_path = str(xml_file)
         pairs = []
+        
         for def_node in root.findall(".//*[defName]"):
             def_type = def_node.tag
             def_name = def_node.find("defName")
             if def_name is None or not def_name.text:
                 continue
+                
             def_name_text = def_name.text
             prefix = f"{def_type}/{def_name_text}."
             filtered_translations = [
@@ -194,17 +206,21 @@ def process_def_file(
                 for full_path, text, tag, file_path in selected_translations
                 if str(file_path) == str(xml_file) and full_path.startswith(prefix)
             ]
+            
             if filtered_translations:
                 pairs.append((def_name_text, filtered_translations))
+                
         return output_path, pairs
-    except ET.ParseError as e:
-        logging.error(f"XML 语法错误 {xml_file}: {e}")
+        
+    except Exception as e:
+        logging.error(f"处理文件失败: {xml_file}: {e}")
         return str(xml_file), []
 
 def process_def_file_wrapper(args: Tuple[Path, List[Tuple[str, str, str, str]]]) -> Tuple[str, List[Tuple[str, List[Tuple[str, str, str]]]]]:
     """包装函数，供 multiprocessing 使用"""
     xml_file, selected_translations = args
-    return process_def_file(xml_file, selected_translations)
+    processor = XMLProcessor()
+    return process_def_file(xml_file, selected_translations, processor)
 
 def export_definjected(
     mod_dir: str,
@@ -223,7 +239,7 @@ def export_definjected(
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
         logging.info(f"创建文件夹：{def_injected_path}")
-    
+        
     # 清理现有文件
     for xml_file in Path(def_injected_path).rglob("*.xml"):
         try:
@@ -231,15 +247,16 @@ def export_definjected(
             logging.info(f"删除文件：{xml_file}")
         except OSError as e:
             logging.error(f"无法删除 {xml_file}: {e}")
-    
+            
     if not os.path.exists(defs_path):
         logging.warning(f"Defs 目录 {defs_path} 不存在，跳过")
         return
-
+        
+    processor = XMLProcessor()
+    
     # 按 DefType 分组翻译内容
     def_groups = {}
     for full_path, text, tag, file_path in selected_translations:
-        # 解析路径格式：DefType/DefName.FieldPath
         if '/' in full_path:
             def_type_part, field_part = full_path.split('/', 1)
             def_type = def_type_part
@@ -249,14 +266,14 @@ def export_definjected(
             else:
                 def_name = field_part
                 field_path = ""
-            
+                
             if def_type not in def_groups:
                 def_groups[def_type] = {}
             if def_name not in def_groups[def_type]:
                 def_groups[def_type][def_name] = []
-            
+                
             def_groups[def_type][def_name].append((field_path, text, tag))
-    
+            
     # 为每个 DefType 生成 XML 文件
     for def_type, def_items in def_groups.items():
         if not def_items:
@@ -278,7 +295,7 @@ def export_definjected(
                     full_key = f"{def_name}.{field_path}"
                 else:
                     full_key = def_name
-                
+                    
                 # 添加英文注释
                 comment = ET.Comment(sanitize_xcomment(f"EN: {text}"))
                 root.append(comment)
@@ -286,196 +303,104 @@ def export_definjected(
                 # 添加翻译元素
                 elem = ET.SubElement(root, full_key)
                 elem.text = sanitize_xml(text)
-        
+                
         # 保存文件
-        save_xml_to_file(root, output_file, pretty_print=True)
+        tree = ET.ElementTree(root)
+        processor.save_xml(tree, output_file)
         logging.info(f"生成 DefInjected 文件: {output_file}")
 
-def export_definjected_to_csv(definjected_dir: str, csv_path: str) -> None:
-    """导出 DefInjected 翻译到 CSV（追加模式）"""
-    logging.info(f"导出 DefInjected 到 CSV: definjected_dir={definjected_dir}, csv_path={csv_path}")
-    definjected_dir = str(Path(definjected_dir).resolve())
-    csv_path = str(Path(csv_path).resolve())
+def export_definjected_to_csv(definjected_dir: str, output_csv: str) -> None:
+    """将 DefInjected 翻译导出到 CSV"""
+    logging.info(f"导出 DefInjected 到 CSV: {definjected_dir} -> {output_csv}")
+    processor = XMLProcessor()
     rows = []
     
-    if not os.path.exists(definjected_dir):
-        logging.warning(f"DefInjected 目录 {definjected_dir} 不存在，跳过 CSV 导出")
-        return
-    
-    xml_files = list(Path(definjected_dir).rglob("*.xml"))
-    if not xml_files:
-        logging.warning(f"DefInjected 目录 {definjected_dir} 没有 XML 文件，跳过 CSV 导出")
-        return
-    
-    print(f"正在处理 DefInjected 目录中的 {len(xml_files)} 个 XML 文件...")
-    
-    for xml_file in xml_files:
+    for xml_file in Path(definjected_dir).rglob("*.xml"):
         try:
-            tree = ET.parse(xml_file)
-            root = tree.getroot()
+            tree = processor.parse_xml(str(xml_file))
+            if tree is None:
+                continue
+                
+            root = tree.getroot() if processor.use_lxml else tree
             file_rows = 0
             
             # 处理 DefInjected 的特殊结构
             for elem in root:
-                if isinstance(elem.tag, str):
-                    # 处理直接的文本元素
-                    if elem.text and elem.text.strip():
-                        key = elem.tag
-                        text = elem.text.strip()
-                        
-                        rows.append({
-                            "key": key,
-                            "text": sanitize_xml(text),
-                            "tag": key.split('.')[-1] if '.' in key else key
-                        })
-                        file_rows += 1
+                if isinstance(elem.tag, str) and elem.text and elem.text.strip():
+                    key = elem.tag
+                    text = elem.text.strip()
                     
-                    # 处理嵌套元素（如 li 标签等）
-                    def process_nested_elements(parent_elem, parent_key=""):
-                        for nested_elem in parent_elem:
-                            if nested_elem.tag == "li":
-                                # 处理 li 元素
-                                if nested_elem.text and nested_elem.text.strip():
-                                    li_key = f"{parent_key}.{len(parent_elem.findall('li')) - len(parent_elem) + list(parent_elem).index(nested_elem)}"
-                                    rows.append({
-                                        "key": li_key,
-                                        "text": sanitize_xml(nested_elem.text.strip()),
-                                        "tag": "li"
-                                    })
-                                    file_rows += 1
-                                # 递归处理嵌套的 li
-                                process_nested_elements(nested_elem, li_key)
-                            else:
-                                # 处理其他嵌套元素
-                                if nested_elem.text and nested_elem.text.strip():
-                                    nested_key = f"{parent_key}.{nested_elem.tag}" if parent_key else nested_elem.tag
-                                    rows.append({
-                                        "key": nested_key,
-                                        "text": sanitize_xml(nested_elem.text.strip()),
-                                        "tag": nested_elem.tag
-                                    })
-                                    file_rows += 1
-                                # 递归处理更深层的嵌套
-                                process_nested_elements(nested_elem, nested_key)
+                    # 获取前一个注释作为英文原文
+                    en_text = ""
+                    prev = root.getprevious() if processor.use_lxml else None
+                    if prev is not None and isinstance(prev, ET.Comment):
+                        en_match = re.match(r'\s*EN:\s*(.*?)\s*$', prev.text)
+                        if en_match:
+                            en_text = en_match.group(1).strip()
                     
-                    # 处理当前元素的嵌套内容
-                    process_nested_elements(elem, elem.tag)
+                    rows.append({
+                        "key": key,
+                        "text": sanitize_xml(text),
+                        "en_text": sanitize_xml(en_text) if en_text else "",
+                        "tag": key.split('.')[-1] if '.' in key else key
+                    })
+                    file_rows += 1
+                    
+            logging.info(f"从 {xml_file.name} 提取了 {file_rows} 条翻译")
             
-            if file_rows > 0:
-                print(f"  ✅ {xml_file.name}: {file_rows} 条记录")
-            else:
-                print(f"  ⚠️ {xml_file.name}: 无有效记录")
-                
-        except ET.ParseError as e:
-            logging.error(f"DefInjected XML解析失败: {xml_file}: {e}")
-            print(f"  ❌ {xml_file.name}: XML 解析失败 - {str(e)[:50]}...")
-        except OSError as e:
-            logging.error(f"DefInjected 文件未找到: {xml_file}: {e}")
-            print(f"  ❌ {xml_file.name}: 文件读取失败")
-    
-    if not rows:
-        logging.warning(f"DefInjected目录 {definjected_dir} 未提取到任何内容")
-        print("⚠️ 未从 DefInjected 目录提取到任何内容")
-        return
-    
-    output_dir = os.path.dirname(csv_path) or "."
-    if not os.access(output_dir, os.W_OK):
-        logging.error(f"输出目录 {output_dir} 无写入权限")
-        return
-    
-    # 追加模式写入（如果文件已存在）
-    file_exists = os.path.exists(csv_path) and os.path.getsize(csv_path) > 0
-    
-    with open(csv_path, "a" if file_exists else "w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["key", "text", "tag"])
-        if not file_exists:
-            writer.writeheader()
-        writer.writerows(rows)
-    
-    logging.info(f"DefInjected 共导出 {len(rows)} 条到 {csv_path}")
-    print(f"✅ DefInjected 导出完成：{len(rows)} 条记录")
+        except Exception as e:
+            logging.error(f"处理文件失败: {xml_file}: {e}")
+            
+    if rows:
+        try:
+            with open(output_csv, 'a', encoding='utf-8', newline='') as f:
+                writer = csv.DictWriter(f, fieldnames=["key", "text", "en_text", "tag"])
+                writer.writerows(rows)
+            logging.info(f"追加 {len(rows)} 条翻译到 {output_csv}")
+        except Exception as e:
+            logging.error(f"写入 CSV 失败: {output_csv}: {e}")
+    else:
+        logging.warning(f"没有找到可导出的翻译")
 
-def export_keyed_to_csv(keyed_dir: str, csv_path: str) -> None:
-    """导出 Keyed 翻译到 CSV"""
-    logging.info(f"导出 Keyed 到 CSV: keyed_dir={keyed_dir}, csv_path={csv_path}")
-    keyed_dir = str(Path(keyed_dir).resolve())
-    csv_path = str(Path(csv_path).resolve())
+def export_keyed_to_csv(keyed_dir: str, output_csv: str) -> None:
+    """将 Keyed 翻译导出到 CSV"""
+    logging.info(f"导出 Keyed 到 CSV: {keyed_dir} -> {output_csv}")
+    processor = XMLProcessor()
     rows = []
     
-    if not os.path.exists(keyed_dir):
-        logging.warning(f"Keyed 目录 {keyed_dir} 不存在，跳过 CSV 导出")
-        return
-    
-    xml_files = list(Path(keyed_dir).rglob("*.xml"))
-    if not xml_files:
-        logging.warning(f"Keyed 目录 {keyed_dir} 没有 XML 文件，跳过 CSV 导出")
-        return
-    
-    print(f"正在处理 Keyed 目录中的 {len(xml_files)} 个 XML 文件...")
-    
-    for xml_file in xml_files:
+    for xml_file in Path(keyed_dir).rglob("*.xml"):
         try:
-            # 先尝试修复常见的 XML 问题
-            with open(xml_file, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            # 检查是否有常见的 XML 格式问题
-            if '&' in content and '&amp;' not in content:
-                # 这可能表明有未转义的 & 字符
-                logging.warning(f"检测到可能的 XML 格式问题: {xml_file}")
-            
-            tree = ET.parse(xml_file)
-            root = tree.getroot()
+            tree = processor.parse_xml(str(xml_file))
+            if tree is None:
+                continue
+                
+            root = tree.getroot() if processor.use_lxml else tree
             file_rows = 0
             
             for elem in root:
                 if isinstance(elem.tag, str) and elem.text and elem.text.strip():
+                    key = elem.tag
+                    text = elem.text.strip()
+                    
                     rows.append({
-                        "key": elem.tag,
-                        "text": sanitize_xml(elem.text.strip()),
-                        "tag": elem.tag
+                        "key": key,
+                        "text": sanitize_xml(text),
+                        "tag": key.split('.')[-1] if '.' in key else key
                     })
                     file_rows += 1
             
-            if file_rows > 0:
-                print(f"  ✅ {xml_file.name}: {file_rows} 条记录")
-            else:
-                print(f"  ⚠️ {xml_file.name}: 无有效记录")
-                
-        except ET.ParseError as e:
-            logging.error(f"Keyed XML解析失败: {xml_file}: {e}")
-            print(f"  ❌ {xml_file.name}: XML 解析失败")
-            print(f"     错误详情: 第 {e.lineno} 行，第 {e.offset} 列")
+            logging.info(f"从 {xml_file.name} 提取了 {file_rows} 条翻译")
             
-            # 尝试提供修复建议
-            try:
-                with open(xml_file, 'r', encoding='utf-8') as f:
-                    lines = f.readlines()
-                if e.lineno <= len(lines):
-                    problem_line = lines[e.lineno - 1].strip()
-                    print(f"     问题行: {problem_line[:100]}...")
-            except:
-                pass
-                
-        except OSError as e:
-            logging.error(f"Keyed 文件未找到: {xml_file}: {e}")
-            print(f"  ❌ {xml_file.name}: 文件读取失败")
-    
-    if not rows:
-        logging.warning(f"Keyed目录 {keyed_dir} 未提取到任何内容，未写入 CSV")
-        print("⚠️ 未从 Keyed 目录提取到任何内容")
-        return
-    
-    output_dir = os.path.dirname(csv_path) or "."
-    if not os.access(output_dir, os.W_OK):
-        logging.error(f"输出目录 {output_dir} 无写入权限")
-        return
-    
-    # 重写模式（清空之前的内容）
-    with open(csv_path, "w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["key", "text", "tag"])
-        writer.writeheader()
-        writer.writerows(rows)
-    
-    logging.info(f"Keyed 共导出 {len(rows)} 条到 {csv_path}")
-    print(f"✅ Keyed 导出完成：{len(rows)} 条记录")
+        except Exception as e:
+            logging.error(f"处理文件失败: {xml_file}: {e}")
+            
+    if rows:
+        try:
+            with open(output_csv, 'a', encoding='utf-8', newline='') as f:
+                writer = csv.DictWriter(f, fieldnames=["key", "text", "tag"])
+                writer.writerows(rows)
+            logging.info(f"追加 {len(rows)} 条翻译到 {output_csv}")
+        except Exception as e:
+            logging.error(f"写入 CSV 失败: {output_csv}: {e}")
+    else:
+        logging.warning(f"没有找到可导出的翻译")
