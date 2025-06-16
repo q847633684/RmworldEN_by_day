@@ -1,0 +1,21 @@
+2025-06-16 12:05:32,197 - INFO - 启动 Day Translation...
+2025-06-16 12:06:26,764 - INFO - 提取翻译到: mod
+2025-06-16 12:06:26,765 - INFO - 提取 Keyed 翻译: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, 语言: English
+2025-06-16 12:06:26,860 - INFO - 提取到 0 条 Keyed 翻译
+2025-06-16 12:06:26,860 - INFO - 扫描 Defs: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, 语言: English
+2025-06-16 12:06:29,627 - INFO - 提取到 4644 条 DefInjected 翻译
+2025-06-16 12:06:29,654 - ERROR - 运行错误: [Errno 13] Permission denied: 'mod'
+Traceback (most recent call last):
+  File "c:\Users\q8476\Documents\我的工作\Day_汉化\run_day_translation.py", line 48, in <module>
+    main()
+    ~~~~^^
+  File "c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\core\main.py", line 161, in main
+    facade.extract_translations(export_csv)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\core\main.py", line 46, in extract_translations
+    self._save_to_csv(translations, export_csv)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\core\main.py", line 93, in _save_to_csv
+    with open(csv_path, "w", encoding="utf-8", newline="") as f:
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'mod'

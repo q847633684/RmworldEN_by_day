@@ -5,6 +5,7 @@ import re
 import time
 from typing import List, Dict
 from pathlib import Path
+from tqdm import tqdm
 
 try:
     from aliyunsdkcore.client import AcsClient
@@ -101,7 +102,7 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
             
             print(f"开始翻译 {total_rows} 条记录...")
             
-            for line_num, row in enumerate(reader, 2):  # 从第2行开始计数
+            for line_num, row in enumerate(tqdm(reader, total=total_rows, desc="翻译进度"), 2):
                 text = row["text"].strip()
                 if not text:
                     row["translated"] = ""
