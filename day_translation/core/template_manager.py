@@ -3,6 +3,7 @@
 """
 import logging
 import csv
+import os
 from pathlib import Path
 from typing import List, Tuple, Dict, Optional
 from tqdm import tqdm
@@ -32,13 +33,12 @@ class TemplateManager:
         self.template_location = template_location
         self.generator = TemplateGenerator(str(self.mod_dir), language, template_location)
         self.processor = XMLProcessor()
-        
-    def extract_and_generate_templates(self, export_csv: str = None, en_keyed_dir: str = None) -> List[Tuple[str, str, str, str]]:
+    def extract_and_generate_templates(self, output_dir: str = None, en_keyed_dir: str = None) -> List[Tuple[str, str, str, str]]:
         """
         提取翻译数据并生成模板，同时导出CSV
         
         Args:
-            export_csv (str): 导出CSV文件路径
+            output_dir (str): 输出目录路径
             en_keyed_dir (str): 英文Keyed目录路径（可选）
             
         Returns:
@@ -53,13 +53,17 @@ class TemplateManager:
             logging.warning("未找到任何翻译数据")
             print(f"{Fore.YELLOW}⚠️ 未找到任何翻译数据{Style.RESET_ALL}")
             return []
-            
-        # 步骤2：生成翻译模板
-        self._generate_all_templates(translations, en_keyed_dir)
+              # 步骤2：生成翻译模板到指定输出目录
+        if output_dir:
+            self._generate_templates_to_output_dir(translations, output_dir, en_keyed_dir)
+        else:        
+            self._generate_all_templates(translations, en_keyed_dir)
         
-        # 步骤3：导出CSV（如果指定了路径）
-        if export_csv:
-            self._save_translations_to_csv(translations, export_csv)
+        # 步骤3：导出CSV到输出目录
+        if output_dir:
+            csv_path = os.path.join(output_dir, "translations.csv")
+            self._save_translations_to_csv(translations, csv_path)
+            print(f"{Fore.GREEN}✅ CSV文件已生成: {csv_path}{Style.RESET_ALL}")
             
         logging.info(f"模板生成完成，总计 {len(translations)} 条翻译")
         print(f"{Fore.GREEN}✅ 提取完成：{len(translations)} 条{Style.RESET_ALL}")
@@ -166,6 +170,46 @@ class TemplateManager:
         if def_translations:
             self.generator.generate_definjected_template(def_translations)
             logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板")
+            
+    def _generate_templates_to_output_dir(self, translations: List[Tuple[str, str, str, str]], output_dir: str, en_keyed_dir: str = None):
+        """在指定输出目录生成翻译模板结构"""
+        output_path = Path(output_dir)
+        
+        # 创建语言目录结构
+        lang_dir = output_path / "Languages" / "ChineseSimplified"
+        keyed_dir = lang_dir / "Keyed"
+        definjected_dir = lang_dir / "DefInjected"
+        
+        # 确保目录存在
+        keyed_dir.mkdir(parents=True, exist_ok=True)
+        definjected_dir.mkdir(parents=True, exist_ok=True)
+        
+        # 分离Keyed和DefInjected翻译
+        keyed_translations = [(k, t, g, f) for k, t, g, f in translations if '/' not in k]
+        def_translations = [(k, t, g, f) for k, t, g, f in translations if '/' in k]
+        
+        # 临时切换生成器的输出目录
+        original_base_dir = self.generator.config.base_dir
+        self.generator.config.base_dir = str(output_path)
+        
+        try:
+            # 生成Keyed模板
+            if keyed_translations:
+                if en_keyed_dir:
+                    self.generator.generate_keyed_template(en_keyed_dir)
+                self.generator.generate_keyed_template_from_data(keyed_translations)
+                logging.info(f"生成 {len(keyed_translations)} 条 Keyed 模板到 {keyed_dir}")
+                print(f"{Fore.GREEN}✅ Keyed模板已生成: {keyed_dir}{Style.RESET_ALL}")
+                
+            # 生成DefInjected模板
+            if def_translations:
+                self.generator.generate_definjected_template(def_translations)
+                logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板到 {definjected_dir}")
+                print(f"{Fore.GREEN}✅ DefInjected模板已生成: {definjected_dir}{Style.RESET_ALL}")
+                
+        finally:
+            # 恢复原始输出目录
+            self.generator.config.base_dir = original_base_dir
             
     def _save_translations_to_csv(self, translations: List[Tuple[str, str, str, str]], csv_path: str):
         """保存翻译数据到CSV文件"""

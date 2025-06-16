@@ -92,12 +92,12 @@ class TranslationFacade:
             ]
         )
 
-    def extract_templates_and_generate_csv(self, export_csv: str = CONFIG.output_csv, en_keyed_dir: str = None) -> List[Tuple[str, str, str, str]]:
+    def extract_templates_and_generate_csv(self, output_dir: str, en_keyed_dir: str = None) -> List[Tuple[str, str, str, str]]:
         """
         提取翻译模板并生成 CSV 文件
 
         Args:
-            export_csv (str): 导出 CSV 文件路径
+            output_dir (str): 输出目录路径
             en_keyed_dir (str): 英文 Keyed 目录路径
 
         Returns:
@@ -107,8 +107,9 @@ class TranslationFacade:
             ExportError: 如果导出失败
         """
         try:
-            logging.info(f"开始提取模板: export_csv={export_csv}, en_keyed_dir={en_keyed_dir}")
-            translations = self.template_manager.extract_and_generate_templates(export_csv, en_keyed_dir)
+            logging.info(f"开始提取模板: output_dir={output_dir}, en_keyed_dir={en_keyed_dir}")
+            translations = self.template_manager.extract_and_generate_templates(output_dir, en_keyed_dir)
+            return translations
             return translations
         except Exception as e:
             error_msg = f"提取模板失败: {str(e)}"
@@ -416,30 +417,36 @@ def main():
                     continue
                     
                 facade = TranslationFacade(mod_dir)
-
+                
                 if mode == "1":
                     # 模式1：提取翻译模板并生成 CSV 文件
-                    export_csv = path_manager.get_path(
-                        path_type="export_csv",
-                        prompt="请输入导出 CSV 路径（例如：output.csv）: ",
-                        validator_type="csv",
-                        default=path_manager.get_remembered_path("export_csv")
+                    output_dir = path_manager.get_path(
+                        path_type="output_dir",
+                        prompt="请输入输出目录路径（例如：mod 或 output）: ",
+                        validator_type="output_dir",                          
+                        default=path_manager.get_remembered_path("output_dir")
                     )
-                    if not export_csv:
+                    if not output_dir:
                         continue
                         
                     en_keyed_dir = None
-                    if input(f"{Fore.YELLOW}是否指定英文 Keyed 目录？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
-                        en_keyed_dir = path_manager.get_path(
-                            path_type="en_keyed_dir",
-                            prompt="请输入英文 Keyed 目录（例如：C:\\Mods\\Keyed）: ",
-                            validator_type="dir",
-                            default=path_manager.get_remembered_path("en_keyed_dir")
-                        )
-                        if not en_keyed_dir:
-                            continue
+                    # 自动检测英文 Keyed 目录
+                    auto_en_keyed_dir = os.path.join(mod_dir, "Languages", "English", CONFIG.keyed_dir)
+                    if os.path.exists(auto_en_keyed_dir):
+                        if input(f"{Fore.YELLOW}检测到英文 Keyed 目录: {auto_en_keyed_dir}\n是否使用英文模板确保翻译完整性？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
+                            en_keyed_dir = auto_en_keyed_dir
+                    else:
+                        if input(f"{Fore.YELLOW}未检测到英文 Keyed 目录，是否手动指定？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
+                            en_keyed_dir = path_manager.get_path(
+                                path_type="en_keyed_dir",
+                                prompt="请输入英文 Keyed 目录路径: ",
+                                validator_type="dir",
+                                default=path_manager.get_remembered_path("en_keyed_dir")
+                            )
+                            if not en_keyed_dir:
+                                continue
                             
-                    facade.extract_templates_and_generate_csv(export_csv, en_keyed_dir)
+                    facade.extract_templates_and_generate_csv(output_dir, en_keyed_dir)
                     
                 elif mode == "2":
                     # 模式2：机器翻译

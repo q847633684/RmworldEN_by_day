@@ -92,22 +92,20 @@ class TranslationConfig:
         for key, value in config_dict.items():
             if hasattr(self, key) and not key.startswith('_'):
                 setattr(self, key, value)
-        self._validate_config()
-
-    @property
+        self._validate_config()    @property
     def default_fields(self) -> Set[str]:
         """获取默认字段集合"""
-        return self._rules.DEFAULT_FIELDS
+        return set(self._rules["default_fields"])
 
     @property
     def ignore_fields(self) -> Set[str]:
         """获取忽略字段集合"""
-        return self._rules.IGNORE_FIELDS
+        return set(self._rules["ignore_fields"])
 
     @property
     def non_text_patterns(self) -> List[str]:
         """获取非文本模式列表"""
-        return self._rules.NON_TEXT_PATTERNS
+        return self._rules["non_text_patterns"]
 
     def update_config(self, key: str, value: Any) -> None:
         """

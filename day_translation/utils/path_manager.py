@@ -40,8 +40,7 @@ class PathManager:
         self._path_pattern = re.compile(r'^[a-zA-Z]:[\\/]|^[\\/]{2}|^[a-zA-Z0-9_\-\.]+[\\/]')
         self._history_cache: Dict[str, PathHistory] = {}
         self._load_history()
-        
-        # 注册路径验证器
+          # 注册路径验证器
         self._validators: Dict[str, Callable[[str], PathValidationResult]] = {
             'dir': self._validate_directory,
             'file': self._validate_file,
@@ -49,7 +48,8 @@ class PathManager:
             'xml': self._validate_xml_file,
             'json': self._validate_json_file,
             'mod': self._validate_mod_directory,
-            'language': self._validate_language_directory
+            'language': self._validate_language_directory,
+            'output_dir': self._validate_output_directory
         }
         
     def _load_history(self) -> None:
@@ -424,6 +424,48 @@ class PathManager:
             normalized_path=result.normalized_path,
             path_type='language'
         )
+        
+    def _validate_output_directory(self, path: str) -> PathValidationResult:
+        """验证输出目录，如果不存在则创建"""
+        try:
+            path_obj = Path(path)
+            
+            # 如果路径不存在，尝试创建
+            if not path_obj.exists():
+                path_obj.mkdir(parents=True, exist_ok=True)
+                
+            # 验证是否为目录
+            if not path_obj.is_dir():
+                return PathValidationResult(
+                    is_valid=False,
+                    error_message=f"路径不是目录: {path}",
+                    normalized_path=str(path_obj.resolve())
+                )
+                
+            # 检查写入权限
+            test_file = path_obj / ".write_test"
+            try:
+                test_file.touch()
+                test_file.unlink()
+            except (PermissionError, OSError):
+                return PathValidationResult(
+                    is_valid=False,
+                    error_message=f"目录没有写入权限: {path}",
+                    normalized_path=str(path_obj.resolve())
+                )
+                
+            return PathValidationResult(
+                is_valid=True,
+                normalized_path=str(path_obj.resolve()),
+                path_type='output_dir'
+            )
+            
+        except Exception as e:
+            return PathValidationResult(
+                is_valid=False,
+                error_message=f"验证输出目录失败: {str(e)}",
+                normalized_path=str(Path(path).resolve()) if path else ""
+            )
         
     def get_language_folder_path(self, mod_dir: str, language: str) -> str:
         """

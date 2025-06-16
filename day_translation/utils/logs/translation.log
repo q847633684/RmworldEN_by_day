@@ -114,3 +114,62 @@ AttributeError: 'TranslationConfig' object has no attribute 'get_remembered_path
 2025-06-17 00:25:23,107 - INFO - 已加载用户配置
 2025-06-17 00:25:23,115 - INFO - 启动 Day Translation...
 2025-06-17 00:25:23,116 - INFO - 启动主工作流
+2025-06-17 00:58:47,846 - INFO - 程序被用户中断
+2025-06-17 00:58:47,847 - INFO - 程序结束
+2025-06-17 01:01:41,930 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:01:41,931 - INFO - 已加载用户配置
+2025-06-17 01:01:41,944 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:01:41,946 - INFO - 已加载用户配置
+2025-06-17 01:01:41,997 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:01:41,999 - INFO - 已加载用户配置
+2025-06-17 01:01:42,004 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:01:42,008 - INFO - 已加载用户配置
+2025-06-17 01:01:42,011 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:01:42,012 - INFO - 已加载用户配置
+2025-06-17 01:01:42,063 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:01:42,065 - INFO - 已加载用户配置
+2025-06-17 01:01:42,070 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:01:42,071 - INFO - 已加载用户配置
+2025-06-17 01:01:42,080 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:01:42,081 - INFO - 已加载用户配置
+2025-06-17 01:01:42,083 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:01:42,084 - INFO - 已加载用户配置
+2025-06-17 01:01:42,527 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:01:42,528 - INFO - 已加载用户配置
+2025-06-17 01:01:42,541 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:01:42,542 - INFO - 已加载用户配置
+2025-06-17 01:01:42,545 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:01:42,546 - INFO - 已加载用户配置
+2025-06-17 01:01:42,551 - INFO - 启动 Day Translation...
+2025-06-17 01:01:42,551 - INFO - 启动主工作流
+2025-06-17 01:02:03,860 - INFO - 开始提取模板: output_dir=C:\Users\q8476\Documents\我的工作\Day_汉化\mod, en_keyed_dir=None
+2025-06-17 01:02:03,861 - INFO - 开始提取翻译数据并生成模板
+2025-06-17 01:02:03,861 - ERROR - 提取模板失败: 'dict' object has no attribute 'DEFAULT_FIELDS'
+2025-06-17 01:02:03,862 - ERROR - 操作失败: 提取模板失败: 'dict' object has no attribute 'DEFAULT_FIELDS'
+2025-06-17 01:09:09,020 - INFO - 程序结束
+2025-06-17 01:09:11,245 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:09:11,246 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 01:09:11,250 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:09:11,251 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 01:09:11,275 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:09:11,276 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 01:09:11,280 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:09:11,281 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 01:09:11,282 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:09:11,283 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 01:09:11,325 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:09:11,326 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 01:09:11,328 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:09:11,329 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 01:09:11,331 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:09:11,332 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 01:09:11,334 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:09:11,335 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 01:09:11,750 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:09:11,750 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 01:09:11,761 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:09:11,762 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 01:09:11,766 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 01:09:11,767 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 01:09:11,772 - INFO - 启动 Day Translation...
+2025-06-17 01:09:11,773 - INFO - 启动主工作流
