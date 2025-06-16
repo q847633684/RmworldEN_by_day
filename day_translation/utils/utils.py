@@ -1,11 +1,11 @@
 import logging
 import os
 import re
+import csv
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Any, Callable
 from functools import wraps
-from contextlib import contextmanager
 try:
     from lxml import etree
     LXML_AVAILABLE = True
@@ -172,3 +172,36 @@ def handle_exceptions(default_return=None):
                 return default_return
         return wrapper
     return decorator
+
+def generate_element_key(elem: Any, root: Any, parent_map: Dict = None) -> str:
+    """生成元素键"""
+    key = elem.get("key") or elem.tag
+    path_parts = []
+    current = elem
+    if parent_map:  # ElementTree
+        while current is not None and current != root:
+            if current.tag != "LanguageData":
+                path_parts.append(current.tag)
+            current = parent_map.get(current)
+    else:  # lxml
+        while current is not None and current != root:
+            if current.tag != "LanguageData":
+                path_parts.append(current.tag)
+            current = current.getparent()
+    path_parts.reverse()
+    return ".".join(path_parts) if path_parts else key
+
+def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
+    """从 CSV 加载翻译"""
+    translations = {}
+    try:
+        with open(csv_path, encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                key = row.get("key", "").strip()
+                translated = row.get("translated", row.get("text", "")).strip()
+                if key and translated:
+                    translations[key] = translated
+    except Exception as e:
+        logging.error(f"CSV 解析失败: {csv_path}: {e}")
+    return translations

@@ -14,7 +14,7 @@ class TranslationConfig:
     log_file: str = os.path.join(os.path.dirname(__file__), "logs", "translation.log")
     log_format: str = "%(asctime)s - %(levelname)s - %(message)s"
     debug_mode: bool = os.getenv("DAY_TRANSLATION_DEBUG", "").lower() == "true"
-    preview_translatable_fields: int = 0
+    preview_transatable_fields: int = 0
 
     def __post_init__(self):
         self._rules = UnifiedFilterRules.get_rules()
