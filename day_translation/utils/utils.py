@@ -205,3 +205,8 @@ def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
     except Exception as e:
         logging.error(f"CSV 解析失败: {csv_path}: {e}")
     return translations
+
+def save_xml_to_file(tree: Any, file_path: str, use_lxml: bool = LXML_AVAILABLE) -> bool:
+    """兼容旧版保存 XML 文件"""
+    processor = XMLProcessor(use_lxml=use_lxml)
+    return processor.save_xml(tree, file_path)
