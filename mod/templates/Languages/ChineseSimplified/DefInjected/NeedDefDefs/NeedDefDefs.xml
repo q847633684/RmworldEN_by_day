@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- EN: Person is now hooked on shrooms. Without them, their bedroom performance may fall. -->
+  <Chemical_HumpShroom.description>Person is now hooked on shrooms. Without them, their bedroom performance may fall.</Chemical_HumpShroom.description>
+  <!-- EN: rjw.Need_Sex -->
+  <Sex.needClass>rjw.Need_Sex</Sex.needClass>
+  <!-- EN: Represents fulfillment of sexual need, which is gained by doing sexual related activities and declined by time & turn-ons. -->
+  <Sex.description>Represents fulfillment of sexual need, which is gained by doing sexual related activities and declined by time & turn-ons.</Sex.description>
+</LanguageData>

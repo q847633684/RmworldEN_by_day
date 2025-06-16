@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- EN: rjw.MainTab.RJW_PawnTable_Humanlikes -->
+  <RJW_PawnTable_Humanlikes.workerClass>rjw.MainTab.RJW_PawnTable_Humanlikes</RJW_PawnTable_Humanlikes.workerClass>
+  <!-- EN: rjw.MainTab.RJW_PawnTable_Animals -->
+  <RJW_PawnTable_Animals.workerClass>rjw.MainTab.RJW_PawnTable_Animals</RJW_PawnTable_Animals.workerClass>
+  <!-- EN: rjw.MainTab.RJW_PawnTable_Humanlikes -->
+  <RJW_PawnTable_Colonists.workerClass>rjw.MainTab.RJW_PawnTable_Humanlikes</RJW_PawnTable_Colonists.workerClass>
+  <!-- EN: rjw.MainTab.RJW_PawnTable_Humanlikes -->
+  <RJW_PawnTable_Property.workerClass>rjw.MainTab.RJW_PawnTable_Humanlikes</RJW_PawnTable_Property.workerClass>
+</LanguageData>

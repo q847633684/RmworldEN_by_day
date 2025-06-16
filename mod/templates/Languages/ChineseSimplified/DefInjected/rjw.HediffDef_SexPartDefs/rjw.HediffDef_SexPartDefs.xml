@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- EN: generic penis -->
+  <GenericPenis.label>generic penis</GenericPenis.label>
+  <!-- EN: a penis -->
+  <GenericPenis.labelNoun>a penis</GenericPenis.labelNoun>
+  <!-- EN: A penis. Generic placeholder part for unsuported race. -->
+  <GenericPenis.description>A penis. Generic placeholder part for unsuported race.</GenericPenis.description>
+  <!-- EN: generic vagina -->
+  <GenericVagina.label>generic vagina</GenericVagina.label>
+  <!-- EN: a vagina -->
+  <GenericVagina.labelNoun>a vagina</GenericVagina.labelNoun>
+  <!-- EN: A vagina. Generic placeholder part for unsuported race. -->
+  <GenericVagina.description>A vagina. Generic placeholder part for unsuported race.</GenericVagina.description>
+  <!-- EN: generic anus -->
+  <GenericAnus.label>generic anus</GenericAnus.label>
+  <!-- EN: an anus -->
+  <GenericAnus.labelNoun>an anus</GenericAnus.labelNoun>
+  <!-- EN: An anus. Generic placeholder part for unsuported race. -->
+  <GenericAnus.description>An anus. Generic placeholder part for unsuported race.</GenericAnus.description>
+  <!-- EN: generic breasts -->
+  <GenericBreasts.label>generic breasts</GenericBreasts.label>
+  <!-- EN: A pair of breasts. Generic placeholder part for unsuported race. -->
+  <GenericBreasts.description>A pair of breasts. Generic placeholder part for unsuported race.</GenericBreasts.description>
+  <!-- EN: equine penis -->
+  <HorsePenis.label>equine penis</HorsePenis.label>
+  <!-- EN: an equine penis -->
+  <HorsePenis.labelNoun>an equine penis</HorsePenis.labelNoun>
+  <!-- EN: A large horse penis. Flares out during sex. -->
+  <HorsePenis.description>A large horse penis. Flares out during sex.</HorsePenis.description>
+  <!-- EN: equine vagina -->
+  <HorseVagina.label>equine vagina</HorseVagina.label>
+  <!-- EN: an equine vagina -->
+  <HorseVagina.labelNoun>an equine vagina</HorseVagina.labelNoun>
+  <!-- EN: A mare vagina. -->
+  <HorseVagina.description>A mare vagina.</HorseVagina.description>
+  <!-- EN: feline penis -->
+  <CatPenis.label>feline penis</CatPenis.label>
+  <!-- EN: a feline penis -->
+  <CatPenis.labelNoun>a feline penis</CatPenis.labelNoun>
+  <!-- EN: A spine-covered feline penis. -->
+  <CatPenis.description>A spine-covered feline penis.</CatPenis.description>
+  <!-- EN: feline vagina -->
+  <CatVagina.label>feline vagina</CatVagina.label>
+  <!-- EN: a feline vagina -->
+  <CatVagina.labelNoun>a feline vagina</CatVagina.labelNoun>
+  <!-- EN: A feline vagina. -->
+  <CatVagina.description>A feline vagina.</CatVagina.description>
+  <!-- EN: canine penis -->
+  <DogPenis.label>canine penis</DogPenis.label>
+  <!-- EN: a dog penis -->
+  <DogPenis.labelNoun>a dog penis</DogPenis.labelNoun>
+  <!-- EN: A bright red dog penis. The knot will expand during sex, locking its lover to their partner for a long time. -->
+  <DogPenis.description>A bright red dog penis. The knot will expand during sex, locking its lover to their partner for a long time.</DogPenis.description>
+  <!-- EN: canine vagina -->
+  <DogVagina.label>canine vagina</DogVagina.label>
+  <!-- EN: a dog vagina -->
+  <DogVagina.labelNoun>a dog vagina</DogVagina.labelNoun>
+  <!-- EN: A dog vagina. -->
+  <DogVagina.description>A dog vagina.</DogVagina.description>
+  <!-- EN: dragon penis -->
+  <DragonPenis.label>dragon penis</DragonPenis.label>
+  <!-- EN: a dragon penis -->
+  <DragonPenis.labelNoun>a dragon penis</DragonPenis.labelNoun>
+  <!-- EN: A dragon penis. Has a knot that expands similarly to a dog's penis, but the ribbing on both sides takes its lover to greater heights of pleasure. -->
+  <DragonPenis.description>A dragon penis. Has a knot that expands similarly to a dog's penis, but the ribbing on both sides takes its lover to greater heights of pleasure.</DragonPenis.description>
+  <!-- EN: dragon vagina -->
+  <DragonVagina.label>dragon vagina</DragonVagina.label>
+  <!-- EN: a dragon vagina -->
+  <DragonVagina.labelNoun>a dragon vagina</DragonVagina.labelNoun>
+  <!-- EN: A dragon vagina. Has a similar texture to their outer hide. -->
+  <DragonVagina.description>A dragon vagina. Has a similar texture to their outer hide.</DragonVagina.description>
+  <!-- EN: procyonine penis -->
+  <RaccoonPenis.label>procyonine penis</RaccoonPenis.label>
+  <!-- EN: a procyonine penis -->
+  <RaccoonPenis.labelNoun>a procyonine penis</RaccoonPenis.labelNoun>
+  <!-- EN: A raccoon penis. -->
+  <RaccoonPenis.description>A raccoon penis.</RaccoonPenis.description>
+  <!-- EN: a hemipenis -->
+  <HemiPenis.labelNoun>a hemipenis</HemiPenis.labelNoun>
+  <!-- EN: Twice the members for double the fun. -->
+  <HemiPenis.description>Twice the members for double the fun.</HemiPenis.description>
+  <!-- EN: crocodilian penis -->
+  <CrocodilianPenis.label>crocodilian penis</CrocodilianPenis.label>
+  <!-- EN: a crocodilian penis -->
+  <CrocodilianPenis.labelNoun>a crocodilian penis</CrocodilianPenis.labelNoun>
+  <!-- EN: A crocodilian penis. Large and permenantly erect. -->
+  <CrocodilianPenis.description>A crocodilian penis. Large and permenantly erect.</CrocodilianPenis.description>
+  <!-- EN: a set of udders -->
+  <UdderBreasts.labelNoun>a set of udders</UdderBreasts.labelNoun>
+  <!-- EN: An animalistic breast with four nipples. -->
+  <UdderBreasts.description>An animalistic breast with four nipples.</UdderBreasts.description>
+  <!-- EN: narrow vagina -->
+  <NarrowVagina.label>narrow vagina</NarrowVagina.label>
+  <!-- EN: a narrow vagina -->
+  <NarrowVagina.labelNoun>a narrow vagina</NarrowVagina.labelNoun>
+  <!-- EN: A tight, narrow vagina. -->
+  <NarrowVagina.description>A tight, narrow vagina.</NarrowVagina.description>
+  <!-- EN: needle penis -->
+  <NeedlePenis.label>needle penis</NeedlePenis.label>
+  <!-- EN: a needle penis -->
+  <NeedlePenis.labelNoun>a needle penis</NeedlePenis.labelNoun>
+  <!-- EN: A small and thin penis. -->
+  <NeedlePenis.description>A small and thin penis.</NeedlePenis.description>
+  <!-- EN: rodent vagina -->
+  <RodentVagina.label>rodent vagina</RodentVagina.label>
+  <!-- EN: a rodent vagina -->
+  <RodentVagina.labelNoun>a rodent vagina</RodentVagina.labelNoun>
+  <!-- EN: A rodent vagina. -->
+  <RodentVagina.description>A rodent vagina.</RodentVagina.description>
+  <!-- EN: rodent penis -->
+  <RodentPenis.label>rodent penis</RodentPenis.label>
+  <!-- EN: a rodent penis -->
+  <RodentPenis.labelNoun>a rodent penis</RodentPenis.labelNoun>
+  <!-- EN: A rodent penis. -->
+  <RodentPenis.description>A rodent penis.</RodentPenis.description>
+  <!-- EN: cloacal penis -->
+  <CloacalPenis.label>cloacal penis</CloacalPenis.label>
+  <!-- EN: a cloacal penis -->
+  <CloacalPenis.labelNoun>a cloacal penis</CloacalPenis.labelNoun>
+  <!-- EN: A cloacal penis. -->
+  <CloacalPenis.description>A cloacal penis.</CloacalPenis.description>
+  <!-- EN: cloacal vagina -->
+  <CloacalVagina.label>cloacal vagina</CloacalVagina.label>
+  <!-- EN: a cloacal vagina -->
+  <CloacalVagina.labelNoun>a cloacal vagina</CloacalVagina.labelNoun>
+  <!-- EN: A cloacal vagina. -->
+  <CloacalVagina.description>A cloacal vagina.</CloacalVagina.description>
+  <!-- EN: cloacal anus -->
+  <CloacalAnus.label>cloacal anus</CloacalAnus.label>
+  <!-- EN: cloacal anus -->
+  <CloacalAnus.labelNoun>cloacal anus</CloacalAnus.labelNoun>
+  <!-- EN: A cloacal anus. -->
+  <CloacalAnus.description>A cloacal anus.</CloacalAnus.description>
+  <!-- EN: demon tentacles -->
+  <DemonTentaclePenis.label>demon tentacles</DemonTentaclePenis.label>
+  <!-- EN: demon tentacles -->
+  <DemonTentaclePenis.labelNoun>demon tentacles</DemonTentaclePenis.labelNoun>
+  <!-- EN: Tentacles capable of reaching corners of the body you never thought possible. -->
+  <DemonTentaclePenis.description>Tentacles capable of reaching corners of the body you never thought possible.</DemonTentaclePenis.description>
+  <!-- EN: demon penis -->
+  <DemonPenis.label>demon penis</DemonPenis.label>
+  <!-- EN: a demon penis -->
+  <DemonPenis.labelNoun>a demon penis</DemonPenis.labelNoun>
+  <!-- EN: A large, daunting mass that can cause its lovers to succumb to debauchery. -->
+  <DemonPenis.description>A large, daunting mass that can cause its lovers to succumb to debauchery.</DemonPenis.description>
+  <!-- EN: demon vagina -->
+  <DemonVagina.label>demon vagina</DemonVagina.label>
+  <!-- EN: a demon vagina -->
+  <DemonVagina.labelNoun>a demon vagina</DemonVagina.labelNoun>
+  <!-- EN: A tight vagina that can send its lovers to heaven. -->
+  <DemonVagina.description>A tight vagina that can send its lovers to heaven.</DemonVagina.description>
+  <!-- EN: demon anus -->
+  <DemonAnus.label>demon anus</DemonAnus.label>
+  <!-- EN: a demon anus -->
+  <DemonAnus.labelNoun>a demon anus</DemonAnus.labelNoun>
+  <!-- EN: A demon anus. -->
+  <DemonAnus.description>A demon anus.</DemonAnus.description>
+  <!-- EN: a penis -->
+  <Penis.labelNoun>a penis</Penis.labelNoun>
+  <!-- EN: A penis. -->
+  <Penis.description>A penis.</Penis.description>
+  <!-- EN: a vagina -->
+  <Vagina.labelNoun>a vagina</Vagina.labelNoun>
+  <!-- EN: A vagina. -->
+  <Vagina.description>A vagina.</Vagina.description>
+  <!-- EN: an anus -->
+  <Anus.labelNoun>an anus</Anus.labelNoun>
+  <!-- EN: A anus. -->
+  <Anus.description>A anus.</Anus.description>
+  <!-- EN: a pair of breasts -->
+  <Breasts.labelNoun>a pair of breasts</Breasts.labelNoun>
+  <!-- EN: A pair of breasts. -->
+  <Breasts.description>A pair of breasts.</Breasts.description>
+  <!-- EN: featureless chest -->
+  <FeaturelessChest.label>featureless chest</FeaturelessChest.label>
+  <!-- EN: a featureless chest -->
+  <FeaturelessChest.labelNoun>a featureless chest</FeaturelessChest.labelNoun>
+  <!-- EN: a flat chest without any nipples where there should be. -->
+  <FeaturelessChest.description>a flat chest without any nipples where there should be.</FeaturelessChest.description>
+  <!-- EN: peg dick -->
+  <PegDick.label>peg dick</PegDick.label>
+  <!-- EN: a peg dick -->
+  <PegDick.labelNoun>a peg dick</PegDick.labelNoun>
+  <!-- EN: A simple, static member. -->
+  <PegDick.description>A simple, static member.</PegDick.description>
+  <!-- EN: hydraulic penis -->
+  <HydraulicPenis.label>hydraulic penis</HydraulicPenis.label>
+  <!-- EN: a hydraulic penis -->
+  <HydraulicPenis.labelNoun>a hydraulic penis</HydraulicPenis.labelNoun>
+  <!-- EN: Simulating a normal penis, it can enlarge itself with hydraulics. -->
+  <HydraulicPenis.description>Simulating a normal penis, it can enlarge itself with hydraulics.</HydraulicPenis.description>
+  <!-- EN: hydraulic vagina -->
+  <HydraulicVagina.label>hydraulic vagina</HydraulicVagina.label>
+  <!-- EN: a hydraulic vagina -->
+  <HydraulicVagina.labelNoun>a hydraulic vagina</HydraulicVagina.labelNoun>
+  <!-- EN: It uses simple hydraulics to simulate the tightness of a regular vagina. -->
+  <HydraulicVagina.description>It uses simple hydraulics to simulate the tightness of a regular vagina.</HydraulicVagina.description>
+  <!-- EN: hydraulic breasts -->
+  <HydraulicBreasts.label>hydraulic breasts</HydraulicBreasts.label>
+  <!-- EN: a pair of hydraulic breasts -->
+  <HydraulicBreasts.labelNoun>a pair of hydraulic breasts</HydraulicBreasts.labelNoun>
+  <!-- EN: A pair obviously unnatural implants. -->
+  <HydraulicBreasts.description>A pair obviously unnatural implants.</HydraulicBreasts.description>
+  <!-- EN: hydraulic anus -->
+  <HydraulicAnus.label>hydraulic anus</HydraulicAnus.label>
+  <!-- EN: a hydraulic anus -->
+  <HydraulicAnus.labelNoun>a hydraulic anus</HydraulicAnus.labelNoun>
+  <!-- EN: An anus that uses simple hydraulics to tighten. -->
+  <HydraulicAnus.description>An anus that uses simple hydraulics to tighten.</HydraulicAnus.description>
+  <!-- EN: bionic penis -->
+  <BionicPenis.label>bionic penis</BionicPenis.label>
+  <!-- EN: a bionic penis -->
+  <BionicPenis.labelNoun>a bionic penis</BionicPenis.labelNoun>
+  <!-- EN: An advanced artificial penis. It uses fine-tuned pressure sensors and PID control loops to analyze its lover's contractions. It can expand, contract and even vibrate to adapt to its lover's preferences. -->
+  <BionicPenis.description>An advanced artificial penis. It uses fine-tuned pressure sensors and PID control loops to analyze its lover's contractions. It can expand, contract and even vibrate to adapt to its lover's preferences.</BionicPenis.description>
+  <!-- EN: bionic vagina -->
+  <BionicVagina.label>bionic vagina</BionicVagina.label>
+  <!-- EN: a bionic vagina -->
+  <BionicVagina.labelNoun>a bionic vagina</BionicVagina.labelNoun>
+  <!-- EN: An advanced bionic vagina. It uses internal pressure sensors to accommodate its user's size, speed. -->
+  <BionicVagina.description>An advanced bionic vagina. It uses internal pressure sensors to accommodate its user's size, speed.</BionicVagina.description>
+  <!-- EN: bionic breasts -->
+  <BionicBreasts.label>bionic breasts</BionicBreasts.label>
+  <!-- EN: a bionic breasts -->
+  <BionicBreasts.labelNoun>a bionic breasts</BionicBreasts.labelNoun>
+  <!-- EN: An advanced bionic breasts. -->
+  <BionicBreasts.description>An advanced bionic breasts.</BionicBreasts.description>
+  <!-- EN: bionic anus -->
+  <BionicAnus.label>bionic anus</BionicAnus.label>
+  <!-- EN: an bionic anus -->
+  <BionicAnus.labelNoun>an bionic anus</BionicAnus.labelNoun>
+  <!-- EN: An advanced bionic anus. -->
+  <BionicAnus.description>An advanced bionic anus.</BionicAnus.description>
+  <!-- EN: archotech penis -->
+  <ArchotechPenis.label>archotech penis</ArchotechPenis.label>
+  <!-- EN: An archotech penis. -->
+  <ArchotechPenis.description>An archotech penis.</ArchotechPenis.description>
+  <!-- EN: archotech vagina -->
+  <ArchotechVagina.label>archotech vagina</ArchotechVagina.label>
+  <!-- EN: An archotech vagina. -->
+  <ArchotechVagina.description>An archotech vagina.</ArchotechVagina.description>
+  <!-- EN: archotech breasts -->
+  <ArchotechBreasts.label>archotech breasts</ArchotechBreasts.label>
+  <!-- EN: A pair of archotech breasts. -->
+  <ArchotechBreasts.description>A pair of archotech breasts.</ArchotechBreasts.description>
+  <!-- EN: archotech anus -->
+  <ArchotechAnus.label>archotech anus</ArchotechAnus.label>
+  <!-- EN: An archotech anus. -->
+  <ArchotechAnus.description>An archotech anus.</ArchotechAnus.description>
+  <!-- EN: ovipositor (Female) -->
+  <OvipositorF.label>ovipositor (Female)</OvipositorF.label>
+  <!-- EN: an ovipositor -->
+  <OvipositorF.labelNoun>an ovipositor</OvipositorF.labelNoun>
+  <!-- EN: An ovipositor. Lays eggs inside host. -->
+  <OvipositorF.description>An ovipositor. Lays eggs inside host.</OvipositorF.description>
+  <!-- EN: 12000~60000 -->
+  <OvipositorF.comps.0eggIntervalTicks>12000~60000</OvipositorF.comps.0eggIntervalTicks>
+  <!-- EN: ovipositor (Male) -->
+  <OvipositorM.label>ovipositor (Male)</OvipositorM.label>
+  <!-- EN: an ovipositor -->
+  <OvipositorM.labelNoun>an ovipositor</OvipositorM.labelNoun>
+  <!-- EN: An ovipositor. Fertilizes eggs inside host. -->
+  <OvipositorM.description>An ovipositor. Fertilizes eggs inside host.</OvipositorM.description>
+  <!-- EN: insect anus -->
+  <InsectAnus.label>insect anus</InsectAnus.label>
+  <!-- EN: an insect anus -->
+  <InsectAnus.labelNoun>an insect anus</InsectAnus.labelNoun>
+  <!-- EN: An insect anus. -->
+  <InsectAnus.description>An insect anus.</InsectAnus.description>
+  <!-- EN: resin protrusion -->
+  <ResinPenis.label>resin protrusion</ResinPenis.label>
+  <!-- EN: a resin protrusion -->
+  <ResinPenis.labelNoun>a resin protrusion</ResinPenis.labelNoun>
+  <!-- EN: Hardened mass of resin, its hard enough. -->
+  <ResinPenis.description>Hardened mass of resin, its hard enough.</ResinPenis.description>
+  <!-- EN: resin hole -->
+  <ResinVagina.label>resin hole</ResinVagina.label>
+  <!-- EN: a resin hole -->
+  <ResinVagina.labelNoun>a resin hole</ResinVagina.labelNoun>
+  <!-- EN: A slick hole covered with viscous organic liquids. -->
+  <ResinVagina.description>A slick hole covered with viscous organic liquids.</ResinVagina.description>
+  <!-- EN: resin hole -->
+  <ResinAnus.label>resin hole</ResinAnus.label>
+  <!-- EN: a resin hole -->
+  <ResinAnus.labelNoun>a resin hole</ResinAnus.labelNoun>
+  <!-- EN: A slick hole covered with viscous organic liquids. -->
+  <ResinAnus.description>A slick hole covered with viscous organic liquids.</ResinAnus.description>
+  <!-- EN: resin blobs -->
+  <ResinBreasts.label>resin blobs</ResinBreasts.label>
+  <!-- EN: a pair of resin blobs -->
+  <ResinBreasts.labelNoun>a pair of resin blobs</ResinBreasts.labelNoun>
+  <!-- EN: A pair resin blobs filled with viscous organic liquids. -->
+  <ResinBreasts.description>A pair resin blobs filled with viscous organic liquids.</ResinBreasts.description>
+  <!-- EN: slime tentacles -->
+  <SlimeTentacles.label>slime tentacles</SlimeTentacles.label>
+  <!-- EN: slime tentacles -->
+  <SlimeTentacles.labelNoun>slime tentacles</SlimeTentacles.labelNoun>
+  <!-- EN: Slick, translucent tentacles that can conform into any shape desired. -->
+  <SlimeTentacles.description>Slick, translucent tentacles that can conform into any shape desired.</SlimeTentacles.description>
+  <!-- EN: slime vagina -->
+  <SlimeVagina.label>slime vagina</SlimeVagina.label>
+  <!-- EN: slime vagina -->
+  <SlimeVagina.labelNoun>slime vagina</SlimeVagina.labelNoun>
+  <!-- EN: A slick, translucent vagina that can grow or shrink to accommodate any penis. -->
+  <SlimeVagina.description>A slick, translucent vagina that can grow or shrink to accommodate any penis.</SlimeVagina.description>
+  <!-- EN: slime anus -->
+  <SlimeAnus.label>slime anus</SlimeAnus.label>
+  <!-- EN: a slime anus -->
+  <SlimeAnus.labelNoun>a slime anus</SlimeAnus.labelNoun>
+  <!-- EN: A slick, translucent anus that can tighten and conform to fit anything. -->
+  <SlimeAnus.description>A slick, translucent anus that can tighten and conform to fit anything.</SlimeAnus.description>
+  <!-- EN: slime breasts -->
+  <SlimeBreasts.label>slime breasts</SlimeBreasts.label>
+  <!-- EN: a pair of slime breasts -->
+  <SlimeBreasts.labelNoun>a pair of slime breasts</SlimeBreasts.labelNoun>
+  <!-- EN: A pair of slick, translucent breasts that can grow or shrink to any desired size. -->
+  <SlimeBreasts.description>A pair of slick, translucent breasts that can grow or shrink to any desired size.</SlimeBreasts.description>
+</LanguageData>

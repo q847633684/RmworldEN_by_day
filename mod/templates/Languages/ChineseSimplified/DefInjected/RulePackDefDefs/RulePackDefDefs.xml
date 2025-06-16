@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- EN: Names/Animal_Unisex -->
+  <EngravedName.rulePack.rulesRaw.0path>Names/Animal_Unisex</EngravedName.rulePack.rulesRaw.0path>
+  <!-- EN: name->[animalnameunisex] -->
+  <EngravedName.rulePack.rulesStrings.0>name->[animalnameunisex]</EngravedName.rulePack.rulesStrings.0>
+  <!-- EN: TalkTopicAny->[TalkTopicSex] -->
+  <TalkTopicsSex.rulePack.rulesStrings.0>TalkTopicAny->[TalkTopicSex]</TalkTopicsSex.rulePack.rulesStrings.0>
+  <!-- EN: TalkTopicSex(p=0.08)->[talktopicsexfile] -->
+  <TalkTopicsSex.rulePack.rulesStrings.1>TalkTopicSex(p=0.08)->[talktopicsexfile]</TalkTopicsSex.rulePack.rulesStrings.1>
+  <!-- EN: TalkTopicHeavy(p=0.08)->the link between [talktopicsexfile] and [talktopicsexfile] -->
+  <TalkTopicsSex.rulePack.rulesStrings.2>TalkTopicHeavy(p=0.08)->the link between [talktopicsexfile] and [talktopicsexfile]</TalkTopicsSex.rulePack.rulesStrings.2>
+  <!-- EN: TalkTopicHeavy(p=0.08)->the connection between [talktopicsexfile] and [talktopicsexfile] -->
+  <TalkTopicsSex.rulePack.rulesStrings.3>TalkTopicHeavy(p=0.08)->the connection between [talktopicsexfile] and [talktopicsexfile]</TalkTopicsSex.rulePack.rulesStrings.3>
+  <!-- EN: TalkTopicHeavy(p=0.08)->the relationship between [talktopicsexfile] and [talktopicsexfile] -->
+  <TalkTopicsSex.rulePack.rulesStrings.4>TalkTopicHeavy(p=0.08)->the relationship between [talktopicsexfile] and [talktopicsexfile]</TalkTopicsSex.rulePack.rulesStrings.4>
+  <!-- EN: TalkTopicHeavy(p=0.16)->the link between [talktopicheavyfile] and [talktopicsexfile] -->
+  <TalkTopicsSex.rulePack.rulesStrings.5>TalkTopicHeavy(p=0.16)->the link between [talktopicheavyfile] and [talktopicsexfile]</TalkTopicsSex.rulePack.rulesStrings.5>
+  <!-- EN: TalkTopicHeavy(p=0.16)->the connection between [talktopicheavyfile] and [talktopicsexfile] -->
+  <TalkTopicsSex.rulePack.rulesStrings.6>TalkTopicHeavy(p=0.16)->the connection between [talktopicheavyfile] and [talktopicsexfile]</TalkTopicsSex.rulePack.rulesStrings.6>
+  <!-- EN: TalkTopicHeavy(p=0.16)->the relationship between [talktopicheavyfile] and [talktopicsexfile] -->
+  <TalkTopicsSex.rulePack.rulesStrings.7>TalkTopicHeavy(p=0.16)->the relationship between [talktopicheavyfile] and [talktopicsexfile]</TalkTopicsSex.rulePack.rulesStrings.7>
+  <!-- EN: talktopicsexfile->Words/Nouns/TalkTopics_Sexual -->
+  <TalkTopicsSex.rulePack.rulesFiles.0>talktopicsexfile->Words/Nouns/TalkTopics_Sexual</TalkTopicsSex.rulePack.rulesFiles.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was anally bred by [INITIATOR_nameDef]. -->
+  <Bestiality_AnalRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was anally bred by [INITIATOR_nameDef].</Bestiality_AnalRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was vaginally bred by [INITIATOR_nameDef]. -->
+  <Bestiality_VaginalRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was vaginally bred by [INITIATOR_nameDef].</Bestiality_VaginalRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was orally bred by [INITIATOR_nameDef]. -->
+  <Bestiality_OralRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was orally bred by [INITIATOR_nameDef].</Bestiality_OralRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was double penetrated by [INITIATOR_nameDef]. -->
+  <Bestiality_DoublePenRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was double penetrated by [INITIATOR_nameDef].</Bestiality_DoublePenRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] anally. -->
+  <Bestiality_Reverse_AnalRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] anally.</Bestiality_Reverse_AnalRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef]. -->
+  <Bestiality_Reverse_AnalRP.rulePack.rulesStrings.1>sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].</Bestiality_Reverse_AnalRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] vaginally. -->
+  <Bestiality_Reverse_VaginalRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] vaginally.</Bestiality_Reverse_VaginalRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef]. -->
+  <Bestiality_Reverse_VaginalRP.rulePack.rulesStrings.1>sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].</Bestiality_Reverse_VaginalRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] orally. -->
+  <Bestiality_Reverse_OralRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into mounting [INITIATOR_nameDef] orally.</Bestiality_Reverse_OralRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef]. -->
+  <Bestiality_Reverse_OralRP.rulePack.rulesStrings.1>sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].</Bestiality_Reverse_OralRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into double penetrating [INITIATOR_nameDef]. -->
+  <Bestiality_Reverse_Double_Penetration.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into double penetrating [INITIATOR_nameDef].</Bestiality_Reverse_Double_Penetration.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef]. -->
+  <Bestiality_Reverse_Double_Penetration.rulePack.rulesStrings.1>sent-> [INITIATOR_nameDef] presented to [RECIPIENT_nameDef].</Bestiality_Reverse_Double_Penetration.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] penis. -->
+  <Masturbation_HandjobPRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] penis.</Masturbation_HandjobPRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] vagina. -->
+  <Masturbation_HandjobVRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] vagina.</Masturbation_HandjobVRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] anus. -->
+  <Masturbation_HandjobARP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] anus.</Masturbation_HandjobARP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] breasts. -->
+  <Masturbation_HandjobBRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] released some tension using [INITIATOR_possessive] breasts.</Masturbation_HandjobBRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] autofellated [INITIATOR_possessive] penis. -->
+  <Masturbation_AutoFellatioRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] autofellated [INITIATOR_possessive] penis.</Masturbation_AutoFellatioRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] stroked [INITIATOR_possessive] penis with [INITIATOR_possessive] breasts. -->
+  <Masturbation_AutoBreastjobRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] stroked [INITIATOR_possessive] penis with [INITIATOR_possessive] breasts.</Masturbation_AutoBreastjobRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was anally raped by [INITIATOR_nameDef]. -->
+  <AnalRapeRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was anally raped by [INITIATOR_nameDef].</AnalRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was vaginally raped by [INITIATOR_nameDef]. -->
+  <VaginalRapeRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was vaginally raped by [INITIATOR_nameDef].</VaginalRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was forced to fellate [INITIATOR_nameDef]. -->
+  <FellatioRapeRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was forced to fellate [INITIATOR_nameDef].</FellatioRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was forced to give a beakjob to [INITIATOR_nameDef]. -->
+  <BeakjobRapeRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was forced to give a beakjob to [INITIATOR_nameDef].</BeakjobRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was raped. -->
+  <OtherRapeRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was raped.</OtherRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was forced to lick [INITIATOR_nameDef]'s anus. -->
+  <ForcedRimmingRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was forced to lick [INITIATOR_nameDef]'s anus.</ForcedRimmingRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was forced to lick [INITIATOR_nameDef]. -->
+  <ForcedCunnilingusRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was forced to lick [INITIATOR_nameDef].</ForcedCunnilingusRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was forced to fellate [INITIATOR_nameDef]. -->
+  <ForcedFellatioRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was forced to fellate [INITIATOR_nameDef].</ForcedFellatioRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was forced to give a breastjob to [INITIATOR_nameDef]. -->
+  <ForcedBreastjobRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was forced to give a breastjob to [INITIATOR_nameDef].</ForcedBreastjobRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] pinned [RECIPIENT_nameDef] down and forcefully jacked [RECIPIENT_objective] off. -->
+  <HandjobRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] pinned [RECIPIENT_nameDef] down and forcefully jacked [RECIPIENT_objective] off.</HandjobRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] humiliated [RECIPIENT_nameDef] by forcibly jerking [RECIPIENT_objective] off. -->
+  <HandjobRapeRP.rulePack.rulesStrings.1>sent-> [INITIATOR_nameDef] humiliated [RECIPIENT_nameDef] by forcibly jerking [RECIPIENT_objective] off.</HandjobRapeRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [INITIATOR_nameDef] gave a forced footjob to [RECIPIENT_nameDef]. -->
+  <FootjobRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] gave a forced footjob to [RECIPIENT_nameDef].</FootjobRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forced [RECIPIENT_nameDef] to cum. -->
+  <MaleRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forced [RECIPIENT_nameDef] to cum.</MaleRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was forced to give a handjob to [INITIATOR_nameDef]. -->
+  <ForcedHandjobRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was forced to give a handjob to [INITIATOR_nameDef].</ForcedHandjobRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was forced to jerk off [INITIATOR_nameDef]. -->
+  <ForcedHandjobRP.rulePack.rulesStrings.1>sent-> [RECIPIENT_nameDef] was forced to jerk off [INITIATOR_nameDef].</ForcedHandjobRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was forced to give a footjob to [INITIATOR_nameDef]. -->
+  <ForcedFootjobRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was forced to give a footjob to [INITIATOR_nameDef].</ForcedFootjobRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was double-penetrated and raped vaginally and anally. -->
+  <DoubleRapeRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was double-penetrated and raped vaginally and anally.</DoubleRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forcibly fingered [RECIPIENT_nameDef]. -->
+  <FingeringRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forcibly fingered [RECIPIENT_nameDef].</FingeringRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was forced to finger [INITIATOR_nameDef]. -->
+  <ForcedFingeringRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was forced to finger [INITIATOR_nameDef].</ForcedFingeringRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forcibly scissored with [RECIPIENT_nameDef]. -->
+  <ScissoringRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forcibly scissored with [RECIPIENT_nameDef].</ScissoringRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was forced to scissor with [INITIATOR_nameDef]. -->
+  <ForcedScissoringRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was forced to scissor with [INITIATOR_nameDef].</ForcedScissoringRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forcibly fisted [RECIPIENT_nameDef]. -->
+  <FistingRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forcibly fisted [RECIPIENT_nameDef].</FistingRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] coerced [RECIPIENT_nameDef] into 69ing with [INITIATOR_objective]. -->
+  <ForcedSixtynineRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] coerced [RECIPIENT_nameDef] into 69ing with [INITIATOR_objective].</ForcedSixtynineRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forced [RECIPIENT_nameDef] to 69 with [INITIATOR_objective]. -->
+  <ForcedSixtynineRP.rulePack.rulesStrings.1>sent-> [INITIATOR_nameDef] forced [RECIPIENT_nameDef] to 69 with [INITIATOR_objective].</ForcedSixtynineRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [INITIATOR_nameDef] implanted something inside [RECIPIENT_nameDef]. -->
+  <MechImplantingRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] implanted something inside [RECIPIENT_nameDef].</MechImplantingRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forcibly deepthroated [RECIPIENT_nameDef]. -->
+  <DeepthroatRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forcibly deepthroated [RECIPIENT_nameDef].</DeepthroatRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forcefully rode [RECIPIENT_nameDef] anally. -->
+  <AnalReverseRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forcefully rode [RECIPIENT_nameDef] anally.</AnalReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forcefully rode [RECIPIENT_nameDef] vaginally. -->
+  <VaginalReverseRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forcefully rode [RECIPIENT_nameDef] vaginally.</VaginalReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] pinned [RECIPIENT_nameDef] down and forcefully jacked [RECIPIENT_objective] off. -->
+  <HandjobReverseRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] pinned [RECIPIENT_nameDef] down and forcefully jacked [RECIPIENT_objective] off.</HandjobReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] humiliated [RECIPIENT_nameDef] by forcibly jerking [RECIPIENT_objective] off. -->
+  <HandjobReverseRapeRP.rulePack.rulesStrings.1>sent-> [INITIATOR_nameDef] humiliated [RECIPIENT_nameDef] by forcibly jerking [RECIPIENT_objective] off.</HandjobReverseRapeRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [INITIATOR_nameDef] forcefully gave a footjob to [RECIPIENT_nameDef]. -->
+  <FootjobReverseRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forcefully gave a footjob to [RECIPIENT_nameDef].</FootjobReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was force fingered by [INITIATOR_nameDef]. -->
+  <FingeringReverseRapeRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was force fingered by [INITIATOR_nameDef].</FingeringReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was forced to fist [INITIATOR_nameDef]. -->
+  <FistingReverseRapeRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was forced to fist [INITIATOR_nameDef].</FistingReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forcibly performed a breastjob on [RECIPIENT_nameDef]. -->
+  <BreastjobReverseRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forcibly performed a breastjob on [RECIPIENT_nameDef].</BreastjobReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] tackled [RECIPIENT_nameDef] down and squeezed [RECIPIENT_objective] between [INITIATOR_possessive] breasts. -->
+  <BreastjobReverseRapeRP.rulePack.rulesStrings.1>sent-> [INITIATOR_nameDef] tackled [RECIPIENT_nameDef] down and squeezed [RECIPIENT_objective] between [INITIATOR_possessive] breasts.</BreastjobReverseRapeRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was forced into using both [INITIATOR_nameDef] holes. -->
+  <DoubleReverseRapeRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was forced into using both [INITIATOR_nameDef] holes.</DoubleReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forcibly scissored with [RECIPIENT_nameDef]. -->
+  <ScissoringReverseRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forcibly scissored with [RECIPIENT_nameDef].</ScissoringReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forcibly rimmed [RECIPIENT_nameDef]. -->
+  <RimmingReverseRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forcibly rimmed [RECIPIENT_nameDef].</RimmingReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forcibly licked [RECIPIENT_nameDef]. -->
+  <CunnilingusReverseRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forcibly licked [RECIPIENT_nameDef].</CunnilingusReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forcibly fellated [RECIPIENT_nameDef]. -->
+  <FellatioReverseRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forcibly fellated [RECIPIENT_nameDef].</FellatioReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forcibly gave [RECIPIENT_nameDef] a beakjob. -->
+  <BeakjobReverseRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forcibly gave [RECIPIENT_nameDef] a beakjob.</BeakjobReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] forcibly sixtynined [RECIPIENT_nameDef]. -->
+  <SixtynineReverseRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] forcibly sixtynined [RECIPIENT_nameDef].</SixtynineReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] went down on [RECIPIENT_nameDef] and forcibly deepthroated [RECIPIENT_objective]. -->
+  <DeepthroatReverseRapeRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] went down on [RECIPIENT_nameDef] and forcibly deepthroated [RECIPIENT_objective].</DeepthroatReverseRapeRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] rimmed [INITIATOR_nameDef]. -->
+  <RimmingRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] rimmed [INITIATOR_nameDef].</RimmingRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] went down on [INITIATOR_nameDef]. -->
+  <CunnilingusRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] went down on [INITIATOR_nameDef].</CunnilingusRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] sucked off [INITIATOR_nameDef]. -->
+  <FellatioRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] sucked off [INITIATOR_nameDef].</FellatioRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] fellated [INITIATOR_nameDef] with [RECIPIENT_possessive] beak. -->
+  <BeakjobRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] fellated [INITIATOR_nameDef] with [RECIPIENT_possessive] beak.</BeakjobRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] 69'd with [INITIATOR_nameDef]. -->
+  <SixtynineRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] 69'd with [INITIATOR_nameDef].</SixtynineRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] make out with [INITIATOR_nameDef]. -->
+  <MutualMakeoutRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] make out with [INITIATOR_nameDef].</MutualMakeoutRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] deepthroated [INITIATOR_nameDef]. -->
+  <DeepthroatRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] deepthroated [INITIATOR_nameDef].</DeepthroatRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] rimmed [RECIPIENT_nameDef]. -->
+  <RimmingReverseRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] rimmed [RECIPIENT_nameDef].</RimmingReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] went down on [RECIPIENT_nameDef]. -->
+  <CunnilingusReverseRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] went down on [RECIPIENT_nameDef].</CunnilingusReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] sucked off [RECIPIENT_nameDef]. -->
+  <FellatioReverseRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] sucked off [RECIPIENT_nameDef].</FellatioReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] fellated [RECIPIENT_nameDef] with [INITIATOR_possessive] beak. -->
+  <BeakjobReverseRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] fellated [RECIPIENT_nameDef] with [INITIATOR_possessive] beak.</BeakjobReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] 69'd with [RECIPIENT_nameDef]. -->
+  <SixtynineReverseRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] 69'd with [RECIPIENT_nameDef].</SixtynineReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] deepthroated [RECIPIENT_nameDef]. -->
+  <DeepthroatReverseRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] deepthroated [RECIPIENT_nameDef].</DeepthroatReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap. -->
+  <MainReverseRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] rode in [INITIATOR_nameDef]'s lap.</MainReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective]. -->
+  <MainReverseRP.rulePack.rulesStrings.1>sent-> [RECIPIENT_nameDef] teased [INITIATOR_nameDef] until [INITIATOR_pronoun] couldn't take it anymore and ravished [RECIPIENT_objective].</MainReverseRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed. -->
+  <MainReverseRP.rulePack.rulesStrings.2>sent-> [RECIPIENT_nameDef] tackled [INITIATOR_nameDef] down and pounded [RECIPIENT_objective] into the bed.</MainReverseRP.rulePack.rulesStrings.2>
+  <!-- EN: sent-> [RECIPIENT_nameDef] had sex with [INITIATOR_nameDef]. -->
+  <DefaultSexReverseRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] had sex with [INITIATOR_nameDef].</DefaultSexReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] was fucked anally by [RECIPIENT_nameDef]. -->
+  <AnalSexReverseRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] was fucked anally by [RECIPIENT_nameDef].</AnalSexReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] was fucked vaginally by [RECIPIENT_nameDef]. -->
+  <VaginalSexReverseRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] was fucked vaginally by [RECIPIENT_nameDef].</VaginalSexReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] received a handjob from [INITIATOR_nameDef]. -->
+  <HandjobReverseRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] received a handjob from [INITIATOR_nameDef].</HandjobReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] squeezed [RECIPIENT_nameDef]. -->
+  <HandjobReverseRP.rulePack.rulesStrings.1>sent-> [INITIATOR_nameDef] squeezed [RECIPIENT_nameDef].</HandjobReverseRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [INITIATOR_nameDef] jerked off [RECIPIENT_nameDef]. -->
+  <HandjobReverseRP.rulePack.rulesStrings.2>sent-> [INITIATOR_nameDef] jerked off [RECIPIENT_nameDef].</HandjobReverseRP.rulePack.rulesStrings.2>
+  <!-- EN: sent-> [RECIPIENT_nameDef] received a footjob from [INITIATOR_nameDef]. -->
+  <FootjobReverseRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] received a footjob from [INITIATOR_nameDef].</FootjobReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] squeezed [RECIPIENT_nameDef] with [INITIATOR_possessive] feet. -->
+  <FootjobReverseRP.rulePack.rulesStrings.1>sent-> [INITIATOR_nameDef] squeezed [RECIPIENT_nameDef] with [INITIATOR_possessive] feet.</FootjobReverseRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [INITIATOR_nameDef] fingered [RECIPIENT_nameDef]. -->
+  <FingeringReverseRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] fingered [RECIPIENT_nameDef].</FingeringReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] anally fisted [RECIPIENT_nameDef]. -->
+  <FistingReverseRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] anally fisted [RECIPIENT_nameDef].</FistingReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into using both [RECIPIENT_possessive] poles on [INITIATOR_objective]. -->
+  <DoublePenetrationReverseRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into using both [RECIPIENT_possessive] poles on [INITIATOR_objective].</DoublePenetrationReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into using both [RECIPIENT_possessive] poles on both [INITIATOR_possessive] holes. -->
+  <DoublePenetrationReverseRP.rulePack.rulesStrings.1>sent-> [INITIATOR_nameDef] teased [RECIPIENT_nameDef] into using both [RECIPIENT_possessive] poles on both [INITIATOR_possessive] holes.</DoublePenetrationReverseRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [INITIATOR_nameDef] gave [RECIPIENT_nameDef] a breastjob. -->
+  <BreastjobReverseRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] gave [RECIPIENT_nameDef] a breastjob.</BreastjobReverseRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] stroked [RECIPIENT_nameDef] with [INITIATOR_possessive] breasts. -->
+  <BreastjobReverseRP.rulePack.rulesStrings.1>sent-> [INITIATOR_nameDef] stroked [RECIPIENT_nameDef] with [INITIATOR_possessive] breasts.</BreastjobReverseRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [INITIATOR_nameDef] had anal sex with [RECIPIENT_nameDef]. -->
+  <AnalSexRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] had anal sex with [RECIPIENT_nameDef].</AnalSexRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] had vaginal sex with [RECIPIENT_nameDef]. -->
+  <VaginalSexRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] had vaginal sex with [RECIPIENT_nameDef].</VaginalSexRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] had sex with [RECIPIENT_nameDef]. -->
+  <OtherSexRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] had sex with [RECIPIENT_nameDef].</OtherSexRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] was double-penetrated by [INITIATOR_nameDef]. -->
+  <DoublePenetrationRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] was double-penetrated by [INITIATOR_nameDef].</DoublePenetrationRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] gave [INITIATOR_nameDef] a breastjob. -->
+  <BreastjobRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] gave [INITIATOR_nameDef] a breastjob.</BreastjobRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] received a handjob from [RECIPIENT_nameDef]. -->
+  <HandjobRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] received a handjob from [RECIPIENT_nameDef].</HandjobRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] was jerked off by [RECIPIENT_nameDef]. -->
+  <HandjobRP.rulePack.rulesStrings.1>sent-> [INITIATOR_nameDef] was jerked off by [RECIPIENT_nameDef].</HandjobRP.rulePack.rulesStrings.1>
+  <!-- EN: sent-> [INITIATOR_nameDef] received a footjob from [RECIPIENT_nameDef]. -->
+  <FootjobRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] received a footjob from [RECIPIENT_nameDef].</FootjobRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] fingered [INITIATOR_nameDef]. -->
+  <FingeringRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] fingered [INITIATOR_nameDef].</FingeringRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] scissored with [INITIATOR_nameDef]. -->
+  <ScissoringRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] scissored with [INITIATOR_nameDef].</ScissoringRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] masturbated each other. -->
+  <MutualMasturbationRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] masturbated each other.</MutualMasturbationRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] intertwined tails. -->
+  <MutualTailholdingRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] intertwined tails.</MutualTailholdingRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] holded each other's hands. -->
+  <MutualHandholdingRP.rulePack.rulesStrings.0>sent-> [INITIATOR_nameDef] and [RECIPIENT_nameDef] holded each other's hands.</MutualHandholdingRP.rulePack.rulesStrings.0>
+  <!-- EN: sent-> [RECIPIENT_nameDef] anally fisted [INITIATOR_nameDef]. -->
+  <FistingRP.rulePack.rulesStrings.0>sent-> [RECIPIENT_nameDef] anally fisted [INITIATOR_nameDef].</FistingRP.rulePack.rulesStrings.0>
+</LanguageData>

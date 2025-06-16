@@ -2113,3 +2113,45 @@
 2025-06-15 20:26:20,322 - INFO - Keyed 共导出 541 条到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\extracted_translations.csv
 2025-06-15 20:26:20,323 - INFO - Keyed 导出已追加到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\extracted_translations.csv，目录：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed
 2025-06-15 20:26:20,325 - INFO - 翻译提取完成！请在导出目标文件夹中查找 extracted_translations.csv。
+2025-06-15 22:53:59,163 - INFO - 程序启动
+2025-06-15 22:54:49,049 - INFO - 提取翻译: mod_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, export_dir=C:\Users\q8476\Documents\我的工作\Day_汉化\mod
+2025-06-15 22:54:49,214 - INFO - 扫描 Defs 目录：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs
+2025-06-15 22:54:49,215 - DEBUG - Using proactor: IocpProactor
+2025-06-15 22:54:49,667 - INFO - 直接导出 1980 条到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\extracted_translations.csv
+2025-06-15 23:02:47,260 - INFO - 程序退出
+2025-06-15 23:03:08,076 - INFO - 程序启动
+2025-06-15 23:03:58,311 - INFO - 提取翻译: mod_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, export_dir=C:\Users\q8476\Documents\我的工作\Day_汉化\mod
+2025-06-15 23:03:58,423 - INFO - 扫描 Defs 目录：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs
+2025-06-15 23:03:58,424 - DEBUG - Using proactor: IocpProactor
+2025-06-15 23:03:59,322 - INFO - 直接导出 1980 条到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\extracted_translations.csv
+2025-06-15 23:10:17,876 - INFO - 程序退出
+2025-06-15 23:19:31,630 - INFO - 程序启动
+2025-06-15 23:25:19,545 - INFO - 用户中断操作
+2025-06-15 23:25:27,774 - INFO - 程序退出
+2025-06-15 23:25:32,235 - INFO - 程序启动
+2025-06-15 23:25:34,202 - ERROR - 未处理错误: name 'get_user_input_with_history' is not defined
+2025-06-15 23:31:55,550 - INFO - 程序退出
+2025-06-15 23:31:59,113 - INFO - 程序启动
+2025-06-15 23:32:00,278 - ERROR - 未处理错误: name 'get_user_input_with_history' is not defined
+2025-06-16 00:29:21,725 - INFO - 程序退出
+2025-06-16 02:14:05,763 - INFO - 提取翻译: mod_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, export_dir=C:\Users\q8476\Documents\我的工作\Day_汉化\mod
+2025-06-16 02:14:05,798 - DEBUG - 过滤非翻译内容: Hediff_InsectEgg_egg= egg
+2025-06-16 02:14:05,807 - DEBUG - 过滤非翻译内容: RJW_PartInfo_fluidTypeFluidAmount={0}: {1}
+2025-06-16 02:14:05,809 - DEBUG - 过滤非翻译内容: AgeImpactor=Age: 
+2025-06-16 02:14:05,810 - DEBUG - 过滤非翻译内容: GainedMultipleTraitsFromSexListItem=  - {0}
+2025-06-16 02:14:05,846 - DEBUG - 过滤非翻译内容: UseParentMethod=DNA inheritance
+2025-06-16 02:14:05,853 - DEBUG - 过滤非翻译内容: sixtynine=69 frequency
+2025-06-16 02:14:05,855 - DEBUG - 过滤非翻译内容: AllowedSex.All=All
+2025-06-16 02:14:05,855 - DEBUG - 过滤非翻译内容: AllowedSex.Homo=Gay
+2025-06-16 02:14:05,857 - DEBUG - 过滤非翻译内容: SexualitySpreadVanilla=[Imported from Vanilla Rimworld]
+2025-06-16 02:14:05,857 - DEBUG - 过滤非翻译内容: SexualitySpreadPsychology=[Imported from Psychology]
+2025-06-16 02:14:05,858 - DEBUG - 过滤非翻译内容: SexualitySpreadIndividuality=[imported from [SYR]Individuality]
+2025-06-16 02:14:05,858 - DEBUG - 过滤非翻译内容: SexualityGay=  Gay: 
+2025-06-16 02:14:06,069 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\templates\Languages\ChineseSimplified\Keyed\Hediff_InsectEgg.xml
+2025-06-16 02:14:06,076 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\templates\Languages\ChineseSimplified\Keyed\RimJobWorldKeys.xml
+2025-06-16 02:14:06,079 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\templates\Languages\ChineseSimplified\Keyed\RJWMainTab.xml
+2025-06-16 02:14:06,081 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\templates\Languages\ChineseSimplified\Keyed\RMB.xml
+2025-06-16 02:14:06,090 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\templates\Languages\ChineseSimplified\Keyed\SettingsKeys.xml
+2025-06-16 02:14:06,094 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\templates\Languages\ChineseSimplified\Keyed\SexGizmo.xml
+2025-06-16 02:14:06,097 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\templates\Languages\ChineseSimplified\Keyed\SexualityCardKeys.xml
+2025-06-16 02:14:06,145 - INFO - 直接导出 529 条到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\extracted_translations.csv

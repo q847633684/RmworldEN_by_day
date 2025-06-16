@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- EN: Contraception pills deliver severe hit to fertility for one quadrum. -->
+  <RJW_Contraceptive.description>Contraception pills deliver severe hit to fertility for one quadrum.</RJW_Contraceptive.description>
+  <!-- EN: (0.75, 0.75, 1.0) -->
+  <RJW_Contraceptive.defaultLabelColor>(0.75, 0.75, 1.0)</RJW_Contraceptive.defaultLabelColor>
+  <!-- EN: Enhanced fertility. A mild aphrodisiac. -->
+  <RJW_FertPill.description>Enhanced fertility. A mild aphrodisiac.</RJW_FertPill.description>
+  <!-- EN: (0.75, 0.75, 1.0) -->
+  <RJW_FertPill.defaultLabelColor>(0.75, 0.75, 1.0)</RJW_FertPill.defaultLabelColor>
+  <!-- EN: induced libido -->
+  <HumpShroomEffect.label>induced libido</HumpShroomEffect.label>
+  <!-- EN: Hump shroom aphrodisiac effects. -->
+  <HumpShroomEffect.description>Hump shroom aphrodisiac effects.</HumpShroomEffect.description>
+  <!-- EN: (1,0,0.5) -->
+  <HumpShroomEffect.defaultLabelColor>(1,0,0.5)</HumpShroomEffect.defaultLabelColor>
+  <!-- EN: humpshroom tolerance -->
+  <HumpShroomTolerance.label>humpshroom tolerance</HumpShroomTolerance.label>
+  <!-- EN: Hump shroom effects tolerance. -->
+  <HumpShroomTolerance.description>Hump shroom effects tolerance.</HumpShroomTolerance.description>
+  <!-- EN: humpshroom addiction -->
+  <HumpShroomAddiction.label>humpshroom addiction</HumpShroomAddiction.label>
+  <!-- EN: Hump shroom effects addiction. -->
+  <HumpShroomAddiction.description>Hump shroom effects addiction.</HumpShroomAddiction.description>
+  <!-- EN: A series of chains that restrict its wearer. -->
+  <Chains.description>A series of chains that restrict its wearer.</Chains.description>
+  <!-- EN: bound hands -->
+  <BoundHands.label>bound hands</BoundHands.label>
+  <!-- EN: bound hands -->
+  <BoundHands.labelNoun>bound hands</BoundHands.labelNoun>
+  <!-- EN: Bound hands. -->
+  <BoundHands.description>Bound hands.</BoundHands.description>
+  <!-- EN: bound legs -->
+  <BoundLegs.label>bound legs</BoundLegs.label>
+  <!-- EN: bound legs -->
+  <BoundLegs.labelNoun>bound legs</BoundLegs.labelNoun>
+  <!-- EN: Bound legs. -->
+  <BoundLegs.description>Bound legs.</BoundLegs.description>
+  <!-- EN: A set of restraints. -->
+  <RJW_Restraints.description>A set of restraints.</RJW_Restraints.description>
+  <!-- EN: rjw.Cocoon -->
+  <RJW_Cocoon.hediffClass>rjw.Cocoon</RJW_Cocoon.hediffClass>
+  <!-- EN: A cocoon -->
+  <RJW_Cocoon.labelNoun>A cocoon</RJW_Cocoon.labelNoun>
+  <!-- EN: A cocoon that tends to its host until ready to procreate. -->
+  <RJW_Cocoon.description>A cocoon that tends to its host until ready to procreate.</RJW_Cocoon.description>
+  <!-- EN: rjw.AdvancedHediffWithComps -->
+  <FeelingBroken.hediffClass>rjw.AdvancedHediffWithComps</FeelingBroken.hediffClass>
+  <!-- EN: Feeling broken -->
+  <FeelingBroken.label>Feeling broken</FeelingBroken.label>
+  <!-- EN: (0.5, 0.7, 0.45) -->
+  <FeelingBroken.defaultLabelColor>(0.5, 0.7, 0.45)</FeelingBroken.defaultLabelColor>
+  <!-- EN: Mind broken. No longer capable of emotion. -->
+  <FeelingBroken.description>Mind broken. No longer capable of emotion.</FeelingBroken.description>
+  <!-- EN: (10,-0.025) -->
+  <FeelingBroken.comps.0severityPerDayReduce.points.0.1>(10,-0.025)</FeelingBroken.comps.0severityPerDayReduce.points.0.1>
+  <!-- EN: early-stage -->
+  <FeelingBroken.stages.0label>early-stage</FeelingBroken.stages.0label>
+  <!-- EN: in a trance -->
+  <FeelingBroken.stages.1label>in a trance</FeelingBroken.stages.1label>
+  <!-- EN: Extremely broken -->
+  <FeelingBroken.stages.3label>Extremely broken</FeelingBroken.stages.3label>
+  <!-- EN: A small silver device inserted into the womb that greatly reduces the chance of pregnancy. -->
+  <RJW_IUD.description>A small silver device inserted into the womb that greatly reduces the chance of pregnancy.</RJW_IUD.description>
+  <!-- EN: (0.8, 0.8, 0.35) -->
+  <RJW_IUD.defaultLabelColor>(0.8, 0.8, 0.35)</RJW_IUD.defaultLabelColor>
+  <!-- EN: Increased fertility, for baby making. -->
+  <IncreasedFertility.description>Increased fertility, for baby making.</IncreasedFertility.description>
+  <!-- EN: (0.7, 1.0, 0.7) -->
+  <IncreasedFertility.defaultLabelColor>(0.7, 1.0, 0.7)</IncreasedFertility.defaultLabelColor>
+  <!-- EN: Low fertility, not for baby making. -->
+  <DecreasedFertility.description>Low fertility, not for baby making.</DecreasedFertility.description>
+  <!-- EN: (1, 0.2, 0.2) -->
+  <DecreasedFertility.defaultLabelColor>(1, 0.2, 0.2)</DecreasedFertility.defaultLabelColor>
+  <!-- EN: Archotech pregnancy blocker -->
+  <ImpregnationBlocker.label>Archotech pregnancy blocker</ImpregnationBlocker.label>
+  <!-- EN: A complex device that prevents fertilization and pregnancy. -->
+  <ImpregnationBlocker.description>A complex device that prevents fertilization and pregnancy.</ImpregnationBlocker.description>
+  <!-- EN: (0.7, 1.0, 0.7) -->
+  <ImpregnationBlocker.defaultLabelColor>(0.7, 1.0, 0.7)</ImpregnationBlocker.defaultLabelColor>
+  <!-- EN: Archotech fertility enhancer -->
+  <FertilityEnhancer.label>Archotech fertility enhancer</FertilityEnhancer.label>
+  <!-- EN: A complex device that increases the likelihood of pregnancy. -->
+  <FertilityEnhancer.description>A complex device that increases the likelihood of pregnancy.</FertilityEnhancer.description>
+  <!-- EN: (0.7, 1.0, 0.7) -->
+  <FertilityEnhancer.defaultLabelColor>(0.7, 1.0, 0.7)</FertilityEnhancer.defaultLabelColor>
+  <!-- EN: rjw.Hediff_Orgasm -->
+  <RJW_Orgasm.hediffClass>rjw.Hediff_Orgasm</RJW_Orgasm.hediffClass>
+  <!-- EN: (0.5, 0.7, 0.45) -->
+  <RJW_Orgasm.defaultLabelColor>(0.5, 0.7, 0.45)</RJW_Orgasm.defaultLabelColor>
+  <!-- EN: "Ohh, yeahh, hah, hnnh, OH!" -->
+  <RJW_Orgasm.description>"Ohh, yeahh, hah, hnnh, OH!"</RJW_Orgasm.description>
+  <!-- EN: rjw.Hediff_TransportCums -->
+  <TransportCums.hediffClass>rjw.Hediff_TransportCums</TransportCums.hediffClass>
+  <!-- EN: Cumming inside. -->
+  <TransportCums.description>Cumming inside.</TransportCums.description>
+  <!-- EN: rjw.Hediff_TransportEggs -->
+  <TransportEggs.hediffClass>rjw.Hediff_TransportEggs</TransportEggs.hediffClass>
+  <!-- EN: Laying egg inside. -->
+  <TransportEggs.description>Laying egg inside.</TransportEggs.description>
+  <!-- EN: peg arm -->
+  <PegArm.label>peg arm</PegArm.label>
+  <!-- EN: a peg arm -->
+  <PegArm.labelNoun>a peg arm</PegArm.labelNoun>
+  <!-- EN: A peg arm. -->
+  <PegArm.description>A peg arm.</PegArm.description>
+  <!-- EN: humanlike paraphilia -->
+  <Humanlike_Paraphilia.label>humanlike paraphilia</Humanlike_Paraphilia.label>
+  <!-- EN: humanlike paraphilia -->
+  <Humanlike_Paraphilia.labelNoun>humanlike paraphilia</Humanlike_Paraphilia.labelNoun>
+  <!-- EN: Animal experiencing sexual attraction to Humanlikes. At some point, an animal might even refuse to mate with other animals -->
+  <Humanlike_Paraphilia.description>Animal experiencing sexual attraction to Humanlikes. At some point, an animal might even refuse to mate with other animals</Humanlike_Paraphilia.description>
+  <!-- EN: rjw.AdvancedHediffWithComps -->
+  <Humanlike_Paraphilia.hediffClass>rjw.AdvancedHediffWithComps</Humanlike_Paraphilia.hediffClass>
+  <!-- EN: (1, 1, 0) -->
+  <Humanlike_Paraphilia.defaultLabelColor>(1, 1, 0)</Humanlike_Paraphilia.defaultLabelColor>
+  <!-- EN: Initial curiosity -->
+  <Humanlike_Paraphilia.stages.0label>Initial curiosity</Humanlike_Paraphilia.stages.0label>
+  <!-- EN: rjw.Hediff_BasePregnancy -->
+  <RJW_pregnancy.hediffClass>rjw.Hediff_BasePregnancy</RJW_pregnancy.hediffClass>
+  <!-- EN: rjw.Hediff_BestialPregnancy -->
+  <RJW_pregnancy_beast.hediffClass>rjw.Hediff_BestialPregnancy</RJW_pregnancy_beast.hediffClass>
+  <!-- EN: rjw.Hediff_MechanoidPregnancy -->
+  <RJW_pregnancy_mech.hediffClass>rjw.Hediff_MechanoidPregnancy</RJW_pregnancy_mech.hediffClass>
+  <!-- EN: rjw.Hediff_SimpleBaby -->
+  <RJW_BabyState.hediffClass>rjw.Hediff_SimpleBaby</RJW_BabyState.hediffClass>
+  <!-- EN: child is growing -->
+  <RJW_BabyState.label>child is growing</RJW_BabyState.label>
+  <!-- EN: A growing child. -->
+  <RJW_BabyState.description>A growing child.</RJW_BabyState.description>
+  <!-- EN: Too young to work -->
+  <RJW_NoManipulationFlag.label>Too young to work</RJW_NoManipulationFlag.label>
+  <!-- EN: Too young to work. -->
+  <RJW_NoManipulationFlag.description>Too young to work.</RJW_NoManipulationFlag.description>
+  <!-- EN: (0.8, 0.8, 0.35) -->
+  <Sterilized.defaultLabelColor>(0.8, 0.8, 0.35)</Sterilized.defaultLabelColor>
+  <!-- EN: Unable to reproduce. -->
+  <Sterilized.description>Unable to reproduce.</Sterilized.description>
+  <!-- EN: Prostrating self -->
+  <Hediff_Submitting.label>Prostrating self</Hediff_Submitting.label>
+  <!-- EN: rjw.Hediff_Submitting -->
+  <Hediff_Submitting.hediffClass>rjw.Hediff_Submitting</Hediff_Submitting.hediffClass>
+  <!-- EN: Submitting. -->
+  <Hediff_Submitting.description>Submitting.</Hediff_Submitting.description>
+  <!-- EN: (1, 0.41, 0.81) -->
+  <Hediff_Submitting.defaultLabelColor>(1, 0.41, 0.81)</Hediff_Submitting.defaultLabelColor>
+  <!-- EN: rape enemy cooldown -->
+  <Hediff_RapeEnemyCD.label>rape enemy cooldown</Hediff_RapeEnemyCD.label>
+  <!-- EN: "Who's next?" -->
+  <Hediff_RapeEnemyCD.description>"Who's next?"</Hediff_RapeEnemyCD.description>
+  <!-- EN: (1, 0.41, 0.81) -->
+  <Hediff_RapeEnemyCD.defaultLabelColor>(1, 0.41, 0.81)</Hediff_RapeEnemyCD.defaultLabelColor>
+</LanguageData>

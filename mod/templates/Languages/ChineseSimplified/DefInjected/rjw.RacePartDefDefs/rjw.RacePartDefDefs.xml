@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- EN: (0.2, 0.5) -->
+  <RJW_CowBreasts.severityCurve.points.0>(0.2, 0.5)</RJW_CowBreasts.severityCurve.points.0>
+  <!-- EN: (0.9, 1.0) -->
+  <RJW_CowBreasts.severityCurve.points.1>(0.9, 1.0)</RJW_CowBreasts.severityCurve.points.1>
+  <!-- EN: (1.0, 1.1) -->
+  <RJW_CowBreasts.severityCurve.points.2>(1.0, 1.1)</RJW_CowBreasts.severityCurve.points.2>
+  <!-- EN: (0.1, 0.1) -->
+  <RJW_SmallHoneyBreasts.severityCurve.points.0>(0.1, 0.1)</RJW_SmallHoneyBreasts.severityCurve.points.0>
+  <!-- EN: (0.6, 0.3) -->
+  <RJW_SmallHoneyBreasts.severityCurve.points.1>(0.6, 0.3)</RJW_SmallHoneyBreasts.severityCurve.points.1>
+  <!-- EN: (1.0, 0.5) -->
+  <RJW_SmallHoneyBreasts.severityCurve.points.2>(1.0, 0.5)</RJW_SmallHoneyBreasts.severityCurve.points.2>
+</LanguageData>

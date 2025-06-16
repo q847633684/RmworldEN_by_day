@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- EN: Designate pawn as Hero, hero can be directly ordered to do loving with other pawns -->
+  <RJW_Hero.headerTip>Designate pawn as Hero, hero can be directly ordered to do loving with other pawns</RJW_Hero.headerTip>
+  <!-- EN: UI/Commands/Hero_off -->
+  <RJW_Hero.headerIcon>UI/Commands/Hero_off</RJW_Hero.headerIcon>
+  <!-- EN: rjw.MainTab.Checkbox.PawnColumnWorker_Hero -->
+  <RJW_Hero.workerClass>rjw.MainTab.Checkbox.PawnColumnWorker_Hero</RJW_Hero.workerClass>
+  <!-- EN: Designate pawn as Comfort pawn, pawn will be used to relief pent up sex need -->
+  <RJW_Comfort.headerTip>Designate pawn as Comfort pawn, pawn will be used to relief pent up sex need</RJW_Comfort.headerTip>
+  <!-- EN: UI/Commands/ComfortPrisoner_off -->
+  <RJW_Comfort.headerIcon>UI/Commands/ComfortPrisoner_off</RJW_Comfort.headerIcon>
+  <!-- EN: rjw.MainTab.Checkbox.PawnColumnWorker_Comfort -->
+  <RJW_Comfort.workerClass>rjw.MainTab.Checkbox.PawnColumnWorker_Comfort</RJW_Comfort.workerClass>
+  <!-- EN: Designate pawn for breeding, colony animals will try to breed this pawn -->
+  <RJW_BreedHumanlike.headerTip>Designate pawn for breeding, colony animals will try to breed this pawn</RJW_BreedHumanlike.headerTip>
+  <!-- EN: UI/Commands/Breeding_Pawn_off -->
+  <RJW_BreedHumanlike.headerIcon>UI/Commands/Breeding_Pawn_off</RJW_BreedHumanlike.headerIcon>
+  <!-- EN: rjw.MainTab.Checkbox.PawnColumnWorker_BreedHumanlike -->
+  <RJW_BreedHumanlike.workerClass>rjw.MainTab.Checkbox.PawnColumnWorker_BreedHumanlike</RJW_BreedHumanlike.workerClass>
+  <!-- EN: Designate pawn as breeder, these animals will try to breed pawns desiganted for breeding -->
+  <RJW_BreederAnimal.headerTip>Designate pawn as breeder, these animals will try to breed pawns desiganted for breeding</RJW_BreederAnimal.headerTip>
+  <!-- EN: UI/Commands/Breeder_Animal_off -->
+  <RJW_BreederAnimal.headerIcon>UI/Commands/Breeder_Animal_off</RJW_BreederAnimal.headerIcon>
+  <!-- EN: rjw.MainTab.Checkbox.PawnColumnWorker_BreederAnimal -->
+  <RJW_BreederAnimal.workerClass>rjw.MainTab.Checkbox.PawnColumnWorker_BreederAnimal</RJW_BreederAnimal.workerClass>
+  <!-- EN: Designate pawn for breeding, colony animals will try to breed this pawn -->
+  <RJW_BreedAnimal.headerTip>Designate pawn for breeding, colony animals will try to breed this pawn</RJW_BreedAnimal.headerTip>
+  <!-- EN: UI/Commands/Breeding_Animal_off -->
+  <RJW_BreedAnimal.headerIcon>UI/Commands/Breeding_Animal_off</RJW_BreedAnimal.headerIcon>
+  <!-- EN: rjw.MainTab.Checkbox.PawnColumnWorker_BreedAnimal -->
+  <RJW_BreedAnimal.workerClass>rjw.MainTab.Checkbox.PawnColumnWorker_BreedAnimal</RJW_BreedAnimal.workerClass>
+  <!-- EN: Designate pawn as Whore, whores provide service to guests for silver -->
+  <RJW_Whore.headerTip>Designate pawn as Whore, whores provide service to guests for silver</RJW_Whore.headerTip>
+  <!-- EN: rjw.MainTab.Checkbox.PawnColumnWorker_Whore -->
+  <RJW_Whore.workerClass>rjw.MainTab.Checkbox.PawnColumnWorker_Whore</RJW_Whore.workerClass>
+  <!-- EN: UI/Commands/Service_off -->
+  <RJW_Whore.headerIcon>UI/Commands/Service_off</RJW_Whore.headerIcon>
+  <!-- EN: UI/Commands/ComfortPrisoner_off -->
+  <RJW_IsPrisoner.headerIcon>UI/Commands/ComfortPrisoner_off</RJW_IsPrisoner.headerIcon>
+  <!-- EN: rjw.MainTab.Icon.PawnColumnWorker_IsPrisoner -->
+  <RJW_IsPrisoner.workerClass>rjw.MainTab.Icon.PawnColumnWorker_IsPrisoner</RJW_IsPrisoner.workerClass>
+  <!-- EN: UI/Commands/ComfortPrisoner_off -->
+  <RJW_IsSlave.headerIcon>UI/Commands/ComfortPrisoner_off</RJW_IsSlave.headerIcon>
+  <!-- EN: rjw.MainTab.Icon.PawnColumnWorker_IsSlave -->
+  <RJW_IsSlave.workerClass>rjw.MainTab.Icon.PawnColumnWorker_IsSlave</RJW_IsSlave.workerClass>
+  <!-- EN: UI/Icons/Gender/Genders -->
+  <RJW_Gender.headerIcon>UI/Icons/Gender/Genders</RJW_Gender.headerIcon>
+  <!-- EN: rjw.MainTab.Icon.PawnColumnWorker_RJWGender -->
+  <RJW_Gender.workerClass>rjw.MainTab.Icon.PawnColumnWorker_RJWGender</RJW_Gender.workerClass>
+</LanguageData>

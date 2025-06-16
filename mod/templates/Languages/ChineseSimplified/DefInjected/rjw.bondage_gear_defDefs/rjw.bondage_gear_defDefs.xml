@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- EN: Chains with cuffs. Useful for restricting someone's movement and manipulation freedom. Prevents* hand-to-hand fighting attempts.
+*gag is advised for complete neutralization -->
+  <PrisonerChains.description>Chains with cuffs. Useful for restricting someone's movement and manipulation freedom. Prevents* hand-to-hand fighting attempts.
+*gag is advised for complete neutralization</PrisonerChains.description>
+  <!-- EN: rjw.restraints -->
+  <PrisonerChains.thingClass>rjw.restraints</PrisonerChains.thingClass>
+  <!-- EN: Things/Pawn/Humanlike/Apparel/Bondage/PrisonerChains/PrisonerChains -->
+  <PrisonerChains.graphicData.texPath>Things/Pawn/Humanlike/Apparel/Bondage/PrisonerChains/PrisonerChains</PrisonerChains.graphicData.texPath>
+  <!-- EN: Things/Pawn/Humanlike/Apparel/Bondage/PrisonerChains/PrisonerChains -->
+  <PrisonerChains.apparel.wornGraphicPath>Things/Pawn/Humanlike/Apparel/Bondage/PrisonerChains/PrisonerChains</PrisonerChains.apparel.wornGraphicPath>
+  <!-- EN: rjw.bondage_gear_soul -->
+  <PrisonerChains.soul_type>rjw.bondage_gear_soul</PrisonerChains.soul_type>
+</LanguageData>

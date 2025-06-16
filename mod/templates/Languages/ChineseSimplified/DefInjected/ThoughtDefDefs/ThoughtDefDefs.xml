@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- EN: Humpshroom aftertaste -->
+  <HumpShroomEffect.stages.0label>Humpshroom aftertaste</HumpShroomEffect.stages.0label>
+  <!-- EN: Tastes funny. -->
+  <HumpShroomEffect.stages.0description>Tastes funny.</HumpShroomEffect.stages.0description>
+  <!-- EN: humpshroom withdrawal -->
+  <HumpShroomWithdrawal.stages.1label>humpshroom withdrawal</HumpShroomWithdrawal.stages.1label>
+  <!-- EN: I just feel nothing down there. -->
+  <HumpShroomWithdrawal.stages.1description>I just feel nothing down there.</HumpShroomWithdrawal.stages.1description>
+  <!-- EN: Had to wear condom -->
+  <SexWithCondom.stages.0label>Had to wear condom</SexWithCondom.stages.0label>
+  <!-- EN: Had to wear condom -->
+  <SexWithCondom.stages.0description>Had to wear condom</SexWithCondom.stages.0description>
+  <!-- EN: raped by animal -->
+  <GotBredByAnimal.stages.0label>raped by animal</GotBredByAnimal.stages.0label>
+  <!-- EN: Oh God... I was raped by an animal. The sheer humiliation of it...How can I look anybody in the eye now? I think I can still smell it on me... -->
+  <GotBredByAnimal.stages.0description>Oh God... I was raped by an animal. The sheer humiliation of it...How can I look anybody in the eye now? I think I can still smell it on me...</GotBredByAnimal.stages.0description>
+  <!-- EN: bred anally by animal -->
+  <GotAnalBredByAnimal.stages.0label>bred anally by animal</GotAnalBredByAnimal.stages.0label>
+  <!-- EN: I was raped...anally... by an animal. I can't get any lower than this; I just want to crawl in a hole and die. Please, nobody look at me... -->
+  <GotAnalBredByAnimal.stages.0description>I was raped...anally... by an animal. I can't get any lower than this; I just want to crawl in a hole and die. Please, nobody look at me...</GotAnalBredByAnimal.stages.0description>
+  <!-- EN: raped by animal -->
+  <MasochistGotBredByAnimal.stages.0label>raped by animal</MasochistGotBredByAnimal.stages.0label>
+  <!-- EN: An animal raped me. It makes me feel so dirty and deviant, like a filthy sow being bred...not bad. -->
+  <MasochistGotBredByAnimal.stages.0description>An animal raped me. It makes me feel so dirty and deviant, like a filthy sow being bred...not bad.</MasochistGotBredByAnimal.stages.0description>
+  <!-- EN: bred anally by animal -->
+  <MasochistGotAnalBredByAnimal.stages.0label>bred anally by animal</MasochistGotAnalBredByAnimal.stages.0label>
+  <!-- EN: I was raped...anally... by an animal. The way it utterly humiliated me by rutting on me mindlessly like I was just some pig who deserved nothing better...I could get used to this. -->
+  <MasochistGotAnalBredByAnimal.stages.0description>I was raped...anally... by an animal. The way it utterly humiliated me by rutting on me mindlessly like I was just some pig who deserved nothing better...I could get used to this.</MasochistGotAnalBredByAnimal.stages.0description>
+  <!-- EN: bred by animal -->
+  <ZoophileGotBredByAnimal.stages.0label>bred by animal</ZoophileGotBredByAnimal.stages.0label>
+  <!-- EN: An animal made love to me, just like I was one too...It's so much more better than with a human.. -->
+  <ZoophileGotBredByAnimal.stages.0description>An animal made love to me, just like I was one too...It's so much more better than with a human..</ZoophileGotBredByAnimal.stages.0description>
+  <!-- EN: bred anally by animal -->
+  <ZoophileGotAnalBredByAnimal.stages.0label>bred anally by animal</ZoophileGotAnalBredByAnimal.stages.0label>
+  <!-- EN: That animal just took me anally and made me its bitch...The way it mounted me...it just makes me want to touch myself all over again just thinking about it. -->
+  <ZoophileGotAnalBredByAnimal.stages.0description>That animal just took me anally and made me its bitch...The way it mounted me...it just makes me want to touch myself all over again just thinking about it.</ZoophileGotAnalBredByAnimal.stages.0description>
+  <!-- EN: bred by animal -->
+  <AllowedAnimalToBreed.stages.0label>bred by animal</AllowedAnimalToBreed.stages.0label>
+  <!-- EN: I was so horny that I let an animal mount me. I feel ashamed for enjoying it... -->
+  <AllowedAnimalToBreed.stages.0description>I was so horny that I let an animal mount me. I feel ashamed for enjoying it...</AllowedAnimalToBreed.stages.0description>
+  <!-- EN: raped by animal -->
+  <GotLickedByAnimal.stages.0label>raped by animal</GotLickedByAnimal.stages.0label>
+  <!-- EN: An animal forced their tongue inside me. -->
+  <GotLickedByAnimal.stages.0description>An animal forced their tongue inside me.</GotLickedByAnimal.stages.0description>
+  <!-- EN: raped by animal -->
+  <MasochistGotLickedByAnimal.stages.0label>raped by animal</MasochistGotLickedByAnimal.stages.0label>
+  <!-- EN: An animal forced their tongue inside me. I kinda liked it... -->
+  <MasochistGotLickedByAnimal.stages.0description>An animal forced their tongue inside me. I kinda liked it...</MasochistGotLickedByAnimal.stages.0description>
+  <!-- EN: ravished by animal -->
+  <ZoophileGotLickedByAnimal.stages.0label>ravished by animal</ZoophileGotLickedByAnimal.stages.0label>
+  <!-- EN: An animal ravished me. -->
+  <ZoophileGotLickedByAnimal.stages.0description>An animal ravished me.</ZoophileGotLickedByAnimal.stages.0description>
+  <!-- EN: licked by animal -->
+  <AllowedAnimalToLick.stages.0label>licked by animal</AllowedAnimalToLick.stages.0label>
+  <!-- EN: I let an animal lick me. I feel ashamed, but kinda liked it... -->
+  <AllowedAnimalToLick.stages.0description>I let an animal lick me. I feel ashamed, but kinda liked it...</AllowedAnimalToLick.stages.0description>
+  <!-- EN: molested by animal -->
+  <GotGropedByAnimal.stages.0label>molested by animal</GotGropedByAnimal.stages.0label>
+  <!-- EN: An animal molested me. I feel dirty. -->
+  <GotGropedByAnimal.stages.0description>An animal molested me. I feel dirty.</GotGropedByAnimal.stages.0description>
+  <!-- EN: molested by animal (Masochist) -->
+  <MasochistGotGropedByAnimal.stages.0label>molested by animal (Masochist)</MasochistGotGropedByAnimal.stages.0label>
+  <!-- EN: An animal molested me. I kinda liked it... -->
+  <MasochistGotGropedByAnimal.stages.0description>An animal molested me. I kinda liked it...</MasochistGotGropedByAnimal.stages.0description>
+  <!-- EN: molested by animal (Zoophile) -->
+  <ZoophileGotGropedByAnimal.stages.0label>molested by animal (Zoophile)</ZoophileGotGropedByAnimal.stages.0label>
+  <!-- EN: An animal ravished me. -->
+  <ZoophileGotGropedByAnimal.stages.0description>An animal ravished me.</ZoophileGotGropedByAnimal.stages.0description>
+  <!-- EN: groped by animal -->
+  <AllowedAnimalToGrope.stages.0label>groped by animal</AllowedAnimalToGrope.stages.0label>
+  <!-- EN: I was so horny that I let an animal grope me. I feel ashamed... -->
+  <AllowedAnimalToGrope.stages.0description>I was so horny that I let an animal grope me. I feel ashamed...</AllowedAnimalToGrope.stages.0description>
+  <!-- EN: rjw.ThoughtWorker_Bound -->
+  <Bound.workerClass>rjw.ThoughtWorker_Bound</Bound.workerClass>
+  <!-- EN: This thing is seriously annoying. I wish I could take it off. -->
+  <Bound.stages.0description>This thing is seriously annoying. I wish I could take it off.</Bound.stages.0description>
+  <!-- EN: Ish shnn ish shrrrrsh uhnnninnn -->
+  <Bound.stages.1description>Ish shnn ish shrrrrsh uhnnninnn</Bound.stages.1description>
+  <!-- EN: bound and gagged -->
+  <Bound.stages.2label>bound and gagged</Bound.stages.2label>
+  <!-- EN: Ufff ish hhhh shrrrnnn shhhrrr! hhhek shi thfffff! -->
+  <Bound.stages.2description>Ufff ish hhhh shrrrnnn shhhrrr! hhhek shi thfffff!</Bound.stages.2description>
+  <!-- EN: rjw.ThoughtWorker_Bound -->
+  <MasochistBound.workerClass>rjw.ThoughtWorker_Bound</MasochistBound.workerClass>
+  <!-- EN: masochist bound -->
+  <MasochistBound.stages.0label>masochist bound</MasochistBound.stages.0label>
+  <!-- EN: Heh... heh heh... -->
+  <MasochistBound.stages.0description>Heh... heh heh...</MasochistBound.stages.0description>
+  <!-- EN: masochist gagged -->
+  <MasochistBound.stages.1label>masochist gagged</MasochistBound.stages.1label>
+  <!-- EN: Nnnn shsh hhhch uhnnn -->
+  <MasochistBound.stages.1description>Nnnn shsh hhhch uhnnn</MasochistBound.stages.1description>
+  <!-- EN: masochist bound and gagged -->
+  <MasochistBound.stages.2label>masochist bound and gagged</MasochistBound.stages.2label>
+  <!-- EN: Shnnn ihhh shrrr fff shnnn... shsh chhhnnn uhfsh~! -->
+  <MasochistBound.stages.2description>Shnnn ihhh shrrr fff shnnn... shsh chhhnnn uhfsh~!</MasochistBound.stages.2description>
+  <!-- EN: my son {0} died -->
+  <MyPupDied.stages.0label>my son {0} died</MyPupDied.stages.0label>
+  <!-- EN: My son is dead. My own flesh and blood... -->
+  <MyPupDied.stages.0description>My son is dead. My own flesh and blood...</MyPupDied.stages.0description>
+  <!-- EN: my daughter {0} died -->
+  <MyPupDiedFemale.stages.0label>my daughter {0} died</MyPupDiedFemale.stages.0label>
+  <!-- EN: My daughter is dead. My own flesh and blood... -->
+  <MyPupDiedFemale.stages.0description>My daughter is dead. My own flesh and blood...</MyPupDiedFemale.stages.0description>
+  <!-- EN: killed my son -->
+  <KilledMyPup.stages.0label>killed my son</KilledMyPup.stages.0label>
+  <!-- EN: killed my daughter -->
+  <KilledMyPupFemale.stages.0label>killed my daughter</KilledMyPupFemale.stages.0label>
+  <!-- EN: loved one sold -->
+  <SoldMyPup.stages.0label>loved one sold</SoldMyPup.stages.0label>
+  <!-- EN: My child was sold! -->
+  <SoldMyPup.stages.0description>My child was sold!</SoldMyPup.stages.0description>
+  <!-- EN: had sex with a corpse -->
+  <ViolatedCorpse.stages.0label>had sex with a corpse</ViolatedCorpse.stages.0label>
+  <!-- EN: {0} wasn't the only thing that was stiff if you know what I mean... -->
+  <ViolatedCorpse.stages.0description>{0} wasn't the only thing that was stiff if you know what I mean...</ViolatedCorpse.stages.0description>
+  <!-- EN: Thats my fetish -->
+  <ThatsMyFetish.stages.0label>Thats my fetish</ThatsMyFetish.stages.0label>
+  <!-- EN: I just had sex that satisfied one of my quirks. -->
+  <ThatsMyFetish.stages.0description>I just had sex that satisfied one of my quirks.</ThatsMyFetish.stages.0description>
+  <!-- EN: rjw.ThoughtWorker_FeelingBroken -->
+  <FeelingBroken.workerClass>rjw.ThoughtWorker_FeelingBroken</FeelingBroken.workerClass>
+  <!-- EN: Huh...wha...how many times was I...? -->
+  <FeelingBroken.stages.0description>Huh...wha...how many times was I...?</FeelingBroken.stages.0description>
+  <!-- EN: my body feels broken -->
+  <FeelingBroken.stages.1label>my body feels broken</FeelingBroken.stages.1label>
+  <!-- EN: No...I don't want...aah...ahhh...my body feels...broken...please...no more... -->
+  <FeelingBroken.stages.1description>No...I don't want...aah...ahhh...my body feels...broken...please...no more...</FeelingBroken.stages.1description>
+  <!-- EN: begging for more -->
+  <FeelingBroken.stages.2label>begging for more</FeelingBroken.stages.2label>
+  <!-- EN: Masters, please violate me more, I only exist to be used by you. Please fuck me and fill me with your cum again, and again, and again... -->
+  <FeelingBroken.stages.2description>Masters, please violate me more, I only exist to be used by you. Please fuck me and fill me with your cum again, and again, and again...</FeelingBroken.stages.2description>
+  <!-- EN: I was raped...I feel so helpless and used. -->
+  <GotRaped.stages.0description>I was raped...I feel so helpless and used.</GotRaped.stages.0description>
+  <!-- EN: anally raped -->
+  <GotAnalRaped.stages.0label>anally raped</GotAnalRaped.stages.0label>
+  <!-- EN: I was raped anally...I feel so violated and filthy. -->
+  <GotAnalRaped.stages.0description>I was raped anally...I feel so violated and filthy.</GotAnalRaped.stages.0description>
+  <!-- EN: anally raped by a girl -->
+  <GotAnalRapedByFemale.stages.0label>anally raped by a girl</GotAnalRapedByFemale.stages.0label>
+  <!-- EN: I was raped anally by a girl...It's so humiliating. I probably deserved it for being so weak... -->
+  <GotAnalRapedByFemale.stages.0description>I was raped anally by a girl...It's so humiliating. I probably deserved it for being so weak...</GotAnalRapedByFemale.stages.0description>
+  <!-- EN: raped (Unconscious) -->
+  <GotRapedUnconscious.stages.0label>raped (Unconscious)</GotRapedUnconscious.stages.0label>
+  <!-- EN: Oh God, someone or something raped me while I was unconscious. I feel so violated and dirty. -->
+  <GotRapedUnconscious.stages.0description>Oh God, someone or something raped me while I was unconscious. I feel so violated and dirty.</GotRapedUnconscious.stages.0description>
+  <!-- EN: raped (Unconscious) -->
+  <MasochistGotRapedUnconscious.stages.0label>raped (Unconscious)</MasochistGotRapedUnconscious.stages.0label>
+  <!-- EN: Some one used my body while I was unconscious and the worst part was that I missed out and didn't feel anything! -->
+  <MasochistGotRapedUnconscious.stages.0description>Some one used my body while I was unconscious and the worst part was that I missed out and didn't feel anything!</MasochistGotRapedUnconscious.stages.0description>
+  <!-- EN: I was used and thrown around like a piece of meat. God, I love it when they rape me. -->
+  <MasochistGotRaped.stages.0description>I was used and thrown around like a piece of meat. God, I love it when they rape me.</MasochistGotRaped.stages.0description>
+  <!-- EN: anally raped -->
+  <MasochistGotAnalRaped.stages.0label>anally raped</MasochistGotAnalRaped.stages.0label>
+  <!-- EN: I was raped anally...it was so intense. They held me down and pounded like a piledriver...mmm... -->
+  <MasochistGotAnalRaped.stages.0description>I was raped anally...it was so intense. They held me down and pounded like a piledriver...mmm...</MasochistGotAnalRaped.stages.0description>
+  <!-- EN: anally raped by a girl -->
+  <MasochistGotAnalRapedByFemale.stages.0label>anally raped by a girl</MasochistGotAnalRapedByFemale.stages.0label>
+  <!-- EN: I was raped anally by a girl...God it was hot. There's just something about a woman having so much power over you as she makes you her bitch... -->
+  <MasochistGotAnalRapedByFemale.stages.0description>I was raped anally by a girl...God it was hot. There's just something about a woman having so much power over you as she makes you her bitch...</MasochistGotAnalRapedByFemale.stages.0description>
+  <!-- EN: raped me -->
+  <HateMyRapist.stages.0label>raped me</HateMyRapist.stages.0label>
+  <!-- EN: I was raped by {0}. I'll never forgive them. -->
+  <HateMyRapist.stages.0description>I was raped by {0}. I'll never forgive them.</HateMyRapist.stages.0description>
+  <!-- EN: raped me -->
+  <KindaLikeMyRapist.stages.0label>raped me</KindaLikeMyRapist.stages.0label>
+  <!-- EN: {0} forced themselves on me roughly. Wish they'd do it more often... -->
+  <KindaLikeMyRapist.stages.0description>{0} forced themselves on me roughly. Wish they'd do it more often...</KindaLikeMyRapist.stages.0description>
+  <!-- EN: allowed me to get raped -->
+  <AllowedMeToGetRaped.stages.0label>allowed me to get raped</AllowedMeToGetRaped.stages.0label>
+  <!-- EN: I got raped while that piece of shit {0} just looked the other way... -->
+  <AllowedMeToGetRaped.stages.0description>I got raped while that piece of shit {0} just looked the other way...</AllowedMeToGetRaped.stages.0description>
+  <!-- EN: stole some lovin’ -->
+  <StoleSomeLovin.stages.0label>stole some lovin’</StoleSomeLovin.stages.0label>
+  <!-- EN: I forced myself on some bitch. The sex was pretty shit, but it's better than nothing. -->
+  <StoleSomeLovin.stages.0description>I forced myself on some bitch. The sex was pretty shit, but it's better than nothing.</StoleSomeLovin.stages.0description>
+  <!-- EN: made some lovin’ -->
+  <MadeSomeLovin.stages.0label>made some lovin’</MadeSomeLovin.stages.0label>
+  <!-- EN: Spent some good time rolling in the hay. -->
+  <MadeSomeLovin.stages.0description>Spent some good time rolling in the hay.</MadeSomeLovin.stages.0description>
+  <!-- EN: stole some lovin’ -->
+  <BloodlustStoleSomeLovin.stages.0label>stole some lovin’</BloodlustStoleSomeLovin.stages.0label>
+  <!-- EN: I raped some cunt who deserved it. The way they screamed and cried was so fucking good. -->
+  <BloodlustStoleSomeLovin.stages.0description>I raped some cunt who deserved it. The way they screamed and cried was so fucking good.</BloodlustStoleSomeLovin.stages.0description>
+  <!-- EN: rjw.ThoughtWorker_NeedSex -->
+  <NeedSex.workerClass>rjw.ThoughtWorker_NeedSex</NeedSex.workerClass>
+  <!-- EN: sexually frustrated -->
+  <NeedSex.stages.0label>sexually frustrated</NeedSex.stages.0label>
+  <!-- EN: I NEED IT!!! -->
+  <NeedSex.stages.0description>I NEED IT!!!</NeedSex.stages.0description>
+  <!-- EN: It's been too long. I can't stop thinking about sex. -->
+  <NeedSex.stages.1description>It's been too long. I can't stop thinking about sex.</NeedSex.stages.1description>
+  <!-- EN: sexually satisfied -->
+  <NeedSex.stages.2label>sexually satisfied</NeedSex.stages.2label>
+  <!-- EN: I had a good roll in the hay. -->
+  <NeedSex.stages.2description>I had a good roll in the hay.</NeedSex.stages.2description>
+  <!-- EN: My legs are numb, my tongue's flopped out, and my eyes have rolled back in my head. -->
+  <RJW_Ahegao.stages.0description>My legs are numb, my tongue's flopped out, and my eyes have rolled back in my head.</RJW_Ahegao.stages.0description>
+  <!-- EN: just fapped -->
+  <Fapped.stages.0label>just fapped</Fapped.stages.0label>
+  <!-- EN: I just fapped. Alone. -->
+  <Fapped.stages.0description>I just fapped. Alone.</Fapped.stages.0description>
+  <!-- EN: rjw.ThoughtWorker_MtT -->
+  <male2trap.workerClass>rjw.ThoughtWorker_MtT</male2trap.workerClass>
+  <!-- EN: Happy with new self -->
+  <male2trap.stages.0label>Happy with new self</male2trap.stages.0label>
+  <!-- EN: Tee hee hee... Traps are gay, you know. -->
+  <male2trap.stages.0description>Tee hee hee... Traps are gay, you know.</male2trap.stages.0description>
+  <!-- EN: Acceptance of sex changes -->
+  <male2trap.stages.1label>Acceptance of sex changes</male2trap.stages.1label>
+  <!-- EN: Well, at least I'm pretty now. -->
+  <male2trap.stages.1description>Well, at least I'm pretty now.</male2trap.stages.1description>
+  <!-- EN: Mild discontent with new gender -->
+  <male2trap.stages.2label>Mild discontent with new gender</male2trap.stages.2label>
+  <!-- EN: But I'm a boy! -->
+  <male2trap.stages.2description>But I'm a boy!</male2trap.stages.2description>
+  <!-- EN: Furious about transgender surgery -->
+  <male2trap.stages.3label>Furious about transgender surgery</male2trap.stages.3label>
+  <!-- EN: What are you doing to me! -->
+  <male2trap.stages.3description>What are you doing to me!</male2trap.stages.3description>
+  <!-- EN: rjw.ThoughtWorker_MtF -->
+  <male2female.workerClass>rjw.ThoughtWorker_MtF</male2female.workerClass>
+  <!-- EN: Happy with new self -->
+  <male2female.stages.0label>Happy with new self</male2female.stages.0label>
+  <!-- EN: Although I was a boy before, I kinda like being a girl now. -->
+  <male2female.stages.0description>Although I was a boy before, I kinda like being a girl now.</male2female.stages.0description>
+  <!-- EN: Acceptance of sex changes -->
+  <male2female.stages.1label>Acceptance of sex changes</male2female.stages.1label>
+  <!-- EN: Well, I guess I will have to live with that now. -->
+  <male2female.stages.1description>Well, I guess I will have to live with that now.</male2female.stages.1description>
+  <!-- EN: Mild discontent with new gender -->
+  <male2female.stages.2label>Mild discontent with new gender</male2female.stages.2label>
+  <!-- EN: But I'm a boy! -->
+  <male2female.stages.2description>But I'm a boy!</male2female.stages.2description>
+  <!-- EN: Furious about transgender surgery -->
+  <male2female.stages.3label>Furious about transgender surgery</male2female.stages.3label>
+  <!-- EN: Aah, I'm not your toy! Sew it back! -->
+  <male2female.stages.3description>Aah, I'm not your toy! Sew it back!</male2female.stages.3description>
+  <!-- EN: rjw.ThoughtWorker_MtH -->
+  <male2futa.workerClass>rjw.ThoughtWorker_MtH</male2futa.workerClass>
+  <!-- EN: Happy with a vagina -->
+  <male2futa.stages.0label>Happy with a vagina</male2futa.stages.0label>
+  <!-- EN: Whoa... This thing is awesome! How could I live without it before! -->
+  <male2futa.stages.0description>Whoa... This thing is awesome! How could I live without it before!</male2futa.stages.0description>
+  <!-- EN: Acceptance of vagina -->
+  <male2futa.stages.1label>Acceptance of vagina</male2futa.stages.1label>
+  <!-- EN: Well, I guess I will have to live with that now.. -->
+  <male2futa.stages.1description>Well, I guess I will have to live with that now..</male2futa.stages.1description>
+  <!-- EN: Mild discontent with vagina -->
+  <male2futa.stages.2label>Mild discontent with vagina</male2futa.stages.2label>
+  <!-- EN: This thing is horrible! Take it away from meee! -->
+  <male2futa.stages.2description>This thing is horrible! Take it away from meee!</male2futa.stages.2description>
+  <!-- EN: Furious about vagina attached -->
+  <male2futa.stages.3label>Furious about vagina attached</male2futa.stages.3label>
+  <!-- EN: I'm a monster now! Aaah! -->
+  <male2futa.stages.3description>I'm a monster now! Aaah!</male2futa.stages.3description>
+  <!-- EN: rjw.ThoughtWorker_FtT -->
+  <female2trap.workerClass>rjw.ThoughtWorker_FtT</female2trap.workerClass>
+  <!-- EN: Happy with new self -->
+  <female2trap.stages.0label>Happy with new self</female2trap.stages.0label>
+  <!-- EN: Tee hee hee... Now I have a built-in strap-on! -->
+  <female2trap.stages.0description>Tee hee hee... Now I have a built-in strap-on!</female2trap.stages.0description>
+  <!-- EN: Acceptance of sex changes 1 -->
+  <female2trap.stages.1label>Acceptance of sex changes 1</female2trap.stages.1label>
+  <!-- EN: Well, at least I'm still pretty. -->
+  <female2trap.stages.1description>Well, at least I'm still pretty.</female2trap.stages.1description>
+  <!-- EN: Mild discontent with new gender 2 -->
+  <female2trap.stages.2label>Mild discontent with new gender 2</female2trap.stages.2label>
+  <!-- EN: But I'm a girl! -->
+  <female2trap.stages.2description>But I'm a girl!</female2trap.stages.2description>
+  <!-- EN: Furious about transgender surgery 3 -->
+  <female2trap.stages.3label>Furious about transgender surgery 3</female2trap.stages.3label>
+  <!-- EN: What are you doing to me! -->
+  <female2trap.stages.3description>What are you doing to me!</female2trap.stages.3description>
+  <!-- EN: rjw.ThoughtWorker_FtM -->
+  <female2male.workerClass>rjw.ThoughtWorker_FtM</female2male.workerClass>
+  <!-- EN: Happy with new self -->
+  <female2male.stages.0label>Happy with new self</female2male.stages.0label>
+  <!-- EN: I'm so happy now with all my masculinity unleashed. -->
+  <female2male.stages.0description>I'm so happy now with all my masculinity unleashed.</female2male.stages.0description>
+  <!-- EN: Acceptance of sex changes -->
+  <female2male.stages.1label>Acceptance of sex changes</female2male.stages.1label>
+  <!-- EN: Well, I've got to live with this. -->
+  <female2male.stages.1description>Well, I've got to live with this.</female2male.stages.1description>
+  <!-- EN: Mild discontent with new gender -->
+  <female2male.stages.2label>Mild discontent with new gender</female2male.stages.2label>
+  <!-- EN: But I'm a girl! -->
+  <female2male.stages.2description>But I'm a girl!</female2male.stages.2description>
+  <!-- EN: Furious about transgender surgery -->
+  <female2male.stages.3label>Furious about transgender surgery</female2male.stages.3label>
+  <!-- EN: What are you doing to me! -->
+  <female2male.stages.3description>What are you doing to me!</female2male.stages.3description>
+  <!-- EN: rjw.ThoughtWorker_FtH -->
+  <female2futa.workerClass>rjw.ThoughtWorker_FtH</female2futa.workerClass>
+  <!-- EN: Happy with a dick -->
+  <female2futa.stages.0label>Happy with a dick</female2futa.stages.0label>
+  <!-- EN: Whoa... This thing is awesome! How could I live without it before! -->
+  <female2futa.stages.0description>Whoa... This thing is awesome! How could I live without it before!</female2futa.stages.0description>
+  <!-- EN: Acceptance of penis -->
+  <female2futa.stages.1label>Acceptance of penis</female2futa.stages.1label>
+  <!-- EN: Well, at least I can pee standing now. -->
+  <female2futa.stages.1description>Well, at least I can pee standing now.</female2futa.stages.1description>
+  <!-- EN: Mild discontent with penis -->
+  <female2futa.stages.2label>Mild discontent with penis</female2futa.stages.2label>
+  <!-- EN: This thing is horrible! Take it away from meee! -->
+  <female2futa.stages.2description>This thing is horrible! Take it away from meee!</female2futa.stages.2description>
+  <!-- EN: Furious about penis attached -->
+  <female2futa.stages.3label>Furious about penis attached</female2futa.stages.3label>
+  <!-- EN: I'm a monster now! Aaah! -->
+  <female2futa.stages.3description>I'm a monster now! Aaah!</female2futa.stages.3description>
+  <!-- EN: rjw.ThoughtWorker_HtT -->
+  <futa2trap.workerClass>rjw.ThoughtWorker_HtT</futa2trap.workerClass>
+  <!-- EN: Happy with new self -->
+  <futa2trap.stages.0label>Happy with new self</futa2trap.stages.0label>
+  <!-- EN: Tee hee hee... I still have another hole! -->
+  <futa2trap.stages.0description>Tee hee hee... I still have another hole!</futa2trap.stages.0description>
+  <!-- EN: Acceptance of sex changes -->
+  <futa2trap.stages.1label>Acceptance of sex changes</futa2trap.stages.1label>
+  <!-- EN: Well, at least I'm still pretty. -->
+  <futa2trap.stages.1description>Well, at least I'm still pretty.</futa2trap.stages.1description>
+  <!-- EN: Mild discontent with new gender -->
+  <futa2trap.stages.2label>Mild discontent with new gender</futa2trap.stages.2label>
+  <!-- EN: Come on! Don't be a pussy! Give mine back! -->
+  <futa2trap.stages.2description>Come on! Don't be a pussy! Give mine back!</futa2trap.stages.2description>
+  <!-- EN: Furious about transgender surgery -->
+  <futa2trap.stages.3label>Furious about transgender surgery</futa2trap.stages.3label>
+  <!-- EN: Hey! Give it back! -->
+  <futa2trap.stages.3description>Hey! Give it back!</futa2trap.stages.3description>
+  <!-- EN: rjw.ThoughtWorker_HtM -->
+  <futa2male.workerClass>rjw.ThoughtWorker_HtM</futa2male.workerClass>
+  <!-- EN: Happy without a vagina -->
+  <futa2male.stages.0label>Happy without a vagina</futa2male.stages.0label>
+  <!-- EN: It was an interesting experience. Let's not do that again. -->
+  <futa2male.stages.0description>It was an interesting experience. Let's not do that again.</futa2male.stages.0description>
+  <!-- EN: Sad without a vagina -->
+  <futa2male.stages.1label>Sad without a vagina</futa2male.stages.1label>
+  <!-- EN: Oh well, it was fun while it lasted. -->
+  <futa2male.stages.1description>Oh well, it was fun while it lasted.</futa2male.stages.1description>
+  <!-- EN: Unhappy without a vagina -->
+  <futa2male.stages.2label>Unhappy without a vagina</futa2male.stages.2label>
+  <!-- EN: Seriously, it is mine now. I want it back. -->
+  <futa2male.stages.2description>Seriously, it is mine now. I want it back.</futa2male.stages.2description>
+  <!-- EN: Furious about vagina removal -->
+  <futa2male.stages.3label>Furious about vagina removal</futa2male.stages.3label>
+  <!-- EN: Aww come on! Give it back! -->
+  <futa2male.stages.3description>Aww come on! Give it back!</futa2male.stages.3description>
+  <!-- EN: rjw.ThoughtWorker_HtF -->
+  <futa2female.workerClass>rjw.ThoughtWorker_HtF</futa2female.workerClass>
+  <!-- EN: Happy without a dick -->
+  <futa2female.stages.0label>Happy without a dick</futa2female.stages.0label>
+  <!-- EN: It was an interesting experience. Let's not do that again. -->
+  <futa2female.stages.0description>It was an interesting experience. Let's not do that again.</futa2female.stages.0description>
+  <!-- EN: Sad without a dick -->
+  <futa2female.stages.1label>Sad without a dick</futa2female.stages.1label>
+  <!-- EN: Oh well, it was fun while it lasted. -->
+  <futa2female.stages.1description>Oh well, it was fun while it lasted.</futa2female.stages.1description>
+  <!-- EN: Unhappy without a dick -->
+  <futa2female.stages.2label>Unhappy without a dick</futa2female.stages.2label>
+  <!-- EN: Seriously, it is mine! I want it back! -->
+  <futa2female.stages.2description>Seriously, it is mine! I want it back!</futa2female.stages.2description>
+  <!-- EN: Furious about dick removal -->
+  <futa2female.stages.3label>Furious about dick removal</futa2female.stages.3label>
+  <!-- EN: Aww come on! Give it back! -->
+  <futa2female.stages.3description>Aww come on! Give it back!</futa2female.stages.3description>
+  <!-- EN: rjw.ThoughtWorker_TtH -->
+  <trap2futa.workerClass>rjw.ThoughtWorker_TtH</trap2futa.workerClass>
+  <!-- EN: Happy with new self -->
+  <trap2futa.stages.0label>Happy with new self</trap2futa.stages.0label>
+  <!-- EN: Hey, now I have best of both worlds! -->
+  <trap2futa.stages.0description>Hey, now I have best of both worlds!</trap2futa.stages.0description>
+  <!-- EN: Acceptance of sex changes -->
+  <trap2futa.stages.1label>Acceptance of sex changes</trap2futa.stages.1label>
+  <!-- EN: Well, now I know both sides. -->
+  <trap2futa.stages.1description>Well, now I know both sides.</trap2futa.stages.1description>
+  <!-- EN: Mild discontent with new gender -->
+  <trap2futa.stages.2label>Mild discontent with new gender</trap2futa.stages.2label>
+  <!-- EN: But I was fine the way I was! -->
+  <trap2futa.stages.2description>But I was fine the way I was!</trap2futa.stages.2description>
+  <!-- EN: Furious about transgender surgery -->
+  <trap2futa.stages.3label>Furious about transgender surgery</trap2futa.stages.3label>
+  <!-- EN: What are you doing to me! -->
+  <trap2futa.stages.3description>What are you doing to me!</trap2futa.stages.3description>
+  <!-- EN: rjw.ThoughtWorker_TtM -->
+  <trap2male.workerClass>rjw.ThoughtWorker_TtM</trap2male.workerClass>
+  <!-- EN: Happy without a breast -->
+  <trap2male.stages.0label>Happy without a breast</trap2male.stages.0label>
+  <!-- EN: It was an interesting experience. Let's not do that again. -->
+  <trap2male.stages.0description>It was an interesting experience. Let's not do that again.</trap2male.stages.0description>
+  <!-- EN: Sad without a breast -->
+  <trap2male.stages.1label>Sad without a breast</trap2male.stages.1label>
+  <!-- EN: Oh well, it was fun while it lasted. -->
+  <trap2male.stages.1description>Oh well, it was fun while it lasted.</trap2male.stages.1description>
+  <!-- EN: Unhappy without a breast -->
+  <trap2male.stages.2label>Unhappy without a breast</trap2male.stages.2label>
+  <!-- EN: Seriously, they're mine now. I want them back. -->
+  <trap2male.stages.2description>Seriously, they're mine now. I want them back.</trap2male.stages.2description>
+  <!-- EN: Furious about breast removal -->
+  <trap2male.stages.3label>Furious about breast removal</trap2male.stages.3label>
+  <!-- EN: Aww come on! Give them back! -->
+  <trap2male.stages.3description>Aww come on! Give them back!</trap2male.stages.3description>
+  <!-- EN: rjw.ThoughtWorker_TtF -->
+  <trap2female.workerClass>rjw.ThoughtWorker_TtF</trap2female.workerClass>
+  <!-- EN: Happy without a dick -->
+  <trap2female.stages.0label>Happy without a dick</trap2female.stages.0label>
+  <!-- EN: It was an interesting experience. Let's not do that again. -->
+  <trap2female.stages.0description>It was an interesting experience. Let's not do that again.</trap2female.stages.0description>
+  <!-- EN: Sad without a dick -->
+  <trap2female.stages.1label>Sad without a dick</trap2female.stages.1label>
+  <!-- EN: Oh well, time to learn to sit when I pee. -->
+  <trap2female.stages.1description>Oh well, time to learn to sit when I pee.</trap2female.stages.1description>
+  <!-- EN: Unhappy without a dick -->
+  <trap2female.stages.2label>Unhappy without a dick</trap2female.stages.2label>
+  <!-- EN: Seriously, it is mine. I want it back. -->
+  <trap2female.stages.2description>Seriously, it is mine. I want it back.</trap2female.stages.2description>
+  <!-- EN: Furious about dick removal -->
+  <trap2female.stages.3label>Furious about dick removal</trap2female.stages.3label>
+  <!-- EN: Aww come on! Give it back! -->
+  <trap2female.stages.3description>Aww come on! Give it back!</trap2female.stages.3description>
+  <!-- EN: Gave virginity -->
+  <FortunateGaveVirginity.stages.0label>Gave virginity</FortunateGaveVirginity.stages.0label>
+  <!-- EN: I gave my virginity. -->
+  <FortunateGaveVirginity.stages.0description>I gave my virginity.</FortunateGaveVirginity.stages.0description>
+  <!-- EN: Lost virginity -->
+  <UnfortunateLostVirginity.stages.0label>Lost virginity</UnfortunateLostVirginity.stages.0label>
+  <!-- EN: I lost my virginity and I'll never get it back. -->
+  <UnfortunateLostVirginity.stages.0description>I lost my virginity and I'll never get it back.</UnfortunateLostVirginity.stages.0description>
+  <!-- EN: Took virginity -->
+  <TookVirginity.stages.0label>Took virginity</TookVirginity.stages.0label>
+  <!-- EN: I've taken someone's virginity. -->
+  <TookVirginity.stages.0description>I've taken someone's virginity.</TookVirginity.stages.0description>
+  <!-- EN: my son {0} died -->
+  <MySonDied_Beast.stages.0label>my son {0} died</MySonDied_Beast.stages.0label>
+  <!-- EN: My son is dead. My own flesh and blood... -->
+  <MySonDied_Beast.stages.0description>My son is dead. My own flesh and blood...</MySonDied_Beast.stages.0description>
+  <!-- EN: my daughter {0} died -->
+  <MyDaughterDied_Beast.stages.0label>my daughter {0} died</MyDaughterDied_Beast.stages.0label>
+  <!-- EN: My daughter is dead. My own flesh and blood... -->
+  <MyDaughterDied_Beast.stages.0description>My daughter is dead. My own flesh and blood...</MyDaughterDied_Beast.stages.0description>
+  <!-- EN: my brother {0} died -->
+  <MyBrotherDied_Beast.stages.0label>my brother {0} died</MyBrotherDied_Beast.stages.0label>
+  <!-- EN: My brother died. My own flesh and blood... -->
+  <MyBrotherDied_Beast.stages.0description>My brother died. My own flesh and blood...</MyBrotherDied_Beast.stages.0description>
+  <!-- EN: my sister {0} died -->
+  <MySisterDied_Beast.stages.0label>my sister {0} died</MySisterDied_Beast.stages.0label>
+  <!-- EN: My sister died. My own flesh and blood... -->
+  <MySisterDied_Beast.stages.0description>My sister died. My own flesh and blood...</MySisterDied_Beast.stages.0description>
+  <!-- EN: my grandchild {0} died -->
+  <MyGrandchildDied_Beast.stages.0label>my grandchild {0} died</MyGrandchildDied_Beast.stages.0label>
+  <!-- EN: My grandchild died. My own flesh and blood... -->
+  <MyGrandchildDied_Beast.stages.0description>My grandchild died. My own flesh and blood...</MyGrandchildDied_Beast.stages.0description>
+  <!-- EN: my niece {0} died -->
+  <MyNieceDied_Beast.stages.0label>my niece {0} died</MyNieceDied_Beast.stages.0label>
+  <!-- EN: My niece died. Such a wonderful child. -->
+  <MyNieceDied_Beast.stages.0description>My niece died. Such a wonderful child.</MyNieceDied_Beast.stages.0description>
+  <!-- EN: my nephew {0} died -->
+  <MyNephewDied_Beast.stages.0label>my nephew {0} died</MyNephewDied_Beast.stages.0label>
+  <!-- EN: My nephew died. Such a wonderful child. -->
+  <MyNephewDied_Beast.stages.0description>My nephew died. Such a wonderful child.</MyNephewDied_Beast.stages.0description>
+  <!-- EN: my half-sibling {0} died -->
+  <MyHalfSiblingDied_Beast.stages.0label>my half-sibling {0} died</MyHalfSiblingDied_Beast.stages.0label>
+  <!-- EN: My half-sibling died. My own flesh and blood... -->
+  <MyHalfSiblingDied_Beast.stages.0description>My half-sibling died. My own flesh and blood...</MyHalfSiblingDied_Beast.stages.0description>
+  <!-- EN: my aunt {0} died -->
+  <MyAuntDied_Beast.stages.0label>my aunt {0} died</MyAuntDied_Beast.stages.0label>
+  <!-- EN: My aunt died. -->
+  <MyAuntDied_Beast.stages.0description>My aunt died.</MyAuntDied_Beast.stages.0description>
+  <!-- EN: my uncle {0} died -->
+  <MyUncleDied_Beast.stages.0label>my uncle {0} died</MyUncleDied_Beast.stages.0label>
+  <!-- EN: My uncle died. -->
+  <MyUncleDied_Beast.stages.0description>My uncle died.</MyUncleDied_Beast.stages.0description>
+  <!-- EN: my grandparent {0} died -->
+  <MyGrandparentDied_Beast.stages.0label>my grandparent {0} died</MyGrandparentDied_Beast.stages.0label>
+  <!-- EN: My grandparent died. -->
+  <MyGrandparentDied_Beast.stages.0description>My grandparent died.</MyGrandparentDied_Beast.stages.0description>
+  <!-- EN: my cousin {0} died -->
+  <MyCousinDied_Beast.stages.0label>my cousin {0} died</MyCousinDied_Beast.stages.0label>
+  <!-- EN: My cousin died. My own flesh and blood... -->
+  <MyCousinDied_Beast.stages.0description>My cousin died. My own flesh and blood...</MyCousinDied_Beast.stages.0description>
+  <!-- EN: my kin {0} died -->
+  <MyKinDied_Beast.stages.0label>my kin {0} died</MyKinDied_Beast.stages.0label>
+  <!-- EN: My kin died. -->
+  <MyKinDied_Beast.stages.0description>My kin died.</MyKinDied_Beast.stages.0description>
+  <!-- EN: my son {0} lost -->
+  <MySonLost_Beast.stages.0label>my son {0} lost</MySonLost_Beast.stages.0label>
+  <!-- EN: My son has gone lost. I hope he will get back to us someday. -->
+  <MySonLost_Beast.stages.0description>My son has gone lost. I hope he will get back to us someday.</MySonLost_Beast.stages.0description>
+  <!-- EN: my daughter {0} lost -->
+  <MyDaughterLost_Beast.stages.0label>my daughter {0} lost</MyDaughterLost_Beast.stages.0label>
+  <!-- EN: My daughter has gone lost. I hope she will get back to us someday. -->
+  <MyDaughterLost_Beast.stages.0description>My daughter has gone lost. I hope she will get back to us someday.</MyDaughterLost_Beast.stages.0description>
+  <!-- EN: my brother {0} lost -->
+  <MyBrotherLost_Beast.stages.0label>my brother {0} lost</MyBrotherLost_Beast.stages.0label>
+  <!-- EN: My brother has gone lost. I hope he will get back to us someday. -->
+  <MyBrotherLost_Beast.stages.0description>My brother has gone lost. I hope he will get back to us someday.</MyBrotherLost_Beast.stages.0description>
+  <!-- EN: my sister {0} lost -->
+  <MySisterLost_Beast.stages.0label>my sister {0} lost</MySisterLost_Beast.stages.0label>
+  <!-- EN: My sister has gone lost. I hope she will get back to us someday. -->
+  <MySisterLost_Beast.stages.0description>My sister has gone lost. I hope she will get back to us someday.</MySisterLost_Beast.stages.0description>
+  <!-- EN: my grandchild {0} lost -->
+  <MyGrandchildLost_Beast.stages.0label>my grandchild {0} lost</MyGrandchildLost_Beast.stages.0label>
+  <!-- EN: My grandchild has gone lost. I hope they will get back to us someday. -->
+  <MyGrandchildLost_Beast.stages.0description>My grandchild has gone lost. I hope they will get back to us someday.</MyGrandchildLost_Beast.stages.0description>
+  <!-- EN: my niece {0} lost -->
+  <MyNieceLost_Beast.stages.0label>my niece {0} lost</MyNieceLost_Beast.stages.0label>
+  <!-- EN: My niece has gone lost. I hope she will get back to us someday. -->
+  <MyNieceLost_Beast.stages.0description>My niece has gone lost. I hope she will get back to us someday.</MyNieceLost_Beast.stages.0description>
+  <!-- EN: my nephew {0} lost -->
+  <MyNephewLost_Beast.stages.0label>my nephew {0} lost</MyNephewLost_Beast.stages.0label>
+  <!-- EN: My nephew has gone lost. I hope he will get back to us someday. -->
+  <MyNephewLost_Beast.stages.0description>My nephew has gone lost. I hope he will get back to us someday.</MyNephewLost_Beast.stages.0description>
+  <!-- EN: my half-sibling {0} lost -->
+  <MyHalfSiblingLost_Beast.stages.0label>my half-sibling {0} lost</MyHalfSiblingLost_Beast.stages.0label>
+  <!-- EN: My half-sibling has gone lost. -->
+  <MyHalfSiblingLost_Beast.stages.0description>My half-sibling has gone lost.</MyHalfSiblingLost_Beast.stages.0description>
+  <!-- EN: my aunt {0} lost -->
+  <MyAuntLost_Beast.stages.0label>my aunt {0} lost</MyAuntLost_Beast.stages.0label>
+  <!-- EN: My aunt has gone lost. I hope she will get back to us someday. -->
+  <MyAuntLost_Beast.stages.0description>My aunt has gone lost. I hope she will get back to us someday.</MyAuntLost_Beast.stages.0description>
+  <!-- EN: my uncle {0} lost -->
+  <MyUncleLost_Beast.stages.0label>my uncle {0} lost</MyUncleLost_Beast.stages.0label>
+  <!-- EN: My uncle has gone lost. I hope he will get back to us someday. -->
+  <MyUncleLost_Beast.stages.0description>My uncle has gone lost. I hope he will get back to us someday.</MyUncleLost_Beast.stages.0description>
+  <!-- EN: my grandparent {0} lost -->
+  <MyGrandparentLost_Beast.stages.0label>my grandparent {0} lost</MyGrandparentLost_Beast.stages.0label>
+  <!-- EN: My grandparent has gone lost. -->
+  <MyGrandparentLost_Beast.stages.0description>My grandparent has gone lost.</MyGrandparentLost_Beast.stages.0description>
+  <!-- EN: my cousin {0} lost -->
+  <MyCousinLost_Beast.stages.0label>my cousin {0} lost</MyCousinLost_Beast.stages.0label>
+  <!-- EN: My cousin has gone lost. -->
+  <MyCousinLost_Beast.stages.0description>My cousin has gone lost.</MyCousinLost_Beast.stages.0description>
+  <!-- EN: my kin {0} lost -->
+  <MyKinLost_Beast.stages.0label>my kin {0} lost</MyKinLost_Beast.stages.0label>
+  <!-- EN: My kin has gone lost. -->
+  <MyKinLost_Beast.stages.0description>My kin has gone lost.</MyKinLost_Beast.stages.0description>
+  <!-- EN: killed my father -->
+  <KilledMyFather_Beast.stages.0label>killed my father</KilledMyFather_Beast.stages.0label>
+  <!-- EN: killed my mother -->
+  <KilledMyMother_Beast.stages.0label>killed my mother</KilledMyMother_Beast.stages.0label>
+  <!-- EN: killed my son -->
+  <KilledMySon_Beast.stages.0label>killed my son</KilledMySon_Beast.stages.0label>
+  <!-- EN: killed my daughter -->
+  <KilledMyDaughter_Beast.stages.0label>killed my daughter</KilledMyDaughter_Beast.stages.0label>
+  <!-- EN: killed my brother -->
+  <KilledMyBrother_Beast.stages.0label>killed my brother</KilledMyBrother_Beast.stages.0label>
+  <!-- EN: killed my sister -->
+  <KilledMySister_Beast.stages.0label>killed my sister</KilledMySister_Beast.stages.0label>
+  <!-- EN: killed my kin -->
+  <KilledMyKin_Beast.stages.0label>killed my kin</KilledMyKin_Beast.stages.0label>
+  <!-- EN: sold my kin -->
+  <SoldMyLovedOne_Beast.stages.0label>sold my kin</SoldMyLovedOne_Beast.stages.0label>
+</LanguageData>

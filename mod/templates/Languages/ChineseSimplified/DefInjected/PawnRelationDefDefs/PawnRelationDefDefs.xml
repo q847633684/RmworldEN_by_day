@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- EN: rjw.PawnRelationWorker_Child_Beast -->
+  <Child_Beast.workerClass>rjw.PawnRelationWorker_Child_Beast</Child_Beast.workerClass>
+  <!-- EN: rjw.PawnRelationWorker_Sibling_Beast -->
+  <Sibling_Beast.workerClass>rjw.PawnRelationWorker_Sibling_Beast</Sibling_Beast.workerClass>
+  <!-- EN: rjw.PawnRelationWorker_HalfSibling_Beast -->
+  <HalfSibling_Beast.workerClass>rjw.PawnRelationWorker_HalfSibling_Beast</HalfSibling_Beast.workerClass>
+  <!-- EN: rjw.PawnRelationWorker_Grandparent_Beast -->
+  <Grandparent_Beast.workerClass>rjw.PawnRelationWorker_Grandparent_Beast</Grandparent_Beast.workerClass>
+  <!-- EN: rjw.PawnRelationWorker_Grandchild_Beast -->
+  <Grandchild_Beast.workerClass>rjw.PawnRelationWorker_Grandchild_Beast</Grandchild_Beast.workerClass>
+  <!-- EN: rjw.PawnRelationWorker_NephewOrNiece_Beast -->
+  <NephewOrNiece_Beast.workerClass>rjw.PawnRelationWorker_NephewOrNiece_Beast</NephewOrNiece_Beast.workerClass>
+  <!-- EN: rjw.PawnRelationWorker_UncleOrAunt_Beast -->
+  <UncleOrAunt_Beast.workerClass>rjw.PawnRelationWorker_UncleOrAunt_Beast</UncleOrAunt_Beast.workerClass>
+  <!-- EN: rjw.PawnRelationWorker_Cousin_Beast -->
+  <Cousin_Beast.workerClass>rjw.PawnRelationWorker_Cousin_Beast</Cousin_Beast.workerClass>
+  <!-- EN: rjw.PawnRelationWorker_GreatGrandparent_Beast -->
+  <GreatGrandparent_Beast.workerClass>rjw.PawnRelationWorker_GreatGrandparent_Beast</GreatGrandparent_Beast.workerClass>
+  <!-- EN: great grandfather -->
+  <GreatGrandparent_Beast.label>great grandfather</GreatGrandparent_Beast.label>
+  <!-- EN: great grandmother -->
+  <GreatGrandparent_Beast.labelFemale>great grandmother</GreatGrandparent_Beast.labelFemale>
+  <!-- EN: rjw.PawnRelationWorker_GreatGrandchild_Beast -->
+  <GreatGrandchild_Beast.workerClass>rjw.PawnRelationWorker_GreatGrandchild_Beast</GreatGrandchild_Beast.workerClass>
+  <!-- EN: great grandson -->
+  <GreatGrandchild_Beast.label>great grandson</GreatGrandchild_Beast.label>
+  <!-- EN: great granddaughter -->
+  <GreatGrandchild_Beast.labelFemale>great granddaughter</GreatGrandchild_Beast.labelFemale>
+  <!-- EN: rjw.PawnRelationWorker_GranduncleOrGrandaunt_Beast -->
+  <GranduncleOrGrandaunt_Beast.workerClass>rjw.PawnRelationWorker_GranduncleOrGrandaunt_Beast</GranduncleOrGrandaunt_Beast.workerClass>
+  <!-- EN: rjw.PawnRelationWorker_GrandnephewOrGrandniece_Beast -->
+  <GrandnephewOrGrandniece_Beast.workerClass>rjw.PawnRelationWorker_GrandnephewOrGrandniece_Beast</GrandnephewOrGrandniece_Beast.workerClass>
+  <!-- EN: rjw.PawnRelationWorker_CousinOnceRemoved_Beast -->
+  <CousinOnceRemoved_Beast.workerClass>rjw.PawnRelationWorker_CousinOnceRemoved_Beast</CousinOnceRemoved_Beast.workerClass>
+  <!-- EN: cousin once removed -->
+  <CousinOnceRemoved_Beast.label>cousin once removed</CousinOnceRemoved_Beast.label>
+  <!-- EN: rjw.PawnRelationWorker_SecondCousin_Beast -->
+  <SecondCousin_Beast.workerClass>rjw.PawnRelationWorker_SecondCousin_Beast</SecondCousin_Beast.workerClass>
+  <!-- EN: second cousin -->
+  <SecondCousin_Beast.label>second cousin</SecondCousin_Beast.label>
+</LanguageData>

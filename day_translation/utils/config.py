@@ -1,46 +1,46 @@
-from typing import List
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+import os
+import logging
+from typing import Set, List
+from .filter_config import UnifiedFilterRules
 
 @dataclass
 class TranslationConfig:
-    """翻译项目配置"""
-    log_file: str = "main.log"
-    log_format: str = "%(asctime)s - %(levelname)s - %(message)s"
-    debug_mode: bool = True  # 开发时设为 True
-    preview_translatable_fields: bool = False  # 测试时可设为 False 跳过预览
     default_language: str = "ChineseSimplified"
     source_language: str = "English"
     def_injected_dir: str = "DefInjected"
     keyed_dir: str = "Keyed"
-    ignore_prefixes: List[str] = field(default_factory=lambda: ["#", "@", "$", "%", "&"])
     output_csv: str = "extracted_translations.csv"
-    default_fields: List[str] = field(default_factory=lambda: [
-        "label", "RMBLabel", "description", "baseDesc", "title", "titleShort",
-        "rulesStrings", "labelNoun", "gerund", "reportString",
-        "text", "message", "verb", "skillLabel", "pawnLabel"
-    ])
-    ignore_fields: List[str] = field(default_factory=lambda: [
-        "defName", "ParentName", "visible", "baseMoodEffect", "Class",
-        "ignoreIllegalLabelCharacterConfigError", "identifier", "slot",
-        "spawnCategories", "skillGains", "workDisables", "requiredWorkTags",
-        "bodyTypeGlobal", "bodyTypeFemale", "bodyTypeMale", "forcedTraits",
-        "initialSeverity", "minSeverity", "maxSeverity", "isBad", "tendable",
-        "scenarioCanAdd", "comps", "defaultLabelColor", "hediffDef",
-        "becomeVisible", "rulePack", "retro", "Social"
-    ])
-    non_text_patterns: List[str] = field(default_factory=lambda: [
-        r"^\s*\(\s*\d+\s*,\s*[\d*\.]+\s*\)\s*$",
-        r"^\s*[\d.]+\s*$",
-        r"^\s*(true|false)\s*$",
-        r"^\s*[A-Za-z_][A-Za-z0-9_]*\s*$",  # 变量名
-        r"^\s*#[0-9A-Fa-f]{6}\s*$",  # 颜色代码
-    ])
-    
-    # 新增：批量处理配置
-    batch_mode_enabled: bool = True
-    max_concurrent_files: int = 10
-    
-    # 新增：用户体验配置
-    show_progress_bar: bool = True
-    auto_backup: bool = True
-    backup_suffix: str = ".backup"
+    log_file: str = os.path.join(os.path.dirname(__file__), "logs", "translation.log")
+    log_format: str = "%(asctime)s - %(levelname)s - %(message)s"
+    debug_mode: bool = os.getenv("DAY_TRANSLATION_DEBUG", "").lower() == "true"
+    preview_translatable_fields: int = 0
+
+    def __post_init__(self):
+        self._rules = UnifiedFilterRules.get_rules()
+        self.log_dir = os.path.dirname(self.log_file)
+        if self.log_dir:
+            os.makedirs(self.log_dir, exist_ok=True)
+
+    @property
+    def default_fields(self) -> Set[str]:
+        return self._rules.DEFAULT_FIELDS
+
+    @property
+    def ignore_fields(self) -> Set[str]:
+        return self._rules.IGNORE_FIELDS
+
+    @property
+    def non_text_patterns(self) -> List[str]:
+        return self._rules.NON_TEXT_PATTERNS
+
+    def load_custom_config(self, config_file: str) -> None:
+        """加载自定义配置文件"""
+        import json
+        try:
+            with open(config_file, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+            self._rules = UnifiedFilterRules.from_custom_config(config)
+            logging.info(f"加载自定义配置: {config_file}")
+        except Exception as e:
+            logging.warning(f"加载自定义配置失败，使用默认规则: {e}")

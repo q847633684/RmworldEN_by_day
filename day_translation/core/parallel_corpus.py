@@ -131,33 +131,35 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
         logging.error(f"写入语料集失败: {e}")
         return 0
 
-def check_parallel_tsv() -> int:
-    """
-    检查平行语料集格式。
-
-    Returns:
-        错误条数
-    """
-    logging.info("检查平行语料集格式")
-    corpus_path = "parallel_corpus.csv"
-    errors = 0
-    if not os.path.exists(corpus_path):
-        logging.error(f"语料集文件 {corpus_path} 不存在")
+def check_parallel_tsv(file_path: str = "parallel_corpus.tsv") -> int:
+    """检查平行语料集格式"""
+    if not os.path.exists(file_path):
+        print(f"文件不存在: {file_path}")
         return 1
+    
+    errors = 0
     try:
-        with open(corpus_path, "r", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            if not reader.fieldnames or "English" not in reader.fieldnames or "Chinese" not in reader.fieldnames:
-                logging.error(f"语料集缺少必要列: {corpus_path}")
-                return 1
-            for row in reader:
-                en_text = row.get("English", "").strip()
-                zh_text = row.get("Chinese", "").strip()
-                if not en_text or not zh_text:
-                    logging.error(f"无效行: {row}")
-                    errors += 1
-    except (csv.Error, OSError) as e:
-        logging.error(f"检查语料集失败: {corpus_path}: {e}")
+        with open(file_path, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+        
+        for i, line in enumerate(lines, 1):
+            line = line.rstrip()
+            if not line:
+                continue
+            
+            parts = line.split('\t')
+            if len(parts) != 2:
+                print(f"第 {i} 行格式错误: 应为2列，实际{len(parts)}列")
+                errors += 1
+            elif not parts[0].strip() or not parts[1].strip():
+                print(f"第 {i} 行有空内容")
+                errors += 1
+        
+        if errors == 0:
+            print("格式检查通过")
+    
+    except Exception as e:
+        print(f"检查失败: {e}")
         errors += 1
-    logging.info(f"检查完成，发现 {errors} 个问题")
+    
     return errors
