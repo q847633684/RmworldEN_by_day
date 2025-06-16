@@ -108,7 +108,7 @@ def sanitize_xml(text: str) -> str:
     if not isinstance(text, str):
         return str(text)
     text = re.sub(r'[^\u0020-\uD7FF\uE000-\uFFFD]', '', text)
-    text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+    text = text.replace('&', '&').replace('<', '<').replace('>', '>')
     return text
 
 def sanitize_xcomment(text: str) -> str:
