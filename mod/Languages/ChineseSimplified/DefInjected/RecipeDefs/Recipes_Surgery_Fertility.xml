@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<LanguageData>
+    <!-- EN: sterilize -->
+    <Sterilization.label>sterilize</Sterilization.label>
+    <!-- EN: Prevents reproduction without removing genitals. -->
+    <Sterilization.description>Prevents reproduction without removing genitals.</Sterilization.description>
+    <!-- EN: install IUD -->
+    <RJW_InstallIUD.label>install IUD</RJW_InstallIUD.label>
+    <!-- EN: Greatly reduces the chance of pregnancy. Reversible anytime. -->
+    <RJW_InstallIUD.description>Greatly reduces the chance of pregnancy. Reversible anytime.</RJW_InstallIUD.description>
+    <!-- EN: remove IUD -->
+    <RJW_RemovelIUD.label>remove IUD</RJW_RemovelIUD.label>
+    <!-- EN: Remove an installed IUD, restoring fertility. -->
+    <RJW_RemovelIUD.description>Remove an installed IUD, restoring fertility.</RJW_RemovelIUD.description>
+    </LanguageData>

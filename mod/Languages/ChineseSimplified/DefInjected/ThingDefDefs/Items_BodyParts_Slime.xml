@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LanguageData>
-  <!--EN: An oozy slime glob. Useless for humans.-->
-  <SlimeGlob.ThingDef.description>An oozy slime glob. Useless for humans.</SlimeGlob.ThingDef.description>
-  <!--EN: slime glob-->
-  <SlimeGlob.ThingDef.label>slime glob</SlimeGlob.ThingDef.label>
-</LanguageData>

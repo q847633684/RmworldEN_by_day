@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Defs>
+	<rjw.SexFluidDef>
+		<defName>Cum</defName>
+		<label>cum</label>
+		<filth>FilthCum</filth>
+		<alwaysProduceFilth>true</alwaysProduceFilth>
+		<baseNutrition>0.75</baseNutrition>
+	</rjw.SexFluidDef>
+
+	<rjw.SexFluidDef>
+		<defName>GirlCum</defName>
+		<label>girlcum</label>
+		<filth>FilthGirlCum</filth>
+		<alwaysProduceFilth>true</alwaysProduceFilth>
+		<baseNutrition>0.75</baseNutrition>
+	</rjw.SexFluidDef>
+
+	<rjw.SexFluidDef>
+		<defName>InsectSpunk</defName>
+		<label>insect spunk</label>
+		<filth>FilthInsectCum</filth>
+		<consumable>InsectJelly</consumable>
+		<alwaysProduceFilth>true</alwaysProduceFilth>
+		<baseNutritionCost>0.05</baseNutritionCost>
+	</rjw.SexFluidDef>
+
+	<!-- Currently unused -->
+	<rjw.SexFluidDef>
+		<defName>Milk</defName>
+		<label>milk</label>
+		<consumable>Milk</consumable>
+		<baseNutritionCost></baseNutritionCost>
+	</rjw.SexFluidDef>
+
+	<rjw.SexFluidDef>
+		<defName>Resin</defName>
+		<label>resin</label>
+		<filth>ResinCum</filth>
+		<!--<alwaysProduceFilth>true</alwaysProduceFilth>-->
+		<baseNutritionCost></baseNutritionCost>
+	</rjw.SexFluidDef>
+</Defs>

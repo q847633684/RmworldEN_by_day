@@ -82,14 +82,17 @@ def scan_defs_sync(mod_dir: str, def_types: Set[str] = None, language: str = CON
                 if defname_elem is None or not defname_elem.text:
                     continue
                     
-                def_name = defname_elem.text
+                def_name = defname_elem.text                # 递归提取可翻译字段，传递 def_type 作为初始父标签
+                field_translations = _extract_translatable_fields_recursive(def_node, def_type, def_name, content_filter, "", None, def_type)
                 
-                # 递归提取可翻译字段
-                field_translations = _extract_translatable_fields_recursive(def_node, def_type, def_name, content_filter)
-                
-                # 转换为标准格式
+                # 转换为标准格式，清理重复的 def_type（参考 Day_EN 实现）
                 for field_path, text, tag in field_translations:
-                    full_path = f"{def_type}/{def_name}.{field_path}"
+                    # 清理路径中重复的 def_type 前缀
+                    clean_path = field_path
+                    if clean_path.startswith(def_type + "."):
+                        clean_path = clean_path[len(def_type) + 1:]
+                    
+                    full_path = f"{def_type}/{def_name}.{clean_path}"
                     translations.append((full_path, text, tag, str(xml_file.relative_to(defs_dir))))
                 
                 print(f"{Fore.CYAN}调试信息 - 从 {def_name} 提取到 {len(field_translations)} 条翻译{Style.RESET_ALL}")
@@ -100,7 +103,7 @@ def scan_defs_sync(mod_dir: str, def_types: Set[str] = None, language: str = CON
     return translations
 
 def _extract_translatable_fields_recursive(node, def_type: str, def_name: str, content_filter: ContentFilter, 
-                                         path: str = "", list_indices: dict = None) -> List[Tuple[str, str, str]]:
+                                         path: str = "", list_indices: dict = None, parent_tag: str = None) -> List[Tuple[str, str, str]]:
     """递归提取可翻译字段（参考 Day_EN 实现）"""
     if list_indices is None:
         list_indices = {}
@@ -122,19 +125,46 @@ def _extract_translatable_fields_recursive(node, def_type: str, def_name: str, c
             list_indices[index_key] = 0
         current_path = f"{path}.{list_indices[index_key]}" if path else str(list_indices[index_key])
     else:
-        current_path = f"{path}.{node_tag}" if path else node_tag
-    
-    # 检查当前节点的文本内容
+        current_path = f"{path}.{node_tag}" if path else node_tag    # 检查当前节点的文本内容 - 使用 Day_EN 的 li 特殊处理逻辑
     if node.text and node.text.strip():
-        # 使用过滤器检查是否应该翻译
-        if content_filter.filter_content(current_path, node.text.strip(), "DefInjected"):
+        should_extract = False
+        
+        # 安全获取默认字段集合，确保都是字符串
+        try:
+            default_fields = content_filter.default_fields or set()
+            default_fields_lower = set()
+            if hasattr(default_fields, '__iter__'):
+                for f in default_fields:
+                    if isinstance(f, str):
+                        default_fields_lower.add(f.lower())
+        except Exception as e:
+            logging.warning(f"获取 default_fields 失败: {e}")
+            default_fields_lower = set()
+        
+        if node_tag == 'li':
+            # li 节点特殊处理：只有当父标签在默认字段中时才提取
+            if parent_tag and isinstance(parent_tag, str) and parent_tag.lower() in default_fields_lower:
+                should_extract = True
+        else:
+            # 非 li 节点：检查当前标签是否在默认字段中
+            if isinstance(node_tag, str) and node_tag.lower() in default_fields_lower:
+                should_extract = True
+        
+        if should_extract and content_filter.filter_content(current_path, node.text.strip(), "DefInjected"):
             translations.append((current_path, node.text.strip(), node_tag))
     
-    # 递归处理子节点
+    # 递归处理子节点 - 传递父标签信息
     for child in node:
-        child_translations = _extract_translatable_fields_recursive(
-            child, def_type, def_name, content_filter, current_path, list_indices.copy()
-        )
+        if child.tag == 'li':
+            # li 子节点传递当前节点作为父标签，但保持 list_indices 引用
+            child_translations = _extract_translatable_fields_recursive(
+                child, def_type, def_name, content_filter, current_path, list_indices, parent_tag=node_tag
+            )
+        else:
+            # 非 li 子节点复制 list_indices，传递当前节点作为父标签
+            child_translations = _extract_translatable_fields_recursive(
+                child, def_type, def_name, content_filter, current_path, list_indices.copy(), parent_tag=node_tag
+            )
         translations.extend(child_translations)
     
     return translations

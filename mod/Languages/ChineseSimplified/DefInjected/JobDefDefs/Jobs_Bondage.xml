@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LanguageData>
-  <!--EN: equipping-->
-  <GiveBondageGear.JobDef.reportString>equipping</GiveBondageGear.JobDef.reportString>
-  <!--EN: struggling-->
-  <StruggleInBondageGear.JobDef.reportString>struggling</StruggleInBondageGear.JobDef.reportString>
-  <!--EN: unlocking-->
-  <UnlockBondageGear.JobDef.reportString>unlocking</UnlockBondageGear.JobDef.reportString>
-</LanguageData>

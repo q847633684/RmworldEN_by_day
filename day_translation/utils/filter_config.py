@@ -16,8 +16,11 @@ class UnifiedFilterRules:
         'skillDescription', 'backstoryDesc', 'jobString',
         'gerundLabel', 'verb', 'deathMessage', 'summary',
         'note', 'flavor', 'quote', 'caption',
+        # RimWorld 特有字段（参考 Day_EN）
+        'RMBLabel', 'rulesStrings', 'labelNoun', 'gerund', 
+        'reportString', 'skillLabel', 'pawnLabel', 'titleShort',
         # 新增字段
-        'reportString', 'reportStringOverride', 'overrideReportString',
+        'reportStringOverride', 'overrideReportString',
         'overrideTooltip', 'overrideLabel', 'overrideDescription',
         'overrideLabelShort', 'overrideDescriptionShort',
         'overrideTitle', 'overrideText', 'overrideMessage',
@@ -166,11 +169,28 @@ class UnifiedFilterRules:
         
     def _initialize_field_types(self) -> None:
         """初始化字段类型"""
-        # 设置默认字段类型
-        for field in self.default_fields:
-            self.field_types[field] = "translatable"
-        for field in self.ignore_fields:
-            self.field_types[field] = "ignored"
+        # 设置默认字段类型 - 添加安全检查
+        try:
+            default_fields = self.default_fields
+            if hasattr(default_fields, '__iter__') and not isinstance(default_fields, str):
+                for field in default_fields:
+                    if isinstance(field, str):
+                        self.field_types[field] = "translatable"
+            else:
+                logging.warning(f"default_fields 不可迭代: {type(default_fields)}")
+        except Exception as e:
+            logging.error(f"初始化默认字段类型时出错: {e}")
+            
+        try:
+            ignore_fields = self.ignore_fields  
+            if hasattr(ignore_fields, '__iter__') and not isinstance(ignore_fields, str):
+                for field in ignore_fields:
+                    if isinstance(field, str):
+                        self.field_types[field] = "ignored"
+            else:
+                logging.warning(f"ignore_fields 不可迭代: {type(ignore_fields)}")
+        except Exception as e:
+            logging.error(f"初始化忽略字段类型时出错: {e}")
             
     def _initialize_field_groups(self) -> None:
         """初始化字段分组"""
@@ -183,11 +203,24 @@ class UnifiedFilterRules:
             
     def _initialize_field_priorities(self) -> None:
         """初始化字段优先级"""
-        # 设置默认优先级
-        for field in self.default_fields:
-            self.field_priorities[field] = self.PRIORITY_LEVELS["normal"]
-        for field in self.ignore_fields:
-            self.field_priorities[field] = self.PRIORITY_LEVELS["lowest"]
+        # 设置默认优先级 - 添加安全检查
+        try:
+            default_fields = self.default_fields
+            if hasattr(default_fields, '__iter__') and not isinstance(default_fields, str):
+                for field in default_fields:
+                    if isinstance(field, str):
+                        self.field_priorities[field] = self.PRIORITY_LEVELS["normal"]
+        except Exception as e:
+            logging.error(f"初始化默认字段优先级时出错: {e}")
+            
+        try:
+            ignore_fields = self.ignore_fields
+            if hasattr(ignore_fields, '__iter__') and not isinstance(ignore_fields, str):
+                for field in ignore_fields:
+                    if isinstance(field, str):
+                        self.field_priorities[field] = self.PRIORITY_LEVELS["lowest"]
+        except Exception as e:
+            logging.error(f"初始化忽略字段优先级时出错: {e}")
             
     def _validate_rules(self) -> None:
         """验证规则的有效性"""

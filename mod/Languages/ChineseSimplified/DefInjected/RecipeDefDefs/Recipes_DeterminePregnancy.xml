@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LanguageData>
-  <!--EN: Determines if a colonist is pregnant or not and if there any abnormalities with pregnancy.-->
-  <DeterminePregnancy.RecipeDef.description>Determines if a colonist is pregnant or not and if there any abnormalities with pregnancy.</DeterminePregnancy.RecipeDef.description>
-  <!--EN: Check pregnancy.-->
-  <DeterminePregnancy.RecipeDef.jobString>Check pregnancy.</DeterminePregnancy.RecipeDef.jobString>
-  <!--EN: check for pregnancy-->
-  <DeterminePregnancy.RecipeDef.label>check for pregnancy</DeterminePregnancy.RecipeDef.label>
-</LanguageData>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LanguageData>
-  <!--EN: anus-->
-  <AnusBPG.BodyPartGroupDef.label>anus</AnusBPG.BodyPartGroupDef.label>
-  <!--EN: chest-->
-  <ChestBPG.BodyPartGroupDef.label>chest</ChestBPG.BodyPartGroupDef.label>
-  <!--EN: genitals-->
-  <GenitalsBPG.BodyPartGroupDef.label>genitals</GenitalsBPG.BodyPartGroupDef.label>
-</LanguageData>

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<LanguageData>
+    <!-- EN: add vagina -->
+    <AddMultiVagina.label>add vagina</AddMultiVagina.label>
+    <!-- EN: add equine vagina -->
+    <AddMultiHorseVagina.label>add equine vagina</AddMultiHorseVagina.label>
+    <!-- EN: add feline vagina -->
+    <AddMultiCatVagina.label>add feline vagina</AddMultiCatVagina.label>
+    <!-- EN: add canine vagina -->
+    <AddMultiDogVagina.label>add canine vagina</AddMultiDogVagina.label>
+    <!-- EN: add dragon vagina -->
+    <AddMultiDragonVagina.label>add dragon vagina</AddMultiDragonVagina.label>
+    <!-- EN: add female ovipositor -->
+    <AddMultiOvipositorF.label>add female ovipositor</AddMultiOvipositorF.label>
+    <!-- EN: Adds additional female ovipositor. -->
+    <AddMultiOvipositorF.description>Adds additional female ovipositor.</AddMultiOvipositorF.description>
+    <!-- EN: add penis -->
+    <AddMultiPenis.label>add penis</AddMultiPenis.label>
+    <!-- EN: add equine penis -->
+    <AddMultiHorsePenis.label>add equine penis</AddMultiHorsePenis.label>
+    <!-- EN: add feline penis -->
+    <AddMultiCatPenis.label>add feline penis</AddMultiCatPenis.label>
+    <!-- EN: add canine penis -->
+    <AddMultiDogPenis.label>add canine penis</AddMultiDogPenis.label>
+    <!-- EN: add dragon penis -->
+    <AddMultiDragonPenis.label>add dragon penis</AddMultiDragonPenis.label>
+    <!-- EN: add procyonine penis -->
+    <AddMultiRaccoonPenis.label>add procyonine penis</AddMultiRaccoonPenis.label>
+    <!-- EN: add hemipenis -->
+    <AddMultiHemiPenis.label>add hemipenis</AddMultiHemiPenis.label>
+    <!-- EN: add crocodilian penis -->
+    <AddMultiCrocodilianPenis.label>add crocodilian penis</AddMultiCrocodilianPenis.label>
+    <!-- EN: add male ovipositor -->
+    <AddMultiOvipositorM.label>add male ovipositor</AddMultiOvipositorM.label>
+    <!-- EN: Adds additional male ovipositor. -->
+    <AddMultiOvipositorM.description>Adds additional male ovipositor.</AddMultiOvipositorM.description>
+    <!-- EN: add breasts -->
+    <AddMultiBreasts.label>add breasts</AddMultiBreasts.label>
+    <!-- EN: add anus -->
+    <AddMultiAnus.label>add anus</AddMultiAnus.label>
+    <!-- EN: add insect anus -->
+    <AddMultiInsectAnus.label>add insect anus</AddMultiInsectAnus.label>
+    </LanguageData>

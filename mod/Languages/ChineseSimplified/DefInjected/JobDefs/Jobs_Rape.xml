@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<LanguageData>
+    <!-- EN: gettin' raped. -->
+    <GettinRaped.reportString>gettin' raped.</GettinRaped.reportString>
+    <!-- EN: rapin' CP -->
+    <RapeComfortPawn.reportString>rapin' CP</RapeComfortPawn.reportString>
+    <!-- EN: raping. -->
+    <RandomRape.reportString>raping.</RandomRape.reportString>
+    <!-- EN: rapin' enemy -->
+    <RapeEnemy.reportString>rapin' enemy</RapeEnemy.reportString>
+    <!-- EN: rapin' enemy -->
+    <RapeEnemyByInsect.reportString>rapin' enemy</RapeEnemyByInsect.reportString>
+    <!-- EN: rapin' enemy -->
+    <RapeEnemyByAnimal.reportString>rapin' enemy</RapeEnemyByAnimal.reportString>
+    <!-- EN: rapin' enemy -->
+    <RapeEnemyByMech.reportString>rapin' enemy</RapeEnemyByMech.reportString>
+    <!-- EN: rapin' enemy -->
+    <RapeEnemyToParasite.reportString>rapin' enemy</RapeEnemyToParasite.reportString>
+    </LanguageData>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+	<!-- Insect privates -->
+	<rjw.HediffDef_SexPart ParentName="NaturalPrivatePartVagina">
+		<defName>OvipositorF</defName>
+		<label>ovipositor (Female)</label>
+		<labelNoun>an ovipositor</labelNoun>
+		<description>An ovipositor. Lays eggs inside host.</description>
+		<descriptionHyperlinks>
+			<ThingDef>OvipositorF</ThingDef>
+		</descriptionHyperlinks>
+		<spawnThingOnRemoved>OvipositorF</spawnThingOnRemoved>
+		<fluid>InsectSpunk</fluid>
+		<sizeProfile>DefaultPenisSizes</sizeProfile>
+		<genitalFamily>FemaleOvipositor</genitalFamily>
+		<genitalTags>
+			<li>CanPenetrate</li>
+			<li>CanBePenetrated</li>
+			<li>CanEgg</li>
+		</genitalTags>
+		<partTags>
+			<li>Internal</li>
+			<li>Rigid</li>
+		</partTags>
+		<comps>
+			<li Class="rjw.HediffCompProperties_Ovipositor">
+				<eggCount>1</eggCount> <!-- How many eggs to produce at once. This is a FloatRange, so you can also have e.g. 2~5 -->
+				<!-- Time to produce new eggs -->
+				<eggIntervalTicks>12000~60000</eggIntervalTicks>
+			</li>
+		</comps>
+	</rjw.HediffDef_SexPart>
+
+	<rjw.HediffDef_SexPart ParentName="NaturalPrivatePartPenis">
+		<defName>OvipositorM</defName>
+		<label>ovipositor (Male)</label>
+		<labelNoun>an ovipositor</labelNoun>
+		<description>An ovipositor. Fertilizes eggs inside host.</description>
+		<descriptionHyperlinks>
+			<ThingDef>OvipositorM</ThingDef>
+		</descriptionHyperlinks>
+		<spawnThingOnRemoved>OvipositorM</spawnThingOnRemoved>
+		<fluid>InsectSpunk</fluid>
+		<genitalFamily>MaleOvipositor</genitalFamily>
+		<genitalTags>
+			<li>CanPenetrate</li>
+			<li>CanFertilizeEgg</li>
+		</genitalTags>
+		<partTags>
+			<li>Internal</li>
+			<li>Barbed</li>
+			<li>Ridged</li>
+			<li>Rigid</li>
+		</partTags>
+	</rjw.HediffDef_SexPart>
+
+	<rjw.HediffDef_SexPart ParentName="NaturalPrivatePartAnus">
+		<defName>InsectAnus</defName>
+		<label>insect anus</label>
+		<labelNoun>an insect anus</labelNoun>
+		<description>An insect anus.</description>
+		<descriptionHyperlinks>
+			<ThingDef>InsectAnus</ThingDef>
+		</descriptionHyperlinks>
+		<spawnThingOnRemoved>InsectAnus</spawnThingOnRemoved>
+		<partTags>
+			<li>Rigid</li>
+		</partTags>
+	</rjw.HediffDef_SexPart>
+</Defs>

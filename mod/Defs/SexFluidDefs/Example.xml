@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Defs>
+	<rjw.SexFluidDef Abstract="True">
+		<defName>Example</defName>
+		<!-- Filth to produce on release. Omit for no filth. -->
+		<filth></filth>
+		<!-- Optional ThingDef to consume when ingested. -->
+		<consumable></consumable>
+		<!-- Number of consumables to ingest per unit fluid. -->
+		<consumableFluidRatio>1</consumableFluidRatio>
+		<!-- If set, can also be consumed through vaginal or anal sex. -->
+		<ingestThroughAnyOrifice>false</ingestThroughAnyOrifice>
+		<!-- If false, only produces filth when there is at least one unit of fluid. -->
+		<alwaysProduceFilth>false</alwaysProduceFilth>
+		<!-- How nutritious the fluid is when consumed. Incompatible with <consumable>. -->
+		<baseNutrition>0</baseNutrition>
+		<!-- How much nutrition a pawn has to spend to produce one unit of fluid. 
+				 Best kept below <baseNutrition> or total consumable nutrition for the sake of thermodynamics. -->
+		<baseNutritionCost>1</baseNutritionCost>
+		<!-- Dubs' Bad Hygiene integration. -->
+		<quenchesThirst>true</quenchesThirst>
+		<!-- Optional tags (arbitrary strings) -->
+		<tags>
+			<li>TastesLikeChicken</li>
+		</tags>
+		<!-- Optional callbacks on ingestion. -->
+		<ingestionDoers>
+			<li Class="SexFluidIngestionDoer_SubClass" />
+		</ingestionDoers>
+	</rjw.SexFluidDef>
+</Defs>

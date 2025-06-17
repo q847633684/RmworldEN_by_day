@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Defs>
+	<!-- From core -->
+	<RecipeDef Abstract="True" Name="RJW_SurgeryFlesh" ParentName="SurgeryFlesh">
+		<dontShowIfAnyIngredientMissing>true</dontShowIfAnyIngredientMissing>
+		<recipeUsers>
+			<li>Human</li>
+			<li MayRequire="Ludeon.RimWorld.Anomaly">CreepJoiner</li>
+		</recipeUsers>
+	</RecipeDef>
+
+	<!--this one not used, but left for mods that are not updated-->
+	<RecipeDef Abstract="True" Name="SexReassignment" ParentName="RJW_SurgeryFlesh">
+		<description>Install genital part.</description>
+		<workerClass>rjw.Recipe_InstallGenitals</workerClass>
+		<workAmount>1200</workAmount>
+		<skillRequirements>
+			<Medicine>10</Medicine>
+		</skillRequirements>
+		<appliedOnFixedBodyParts>
+			<li>Genitals</li>
+		</appliedOnFixedBodyParts>
+	</RecipeDef>
+
+	<RecipeDef Abstract="True" Name="SexReassignmentV" ParentName="RJW_SurgeryFlesh">
+		<description>Installs a vagina, replaces other bodyparts if present.</description>
+		<workerClass>rjw.Recipe_InstallGenitals</workerClass>
+		<jobString>Installing vagina.</jobString>
+		<workAmount>2000</workAmount>
+		<skillRequirements>
+			<Medicine>10</Medicine>
+		</skillRequirements>
+		<appliedOnFixedBodyParts>
+			<li>Genitals</li>
+		</appliedOnFixedBodyParts>
+	</RecipeDef>
+
+	<RecipeDef Abstract="True" Name="SexReassignmentP" ParentName="RJW_SurgeryFlesh">
+		<description>Attaches a penis, replaces other bodyparts if present.</description>
+		<workerClass>rjw.Recipe_InstallGenitals</workerClass>
+		<jobString>Attaching penis.</jobString>
+		<workAmount>1200</workAmount>
+		<skillRequirements>
+			<Medicine>10</Medicine>
+		</skillRequirements>
+		<appliedOnFixedBodyParts>
+			<li>Genitals</li>
+		</appliedOnFixedBodyParts>
+	</RecipeDef>
+
+	<RecipeDef Abstract="True" Name="BreastSurgery" ParentName="RJW_SurgeryFlesh">
+		<description>Attaches a pair of breasts, replaces other bodyparts if present.</description>
+		<workerClass>rjw.Recipe_InstallBreasts</workerClass>
+		<jobString>Attaching a pair of breasts.</jobString>
+		<workAmount>1200</workAmount>
+		<skillRequirements>
+			<Medicine>8</Medicine>
+		</skillRequirements>
+		<appliedOnFixedBodyParts>
+			<li>Chest</li>
+		</appliedOnFixedBodyParts>
+	</RecipeDef>
+
+	<RecipeDef Abstract="True" Name="AnalSurgery" ParentName="RJW_SurgeryFlesh">
+		<description>Installs an anus, replaces other bodyparts if present.</description>
+		<workerClass>rjw.Recipe_InstallAnus</workerClass>
+		<jobString>Installing an anus.</jobString>
+		<workAmount>1200</workAmount>
+		<skillRequirements>
+			<Medicine>10</Medicine>
+		</skillRequirements>
+		<appliedOnFixedBodyParts>
+			<li>Anus</li>
+		</appliedOnFixedBodyParts>
+	</RecipeDef>
+</Defs>

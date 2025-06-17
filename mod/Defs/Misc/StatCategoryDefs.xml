@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+	<StatCategoryDef>
+		<defName>RJW_OriginalPartOwner</defName>
+		<label>ownership</label>
+		<displayOrder>37</displayOrder> <!-- Chosen arbitrarily, may need changing -->
+	</StatCategoryDef>
+</Defs>

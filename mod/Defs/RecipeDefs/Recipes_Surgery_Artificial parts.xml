@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Defs>
+
+	<!-- Attach simple prosthetic privates -->
+
+	<RecipeDef ParentName="SexReassignmentP">
+		<defName>InstallHydraulicPenis</defName>
+		<label>install hydraulic penis</label>
+		<description>Installs a hydraulic penis, replaces other bodyparts if present.</description>
+		<jobString>Installing hydraulic penis.</jobString>
+		<workAmount>1500</workAmount>
+		<skillRequirements>
+			<Medicine>7</Medicine>
+		</skillRequirements>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>Medicine</li>
+					</categories>
+				</filter>
+				<count>1</count>
+			</li>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>HydraulicPenis</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<categories>
+				<li>Medicine</li>
+			</categories>
+			<thingDefs>
+				<li>HydraulicPenis</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<addsHediff>HydraulicPenis</addsHediff>
+	</RecipeDef>
+
+	<RecipeDef ParentName="SexReassignmentV">
+		<defName>InstallHydraulicVagina</defName>
+		<label>install hydraulic vagina</label>
+		<description>Installs a hydraulic vagina, replaces other bodyparts if present.</description>
+		<jobString>Installing hydraulic vagina.</jobString>
+		<workAmount>1500</workAmount>
+		<skillRequirements>
+			<Medicine>7</Medicine>
+		</skillRequirements>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>Medicine</li>
+					</categories>
+				</filter>
+				<count>1</count>
+			</li>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>HydraulicVagina</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<categories>
+				<li>Medicine</li>
+			</categories>
+			<thingDefs>
+				<li>HydraulicVagina</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<addsHediff>HydraulicVagina</addsHediff>
+	</RecipeDef>
+
+	<RecipeDef ParentName="BreastSurgery">
+		<defName>InstallHydraulicBreasts</defName>
+		<label>install hydraulic breasts</label>
+		<description>Installs a pair of hydraulic breasts, replaces other bodyparts if present.</description>
+		<jobString>Installing hydraulic breasts.</jobString>
+		<workAmount>1500</workAmount>
+		<skillRequirements>
+			<Medicine>7</Medicine>
+		</skillRequirements>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>Medicine</li>
+					</categories>
+				</filter>
+				<count>1</count>
+			</li>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>HydraulicBreasts</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<categories>
+				<li>Medicine</li>
+			</categories>
+			<thingDefs>
+				<li>HydraulicBreasts</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<addsHediff>HydraulicBreasts</addsHediff>
+	</RecipeDef>
+
+	<RecipeDef ParentName="AnalSurgery">
+		<defName>InstallHydraulicAnus</defName>
+		<label>install hydraulic anus</label>
+		<description>Installs a hydraulic anus, replaces other bodyparts if present.</description>
+		<jobString>Installing hydraulic anus.</jobString>
+		<workAmount>1500</workAmount>
+		<skillRequirements>
+			<Medicine>7</Medicine>
+		</skillRequirements>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>Medicine</li>
+					</categories>
+				</filter>
+				<count>1</count>
+			</li>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>HydraulicAnus</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<categories>
+				<li>Medicine</li>
+			</categories>
+			<thingDefs>
+				<li>HydraulicAnus</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<addsHediff>HydraulicAnus</addsHediff>
+	</RecipeDef>
+
+	<!-- Attach bionic privates -->
+
+	<RecipeDef ParentName="SexReassignmentV">
+		<defName>InstallBionicVagina</defName>
+		<label>install bionic vagina</label>
+		<description>Installs a bionic vagina, replaces other bodyparts if present.</description>
+		<jobString>Installing bionic vagina.</jobString>
+		<workAmount>2000</workAmount>
+		<skillRequirements>
+			<Medicine>12</Medicine>
+		</skillRequirements>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>Medicine</li>
+					</categories>
+				</filter>
+				<count>1</count>
+			</li>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>BionicVagina</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<categories>
+				<li>Medicine</li>
+			</categories>
+			<thingDefs>
+				<li>BionicVagina</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<addsHediff>BionicVagina</addsHediff>
+	</RecipeDef>
+
+	<RecipeDef ParentName="SexReassignmentP">
+		<defName>InstallBionicPenis</defName>
+		<label>install bionic penis</label>
+		<description>Attaches a bionic penis, replaces other bodyparts if present.</description>
+		<jobString>Attaching bionic penis.</jobString>
+		<workAmount>1500</workAmount>
+		<skillRequirements>
+			<Medicine>12</Medicine>
+		</skillRequirements>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>Medicine</li>
+					</categories>
+				</filter>
+				<count>1</count>
+			</li>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>BionicPenis</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<categories>
+				<li>Medicine</li>
+			</categories>
+			<thingDefs>
+				<li>BionicPenis</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<addsHediff>BionicPenis</addsHediff>
+	</RecipeDef>
+
+	<RecipeDef ParentName="BreastSurgery">
+		<defName>InstallBionicBreasts</defName>
+		<label>install bionic breasts</label>
+		<description>Installs a pair of bionic breasts, replaces other bodyparts if present.</description>
+		<jobString>Installing bionic breasts.</jobString>
+		<workAmount>2000</workAmount>
+		<skillRequirements>
+			<Medicine>14</Medicine>
+		</skillRequirements>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>Medicine</li>
+					</categories>
+				</filter>
+				<count>1</count>
+			</li>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>BionicBreasts</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<categories>
+				<li>Medicine</li>
+			</categories>
+			<thingDefs>
+				<li>BionicBreasts</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<addsHediff>BionicBreasts</addsHediff>
+	</RecipeDef>
+
+	<RecipeDef ParentName="AnalSurgery">
+		<defName>InstallBionicAnus</defName>
+		<label>install bionic anus</label>
+		<description>Installs a bionic anus, replaces other bodyparts if present.</description>
+		<jobString>Installing bionic anus.</jobString>
+		<workAmount>2000</workAmount>
+		<skillRequirements>
+			<Medicine>14</Medicine>
+		</skillRequirements>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>Medicine</li>
+					</categories>
+				</filter>
+				<count>1</count>
+			</li>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>BionicAnus</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<categories>
+				<li>Medicine</li>
+			</categories>
+			<thingDefs>
+				<li>BionicAnus</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<addsHediff>BionicAnus</addsHediff>
+	</RecipeDef>
+
+	<!-- Attach archotech privates -->
+
+	<RecipeDef ParentName="SexReassignmentP">
+		<defName>InstallArchotechPenis</defName>
+		<label>install archotech penis</label>
+		<description>Attaches a archotech penis, replaces other bodyparts if present.</description>
+		<jobString>Attaching archotech penis.</jobString>
+		<workAmount>1500</workAmount>
+		<skillRequirements>
+			<!-- Much lower than other types. Core Archotech is Medine 3, these basically attach themselves. -->
+			<Medicine>5</Medicine>
+		</skillRequirements>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>Medicine</li>
+					</categories>
+				</filter>
+				<count>1</count>
+			</li>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>ArchotechPenis</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<categories>
+				<li>Medicine</li>
+			</categories>
+			<thingDefs>
+				<li>ArchotechPenis</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<addsHediff>ArchotechPenis</addsHediff>
+	</RecipeDef>
+
+	<RecipeDef ParentName="SexReassignmentV">
+		<defName>InstallArchotechVagina</defName>
+		<label>install archotech vagina</label>
+		<description>Installs a archotech vagina, replaces other bodyparts if present.</description>
+		<jobString>Installing archotech vagina.</jobString>
+		<workAmount>2000</workAmount>
+		<skillRequirements>
+			<Medicine>5</Medicine>
+		</skillRequirements>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>Medicine</li>
+					</categories>
+				</filter>
+				<count>1</count>
+			</li>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>ArchotechVagina</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<categories>
+				<li>Medicine</li>
+			</categories>
+			<thingDefs>
+				<li>ArchotechVagina</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<addsHediff>ArchotechVagina</addsHediff>
+	</RecipeDef>
+
+	<RecipeDef ParentName="AnalSurgery">
+		<defName>InstallArchotechAnus</defName>
+		<label>install archotech anus</label>
+		<description>Installs a archotech anus, replaces other bodyparts if present.</description>
+		<jobString>Installing archotech anus.</jobString>
+		<workAmount>2000</workAmount>
+		<skillRequirements>
+			<Medicine>5</Medicine>
+		</skillRequirements>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>Medicine</li>
+					</categories>
+				</filter>
+				<count>1</count>
+			</li>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>ArchotechAnus</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<categories>
+				<li>Medicine</li>
+			</categories>
+			<thingDefs>
+				<li>ArchotechAnus</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<addsHediff>ArchotechAnus</addsHediff>
+	</RecipeDef>
+
+	<RecipeDef ParentName="BreastSurgery">
+		<defName>InstallArchotechBreasts</defName>
+		<label>install archotech breasts</label>
+		<description>Installs a pair of archotech breasts, replaces other bodyparts if present.</description>
+		<jobString>Installing archotech breasts.</jobString>
+		<workAmount>2000</workAmount>
+		<skillRequirements>
+			<Medicine>5</Medicine>
+		</skillRequirements>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>Medicine</li>
+					</categories>
+				</filter>
+				<count>1</count>
+			</li>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>ArchotechBreasts</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<categories>
+				<li>Medicine</li>
+			</categories>
+			<thingDefs>
+				<li>ArchotechBreasts</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<addsHediff>ArchotechBreasts</addsHediff>
+	</RecipeDef>
+</Defs>

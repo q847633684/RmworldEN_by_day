@@ -97,14 +97,17 @@ class TranslationConfig:
             if hasattr(self, key) and not key.startswith('_'):
                 setattr(self, key, value)
         self._validate_config()
-
+    
     @property
     def default_fields(self) -> Set[str]:
         """获取默认字段集合"""
         if not hasattr(self, '_rules') or not self._rules:
             return set()
         default_fields = self._rules.get("default_fields", [])
-        return set(default_fields) if default_fields else set()
+        # 确保所有字段都是字符串类型
+        if isinstance(default_fields, (list, set)):
+            return set(f for f in default_fields if isinstance(f, str))
+        return set()
 
     @property
     def ignore_fields(self) -> Set[str]:

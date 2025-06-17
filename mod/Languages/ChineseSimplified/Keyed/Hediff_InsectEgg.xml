@@ -1,10 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <LanguageData>
-  <Hediff_InsectEgg_egg>egg</Hediff_InsectEgg_egg>
-  <Hediff_InsectEgg_small>Small egg</Hediff_InsectEgg_small>
-  <Hediff_InsectEgg_medium>Medium egg</Hediff_InsectEgg_medium>
-  <Hediff_InsectEgg_big>Big egg</Hediff_InsectEgg_big>
-  <Hediff_InsectEgg_huge>Huge egg</Hediff_InsectEgg_huge>
-  <Hediff_InsectEgg_fertilized>Fertilized</Hediff_InsectEgg_fertilized>
-  <Hediff_InsectEgg_unfertilized>Unfertilized</Hediff_InsectEgg_unfertilized>
-</LanguageData>
+    <!-- EN:  egg -->
+    <Hediff_InsectEgg_egg> egg</Hediff_InsectEgg_egg>
+    <!-- EN: Small egg -->
+    <Hediff_InsectEgg_small>Small egg</Hediff_InsectEgg_small>
+    <!-- EN: Medium egg -->
+    <Hediff_InsectEgg_medium>Medium egg</Hediff_InsectEgg_medium>
+    <!-- EN: Big egg -->
+    <Hediff_InsectEgg_big>Big egg</Hediff_InsectEgg_big>
+    <!-- EN: Huge egg -->
+    <Hediff_InsectEgg_huge>Huge egg</Hediff_InsectEgg_huge>
+    <!-- EN: Fertilized -->
+    <Hediff_InsectEgg_fertilized>Fertilized</Hediff_InsectEgg_fertilized>
+    <!-- EN: Unfertilized -->
+    <Hediff_InsectEgg_unfertilized>Unfertilized</Hediff_InsectEgg_unfertilized>
+    </LanguageData>

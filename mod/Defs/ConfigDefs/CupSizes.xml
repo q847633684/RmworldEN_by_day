@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<Defs>
+	<rjw.BraSizeConfigDef>
+		<defName>RJW_BraSizes</defName>
+		<bandSizeBase>34</bandSizeBase>
+		<cupSizeLabels>
+			<li>AA</li>
+			<li>A</li>
+			<li>B</li>
+			<li>C</li>
+			<li>D</li>
+			<li>DD</li>
+			<li>E</li>
+			<li>F</li>
+			<li>FF</li>
+			<li>G</li>
+			<li>GG</li>
+			<li>H</li>
+			<li>HH</li>
+			<li>J</li>
+			<li>JJ</li>
+			<li>K</li>
+			<li>KK</li>
+			<li>L</li>
+			<li>LL</li>
+			<li>M</li>
+			<li>MM</li>
+			<li>N</li>
+			<!-- Largest non-custom cup size sold by Ewa Michalak. -->
+			<li>NN</li>
+			<li>O</li>
+			<li>OO</li>
+			<li>P</li>
+			<li>PP</li>
+			<li>Q</li>
+			<li>QQ</li>
+			<li>R</li>
+			<!-- Just making it up now. -->
+			<li>RR</li>
+			<li>S</li>
+			<li>SS</li>
+			<li>T</li>
+			<li>TT</li>
+			<li>U</li>
+			<li>UU</li>
+			<li>V</li>
+			<li>VV</li>
+			<li>W</li>
+			<li>WW</li>
+			<li>X</li>
+			<li>XX</li>
+			<li>Y</li>
+			<li>YY</li>
+			<li>Z</li>
+			<li>ZZ</li>
+		</cupSizeLabels>
+	</rjw.BraSizeConfigDef>
+</Defs>

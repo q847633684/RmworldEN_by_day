@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Defs>
-  <ThingDef>
-    <defName>TestItem</defName>
-    <label>Test Item</label>
-    <description>This is a test item</description>
-    <thingClass>Thing</thingClass>
-  </ThingDef>
-</Defs>

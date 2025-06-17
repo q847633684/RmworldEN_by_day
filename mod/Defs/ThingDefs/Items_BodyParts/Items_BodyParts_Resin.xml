@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Defs>
+	<ThingDef ParentName="ResourceBase">
+		<defName>ResinGlob</defName>
+		<thingClass>ThingWithComps</thingClass>
+		<label>resin</label>
+		<description>A mixture of highly viscous organic compounds typically harvested from plants.</description>
+		<graphicData>
+			<texPath>Things/Item/Parts/slime</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<useHitPoints>true</useHitPoints>
+		<statBases>
+			<MaxHitPoints>100</MaxHitPoints>
+			<DeteriorationRate>0</DeteriorationRate>
+			<MarketValue>1</MarketValue>
+			<Mass>1.0</Mass>
+			<Flammability>1.0</Flammability>
+		</statBases>
+		<altitudeLayer>Item</altitudeLayer>
+		<tickerType>Never</tickerType>
+		<thingCategories>
+			<li>Items</li>
+		</thingCategories>
+		<tradeTags>
+			<li>Exotic</li>
+		</tradeTags>
+		<tradeability>None</tradeability>
+		<generateCommonality>0.0</generateCommonality>
+	</ThingDef>
+</Defs>

@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='utf-8'?>
+<LanguageData>
+    <!-- EN: masturbating done -->
+    <CountOfFappin.label>masturbating done</CountOfFappin.label>
+    <!-- EN: The number of times I masturbated. -->
+    <CountOfFappin.description>The number of times I masturbated.</CountOfFappin.description>
+    <!-- EN: total sex had -->
+    <CountOfSex.label>total sex had</CountOfSex.label>
+    <!-- EN: The number of times I had sex. -->
+    <CountOfSex.description>The number of times I had sex.</CountOfSex.description>
+    <!-- EN: sex with humanlikes -->
+    <CountOfSexWithHumanlikes.label>sex with humanlikes</CountOfSexWithHumanlikes.label>
+    <!-- EN: The number of times I had sex with humanlikes. -->
+    <CountOfSexWithHumanlikes.description>The number of times I had sex with humanlikes.</CountOfSexWithHumanlikes.description>
+    <!-- EN: sex with animals -->
+    <CountOfSexWithAnimals.label>sex with animals</CountOfSexWithAnimals.label>
+    <!-- EN: The number of times I had sex with animals. -->
+    <CountOfSexWithAnimals.description>The number of times I had sex with animals.</CountOfSexWithAnimals.description>
+    <!-- EN: sex with insects -->
+    <CountOfSexWithInsects.label>sex with insects</CountOfSexWithInsects.label>
+    <!-- EN: The number of times I had sex with insects. -->
+    <CountOfSexWithInsects.description>The number of times I had sex with insects.</CountOfSexWithInsects.description>
+    <!-- EN: sex with other -->
+    <CountOfSexWithOthers.label>sex with other</CountOfSexWithOthers.label>
+    <!-- EN: The number of times I had sex with weird stuff. -->
+    <CountOfSexWithOthers.description>The number of times I had sex with weird stuff.</CountOfSexWithOthers.description>
+    <!-- EN: raped humanlikes -->
+    <CountOfRapedHumanlikes.label>raped humanlikes</CountOfRapedHumanlikes.label>
+    <!-- EN: The number of times I raped humanlikes. -->
+    <CountOfRapedHumanlikes.description>The number of times I raped humanlikes.</CountOfRapedHumanlikes.description>
+    <!-- EN: raped animals -->
+    <CountOfRapedAnimals.label>raped animals</CountOfRapedAnimals.label>
+    <!-- EN: The number of times I raped animals. -->
+    <CountOfRapedAnimals.description>The number of times I raped animals.</CountOfRapedAnimals.description>
+    <!-- EN: raped insects -->
+    <CountOfRapedInsects.label>raped insects</CountOfRapedInsects.label>
+    <!-- EN: The number of times I raped insects. -->
+    <CountOfRapedInsects.description>The number of times I raped insects.</CountOfRapedInsects.description>
+    <!-- EN: raped other -->
+    <CountOfRapedOthers.label>raped other</CountOfRapedOthers.label>
+    <!-- EN: The number of times I raped weird stuff. -->
+    <CountOfRapedOthers.description>The number of times I raped weird stuff.</CountOfRapedOthers.description>
+    <!-- EN: raped corpses -->
+    <CountOfSexWithCorpse.label>raped corpses</CountOfSexWithCorpse.label>
+    <!-- EN: The number of times I raped corpses. -->
+    <CountOfSexWithCorpse.description>The number of times I raped corpses.</CountOfSexWithCorpse.description>
+    <!-- EN: raped by humanlikes -->
+    <CountOfBeenRapedByHumanlikes.label>raped by humanlikes</CountOfBeenRapedByHumanlikes.label>
+    <!-- EN: The number of times I was raped by humanlikes. -->
+    <CountOfBeenRapedByHumanlikes.description>The number of times I was raped by humanlikes.</CountOfBeenRapedByHumanlikes.description>
+    <!-- EN: raped by animals -->
+    <CountOfBeenRapedByAnimals.label>raped by animals</CountOfBeenRapedByAnimals.label>
+    <!-- EN: The number of times I was raped by animals. -->
+    <CountOfBeenRapedByAnimals.description>The number of times I was raped by animals.</CountOfBeenRapedByAnimals.description>
+    <!-- EN: raped by insects -->
+    <CountOfBeenRapedByInsects.label>raped by insects</CountOfBeenRapedByInsects.label>
+    <!-- EN: The number of times I was raped by insects. -->
+    <CountOfBeenRapedByInsects.description>The number of times I was raped by insects.</CountOfBeenRapedByInsects.description>
+    <!-- EN: raped by other -->
+    <CountOfBeenRapedByOthers.label>raped by other</CountOfBeenRapedByOthers.label>
+    <!-- EN: The number of times I was raped by weird stuff. -->
+    <CountOfBeenRapedByOthers.description>The number of times I was raped by weird stuff.</CountOfBeenRapedByOthers.description>
+    <!-- EN: raped as a comfort -->
+    <GetRapedAsComfortPrisoner.label>raped as a comfort</GetRapedAsComfortPrisoner.label>
+    <!-- EN: The number of times I was used to comfort someone. -->
+    <GetRapedAsComfortPrisoner.description>The number of times I was used to comfort someone.</GetRapedAsComfortPrisoner.description>
+    <!-- EN: birthed humanlikes -->
+    <CountOfBirthHuman.label>birthed humanlikes</CountOfBirthHuman.label>
+    <!-- EN: How many humanlikes I have birthed. -->
+    <CountOfBirthHuman.description>How many humanlikes I have birthed.</CountOfBirthHuman.description>
+    <!-- EN: birthed animals -->
+    <CountOfBirthAnimal.label>birthed animals</CountOfBirthAnimal.label>
+    <!-- EN: How many animals I have birthed. -->
+    <CountOfBirthAnimal.description>How many animals I have birthed.</CountOfBirthAnimal.description>
+    <!-- EN: birthed eggs -->
+    <CountOfBirthEgg.label>birthed eggs</CountOfBirthEgg.label>
+    <!-- EN: How many eggs I have birthed. -->
+    <CountOfBirthEgg.description>How many eggs I have birthed.</CountOfBirthEgg.description>
+    <!-- EN: condoms used -->
+    <CountOfCondomsUsed.label>condoms used</CountOfCondomsUsed.label>
+    <!-- EN: The number of condoms I've used. -->
+    <CountOfCondomsUsed.description>The number of condoms I've used.</CountOfCondomsUsed.description>
+    </LanguageData>

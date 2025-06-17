@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LanguageData>
-  <!--EN: anus-->
-  <Anus.BodyPartDef.label>anus</Anus.BodyPartDef.label>
-  <!--EN: chest-->
-  <Chest.BodyPartDef.label>chest</Chest.BodyPartDef.label>
-  <!--EN: genitals-->
-  <Genitals.BodyPartDef.label>genitals</Genitals.BodyPartDef.label>
-</LanguageData>
