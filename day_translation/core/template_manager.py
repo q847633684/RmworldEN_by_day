@@ -8,9 +8,9 @@ from pathlib import Path
 from typing import List, Tuple, Dict, Optional
 from tqdm import tqdm
 from colorama import Fore, Style
-
 from .extractors import extract_keyed_translations, scan_defs_sync
 from .generators import TemplateGenerator
+from .exporters import handle_extract_translate
 from ..utils.config import get_config
 from ..utils.utils import XMLProcessor, get_language_folder_path, handle_exceptions
 
@@ -26,47 +26,82 @@ class TemplateManager:
         Args:
             mod_dir (str): 模组目录路径
             language (str): 目标语言
-            template_location (str): 模板位置
-        """
+            template_location (str): 模板位置        """
         self.mod_dir = Path(mod_dir)
         self.language = language
         self.template_location = template_location
         self.generator = TemplateGenerator(str(self.mod_dir), language, template_location)
         self.processor = XMLProcessor()
-    def extract_and_generate_templates(self, output_dir: str = None, en_keyed_dir: str = None) -> List[Tuple[str, str, str, str]]:
+        
+    def extract_and_generate_templates(self, output_dir: str = None, en_keyed_dir: str = None, auto_choose_definjected: bool = False) -> List[Tuple[str, str, str, str]]:
         """
         提取翻译数据并生成模板，同时导出CSV
         
         Args:
             output_dir (str): 输出目录路径
             en_keyed_dir (str): 英文Keyed目录路径（可选）
+            auto_choose_definjected (bool): 是否自动选择DefInjected提取方式
             
         Returns:
             List[Tuple[str, str, str, str]]: 提取的翻译数据
         """
+        # 记录操作开始，便于调试和跟踪处理流程
         logging.info("开始提取翻译数据并生成模板")
+          # 步骤1：智能选择DefInjected提取方式
+        # 
+        # 【背景说明】
+        # RimWorld模组有两种DefInjected数据来源：
+        # 1. 英文DefInjected目录：ModDir/Languages/English/DefInjected/
+        #    - 这是模组作者手工整理的翻译结构，通常更精确
+        #    - 适合已有翻译基础的情况，保持结构一致性
+        # 
+        # 2. Defs目录：ModDir/Defs/
+        #    - 这是模组的原始定义文件，包含所有可翻译字段
+        #    - 适合首次翻译或结构有变动的情况，确保完整性
+        #
+        # 【智能选择逻辑】
+        # - auto_choose=True: 自动选择"defs"模式（批量处理时使用）
+        # - auto_choose=False: 检测英文DefInjected目录，让用户选择最佳方式
+        # - 如果有英文DefInjected: 询问用户选择基础模式还是全量模式
+        # - 如果无英文DefInjected: 自动使用全量模式
+        definjected_extract_mode = self._handle_definjected_extraction_choice(output_dir, auto_choose_definjected)
         
-        # 步骤1：提取翻译数据
-        translations = self._extract_all_translations()
+        # 步骤2：提取翻译数据
+        # 根据选择的模式提取Keyed和DefInjected翻译数据
+        # 返回格式：[(key, text, group, file_info), ...]
+        translations = self._extract_all_translations(definjected_mode=definjected_extract_mode)
         
+        # 数据有效性检查：如果没有提取到任何翻译数据，记录警告并返回空列表
         if not translations:
             logging.warning("未找到任何翻译数据")
             print(f"{Fore.YELLOW}⚠️ 未找到任何翻译数据{Style.RESET_ALL}")
             return []
-              # 步骤2：生成翻译模板到指定输出目录
+              # 步骤3：根据用户选择的输出模式生成翻译模板
+        # 
+        # 【两种输出模式说明】
         if output_dir:
+            # 外部输出模式：生成到用户指定的外部目录
+            # 优势：独立管理，便于翻译工作、版本控制和分发
+            # 适用：翻译团队协作、多版本管理、模组包分发
             self._generate_templates_to_output_dir(translations, output_dir, en_keyed_dir)
         else:        
+            # 内部输出模式：生成到模组内部Languages目录
+            # 优势：直接集成到模组中，开发和测试方便
+            # 适用：模组开发、快速测试、单机使用
             self._generate_all_templates(translations, en_keyed_dir)
         
-        # 步骤3：导出CSV到输出目录
+        # 步骤4：导出CSV到输出目录
+        # 只有指定了输出目录才生成CSV文件，方便后续翻译和导入操作
         if output_dir:
             csv_path = os.path.join(output_dir, "translations.csv")
             self._save_translations_to_csv(translations, csv_path)
             print(f"{Fore.GREEN}✅ CSV文件已生成: {csv_path}{Style.RESET_ALL}")
             
+        # 记录完成状态并向用户显示结果统计
         logging.info(f"模板生成完成，总计 {len(translations)} 条翻译")
         print(f"{Fore.GREEN}✅ 提取完成：{len(translations)} 条{Style.RESET_ALL}")
+        
+        # 返回提取到的翻译数据，供调用方进一步处理（如机器翻译、导入等）
         return translations
         
     def import_translations(self, csv_path: str, merge: bool = True, auto_create_templates: bool = True) -> bool:
@@ -137,8 +172,16 @@ class TemplateManager:
         translations = self.extract_and_generate_templates()
         return len(translations) > 0
         
-    def _extract_all_translations(self) -> List[Tuple[str, str, str, str]]:
-        """提取所有翻译数据"""
+    def _extract_all_translations(self, definjected_mode: str = "defs") -> List[Tuple[str, str, str, str]]:
+        """
+        提取所有翻译数据
+        
+        Args:
+            definjected_mode (str): DefInjected 提取模式 ('definjected' 或 'defs')
+            
+        Returns:
+            List[Tuple[str, str, str, str]]: 翻译数据列表
+        """
         translations = []
         
         # 提取Keyed翻译
@@ -146,10 +189,47 @@ class TemplateManager:
         translations.extend(keyed_translations)
         logging.debug(f"提取到 {len(keyed_translations)} 条 Keyed 翻译")
         
-        # 提取Defs翻译
-        defs_translations = list(tqdm(scan_defs_sync(str(self.mod_dir)), desc="提取 DefInjected"))
-        translations.extend(defs_translations)
-        logging.debug(f"提取到 {len(defs_translations)} 条 DefInjected 翻译")
+        # 根据模式提取DefInjected翻译
+        # 
+        # 【两种提取模式的区别】
+        if definjected_mode == "definjected":
+            # 模式1："definjected" - 以英文DefInjected为基础
+            # 
+            # 工作原理：
+            # 1. 用户在 handle_extract_translate 中选择"以英文DefInjected为基础"
+            # 2. 直接从模组的英文DefInjected目录提取翻译数据
+            # 3. 保持与原模组相同的翻译结构，兼容性好
+            # 
+            # 优势：基于现有的翻译结构，避免重复劳动
+            # 适用：模组已有完整的英文DefInjected，结构稳定
+            logging.info("从英文 DefInjected 目录提取翻译数据")
+            
+            # 从模组的英文DefInjected目录提取翻译数据
+            src_lang_path = get_language_folder_path(CONFIG.source_language, str(self.mod_dir))
+            src_definjected_dir = Path(src_lang_path) / CONFIG.def_injected_dir
+            
+            if src_definjected_dir.exists():
+                # 暂时使用 scan_defs_sync 的逻辑，后续可以优化为专门的 DefInjected 提取函数
+                definjected_translations = scan_defs_sync(str(self.mod_dir), language=CONFIG.source_language)
+                translations.extend(definjected_translations)
+                logging.debug(f"从英文DefInjected提取到 {len(definjected_translations)} 条翻译")
+            else:
+                logging.warning(f"英文DefInjected目录不存在: {src_definjected_dir}，回退到defs模式")
+                definjected_mode = "defs"
+        
+        if definjected_mode == "defs":
+            # 模式2："defs" - 从Defs目录全量提取
+            # 
+            # 工作原理：
+            # 1. 扫描模组的Defs目录下所有XML定义文件
+            # 2. 解析每个定义，提取所有可翻译的字段（label, description等）
+            # 3. 生成完整的DefInjected翻译条目
+            # 
+            # 优势：确保所有可翻译内容都被提取，不会遗漏
+            # 适用：首次翻译、英文DefInjected不完整、模组结构有更新
+            defs_translations = scan_defs_sync(str(self.mod_dir), language=CONFIG.source_language)
+            translations.extend(defs_translations)
+            logging.debug(f"提取到 {len(defs_translations)} 条 DefInjected 翻译")
         
         return translations
         
@@ -183,14 +263,13 @@ class TemplateManager:
         # 确保目录存在
         keyed_dir.mkdir(parents=True, exist_ok=True)
         definjected_dir.mkdir(parents=True, exist_ok=True)
-        
-        # 分离Keyed和DefInjected翻译
+          # 分离Keyed和DefInjected翻译
         keyed_translations = [(k, t, g, f) for k, t, g, f in translations if '/' not in k]
         def_translations = [(k, t, g, f) for k, t, g, f in translations if '/' in k]
         
         # 临时切换生成器的输出目录
-        original_base_dir = self.generator.config.base_dir
-        self.generator.config.base_dir = str(output_path)
+        original_mod_dir = self.generator.mod_dir
+        self.generator.mod_dir = output_path
         
         try:
             # 生成Keyed模板
@@ -209,7 +288,7 @@ class TemplateManager:
                 
         finally:
             # 恢复原始输出目录
-            self.generator.config.base_dir = original_base_dir
+            self.generator.mod_dir = original_mod_dir
             
     def _save_translations_to_csv(self, translations: List[Tuple[str, str, str, str]], csv_path: str):
         """保存翻译数据到CSV文件"""
@@ -285,8 +364,7 @@ class TemplateManager:
         if not template_dir.exists():
             logging.error("导入后模板目录不存在")
             return False
-            
-        # 检查是否有翻译文件
+              # 检查是否有翻译文件
         has_keyed = any((template_dir / "Keyed").glob("*.xml")) if (template_dir / "Keyed").exists() else False
         has_definjected = any((template_dir / "DefInjected").glob("**/*.xml")) if (template_dir / "DefInjected").exists() else False
         
@@ -296,3 +374,36 @@ class TemplateManager:
             
         logging.info("导入结果验证通过")
         return True
+    
+    def _handle_definjected_extraction_choice(self, output_dir: str = None, auto_choose: bool = False) -> str:
+        """
+        处理 DefInjected 提取方式选择
+        
+        Args:
+            output_dir (str): 输出目录（用于调用 handle_extract_translate）
+            auto_choose (bool): 是否自动选择，True时自动选择 'defs' 模式
+            
+        Returns:
+            str: 选择的提取方式 ('definjected' 或 'defs')
+        """
+        if auto_choose:
+            logging.info("自动选择 defs 提取模式")
+            return "defs"
+            
+        # 如果提供了输出目录，使用智能选择逻辑
+        if output_dir:
+            try:
+                extraction_mode = handle_extract_translate(
+                    mod_dir=str(self.mod_dir),
+                    export_dir=output_dir,
+                    language=self.language,
+                    source_language=CONFIG.source_language
+                )
+                return extraction_mode
+            except Exception as e:
+                logging.warning(f"智能选择失败，回退到 defs 模式: {e}")
+                return "defs"
+        else:
+            # 没有输出目录时，默认使用 defs 模式
+            logging.info("未指定输出目录，使用 defs 提取模式")
+            return "defs"

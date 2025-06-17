@@ -10,11 +10,7 @@ from ..utils.config import ConfigError, get_config, get_user_config, save_user_c
 from ..utils.utils import get_history_list, update_history_list
 from ..utils.config_generator import generate_default_config
 from ..utils.path_manager import PathManager
-from ..core.extractors import extract_keyed_translations, scan_defs_sync
-from ..core.exporters import export_definjected, export_keyed
-from ..core.generators import TemplateGenerator
 from ..core.template_manager import TemplateManager
-from ..core.importers import import_translations
 from ..utils.machine_translate import translate_csv
 from ..utils.parallel_corpus import generate_parallel_corpus
 from ..utils.batch_processor import BatchProcessor
@@ -79,29 +75,27 @@ class TranslationFacade:
         if not os.path.exists(os.path.join(self.mod_dir, "Languages")):
             logging.warning(f"模组目录中未找到 Languages 文件夹: {self.mod_dir}")
 
-    def extract_templates_and_generate_csv(self, output_dir: str, en_keyed_dir: str = None) -> List[Tuple[str, str, str, str]]:
+    def extract_templates_and_generate_csv(self, output_dir: str, en_keyed_dir: str = None, auto_choose_definjected: bool = False) -> List[Tuple[str, str, str, str]]:
         """
         提取翻译模板并生成 CSV 文件
-
-        Args:
-            output_dir (str): 输出目录路径
-            en_keyed_dir (str): 英文 Keyed 目录路径
-
-        Returns:
-            List[Tuple[str, str, str, str]]: 提取的翻译数据
-
-        Raises:
-            ExportError: 如果导出失败
         """
         try:
-            logging.info(f"开始提取模板: output_dir={output_dir}, en_keyed_dir={en_keyed_dir}")
-            translations = self.template_manager.extract_and_generate_templates(output_dir, en_keyed_dir)
-            return translations
+            # 记录提取操作的开始，包含所有关键参数用于调试和审计
+            logging.info(f"开始提取模板: output_dir={output_dir}, en_keyed_dir={en_keyed_dir}, auto_choose_definjected={auto_choose_definjected}")
+            
+            # 调用模板管理器执行核心提取操作
+            # - output_dir: 输出目录，模板和CSV文件的保存位置
+            # - en_keyed_dir: 英文Keyed目录，用于确保UI文本翻译完整性
+            # - auto_choose_definjected: DefInjected提取方式选择（True=自动，False=交互）
+            translations = self.template_manager.extract_and_generate_templates(output_dir, en_keyed_dir, auto_choose_definjected)
+            
+            # 返回提取到的翻译数据列表，格式：[(key, text, group, file_info), ...]
             return translations
         except Exception as e:
-            error_msg = f"提取模板失败: {str(e)}"
-            logging.error(error_msg)
-            raise ExportError(error_msg)
+            # 捕获并处理提取过程中的任何异常
+            error_msg = f"提取模板失败: {str(e)}"           # 构建详细错误信息
+            logging.error(error_msg)                        # 记录错误到日志文件
+            raise ExportError(error_msg)                    # 抛出自定义异常，便于上层处理
 
     def import_translations_to_templates(self, csv_path: str, merge: bool = True) -> None:
         """
@@ -413,42 +407,70 @@ def main():
                     path_type="mod_dir", 
                     prompt="请输入模组目录（例如：C:\\Mods\\MyMod）: ", 
                     validator_type="mod", 
-                    default=path_manager.get_remembered_path("mod_dir")
-                )
+                    default=path_manager.get_remembered_path("mod_dir")                )
                 if not mod_dir:
                     continue
                     
                 facade = TranslationFacade(mod_dir)
                 
                 if mode == "1":
-                    # 模式1：提取翻译模板并生成 CSV 文件
-                    output_dir = path_manager.get_path(
-                        path_type="output_dir",
-                        prompt="请输入输出目录路径（例如：mod 或 output）: ",
-                        validator_type="output_dir",                          
-                        default=path_manager.get_remembered_path("output_dir")
-                    )
-                    if not output_dir:
-                        continue
-                        
-                    en_keyed_dir = None
-                    # 自动检测英文 Keyed 目录
-                    auto_en_keyed_dir = os.path.join(mod_dir, "Languages", "English", CONFIG.keyed_dir)
-                    if os.path.exists(auto_en_keyed_dir):
-                        if input(f"{Fore.YELLOW}检测到英文 Keyed 目录: {auto_en_keyed_dir}\n是否使用英文模板确保翻译完整性？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
-                            en_keyed_dir = auto_en_keyed_dir
+                    # ==================== 模式1：提取翻译模板并生成 CSV 文件 ====================
+                    # 这是最核心的功能，从模组中提取所有可翻译文本并生成翻译模板
+                    # 步骤1：选择输出模式
+                    # 让用户选择是生成到模组内部还是外部目录
+                    print(f"\n{Fore.CYAN}请选择模板输出位置：{Style.RESET_ALL}")
+                    print(f"1. {Fore.GREEN}模组内部{Style.RESET_ALL}（直接集成到模组Languages目录，适合开发模组）")
+                    print(f"2. {Fore.GREEN}外部目录{Style.RESET_ALL}（独立管理，适合翻译工作和分发）")
+                    
+                    output_choice = input(f"{Fore.CYAN}请输入选项编号（1/2，回车默认2）：{Style.RESET_ALL}").strip()
+                    
+                    output_dir = None                                              # 初始化输出目录变量
+                    
+                    if output_choice == "1":
+                        # 选择内部模式：直接输出到模组内部
+                        print(f"{Fore.GREEN}✅ 将生成模板到模组内部Languages目录{Style.RESET_ALL}")
+                        output_dir = None                                          # None表示内部模式
                     else:
+                        # 选择外部模式：要求用户指定外部目录
+                        print(f"{Fore.GREEN}✅ 将生成模板到外部目录{Style.RESET_ALL}")
+                        output_dir = path_manager.get_path(
+                            path_type="output_dir",                                # 路径类型标识，用于记忆用户选择
+                            prompt="请输入外部输出目录路径（例如：output 或 D:\\translations）: ",  # 用户提示信息
+                            validator_type="output_dir",                           # 验证器类型，确保路径有效
+                            default=path_manager.get_remembered_path("output_dir") # 使用上次记住的路径作为默认值
+                        )
+                        if not output_dir:                                         # 用户取消或输入无效
+                            continue                                               # 返回主菜单
+                        
+                    # 步骤2：处理英文 Keyed 目录选择
+                    # Keyed 是 RimWorld 中UI文本的存储方式，英文模板可以确保翻译完整性
+                    en_keyed_dir = None                                           # 初始化英文Keyed目录变量
+                      # 步骤2a：自动检测英文 Keyed 目录
+                    # 构建标准的英文Keyed目录路径：ModDir/Languages/English/Keyed
+                    auto_en_keyed_dir = os.path.join(mod_dir, "Languages", "English", CONFIG.keyed_dir)
+                    
+                    if os.path.exists(auto_en_keyed_dir):                         # 如果检测到英文Keyed目录存在
+                        # 自动使用检测到的英文Keyed目录，确保翻译完整性
+                        en_keyed_dir = auto_en_keyed_dir                          # 直接使用自动检测的目录
+                        print(f"{Fore.GREEN}✅ 已自动检测并使用英文 Keyed 目录: {auto_en_keyed_dir}{Style.RESET_ALL}")
+                    else:                                                         # 未检测到英文Keyed目录
+                        # 步骤2b：询问用户是否手动指定英文Keyed目录
+                        # 某些模组可能将英文文本放在非标准位置
                         if input(f"{Fore.YELLOW}未检测到英文 Keyed 目录，是否手动指定？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
+                            # 让用户手动选择英文Keyed目录路径
                             en_keyed_dir = path_manager.get_path(
-                                path_type="en_keyed_dir",
-                                prompt="请输入英文 Keyed 目录路径: ",
-                                validator_type="dir",
-                                default=path_manager.get_remembered_path("en_keyed_dir")
+                                path_type="en_keyed_dir",                         # 路径类型：英文Keyed目录
+                                prompt="请输入英文 Keyed 目录路径: ",             # 提示用户输入路径
+                                validator_type="dir",                             # 验证是有效目录
+                                default=path_manager.get_remembered_path("en_keyed_dir")  # 使用记住的路径
                             )
-                            if not en_keyed_dir:
-                                continue
+                            if not en_keyed_dir:                                 # 用户取消输入
+                                continue                                         # 返回主菜单
                             
-                    facade.extract_templates_and_generate_csv(output_dir, en_keyed_dir)
+                    # 步骤3：执行提取和生成操作
+                    # 调用核心功能：提取翻译文本、生成模板文件、导出CSV
+                    # auto_choose_definjected=False 启用DefInjected智能选择交互
+                    facade.extract_templates_and_generate_csv(output_dir, en_keyed_dir, auto_choose_definjected=False)
                     
                 elif mode == "2":
                     # 模式2：机器翻译
@@ -514,7 +536,7 @@ def main():
                         if not en_keyed_dir:
                             continue
                             
-                    translations = facade.extract_templates_and_generate_csv(export_csv, en_keyed_dir)
+                    translations = facade.extract_templates_and_generate_csv(export_csv, en_keyed_dir, auto_choose_definjected=True)
                     
                     if translations and input(f"{Fore.YELLOW}确认翻译并导入？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
                         output_csv = None

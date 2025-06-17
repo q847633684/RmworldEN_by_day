@@ -9,7 +9,6 @@ import os
 from colorama import Fore, Style
 from ..utils.utils import XMLProcessor, XMLProcessorConfig, get_language_folder_path, handle_exceptions
 from ..utils.config import get_config
-from .template_manager import TemplateManager
 
 CONFIG = get_config()
 
@@ -63,7 +62,6 @@ def import_translations(csv_path: str, mod_dir: str, language: str = CONFIG.defa
         bool: 导入是否成功
     """
     try:
-        template_manager = TemplateManager(mod_dir, language)
         # 直接调用本模块的 update_all_xml 函数，统一使用 XMLProcessor 处理 XML 更新
         update_all_xml(mod_dir, load_translations_from_csv(csv_path), language, merge)
         return True

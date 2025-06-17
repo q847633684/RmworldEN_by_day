@@ -43,8 +43,10 @@ class ContentFilter:
         if tag in self.ignore_fields:
             logging.debug(f"过滤掉（{key}）: 标签（{tag}）在忽略字段中")
             return False
-        if context == "Keyed" and tag not in self.default_fields:
-            logging.debug(f"过滤掉（{key}）: Keyed 中未在默认字段中")
+        # 对于 Keyed 翻译，不限制 default_fields，因为 Keyed 使用自定义标签名
+        # 对于 DefInjected 翻译，才检查 default_fields
+        if context == "DefInjected" and self.default_fields and tag not in self.default_fields:
+            logging.debug(f"过滤掉（{key}）: DefInjected 中未在默认字段中")
             return False
         for pattern in self.non_text_patterns:
             if re.match(pattern, text):

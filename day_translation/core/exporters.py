@@ -77,8 +77,13 @@ def handle_extract_translate(
     language: str = CONFIG.default_language,
     source_language: str = CONFIG.source_language,
     extract_definjected_from_defs=None
-) -> None:
-    """处理翻译提取逻辑，选择 DefInjected 或 Defs"""
+) -> str:
+    """
+    处理翻译提取逻辑，选择 DefInjected 或 Defs
+    
+    Returns:
+        str: 选择的提取方式 ('definjected' 或 'defs')
+    """
     logging.info(f"处理翻译提取: mod_dir={mod_dir}, export_dir={export_dir}")
     mod_dir = str(Path(mod_dir).resolve())
     export_dir = str(Path(export_dir).resolve())
@@ -87,30 +92,31 @@ def handle_extract_translate(
     old_def_linked_path = os.path.join(lang_path, "DefLinked")
     src_lang_path = get_language_folder_path(source_language, mod_dir)
     src_def_injected_path = os.path.join(src_lang_path, CONFIG.def_injected_dir)
+    
+    # 处理旧的 DefLinked 目录
     if os.path.exists(old_def_linked_path) and not os.path.exists(def_injected_path):
         move_dir(old_def_linked_path, def_injected_path)
+    
     if os.path.exists(src_def_injected_path):
-        print("检测到英文 DefInjected 目录。请选择处理方式：")
-        print("1. 以英文 DefInjected 为基础（推荐用于已有翻译结构的情况）")
-        print("2. 直接从 Defs 目录重新提取可翻译字段（推荐用于结构有变动或需全量提取时）")
-        choice = input("请输入选项编号（1/2，回车默认1）：").strip()
+        print(f"\n{Fore.CYAN}检测到英文 DefInjected 目录: {src_def_injected_path}{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}请选择 DefInjected 处理方式：{Style.RESET_ALL}")
+        print(f"1. {Fore.GREEN}以英文 DefInjected 为基础{Style.RESET_ALL}（推荐用于已有翻译结构的情况）")
+        print(f"2. {Fore.GREEN}直接从 Defs 目录重新提取可翻译字段{Style.RESET_ALL}（推荐用于结构有变动或需全量提取时）")
+        
+        choice = input(f"{Fore.CYAN}请输入选项编号（1/2，回车默认1）：{Style.RESET_ALL}").strip()
+        
         if choice == "2":
             logging.info("用户选择：从 Defs 目录重新提取")
-            if extract_definjected_from_defs:
-                extract_definjected_from_defs(mod_dir, export_dir, language)
-            return
-        logging.info("用户选择：以英文 DefInjected 为基础")
-        export_definjected_from_english(
-            mod_dir=mod_dir,
-            export_dir=export_dir,
-            language=language,
-            source_language=source_language
-        )
+            print(f"{Fore.GREEN}✅ 将从 Defs 目录重新提取可翻译字段{Style.RESET_ALL}")
+            return "defs"
+        else:
+            logging.info("用户选择：以英文 DefInjected 为基础")
+            print(f"{Fore.GREEN}✅ 将以英文 DefInjected 为基础{Style.RESET_ALL}")
+            return "definjected"
     else:
         logging.info(f"未找到英文 DefInjected {src_def_injected_path}，从 Defs 提取")
-        print(f"未找到英文 DefInjected 目录 {src_def_injected_path}，将从 Defs 提取可翻译字段。")
-        if extract_definjected_from_defs:
-            extract_definjected_from_defs(mod_dir, export_dir, language)
+        print(f"{Fore.YELLOW}未找到英文 DefInjected 目录，将从 Defs 提取可翻译字段{Style.RESET_ALL}")
+        return "defs"
 
 def cleanup_backstories_dir(
     mod_dir: str,

@@ -167,10 +167,16 @@ class XMLProcessor:
         encoding = self.config.encoding if encoding is None else encoding
         
         try:
-            if self.use_lxml:
+            # 检查树对象的类型和模块
+            tree_type = str(type(tree))
+            is_lxml_tree = 'lxml' in tree_type
+            
+            if self.use_lxml and is_lxml_tree:
+                # 使用 lxml 的 write 方法
                 tree.write(file_path, encoding=encoding, xml_declaration=True,
                           pretty_print=pretty_print)
             else:
+                # 使用标准库的 ElementTree
                 root = tree.getroot()
                 new_tree = ET.ElementTree(root)
                 with open(file_path, "wb") as f:
@@ -200,7 +206,7 @@ class XMLProcessor:
             List[Tuple[str, str, str]]: 提取的翻译列表
         """
         translations = []
-        root = tree.getroot() if self.use_lxml else tree
+        root = tree.getroot() if hasattr(tree, 'getroot') else tree
         
         # 使用 xpath 或 iter 遍历
         elements = root.xpath(".//*") if self.use_lxml else root.iter()
