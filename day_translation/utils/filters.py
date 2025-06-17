@@ -31,7 +31,8 @@ class ContentFilter:
     def __init__(self, config=None):
         if config is None:
             config = get_config()
-        self.config = config        # 调用属性方法获取实际值，而不是方法对象        self.default_fields = config.default_fields  # 这会调用 @property 方法
+        self.config = config        # 调用属性方法获取实际值，而不是方法对象
+        self.default_fields = config.default_fields  # 这会调用 @property 方法
         self.ignore_fields = config.ignore_fields    # 这会调用 @property 方法
         self.non_text_patterns = config.non_text_patterns  # 这会调用 @property 方法
     
@@ -43,7 +44,8 @@ class ContentFilter:
         if is_non_text(text):
             logging.debug(f"过滤掉（{key}）: 文本（{text}）为非文本内容")
             return False
-          # 智能提取字段名：从后往前找到第一个非数字的部分
+        
+        # 智能提取字段名：从后往前找到第一个非数字的部分
         parts = key.split('.')
         tag = key  # 默认值
         
@@ -68,7 +70,7 @@ class ContentFilter:
             try:
                 default_fields = self.default_fields
                 if default_fields and hasattr(default_fields, '__contains__') and tag not in default_fields:
-                    logging.debug(f"过滤掉（{key}）: DefInjected 中未在默认字段中")
+                    logging.debug(f"过滤掉（{key}）: DefInjected 中字段 {tag} 未在默认字段中")
                     return False
             except Exception as e:
                 logging.warning(f"检查默认字段时出错: {e}")

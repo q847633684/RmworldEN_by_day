@@ -306,7 +306,6 @@ class TemplateManager:
         """验证CSV文件"""
         if not Path(csv_path).is_file():
             logging.error(f"CSV文件不存在: {csv_path}")
-            print(f"{Fore.RED}❌ CSV文件不存在: {csv_path}{Style.RESET_ALL}")
             return False
             
         try:
@@ -315,12 +314,10 @@ class TemplateManager:
                 header = next(reader, None)
                 if not header or not all(col in header for col in ["key", "text"]):
                     logging.error("CSV文件格式无效：缺少必要的列")
-                    print(f"{Fore.RED}❌ CSV文件格式无效：缺少必要的列{Style.RESET_ALL}")
                     return False
                 return True
         except Exception as e:
             logging.error(f"验证CSV文件时发生错误: {e}")
-            print(f"{Fore.RED}❌ 验证CSV文件失败: {e}{Style.RESET_ALL}")
             return False
             
     def _load_translations_from_csv(self, csv_path: str) -> Dict[str, str]:

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: Safely neutralize mechanoid nanites.-->
+  <RJW_AbortionMech.description>Safely neutralize mechanoid nanites.</RJW_AbortionMech.description>
+  <!--EN: Neutralize mechanoid-->
+  <RJW_AbortionMech.label>Neutralize mechanoid</RJW_AbortionMech.label>
+  <!--EN: Hack mechanoid AI, cutting it from global mechanoid AI, results docile(unless provoked) mechanoid.-->
+  <RJW_HackMech.description>Hack mechanoid AI, cutting it from global mechanoid AI, results docile(unless provoked) mechanoid.</RJW_HackMech.description>
+  <!--EN: Hacking mechanoid.-->
+  <RJW_HackMech.jobString>Hacking mechanoid.</RJW_HackMech.jobString>
+  <!--EN: Hack mechanoid-->
+  <RJW_HackMech.label>Hack mechanoid</RJW_HackMech.label>
+</LanguageData>

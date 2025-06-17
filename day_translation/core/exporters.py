@@ -676,4 +676,3 @@ def export_definjected_with_defs_structure(
         tree = ET.ElementTree(root)
         processor.save_xml(tree, output_file, pretty_print=True)
         logging.info(f"生成 DefInjected 文件: {output_file} ({len(translations)} 条翻译)")
-        print(f"{Fore.GREEN}✅ 生成: {Path(output_file).relative_to(Path(def_injected_path))} ({len(translations)} 条){Style.RESET_ALL}")

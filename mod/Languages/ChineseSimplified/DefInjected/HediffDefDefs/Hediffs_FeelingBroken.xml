@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: Mind broken. No longer capable of emotion.-->
+  <FeelingBroken.description>Mind broken. No longer capable of emotion.</FeelingBroken.description>
+  <!--EN: Feeling broken-->
+  <FeelingBroken.label>Feeling broken</FeelingBroken.label>
+  <!--EN: early-stage-->
+  <FeelingBroken.stages.0.label>early-stage</FeelingBroken.stages.0.label>
+  <!--EN: in a trance-->
+  <FeelingBroken.stages.1.label>in a trance</FeelingBroken.stages.1.label>
+  <!--EN: broken-->
+  <FeelingBroken.stages.2.label>broken</FeelingBroken.stages.2.label>
+  <!--EN: Extremely broken-->
+  <FeelingBroken.stages.3.label>Extremely broken</FeelingBroken.stages.3.label>
+</LanguageData>

@@ -8,6 +8,7 @@ import logging
 from pathlib import Path
 from typing import Set, List, Dict, Any, Optional
 from colorama import Fore, Style
+from datetime import datetime
 
 from .filter_config import UnifiedFilterRules
 
@@ -26,13 +27,18 @@ class TranslationConfig:
     def_injected_dir: str = "DefInjected"
     keyed_dir: str = "Keyed"
     output_csv: str = "extracted_translations.csv"
-    log_file: str = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "logs", "day_translation.log")
+    log_file: str = ""  # 将在 __post_init__ 中动态生成
     log_format: str = "%(asctime)s - %(levelname)s - %(message)s"
     debug_mode: bool = os.getenv("DAY_TRANSLATION_DEBUG", "").lower() == "true"
     preview_transatable_fields: int = 0
 
     def __post_init__(self):
         """初始化后处理"""
+        # 动态生成带时间戳的日志文件名
+        if not self.log_file:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            log_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "logs")
+            self.log_file = os.path.join(log_dir, f"day_translation_{timestamp}.log")
         self._validate_config()
         self._rules = UnifiedFilterRules.get_rules()
         self._setup_logging()
@@ -48,15 +54,19 @@ class TranslationConfig:
         try:
             log_dir = os.path.dirname(self.log_file)
             if log_dir:
-                os.makedirs(log_dir, exist_ok=True)
-            logging.basicConfig(
-                level=logging.DEBUG if self.debug_mode else logging.INFO,
-                format=self.log_format,
-                handlers=[
-                    logging.FileHandler(self.log_file, encoding="utf-8"),
-                    logging.StreamHandler()
-                ]
-            )
+                os.makedirs(log_dir, exist_ok=True)            # 创建文件处理器和控制台处理器
+            file_handler = logging.FileHandler(self.log_file, encoding="utf-8")
+            file_handler.setLevel(logging.DEBUG if self.debug_mode else logging.INFO)
+            file_handler.setFormatter(logging.Formatter(self.log_format))
+            
+            console_handler = logging.StreamHandler()
+            console_handler.setLevel(logging.WARNING)  # 控制台只显示警告和错误
+            console_handler.setFormatter(logging.Formatter(self.log_format))
+            
+            # 配置根日志器
+            root_logger.setLevel(logging.DEBUG if self.debug_mode else logging.INFO)
+            root_logger.addHandler(file_handler)
+            root_logger.addHandler(console_handler)
             logging.info(f"日志系统初始化完成: {self.log_file}")
         except Exception as e:
             print(f"{Fore.RED}日志系统初始化失败: {e}{Style.RESET_ALL}")

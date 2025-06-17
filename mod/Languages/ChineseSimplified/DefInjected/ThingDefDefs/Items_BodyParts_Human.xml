@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: An anus.-->
+  <Anus.description>An anus.</Anus.description>
+  <!--EN: anus-->
+  <Anus.label>anus</Anus.label>
+  <!--EN: A pair of breasts.-->
+  <Breasts.description>A pair of breasts.</Breasts.description>
+  <!--EN: breasts-->
+  <Breasts.label>breasts</Breasts.label>
+  <!--EN: Smooth, featureless chest. Primarily found on non-mammalian creatures.-->
+  <FeaturelessChest.description>Smooth, featureless chest. Primarily found on non-mammalian creatures.</FeaturelessChest.description>
+  <!--EN: featureless chest-->
+  <FeaturelessChest.label>featureless chest</FeaturelessChest.label>
+  <!--EN: A penis.-->
+  <Penis.description>A penis.</Penis.description>
+  <!--EN: penis-->
+  <Penis.label>penis</Penis.label>
+  <!--EN: A vagina.-->
+  <Vagina.description>A vagina.</Vagina.description>
+  <!--EN: vagina-->
+  <Vagina.label>vagina</Vagina.label>
+</LanguageData>
