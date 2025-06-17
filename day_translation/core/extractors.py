@@ -138,3 +138,42 @@ def _extract_translatable_fields_recursive(node, def_type: str, def_name: str, c
         translations.extend(child_translations)
     
     return translations
+
+def extract_definjected_translations(mod_dir: str, language: str = CONFIG.source_language) -> List[Tuple[str, str, str, str]]:
+    """从 DefInjected 目录提取翻译数据"""
+    print(f"{Fore.GREEN}正在从 DefInjected 目录提取翻译数据（模组目录：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}")
+    processor = XMLProcessor()
+    content_filter = ContentFilter(CONFIG)
+    translations: List[Tuple[str, str, str, str]] = []
+    lang_path = get_language_folder_path(language, mod_dir)
+    definjected_dir = Path(lang_path) / CONFIG.def_injected_dir
+    
+    print(f"{Fore.CYAN}调试信息 - 语言路径: {lang_path}{Style.RESET_ALL}")
+    print(f"{Fore.CYAN}调试信息 - DefInjected目录: {definjected_dir}{Style.RESET_ALL}")
+    print(f"{Fore.CYAN}调试信息 - 目录是否存在: {definjected_dir.exists()}{Style.RESET_ALL}")
+    
+    if not definjected_dir.exists():
+        print(f"{Fore.YELLOW}DefInjected 目录不存在: {definjected_dir}{Style.RESET_ALL}")
+        return []
+        
+    # 查找所有XML文件
+    xml_files = list(definjected_dir.rglob("*.xml"))
+    print(f"{Fore.CYAN}调试信息 - 找到 {len(xml_files)} 个DefInjected XML文件{Style.RESET_ALL}")
+    
+    for xml_file in xml_files:
+        print(f"{Fore.CYAN}调试信息 - 处理DefInjected文件: {xml_file}{Style.RESET_ALL}")
+        tree = processor.parse_xml(str(xml_file))
+        if tree:
+            file_translations = []
+            # DefInjected 文件的结构和 Keyed 文件不同，需要特殊处理
+            for key, text, tag in processor.extract_translations(tree, context="DefInjected", filter_func=content_filter.filter_content):
+                # 构建相对路径，包含 DefInjected 子目录结构
+                rel_path = str(xml_file.relative_to(definjected_dir))
+                file_translations.append((key, text, tag, rel_path))
+            print(f"{Fore.CYAN}调试信息 - 从 {xml_file.name} 提取到 {len(file_translations)} 条DefInjected翻译{Style.RESET_ALL}")
+            translations.extend(file_translations)
+        else:
+            print(f"{Fore.RED}调试信息 - 无法解析DefInjected XML文件: {xml_file}{Style.RESET_ALL}")
+    
+    print(f"{Fore.GREEN}从DefInjected目录提取到 {len(translations)} 条翻译{Style.RESET_ALL}")
+    return translations

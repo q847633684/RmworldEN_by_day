@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import List, Tuple, Dict, Optional
 from tqdm import tqdm
 from colorama import Fore, Style
-from .extractors import extract_keyed_translations, scan_defs_sync
+from .extractors import extract_keyed_translations, scan_defs_sync, extract_definjected_translations
 from .generators import TemplateGenerator
 from .exporters import handle_extract_translate
 from ..utils.config import get_config
@@ -209,8 +209,8 @@ class TemplateManager:
             src_definjected_dir = Path(src_lang_path) / CONFIG.def_injected_dir
             
             if src_definjected_dir.exists():
-                # 暂时使用 scan_defs_sync 的逻辑，后续可以优化为专门的 DefInjected 提取函数
-                definjected_translations = scan_defs_sync(str(self.mod_dir), language=CONFIG.source_language)
+                # 使用专门的 DefInjected 提取函数
+                definjected_translations = extract_definjected_translations(str(self.mod_dir), CONFIG.source_language)
                 translations.extend(definjected_translations)
                 logging.debug(f"从英文DefInjected提取到 {len(definjected_translations)} 条翻译")
             else:
