@@ -4,6 +4,7 @@
 
 import logging
 import os
+import re
 import shutil
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -11,11 +12,11 @@ from typing import List, Tuple, Dict
 import csv
 from multiprocessing import Pool
 from tqdm import tqdm
-from ..utils.config import TranslationConfig
+from ..utils.config import get_config
 from ..utils.utils import XMLProcessor, save_xml_to_file, sanitize_xcomment, get_language_folder_path, sanitize_xml
 from colorama import Fore, Style
 
-CONFIG = TranslationConfig()
+CONFIG = get_config()
 
 def move_dir(src: str, dst: str) -> None:
     """移动目录，覆盖已存在目录"""

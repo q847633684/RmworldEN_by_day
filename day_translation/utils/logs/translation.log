@@ -174,3 +174,39 @@ AttributeError: 'TranslationConfig' object has no attribute 'get_remembered_path
 2025-06-17 01:09:11,772 - INFO - 启动 Day Translation...
 2025-06-17 01:09:11,773 - INFO - 启动主工作流
 2025-06-17 01:15:32,780 - INFO - 程序结束
+2025-06-17 02:07:25,663 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 02:07:25,664 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:07:25,718 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:07:25,725 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:07:25,764 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:07:25,780 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:07:26,254 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:07:26,264 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:07:26,271 - INFO - 启动 Day Translation...
+2025-06-17 02:07:26,272 - INFO - 启动主工作流
+2025-06-17 02:14:28,998 - INFO - 程序结束
+2025-06-17 02:14:43,782 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 02:14:43,783 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:14:43,838 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:14:43,841 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:14:43,878 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:14:43,882 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:14:44,374 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:14:44,383 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:14:44,390 - INFO - 启动 Day Translation...
+2025-06-17 02:14:44,391 - INFO - 启动主工作流
+2025-06-17 02:15:22,397 - INFO - 程序结束
+2025-06-17 02:15:29,056 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\day_translation\utils\logs\translation.log
+2025-06-17 02:15:29,057 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:15:29,100 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:15:29,102 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:15:29,137 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:15:29,141 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:15:29,509 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:15:29,518 - WARNING - 加载用户配置失败: unsupported operand type(s) for @: 'NoneType' and 'type'
+2025-06-17 02:15:29,525 - INFO - 启动 Day Translation...
+2025-06-17 02:15:29,526 - INFO - 启动主工作流
+2025-06-17 12:19:12,780 - INFO - 开始提取模板: output_dir=C:\Users\q8476\Documents\我的工作\Day_汉化\mod, en_keyed_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\Keyed
+2025-06-17 12:19:12,781 - INFO - 开始提取翻译数据并生成模板
+2025-06-17 12:19:12,800 - ERROR - 提取模板失败: argument of type 'method' is not iterable
+2025-06-17 12:19:12,801 - ERROR - 操作失败: 提取模板失败: argument of type 'method' is not iterable

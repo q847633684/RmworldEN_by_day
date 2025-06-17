@@ -6,10 +6,9 @@ from pathlib import Path
 from typing import List, Tuple, Optional, Dict, Any
 from tqdm import tqdm
 from colorama import init, Fore, Style
-from ..utils.config import ConfigError, get_config
+from ..utils.config import ConfigError, get_config, get_user_config, save_user_config_to_file
 from ..utils.utils import get_history_list, update_history_list
 from ..utils.config_generator import generate_default_config
-from ..utils.user_config import load_user_config, save_user_config
 from ..utils.path_manager import PathManager
 from ..core.extractors import extract_keyed_translations, scan_defs_sync
 from ..core.exporters import export_definjected, export_keyed
@@ -65,7 +64,6 @@ class TranslationFacade:
             self.language = language
             self.template_location = template_location
             self.template_manager = TemplateManager(self.mod_dir, language, template_location)
-            self.setup_logging()
             self._validate_config()
             
             logging.debug(f"初始化 TranslationFacade: mod_dir={self.mod_dir}, language={self.language}")
@@ -80,17 +78,6 @@ class TranslationFacade:
             raise ConfigError(f"模组目录不存在: {self.mod_dir}")
         if not os.path.exists(os.path.join(self.mod_dir, "Languages")):
             logging.warning(f"模组目录中未找到 Languages 文件夹: {self.mod_dir}")
-
-    def setup_logging(self) -> None:
-        """设置日志记录"""
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s - %(levelname)s - %(message)s',
-            handlers=[
-                logging.StreamHandler(),
-                logging.FileHandler(os.path.join(self.mod_dir, "translation.log"), encoding='utf-8')
-            ]
-        )
 
     def extract_templates_and_generate_csv(self, output_dir: str, en_keyed_dir: str = None) -> List[Tuple[str, str, str, str]]:
         """
@@ -183,9 +170,8 @@ class TranslationFacade:
                 raise ExportError(f"CSV文件不存在: {csv_path}")
                 
             logging.info(f"开始机器翻译: csv_path={csv_path}, output_csv={output_csv}")
-            
-            # 获取用户配置
-            user_config = load_user_config()
+              # 获取用户配置
+            user_config = get_user_config()
             
             # 获取API密钥
             access_key_id = self._get_api_key("ALIYUN_ACCESS_KEY_ID", user_config)
@@ -215,7 +201,7 @@ class TranslationFacade:
             key = input(f"{Fore.CYAN}请输入 {key_name}:{Style.RESET_ALL} ").strip()
             if input(f"{Fore.YELLOW}保存到配置文件？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
                 user_config[key_name] = key
-                save_user_config(user_config)
+                save_user_config_to_file(user_config)
                 logging.debug(f"已保存 {key_name} 到用户配置文件")
         return key
 
@@ -288,9 +274,21 @@ def validate_file(path: str) -> bool:
         logging.debug(f"验证文件失败: {path}, 错误={e}")
         return False
 
+def show_welcome():
+    """显示程序欢迎界面，包含版本和配置状态"""
+    user_config = get_user_config()
+    has_api_key = bool(user_config.get('ALIYUN_ACCESS_KEY_ID') or os.getenv('ALIYUN_ACCESS_KEY_ID'))
+    print(f"\n{Fore.MAGENTA}=== 欢迎使用 Day Translation v0.1.0 ==={Style.RESET_ALL}")
+    print(f"功能：模组文本提取、阿里云机器翻译、翻译导入、批量处理")
+    print(f"阿里云密钥：{Fore.GREEN if has_api_key else Fore.RED}{'已配置' if has_api_key else '未配置'}{Style.RESET_ALL}")
+    print(f"输入 '{Fore.RED}q{Style.RESET_ALL}' 随时退出，'{Fore.YELLOW}b{Style.RESET_ALL}' 返回主菜单")
+    print(f"{Fore.MAGENTA}====================================={Style.RESET_ALL}\n")
+    logging.debug("显示欢迎界面")
+
 def main():
     """主函数"""
     try:
+        show_welcome()
         logging.info("启动主工作流")
         
         path_manager = PathManager()
@@ -372,12 +370,16 @@ def main():
                                     continue
                                 print(f"{Fore.GREEN}  ✅ 配置已更新{Style.RESET_ALL}")
                                 CONFIG.save_user_config()
-                            except ConfigError as e:
-                                print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
+                            except ConfigError as e:                                print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
                         elif config_mode == "3":
-                             if input(f"{Fore.YELLOW}确认重置配置？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
-                                 CONFIG.reset_config()
-                                 print(f"{Fore.GREEN}✅ 配置已重置{Style.RESET_ALL}")
+                            if input(f"{Fore.YELLOW}确认重置配置？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
+                                # 提示用户手动删除配置文件来重置
+                                config_path = get_user_config()
+                                if config_path:
+                                    print(f"{Fore.YELLOW}请手动删除配置文件来重置配置：{Style.RESET_ALL}")
+                                    print(f"{Fore.CYAN}配置文件位置：~/.day_translation/config.json{Style.RESET_ALL}")
+                                else:
+                                    print(f"{Fore.GREEN}✅ 当前已是默认配置{Style.RESET_ALL}")
                         elif config_mode == "4":
                              config_path = path_manager.get_path(path_type="config_export", prompt="请输入导出配置路径（例如：config_export.json）: ", validator_type="json", default=path_manager.get_remembered_path("config_export"))
                              if config_path:

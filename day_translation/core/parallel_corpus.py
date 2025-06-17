@@ -8,11 +8,11 @@ import csv
 import re
 from pathlib import Path
 from typing import List, Tuple
-from ..utils.config import TranslationConfig
+from ..utils.config import get_config
 from ..utils.utils import XMLProcessor, get_language_folder_path, sanitize_xcomment
 from colorama import Fore, Style
 
-CONFIG = TranslationConfig()
+CONFIG = get_config()
 
 def extract_pairs_from_file(filepath: str) -> List[Tuple[str, str]]:
     """

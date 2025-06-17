@@ -10,8 +10,8 @@ from typing import Dict, Optional, Callable, List, Set, Union
 from dataclasses import dataclass, field
 from colorama import Fore, Style
 
-from .user_config import load_user_config, save_user_config
-from .config import get_config
+from .config import get_user_config, save_user_config_to_file
+from .config import get_config, get_user_config
 
 CONFIG = get_config()
 
@@ -35,7 +35,7 @@ class PathManager:
     
     def __init__(self):
         """初始化路径管理器"""
-        self.user_config = load_user_config()
+        self.user_config = get_user_config()
         self._history_file = os.path.join(os.path.dirname(__file__), ".day_translation_history.json")
         self._path_pattern = re.compile(r'^[a-zA-Z]:[\\/]|^[\\/]{2}|^[a-zA-Z0-9_\-\.]+[\\/]')
         self._history_cache: Dict[str, PathHistory] = {}
@@ -222,7 +222,7 @@ class PathManager:
                 
             # 更新用户配置
             self.user_config[f"default_{path_type}"] = result.normalized_path
-            save_user_config(self.user_config)
+            save_user_config_to_file(self.user_config)
             
             # 更新历史记录
             if path_type not in self._history_cache:

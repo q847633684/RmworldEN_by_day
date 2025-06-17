@@ -10,10 +10,10 @@ from colorama import Fore, Style
 from ..utils.config_generator import generate_default_config
 from ..core.importers import load_translations_from_csv
 from ..utils.utils import XMLProcessor, get_language_folder_path, generate_element_key
-from ..utils.config import TranslationConfig
+from ..utils.config import get_config
 from ..core.filters import ContentFilter
 
-CONFIG = TranslationConfig()
+CONFIG = get_config()
 
 @dataclass
 class ModProcessResult:

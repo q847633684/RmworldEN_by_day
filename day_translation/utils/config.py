@@ -10,7 +10,6 @@ from typing import Set, List, Dict, Any, Optional
 from colorama import Fore, Style
 
 from .filter_config import UnifiedFilterRules
-from .user_config import get_config_path, load_user_config, save_user_config
 
 CONFIG_VERSION = "1.0.0"
 
@@ -27,7 +26,7 @@ class TranslationConfig:
     def_injected_dir: str = "DefInjected"
     keyed_dir: str = "Keyed"
     output_csv: str = "extracted_translations.csv"
-    log_file: str = os.path.join(os.path.dirname(__file__), "logs", "translation.log")
+    log_file: str = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "logs", "day_translation.log")
     log_format: str = "%(asctime)s - %(levelname)s - %(message)s"
     debug_mode: bool = os.getenv("DAY_TRANSLATION_DEBUG", "").lower() == "true"
     preview_transatable_fields: int = 0
@@ -66,7 +65,7 @@ class TranslationConfig:
     def _load_user_config(self) -> None:
         """加载用户配置"""
         try:
-            user_config = load_user_config()
+            user_config = get_user_config()  # 使用缓存版本
             if user_config:
                 self._update_from_dict(user_config)
                 logging.info("已加载用户配置")
@@ -97,20 +96,30 @@ class TranslationConfig:
         for key, value in config_dict.items():
             if hasattr(self, key) and not key.startswith('_'):
                 setattr(self, key, value)
-        self._validate_config()    @property
+        self._validate_config()
+
+    @property
     def default_fields(self) -> Set[str]:
         """获取默认字段集合"""
-        return set(self._rules["default_fields"])
+        if not hasattr(self, '_rules') or not self._rules:
+            return set()
+        default_fields = self._rules.get("default_fields", [])
+        return set(default_fields) if default_fields else set()
 
     @property
     def ignore_fields(self) -> Set[str]:
         """获取忽略字段集合"""
-        return set(self._rules["ignore_fields"])
+        if not hasattr(self, '_rules') or not self._rules:
+            return set()
+        ignore_fields = self._rules.get("ignore_fields", [])
+        return set(ignore_fields) if ignore_fields else set()
 
     @property
     def non_text_patterns(self) -> List[str]:
         """获取非文本模式列表"""
-        return self._rules["non_text_patterns"]
+        if not hasattr(self, '_rules') or not self._rules:
+            return []
+        return self._rules.get("non_text_patterns", [])
 
     def update_config(self, key: str, value: Any) -> None:
         """
@@ -187,14 +196,8 @@ class TranslationConfig:
                     
             self._update_from_dict(config_dict)
             logging.info(f"配置已从 {config_file} 导入")
-        except Exception as e:
+        except Exception as e:            
             raise ConfigError(f"导入配置失败: {str(e)}")
-
-    def reset_config(self) -> None:
-        """重置配置为默认值"""
-        default_config = TranslationConfig()
-        self._update_from_dict(asdict(default_config))
-        logging.info("配置已重置为默认值")
 
     def save_user_config(self) -> None:
         """保存用户配置"""
@@ -202,7 +205,7 @@ class TranslationConfig:
             user_config = asdict(self)
             # 移除内部属性
             user_config.pop('_rules', None)
-            save_user_config(user_config)
+            save_user_config_to_file(user_config)
             logging.info("用户配置已保存")
         except Exception as e:
             logging.error(f"保存用户配置失败: {e}")
@@ -262,6 +265,8 @@ class TranslationConfig:
 
 # 全局配置实例（单例）
 _global_config_instance = None
+# 全局用户配置缓存
+_global_user_config_cache = None
 
 def get_config() -> TranslationConfig:
     """获取全局配置实例（单例模式）"""
@@ -269,3 +274,52 @@ def get_config() -> TranslationConfig:
     if _global_config_instance is None:
         _global_config_instance = TranslationConfig()
     return _global_config_instance
+
+def get_config_path() -> str:
+    """获取用户配置文件路径"""
+    config_path = os.path.join(Path.home(), ".day_translation", "config.json")
+    logging.debug(f"获取配置文件路径: {config_path}")
+    return config_path
+
+def get_user_config() -> Dict[str, Any]:
+    """获取缓存的用户配置"""
+    global _global_user_config_cache
+    if _global_user_config_cache is None:
+        # 直接实现配置加载，避免循环依赖
+        config_path = get_config_path()
+        if os.path.exists(config_path):
+            try:
+                with open(config_path, "r", encoding="utf-8") as f:
+                    _global_user_config_cache = json.load(f)
+                    logging.debug(f"加载用户配置成功: {config_path}")
+            except Exception as e:
+                logging.error(f"加载用户配置文件失败: {e}")
+                _global_user_config_cache = {}
+        else:
+            _global_user_config_cache = {}
+            logging.debug("用户配置文件不存在，使用空配置")
+    return _global_user_config_cache
+
+def clear_user_config_cache():
+    """清除用户配置缓存（用于配置更新后）"""
+    global _global_user_config_cache
+    _global_user_config_cache = None
+
+def save_user_config_to_file(config: Dict) -> None:
+    """
+    保存用户配置到文件
+
+    Args:
+        config (Dict): 配置字典
+    """
+    config_path = get_config_path()
+    try:
+        os.makedirs(os.path.dirname(config_path), exist_ok=True)
+        with open(config_path, "w", encoding="utf-8") as f:
+            json.dump(config, f, indent=4, ensure_ascii=False)
+        logging.debug(f"配置文件保存成功: {config_path}")
+        # 清除缓存，以便下次读取时获取最新配置
+        clear_user_config_cache()
+    except Exception as e:
+        print(f"保存配置文件失败: {e}")
+        logging.error(f"保存配置文件失败: {e}")

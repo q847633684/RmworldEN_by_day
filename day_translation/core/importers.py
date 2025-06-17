@@ -8,10 +8,10 @@ import logging
 import os
 from colorama import Fore, Style
 from ..utils.utils import XMLProcessor, XMLProcessorConfig, get_language_folder_path, handle_exceptions
-from ..utils.config import TranslationConfig
+from ..utils.config import get_config
 from .template_manager import TemplateManager
 
-CONFIG = TranslationConfig()
+CONFIG = get_config()
 
 def update_all_xml(mod_dir: str, translations: Dict[str, str], language: str = CONFIG.default_language, merge: bool = True) -> None:
     """
