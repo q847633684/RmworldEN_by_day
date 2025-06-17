@@ -1,0 +1,664 @@
+2025-06-18 01:26:00,120 - INFO - 创建导出目录：C:\Users\q8476\Documents\我的工作\Day_汉化\mod
+2025-06-18 01:26:00,121 - INFO - 开始提取翻译
+2025-06-18 01:26:00,121 - INFO - 调用 handle_extract_translate: mod_root_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, export_dir=C:\Users\q8476\Documents\我的工作\Day_汉化\mod, active_language=ChineseSimplified
+2025-06-18 01:26:00,122 - INFO - 未找到英文 DefInjected C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\DefInjected，从 Defs 提取
+2025-06-18 01:26:00,122 - INFO - 扫描 Defs 目录：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs
+2025-06-18 01:26:00,123 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\NonInheritedTraits.xml
+2025-06-18 01:26:00,125 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\QuickieInterruptibleJobs.xml
+2025-06-18 01:26:00,126 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ApparelLayerDefs\ApparelLayerDefs.xml
+2025-06-18 01:26:00,127 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\BackstoryDefs\rjw_child.xml
+2025-06-18 01:26:00,128 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\BackstoryDefs\rjw_nymphs.xml
+2025-06-18 01:26:00,129 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\BodyPartDefs\BodyPartGroups.xml
+2025-06-18 01:26:00,130 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\BodyPartDefs\BodyParts_Humanlike.xml
+2025-06-18 01:26:00,131 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\BodyPartDefs\BodyParts_Mech.xml
+2025-06-18 01:26:00,131 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\BodyPartTagDefs\BodyPartTags_FertilitySource.xml
+2025-06-18 01:26:00,132 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ConfigDefs\AgeConfig.xml
+2025-06-18 01:26:00,133 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ConfigDefs\CupSizes.xml
+2025-06-18 01:26:00,133 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ConfigDefs\MiscConfig.xml
+2025-06-18 01:26:00,134 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ConfigDefs\PartSizeConfigs.xml
+2025-06-18 01:26:00,135 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\Drugs\Aphrodisiac.xml
+2025-06-18 01:26:00,135 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\Drugs\Contraceptive.xml
+2025-06-18 01:26:00,136 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\Drugs\FertPill.xml
+2025-06-18 01:26:00,137 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\Drugs\Humpshroom.xml
+2025-06-18 01:26:00,140 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\Effects\Motes.xml
+2025-06-18 01:26:00,141 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Bondage.xml
+2025-06-18 01:26:00,142 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_EnemyImplants.xml
+2025-06-18 01:26:00,142 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_FeelingBroken.xml
+2025-06-18 01:26:00,143 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Fertility.xml
+2025-06-18 01:26:00,144 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Lactating.xml
+2025-06-18 01:26:00,144 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_MCEvents.xml
+2025-06-18 01:26:00,145 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Other.xml
+2025-06-18 01:26:00,146 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Paraphilia.xml
+2025-06-18 01:26:00,147 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Pregnancy.xml
+2025-06-18 01:26:00,148 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_SimpleBaby.xml
+2025-06-18 01:26:00,149 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Sterilized.xml
+2025-06-18 01:26:00,149 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Submitting.xml
+2025-06-18 01:26:00,150 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Transgender.xml
+2025-06-18 01:26:00,151 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HistoryEventDefs\HistoryEventDefs.xml
+2025-06-18 01:26:00,152 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\IncidentDef\Incidents_Nymph.xml
+2025-06-18 01:26:00,153 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Interactions_Base.xml
+2025-06-18 01:26:00,154 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Interactions_Dialogue.xml
+2025-06-18 01:26:00,155 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\RJW_Interaction template.xml
+2025-06-18 01:26:00,156 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Adjustparts.xml
+2025-06-18 01:26:00,156 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Bestiality.xml
+2025-06-18 01:26:00,157 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Biotech.xml
+2025-06-18 01:26:00,157 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Bondage.xml
+2025-06-18 01:26:00,158 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Knotted.xml
+2025-06-18 01:26:00,158 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Masturbate.xml
+2025-06-18 01:26:00,159 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Necro.xml
+2025-06-18 01:26:00,159 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Quickie.xml
+2025-06-18 01:26:00,159 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Rape.xml
+2025-06-18 01:26:00,160 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Sex.xml
+2025-06-18 01:26:00,161 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\MeditationFocusDefs\MeditationFocuses.xml
+2025-06-18 01:26:00,162 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\MentalStateDefs\MentalState_Rape.xml
+2025-06-18 01:26:00,162 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\Misc\StatCategoryDefs.xml
+2025-06-18 01:26:00,163 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\MiscTranslationDef\MiscTranslationDefs.xml
+2025-06-18 01:26:00,164 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\NeedDefs\Needs_Sex.xml
+2025-06-18 01:26:00,164 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\PawnCapacityDefs\PawnCapacity_Fertility.xml
+2025-06-18 01:26:00,165 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\PawnKindDefs\PawnKind_Nymph.xml
+2025-06-18 01:26:00,166 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\PawnRelationDef\PawnRelations_Beast.xml
+2025-06-18 01:26:00,167 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RaceSupport\CustomRaceParts.xml
+2025-06-18 01:26:00,168 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RaceSupport\No_sex.xml
+2025-06-18 01:26:00,168 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RaceSupport\PartsMorphFilters.xml
+2025-06-18 01:26:00,169 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RaceSupport\RacePartDefs.xml
+2025-06-18 01:26:00,170 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RaceSupport\Slime_Group.xml
+2025-06-18 01:26:00,170 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RaceSupport\_base.xml
+2025-06-18 01:26:00,171 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RaceSupport\_Rimworld.xml
+2025-06-18 01:26:00,173 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Abortion.xml
+2025-06-18 01:26:00,173 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_ClaimChild.xml
+2025-06-18 01:26:00,174 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_DeterminePaternity.xml
+2025-06-18 01:26:00,174 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_DeterminePregnancy.xml
+2025-06-18 01:26:00,175 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_ForceRemoveBondage.xml
+2025-06-18 01:26:00,175 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_MakeBondageGear.xml
+2025-06-18 01:26:00,176 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_MakeProsthetics.xml
+2025-06-18 01:26:00,178 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_RemoveEnemyImplants.xml
+2025-06-18 01:26:00,178 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery.xml
+2025-06-18 01:26:00,179 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Artificial parts.xml
+2025-06-18 01:26:00,180 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Artificial_Multiparts.xml
+2025-06-18 01:26:00,181 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Breast_Manipulation.xml
+2025-06-18 01:26:00,182 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Fertility.xml
+2025-06-18 01:26:00,183 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Misc.xml
+2025-06-18 01:26:00,183 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Natural parts.xml
+2025-06-18 01:26:00,185 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Natural_Multiparts.xml
+2025-06-18 01:26:00,188 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Remove_Parts.xml
+2025-06-18 01:26:00,189 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecordDefs\Records.xml
+2025-06-18 01:26:00,190 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RJWTab\MainButtons.xml
+2025-06-18 01:26:00,190 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RJWTab\PawnTableDefs.xml
+2025-06-18 01:26:00,191 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\RulePacks_EngravedNames.xml
+2025-06-18 01:26:00,192 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\RulePacks_TalkTopics_Sex.xml
+2025-06-18 01:26:00,192 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\SexFluidDefs\Example.xml
+2025-06-18 01:26:00,193 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\SexFluidDefs\Fluids.xml
+2025-06-18 01:26:00,194 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\SoundDefs\Sounds_Sex.xml
+2025-06-18 01:26:00,195 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\StatDefs\Stats.xml
+2025-06-18 01:26:00,196 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingCategoryDefs\ThingCategories.xml
+2025-06-18 01:26:00,197 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Birth_Control.xml
+2025-06-18 01:26:00,198 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Filth_Cum.xml
+2025-06-18 01:26:00,199 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_Bondage.xml
+2025-06-18 01:26:00,200 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_Resource_AnimalProduct_Eggs.xml
+2025-06-18 01:26:00,201 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThinkTreeDefs\ThinkTrees_Animal.xml
+2025-06-18 01:26:00,201 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThinkTreeDefs\ThinkTrees_Misc.xml
+2025-06-18 01:26:00,202 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThinkTreeDefs\ThinkTrees_Necro.xml
+2025-06-18 01:26:00,203 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThinkTreeDefs\ThinkTrees_Nymph.xml
+2025-06-18 01:26:00,203 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThinkTreeDefs\ThinkTrees_Prisoner.xml
+2025-06-18 01:26:00,204 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThinkTreeDefs\ThinkTrees_Rapist.xml
+2025-06-18 01:26:00,204 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThinkTreeDefs\ThinkTrees_Zoophile.xml
+2025-06-18 01:26:00,205 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Bestiality.xml
+2025-06-18 01:26:00,246 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Bondage.xml
+2025-06-18 01:26:00,247 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Family.xml
+2025-06-18 01:26:00,248 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Necro.xml
+2025-06-18 01:26:00,248 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Quirk.xml
+2025-06-18 01:26:00,249 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Rape.xml
+2025-06-18 01:26:00,250 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Sex.xml
+2025-06-18 01:26:00,251 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_SexChange.xml
+2025-06-18 01:26:00,252 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Virgin.xml
+2025-06-18 01:26:00,253 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thought_Family_Beast.xml
+2025-06-18 01:26:00,255 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\TipSetDefs\Tips.xml
+2025-06-18 01:26:00,256 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\TraitDefs\Traits.xml
+2025-06-18 01:26:00,256 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\TraitDefs\Traits_Nymphomaniac.xml
+2025-06-18 01:26:00,257 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\TraitDefs\Traits_xSlut.xml
+2025-06-18 01:26:00,258 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts.xml
+2025-06-18 01:26:00,259 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts_Animal.xml
+2025-06-18 01:26:00,260 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts_Demon.xml
+2025-06-18 01:26:00,261 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts_Human.xml
+2025-06-18 01:26:00,261 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts_Implants.xml
+2025-06-18 01:26:00,262 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts_Insect.xml
+2025-06-18 01:26:00,263 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts_Resin.xml
+2025-06-18 01:26:00,264 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts_Slime.xml
+2025-06-18 01:26:00,265 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Bestiality\RulePacks_Bestiality.xml
+2025-06-18 01:26:00,266 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Bestiality\RulePacks_Bestiality_Reverse.xml
+2025-06-18 01:26:00,267 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Masturbation\RulePacks_Masturbation.xml
+2025-06-18 01:26:00,268 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Rape\RulePacks_Rape.xml
+2025-06-18 01:26:00,269 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Rape\RulePacks_Rape_Reverse.xml
+2025-06-18 01:26:00,270 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Sex\RulePacks_Oral.xml
+2025-06-18 01:26:00,270 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Sex\RulePacks_Reverse_Oral.xml
+2025-06-18 01:26:00,271 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Sex\RulePacks_Reverse_Sex.xml
+2025-06-18 01:26:00,272 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Sex\RulePacks_Sex.xml
+2025-06-18 01:26:00,273 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RJWTab\PawnColumnDefs\Checkboxes.xml
+2025-06-18 01:26:00,274 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RJWTab\PawnColumnDefs\Icons.xml
+2025-06-18 01:26:00,277 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Bestiality_Anal.xml
+2025-06-18 01:26:00,278 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Bestiality_Double_PenetrationM.xml
+2025-06-18 01:26:00,278 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Bestiality_Oral.xml
+2025-06-18 01:26:00,279 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Bestiality_Vaginal.xml
+2025-06-18 01:26:00,280 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Masturbation\Masturbation_AutoBreastjob.xml
+2025-06-18 01:26:00,281 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Masturbation\Masturbation_AutoFellatio.xml
+2025-06-18 01:26:00,281 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Masturbation\Masturbation_Breastjob.xml
+2025-06-18 01:26:00,282 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Masturbation\Masturbation_HandjobA.xml
+2025-06-18 01:26:00,282 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Masturbation\Masturbation_HandjobP.xml
+2025-06-18 01:26:00,283 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Masturbation\Masturbation_HandjobV.xml
+2025-06-18 01:26:00,284 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Anal.xml
+2025-06-18 01:26:00,284 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Beakjob.xml
+2025-06-18 01:26:00,285 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Breastjob.xml
+2025-06-18 01:26:00,286 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Cunnilingus.xml
+2025-06-18 01:26:00,286 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_DoublePenetration.xml
+2025-06-18 01:26:00,287 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_DoublePenetrationM.xml
+2025-06-18 01:26:00,288 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Fellatio.xml
+2025-06-18 01:26:00,288 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Fingering.xml
+2025-06-18 01:26:00,289 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Fisting.xml
+2025-06-18 01:26:00,289 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Footjob.xml
+2025-06-18 01:26:00,290 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Handjob.xml
+2025-06-18 01:26:00,291 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Oral.xml
+2025-06-18 01:26:00,291 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Rimming.xml
+2025-06-18 01:26:00,292 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Scissoring.xml
+2025-06-18 01:26:00,292 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Vaginal.xml
+2025-06-18 01:26:00,293 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Anal.xml
+2025-06-18 01:26:00,294 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Beakjob.xml
+2025-06-18 01:26:00,294 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Breastjob.xml
+2025-06-18 01:26:00,295 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Cunnilingus.xml
+2025-06-18 01:26:00,295 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_DoublePenetration.xml
+2025-06-18 01:26:00,296 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_DoublePenetrationM.xml
+2025-06-18 01:26:00,297 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Fellatio.xml
+2025-06-18 01:26:00,297 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Fingering.xml
+2025-06-18 01:26:00,298 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Fisting.xml
+2025-06-18 01:26:00,298 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Footjob.xml
+2025-06-18 01:26:00,299 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Handjob.xml
+2025-06-18 01:26:00,300 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_MutualMasturbation.xml
+2025-06-18 01:26:00,300 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Rimming.xml
+2025-06-18 01:26:00,301 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Scissoring.xml
+2025-06-18 01:26:00,301 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Sixtynine.xml
+2025-06-18 01:26:00,302 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Vaginal.xml
+2025-06-18 01:26:00,303 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Anal.xml
+2025-06-18 01:26:00,304 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Beakjob.xml
+2025-06-18 01:26:00,304 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Breastjob.xml
+2025-06-18 01:26:00,305 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Cunnilingus.xml
+2025-06-18 01:26:00,305 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_DoublePenetration.xml
+2025-06-18 01:26:00,306 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_DoublePenetrationM.xml
+2025-06-18 01:26:00,307 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Fellatio.xml
+2025-06-18 01:26:00,307 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Fingering.xml
+2025-06-18 01:26:00,308 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Fisting.xml
+2025-06-18 01:26:00,309 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Footjob.xml
+2025-06-18 01:26:00,310 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Handjob.xml
+2025-06-18 01:26:00,310 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Rimming.xml
+2025-06-18 01:26:00,311 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Vaginal.xml
+2025-06-18 01:26:00,312 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Necro_Anal.xml
+2025-06-18 01:26:00,313 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Necro_DoublePenetration.xml
+2025-06-18 01:26:00,314 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Necro_DoublePenetrationM.xml
+2025-06-18 01:26:00,314 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Necro_Vaginal.xml
+2025-06-18 01:26:00,315 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Other\Rape_MechImplant.xml
+2025-06-18 01:26:00,316 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Anal.xml
+2025-06-18 01:26:00,317 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Breastjob.xml
+2025-06-18 01:26:00,317 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Cunnilingus.xml
+2025-06-18 01:26:00,318 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_DoublePenetration.xml
+2025-06-18 01:26:00,318 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_DoublePenetrationM.xml
+2025-06-18 01:26:00,319 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Fellatio.xml
+2025-06-18 01:26:00,320 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Fingering.xml
+2025-06-18 01:26:00,320 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Fisting.xml
+2025-06-18 01:26:00,321 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Footjob.xml
+2025-06-18 01:26:00,322 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Handjob.xml
+2025-06-18 01:26:00,322 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Rimming.xml
+2025-06-18 01:26:00,323 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Scissoring.xml
+2025-06-18 01:26:00,323 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Vaginal.xml
+2025-06-18 01:26:00,325 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Reverse\Necro_Reverse_Anal.xml
+2025-06-18 01:26:00,326 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Reverse\Necro_Reverse_DoublePenetration.xml
+2025-06-18 01:26:00,326 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Reverse\Necro_Reverse_DoublePenetrationM.xml
+2025-06-18 01:26:00,327 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Reverse\Necro_Reverse_Vaginal.xml
+2025-06-18 01:26:00,328 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Anal.xml
+2025-06-18 01:26:00,329 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Double_PenetrationM.xml
+2025-06-18 01:26:00,330 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Handjob.xml
+2025-06-18 01:26:00,330 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Oral.xml
+2025-06-18 01:26:00,331 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Oral_Service.xml
+2025-06-18 01:26:00,331 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Vaginal.xml
+2025-06-18 01:26:00,333 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts.xml
+2025-06-18 01:26:00,334 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Animal.xml
+2025-06-18 01:26:00,336 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Demon.xml
+2025-06-18 01:26:00,336 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Human.xml
+2025-06-18 01:26:00,337 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Implants.xml
+2025-06-18 01:26:00,341 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Insect.xml
+2025-06-18 01:26:00,342 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Resin.xml
+2025-06-18 01:26:00,343 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Slime.xml
+2025-06-18 01:26:00,345 - INFO - 调用 export_definjected: mod_root_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, export_dir=C:\Users\q8476\Documents\我的工作\Day_汉化\mod, active_language=ChineseSimplified, translations_count=1547
+2025-06-18 01:26:00,347 - INFO - 创建文件夹：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected
+2025-06-18 01:26:00,671 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ApparelLayerDefs\ApparelLayerDefs.xml
+2025-06-18 01:26:00,691 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BackstoryDefs\rjw_child.xml
+2025-06-18 01:26:00,706 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BackstoryDefs\rjw_nymphs.xml
+2025-06-18 01:26:00,716 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartDefs\BodyPartGroups.xml
+2025-06-18 01:26:00,731 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartDefs\BodyParts_Humanlike.xml
+2025-06-18 01:26:00,743 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartDefs\BodyParts_Mech.xml
+2025-06-18 01:26:00,754 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartTagDefs\BodyPartTags_FertilitySource.xml
+2025-06-18 01:26:00,765 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ConfigDefs\PartSizeConfigs.xml
+2025-06-18 01:26:00,778 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\Drugs\Aphrodisiac.xml
+2025-06-18 01:26:00,792 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\Drugs\Contraceptive.xml
+2025-06-18 01:26:00,807 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\Drugs\FertPill.xml
+2025-06-18 01:26:00,824 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\Drugs\Humpshroom.xml
+2025-06-18 01:26:00,838 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_Bondage.xml
+2025-06-18 01:26:00,851 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_EnemyImplants.xml
+2025-06-18 01:26:00,868 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_FeelingBroken.xml
+2025-06-18 01:26:00,881 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_Fertility.xml
+2025-06-18 01:26:00,892 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_MCEvents.xml
+2025-06-18 01:26:00,902 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_Other.xml
+2025-06-18 01:26:00,913 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_Paraphilia.xml
+2025-06-18 01:26:00,923 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_SimpleBaby.xml
+2025-06-18 01:26:00,932 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_Sterilized.xml
+2025-06-18 01:26:00,944 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_Submitting.xml
+2025-06-18 01:26:00,955 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_Transgender.xml
+2025-06-18 01:26:00,965 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HistoryEventDefs\HistoryEventDefs.xml
+2025-06-18 01:26:00,976 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\IncidentDef\Incidents_Nymph.xml
+2025-06-18 01:26:00,989 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Interactions_Dialogue.xml
+2025-06-18 01:26:01,002 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\RJW_Interaction template.xml
+2025-06-18 01:26:01,013 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefs\Jobs_Bestiality.xml
+2025-06-18 01:26:01,024 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefs\Jobs_Biotech.xml
+2025-06-18 01:26:01,034 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefs\Jobs_Bondage.xml
+2025-06-18 01:26:01,044 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefs\Jobs_Knotted.xml
+2025-06-18 01:26:01,057 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefs\Jobs_Masturbate.xml
+2025-06-18 01:26:01,068 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefs\Jobs_Necro.xml
+2025-06-18 01:26:01,081 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefs\Jobs_Quickie.xml
+2025-06-18 01:26:01,096 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefs\Jobs_Rape.xml
+2025-06-18 01:26:01,109 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefs\Jobs_Sex.xml
+2025-06-18 01:26:01,122 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\MeditationFocusDefs\MeditationFocuses.xml
+2025-06-18 01:26:01,134 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\MentalStateDefs\MentalState_Rape.xml
+2025-06-18 01:26:01,149 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\Misc\StatCategoryDefs.xml
+2025-06-18 01:26:01,164 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\MiscTranslationDef\MiscTranslationDefs.xml
+2025-06-18 01:26:01,177 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\NeedDefs\Needs_Sex.xml
+2025-06-18 01:26:01,181 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnCapacityDefs\PawnCapacity_Fertility.xml
+2025-06-18 01:26:01,194 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnKindDefs\PawnKind_Nymph.xml
+2025-06-18 01:26:01,206 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnRelationDef\PawnRelations_Beast.xml
+2025-06-18 01:26:01,217 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RaceSupport\CustomRaceParts.xml
+2025-06-18 01:26:01,229 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefs\Recipes_Abortion.xml
+2025-06-18 01:26:01,245 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefs\Recipes_ClaimChild.xml
+2025-06-18 01:26:01,260 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefs\Recipes_DeterminePaternity.xml
+2025-06-18 01:26:01,272 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefs\Recipes_DeterminePregnancy.xml
+2025-06-18 01:26:01,285 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefs\Recipes_MakeBondageGear.xml
+2025-06-18 01:26:01,303 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefs\Recipes_MakeProsthetics.xml
+2025-06-18 01:26:01,317 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefs\Recipes_RemoveEnemyImplants.xml
+2025-06-18 01:26:01,334 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefs\Recipes_Surgery_Artificial parts.xml
+2025-06-18 01:26:01,357 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefs\Recipes_Surgery_Artificial_Multiparts.xml
+2025-06-18 01:26:01,371 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefs\Recipes_Surgery_Fertility.xml
+2025-06-18 01:26:01,383 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefs\Recipes_Surgery_Misc.xml
+2025-06-18 01:26:01,401 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefs\Recipes_Surgery_Natural parts.xml
+2025-06-18 01:26:01,416 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefs\Recipes_Surgery_Natural_Multiparts.xml
+2025-06-18 01:26:01,428 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefs\Recipes_Surgery_Remove_Parts.xml
+2025-06-18 01:26:01,443 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecordDefs\Records.xml
+2025-06-18 01:26:01,457 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RJWTab\MainButtons.xml
+2025-06-18 01:26:01,470 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RJWTab\PawnTableDefs.xml
+2025-06-18 01:26:01,482 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RulePackDefs\RulePacks_EngravedNames.xml
+2025-06-18 01:26:01,498 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RulePackDefs\RulePacks_TalkTopics_Sex.xml
+2025-06-18 01:26:01,522 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\SexFluidDefs\Fluids.xml
+2025-06-18 01:26:01,539 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\StatDefs\Stats.xml
+2025-06-18 01:26:01,551 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingCategoryDefs\ThingCategories.xml
+2025-06-18 01:26:01,565 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefs\Birth_Control.xml
+2025-06-18 01:26:01,577 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefs\Filth_Cum.xml
+2025-06-18 01:26:01,591 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefs\Items_Bondage.xml
+2025-06-18 01:26:01,594 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefs\Items_Resource_AnimalProduct_Eggs.xml
+2025-06-18 01:26:01,607 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefs\Thoughts_Bestiality.xml
+2025-06-18 01:26:01,620 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefs\Thoughts_Bondage.xml
+2025-06-18 01:26:01,631 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefs\Thoughts_Family.xml
+2025-06-18 01:26:01,643 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefs\Thoughts_Necro.xml
+2025-06-18 01:26:01,653 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefs\Thoughts_Quirk.xml
+2025-06-18 01:26:01,666 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefs\Thoughts_Rape.xml
+2025-06-18 01:26:01,680 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefs\Thoughts_Sex.xml
+2025-06-18 01:26:01,697 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefs\Thoughts_SexChange.xml
+2025-06-18 01:26:01,716 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefs\Thoughts_Virgin.xml
+2025-06-18 01:26:01,734 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefs\Thought_Family_Beast.xml
+2025-06-18 01:26:01,749 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\TraitDefs\Traits.xml
+2025-06-18 01:26:01,765 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\TraitDefs\Traits_Nymphomaniac.xml
+2025-06-18 01:26:01,782 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\TraitDefs\Traits_xSlut.xml
+2025-06-18 01:26:01,803 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefs\Items_BodyParts\Items_BodyParts_Animal.xml
+2025-06-18 01:26:01,818 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefs\Items_BodyParts\Items_BodyParts_Demon.xml
+2025-06-18 01:26:01,832 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefs\Items_BodyParts\Items_BodyParts_Human.xml
+2025-06-18 01:26:01,848 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefs\Items_BodyParts\Items_BodyParts_Implants.xml
+2025-06-18 01:26:01,860 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefs\Items_BodyParts\Items_BodyParts_Insect.xml
+2025-06-18 01:26:01,871 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefs\Items_BodyParts\Items_BodyParts_Resin.xml
+2025-06-18 01:26:01,883 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefs\Items_BodyParts\Items_BodyParts_Slime.xml
+2025-06-18 01:26:01,896 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RulePackDefs\Bestiality\RulePacks_Bestiality.xml
+2025-06-18 01:26:01,908 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RulePackDefs\Bestiality\RulePacks_Bestiality_Reverse.xml
+2025-06-18 01:26:01,921 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RulePackDefs\Masturbation\RulePacks_Masturbation.xml
+2025-06-18 01:26:01,933 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RulePackDefs\Rape\RulePacks_Rape.xml
+2025-06-18 01:26:01,947 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RulePackDefs\Rape\RulePacks_Rape_Reverse.xml
+2025-06-18 01:26:01,962 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RulePackDefs\Sex\RulePacks_Oral.xml
+2025-06-18 01:26:01,977 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RulePackDefs\Sex\RulePacks_Reverse_Oral.xml
+2025-06-18 01:26:01,991 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RulePackDefs\Sex\RulePacks_Reverse_Sex.xml
+2025-06-18 01:26:02,008 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RulePackDefs\Sex\RulePacks_Sex.xml
+2025-06-18 01:26:02,026 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Bestiality\Bestiality_Anal.xml
+2025-06-18 01:26:02,042 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Bestiality\Bestiality_Double_PenetrationM.xml
+2025-06-18 01:26:02,055 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Bestiality\Bestiality_Oral.xml
+2025-06-18 01:26:02,071 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Bestiality\Bestiality_Vaginal.xml
+2025-06-18 01:26:02,084 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Masturbation\Masturbation_AutoBreastjob.xml
+2025-06-18 01:26:02,096 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Masturbation\Masturbation_AutoFellatio.xml
+2025-06-18 01:26:02,112 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Masturbation\Masturbation_Breastjob.xml
+2025-06-18 01:26:02,125 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Masturbation\Masturbation_HandjobA.xml
+2025-06-18 01:26:02,140 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Masturbation\Masturbation_HandjobP.xml
+2025-06-18 01:26:02,152 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Masturbation\Masturbation_HandjobV.xml
+2025-06-18 01:26:02,165 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_Anal.xml
+2025-06-18 01:26:02,176 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_Beakjob.xml
+2025-06-18 01:26:02,189 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_Breastjob.xml
+2025-06-18 01:26:02,199 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_Cunnilingus.xml
+2025-06-18 01:26:02,211 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_DoublePenetration.xml
+2025-06-18 01:26:02,223 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_DoublePenetrationM.xml
+2025-06-18 01:26:02,233 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_Fellatio.xml
+2025-06-18 01:26:02,245 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_Fingering.xml
+2025-06-18 01:26:02,257 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_Fisting.xml
+2025-06-18 01:26:02,268 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_Footjob.xml
+2025-06-18 01:26:02,279 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_Handjob.xml
+2025-06-18 01:26:02,291 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_Oral.xml
+2025-06-18 01:26:02,305 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_Rimming.xml
+2025-06-18 01:26:02,316 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_Scissoring.xml
+2025-06-18 01:26:02,331 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Rape_Vaginal.xml
+2025-06-18 01:26:02,343 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_Anal.xml
+2025-06-18 01:26:02,354 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_Beakjob.xml
+2025-06-18 01:26:02,371 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_Breastjob.xml
+2025-06-18 01:26:02,387 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_Cunnilingus.xml
+2025-06-18 01:26:02,399 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_DoublePenetration.xml
+2025-06-18 01:26:02,411 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_DoublePenetrationM.xml
+2025-06-18 01:26:02,424 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_Fellatio.xml
+2025-06-18 01:26:02,436 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_Fingering.xml
+2025-06-18 01:26:02,448 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_Fisting.xml
+2025-06-18 01:26:02,461 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_Footjob.xml
+2025-06-18 01:26:02,473 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_Handjob.xml
+2025-06-18 01:26:02,484 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_MutualMasturbation.xml
+2025-06-18 01:26:02,501 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_Rimming.xml
+2025-06-18 01:26:02,525 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_Scissoring.xml
+2025-06-18 01:26:02,543 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_Sixtynine.xml
+2025-06-18 01:26:02,560 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Sex_Vaginal.xml
+2025-06-18 01:26:02,572 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Reverse\Sex_Reverse_Anal.xml
+2025-06-18 01:26:02,583 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Reverse\Sex_Reverse_Beakjob.xml
+2025-06-18 01:26:02,598 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Reverse\Sex_Reverse_Breastjob.xml
+2025-06-18 01:26:02,612 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Reverse\Sex_Reverse_Cunnilingus.xml
+2025-06-18 01:26:02,630 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Reverse\Sex_Reverse_DoublePenetration.xml
+2025-06-18 01:26:02,644 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Reverse\Sex_Reverse_DoublePenetrationM.xml
+2025-06-18 01:26:02,657 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Reverse\Sex_Reverse_Fellatio.xml
+2025-06-18 01:26:02,674 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Reverse\Sex_Reverse_Fingering.xml
+2025-06-18 01:26:02,688 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Reverse\Sex_Reverse_Fisting.xml
+2025-06-18 01:26:02,702 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Reverse\Sex_Reverse_Footjob.xml
+2025-06-18 01:26:02,715 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Reverse\Sex_Reverse_Handjob.xml
+2025-06-18 01:26:02,727 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Reverse\Sex_Reverse_Rimming.xml
+2025-06-18 01:26:02,740 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Sex\Reverse\Sex_Reverse_Vaginal.xml
+2025-06-18 01:26:02,752 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Necro\Necro_Anal.xml
+2025-06-18 01:26:02,765 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Necro\Necro_DoublePenetration.xml
+2025-06-18 01:26:02,779 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Necro\Necro_DoublePenetrationM.xml
+2025-06-18 01:26:02,792 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Necro\Necro_Vaginal.xml
+2025-06-18 01:26:02,808 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Other\Rape_MechImplant.xml
+2025-06-18 01:26:02,821 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Reverse\Rape_Reverse_Anal.xml
+2025-06-18 01:26:02,839 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Reverse\Rape_Reverse_Breastjob.xml
+2025-06-18 01:26:02,858 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Reverse\Rape_Reverse_Cunnilingus.xml
+2025-06-18 01:26:02,874 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Reverse\Rape_Reverse_DoublePenetration.xml
+2025-06-18 01:26:02,891 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Reverse\Rape_Reverse_DoublePenetrationM.xml
+2025-06-18 01:26:02,909 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Reverse\Rape_Reverse_Fellatio.xml
+2025-06-18 01:26:02,926 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Reverse\Rape_Reverse_Fingering.xml
+2025-06-18 01:26:02,944 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Reverse\Rape_Reverse_Fisting.xml
+2025-06-18 01:26:02,961 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Reverse\Rape_Reverse_Footjob.xml
+2025-06-18 01:26:02,977 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Reverse\Rape_Reverse_Handjob.xml
+2025-06-18 01:26:02,993 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Reverse\Rape_Reverse_Rimming.xml
+2025-06-18 01:26:03,008 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Reverse\Rape_Reverse_Scissoring.xml
+2025-06-18 01:26:03,015 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Reverse\Rape_Reverse_Vaginal.xml
+2025-06-18 01:26:03,031 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Necro\Reverse\Necro_Reverse_Anal.xml
+2025-06-18 01:26:03,049 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Necro\Reverse\Necro_Reverse_DoublePenetration.xml
+2025-06-18 01:26:03,064 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Necro\Reverse\Necro_Reverse_DoublePenetrationM.xml
+2025-06-18 01:26:03,076 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Rape\Necro\Reverse\Necro_Reverse_Vaginal.xml
+2025-06-18 01:26:03,089 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Anal.xml
+2025-06-18 01:26:03,101 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Double_PenetrationM.xml
+2025-06-18 01:26:03,114 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Handjob.xml
+2025-06-18 01:26:03,126 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Oral.xml
+2025-06-18 01:26:03,139 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Oral_Service.xml
+2025-06-18 01:26:03,151 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Vaginal.xml
+2025-06-18 01:26:03,166 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts.xml
+2025-06-18 01:26:03,183 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Animal.xml
+2025-06-18 01:26:03,200 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Demon.xml
+2025-06-18 01:26:03,216 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Human.xml
+2025-06-18 01:26:03,234 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Implants.xml
+2025-06-18 01:26:03,250 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Insect.xml
+2025-06-18 01:26:03,262 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Resin.xml
+2025-06-18 01:26:03,274 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Slime.xml
+2025-06-18 01:26:03,275 - INFO - 调用 export_keyed: mod_root_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, export_dir=C:\Users\q8476\Documents\我的工作\Day_汉化\mod, active_language=ChineseSimplified, english_language=English
+2025-06-18 01:26:03,276 - INFO - 创建文件夹：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed
+2025-06-18 01:26:03,279 - INFO - 复制 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\Keyed\Hediff_InsectEgg.xml 到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\Hediff_InsectEgg.xml
+2025-06-18 01:26:03,302 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\Hediff_InsectEgg.xml
+2025-06-18 01:26:03,304 - INFO - 复制 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\Keyed\RimJobWorldKeys.xml 到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RimJobWorldKeys.xml
+2025-06-18 01:26:03,328 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RimJobWorldKeys.xml
+2025-06-18 01:26:03,329 - INFO - 复制 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\Keyed\RJWMainTab.xml 到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RJWMainTab.xml
+2025-06-18 01:26:03,340 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RJWMainTab.xml
+2025-06-18 01:26:03,341 - INFO - 复制 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\Keyed\RMB.xml 到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RMB.xml
+2025-06-18 01:26:03,354 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RMB.xml
+2025-06-18 01:26:03,356 - INFO - 复制 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\Keyed\SettingsKeys.xml 到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SettingsKeys.xml
+2025-06-18 01:26:03,384 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SettingsKeys.xml
+2025-06-18 01:26:03,387 - INFO - 复制 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\Keyed\SexGizmo.xml 到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SexGizmo.xml
+2025-06-18 01:26:03,404 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SexGizmo.xml
+2025-06-18 01:26:03,406 - INFO - 复制 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\Keyed\SexualityCardKeys.xml 到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SexualityCardKeys.xml
+2025-06-18 01:26:03,425 - INFO - 保存 XML 文件：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SexualityCardKeys.xml
+2025-06-18 01:26:03,425 - INFO - 导出所有可翻译字段到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\extracted_translations.csv
+2025-06-18 01:26:03,425 - INFO - 扫描 Defs 目录：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs
+2025-06-18 01:26:03,426 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\NonInheritedTraits.xml
+2025-06-18 01:26:03,427 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\QuickieInterruptibleJobs.xml
+2025-06-18 01:26:03,429 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ApparelLayerDefs\ApparelLayerDefs.xml
+2025-06-18 01:26:03,430 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\BackstoryDefs\rjw_child.xml
+2025-06-18 01:26:03,431 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\BackstoryDefs\rjw_nymphs.xml
+2025-06-18 01:26:03,438 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\BodyPartDefs\BodyPartGroups.xml
+2025-06-18 01:26:03,439 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\BodyPartDefs\BodyParts_Humanlike.xml
+2025-06-18 01:26:03,440 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\BodyPartDefs\BodyParts_Mech.xml
+2025-06-18 01:26:03,443 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\BodyPartTagDefs\BodyPartTags_FertilitySource.xml
+2025-06-18 01:26:03,444 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ConfigDefs\AgeConfig.xml
+2025-06-18 01:26:03,446 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ConfigDefs\CupSizes.xml
+2025-06-18 01:26:03,448 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ConfigDefs\MiscConfig.xml
+2025-06-18 01:26:03,449 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ConfigDefs\PartSizeConfigs.xml
+2025-06-18 01:26:03,450 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\Drugs\Aphrodisiac.xml
+2025-06-18 01:26:03,451 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\Drugs\Contraceptive.xml
+2025-06-18 01:26:03,452 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\Drugs\FertPill.xml
+2025-06-18 01:26:03,454 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\Drugs\Humpshroom.xml
+2025-06-18 01:26:03,460 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\Effects\Motes.xml
+2025-06-18 01:26:03,461 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Bondage.xml
+2025-06-18 01:26:03,462 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_EnemyImplants.xml
+2025-06-18 01:26:03,464 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_FeelingBroken.xml
+2025-06-18 01:26:03,465 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Fertility.xml
+2025-06-18 01:26:03,466 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Lactating.xml
+2025-06-18 01:26:03,467 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_MCEvents.xml
+2025-06-18 01:26:03,468 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Other.xml
+2025-06-18 01:26:03,468 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Paraphilia.xml
+2025-06-18 01:26:03,470 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Pregnancy.xml
+2025-06-18 01:26:03,473 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_SimpleBaby.xml
+2025-06-18 01:26:03,475 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Sterilized.xml
+2025-06-18 01:26:03,476 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Submitting.xml
+2025-06-18 01:26:03,476 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_Transgender.xml
+2025-06-18 01:26:03,478 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HistoryEventDefs\HistoryEventDefs.xml
+2025-06-18 01:26:03,479 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\IncidentDef\Incidents_Nymph.xml
+2025-06-18 01:26:03,481 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Interactions_Base.xml
+2025-06-18 01:26:03,481 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Interactions_Dialogue.xml
+2025-06-18 01:26:03,483 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\RJW_Interaction template.xml
+2025-06-18 01:26:03,484 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Adjustparts.xml
+2025-06-18 01:26:03,485 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Bestiality.xml
+2025-06-18 01:26:03,486 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Biotech.xml
+2025-06-18 01:26:03,487 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Bondage.xml
+2025-06-18 01:26:03,488 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Knotted.xml
+2025-06-18 01:26:03,489 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Masturbate.xml
+2025-06-18 01:26:03,489 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Necro.xml
+2025-06-18 01:26:03,490 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Quickie.xml
+2025-06-18 01:26:03,491 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Rape.xml
+2025-06-18 01:26:03,492 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\JobDefs\Jobs_Sex.xml
+2025-06-18 01:26:03,493 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\MeditationFocusDefs\MeditationFocuses.xml
+2025-06-18 01:26:03,494 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\MentalStateDefs\MentalState_Rape.xml
+2025-06-18 01:26:03,495 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\Misc\StatCategoryDefs.xml
+2025-06-18 01:26:03,496 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\MiscTranslationDef\MiscTranslationDefs.xml
+2025-06-18 01:26:03,497 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\NeedDefs\Needs_Sex.xml
+2025-06-18 01:26:03,498 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\PawnCapacityDefs\PawnCapacity_Fertility.xml
+2025-06-18 01:26:03,499 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\PawnKindDefs\PawnKind_Nymph.xml
+2025-06-18 01:26:03,500 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\PawnRelationDef\PawnRelations_Beast.xml
+2025-06-18 01:26:03,504 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RaceSupport\CustomRaceParts.xml
+2025-06-18 01:26:03,505 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RaceSupport\No_sex.xml
+2025-06-18 01:26:03,506 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RaceSupport\PartsMorphFilters.xml
+2025-06-18 01:26:03,507 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RaceSupport\RacePartDefs.xml
+2025-06-18 01:26:03,508 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RaceSupport\Slime_Group.xml
+2025-06-18 01:26:03,509 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RaceSupport\_base.xml
+2025-06-18 01:26:03,510 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RaceSupport\_Rimworld.xml
+2025-06-18 01:26:03,513 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Abortion.xml
+2025-06-18 01:26:03,514 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_ClaimChild.xml
+2025-06-18 01:26:03,515 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_DeterminePaternity.xml
+2025-06-18 01:26:03,517 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_DeterminePregnancy.xml
+2025-06-18 01:26:03,517 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_ForceRemoveBondage.xml
+2025-06-18 01:26:03,518 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_MakeBondageGear.xml
+2025-06-18 01:26:03,520 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_MakeProsthetics.xml
+2025-06-18 01:26:03,522 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_RemoveEnemyImplants.xml
+2025-06-18 01:26:03,523 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery.xml
+2025-06-18 01:26:03,524 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Artificial parts.xml
+2025-06-18 01:26:03,527 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Artificial_Multiparts.xml
+2025-06-18 01:26:03,530 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Breast_Manipulation.xml
+2025-06-18 01:26:03,531 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Fertility.xml
+2025-06-18 01:26:03,532 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Misc.xml
+2025-06-18 01:26:03,533 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Natural parts.xml
+2025-06-18 01:26:03,538 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Natural_Multiparts.xml
+2025-06-18 01:26:03,543 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecipeDefs\Recipes_Surgery_Remove_Parts.xml
+2025-06-18 01:26:03,545 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RecordDefs\Records.xml
+2025-06-18 01:26:03,547 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RJWTab\MainButtons.xml
+2025-06-18 01:26:03,548 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RJWTab\PawnTableDefs.xml
+2025-06-18 01:26:03,549 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\RulePacks_EngravedNames.xml
+2025-06-18 01:26:03,550 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\RulePacks_TalkTopics_Sex.xml
+2025-06-18 01:26:03,566 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\SexFluidDefs\Example.xml
+2025-06-18 01:26:03,567 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\SexFluidDefs\Fluids.xml
+2025-06-18 01:26:03,568 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\SoundDefs\Sounds_Sex.xml
+2025-06-18 01:26:03,568 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\StatDefs\Stats.xml
+2025-06-18 01:26:03,569 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingCategoryDefs\ThingCategories.xml
+2025-06-18 01:26:03,570 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Birth_Control.xml
+2025-06-18 01:26:03,571 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Filth_Cum.xml
+2025-06-18 01:26:03,571 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_Bondage.xml
+2025-06-18 01:26:03,572 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_Resource_AnimalProduct_Eggs.xml
+2025-06-18 01:26:03,573 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThinkTreeDefs\ThinkTrees_Animal.xml
+2025-06-18 01:26:03,574 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThinkTreeDefs\ThinkTrees_Misc.xml
+2025-06-18 01:26:03,575 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThinkTreeDefs\ThinkTrees_Necro.xml
+2025-06-18 01:26:03,576 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThinkTreeDefs\ThinkTrees_Nymph.xml
+2025-06-18 01:26:03,576 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThinkTreeDefs\ThinkTrees_Prisoner.xml
+2025-06-18 01:26:03,577 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThinkTreeDefs\ThinkTrees_Rapist.xml
+2025-06-18 01:26:03,577 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThinkTreeDefs\ThinkTrees_Zoophile.xml
+2025-06-18 01:26:03,578 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Bestiality.xml
+2025-06-18 01:26:03,579 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Bondage.xml
+2025-06-18 01:26:03,580 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Family.xml
+2025-06-18 01:26:03,581 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Necro.xml
+2025-06-18 01:26:03,581 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Quirk.xml
+2025-06-18 01:26:03,582 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Rape.xml
+2025-06-18 01:26:03,583 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Sex.xml
+2025-06-18 01:26:03,583 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_SexChange.xml
+2025-06-18 01:26:03,585 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thoughts_Virgin.xml
+2025-06-18 01:26:03,585 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThoughtDefs\Thought_Family_Beast.xml
+2025-06-18 01:26:03,587 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\TipSetDefs\Tips.xml
+2025-06-18 01:26:03,588 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\TraitDefs\Traits.xml
+2025-06-18 01:26:03,588 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\TraitDefs\Traits_Nymphomaniac.xml
+2025-06-18 01:26:03,589 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\TraitDefs\Traits_xSlut.xml
+2025-06-18 01:26:03,590 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts.xml
+2025-06-18 01:26:03,591 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts_Animal.xml
+2025-06-18 01:26:03,592 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts_Demon.xml
+2025-06-18 01:26:03,592 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts_Human.xml
+2025-06-18 01:26:03,593 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts_Implants.xml
+2025-06-18 01:26:03,595 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts_Insect.xml
+2025-06-18 01:26:03,596 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts_Resin.xml
+2025-06-18 01:26:03,596 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\ThingDefs\Items_BodyParts\Items_BodyParts_Slime.xml
+2025-06-18 01:26:03,599 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Bestiality\RulePacks_Bestiality.xml
+2025-06-18 01:26:03,599 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Bestiality\RulePacks_Bestiality_Reverse.xml
+2025-06-18 01:26:03,601 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Masturbation\RulePacks_Masturbation.xml
+2025-06-18 01:26:03,602 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Rape\RulePacks_Rape.xml
+2025-06-18 01:26:03,603 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Rape\RulePacks_Rape_Reverse.xml
+2025-06-18 01:26:03,605 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Sex\RulePacks_Oral.xml
+2025-06-18 01:26:03,606 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Sex\RulePacks_Reverse_Oral.xml
+2025-06-18 01:26:03,607 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Sex\RulePacks_Reverse_Sex.xml
+2025-06-18 01:26:03,609 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RulePackDefs\Sex\RulePacks_Sex.xml
+2025-06-18 01:26:03,611 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RJWTab\PawnColumnDefs\Checkboxes.xml
+2025-06-18 01:26:03,612 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\RJWTab\PawnColumnDefs\Icons.xml
+2025-06-18 01:26:03,616 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Bestiality_Anal.xml
+2025-06-18 01:26:03,617 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Bestiality_Double_PenetrationM.xml
+2025-06-18 01:26:03,618 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Bestiality_Oral.xml
+2025-06-18 01:26:03,619 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Bestiality_Vaginal.xml
+2025-06-18 01:26:03,620 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Masturbation\Masturbation_AutoBreastjob.xml
+2025-06-18 01:26:03,621 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Masturbation\Masturbation_AutoFellatio.xml
+2025-06-18 01:26:03,622 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Masturbation\Masturbation_Breastjob.xml
+2025-06-18 01:26:03,622 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Masturbation\Masturbation_HandjobA.xml
+2025-06-18 01:26:03,623 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Masturbation\Masturbation_HandjobP.xml
+2025-06-18 01:26:03,624 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Masturbation\Masturbation_HandjobV.xml
+2025-06-18 01:26:03,625 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Anal.xml
+2025-06-18 01:26:03,626 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Beakjob.xml
+2025-06-18 01:26:03,627 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Breastjob.xml
+2025-06-18 01:26:03,627 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Cunnilingus.xml
+2025-06-18 01:26:03,628 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_DoublePenetration.xml
+2025-06-18 01:26:03,629 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_DoublePenetrationM.xml
+2025-06-18 01:26:03,630 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Fellatio.xml
+2025-06-18 01:26:03,631 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Fingering.xml
+2025-06-18 01:26:03,631 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Fisting.xml
+2025-06-18 01:26:03,632 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Footjob.xml
+2025-06-18 01:26:03,632 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Handjob.xml
+2025-06-18 01:26:03,633 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Oral.xml
+2025-06-18 01:26:03,633 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Rimming.xml
+2025-06-18 01:26:03,634 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Scissoring.xml
+2025-06-18 01:26:03,634 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Rape_Vaginal.xml
+2025-06-18 01:26:03,635 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Anal.xml
+2025-06-18 01:26:03,636 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Beakjob.xml
+2025-06-18 01:26:03,636 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Breastjob.xml
+2025-06-18 01:26:03,637 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Cunnilingus.xml
+2025-06-18 01:26:03,637 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_DoublePenetration.xml
+2025-06-18 01:26:03,638 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_DoublePenetrationM.xml
+2025-06-18 01:26:03,638 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Fellatio.xml
+2025-06-18 01:26:03,639 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Fingering.xml
+2025-06-18 01:26:03,639 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Fisting.xml
+2025-06-18 01:26:03,639 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Footjob.xml
+2025-06-18 01:26:03,640 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Handjob.xml
+2025-06-18 01:26:03,640 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_MutualMasturbation.xml
+2025-06-18 01:26:03,641 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Rimming.xml
+2025-06-18 01:26:03,642 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Scissoring.xml
+2025-06-18 01:26:03,642 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Sixtynine.xml
+2025-06-18 01:26:03,643 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Sex_Vaginal.xml
+2025-06-18 01:26:03,644 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Anal.xml
+2025-06-18 01:26:03,644 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Beakjob.xml
+2025-06-18 01:26:03,645 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Breastjob.xml
+2025-06-18 01:26:03,645 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Cunnilingus.xml
+2025-06-18 01:26:03,646 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_DoublePenetration.xml
+2025-06-18 01:26:03,646 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_DoublePenetrationM.xml
+2025-06-18 01:26:03,647 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Fellatio.xml
+2025-06-18 01:26:03,647 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Fingering.xml
+2025-06-18 01:26:03,648 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Fisting.xml
+2025-06-18 01:26:03,648 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Footjob.xml
+2025-06-18 01:26:03,649 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Handjob.xml
+2025-06-18 01:26:03,649 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Rimming.xml
+2025-06-18 01:26:03,650 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Sex\Reverse\Sex_Reverse_Vaginal.xml
+2025-06-18 01:26:03,651 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Necro_Anal.xml
+2025-06-18 01:26:03,652 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Necro_DoublePenetration.xml
+2025-06-18 01:26:03,653 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Necro_DoublePenetrationM.xml
+2025-06-18 01:26:03,653 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Necro_Vaginal.xml
+2025-06-18 01:26:03,654 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Other\Rape_MechImplant.xml
+2025-06-18 01:26:03,655 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Anal.xml
+2025-06-18 01:26:03,655 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Breastjob.xml
+2025-06-18 01:26:03,656 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Cunnilingus.xml
+2025-06-18 01:26:03,656 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_DoublePenetration.xml
+2025-06-18 01:26:03,657 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_DoublePenetrationM.xml
+2025-06-18 01:26:03,658 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Fellatio.xml
+2025-06-18 01:26:03,658 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Fingering.xml
+2025-06-18 01:26:03,659 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Fisting.xml
+2025-06-18 01:26:03,659 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Footjob.xml
+2025-06-18 01:26:03,660 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Handjob.xml
+2025-06-18 01:26:03,660 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Rimming.xml
+2025-06-18 01:26:03,661 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Scissoring.xml
+2025-06-18 01:26:03,661 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Reverse\Rape_Reverse_Vaginal.xml
+2025-06-18 01:26:03,663 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Reverse\Necro_Reverse_Anal.xml
+2025-06-18 01:26:03,663 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Reverse\Necro_Reverse_DoublePenetration.xml
+2025-06-18 01:26:03,664 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Reverse\Necro_Reverse_DoublePenetrationM.xml
+2025-06-18 01:26:03,665 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Rape\Necro\Reverse\Necro_Reverse_Vaginal.xml
+2025-06-18 01:26:03,667 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Anal.xml
+2025-06-18 01:26:03,667 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Double_PenetrationM.xml
+2025-06-18 01:26:03,668 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Handjob.xml
+2025-06-18 01:26:03,668 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Oral.xml
+2025-06-18 01:26:03,669 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Oral_Service.xml
+2025-06-18 01:26:03,669 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\InteractionDef\Bestiality\Reverse\Bestiality_Reverse_Vaginal.xml
+2025-06-18 01:26:03,671 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts.xml
+2025-06-18 01:26:03,672 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Animal.xml
+2025-06-18 01:26:03,673 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Demon.xml
+2025-06-18 01:26:03,674 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Human.xml
+2025-06-18 01:26:03,674 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Implants.xml
+2025-06-18 01:26:03,678 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Insect.xml
+2025-06-18 01:26:03,679 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Resin.xml
+2025-06-18 01:26:03,680 - INFO - 处理 XML 文件：C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Defs\HediffDefs\Hediffs_PrivateParts\Hediffs_PrivateParts_Slime.xml
+2025-06-18 01:26:03,686 - INFO - DefInjected 共导出 1547 条到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\extracted_translations.csv
+2025-06-18 01:26:03,686 - INFO - 调用 export_keyed_to_csv: keyed_dir=C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed, csv_path=C:\Users\q8476\Documents\我的工作\Day_汉化\mod\extracted_translations.csv
+2025-06-18 01:26:03,719 - INFO - Keyed 共导出 541 条到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\extracted_translations.csv
+2025-06-18 01:26:03,719 - INFO - Keyed 导出已追加到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\extracted_translations.csv，目录：C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed
+2025-06-18 01:26:03,720 - INFO - 翻译提取完成！请在导出目标文件夹中查找 extracted_translations.csv。
