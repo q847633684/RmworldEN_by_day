@@ -15,8 +15,8 @@ from ..core.exporters import export_definjected, export_keyed
 from ..core.generators import TemplateGenerator
 from ..core.template_manager import TemplateManager
 from ..core.importers import import_translations
-from ..core.machine_translate import translate_csv
-from ..core.parallel_corpus import generate_parallel_corpus
+from ..utils.machine_translate import translate_csv
+from ..utils.parallel_corpus import generate_parallel_corpus
 from ..utils.batch_processor import BatchProcessor
 from ..utils.filter_config import UnifiedFilterRules
 

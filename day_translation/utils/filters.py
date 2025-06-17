@@ -1,7 +1,7 @@
 import re
 from typing import Optional
 import logging
-from ..utils.config import get_config
+from .config import get_config
 from colorama import Fore, Style
 
 def is_non_text(text: str) -> bool:

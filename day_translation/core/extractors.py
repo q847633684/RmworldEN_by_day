@@ -3,7 +3,7 @@ from typing import List, Tuple, Set
 import logging
 from ..utils.utils import XMLProcessor, get_language_folder_path
 from ..utils.config import get_config
-from .filters import ContentFilter
+from ..utils.filters import ContentFilter
 from colorama import Fore, Style
 
 CONFIG = get_config()
