@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: An anus. Generic placeholder part for unsuported race.-->
+  <GenericAnus.rjw.HediffDef_SexPart.description>An anus. Generic placeholder part for unsuported race.</GenericAnus.rjw.HediffDef_SexPart.description>
+  <!--EN: generic anus-->
+  <GenericAnus.rjw.HediffDef_SexPart.label>generic anus</GenericAnus.rjw.HediffDef_SexPart.label>
+  <!--EN: A pair of breasts. Generic placeholder part for unsuported race.-->
+  <GenericBreasts.rjw.HediffDef_SexPart.description>A pair of breasts. Generic placeholder part for unsuported race.</GenericBreasts.rjw.HediffDef_SexPart.description>
+  <!--EN: generic breasts-->
+  <GenericBreasts.rjw.HediffDef_SexPart.label>generic breasts</GenericBreasts.rjw.HediffDef_SexPart.label>
+  <!--EN: A penis. Generic placeholder part for unsuported race.-->
+  <GenericPenis.rjw.HediffDef_SexPart.description>A penis. Generic placeholder part for unsuported race.</GenericPenis.rjw.HediffDef_SexPart.description>
+  <!--EN: generic penis-->
+  <GenericPenis.rjw.HediffDef_SexPart.label>generic penis</GenericPenis.rjw.HediffDef_SexPart.label>
+  <!--EN: A vagina. Generic placeholder part for unsuported race.-->
+  <GenericVagina.rjw.HediffDef_SexPart.description>A vagina. Generic placeholder part for unsuported race.</GenericVagina.rjw.HediffDef_SexPart.description>
+  <!--EN: generic vagina-->
+  <GenericVagina.rjw.HediffDef_SexPart.label>generic vagina</GenericVagina.rjw.HediffDef_SexPart.label>
+</LanguageData>

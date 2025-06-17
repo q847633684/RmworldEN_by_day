@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: Enhanced fertility. A mild aphrodisiac.-->
+  <RJW_FertPill.HediffDef.description>Enhanced fertility. A mild aphrodisiac.</RJW_FertPill.HediffDef.description>
+  <!--EN: fertpill-->
+  <RJW_FertPill.HediffDef.label>fertpill</RJW_FertPill.HediffDef.label>
+  <!--EN: Hyperfertility-->
+  <RJW_FertPill.HediffDef.stages.0.label>Hyperfertility</RJW_FertPill.HediffDef.stages.0.label>
+  <!--EN: Enhances fertility for 48 hours. Also works as a mild aphrodisiac.-->
+  <RJW_FertPill.ThingDef.description>Enhances fertility for 48 hours. Also works as a mild aphrodisiac.</RJW_FertPill.ThingDef.description>
+  <!--EN: hyperfertility pill-->
+  <RJW_FertPill.ThingDef.label>hyperfertility pill</RJW_FertPill.ThingDef.label>
+</LanguageData>

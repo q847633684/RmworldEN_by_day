@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: [PAWN_nameDef] suffered some terrible things, [PAWN_pronoun] looks rather emaciated.-->
+  <rjw_broken.rjw.MiscTranslationDef.description>[PAWN_nameDef] suffered some terrible things, [PAWN_pronoun] looks rather emaciated.</rjw_broken.rjw.MiscTranslationDef.description>
+  <!--EN: Broken Nymph-->
+  <rjw_broken.rjw.MiscTranslationDef.label>Broken Nymph</rjw_broken.rjw.MiscTranslationDef.label>
+  <!--EN: No one can be more loquacious than [PAWN_nameDef]. [PAWN_pronoun] has a flexible tongue, a sharp mind, and hot lips.-->
+  <rjw_chatty.rjw.MiscTranslationDef.description>No one can be more loquacious than [PAWN_nameDef]. [PAWN_pronoun] has a flexible tongue, a sharp mind, and hot lips.</rjw_chatty.rjw.MiscTranslationDef.description>
+  <!--EN: Chatty Nymph-->
+  <rjw_chatty.rjw.MiscTranslationDef.label>Chatty Nymph</rjw_chatty.rjw.MiscTranslationDef.label>
+  <!--EN: [PAWN_nameDef] loves crafting various things, especially things that provide new experiences.-->
+  <rjw_curious.rjw.MiscTranslationDef.description>[PAWN_nameDef] loves crafting various things, especially things that provide new experiences.</rjw_curious.rjw.MiscTranslationDef.description>
+  <!--EN: Curious Nymph-->
+  <rjw_curious.rjw.MiscTranslationDef.label>Curious Nymph</rjw_curious.rjw.MiscTranslationDef.label>
+  <!--EN: [PAWN_nameDef] is a conqueror by nature and will punch you in a face if you try to say "No" to [PAWN_possessive] advances.-->
+  <rjw_feisty.rjw.MiscTranslationDef.description>[PAWN_nameDef] is a conqueror by nature and will punch you in a face if you try to say "No" to [PAWN_possessive] advances.</rjw_feisty.rjw.MiscTranslationDef.description>
+  <!--EN: Feisty Nymph-->
+  <rjw_feisty.rjw.MiscTranslationDef.label>Feisty Nymph</rjw_feisty.rjw.MiscTranslationDef.label>
+  <!--EN: [PAWN_nameDef] has a pair of charming eyes, and [PAWN_possessive] voice is soft and sweet. Due to [PAWN_possessive] previous nurse job, [PAWN_pronoun] tends people quite well.-->
+  <rjw_tender.rjw.MiscTranslationDef.description>[PAWN_nameDef] has a pair of charming eyes, and [PAWN_possessive] voice is soft and sweet. Due to [PAWN_possessive] previous nurse job, [PAWN_pronoun] tends people quite well.</rjw_tender.rjw.MiscTranslationDef.description>
+  <!--EN: Tender Nymph-->
+  <rjw_tender.rjw.MiscTranslationDef.label>Tender Nymph</rjw_tender.rjw.MiscTranslationDef.label>
+  <!--EN: [PAWN_nameDef] was made to be a sex toy, rather than a human. During [PAWN_possessive] growing period, [PAWN_pronoun] was taught plenty of social and sex related skills to satisfy any demands of its owners.-->
+  <rjw_vatgrown_sex_slave.rjw.MiscTranslationDef.description>[PAWN_nameDef] was made to be a sex toy, rather than a human. During [PAWN_possessive] growing period, [PAWN_pronoun] was taught plenty of social and sex related skills to satisfy any demands of its owners.</rjw_vatgrown_sex_slave.rjw.MiscTranslationDef.description>
+  <!--EN: Vat-Grown Sex Slave-->
+  <rjw_vatgrown_sex_slave.rjw.MiscTranslationDef.label>Vat-Grown Sex Slave</rjw_vatgrown_sex_slave.rjw.MiscTranslationDef.label>
+</LanguageData>

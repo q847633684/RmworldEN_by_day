@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: standard anus size config-->
+  <DefaultAnusSizes.rjw.PartSizeConfigDef.label>standard anus size config</DefaultAnusSizes.rjw.PartSizeConfigDef.label>
+  <!--EN: standard breast size config-->
+  <DefaultBreastSizes.rjw.PartSizeConfigDef.label>standard breast size config</DefaultBreastSizes.rjw.PartSizeConfigDef.label>
+  <!--EN: standard penis size config-->
+  <DefaultPenisSizes.rjw.PartSizeConfigDef.label>standard penis size config</DefaultPenisSizes.rjw.PartSizeConfigDef.label>
+  <!--EN: standard vagina size config-->
+  <DefaultVaginaSizes.rjw.PartSizeConfigDef.label>standard vagina size config</DefaultVaginaSizes.rjw.PartSizeConfigDef.label>
+</LanguageData>

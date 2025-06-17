@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: gettin' raped.-->
+  <GettinRaped.JobDef.reportString>gettin' raped.</GettinRaped.JobDef.reportString>
+  <!--EN: raping.-->
+  <RandomRape.JobDef.reportString>raping.</RandomRape.JobDef.reportString>
+  <!--EN: rapin' CP-->
+  <RapeComfortPawn.JobDef.reportString>rapin' CP</RapeComfortPawn.JobDef.reportString>
+  <!--EN: rapin' enemy-->
+  <RapeEnemy.JobDef.reportString>rapin' enemy</RapeEnemy.JobDef.reportString>
+  <!--EN: rapin' enemy-->
+  <RapeEnemyByAnimal.JobDef.reportString>rapin' enemy</RapeEnemyByAnimal.JobDef.reportString>
+  <!--EN: rapin' enemy-->
+  <RapeEnemyByInsect.JobDef.reportString>rapin' enemy</RapeEnemyByInsect.JobDef.reportString>
+  <!--EN: rapin' enemy-->
+  <RapeEnemyByMech.JobDef.reportString>rapin' enemy</RapeEnemyByMech.JobDef.reportString>
+  <!--EN: rapin' enemy-->
+  <RapeEnemyToParasite.JobDef.reportString>rapin' enemy</RapeEnemyToParasite.JobDef.reportString>
+</LanguageData>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: son-->
+  <Child_Beast.PawnRelationDef.label>son</Child_Beast.PawnRelationDef.label>
+  <!--EN: cousin once removed-->
+  <CousinOnceRemoved_Beast.PawnRelationDef.label>cousin once removed</CousinOnceRemoved_Beast.PawnRelationDef.label>
+  <!--EN: cousin-->
+  <Cousin_Beast.PawnRelationDef.label>cousin</Cousin_Beast.PawnRelationDef.label>
+  <!--EN: grandson-->
+  <Grandchild_Beast.PawnRelationDef.label>grandson</Grandchild_Beast.PawnRelationDef.label>
+  <!--EN: grandnephew-->
+  <GrandnephewOrGrandniece_Beast.PawnRelationDef.label>grandnephew</GrandnephewOrGrandniece_Beast.PawnRelationDef.label>
+  <!--EN: grandfather-->
+  <Grandparent_Beast.PawnRelationDef.label>grandfather</Grandparent_Beast.PawnRelationDef.label>
+  <!--EN: granduncle-->
+  <GranduncleOrGrandaunt_Beast.PawnRelationDef.label>granduncle</GranduncleOrGrandaunt_Beast.PawnRelationDef.label>
+  <!--EN: great grandson-->
+  <GreatGrandchild_Beast.PawnRelationDef.label>great grandson</GreatGrandchild_Beast.PawnRelationDef.label>
+  <!--EN: great grandfather-->
+  <GreatGrandparent_Beast.PawnRelationDef.label>great grandfather</GreatGrandparent_Beast.PawnRelationDef.label>
+  <!--EN: brother-->
+  <HalfSibling_Beast.PawnRelationDef.label>brother</HalfSibling_Beast.PawnRelationDef.label>
+  <!--EN: nephew-->
+  <NephewOrNiece_Beast.PawnRelationDef.label>nephew</NephewOrNiece_Beast.PawnRelationDef.label>
+  <!--EN: son-->
+  <RJW_Pup.PawnRelationDef.label>son</RJW_Pup.PawnRelationDef.label>
+  <!--EN: father-->
+  <RJW_Sire.PawnRelationDef.label>father</RJW_Sire.PawnRelationDef.label>
+  <!--EN: second cousin-->
+  <SecondCousin_Beast.PawnRelationDef.label>second cousin</SecondCousin_Beast.PawnRelationDef.label>
+  <!--EN: brother-->
+  <Sibling_Beast.PawnRelationDef.label>brother</Sibling_Beast.PawnRelationDef.label>
+  <!--EN: uncle-->
+  <UncleOrAunt_Beast.PawnRelationDef.label>uncle</UncleOrAunt_Beast.PawnRelationDef.label>
+</LanguageData>

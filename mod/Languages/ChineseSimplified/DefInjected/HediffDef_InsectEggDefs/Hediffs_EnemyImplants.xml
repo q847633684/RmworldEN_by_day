@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: insectoid egg-->
+  <RJW_InsectHiveEgg.rjw.HediffDef_InsectEgg.label>insectoid egg</RJW_InsectHiveEgg.rjw.HediffDef_InsectEgg.label>
+  <!--EN: implanted mechanoid-->
+  <RJW_MechanoidImplant.rjw.HediffDef_MechImplants.label>implanted mechanoid</RJW_MechanoidImplant.rjw.HediffDef_MechImplants.label>
+  <!--EN: generic insect egg-->
+  <RJW_UnknownEgg.rjw.HediffDef_InsectEgg.label>generic insect egg</RJW_UnknownEgg.rjw.HediffDef_InsectEgg.label>
+</LanguageData>

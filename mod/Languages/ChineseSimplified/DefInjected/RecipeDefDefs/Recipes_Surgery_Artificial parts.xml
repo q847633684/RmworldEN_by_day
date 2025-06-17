@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: Installs a archotech anus, replaces other bodyparts if present.-->
+  <InstallArchotechAnus.RecipeDef.description>Installs a archotech anus, replaces other bodyparts if present.</InstallArchotechAnus.RecipeDef.description>
+  <!--EN: Installing archotech anus.-->
+  <InstallArchotechAnus.RecipeDef.jobString>Installing archotech anus.</InstallArchotechAnus.RecipeDef.jobString>
+  <!--EN: install archotech anus-->
+  <InstallArchotechAnus.RecipeDef.label>install archotech anus</InstallArchotechAnus.RecipeDef.label>
+  <!--EN: Installs a pair of archotech breasts, replaces other bodyparts if present.-->
+  <InstallArchotechBreasts.RecipeDef.description>Installs a pair of archotech breasts, replaces other bodyparts if present.</InstallArchotechBreasts.RecipeDef.description>
+  <!--EN: Installing archotech breasts.-->
+  <InstallArchotechBreasts.RecipeDef.jobString>Installing archotech breasts.</InstallArchotechBreasts.RecipeDef.jobString>
+  <!--EN: install archotech breasts-->
+  <InstallArchotechBreasts.RecipeDef.label>install archotech breasts</InstallArchotechBreasts.RecipeDef.label>
+  <!--EN: Attaches a archotech penis, replaces other bodyparts if present.-->
+  <InstallArchotechPenis.RecipeDef.description>Attaches a archotech penis, replaces other bodyparts if present.</InstallArchotechPenis.RecipeDef.description>
+  <!--EN: Attaching archotech penis.-->
+  <InstallArchotechPenis.RecipeDef.jobString>Attaching archotech penis.</InstallArchotechPenis.RecipeDef.jobString>
+  <!--EN: install archotech penis-->
+  <InstallArchotechPenis.RecipeDef.label>install archotech penis</InstallArchotechPenis.RecipeDef.label>
+  <!--EN: Installs a archotech vagina, replaces other bodyparts if present.-->
+  <InstallArchotechVagina.RecipeDef.description>Installs a archotech vagina, replaces other bodyparts if present.</InstallArchotechVagina.RecipeDef.description>
+  <!--EN: Installing archotech vagina.-->
+  <InstallArchotechVagina.RecipeDef.jobString>Installing archotech vagina.</InstallArchotechVagina.RecipeDef.jobString>
+  <!--EN: install archotech vagina-->
+  <InstallArchotechVagina.RecipeDef.label>install archotech vagina</InstallArchotechVagina.RecipeDef.label>
+  <!--EN: Installs a bionic anus, replaces other bodyparts if present.-->
+  <InstallBionicAnus.RecipeDef.description>Installs a bionic anus, replaces other bodyparts if present.</InstallBionicAnus.RecipeDef.description>
+  <!--EN: Installing bionic anus.-->
+  <InstallBionicAnus.RecipeDef.jobString>Installing bionic anus.</InstallBionicAnus.RecipeDef.jobString>
+  <!--EN: install bionic anus-->
+  <InstallBionicAnus.RecipeDef.label>install bionic anus</InstallBionicAnus.RecipeDef.label>
+  <!--EN: Installs a pair of bionic breasts, replaces other bodyparts if present.-->
+  <InstallBionicBreasts.RecipeDef.description>Installs a pair of bionic breasts, replaces other bodyparts if present.</InstallBionicBreasts.RecipeDef.description>
+  <!--EN: Installing bionic breasts.-->
+  <InstallBionicBreasts.RecipeDef.jobString>Installing bionic breasts.</InstallBionicBreasts.RecipeDef.jobString>
+  <!--EN: install bionic breasts-->
+  <InstallBionicBreasts.RecipeDef.label>install bionic breasts</InstallBionicBreasts.RecipeDef.label>
+  <!--EN: Attaches a bionic penis, replaces other bodyparts if present.-->
+  <InstallBionicPenis.RecipeDef.description>Attaches a bionic penis, replaces other bodyparts if present.</InstallBionicPenis.RecipeDef.description>
+  <!--EN: Attaching bionic penis.-->
+  <InstallBionicPenis.RecipeDef.jobString>Attaching bionic penis.</InstallBionicPenis.RecipeDef.jobString>
+  <!--EN: install bionic penis-->
+  <InstallBionicPenis.RecipeDef.label>install bionic penis</InstallBionicPenis.RecipeDef.label>
+  <!--EN: Installs a bionic vagina, replaces other bodyparts if present.-->
+  <InstallBionicVagina.RecipeDef.description>Installs a bionic vagina, replaces other bodyparts if present.</InstallBionicVagina.RecipeDef.description>
+  <!--EN: Installing bionic vagina.-->
+  <InstallBionicVagina.RecipeDef.jobString>Installing bionic vagina.</InstallBionicVagina.RecipeDef.jobString>
+  <!--EN: install bionic vagina-->
+  <InstallBionicVagina.RecipeDef.label>install bionic vagina</InstallBionicVagina.RecipeDef.label>
+  <!--EN: Installs a hydraulic anus, replaces other bodyparts if present.-->
+  <InstallHydraulicAnus.RecipeDef.description>Installs a hydraulic anus, replaces other bodyparts if present.</InstallHydraulicAnus.RecipeDef.description>
+  <!--EN: Installing hydraulic anus.-->
+  <InstallHydraulicAnus.RecipeDef.jobString>Installing hydraulic anus.</InstallHydraulicAnus.RecipeDef.jobString>
+  <!--EN: install hydraulic anus-->
+  <InstallHydraulicAnus.RecipeDef.label>install hydraulic anus</InstallHydraulicAnus.RecipeDef.label>
+  <!--EN: Installs a pair of hydraulic breasts, replaces other bodyparts if present.-->
+  <InstallHydraulicBreasts.RecipeDef.description>Installs a pair of hydraulic breasts, replaces other bodyparts if present.</InstallHydraulicBreasts.RecipeDef.description>
+  <!--EN: Installing hydraulic breasts.-->
+  <InstallHydraulicBreasts.RecipeDef.jobString>Installing hydraulic breasts.</InstallHydraulicBreasts.RecipeDef.jobString>
+  <!--EN: install hydraulic breasts-->
+  <InstallHydraulicBreasts.RecipeDef.label>install hydraulic breasts</InstallHydraulicBreasts.RecipeDef.label>
+  <!--EN: Installs a hydraulic penis, replaces other bodyparts if present.-->
+  <InstallHydraulicPenis.RecipeDef.description>Installs a hydraulic penis, replaces other bodyparts if present.</InstallHydraulicPenis.RecipeDef.description>
+  <!--EN: Installing hydraulic penis.-->
+  <InstallHydraulicPenis.RecipeDef.jobString>Installing hydraulic penis.</InstallHydraulicPenis.RecipeDef.jobString>
+  <!--EN: install hydraulic penis-->
+  <InstallHydraulicPenis.RecipeDef.label>install hydraulic penis</InstallHydraulicPenis.RecipeDef.label>
+  <!--EN: Installs a hydraulic vagina, replaces other bodyparts if present.-->
+  <InstallHydraulicVagina.RecipeDef.description>Installs a hydraulic vagina, replaces other bodyparts if present.</InstallHydraulicVagina.RecipeDef.description>
+  <!--EN: Installing hydraulic vagina.-->
+  <InstallHydraulicVagina.RecipeDef.jobString>Installing hydraulic vagina.</InstallHydraulicVagina.RecipeDef.jobString>
+  <!--EN: install hydraulic vagina-->
+  <InstallHydraulicVagina.RecipeDef.label>install hydraulic vagina</InstallHydraulicVagina.RecipeDef.label>
+</LanguageData>

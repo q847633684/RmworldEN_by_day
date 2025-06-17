@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: This thing is seriously annoying. I wish I could take it off.-->
+  <Bound.ThoughtDef.stages.0.description>This thing is seriously annoying. I wish I could take it off.</Bound.ThoughtDef.stages.0.description>
+  <!--EN: Ish shnn ish shrrrrsh uhnnninnn-->
+  <Bound.ThoughtDef.stages.0.description>Ish shnn ish shrrrrsh uhnnninnn</Bound.ThoughtDef.stages.0.description>
+  <!--EN: Ufff ish hhhh shrrrnnn shhhrrr! hhhek shi thfffff!-->
+  <Bound.ThoughtDef.stages.0.description>Ufff ish hhhh shrrrnnn shhhrrr! hhhek shi thfffff!</Bound.ThoughtDef.stages.0.description>
+  <!--EN: bound-->
+  <Bound.ThoughtDef.stages.0.label>bound</Bound.ThoughtDef.stages.0.label>
+  <!--EN: gagged-->
+  <Bound.ThoughtDef.stages.0.label>gagged</Bound.ThoughtDef.stages.0.label>
+  <!--EN: bound and gagged-->
+  <Bound.ThoughtDef.stages.0.label>bound and gagged</Bound.ThoughtDef.stages.0.label>
+  <!--EN: Heh... heh heh...-->
+  <MasochistBound.ThoughtDef.stages.0.description>Heh... heh heh...</MasochistBound.ThoughtDef.stages.0.description>
+  <!--EN: Nnnn shsh hhhch uhnnn-->
+  <MasochistBound.ThoughtDef.stages.0.description>Nnnn shsh hhhch uhnnn</MasochistBound.ThoughtDef.stages.0.description>
+  <!--EN: Shnnn ihhh shrrr fff shnnn... shsh chhhnnn uhfsh~!-->
+  <MasochistBound.ThoughtDef.stages.0.description>Shnnn ihhh shrrr fff shnnn... shsh chhhnnn uhfsh~!</MasochistBound.ThoughtDef.stages.0.description>
+  <!--EN: masochist bound-->
+  <MasochistBound.ThoughtDef.stages.0.label>masochist bound</MasochistBound.ThoughtDef.stages.0.label>
+  <!--EN: masochist gagged-->
+  <MasochistBound.ThoughtDef.stages.0.label>masochist gagged</MasochistBound.ThoughtDef.stages.0.label>
+  <!--EN: masochist bound and gagged-->
+  <MasochistBound.ThoughtDef.stages.0.label>masochist bound and gagged</MasochistBound.ThoughtDef.stages.0.label>
+</LanguageData>

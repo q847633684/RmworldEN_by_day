@@ -10,7 +10,7 @@ from tqdm import tqdm
 from colorama import Fore, Style
 from .extractors import extract_keyed_translations, scan_defs_sync, extract_definjected_translations
 from .generators import TemplateGenerator
-from .exporters import handle_extract_translate
+from .exporters import handle_extract_translate, export_definjected_with_original_structure, export_definjected_with_defs_structure
 from ..utils.config import get_config
 from ..utils.utils import XMLProcessor, get_language_folder_path, handle_exceptions
 
@@ -278,13 +278,70 @@ class TemplateManager:
                     self.generator.generate_keyed_template(en_keyed_dir)
                 self.generator.generate_keyed_template_from_data(keyed_translations)
                 logging.info(f"生成 {len(keyed_translations)} 条 Keyed 模板到 {keyed_dir}")
-                print(f"{Fore.GREEN}✅ Keyed模板已生成: {keyed_dir}{Style.RESET_ALL}")
-                
-            # 生成DefInjected模板
+                print(f"{Fore.GREEN}✅ Keyed模板已生成: {keyed_dir}{Style.RESET_ALL}")            # 生成DefInjected模板
             if def_translations:
-                self.generator.generate_definjected_template(def_translations)
-                logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板到 {definjected_dir}")
-                print(f"{Fore.GREEN}✅ DefInjected模板已生成: {definjected_dir}{Style.RESET_ALL}")
+                # 检查是否存在英文 DefInjected 目录
+                src_lang_path = get_language_folder_path(CONFIG.source_language, str(self.mod_dir))
+                src_definjected_dir = Path(src_lang_path) / CONFIG.def_injected_dir
+                
+                if src_definjected_dir.exists():
+                    # 有英文 DefInjected，提供3种选择
+                    print(f"\n{Fore.CYAN}检测到英文 DefInjected 目录，请选择文件结构：{Style.RESET_ALL}")
+                    print(f"1. {Fore.GREEN}保持原英文DefInjected结构{Style.RESET_ALL}（推荐：与原模组翻译文件一致）")
+                    print(f"2. {Fore.GREEN}按原Defs目录结构生成{Style.RESET_ALL}（按原始定义文件组织）")
+                    print(f"3. {Fore.GREEN}按DefType自动分组{Style.RESET_ALL}（传统方式：ThingDefs、PawnKindDefs等）")
+                else:
+                    # 没有英文 DefInjected，提供2种选择
+                    print(f"\n{Fore.YELLOW}未检测到英文 DefInjected 目录，请选择文件结构：{Style.RESET_ALL}")
+                    print(f"1. {Fore.GREEN}按原Defs目录结构生成{Style.RESET_ALL}（推荐：按原始定义文件组织）")
+                    print(f"2. {Fore.GREEN}按DefType自动分组{Style.RESET_ALL}（传统方式：ThingDefs、PawnKindDefs等）")
+                
+                structure_choice = input(f"{Fore.CYAN}请输入选项编号（回车默认1）：{Style.RESET_ALL}").strip()
+                
+                if src_definjected_dir.exists():
+                    # 有英文 DefInjected 的情况
+                    if structure_choice == "2":
+                        # 按原Defs目录结构
+                        export_definjected_with_defs_structure(
+                            mod_dir=str(self.mod_dir),
+                            export_dir=output_path,
+                            selected_translations=def_translations,
+                            language=self.language
+                        )
+                        logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按Defs结构）")
+                        print(f"{Fore.GREEN}✅ DefInjected模板已生成（按Defs结构）: {definjected_dir}{Style.RESET_ALL}")
+                    elif structure_choice == "3":
+                        # 按DefType自动分组
+                        self.generator.generate_definjected_template(def_translations)
+                        logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按DefType分组）")
+                        print(f"{Fore.GREEN}✅ DefInjected模板已生成（按DefType分组）: {definjected_dir}{Style.RESET_ALL}")
+                    else:
+                        # 默认：保持原英文DefInjected结构
+                        export_definjected_with_original_structure(
+                            mod_dir=str(self.mod_dir),
+                            export_dir=output_path,
+                            selected_translations=def_translations,
+                            language=self.language
+                        )
+                        logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（保持原结构）")
+                        print(f"{Fore.GREEN}✅ DefInjected模板已生成（保持原结构）: {definjected_dir}{Style.RESET_ALL}")
+                else:
+                    # 没有英文 DefInjected 的情况
+                    if structure_choice == "2":
+                        # 按DefType自动分组
+                        self.generator.generate_definjected_template(def_translations)
+                        logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按DefType分组）")
+                        print(f"{Fore.GREEN}✅ DefInjected模板已生成（按DefType分组）: {definjected_dir}{Style.RESET_ALL}")
+                    else:
+                        # 默认：按原Defs目录结构
+                        export_definjected_with_defs_structure(
+                            mod_dir=str(self.mod_dir),
+                            export_dir=output_path,
+                            selected_translations=def_translations,
+                            language=self.language
+                        )
+                        logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按Defs结构）")
+                        print(f"{Fore.GREEN}✅ DefInjected模板已生成（按Defs结构）: {definjected_dir}{Style.RESET_ALL}")
                 
         finally:
             # 恢复原始输出目录

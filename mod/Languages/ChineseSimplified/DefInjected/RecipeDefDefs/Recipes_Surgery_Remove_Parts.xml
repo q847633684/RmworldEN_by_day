@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: Removes anus.-->
+  <RemoveAnus.RecipeDef.description>Removes anus.</RemoveAnus.RecipeDef.description>
+  <!--EN: Removing anus.-->
+  <RemoveAnus.RecipeDef.jobString>Removing anus.</RemoveAnus.RecipeDef.jobString>
+  <!--EN: remove anus-->
+  <RemoveAnus.RecipeDef.label>remove anus</RemoveAnus.RecipeDef.label>
+  <!--EN: Removes breasts.-->
+  <RemoveBreasts.RecipeDef.description>Removes breasts.</RemoveBreasts.RecipeDef.description>
+  <!--EN: Removing breasts.-->
+  <RemoveBreasts.RecipeDef.jobString>Removing breasts.</RemoveBreasts.RecipeDef.jobString>
+  <!--EN: remove breasts-->
+  <RemoveBreasts.RecipeDef.label>remove breasts</RemoveBreasts.RecipeDef.label>
+  <!--EN: Removes sex organs.-->
+  <RemoveGenitals.RecipeDef.description>Removes sex organs.</RemoveGenitals.RecipeDef.description>
+  <!--EN: Removing genitals.-->
+  <RemoveGenitals.RecipeDef.jobString>Removing genitals.</RemoveGenitals.RecipeDef.jobString>
+  <!--EN: remove genitals-->
+  <RemoveGenitals.RecipeDef.label>remove genitals</RemoveGenitals.RecipeDef.label>
+</LanguageData>

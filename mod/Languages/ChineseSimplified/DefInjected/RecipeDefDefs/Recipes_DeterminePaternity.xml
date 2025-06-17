@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: Try to figure out who is the father.-->
+  <DeterminePaternity.RecipeDef.description>Try to figure out who is the father.</DeterminePaternity.RecipeDef.description>
+  <!--EN: Check Paternity.-->
+  <DeterminePaternity.RecipeDef.jobString>Check Paternity.</DeterminePaternity.RecipeDef.jobString>
+  <!--EN: check Paternity-->
+  <DeterminePaternity.RecipeDef.label>check Paternity</DeterminePaternity.RecipeDef.label>
+</LanguageData>

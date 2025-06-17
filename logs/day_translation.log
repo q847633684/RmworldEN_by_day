@@ -1,0 +1,558 @@
+2025-06-17 22:52:13,876 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\logs\day_translation.log
+2025-06-17 22:52:13,877 - INFO - 已加载用户配置
+2025-06-17 22:52:14,435 - INFO - 启动主工作流
+2025-06-17 22:52:22,848 - INFO - 开始提取模板: output_dir=None, en_keyed_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\Keyed, auto_choose_definjected=False
+2025-06-17 22:52:22,848 - INFO - 开始提取翻译数据并生成模板
+2025-06-17 22:52:22,849 - INFO - 未指定输出目录，使用 defs 提取模式
+2025-06-17 22:52:23,815 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\Keyed\Hediff_InsectEgg.xml
+2025-06-17 22:52:23,820 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\Keyed\RimJobWorldKeys.xml
+2025-06-17 22:52:23,824 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\Keyed\RJWMainTab.xml
+2025-06-17 22:52:23,829 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\Keyed\RMB.xml
+2025-06-17 22:52:23,837 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\Keyed\SettingsKeys.xml
+2025-06-17 22:52:23,841 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\Keyed\SexGizmo.xml
+2025-06-17 22:52:23,846 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\Keyed\SexualityCardKeys.xml
+2025-06-17 22:52:23,847 - INFO - 正在生成中文 Keyed 翻译模板...
+2025-06-17 22:52:23,850 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\Keyed\Hediff_InsectEgg.xml
+2025-06-17 22:52:23,850 - INFO - 生成 Keyed 模板: Hediff_InsectEgg.xml
+2025-06-17 22:52:23,853 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\Keyed\RimJobWorldKeys.xml
+2025-06-17 22:52:23,854 - INFO - 生成 Keyed 模板: RimJobWorldKeys.xml
+2025-06-17 22:52:23,856 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\Keyed\RJWMainTab.xml
+2025-06-17 22:52:23,859 - INFO - 生成 Keyed 模板: RJWMainTab.xml
+2025-06-17 22:52:23,864 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\Keyed\RMB.xml
+2025-06-17 22:52:23,864 - INFO - 生成 Keyed 模板: RMB.xml
+2025-06-17 22:52:23,880 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\Keyed\SettingsKeys.xml
+2025-06-17 22:52:23,881 - INFO - 生成 Keyed 模板: SettingsKeys.xml
+2025-06-17 22:52:23,884 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\Keyed\SexGizmo.xml
+2025-06-17 22:52:23,885 - INFO - 生成 Keyed 模板: SexGizmo.xml
+2025-06-17 22:52:23,889 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\Keyed\SexualityCardKeys.xml
+2025-06-17 22:52:23,890 - INFO - 生成 Keyed 模板: SexualityCardKeys.xml
+2025-06-17 22:52:23,891 - INFO - 生成 541 条 Keyed 模板
+2025-06-17 22:52:23,897 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\ApparelLayerDefDefs\ApparelLayerDefDefs.xml
+2025-06-17 22:52:23,902 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\BackstoryDefDefs\BackstoryDefDefs.xml
+2025-06-17 22:52:23,907 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\BodyPartGroupDefDefs\BodyPartGroupDefDefs.xml
+2025-06-17 22:52:23,911 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\BodyPartDefDefs\BodyPartDefDefs.xml
+2025-06-17 22:52:23,914 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\BodyPartTagDefDefs\BodyPartTagDefDefs.xml
+2025-06-17 22:52:23,918 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\rjw.PartSizeConfigDefDefs\rjw.PartSizeConfigDefDefs.xml
+2025-06-17 22:52:23,927 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\ThingDefDefs\ThingDefDefs.xml
+2025-06-17 22:52:23,932 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\HediffDefDefs\HediffDefDefs.xml
+2025-06-17 22:52:23,939 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\ThoughtDefDefs.xml
+2025-06-17 22:52:23,944 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\ChemicalDefDefs\ChemicalDefDefs.xml
+2025-06-17 22:52:23,947 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\NeedDefDefs\NeedDefDefs.xml
+2025-06-17 22:52:23,950 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\rjw.HediffDef_InsectEggDefs\rjw.HediffDef_InsectEggDefs.xml
+2025-06-17 22:52:23,953 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\rjw.HediffDef_MechImplantsDefs\rjw.HediffDef_MechImplantsDefs.xml
+2025-06-17 22:52:23,958 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\HistoryEventDefDefs\HistoryEventDefDefs.xml
+2025-06-17 22:52:23,962 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\IncidentDefDefs\IncidentDefDefs.xml
+2025-06-17 22:52:23,967 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\InteractionDefDefs.xml
+2025-06-17 22:52:23,971 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\JobDefDefs\JobDefDefs.xml
+2025-06-17 22:52:23,975 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\MeditationFocusDefDefs\MeditationFocusDefDefs.xml
+2025-06-17 22:52:23,979 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\rjw.SexualMentalStateDefDefs\rjw.SexualMentalStateDefDefs.xml
+2025-06-17 22:52:23,982 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\StatCategoryDefDefs\StatCategoryDefDefs.xml
+2025-06-17 22:52:23,987 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\rjw.MiscTranslationDefDefs\rjw.MiscTranslationDefDefs.xml
+2025-06-17 22:52:23,991 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\PawnCapacityDefDefs\PawnCapacityDefDefs.xml
+2025-06-17 22:52:23,995 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\PawnKindDefDefs\PawnKindDefDefs.xml
+2025-06-17 22:52:23,998 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\PawnRelationDefDefs\PawnRelationDefDefs.xml
+2025-06-17 22:52:24,001 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\rjw.SexFluidDefDefs\rjw.SexFluidDefDefs.xml
+2025-06-17 22:52:24,009 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\RecipeDefDefs.xml
+2025-06-17 22:52:24,014 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\RecordDefDefs\RecordDefDefs.xml
+2025-06-17 22:52:24,017 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\MainButtonDefDefs\MainButtonDefDefs.xml
+2025-06-17 22:52:24,020 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\PawnTableDefDefs\PawnTableDefDefs.xml
+2025-06-17 22:52:24,025 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\StatDefDefs\StatDefDefs.xml
+2025-06-17 22:52:24,028 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\ThingCategoryDefDefs\ThingCategoryDefDefs.xml
+2025-06-17 22:52:24,032 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\rjw.bondage_gear_defDefs\rjw.bondage_gear_defDefs.xml
+2025-06-17 22:52:24,035 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\TraitDefDefs\TraitDefDefs.xml
+2025-06-17 22:52:24,042 - INFO - 保存 XML 文件: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\ChineseSimplified\DefInjected\rjw.HediffDef_SexPartDefs\rjw.HediffDef_SexPartDefs.xml
+2025-06-17 22:52:24,043 - INFO - 生成 1127 条 DefInjected 模板
+2025-06-17 22:52:24,043 - INFO - 模板生成完成，总计 1668 条翻译
+2025-06-17 22:53:09,355 - INFO - 开始提取模板: output_dir=C:\Users\q8476\Documents\我的工作\Day_汉化\mod, en_keyed_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\Keyed, auto_choose_definjected=False
+2025-06-17 22:53:09,355 - INFO - 开始提取翻译数据并生成模板
+2025-06-17 22:53:09,356 - INFO - 处理翻译提取: mod_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, export_dir=C:\Users\q8476\Documents\我的工作\Day_汉化\mod
+2025-06-17 22:53:09,357 - INFO - 未找到英文 DefInjected C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\DefInjected，从 Defs 提取
+2025-06-17 22:53:10,277 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\Hediff_InsectEgg.xml
+2025-06-17 22:53:10,283 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RimJobWorldKeys.xml
+2025-06-17 22:53:10,287 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RJWMainTab.xml
+2025-06-17 22:53:10,292 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RMB.xml
+2025-06-17 22:53:10,310 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SettingsKeys.xml
+2025-06-17 22:53:10,314 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SexGizmo.xml
+2025-06-17 22:53:10,319 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SexualityCardKeys.xml
+2025-06-17 22:53:10,320 - INFO - 正在生成中文 Keyed 翻译模板...
+2025-06-17 22:53:10,323 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\Hediff_InsectEgg.xml
+2025-06-17 22:53:10,324 - INFO - 生成 Keyed 模板: Hediff_InsectEgg.xml
+2025-06-17 22:53:10,327 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RimJobWorldKeys.xml
+2025-06-17 22:53:10,328 - INFO - 生成 Keyed 模板: RimJobWorldKeys.xml
+2025-06-17 22:53:10,330 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RJWMainTab.xml
+2025-06-17 22:53:10,330 - INFO - 生成 Keyed 模板: RJWMainTab.xml
+2025-06-17 22:53:10,333 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RMB.xml
+2025-06-17 22:53:10,333 - INFO - 生成 Keyed 模板: RMB.xml
+2025-06-17 22:53:10,346 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SettingsKeys.xml
+2025-06-17 22:53:10,346 - INFO - 生成 Keyed 模板: SettingsKeys.xml
+2025-06-17 22:53:10,348 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SexGizmo.xml
+2025-06-17 22:53:10,348 - INFO - 生成 Keyed 模板: SexGizmo.xml
+2025-06-17 22:53:10,351 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SexualityCardKeys.xml
+2025-06-17 22:53:10,351 - INFO - 生成 Keyed 模板: SexualityCardKeys.xml
+2025-06-17 22:53:10,352 - INFO - 生成 541 条 Keyed 模板到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed
+2025-06-17 22:54:18,144 - INFO - 按原结构导出 DefInjected: mod_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, translations_count=1127
+2025-06-17 22:54:18,146 - WARNING - 原英文DefInjected目录不存在: C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\DefInjected，回退到默认结构
+2025-06-17 22:54:18,146 - INFO - 导出 DefInjected: mod_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, translations_count=1127
+2025-06-17 22:54:18,153 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ApparelLayerDefDefs\ApparelLayerDefDefs.xml
+2025-06-17 22:54:18,154 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ApparelLayerDefDefs\ApparelLayerDefDefs.xml
+2025-06-17 22:54:18,158 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BackstoryDefDefs\BackstoryDefDefs.xml
+2025-06-17 22:54:18,159 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BackstoryDefDefs\BackstoryDefDefs.xml
+2025-06-17 22:54:18,162 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartGroupDefDefs\BodyPartGroupDefDefs.xml
+2025-06-17 22:54:18,163 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartGroupDefDefs\BodyPartGroupDefDefs.xml
+2025-06-17 22:54:18,166 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartDefDefs\BodyPartDefDefs.xml
+2025-06-17 22:54:18,166 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartDefDefs\BodyPartDefDefs.xml
+2025-06-17 22:54:18,171 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartTagDefDefs\BodyPartTagDefDefs.xml
+2025-06-17 22:54:18,172 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartTagDefDefs\BodyPartTagDefDefs.xml
+2025-06-17 22:54:18,175 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.PartSizeConfigDefDefs\rjw.PartSizeConfigDefDefs.xml
+2025-06-17 22:54:18,175 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.PartSizeConfigDefDefs\rjw.PartSizeConfigDefDefs.xml
+2025-06-17 22:54:18,183 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\ThingDefDefs.xml
+2025-06-17 22:54:18,183 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\ThingDefDefs.xml
+2025-06-17 22:54:18,187 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\HediffDefDefs.xml
+2025-06-17 22:54:18,188 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\HediffDefDefs.xml
+2025-06-17 22:54:18,196 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\ThoughtDefDefs.xml
+2025-06-17 22:54:18,196 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\ThoughtDefDefs.xml
+2025-06-17 22:54:18,200 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ChemicalDefDefs\ChemicalDefDefs.xml
+2025-06-17 22:54:18,200 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ChemicalDefDefs\ChemicalDefDefs.xml
+2025-06-17 22:54:18,203 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\NeedDefDefs\NeedDefDefs.xml
+2025-06-17 22:54:18,203 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\NeedDefDefs\NeedDefDefs.xml
+2025-06-17 22:54:18,206 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.HediffDef_InsectEggDefs\rjw.HediffDef_InsectEggDefs.xml
+2025-06-17 22:54:18,206 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.HediffDef_InsectEggDefs\rjw.HediffDef_InsectEggDefs.xml
+2025-06-17 22:54:18,209 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.HediffDef_MechImplantsDefs\rjw.HediffDef_MechImplantsDefs.xml
+2025-06-17 22:54:18,209 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.HediffDef_MechImplantsDefs\rjw.HediffDef_MechImplantsDefs.xml
+2025-06-17 22:54:18,213 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HistoryEventDefDefs\HistoryEventDefDefs.xml
+2025-06-17 22:54:18,213 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HistoryEventDefDefs\HistoryEventDefDefs.xml
+2025-06-17 22:54:18,217 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\IncidentDefDefs\IncidentDefDefs.xml
+2025-06-17 22:54:18,218 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\IncidentDefDefs\IncidentDefDefs.xml
+2025-06-17 22:54:18,222 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\InteractionDefDefs.xml
+2025-06-17 22:54:18,222 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\InteractionDefDefs.xml
+2025-06-17 22:54:18,226 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\JobDefDefs.xml
+2025-06-17 22:54:18,226 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\JobDefDefs.xml
+2025-06-17 22:54:18,230 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\MeditationFocusDefDefs\MeditationFocusDefDefs.xml
+2025-06-17 22:54:18,230 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\MeditationFocusDefDefs\MeditationFocusDefDefs.xml
+2025-06-17 22:54:18,234 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.SexualMentalStateDefDefs\rjw.SexualMentalStateDefDefs.xml
+2025-06-17 22:54:18,234 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.SexualMentalStateDefDefs\rjw.SexualMentalStateDefDefs.xml
+2025-06-17 22:54:18,238 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\StatCategoryDefDefs\StatCategoryDefDefs.xml
+2025-06-17 22:54:18,238 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\StatCategoryDefDefs\StatCategoryDefDefs.xml
+2025-06-17 22:54:18,242 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.MiscTranslationDefDefs\rjw.MiscTranslationDefDefs.xml
+2025-06-17 22:54:18,242 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.MiscTranslationDefDefs\rjw.MiscTranslationDefDefs.xml
+2025-06-17 22:54:18,245 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnCapacityDefDefs\PawnCapacityDefDefs.xml
+2025-06-17 22:54:18,245 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnCapacityDefDefs\PawnCapacityDefDefs.xml
+2025-06-17 22:54:18,249 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnKindDefDefs\PawnKindDefDefs.xml
+2025-06-17 22:54:18,250 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnKindDefDefs\PawnKindDefDefs.xml
+2025-06-17 22:54:18,254 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnRelationDefDefs\PawnRelationDefDefs.xml
+2025-06-17 22:54:18,254 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnRelationDefDefs\PawnRelationDefDefs.xml
+2025-06-17 22:54:18,258 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.SexFluidDefDefs\rjw.SexFluidDefDefs.xml
+2025-06-17 22:54:18,258 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.SexFluidDefDefs\rjw.SexFluidDefDefs.xml
+2025-06-17 22:54:18,265 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\RecipeDefDefs.xml
+2025-06-17 22:54:18,265 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\RecipeDefDefs.xml
+2025-06-17 22:54:18,269 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecordDefDefs\RecordDefDefs.xml
+2025-06-17 22:54:18,270 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecordDefDefs\RecordDefDefs.xml
+2025-06-17 22:54:18,273 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\MainButtonDefDefs\MainButtonDefDefs.xml
+2025-06-17 22:54:18,273 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\MainButtonDefDefs\MainButtonDefDefs.xml
+2025-06-17 22:54:18,276 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnTableDefDefs\PawnTableDefDefs.xml
+2025-06-17 22:54:18,276 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnTableDefDefs\PawnTableDefDefs.xml
+2025-06-17 22:54:18,280 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\StatDefDefs\StatDefDefs.xml
+2025-06-17 22:54:18,280 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\StatDefDefs\StatDefDefs.xml
+2025-06-17 22:54:18,283 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingCategoryDefDefs\ThingCategoryDefDefs.xml
+2025-06-17 22:54:18,284 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingCategoryDefDefs\ThingCategoryDefDefs.xml
+2025-06-17 22:54:18,287 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.bondage_gear_defDefs\rjw.bondage_gear_defDefs.xml
+2025-06-17 22:54:18,287 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.bondage_gear_defDefs\rjw.bondage_gear_defDefs.xml
+2025-06-17 22:54:18,290 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\TraitDefDefs\TraitDefDefs.xml
+2025-06-17 22:54:18,290 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\TraitDefDefs\TraitDefDefs.xml
+2025-06-17 22:54:18,298 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.HediffDef_SexPartDefs\rjw.HediffDef_SexPartDefs.xml
+2025-06-17 22:54:18,299 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\rjw.HediffDef_SexPartDefs\rjw.HediffDef_SexPartDefs.xml
+2025-06-17 22:54:18,299 - INFO - 生成 1127 条 DefInjected 模板到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected（保持原结构）
+2025-06-17 22:54:18,307 - INFO - 翻译数据已保存到CSV: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\translations.csv
+2025-06-17 22:54:18,307 - INFO - 模板生成完成，总计 1668 条翻译
+2025-06-17 23:03:50,757 - INFO - 日志系统初始化完成: c:\Users\q8476\Documents\我的工作\Day_汉化\logs\day_translation.log
+2025-06-17 23:03:50,758 - INFO - 已加载用户配置
+2025-06-17 23:03:51,329 - INFO - 启动主工作流
+2025-06-17 23:03:59,314 - INFO - 开始提取模板: output_dir=C:\Users\q8476\Documents\我的工作\Day_汉化\mod, en_keyed_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\Keyed, auto_choose_definjected=False
+2025-06-17 23:03:59,315 - INFO - 开始提取翻译数据并生成模板
+2025-06-17 23:03:59,315 - INFO - 处理翻译提取: mod_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, export_dir=C:\Users\q8476\Documents\我的工作\Day_汉化\mod
+2025-06-17 23:03:59,317 - INFO - 未找到英文 DefInjected C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5\Languages\English\DefInjected，从 Defs 提取
+2025-06-17 23:04:00,793 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\Hediff_InsectEgg.xml
+2025-06-17 23:04:00,802 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RimJobWorldKeys.xml
+2025-06-17 23:04:00,806 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RJWMainTab.xml
+2025-06-17 23:04:00,811 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RMB.xml
+2025-06-17 23:04:00,835 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SettingsKeys.xml
+2025-06-17 23:04:00,842 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SexGizmo.xml
+2025-06-17 23:04:00,848 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SexualityCardKeys.xml
+2025-06-17 23:04:00,851 - INFO - 正在生成中文 Keyed 翻译模板...
+2025-06-17 23:04:00,854 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\Hediff_InsectEgg.xml
+2025-06-17 23:04:00,855 - INFO - 生成 Keyed 模板: Hediff_InsectEgg.xml
+2025-06-17 23:04:00,858 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RimJobWorldKeys.xml
+2025-06-17 23:04:00,859 - INFO - 生成 Keyed 模板: RimJobWorldKeys.xml
+2025-06-17 23:04:00,861 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RJWMainTab.xml
+2025-06-17 23:04:00,862 - INFO - 生成 Keyed 模板: RJWMainTab.xml
+2025-06-17 23:04:00,865 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\RMB.xml
+2025-06-17 23:04:00,866 - INFO - 生成 Keyed 模板: RMB.xml
+2025-06-17 23:04:00,879 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SettingsKeys.xml
+2025-06-17 23:04:00,879 - INFO - 生成 Keyed 模板: SettingsKeys.xml
+2025-06-17 23:04:00,882 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SexGizmo.xml
+2025-06-17 23:04:00,882 - INFO - 生成 Keyed 模板: SexGizmo.xml
+2025-06-17 23:04:00,886 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed\SexualityCardKeys.xml
+2025-06-17 23:04:00,887 - INFO - 生成 Keyed 模板: SexualityCardKeys.xml
+2025-06-17 23:04:00,887 - INFO - 生成 541 条 Keyed 模板到 C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\Keyed
+2025-06-17 23:04:09,016 - INFO - 按Defs结构导出 DefInjected: mod_dir=C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\rjw\1.5, translations_count=1127
+2025-06-17 23:04:09,019 - INFO - 按文件分组完成: 178 个文件
+2025-06-17 23:04:09,022 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ApparelLayerDefDefs\ApparelLayerDefs.xml
+2025-06-17 23:04:09,023 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ApparelLayerDefDefs\ApparelLayerDefs.xml (6 条翻译)
+2025-06-17 23:04:09,027 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BackstoryDefDefs\rjw_child.xml
+2025-06-17 23:04:09,027 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BackstoryDefDefs\rjw_child.xml (4 条翻译)
+2025-06-17 23:04:09,031 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BackstoryDefDefs\rjw_nymphs.xml
+2025-06-17 23:04:09,032 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BackstoryDefDefs\rjw_nymphs.xml (14 条翻译)
+2025-06-17 23:04:09,036 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartGroupDefDefs\BodyPartGroups.xml
+2025-06-17 23:04:09,037 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartGroupDefDefs\BodyPartGroups.xml (3 条翻译)
+2025-06-17 23:04:09,042 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartDefDefs\BodyParts_Humanlike.xml
+2025-06-17 23:04:09,042 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartDefDefs\BodyParts_Humanlike.xml (3 条翻译)
+2025-06-17 23:04:09,045 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartDefDefs\BodyParts_Mech.xml
+2025-06-17 23:04:09,046 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartDefDefs\BodyParts_Mech.xml (1 条翻译)
+2025-06-17 23:04:09,049 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartTagDefDefs\BodyPartTags_FertilitySource.xml
+2025-06-17 23:04:09,049 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\BodyPartTagDefDefs\BodyPartTags_FertilitySource.xml (2 条翻译)
+2025-06-17 23:04:09,054 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PartSizeConfigDefDefs\PartSizeConfigs.xml
+2025-06-17 23:04:09,055 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PartSizeConfigDefDefs\PartSizeConfigs.xml (4 条翻译)
+2025-06-17 23:04:09,058 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Aphrodisiac.xml
+2025-06-17 23:04:09,058 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Aphrodisiac.xml (2 条翻译)
+2025-06-17 23:04:09,062 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Contraceptive.xml
+2025-06-17 23:04:09,062 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Contraceptive.xml (5 条翻译)
+2025-06-17 23:04:09,066 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\FertPill.xml
+2025-06-17 23:04:09,067 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\FertPill.xml (5 条翻译)
+2025-06-17 23:04:09,071 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Humpshroom.xml
+2025-06-17 23:04:09,072 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Humpshroom.xml (18 条翻译)
+2025-06-17 23:04:09,077 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_Bondage.xml
+2025-06-17 23:04:09,077 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_Bondage.xml (10 条翻译)
+2025-06-17 23:04:09,081 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_InsectEggDefs\Hediffs_EnemyImplants.xml
+2025-06-17 23:04:09,081 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_InsectEggDefs\Hediffs_EnemyImplants.xml (3 条翻译)
+2025-06-17 23:04:09,085 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_FeelingBroken.xml
+2025-06-17 23:04:09,086 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_FeelingBroken.xml (6 条翻译)
+2025-06-17 23:04:09,090 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_Fertility.xml
+2025-06-17 23:04:09,090 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_Fertility.xml (10 条翻译)
+2025-06-17 23:04:09,093 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_MCEvents.xml
+2025-06-17 23:04:09,093 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_MCEvents.xml (7 条翻译)
+2025-06-17 23:04:09,096 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_Other.xml
+2025-06-17 23:04:09,097 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_Other.xml (2 条翻译)
+2025-06-17 23:04:09,100 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_Paraphilia.xml
+2025-06-17 23:04:09,100 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_Paraphilia.xml (7 条翻译)
+2025-06-17 23:04:09,104 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_SimpleBaby.xml
+2025-06-17 23:04:09,105 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_SimpleBaby.xml (7 条翻译)
+2025-06-17 23:04:09,108 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_Sterilized.xml
+2025-06-17 23:04:09,109 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_Sterilized.xml (2 条翻译)
+2025-06-17 23:04:09,111 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_Submitting.xml
+2025-06-17 23:04:09,112 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_Submitting.xml (4 条翻译)
+2025-06-17 23:04:09,115 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_Transgender.xml
+2025-06-17 23:04:09,115 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDefDefs\Hediffs_Transgender.xml (16 条翻译)
+2025-06-17 23:04:09,119 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HistoryEventDefDefs\HistoryEventDefs.xml
+2025-06-17 23:04:09,119 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HistoryEventDefDefs\HistoryEventDefs.xml (1 条翻译)
+2025-06-17 23:04:09,123 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\IncidentDefDefs\Incidents_Nymph.xml
+2025-06-17 23:04:09,124 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\IncidentDefDefs\Incidents_Nymph.xml (4 条翻译)
+2025-06-17 23:04:09,127 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Interactions_Dialogue.xml
+2025-06-17 23:04:09,127 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Interactions_Dialogue.xml (1 条翻译)
+2025-06-17 23:04:09,130 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Bestiality.xml
+2025-06-17 23:04:09,131 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Bestiality.xml (5 条翻译)
+2025-06-17 23:04:09,134 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Biotech.xml
+2025-06-17 23:04:09,134 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Biotech.xml (1 条翻译)
+2025-06-17 23:04:09,138 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Bondage.xml
+2025-06-17 23:04:09,139 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Bondage.xml (3 条翻译)
+2025-06-17 23:04:09,141 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Knotted.xml
+2025-06-17 23:04:09,142 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Knotted.xml (1 条翻译)
+2025-06-17 23:04:09,145 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Masturbate.xml
+2025-06-17 23:04:09,145 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Masturbate.xml (1 条翻译)
+2025-06-17 23:04:09,148 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Necro.xml
+2025-06-17 23:04:09,148 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Necro.xml (1 条翻译)
+2025-06-17 23:04:09,151 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Quickie.xml
+2025-06-17 23:04:09,151 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Quickie.xml (2 条翻译)
+2025-06-17 23:04:09,155 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Rape.xml
+2025-06-17 23:04:09,156 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Rape.xml (8 条翻译)
+2025-06-17 23:04:09,159 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Sex.xml
+2025-06-17 23:04:09,160 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\JobDefDefs\Jobs_Sex.xml (4 条翻译)
+2025-06-17 23:04:09,163 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\MeditationFocusDefDefs\MeditationFocuses.xml
+2025-06-17 23:04:09,163 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\MeditationFocusDefDefs\MeditationFocuses.xml (1 条翻译)
+2025-06-17 23:04:09,167 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\SexualMentalStateDefDefs\MentalState_Rape.xml
+2025-06-17 23:04:09,167 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\SexualMentalStateDefDefs\MentalState_Rape.xml (1 条翻译)
+2025-06-17 23:04:09,172 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\StatCategoryDefDefs\StatCategoryDefs.xml
+2025-06-17 23:04:09,172 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\StatCategoryDefDefs\StatCategoryDefs.xml (1 条翻译)
+2025-06-17 23:04:09,176 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\MiscTranslationDefDefs\MiscTranslationDefs.xml
+2025-06-17 23:04:09,176 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\MiscTranslationDefDefs\MiscTranslationDefs.xml (12 条翻译)
+2025-06-17 23:04:09,180 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\NeedDefDefs\Needs_Sex.xml
+2025-06-17 23:04:09,180 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\NeedDefDefs\Needs_Sex.xml (2 条翻译)
+2025-06-17 23:04:09,183 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnCapacityDefDefs\PawnCapacity_Fertility.xml
+2025-06-17 23:04:09,183 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnCapacityDefDefs\PawnCapacity_Fertility.xml (1 条翻译)
+2025-06-17 23:04:09,187 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnKindDefDefs\PawnKind_Nymph.xml
+2025-06-17 23:04:09,187 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnKindDefDefs\PawnKind_Nymph.xml (1 条翻译)
+2025-06-17 23:04:09,191 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnRelationDefDefs\PawnRelations_Beast.xml
+2025-06-17 23:04:09,191 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnRelationDefDefs\PawnRelations_Beast.xml (16 条翻译)
+2025-06-17 23:04:09,194 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\SexFluidDefDefs\CustomRaceParts.xml
+2025-06-17 23:04:09,194 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\SexFluidDefDefs\CustomRaceParts.xml (1 条翻译)
+2025-06-17 23:04:09,197 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Abortion.xml
+2025-06-17 23:04:09,197 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Abortion.xml (5 条翻译)
+2025-06-17 23:04:09,200 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_ClaimChild.xml
+2025-06-17 23:04:09,200 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_ClaimChild.xml (3 条翻译)
+2025-06-17 23:04:09,204 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_DeterminePaternity.xml
+2025-06-17 23:04:09,205 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_DeterminePaternity.xml (3 条翻译)
+2025-06-17 23:04:09,207 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_DeterminePregnancy.xml
+2025-06-17 23:04:09,208 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_DeterminePregnancy.xml (3 条翻译)
+2025-06-17 23:04:09,211 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_MakeBondageGear.xml
+2025-06-17 23:04:09,211 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_MakeBondageGear.xml (6 条翻译)
+2025-06-17 23:04:09,215 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_MakeProsthetics.xml
+2025-06-17 23:04:09,215 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_MakeProsthetics.xml (27 条翻译)
+2025-06-17 23:04:09,218 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_RemoveEnemyImplants.xml
+2025-06-17 23:04:09,219 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_RemoveEnemyImplants.xml (6 条翻译)
+2025-06-17 23:04:09,223 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Surgery_Artificial parts.xml
+2025-06-17 23:04:09,223 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Surgery_Artificial parts.xml (36 条翻译)
+2025-06-17 23:04:09,226 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Surgery_Artificial_Multiparts.xml
+2025-06-17 23:04:09,227 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Surgery_Artificial_Multiparts.xml (11 条翻译)
+2025-06-17 23:04:09,230 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Surgery_Fertility.xml
+2025-06-17 23:04:09,230 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Surgery_Fertility.xml (9 条翻译)
+2025-06-17 23:04:09,233 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Surgery_Misc.xml
+2025-06-17 23:04:09,233 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Surgery_Misc.xml (3 条翻译)
+2025-06-17 23:04:09,238 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Surgery_Natural parts.xml
+2025-06-17 23:04:09,238 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Surgery_Natural parts.xml (36 条翻译)
+2025-06-17 23:04:09,243 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Surgery_Natural_Multiparts.xml
+2025-06-17 23:04:09,243 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Surgery_Natural_Multiparts.xml (22 条翻译)
+2025-06-17 23:04:09,247 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Surgery_Remove_Parts.xml
+2025-06-17 23:04:09,247 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecipeDefDefs\Recipes_Surgery_Remove_Parts.xml (9 条翻译)
+2025-06-17 23:04:09,253 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecordDefDefs\Records.xml
+2025-06-17 23:04:09,254 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\RecordDefDefs\Records.xml (40 条翻译)
+2025-06-17 23:04:09,258 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\MainButtonDefDefs\MainButtons.xml
+2025-06-17 23:04:09,258 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\MainButtonDefDefs\MainButtons.xml (2 条翻译)
+2025-06-17 23:04:09,263 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnTableDefDefs\PawnTableDefs.xml
+2025-06-17 23:04:09,264 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\PawnTableDefDefs\PawnTableDefs.xml (4 条翻译)
+2025-06-17 23:04:09,268 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\SexFluidDefDefs\Fluids.xml
+2025-06-17 23:04:09,268 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\SexFluidDefDefs\Fluids.xml (5 条翻译)
+2025-06-17 23:04:09,274 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\StatDefDefs\Stats.xml
+2025-06-17 23:04:09,274 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\StatDefDefs\Stats.xml (6 条翻译)
+2025-06-17 23:04:09,278 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingCategoryDefDefs\ThingCategories.xml
+2025-06-17 23:04:09,278 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingCategoryDefDefs\ThingCategories.xml (1 条翻译)
+2025-06-17 23:04:09,281 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Birth_Control.xml
+2025-06-17 23:04:09,282 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Birth_Control.xml (9 条翻译)
+2025-06-17 23:04:09,286 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Filth_Cum.xml
+2025-06-17 23:04:09,287 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Filth_Cum.xml (2 条翻译)
+2025-06-17 23:04:09,291 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_Bondage.xml
+2025-06-17 23:04:09,291 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_Bondage.xml (6 条翻译)
+2025-06-17 23:04:09,296 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_Resource_AnimalProduct_Eggs.xml
+2025-06-17 23:04:09,296 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_Resource_AnimalProduct_Eggs.xml (8 条翻译)
+2025-06-17 23:04:09,301 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Bestiality.xml
+2025-06-17 23:04:09,301 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Bestiality.xml (30 条翻译)
+2025-06-17 23:04:09,307 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Bondage.xml
+2025-06-17 23:04:09,308 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Bondage.xml (12 条翻译)
+2025-06-17 23:04:09,312 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Family.xml
+2025-06-17 23:04:09,313 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Family.xml (8 条翻译)
+2025-06-17 23:04:09,317 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Necro.xml
+2025-06-17 23:04:09,318 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Necro.xml (2 条翻译)
+2025-06-17 23:04:09,323 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Quirk.xml
+2025-06-17 23:04:09,324 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Quirk.xml (2 条翻译)
+2025-06-17 23:04:09,330 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Rape.xml
+2025-06-17 23:04:09,330 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Rape.xml (34 条翻译)
+2025-06-17 23:04:09,334 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Sex.xml
+2025-06-17 23:04:09,335 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Sex.xml (10 条翻译)
+2025-06-17 23:04:09,344 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_SexChange.xml
+2025-06-17 23:04:09,344 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_SexChange.xml (96 条翻译)
+2025-06-17 23:04:09,348 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Virgin.xml
+2025-06-17 23:04:09,348 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thoughts_Virgin.xml (6 条翻译)
+2025-06-17 23:04:09,357 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thought_Family_Beast.xml
+2025-06-17 23:04:09,358 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThoughtDefDefs\Thought_Family_Beast.xml (60 条翻译)
+2025-06-17 23:04:09,364 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\TraitDefDefs\Traits.xml
+2025-06-17 23:04:09,364 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\TraitDefDefs\Traits.xml (6 条翻译)
+2025-06-17 23:04:09,369 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\TraitDefDefs\Traits_Nymphomaniac.xml
+2025-06-17 23:04:09,370 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\TraitDefDefs\Traits_Nymphomaniac.xml (2 条翻译)
+2025-06-17 23:04:09,375 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\TraitDefDefs\Traits_xSlut.xml
+2025-06-17 23:04:09,376 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\TraitDefDefs\Traits_xSlut.xml (6 条翻译)
+2025-06-17 23:04:09,380 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_BodyParts_Animal.xml
+2025-06-17 23:04:09,381 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_BodyParts_Animal.xml (38 条翻译)
+2025-06-17 23:04:09,385 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_BodyParts_Demon.xml
+2025-06-17 23:04:09,386 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_BodyParts_Demon.xml (8 条翻译)
+2025-06-17 23:04:09,391 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_BodyParts_Human.xml
+2025-06-17 23:04:09,391 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_BodyParts_Human.xml (10 条翻译)
+2025-06-17 23:04:09,397 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_BodyParts_Implants.xml
+2025-06-17 23:04:09,398 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_BodyParts_Implants.xml (26 条翻译)
+2025-06-17 23:04:09,403 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_BodyParts_Insect.xml
+2025-06-17 23:04:09,404 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_BodyParts_Insect.xml (6 条翻译)
+2025-06-17 23:04:09,409 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_BodyParts_Resin.xml
+2025-06-17 23:04:09,409 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_BodyParts_Resin.xml (2 条翻译)
+2025-06-17 23:04:09,413 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_BodyParts_Slime.xml
+2025-06-17 23:04:09,413 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\ThingDefDefs\Items_BodyParts_Slime.xml (2 条翻译)
+2025-06-17 23:04:09,417 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Anal.xml
+2025-06-17 23:04:09,418 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Anal.xml (1 条翻译)
+2025-06-17 23:04:09,423 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Double_PenetrationM.xml
+2025-06-17 23:04:09,423 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Double_PenetrationM.xml (1 条翻译)
+2025-06-17 23:04:09,428 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Oral.xml
+2025-06-17 23:04:09,428 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Oral.xml (1 条翻译)
+2025-06-17 23:04:09,432 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Vaginal.xml
+2025-06-17 23:04:09,433 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Vaginal.xml (1 条翻译)
+2025-06-17 23:04:09,440 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Masturbation_AutoBreastjob.xml
+2025-06-17 23:04:09,440 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Masturbation_AutoBreastjob.xml (1 条翻译)
+2025-06-17 23:04:09,444 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Masturbation_AutoFellatio.xml
+2025-06-17 23:04:09,445 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Masturbation_AutoFellatio.xml (1 条翻译)
+2025-06-17 23:04:09,448 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Masturbation_Breastjob.xml
+2025-06-17 23:04:09,449 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Masturbation_Breastjob.xml (1 条翻译)
+2025-06-17 23:04:09,452 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Masturbation_HandjobA.xml
+2025-06-17 23:04:09,453 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Masturbation_HandjobA.xml (1 条翻译)
+2025-06-17 23:04:09,457 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Masturbation_HandjobP.xml
+2025-06-17 23:04:09,457 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Masturbation_HandjobP.xml (1 条翻译)
+2025-06-17 23:04:09,461 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Masturbation_HandjobV.xml
+2025-06-17 23:04:09,461 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Masturbation_HandjobV.xml (1 条翻译)
+2025-06-17 23:04:09,465 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Anal.xml
+2025-06-17 23:04:09,465 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Anal.xml (1 条翻译)
+2025-06-17 23:04:09,471 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Beakjob.xml
+2025-06-17 23:04:09,472 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Beakjob.xml (1 条翻译)
+2025-06-17 23:04:09,476 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Breastjob.xml
+2025-06-17 23:04:09,476 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Breastjob.xml (1 条翻译)
+2025-06-17 23:04:09,480 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Cunnilingus.xml
+2025-06-17 23:04:09,480 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Cunnilingus.xml (1 条翻译)
+2025-06-17 23:04:09,484 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_DoublePenetration.xml
+2025-06-17 23:04:09,485 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_DoublePenetration.xml (1 条翻译)
+2025-06-17 23:04:09,489 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_DoublePenetrationM.xml
+2025-06-17 23:04:09,489 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_DoublePenetrationM.xml (1 条翻译)
+2025-06-17 23:04:09,492 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Fellatio.xml
+2025-06-17 23:04:09,492 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Fellatio.xml (1 条翻译)
+2025-06-17 23:04:09,495 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Fingering.xml
+2025-06-17 23:04:09,496 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Fingering.xml (1 条翻译)
+2025-06-17 23:04:09,498 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Fisting.xml
+2025-06-17 23:04:09,499 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Fisting.xml (1 条翻译)
+2025-06-17 23:04:09,501 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Footjob.xml
+2025-06-17 23:04:09,502 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Footjob.xml (1 条翻译)
+2025-06-17 23:04:09,506 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Handjob.xml
+2025-06-17 23:04:09,507 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Handjob.xml (1 条翻译)
+2025-06-17 23:04:09,510 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Oral.xml
+2025-06-17 23:04:09,510 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Oral.xml (1 条翻译)
+2025-06-17 23:04:09,513 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Rimming.xml
+2025-06-17 23:04:09,514 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Rimming.xml (1 条翻译)
+2025-06-17 23:04:09,517 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Scissoring.xml
+2025-06-17 23:04:09,517 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Scissoring.xml (1 条翻译)
+2025-06-17 23:04:09,521 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Vaginal.xml
+2025-06-17 23:04:09,521 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Vaginal.xml (1 条翻译)
+2025-06-17 23:04:09,525 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Anal.xml
+2025-06-17 23:04:09,525 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Anal.xml (1 条翻译)
+2025-06-17 23:04:09,528 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Beakjob.xml
+2025-06-17 23:04:09,529 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Beakjob.xml (1 条翻译)
+2025-06-17 23:04:09,531 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Breastjob.xml
+2025-06-17 23:04:09,532 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Breastjob.xml (1 条翻译)
+2025-06-17 23:04:09,536 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Cunnilingus.xml
+2025-06-17 23:04:09,536 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Cunnilingus.xml (1 条翻译)
+2025-06-17 23:04:09,540 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_DoublePenetration.xml
+2025-06-17 23:04:09,540 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_DoublePenetration.xml (1 条翻译)
+2025-06-17 23:04:09,543 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_DoublePenetrationM.xml
+2025-06-17 23:04:09,543 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_DoublePenetrationM.xml (1 条翻译)
+2025-06-17 23:04:09,546 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Fellatio.xml
+2025-06-17 23:04:09,546 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Fellatio.xml (1 条翻译)
+2025-06-17 23:04:09,549 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Fingering.xml
+2025-06-17 23:04:09,549 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Fingering.xml (1 条翻译)
+2025-06-17 23:04:09,553 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Fisting.xml
+2025-06-17 23:04:09,553 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Fisting.xml (1 条翻译)
+2025-06-17 23:04:09,556 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Footjob.xml
+2025-06-17 23:04:09,557 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Footjob.xml (1 条翻译)
+2025-06-17 23:04:09,560 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Handjob.xml
+2025-06-17 23:04:09,560 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Handjob.xml (1 条翻译)
+2025-06-17 23:04:09,563 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_MutualMasturbation.xml
+2025-06-17 23:04:09,564 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_MutualMasturbation.xml (1 条翻译)
+2025-06-17 23:04:09,567 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Rimming.xml
+2025-06-17 23:04:09,568 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Rimming.xml (1 条翻译)
+2025-06-17 23:04:09,572 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Scissoring.xml
+2025-06-17 23:04:09,572 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Scissoring.xml (1 条翻译)
+2025-06-17 23:04:09,575 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Sixtynine.xml
+2025-06-17 23:04:09,575 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Sixtynine.xml (1 条翻译)
+2025-06-17 23:04:09,578 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Vaginal.xml
+2025-06-17 23:04:09,579 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Vaginal.xml (1 条翻译)
+2025-06-17 23:04:09,582 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Anal.xml
+2025-06-17 23:04:09,582 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Anal.xml (1 条翻译)
+2025-06-17 23:04:09,587 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Beakjob.xml
+2025-06-17 23:04:09,588 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Beakjob.xml (1 条翻译)
+2025-06-17 23:04:09,591 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Breastjob.xml
+2025-06-17 23:04:09,592 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Breastjob.xml (1 条翻译)
+2025-06-17 23:04:09,594 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Cunnilingus.xml
+2025-06-17 23:04:09,595 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Cunnilingus.xml (1 条翻译)
+2025-06-17 23:04:09,597 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_DoublePenetration.xml
+2025-06-17 23:04:09,598 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_DoublePenetration.xml (1 条翻译)
+2025-06-17 23:04:09,602 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_DoublePenetrationM.xml
+2025-06-17 23:04:09,602 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_DoublePenetrationM.xml (1 条翻译)
+2025-06-17 23:04:09,606 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Fellatio.xml
+2025-06-17 23:04:09,607 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Fellatio.xml (1 条翻译)
+2025-06-17 23:04:09,611 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Fingering.xml
+2025-06-17 23:04:09,612 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Fingering.xml (1 条翻译)
+2025-06-17 23:04:09,616 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Fisting.xml
+2025-06-17 23:04:09,616 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Fisting.xml (1 条翻译)
+2025-06-17 23:04:09,621 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Footjob.xml
+2025-06-17 23:04:09,621 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Footjob.xml (1 条翻译)
+2025-06-17 23:04:09,624 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Handjob.xml
+2025-06-17 23:04:09,625 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Handjob.xml (1 条翻译)
+2025-06-17 23:04:09,628 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Rimming.xml
+2025-06-17 23:04:09,628 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Rimming.xml (1 条翻译)
+2025-06-17 23:04:09,633 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Vaginal.xml
+2025-06-17 23:04:09,633 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Sex_Reverse_Vaginal.xml (1 条翻译)
+2025-06-17 23:04:09,639 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_Anal.xml
+2025-06-17 23:04:09,640 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_Anal.xml (1 条翻译)
+2025-06-17 23:04:09,645 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_DoublePenetration.xml
+2025-06-17 23:04:09,645 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_DoublePenetration.xml (1 条翻译)
+2025-06-17 23:04:09,649 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_DoublePenetrationM.xml
+2025-06-17 23:04:09,650 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_DoublePenetrationM.xml (1 条翻译)
+2025-06-17 23:04:09,655 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_Vaginal.xml
+2025-06-17 23:04:09,656 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_Vaginal.xml (1 条翻译)
+2025-06-17 23:04:09,660 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_MechImplant.xml
+2025-06-17 23:04:09,660 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_MechImplant.xml (1 条翻译)
+2025-06-17 23:04:09,664 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Anal.xml
+2025-06-17 23:04:09,665 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Anal.xml (1 条翻译)
+2025-06-17 23:04:09,668 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Breastjob.xml
+2025-06-17 23:04:09,668 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Breastjob.xml (1 条翻译)
+2025-06-17 23:04:09,673 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Cunnilingus.xml
+2025-06-17 23:04:09,673 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Cunnilingus.xml (1 条翻译)
+2025-06-17 23:04:09,677 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_DoublePenetration.xml
+2025-06-17 23:04:09,678 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_DoublePenetration.xml (1 条翻译)
+2025-06-17 23:04:09,682 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_DoublePenetrationM.xml
+2025-06-17 23:04:09,682 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_DoublePenetrationM.xml (1 条翻译)
+2025-06-17 23:04:09,686 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Fellatio.xml
+2025-06-17 23:04:09,686 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Fellatio.xml (1 条翻译)
+2025-06-17 23:04:09,690 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Fingering.xml
+2025-06-17 23:04:09,690 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Fingering.xml (1 条翻译)
+2025-06-17 23:04:09,693 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Fisting.xml
+2025-06-17 23:04:09,693 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Fisting.xml (1 条翻译)
+2025-06-17 23:04:09,697 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Footjob.xml
+2025-06-17 23:04:09,697 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Footjob.xml (1 条翻译)
+2025-06-17 23:04:09,702 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Handjob.xml
+2025-06-17 23:04:09,703 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Handjob.xml (1 条翻译)
+2025-06-17 23:04:09,707 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Rimming.xml
+2025-06-17 23:04:09,708 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Rimming.xml (1 条翻译)
+2025-06-17 23:04:09,711 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Scissoring.xml
+2025-06-17 23:04:09,712 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Scissoring.xml (1 条翻译)
+2025-06-17 23:04:09,716 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Vaginal.xml
+2025-06-17 23:04:09,716 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Rape_Reverse_Vaginal.xml (1 条翻译)
+2025-06-17 23:04:09,721 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_Reverse_Anal.xml
+2025-06-17 23:04:09,721 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_Reverse_Anal.xml (1 条翻译)
+2025-06-17 23:04:09,725 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_Reverse_DoublePenetration.xml
+2025-06-17 23:04:09,726 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_Reverse_DoublePenetration.xml (1 条翻译)
+2025-06-17 23:04:09,730 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_Reverse_DoublePenetrationM.xml
+2025-06-17 23:04:09,731 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_Reverse_DoublePenetrationM.xml (1 条翻译)
+2025-06-17 23:04:09,736 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_Reverse_Vaginal.xml
+2025-06-17 23:04:09,737 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Necro_Reverse_Vaginal.xml (1 条翻译)
+2025-06-17 23:04:09,741 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Reverse_Anal.xml
+2025-06-17 23:04:09,742 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Reverse_Anal.xml (1 条翻译)
+2025-06-17 23:04:09,746 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Reverse_Double_PenetrationM.xml
+2025-06-17 23:04:09,746 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Reverse_Double_PenetrationM.xml (1 条翻译)
+2025-06-17 23:04:09,750 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Reverse_Handjob.xml
+2025-06-17 23:04:09,751 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Reverse_Handjob.xml (1 条翻译)
+2025-06-17 23:04:09,756 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Reverse_Oral.xml
+2025-06-17 23:04:09,756 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Reverse_Oral.xml (1 条翻译)
+2025-06-17 23:04:09,760 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Reverse_Oral_Service.xml
+2025-06-17 23:04:09,761 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Reverse_Oral_Service.xml (1 条翻译)
+2025-06-17 23:04:09,764 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Reverse_Vaginal.xml
+2025-06-17 23:04:09,765 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\InteractionDefDefs\Bestiality_Reverse_Vaginal.xml (1 条翻译)
+2025-06-17 23:04:09,768 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts.xml
+2025-06-17 23:04:09,768 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts.xml (8 条翻译)
+2025-06-17 23:04:09,773 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts_Animal.xml
+2025-06-17 23:04:09,774 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts_Animal.xml (38 条翻译)
+2025-06-17 23:04:09,777 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts_Demon.xml
+2025-06-17 23:04:09,777 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts_Demon.xml (8 条翻译)
+2025-06-17 23:04:09,781 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts_Human.xml
+2025-06-17 23:04:09,781 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts_Human.xml (10 条翻译)
+2025-06-17 23:04:09,788 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts_Implants.xml
+2025-06-17 23:04:09,788 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts_Implants.xml (122 条翻译)
+2025-06-17 23:04:09,791 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts_Insect.xml
+2025-06-17 23:04:09,791 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts_Insect.xml (6 条翻译)
+2025-06-17 23:04:09,795 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts_Resin.xml
+2025-06-17 23:04:09,795 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts_Resin.xml (8 条翻译)
+2025-06-17 23:04:09,798 - INFO - 保存 XML 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts_Slime.xml
+2025-06-17 23:04:09,799 - INFO - 生成 DefInjected 文件: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\Languages\ChineseSimplified\DefInjected\HediffDef_SexPartDefs\Hediffs_PrivateParts_Slime.xml (8 条翻译)
+2025-06-17 23:04:09,799 - INFO - 生成 1127 条 DefInjected 模板（按Defs结构）
+2025-06-17 23:04:09,808 - INFO - 翻译数据已保存到CSV: C:\Users\q8476\Documents\我的工作\Day_汉化\mod\translations.csv
+2025-06-17 23:04:09,808 - INFO - 模板生成完成，总计 1668 条翻译
+2025-06-17 23:05:31,199 - INFO - 程序结束

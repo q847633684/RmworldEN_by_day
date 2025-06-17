@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: add anus-->
+  <AddMultiAnus.RecipeDef.label>add anus</AddMultiAnus.RecipeDef.label>
+  <!--EN: add breasts-->
+  <AddMultiBreasts.RecipeDef.label>add breasts</AddMultiBreasts.RecipeDef.label>
+  <!--EN: add feline penis-->
+  <AddMultiCatPenis.RecipeDef.label>add feline penis</AddMultiCatPenis.RecipeDef.label>
+  <!--EN: add feline vagina-->
+  <AddMultiCatVagina.RecipeDef.label>add feline vagina</AddMultiCatVagina.RecipeDef.label>
+  <!--EN: add crocodilian penis-->
+  <AddMultiCrocodilianPenis.RecipeDef.label>add crocodilian penis</AddMultiCrocodilianPenis.RecipeDef.label>
+  <!--EN: add canine penis-->
+  <AddMultiDogPenis.RecipeDef.label>add canine penis</AddMultiDogPenis.RecipeDef.label>
+  <!--EN: add canine vagina-->
+  <AddMultiDogVagina.RecipeDef.label>add canine vagina</AddMultiDogVagina.RecipeDef.label>
+  <!--EN: add dragon penis-->
+  <AddMultiDragonPenis.RecipeDef.label>add dragon penis</AddMultiDragonPenis.RecipeDef.label>
+  <!--EN: add dragon vagina-->
+  <AddMultiDragonVagina.RecipeDef.label>add dragon vagina</AddMultiDragonVagina.RecipeDef.label>
+  <!--EN: add hemipenis-->
+  <AddMultiHemiPenis.RecipeDef.label>add hemipenis</AddMultiHemiPenis.RecipeDef.label>
+  <!--EN: add equine penis-->
+  <AddMultiHorsePenis.RecipeDef.label>add equine penis</AddMultiHorsePenis.RecipeDef.label>
+  <!--EN: add equine vagina-->
+  <AddMultiHorseVagina.RecipeDef.label>add equine vagina</AddMultiHorseVagina.RecipeDef.label>
+  <!--EN: add insect anus-->
+  <AddMultiInsectAnus.RecipeDef.label>add insect anus</AddMultiInsectAnus.RecipeDef.label>
+  <!--EN: Adds additional female ovipositor.-->
+  <AddMultiOvipositorF.RecipeDef.description>Adds additional female ovipositor.</AddMultiOvipositorF.RecipeDef.description>
+  <!--EN: Adding female ovipositor.-->
+  <AddMultiOvipositorF.RecipeDef.jobString>Adding female ovipositor.</AddMultiOvipositorF.RecipeDef.jobString>
+  <!--EN: add female ovipositor-->
+  <AddMultiOvipositorF.RecipeDef.label>add female ovipositor</AddMultiOvipositorF.RecipeDef.label>
+  <!--EN: Adds additional male ovipositor.-->
+  <AddMultiOvipositorM.RecipeDef.description>Adds additional male ovipositor.</AddMultiOvipositorM.RecipeDef.description>
+  <!--EN: Adding male ovipositor.-->
+  <AddMultiOvipositorM.RecipeDef.jobString>Adding male ovipositor.</AddMultiOvipositorM.RecipeDef.jobString>
+  <!--EN: add male ovipositor-->
+  <AddMultiOvipositorM.RecipeDef.label>add male ovipositor</AddMultiOvipositorM.RecipeDef.label>
+  <!--EN: add penis-->
+  <AddMultiPenis.RecipeDef.label>add penis</AddMultiPenis.RecipeDef.label>
+  <!--EN: add procyonine penis-->
+  <AddMultiRaccoonPenis.RecipeDef.label>add procyonine penis</AddMultiRaccoonPenis.RecipeDef.label>
+  <!--EN: add vagina-->
+  <AddMultiVagina.RecipeDef.label>add vagina</AddMultiVagina.RecipeDef.label>
+</LanguageData>

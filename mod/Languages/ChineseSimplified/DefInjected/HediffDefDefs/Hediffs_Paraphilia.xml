@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: Animal experiencing sexual attraction to Humanlikes. At some point, an animal might even refuse to mate with other animals-->
+  <Humanlike_Paraphilia.HediffDef.description>Animal experiencing sexual attraction to Humanlikes. At some point, an animal might even refuse to mate with other animals</Humanlike_Paraphilia.HediffDef.description>
+  <!--EN: humanlike paraphilia-->
+  <Humanlike_Paraphilia.HediffDef.label>humanlike paraphilia</Humanlike_Paraphilia.HediffDef.label>
+  <!--EN: Initial curiosity-->
+  <Humanlike_Paraphilia.HediffDef.stages.0.label>Initial curiosity</Humanlike_Paraphilia.HediffDef.stages.0.label>
+  <!--EN: Attracted-->
+  <Humanlike_Paraphilia.HediffDef.stages.0.label>Attracted</Humanlike_Paraphilia.HediffDef.stages.0.label>
+  <!--EN: Focused-->
+  <Humanlike_Paraphilia.HediffDef.stages.0.label>Focused</Humanlike_Paraphilia.HediffDef.stages.0.label>
+  <!--EN: Fixated-->
+  <Humanlike_Paraphilia.HediffDef.stages.0.label>Fixated</Humanlike_Paraphilia.HediffDef.stages.0.label>
+  <!--EN: Obsessed-->
+  <Humanlike_Paraphilia.HediffDef.stages.0.label>Obsessed</Humanlike_Paraphilia.HediffDef.stages.0.label>
+</LanguageData>

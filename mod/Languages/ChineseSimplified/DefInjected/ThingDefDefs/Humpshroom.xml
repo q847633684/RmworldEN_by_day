@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: Person is now hooked on shrooms. Without them, their bedroom performance may fall.-->
+  <Chemical_HumpShroom.NeedDef.description>Person is now hooked on shrooms. Without them, their bedroom performance may fall.</Chemical_HumpShroom.NeedDef.description>
+  <!--EN: humpshroom-->
+  <Chemical_HumpShroom.NeedDef.label>humpshroom</Chemical_HumpShroom.NeedDef.label>
+  <!--EN: humpshroom-->
+  <HumpShroom.ChemicalDef.label>humpshroom</HumpShroom.ChemicalDef.label>
+  <!--EN: A shroom with tough flesh, thick juice and smooth soft skin. Exhibits aphrodisiac effects when consumed, refills psyfocus.-->
+  <HumpShroom.ThingDef.description>A shroom with tough flesh, thick juice and smooth soft skin. Exhibits aphrodisiac effects when consumed, refills psyfocus.</HumpShroom.ThingDef.description>
+  <!--EN: Hump shroom-->
+  <HumpShroom.ThingDef.label>Hump shroom</HumpShroom.ThingDef.label>
+  <!--EN: Hump shroom effects addiction.-->
+  <HumpShroomAddiction.HediffDef.description>Hump shroom effects addiction.</HumpShroomAddiction.HediffDef.description>
+  <!--EN: humpshroom addiction-->
+  <HumpShroomAddiction.HediffDef.label>humpshroom addiction</HumpShroomAddiction.HediffDef.label>
+  <!--EN: withdrawal-->
+  <HumpShroomAddiction.HediffDef.stages.0.label>withdrawal</HumpShroomAddiction.HediffDef.stages.0.label>
+  <!--EN: Hump shroom aphrodisiac effects.-->
+  <HumpShroomEffect.HediffDef.description>Hump shroom aphrodisiac effects.</HumpShroomEffect.HediffDef.description>
+  <!--EN: induced libido-->
+  <HumpShroomEffect.HediffDef.label>induced libido</HumpShroomEffect.HediffDef.label>
+  <!--EN: Tastes funny.-->
+  <HumpShroomEffect.ThoughtDef.stages.0.description>Tastes funny.</HumpShroomEffect.ThoughtDef.stages.0.description>
+  <!--EN: Humpshroom aftertaste-->
+  <HumpShroomEffect.ThoughtDef.stages.0.label>Humpshroom aftertaste</HumpShroomEffect.ThoughtDef.stages.0.label>
+  <!--EN: Hump shroom effects tolerance.-->
+  <HumpShroomTolerance.HediffDef.description>Hump shroom effects tolerance.</HumpShroomTolerance.HediffDef.description>
+  <!--EN: humpshroom tolerance-->
+  <HumpShroomTolerance.HediffDef.label>humpshroom tolerance</HumpShroomTolerance.HediffDef.label>
+  <!--EN: I just feel nothing down there.-->
+  <HumpShroomWithdrawal.ThoughtDef.stages.0.description>I just feel nothing down there.</HumpShroomWithdrawal.ThoughtDef.stages.0.description>
+  <!--EN: humpshroom withdrawal-->
+  <HumpShroomWithdrawal.ThoughtDef.stages.0.label>humpshroom withdrawal</HumpShroomWithdrawal.ThoughtDef.stages.0.label>
+  <!--EN: Thick shroom with tough flesh, thick juice and smooth soft skin. Exhibits aphrodisiac effects when consumed, refills psyfocus.-->
+  <PlantHumpShroom.ThingDef.description>Thick shroom with tough flesh, thick juice and smooth soft skin. Exhibits aphrodisiac effects when consumed, refills psyfocus.</PlantHumpShroom.ThingDef.description>
+  <!--EN: humpshroom shroom-->
+  <PlantHumpShroom.ThingDef.label>humpshroom shroom</PlantHumpShroom.ThingDef.label>
+</LanguageData>

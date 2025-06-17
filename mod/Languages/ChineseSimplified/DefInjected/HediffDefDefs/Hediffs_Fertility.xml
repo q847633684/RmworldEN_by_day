@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: Low fertility, not for baby making.-->
+  <DecreasedFertility.HediffDef.description>Low fertility, not for baby making.</DecreasedFertility.HediffDef.description>
+  <!--EN: Infertile-->
+  <DecreasedFertility.HediffDef.label>Infertile</DecreasedFertility.HediffDef.label>
+  <!--EN: A complex device that increases the likelihood of pregnancy.-->
+  <FertilityEnhancer.HediffDef.description>A complex device that increases the likelihood of pregnancy.</FertilityEnhancer.HediffDef.description>
+  <!--EN: Archotech fertility enhancer-->
+  <FertilityEnhancer.HediffDef.label>Archotech fertility enhancer</FertilityEnhancer.HediffDef.label>
+  <!--EN: A complex device that prevents fertilization and pregnancy.-->
+  <ImpregnationBlocker.HediffDef.description>A complex device that prevents fertilization and pregnancy.</ImpregnationBlocker.HediffDef.description>
+  <!--EN: Archotech pregnancy blocker-->
+  <ImpregnationBlocker.HediffDef.label>Archotech pregnancy blocker</ImpregnationBlocker.HediffDef.label>
+  <!--EN: Increased fertility, for baby making.-->
+  <IncreasedFertility.HediffDef.description>Increased fertility, for baby making.</IncreasedFertility.HediffDef.description>
+  <!--EN: Fertile-->
+  <IncreasedFertility.HediffDef.label>Fertile</IncreasedFertility.HediffDef.label>
+  <!--EN: A small silver device inserted into the womb that greatly reduces the chance of pregnancy.-->
+  <RJW_IUD.HediffDef.description>A small silver device inserted into the womb that greatly reduces the chance of pregnancy.</RJW_IUD.HediffDef.description>
+  <!--EN: IUD-->
+  <RJW_IUD.HediffDef.label>IUD</RJW_IUD.HediffDef.label>
+</LanguageData>

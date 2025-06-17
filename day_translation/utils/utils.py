@@ -171,17 +171,35 @@ class XMLProcessor:
             tree_type = str(type(tree))
             is_lxml_tree = 'lxml' in tree_type
             
-            if self.use_lxml and is_lxml_tree:
-                # 使用 lxml 的 write 方法
+            if self.use_lxml and is_lxml_tree:                # 使用 lxml 的 write 方法
                 tree.write(file_path, encoding=encoding, xml_declaration=True,
                           pretty_print=pretty_print)
             else:
                 # 使用标准库的 ElementTree
                 root = tree.getroot()
-                new_tree = ET.ElementTree(root)
-                with open(file_path, "wb") as f:
-                    f.write(f'<?xml version="1.0" encoding="{encoding}"?>\n'.encode(encoding))
-                    new_tree.write(f, encoding=encoding)
+                
+                # 如果需要格式化，使用 xml.dom.minidom 进行美化
+                if pretty_print:
+                    try:
+                        import xml.dom.minidom as minidom
+                        rough_string = ET.tostring(root, encoding)
+                        reparsed = minidom.parseString(rough_string)
+                        pretty_xml = reparsed.toprettyxml(indent="  ", encoding=encoding)
+                        
+                        with open(file_path, "wb") as f:
+                            f.write(pretty_xml)
+                    except ImportError:
+                        # 如果 minidom 不可用，回退到普通保存
+                        new_tree = ET.ElementTree(root)
+                        with open(file_path, "wb") as f:
+                            f.write(f'<?xml version="1.0" encoding="{encoding}"?>\n'.encode(encoding))
+                            new_tree.write(f, encoding=encoding)
+                else:
+                    # 不需要格式化的普通保存
+                    new_tree = ET.ElementTree(root)
+                    with open(file_path, "wb") as f:
+                        f.write(f'<?xml version="1.0" encoding="{encoding}"?>\n'.encode(encoding))
+                        new_tree.write(f, encoding=encoding)
             logging.info(f"保存 XML 文件: {file_path}")
             return True
         except Exception as e:

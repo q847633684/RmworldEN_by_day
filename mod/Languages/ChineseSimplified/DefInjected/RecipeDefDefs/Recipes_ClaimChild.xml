@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: Makes the child belong to the colony.-->
+  <claimChild.RecipeDef.description>Makes the child belong to the colony.</claimChild.RecipeDef.description>
+  <!--EN: Adopting.-->
+  <claimChild.RecipeDef.jobString>Adopting.</claimChild.RecipeDef.jobString>
+  <!--EN: Claim child-->
+  <claimChild.RecipeDef.label>Claim child</claimChild.RecipeDef.label>
+</LanguageData>

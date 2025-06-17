@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: insertable-->
+  <AnalInsertableBondage.ApparelLayerDef.label>insertable</AnalInsertableBondage.ApparelLayerDef.label>
+  <!--EN: outer-->
+  <ArmsOuterBondage.ApparelLayerDef.label>outer</ArmsOuterBondage.ApparelLayerDef.label>
+  <!--EN: Over skin-->
+  <BeltsOnSkinBondage.ApparelLayerDef.label>Over skin</BeltsOnSkinBondage.ApparelLayerDef.label>
+  <!--EN: headgear-->
+  <GagOuterBondage.ApparelLayerDef.label>headgear</GagOuterBondage.ApparelLayerDef.label>
+  <!--EN: outer-->
+  <LegsOuterBondage.ApparelLayerDef.label>outer</LegsOuterBondage.ApparelLayerDef.label>
+  <!--EN: insertable-->
+  <VaginalInsertableBondage.ApparelLayerDef.label>insertable</VaginalInsertableBondage.ApparelLayerDef.label>
+</LanguageData>

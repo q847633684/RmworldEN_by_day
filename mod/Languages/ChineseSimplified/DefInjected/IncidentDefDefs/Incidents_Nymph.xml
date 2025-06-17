@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: nymph joins-->
+  <NymphJoins.IncidentDef.label>nymph joins</NymphJoins.IncidentDef.label>
+  <!--EN: nymph visitor-->
+  <NymphVisitor.IncidentDef.label>nymph visitor</NymphVisitor.IncidentDef.label>
+  <!--EN: nymph raid(easy)-->
+  <NymphVisitorGroupEasy.IncidentDef.label>nymph raid(easy)</NymphVisitorGroupEasy.IncidentDef.label>
+  <!--EN: nymph raid(hard)-->
+  <NymphVisitorGroupHard.IncidentDef.label>nymph raid(hard)</NymphVisitorGroupHard.IncidentDef.label>
+</LanguageData>

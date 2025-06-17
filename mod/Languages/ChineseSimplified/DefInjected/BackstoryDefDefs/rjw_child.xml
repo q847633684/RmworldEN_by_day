@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: [PAWN_nameDef] was born in civil settlement.-->
+  <rjw_childC.BackstoryDef.baseDesc>[PAWN_nameDef] was born in civil settlement.</rjw_childC.BackstoryDef.baseDesc>
+  <!--EN: Child-->
+  <rjw_childC.BackstoryDef.title>Child</rjw_childC.BackstoryDef.title>
+  <!--EN: [PAWN_nameDef] was born in a tribe.-->
+  <rjw_childT.BackstoryDef.baseDesc>[PAWN_nameDef] was born in a tribe.</rjw_childT.BackstoryDef.baseDesc>
+  <!--EN: Child-->
+  <rjw_childT.BackstoryDef.title>Child</rjw_childT.BackstoryDef.title>
+</LanguageData>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: A spine-covered feline penis.-->
+  <CatPenis.rjw.HediffDef_SexPart.description>A spine-covered feline penis.</CatPenis.rjw.HediffDef_SexPart.description>
+  <!--EN: feline penis-->
+  <CatPenis.rjw.HediffDef_SexPart.label>feline penis</CatPenis.rjw.HediffDef_SexPart.label>
+  <!--EN: A feline vagina.-->
+  <CatVagina.rjw.HediffDef_SexPart.description>A feline vagina.</CatVagina.rjw.HediffDef_SexPart.description>
+  <!--EN: feline vagina-->
+  <CatVagina.rjw.HediffDef_SexPart.label>feline vagina</CatVagina.rjw.HediffDef_SexPart.label>
+  <!--EN: A cloacal anus.-->
+  <CloacalAnus.rjw.HediffDef_SexPart.description>A cloacal anus.</CloacalAnus.rjw.HediffDef_SexPart.description>
+  <!--EN: cloacal anus-->
+  <CloacalAnus.rjw.HediffDef_SexPart.label>cloacal anus</CloacalAnus.rjw.HediffDef_SexPart.label>
+  <!--EN: A cloacal penis.-->
+  <CloacalPenis.rjw.HediffDef_SexPart.description>A cloacal penis.</CloacalPenis.rjw.HediffDef_SexPart.description>
+  <!--EN: cloacal penis-->
+  <CloacalPenis.rjw.HediffDef_SexPart.label>cloacal penis</CloacalPenis.rjw.HediffDef_SexPart.label>
+  <!--EN: A cloacal vagina.-->
+  <CloacalVagina.rjw.HediffDef_SexPart.description>A cloacal vagina.</CloacalVagina.rjw.HediffDef_SexPart.description>
+  <!--EN: cloacal vagina-->
+  <CloacalVagina.rjw.HediffDef_SexPart.label>cloacal vagina</CloacalVagina.rjw.HediffDef_SexPart.label>
+  <!--EN: A crocodilian penis. Large and permenantly erect.-->
+  <CrocodilianPenis.rjw.HediffDef_SexPart.description>A crocodilian penis. Large and permenantly erect.</CrocodilianPenis.rjw.HediffDef_SexPart.description>
+  <!--EN: crocodilian penis-->
+  <CrocodilianPenis.rjw.HediffDef_SexPart.label>crocodilian penis</CrocodilianPenis.rjw.HediffDef_SexPart.label>
+  <!--EN: A bright red dog penis. The knot will expand during sex, locking its lover to their partner for a long time.-->
+  <DogPenis.rjw.HediffDef_SexPart.description>A bright red dog penis. The knot will expand during sex, locking its lover to their partner for a long time.</DogPenis.rjw.HediffDef_SexPart.description>
+  <!--EN: canine penis-->
+  <DogPenis.rjw.HediffDef_SexPart.label>canine penis</DogPenis.rjw.HediffDef_SexPart.label>
+  <!--EN: A dog vagina.-->
+  <DogVagina.rjw.HediffDef_SexPart.description>A dog vagina.</DogVagina.rjw.HediffDef_SexPart.description>
+  <!--EN: canine vagina-->
+  <DogVagina.rjw.HediffDef_SexPart.label>canine vagina</DogVagina.rjw.HediffDef_SexPart.label>
+  <!--EN: A dragon penis. Has a knot that expands similarly to a dog's penis, but the ribbing on both sides takes its lover to greater heights of pleasure.-->
+  <DragonPenis.rjw.HediffDef_SexPart.description>A dragon penis. Has a knot that expands similarly to a dog's penis, but the ribbing on both sides takes its lover to greater heights of pleasure.</DragonPenis.rjw.HediffDef_SexPart.description>
+  <!--EN: dragon penis-->
+  <DragonPenis.rjw.HediffDef_SexPart.label>dragon penis</DragonPenis.rjw.HediffDef_SexPart.label>
+  <!--EN: A dragon vagina. Has a similar texture to their outer hide.-->
+  <DragonVagina.rjw.HediffDef_SexPart.description>A dragon vagina. Has a similar texture to their outer hide.</DragonVagina.rjw.HediffDef_SexPart.description>
+  <!--EN: dragon vagina-->
+  <DragonVagina.rjw.HediffDef_SexPart.label>dragon vagina</DragonVagina.rjw.HediffDef_SexPart.label>
+  <!--EN: Twice the members for double the fun.-->
+  <HemiPenis.rjw.HediffDef_SexPart.description>Twice the members for double the fun.</HemiPenis.rjw.HediffDef_SexPart.description>
+  <!--EN: hemipenis-->
+  <HemiPenis.rjw.HediffDef_SexPart.label>hemipenis</HemiPenis.rjw.HediffDef_SexPart.label>
+  <!--EN: A large horse penis. Flares out during sex.-->
+  <HorsePenis.rjw.HediffDef_SexPart.description>A large horse penis. Flares out during sex.</HorsePenis.rjw.HediffDef_SexPart.description>
+  <!--EN: equine penis-->
+  <HorsePenis.rjw.HediffDef_SexPart.label>equine penis</HorsePenis.rjw.HediffDef_SexPart.label>
+  <!--EN: A mare vagina.-->
+  <HorseVagina.rjw.HediffDef_SexPart.description>A mare vagina.</HorseVagina.rjw.HediffDef_SexPart.description>
+  <!--EN: equine vagina-->
+  <HorseVagina.rjw.HediffDef_SexPart.label>equine vagina</HorseVagina.rjw.HediffDef_SexPart.label>
+  <!--EN: A tight, narrow vagina.-->
+  <NarrowVagina.rjw.HediffDef_SexPart.description>A tight, narrow vagina.</NarrowVagina.rjw.HediffDef_SexPart.description>
+  <!--EN: narrow vagina-->
+  <NarrowVagina.rjw.HediffDef_SexPart.label>narrow vagina</NarrowVagina.rjw.HediffDef_SexPart.label>
+  <!--EN: A small and thin penis.-->
+  <NeedlePenis.rjw.HediffDef_SexPart.description>A small and thin penis.</NeedlePenis.rjw.HediffDef_SexPart.description>
+  <!--EN: needle penis-->
+  <NeedlePenis.rjw.HediffDef_SexPart.label>needle penis</NeedlePenis.rjw.HediffDef_SexPart.label>
+  <!--EN: A raccoon penis.-->
+  <RaccoonPenis.rjw.HediffDef_SexPart.description>A raccoon penis.</RaccoonPenis.rjw.HediffDef_SexPart.description>
+  <!--EN: procyonine penis-->
+  <RaccoonPenis.rjw.HediffDef_SexPart.label>procyonine penis</RaccoonPenis.rjw.HediffDef_SexPart.label>
+  <!--EN: A rodent penis.-->
+  <RodentPenis.rjw.HediffDef_SexPart.description>A rodent penis.</RodentPenis.rjw.HediffDef_SexPart.description>
+  <!--EN: rodent penis-->
+  <RodentPenis.rjw.HediffDef_SexPart.label>rodent penis</RodentPenis.rjw.HediffDef_SexPart.label>
+  <!--EN: A rodent vagina.-->
+  <RodentVagina.rjw.HediffDef_SexPart.description>A rodent vagina.</RodentVagina.rjw.HediffDef_SexPart.description>
+  <!--EN: rodent vagina-->
+  <RodentVagina.rjw.HediffDef_SexPart.label>rodent vagina</RodentVagina.rjw.HediffDef_SexPart.label>
+  <!--EN: An animalistic breast with four nipples.-->
+  <UdderBreasts.rjw.HediffDef_SexPart.description>An animalistic breast with four nipples.</UdderBreasts.rjw.HediffDef_SexPart.description>
+  <!--EN: udders-->
+  <UdderBreasts.rjw.HediffDef_SexPart.label>udders</UdderBreasts.rjw.HediffDef_SexPart.label>
+</LanguageData>

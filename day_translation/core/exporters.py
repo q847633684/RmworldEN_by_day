@@ -66,7 +66,7 @@ def export_definjected_from_english(
                 
             # 添加英文注释
             processor.add_comments(tree, comment_prefix="EN")
-            processor.save_xml(tree, str(dst_file))
+            processor.save_xml(tree, str(dst_file), pretty_print=True)
             
         except Exception as e:
             logging.error(f"处理文件失败: {src_file}: {e}")
@@ -177,10 +177,9 @@ def export_keyed(
             tree = processor.parse_xml(str(dst_file))
             if tree is None:
                 continue
-                
-            # 添加英文注释
+                  # 添加英文注释
             processor.add_comments(tree, comment_prefix="EN")
-            processor.save_xml(tree, str(dst_file))
+            processor.save_xml(tree, str(dst_file), pretty_print=True)
             
         except Exception as e:
             logging.error(f"处理文件失败: {src_file}: {e}")
@@ -260,13 +259,18 @@ def export_definjected(
         return
         
     processor = XMLProcessor()
-    
-    # 按 DefType 分组翻译内容
+      # 按 DefType 分组翻译内容
     def_groups = {}
     for full_path, text, tag, file_path in selected_translations:
         if '/' in full_path:
             def_type_part, field_part = full_path.split('/', 1)
-            def_type = def_type_part
+            
+            # 清理 def_type：移除命名空间前缀，只保留类型名
+            # 例如：rjw.SexFluidDef -> SexFluidDef
+            if '.' in def_type_part:
+                def_type = def_type_part.split('.')[-1]  # 取最后一个部分
+            else:
+                def_type = def_type_part
             
             if '.' in field_part:
                 def_name, field_path = field_part.split('.', 1)
@@ -310,10 +314,9 @@ def export_definjected(
                 # 添加翻译元素
                 elem = ET.SubElement(root, full_key)
                 elem.text = sanitize_xml(text)
-                
-        # 保存文件
+                  # 保存文件
         tree = ET.ElementTree(root)
-        processor.save_xml(tree, output_file)
+        processor.save_xml(tree, output_file, pretty_print=True)
         logging.info(f"生成 DefInjected 文件: {output_file}")
 
 def export_definjected_to_csv(definjected_dir: str, output_csv: str) -> None:
@@ -411,3 +414,266 @@ def export_keyed_to_csv(keyed_dir: str, output_csv: str) -> None:
             logging.error(f"写入 CSV 失败: {output_csv}: {e}")
     else:
         logging.warning(f"没有找到可导出的翻译")
+
+def export_definjected_with_original_structure(
+    mod_dir: str,
+    export_dir: str,
+    selected_translations: List[Tuple[str, str, str, str]],
+    language: str = CONFIG.default_language,
+    source_language: str = CONFIG.source_language
+) -> None:
+    """按照原英文DefInjected目录结构导出翻译，保持文件组织一致"""
+    logging.info(f"按原结构导出 DefInjected: mod_dir={mod_dir}, translations_count={len(selected_translations)}")
+    mod_dir = str(Path(mod_dir).resolve())
+    export_dir = str(Path(export_dir).resolve())
+    lang_path = get_language_folder_path(language, export_dir)
+    def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
+    
+    # 获取原英文DefInjected目录
+    src_lang_path = get_language_folder_path(source_language, mod_dir)
+    src_def_injected_path = os.path.join(src_lang_path, CONFIG.def_injected_dir)
+    
+    if not os.path.exists(src_def_injected_path):
+        logging.warning(f"原英文DefInjected目录不存在: {src_def_injected_path}，回退到默认结构")
+        # 回退到原来的函数
+        export_definjected(mod_dir, export_dir, selected_translations, language)
+        return
+    
+    if not os.path.exists(def_injected_path):
+        os.makedirs(def_injected_path)
+        logging.info(f"创建文件夹：{def_injected_path}")
+    
+    # 清理现有文件
+    for xml_file in Path(def_injected_path).rglob("*.xml"):
+        try:
+            os.remove(xml_file)
+            logging.info(f"删除文件：{xml_file}")
+        except OSError as e:
+            logging.error(f"无法删除 {xml_file}: {e}")
+    
+    processor = XMLProcessor()
+    
+    # 1. 分析原英文DefInjected文件结构
+    original_files = {}  # {relative_path: xml_file_path}
+    for xml_file in Path(src_def_injected_path).rglob("*.xml"):
+        rel_path = str(xml_file.relative_to(Path(src_def_injected_path)))
+        original_files[rel_path] = xml_file
+    
+    print(f"{Fore.CYAN}发现原英文DefInjected文件结构：{Style.RESET_ALL}")
+    for rel_path in sorted(original_files.keys()):
+        print(f"  📁 {rel_path}")
+    
+    # 2. 解析原文件，建立键到文件的映射
+    key_to_file_map = {}  # {full_key: relative_path}
+    
+    for rel_path, xml_file in original_files.items():
+        try:
+            tree = processor.parse_xml(str(xml_file))
+            if tree is None:
+                continue
+                
+            root = tree.getroot() if processor.use_lxml else tree
+            
+            # 提取所有键
+            for elem in root:
+                if isinstance(elem.tag, str) and not elem.tag.startswith('{'):
+                    key_to_file_map[elem.tag] = rel_path
+                    
+        except Exception as e:
+            logging.error(f"解析原文件失败 {xml_file}: {e}")
+    
+    logging.info(f"建立键映射: {len(key_to_file_map)} 个键")
+    
+    # 3. 按文件分组翻译数据
+    file_groups = {}  # {relative_path: [(key, text, tag), ...]}
+    unmatched_translations = []
+    
+    for full_path, text, tag, file_path in selected_translations:
+        # 从full_path提取键名
+        if '/' in full_path:
+            def_type_part, field_part = full_path.split('/', 1)
+            if '.' in field_part:
+                def_name, field_path = field_part.split('.', 1)
+                full_key = f"{def_name}.{field_path}"
+            else:
+                full_key = field_part
+        else:
+            full_key = full_path
+        
+        # 查找对应的原文件
+        target_file = key_to_file_map.get(full_key)
+        
+        if target_file:
+            if target_file not in file_groups:
+                file_groups[target_file] = []
+            file_groups[target_file].append((full_key, text, tag))
+        else:
+            # 无法匹配到原文件的翻译
+            unmatched_translations.append((full_path, text, tag, file_path))
+    
+    logging.info(f"文件分组完成: {len(file_groups)} 个文件, {len(unmatched_translations)} 个未匹配")
+    
+    # 4. 为每个文件生成翻译内容
+    for rel_path, translations in file_groups.items():
+        if not translations:
+            continue
+            
+        # 创建对应的目录结构
+        output_file = os.path.join(def_injected_path, rel_path)
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        
+        # 生成 XML 内容
+        root = ET.Element("LanguageData")
+        
+        # 按键名排序，保持一致性
+        for full_key, text, tag in sorted(translations, key=lambda x: x[0]):
+            # 添加英文注释
+            comment = ET.Comment(sanitize_xcomment(f"EN: {text}"))
+            root.append(comment)
+            
+            # 添加翻译元素
+            elem = ET.SubElement(root, full_key)
+            elem.text = sanitize_xml(text)
+        
+        # 保存文件
+        tree = ET.ElementTree(root)
+        processor.save_xml(tree, output_file, pretty_print=True)
+        logging.info(f"生成 DefInjected 文件: {output_file} ({len(translations)} 条翻译)")
+    
+    # 5. 处理未匹配的翻译（可选：生成到额外文件）
+    if unmatched_translations:
+        logging.warning(f"发现 {len(unmatched_translations)} 条未匹配的翻译")
+        print(f"{Fore.YELLOW}⚠️ 发现 {len(unmatched_translations)} 条未匹配的翻译，将生成到 _Additional.xml{Style.RESET_ALL}")
+        
+        # 生成额外文件
+        additional_file = os.path.join(def_injected_path, "_Additional.xml")
+        root = ET.Element("LanguageData")
+        
+        for full_path, text, tag, file_path in unmatched_translations:
+            # 从full_path生成键名
+            if '/' in full_path:
+                def_type_part, field_part = full_path.split('/', 1)
+                if '.' in field_part:
+                    def_name, field_path = field_part.split('.', 1)
+                    full_key = f"{def_name}.{field_path}"
+                else:
+                    full_key = field_part
+            else:
+                full_key = full_path
+            
+            comment = ET.Comment(sanitize_xcomment(f"EN: {text} (来源: {file_path})"))
+            root.append(comment)
+            
+            elem = ET.SubElement(root, full_key)
+            elem.text = sanitize_xml(text)
+        
+        tree = ET.ElementTree(root)
+        processor.save_xml(tree, additional_file, pretty_print=True)
+        logging.info(f"生成额外翻译文件: {additional_file}")
+
+def export_definjected_with_defs_structure(
+    mod_dir: str,
+    export_dir: str,
+    selected_translations: List[Tuple[str, str, str, str]],
+    language: str = CONFIG.default_language
+) -> None:
+    """按照原Defs目录结构导出DefInjected翻译"""
+    logging.info(f"按Defs结构导出 DefInjected: mod_dir={mod_dir}, translations_count={len(selected_translations)}")
+    mod_dir = str(Path(mod_dir).resolve())
+    export_dir = str(Path(export_dir).resolve())
+    lang_path = get_language_folder_path(language, export_dir)
+    def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
+    defs_path = os.path.join(mod_dir, "Defs")
+    
+    if not os.path.exists(def_injected_path):
+        os.makedirs(def_injected_path)
+        logging.info(f"创建文件夹：{def_injected_path}")
+    
+    # 清理现有文件
+    for xml_file in Path(def_injected_path).rglob("*.xml"):
+        try:
+            os.remove(xml_file)
+            logging.info(f"删除文件：{xml_file}")
+        except OSError as e:
+            logging.error(f"无法删除 {xml_file}: {e}")
+    
+    if not os.path.exists(defs_path):
+        logging.warning(f"Defs 目录 {defs_path} 不存在，跳过")
+        return
+        
+    processor = XMLProcessor()
+    
+    # 按原始文件路径分组翻译内容（基于 file_path 信息）
+    file_groups = {}  # {original_file_path: [(key, text, tag), ...]}
+    
+    for full_path, text, tag, file_path in selected_translations:
+        # 从 full_path 生成键名
+        if '/' in full_path:
+            def_type_part, field_part = full_path.split('/', 1)
+            if '.' in field_part:
+                def_name, field_path = field_part.split('.', 1)
+                full_key = f"{def_name}.{field_path}"
+            else:
+                full_key = field_part
+        else:
+            full_key = full_path
+        
+        # 使用 file_path 作为分组依据
+        if file_path not in file_groups:
+            file_groups[file_path] = []
+        file_groups[file_path].append((full_key, text, tag))
+    
+    logging.info(f"按文件分组完成: {len(file_groups)} 个文件")
+    
+    # 为每个原始文件生成对应的 DefInjected 文件
+    for original_file_path, translations in file_groups.items():
+        if not translations:
+            continue
+        
+        # 生成 DefInjected 文件路径
+        # 例如：Defs/ThingDefs/Weapons.xml -> DefInjected/ThingDefs/Weapons.xml
+        file_name = Path(original_file_path).stem  # 获取不带扩展名的文件名
+        
+        # 从第一个翻译项中提取 DefType
+        first_translation = translations[0]
+        first_full_path = None
+        for full_path, text, tag, fp in selected_translations:
+            if fp == original_file_path:
+                first_full_path = full_path
+                break
+        
+        if first_full_path and '/' in first_full_path:
+            def_type_part = first_full_path.split('/', 1)[0]
+            # 清理 def_type 名称
+            if '.' in def_type_part:
+                def_type = def_type_part.split('.')[-1]
+            else:
+                def_type = def_type_part
+        else:
+            def_type = "UnknownDef"
+        
+        # 创建目录结构：DefInjected/ThingDefs/
+        type_dir = os.path.join(def_injected_path, f"{def_type}Defs")
+        os.makedirs(type_dir, exist_ok=True)
+        
+        # 生成文件：DefInjected/ThingDefs/Weapons.xml
+        output_file = os.path.join(type_dir, f"{file_name}.xml")
+        
+        # 生成 XML 内容
+        root = ET.Element("LanguageData")
+        
+        # 按键名排序，保持一致性
+        for full_key, text, tag in sorted(translations, key=lambda x: x[0]):
+            # 添加英文注释
+            comment = ET.Comment(sanitize_xcomment(f"EN: {text}"))
+            root.append(comment)
+            
+            # 添加翻译元素
+            elem = ET.SubElement(root, full_key)
+            elem.text = sanitize_xml(text)
+        
+        # 保存文件
+        tree = ET.ElementTree(root)
+        processor.save_xml(tree, output_file, pretty_print=True)
+        logging.info(f"生成 DefInjected 文件: {output_file} ({len(translations)} 条翻译)")
+        print(f"{Fore.GREEN}✅ 生成: {Path(output_file).relative_to(Path(def_injected_path))} ({len(translations)} 条){Style.RESET_ALL}")

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: A feline penis. Long, thin and barbed.-->
+  <CatPenis.ThingDef.description>A feline penis. Long, thin and barbed.</CatPenis.ThingDef.description>
+  <!--EN: feline penis-->
+  <CatPenis.ThingDef.label>feline penis</CatPenis.ThingDef.label>
+  <!--EN: A feline vagina. Long and thin vagina with clitoris inside, perfect for barbed feline cocks.-->
+  <CatVagina.ThingDef.description>A feline vagina. Long and thin vagina with clitoris inside, perfect for barbed feline cocks.</CatVagina.ThingDef.description>
+  <!--EN: feline vagina-->
+  <CatVagina.ThingDef.label>feline vagina</CatVagina.ThingDef.label>
+  <!--EN: A cloacal anus. An anus hidden within a common port for the reproductive organs, known as a cloaca.-->
+  <CloacalAnus.ThingDef.description>A cloacal anus. An anus hidden within a common port for the reproductive organs, known as a cloaca.</CloacalAnus.ThingDef.description>
+  <!--EN: cloacal anus-->
+  <CloacalAnus.ThingDef.label>cloacal anus</CloacalAnus.ThingDef.label>
+  <!--EN: A cloacal penis. A male sex organ tucked away inside a slit.-->
+  <CloacalPenis.ThingDef.description>A cloacal penis. A male sex organ tucked away inside a slit.</CloacalPenis.ThingDef.description>
+  <!--EN: cloacal penis-->
+  <CloacalPenis.ThingDef.label>cloacal penis</CloacalPenis.ThingDef.label>
+  <!--EN: A cloacal vagina. A female, egg-laying sex organ.-->
+  <CloacalVagina.ThingDef.description>A cloacal vagina. A female, egg-laying sex organ.</CloacalVagina.ThingDef.description>
+  <!--EN: cloacal vagina-->
+  <CloacalVagina.ThingDef.label>cloacal vagina</CloacalVagina.ThingDef.label>
+  <!--EN: A crocodilian penis. Very rigid and has a thick bulbous base, but otherwise similar to a humanoid penis.-->
+  <CrocodilianPenis.ThingDef.description>A crocodilian penis. Very rigid and has a thick bulbous base, but otherwise similar to a humanoid penis.</CrocodilianPenis.ThingDef.description>
+  <!--EN: crocodilian penis-->
+  <CrocodilianPenis.ThingDef.label>crocodilian penis</CrocodilianPenis.ThingDef.label>
+  <!--EN: A canine penis. Thick and knotted.-->
+  <DogPenis.ThingDef.description>A canine penis. Thick and knotted.</DogPenis.ThingDef.description>
+  <!--EN: canine penis-->
+  <DogPenis.ThingDef.label>canine penis</DogPenis.ThingDef.label>
+  <!--EN: A canine vagina. Has enough strength to keep cock inside for 20 minutes.-->
+  <DogVagina.ThingDef.description>A canine vagina. Has enough strength to keep cock inside for 20 minutes.</DogVagina.ThingDef.description>
+  <!--EN: canine vagina-->
+  <DogVagina.ThingDef.label>canine vagina</DogVagina.ThingDef.label>
+  <!--EN: A dragon penis. Thick and HARD.-->
+  <DragonPenis.ThingDef.description>A dragon penis. Thick and HARD.</DragonPenis.ThingDef.description>
+  <!--EN: dragon penis-->
+  <DragonPenis.ThingDef.label>dragon penis</DragonPenis.ThingDef.label>
+  <!--EN: A dragon vagina. It's gaping, probably good for laying eggs.-->
+  <DragonVagina.ThingDef.description>A dragon vagina. It's gaping, probably good for laying eggs.</DragonVagina.ThingDef.description>
+  <!--EN: dragon vagina-->
+  <DragonVagina.ThingDef.label>dragon vagina</DragonVagina.ThingDef.label>
+  <!--EN: A reptilian hemipenis. Two knobbly shafts with flexible barbs.-->
+  <HemiPenis.ThingDef.description>A reptilian hemipenis. Two knobbly shafts with flexible barbs.</HemiPenis.ThingDef.description>
+  <!--EN: hemipenis-->
+  <HemiPenis.ThingDef.label>hemipenis</HemiPenis.ThingDef.label>
+  <!--EN: A equine penis. Huge for a human.-->
+  <HorsePenis.ThingDef.description>A equine penis. Huge for a human.</HorsePenis.ThingDef.description>
+  <!--EN: equine penis-->
+  <HorsePenis.ThingDef.label>equine penis</HorsePenis.ThingDef.label>
+  <!--EN: A equine vagina. Gaping vagina just begs Studs to plow it.-->
+  <HorseVagina.ThingDef.description>A equine vagina. Gaping vagina just begs Studs to plow it.</HorseVagina.ThingDef.description>
+  <!--EN: equine vagina-->
+  <HorseVagina.ThingDef.label>equine vagina</HorseVagina.ThingDef.label>
+  <!--EN: A narrow vagina. A deep, but particularly thin vagina.-->
+  <NarrowVagina.ThingDef.description>A narrow vagina. A deep, but particularly thin vagina.</NarrowVagina.ThingDef.description>
+  <!--EN: narrow vagina-->
+  <NarrowVagina.ThingDef.label>narrow vagina</NarrowVagina.ThingDef.label>
+  <!--EN: A needle-like penis. A rather long, but exceptionally thin penis.-->
+  <NeedlePenis.ThingDef.description>A needle-like penis. A rather long, but exceptionally thin penis.</NeedlePenis.ThingDef.description>
+  <!--EN: needle-like penis-->
+  <NeedlePenis.ThingDef.label>needle-like penis</NeedlePenis.ThingDef.label>
+  <!--EN: A procyonine penis. Impressive length, but very thin and inflexible.-->
+  <RaccoonPenis.ThingDef.description>A procyonine penis. Impressive length, but very thin and inflexible.</RaccoonPenis.ThingDef.description>
+  <!--EN: procyonine penis-->
+  <RaccoonPenis.ThingDef.label>procyonine penis</RaccoonPenis.ThingDef.label>
+  <!--EN: A rodent penis. A truly tiny penis, built for the bare minimum of function.-->
+  <RodentPenis.ThingDef.description>A rodent penis. A truly tiny penis, built for the bare minimum of function.</RodentPenis.ThingDef.description>
+  <!--EN: rodent penis-->
+  <RodentPenis.ThingDef.label>rodent penis</RodentPenis.ThingDef.label>
+  <!--EN: A rodent vagina. A vagina barely even large enough to fit a human finger.-->
+  <RodentVagina.ThingDef.description>A rodent vagina. A vagina barely even large enough to fit a human finger.</RodentVagina.ThingDef.description>
+  <!--EN: rodent vagina-->
+  <RodentVagina.ThingDef.label>rodent vagina</RodentVagina.ThingDef.label>
+  <!--EN: A large udder, possibly from a muffalo or similar animal. May be attached to humanoids for a literal cowgirl look.-->
+  <UdderBreasts.ThingDef.description>A large udder, possibly from a muffalo or similar animal. May be attached to humanoids for a literal cowgirl look.</UdderBreasts.ThingDef.description>
+  <!--EN: udder-->
+  <UdderBreasts.ThingDef.label>udder</UdderBreasts.ThingDef.label>
+</LanguageData>
