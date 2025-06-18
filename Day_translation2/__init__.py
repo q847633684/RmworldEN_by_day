@@ -1,52 +1,39 @@
 """
-Day Translation 2 - 新一代翻译工具
+Day Translation 2 - 游戏本地化翻译工具 (全新架构)
 
-一个重构的、模块化的RimWorld模组翻译工具，提供：
-- 统一的配置管理系统
-- 智能的用户交互界面  
-- 模块化的核心业务逻辑
-- 完整的服务层架构
-- 强大的工具集合
-- 规范的数据模型
+新一代游戏本地化翻译工具，采用清洁架构设计。
+专注于RimWorld等游戏的中英文本地化翻译。
 
-版本: 2.0.0
-作者: Day Translation Team
+架构特点:
+- 分层设计: models/core/services/utils/interaction/config
+- 类型安全: 完整的类型注解
+- 异常处理: 具体异常类型+详细上下文
+- 测试覆盖: 80%+覆盖率目标
+- 性能优化: 多线程+批量处理
 """
 
 __version__ = "2.0.0"
-__author__ = "Day Translation Team"
+__author__ = "Day汉化项目组"
+__description__ = "游戏本地化翻译工具 - 全新架构版本"
 
-# 主要模块导入
-from .config import get_config, UnifiedConfig
-from .interaction import UnifiedInteractionManager
-from .models import (
-    TranslationError, ConfigError, ImportError, ExportError,
-    TranslationData, KeyedTranslation, DefInjectedTranslation,
-    OperationResult, ModProcessResult
-)
+# 延迟导入，避免循环依赖
+def get_translation_facade():
+    """获取翻译门面实例"""
+    from .core.translation_facade import TranslationFacade
+    return TranslationFacade
 
+# 主要接口
+__all__ = ['get_translation_facade', '__version__']
+from .models.exceptions import TranslationError, ValidationError, ProcessingError
+from .models.result_models import OperationResult, OperationStatus, OperationType
+
+# 主要功能导出
 __all__ = [
-    # 版本信息
-    '__version__',
-    '__author__',
-    
-    # 配置管理
-    'get_config',
-    'UnifiedConfig',
-    
-    # 交互管理
-    'UnifiedInteractionManager',
-    
-    # 异常类
-    'TranslationError',
-    'ConfigError', 
-    'ImportError',
-    'ExportError',
-    
-    # 数据模型
-    'TranslationData',
-    'KeyedTranslation',
-    'DefInjectedTranslation',
-    'OperationResult',
-    'ModProcessResult'
+    "TranslationFacade",
+    "TranslationError", 
+    "ValidationError",
+    "ProcessingError",
+    "OperationResult",
+    "OperationStatus", 
+    "OperationType"
 ]

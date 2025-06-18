@@ -213,29 +213,29 @@ def migrate_configurations():
             json.dump(unified_config, f, indent=2, ensure_ascii=False)
         
         print(f"✅ 统一配置已保存: {new_config_file}")
-        
-        # 删除旧的配置文件（已备份）
-        files_to_remove = [old_preferences_file, old_paths_file, old_history_file]
-        for file_path in files_to_remove:
-            if file_path.exists():
-                file_path.unlink()
-                print(f"🗑️ 已删除旧配置文件: {file_path.name}")
+        print("🎉 配置迁移完成！")
+        return True
         
     except Exception as e:
         print(f"❌ 保存统一配置失败: {e}")
         return False
-    
-    # 6. 显示迁移摘要
-    print(f"\n{len(migrated_data)} 项配置已迁移:")
-    for item in migrated_data:
-        print(f"  • {item}")
-    
-    print(f"\n📦 旧配置文件已备份到: {backup_dir}")
-    print("🎉 配置迁移完成！")
-    
-    return True
 
-def rollback_migration():
+if __name__ == "__main__":
+    import sys
+    
+    if len(sys.argv) > 1 and sys.argv[1] == "--rollback":
+        # rollback_migration()
+        pass
+    else:
+        print("Day Translation 配置迁移工具")
+        print("这将把现有的分散配置文件合并为统一配置")
+        print("旧配置文件将被备份到 backup/ 目录")
+        
+        confirm = input("\n是否开始迁移？[y/N]: ").strip().lower()
+        if confirm in ['y', 'yes']:
+            migrate_configurations()
+        else:
+            print("迁移已取消")
     """回滚配置迁移"""
     print("🔄 开始配置回滚...")
     

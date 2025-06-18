@@ -314,7 +314,7 @@ def handle_translation_mode(facade: TranslationFacade, interaction_manager: Unif
     
     if interaction_manager.confirm_operation("机器翻译", f"文件: {config['csv_path']}"):
         facade.machine_translate(config["csv_path"], config["output_csv"])
-        interaction_manager.show_operation_result(True, "机器翻译完成")
+        interaction_manager.show_operation_result(success=True, message="机器翻译完成")
 
 
 def handle_import_mode(facade: TranslationFacade, interaction_manager: UnifiedInteractionManager):
@@ -324,14 +324,14 @@ def handle_import_mode(facade: TranslationFacade, interaction_manager: UnifiedIn
         return
     
     facade.import_translations_to_templates(config["csv_path"])
-    interaction_manager.show_operation_result(True, "翻译导入完成")
+    interaction_manager.show_operation_result(success=True, message="翻译导入完成")
 
 
 def handle_corpus_mode(facade: TranslationFacade, interaction_manager: UnifiedInteractionManager):
     """处理语料生成模式"""
     if interaction_manager.confirm_operation("生成平行语料"):
         corpus = facade.generate_corpus()
-        interaction_manager.show_operation_result(True, f"语料生成完成，共 {len(corpus)} 条")
+        interaction_manager.show_operation_result(success=True, message=f"语料生成完成，共 {len(corpus)} 条")
 
 
 def handle_complete_workflow_mode(facade: TranslationFacade, interaction_manager: UnifiedInteractionManager):
@@ -342,8 +342,7 @@ def handle_complete_workflow_mode(facade: TranslationFacade, interaction_manager
     
     if not interaction_manager.confirm_operation("完整工作流", "提取 -> 翻译 -> 导入"):
         return
-    
-    # 执行提取
+      # 执行提取
     translations = facade.extract_templates_and_generate_csv(
         config["export_csv"], 
         config["en_keyed_dir"], 
@@ -351,7 +350,7 @@ def handle_complete_workflow_mode(facade: TranslationFacade, interaction_manager
     )
     
     if not translations:
-        interaction_manager.show_operation_result(False, "提取失败，工作流中断")
+        interaction_manager.show_operation_result(success=False, message="提取失败，工作流中断")
         return
     
     # 确认继续翻译
@@ -365,7 +364,7 @@ def handle_complete_workflow_mode(facade: TranslationFacade, interaction_manager
     final_csv = config["output_csv"] or config["export_csv"].replace('.csv', '_translated.csv')
     facade.import_translations_to_templates(final_csv)
     
-    interaction_manager.show_operation_result(True, "完整工作流执行完成")
+    interaction_manager.show_operation_result(success=True, message="完整工作流执行完成")
 
 
 def handle_batch_processing_mode(interaction_manager: UnifiedInteractionManager):
@@ -391,9 +390,9 @@ def handle_batch_processing_mode(interaction_manager: UnifiedInteractionManager)
                 details.append(f"✗ {Path(mod_dir).name}: {result.error or '失败'}")
         
         interaction_manager.show_operation_result(
-            True, 
-            f"批量处理完成 ({success_count}/{len(results)} 成功)", 
-            details
+            success=True, 
+            message=f"批量处理完成 ({success_count}/{len(results)} 成功)", 
+            details=details
         )
 
 
@@ -413,15 +412,15 @@ def handle_config_management(interaction_manager: UnifiedInteractionManager):
         print(f"b. {Fore.YELLOW}返回主菜单{Style.RESET_ALL}")
         
         config_mode = input(f"\n{Fore.CYAN}选择操作 (1-3, b):{Style.RESET_ALL} ").strip().lower()
-        
-        if config_mode == 'b':
+          if config_mode == 'b':
             break
         elif config_mode == '1':
             # 显示当前配置
             CONFIG = get_config()
             CONFIG.show_config()
         elif config_mode == '2':
-            # 重置配置            if input(f"{Fore.RED}确定要重置配置吗？[y/N]: {Style.RESET_ALL}").lower() == 'y':
+            # 重置配置
+            if input(f"{Fore.RED}确定要重置配置吗？[y/N]: {Style.RESET_ALL}").lower() == 'y':
                 try:
                     config = get_config()
                     config.reset_to_defaults()
@@ -431,7 +430,7 @@ def handle_config_management(interaction_manager: UnifiedInteractionManager):
                     print(f"{Fore.RED}❌ 重置失败: {e}{Style.RESET_ALL}")
         elif config_mode == '3':
             # 转到偏好设置
-            interaction_manager.handle_preferences_menu()
+            interaction_manager.handle_settings_menu()
         else:
             print(f"{Fore.RED}无效选择{Style.RESET_ALL}")
         continue

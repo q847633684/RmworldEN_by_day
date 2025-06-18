@@ -1,3 +1,17 @@
 {
-    "commentTranslate.targetLanguage": "en"
+    "commentTranslate.targetLanguage": "en",
+    "copilot.promptFiles": [
+        "${workspaceFolder}/.github/prompts/配置提示文件.prompt.md"
+    ],
+    "copilot.advanced": {
+        "memoryContext": "Day汉化项目重构专家",
+        "workflowMode": "双轨制记忆系统"
+    },
+    "files.associations": {
+        "*.prompt.md": "markdown",
+        "*.instructions.md": "markdown",
+        "*.chatmode.md": "markdown"
+    },
+    "markdown.preview.breaks": true,
+    "markdown.validate.enabled": true
 }

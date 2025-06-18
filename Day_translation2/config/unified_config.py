@@ -14,8 +14,14 @@ from dataclasses import dataclass, asdict, field
 from colorama import Fore, Style
 from datetime import datetime
 
-from ..models.config_models import CoreConfig, UserConfig, PathValidationResult, FilterConfig, ProcessingConfig
-from ..models.exceptions import ConfigError
+try:
+    # 尝试相对导入 (包内使用)
+    from ..models.config_models import CoreConfig, UserConfig, PathValidationResult, FilterConfig, ProcessingConfig
+    from ..models.exceptions import ConfigError
+except ImportError:
+    # 回退到绝对导入 (直接运行时)
+    from models.config_models import CoreConfig, UserConfig, PathValidationResult, FilterConfig, ProcessingConfig
+    from models.exceptions import ConfigError
 
 CONFIG_VERSION = "2.0.0"
 
