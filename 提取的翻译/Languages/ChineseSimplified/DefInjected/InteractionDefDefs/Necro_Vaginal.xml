@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<LanguageData>
+  <Necro_Vaginal.label>vaginal</Necro_Vaginal.label>
+  <Necro_Vaginal.logRulesInitiator.rulesStrings.0>r_logentry-&amp;gt;Raped vaginally [RECIPIENT_nameDef].</Necro_Vaginal.logRulesInitiator.rulesStrings.0>
+  <Necro_Vaginal.logRulesRecipient.rulesStrings.0>r_logentry-&amp;gt;Was vaginally raped by [INITIATOR_nameDef].</Necro_Vaginal.logRulesRecipient.rulesStrings.0>
+  <Necro_Vaginal.modExtensions.0.RMBLabel>Fuck vaginally</Necro_Vaginal.modExtensions.0.RMBLabel>
+</LanguageData>

@@ -1,0 +1,9 @@
+2025-06-18 11:42:00,995 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\logs\day_translation_20250618_114200.log
+2025-06-18 11:42:00,996 - INFO - 已加载用户配置
+2025-06-18 11:42:01,557 - INFO - 扫描到现有翻译条目: 8 个
+2025-06-18 11:42:01,563 - INFO - 保留手动编辑的翻译: ManualEdit.label = '手动编辑的翻译'
+2025-06-18 11:42:01,563 - INFO - 保留手动编辑的翻译: BeltsOnSkinBondage.label = 'Over skin'
+2025-06-18 11:42:01,565 - INFO - 保存 XML 文件: C:\Users\q8476\AppData\Local\Temp\tmppvi48vdu\test.xml
+2025-06-18 11:42:01,566 - INFO - 智能合并完成: 更新 5 个, 添加 3 个翻译
+2025-06-18 11:42:01,590 - INFO - 保存 XML 文件: C:\Users\q8476\AppData\Local\Temp\tmpmacu5h8q\test.xml
+2025-06-18 11:42:01,590 - INFO - 创建新的XML翻译文件: C:\Users\q8476\AppData\Local\Temp\tmpmacu5h8q\test.xml, 包含 10 个翻译

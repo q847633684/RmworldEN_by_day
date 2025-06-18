@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<LanguageData>
+  <Sex_MutualMasturbation.label>mutual masturbation</Sex_MutualMasturbation.label>
+  <Sex_MutualMasturbation.logRulesInitiator.rulesStrings.0>r_logentry-&amp;gt;Engaged in mutual masturbation with [RECIPIENT_nameDef].</Sex_MutualMasturbation.logRulesInitiator.rulesStrings.0>
+  <Sex_MutualMasturbation.logRulesRecipient.rulesStrings.0>r_logentry-&amp;gt;Engaged in mutual masturbation with [INITIATOR_nameDef].</Sex_MutualMasturbation.logRulesRecipient.rulesStrings.0>
+  <Sex_MutualMasturbation.modExtensions.0.RMBLabel>Do mutual masturbation</Sex_MutualMasturbation.modExtensions.0.RMBLabel>
+</LanguageData>

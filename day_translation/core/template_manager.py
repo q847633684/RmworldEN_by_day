@@ -11,7 +11,7 @@ from colorama import Fore, Style
 from .extractors import extract_keyed_translations, scan_defs_sync, extract_definjected_translations
 from .generators import TemplateGenerator
 from .exporters import handle_extract_translate, export_definjected_with_original_structure, export_definjected_with_defs_structure
-from ..utils.config import get_config
+from ..utils.unified_config import get_config
 from ..utils.utils import XMLProcessor, get_language_folder_path, handle_exceptions
 
 CONFIG = get_config()
@@ -31,9 +31,8 @@ class TemplateManager:
         self.language = language
         self.template_location = template_location
         self.generator = TemplateGenerator(str(self.mod_dir), language, template_location)
-        self.processor = XMLProcessor()
-        
-    def extract_and_generate_templates(self, output_dir: str = None, en_keyed_dir: str = None, auto_choose_definjected: bool = False) -> List[Tuple[str, str, str, str]]:
+        self.processor = XMLProcessor()        
+    def extract_and_generate_templates(self, output_dir: str = None, en_keyed_dir: str = None, auto_choose_definjected: bool = False, structure_choice: str = "original", merge_mode: str = "smart-merge") -> List[Tuple[str, str, str, str]]:
         """
         提取翻译数据并生成模板，同时导出CSV
         
@@ -41,34 +40,19 @@ class TemplateManager:
             output_dir (str): 输出目录路径
             en_keyed_dir (str): 英文Keyed目录路径（可选）
             auto_choose_definjected (bool): 是否自动选择DefInjected提取方式
+            structure_choice (str): 结构选择（"original", "defs", "structured"）
+            merge_mode (str): 合并模式（"merge", "replace", "backup", "skip", "smart-merge"）
             
         Returns:
             List[Tuple[str, str, str, str]]: 提取的翻译数据
         """
         # 记录操作开始，便于调试和跟踪处理流程
         logging.info("开始提取翻译数据并生成模板")
-          # 步骤1：智能选择DefInjected提取方式
-        # 
-        # 【背景说明】
-        # RimWorld模组有两种DefInjected数据来源：
-        # 1. 英文DefInjected目录：ModDir/Languages/English/DefInjected/
-        #    - 这是模组作者手工整理的翻译结构，通常更精确
-        #    - 适合已有翻译基础的情况，保持结构一致性
-        # 
-        # 2. Defs目录：ModDir/Defs/
-        #    - 这是模组的原始定义文件，包含所有可翻译字段
-        #    - 适合首次翻译或结构有变动的情况，确保完整性
-        #
-        # 【智能选择逻辑】
-        # - auto_choose=True: 自动选择"defs"模式（批量处理时使用）
-        # - auto_choose=False: 检测英文DefInjected目录，让用户选择最佳方式
-        # - 如果有英文DefInjected: 询问用户选择基础模式还是全量模式
-        # - 如果无英文DefInjected: 自动使用全量模式
+        
+        # 步骤1：智能选择DefInjected提取方式
         definjected_extract_mode = self._handle_definjected_extraction_choice(output_dir, auto_choose_definjected)
         
         # 步骤2：提取翻译数据
-        # 根据选择的模式提取Keyed和DefInjected翻译数据
-        # 返回格式：[(key, text, group, file_info), ...]
         translations = self._extract_all_translations(definjected_mode=definjected_extract_mode)
         
         # 数据有效性检查：如果没有提取到任何翻译数据，记录警告并返回空列表
@@ -76,22 +60,16 @@ class TemplateManager:
             logging.warning("未找到任何翻译数据")
             print(f"{Fore.YELLOW}⚠️ 未找到任何翻译数据{Style.RESET_ALL}")
             return []
-              # 步骤3：根据用户选择的输出模式生成翻译模板
-        # 
-        # 【两种输出模式说明】
+        
+        # 步骤3：根据用户选择的输出模式生成翻译模板
         if output_dir:
             # 外部输出模式：生成到用户指定的外部目录
-            # 优势：独立管理，便于翻译工作、版本控制和分发
-            # 适用：翻译团队协作、多版本管理、模组包分发
-            self._generate_templates_to_output_dir(translations, output_dir, en_keyed_dir)
+            self._generate_templates_to_output_dir(translations, output_dir, en_keyed_dir, structure_choice, merge_mode)
         else:        
             # 内部输出模式：生成到模组内部Languages目录
-            # 优势：直接集成到模组中，开发和测试方便
-            # 适用：模组开发、快速测试、单机使用
-            self._generate_all_templates(translations, en_keyed_dir)
+            self._generate_all_templates(translations, en_keyed_dir, structure_choice, merge_mode)
         
         # 步骤4：导出CSV到输出目录
-        # 只有指定了输出目录才生成CSV文件，方便后续翻译和导入操作
         if output_dir:
             csv_path = os.path.join(output_dir, "translations.csv")
             self._save_translations_to_csv(translations, csv_path)
@@ -233,7 +211,7 @@ class TemplateManager:
         
         return translations
         
-    def _generate_all_templates(self, translations: List[Tuple[str, str, str, str]], en_keyed_dir: str = None):
+    def _generate_all_templates(self, translations: List[Tuple[str, str, str, str]], en_keyed_dir: str = None, structure_choice: str = "original", merge_mode: str = "smart-merge"):
         """生成所有翻译模板"""
         # 分离Keyed和DefInjected翻译
         keyed_translations = [(k, t, g, f) for k, t, g, f in translations if '/' not in k]
@@ -249,10 +227,12 @@ class TemplateManager:
             self._handle_definjected_structure_choice(
                 def_translations=def_translations,
                 export_dir=str(self.mod_dir),  # 内部模式：输出到模组目录
-                is_internal_mode=True
+                is_internal_mode=True,
+                structure_choice=structure_choice,
+                merge_mode=merge_mode
             )
             
-    def _generate_templates_to_output_dir(self, translations: List[Tuple[str, str, str, str]], output_dir: str, en_keyed_dir: str = None):
+    def _generate_templates_to_output_dir(self, translations: List[Tuple[str, str, str, str]], output_dir: str, en_keyed_dir: str = None, structure_choice: str = "original", merge_mode: str = "smart-merge"):
         """在指定输出目录生成翻译模板结构"""
         output_path = Path(output_dir)
         
@@ -284,7 +264,9 @@ class TemplateManager:
                 self._handle_definjected_structure_choice(
                     def_translations=def_translations,
                     export_dir=str(output_path),  # 外部模式：输出到指定目录
-                    is_internal_mode=False
+                    is_internal_mode=False,
+                    structure_choice=structure_choice,
+                    merge_mode=merge_mode
                 )
                 
         finally:
@@ -405,8 +387,8 @@ class TemplateManager:
             # 没有输出目录时，默认使用 defs 模式
             logging.info("未指定输出目录，使用 defs 提取模式")
             return "defs"
-        
-    def _handle_definjected_structure_choice(self, def_translations: List[Tuple[str, str, str, str]], export_dir: str, is_internal_mode: bool = False):
+
+    def _handle_definjected_structure_choice(self, def_translations: List[Tuple[str, str, str, str]], export_dir: str, is_internal_mode: bool = False, structure_choice: str = "original", merge_mode: str = "smart-merge"):
         """处理 DefInjected 结构选择逻辑"""
         if not def_translations:
             return
@@ -415,36 +397,23 @@ class TemplateManager:
         src_lang_path = get_language_folder_path(CONFIG.source_language, str(self.mod_dir))
         src_definjected_dir = Path(src_lang_path) / CONFIG.def_injected_dir
         
-        if src_definjected_dir.exists():
-            # 有英文 DefInjected，提供3种选择
-            print(f"\n{Fore.CYAN}检测到英文 DefInjected 目录，请选择文件结构：{Style.RESET_ALL}")
-            print(f"1. {Fore.GREEN}保持原英文DefInjected结构{Style.RESET_ALL}（推荐：与原模组翻译文件一致）")
-            print(f"2. {Fore.GREEN}按原Defs目录结构生成{Style.RESET_ALL}（按原始定义文件组织）")
-            print(f"3. {Fore.GREEN}按DefType自动分组{Style.RESET_ALL}（传统方式：ThingDefs、PawnKindDefs等）")
-        else:
-            # 没有英文 DefInjected，提供2种选择
-            print(f"\n{Fore.YELLOW}未检测到英文 DefInjected 目录，请选择文件结构：{Style.RESET_ALL}")
-            print(f"1. {Fore.GREEN}按原Defs目录结构生成{Style.RESET_ALL}（推荐：按原始定义文件组织）")
-            print(f"2. {Fore.GREEN}按DefType自动分组{Style.RESET_ALL}（传统方式：ThingDefs、PawnKindDefs等）")
-        
-        structure_choice = input(f"{Fore.CYAN}请输入选项编号（回车默认1）：{Style.RESET_ALL}").strip()
-        
         # 生成成功消息后缀
         location_suffix = "到模组内部" if is_internal_mode else f": {Path(export_dir) / 'Languages' / self.language / 'DefInjected'}"
         
         if src_definjected_dir.exists():
             # 有英文 DefInjected 的情况
-            if structure_choice == "2":
+            if structure_choice == "defs":
                 # 按原Defs目录结构
                 export_definjected_with_defs_structure(
                     mod_dir=str(self.mod_dir),
                     export_dir=export_dir,
                     selected_translations=def_translations,
-                    language=self.language
+                    language=self.language,
+                    merge_mode=merge_mode
                 )
                 logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按Defs结构）")
                 print(f"{Fore.GREEN}✅ DefInjected模板已生成（按Defs结构）{location_suffix}{Style.RESET_ALL}")
-            elif structure_choice == "3":
+            elif structure_choice == "structured":
                 # 按DefType自动分组
                 if is_internal_mode:
                     self.generator.generate_definjected_template(def_translations)
@@ -459,18 +428,19 @@ class TemplateManager:
                 logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按DefType分组）")
                 print(f"{Fore.GREEN}✅ DefInjected模板已生成（按DefType分组）{location_suffix}{Style.RESET_ALL}")
             else:
-                # 默认：保持原英文DefInjected结构
+                # 默认：保持原英文DefInjected结构（original）
                 export_definjected_with_original_structure(
                     mod_dir=str(self.mod_dir),
                     export_dir=export_dir,
                     selected_translations=def_translations,
-                    language=self.language
+                    language=self.language,
+                    merge_mode=merge_mode
                 )
                 logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（保持原结构）")
                 print(f"{Fore.GREEN}✅ DefInjected模板已生成（保持原结构）{location_suffix}{Style.RESET_ALL}")
         else:
             # 没有英文 DefInjected 的情况
-            if structure_choice == "2":
+            if structure_choice == "structured":
                 # 按DefType自动分组
                 if is_internal_mode:
                     self.generator.generate_definjected_template(def_translations)
@@ -485,12 +455,26 @@ class TemplateManager:
                 logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按DefType分组）")
                 print(f"{Fore.GREEN}✅ DefInjected模板已生成（按DefType分组）{location_suffix}{Style.RESET_ALL}")
             else:
-                # 默认：按原Defs目录结构
+                # 默认：按原Defs目录结构（original或defs都用这个）
                 export_definjected_with_defs_structure(
                     mod_dir=str(self.mod_dir),
                     export_dir=export_dir,
                     selected_translations=def_translations,
-                    language=self.language
+                    language=self.language,
+                    merge_mode=merge_mode
                 )
                 logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按Defs结构）")
                 print(f"{Fore.GREEN}✅ DefInjected模板已生成（按Defs结构）{location_suffix}{Style.RESET_ALL}")
+                # 按DefType自动分组
+                if is_internal_mode:
+                    self.generator.generate_definjected_template(def_translations)
+                else:
+                    # 外部模式需要临时切换生成器目录
+                    original_mod_dir = self.generator.mod_dir
+                    self.generator.mod_dir = export_dir
+                    try:
+                        self.generator.generate_definjected_template(def_translations)
+                    finally:
+                        self.generator.mod_dir = original_mod_dir
+                logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按DefType分组）")
+                print(f"{Fore.GREEN}✅ DefInjected模板已生成（按DefType分组）{location_suffix}{Style.RESET_ALL}")

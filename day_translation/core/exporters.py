@@ -10,10 +10,9 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import List, Tuple, Dict
 import csv
-from multiprocessing import Pool
 from tqdm import tqdm
-from ..utils.config import get_config
-from ..utils.utils import XMLProcessor, save_xml_to_file, sanitize_xcomment, get_language_folder_path, sanitize_xml
+from ..utils.unified_config import get_config
+from ..utils.utils import XMLProcessor, save_xml_to_file, sanitize_xcomment, get_language_folder_path, sanitize_xml, handle_existing_translations_choice, smart_merge_xml_translations
 from colorama import Fore, Style
 
 CONFIG = get_config()
@@ -245,14 +244,12 @@ def export_definjected(
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
         logging.info(f"创建文件夹：{def_injected_path}")
-        
-    # 清理现有文件
-    for xml_file in Path(def_injected_path).rglob("*.xml"):
-        try:
-            os.remove(xml_file)
-            logging.info(f"删除文件：{xml_file}")
-        except OSError as e:
-            logging.error(f"无法删除 {xml_file}: {e}")
+    else:
+        # 使用封装的用户选择函数
+        choice = handle_existing_translations_choice(def_injected_path)
+        if choice == "skip":
+            logging.info("用户选择跳过，停止生成 DefInjected 文件")
+            return
             
     if not os.path.exists(defs_path):
         logging.warning(f"Defs 目录 {defs_path} 不存在，跳过")
@@ -284,8 +281,7 @@ def export_definjected(
                 def_groups[def_type][def_name] = []
                 
             def_groups[def_type][def_name].append((field_path, text, tag))
-            
-    # 为每个 DefType 生成 XML 文件
+              # 为每个 DefType 生成 XML 文件
     for def_type, def_items in def_groups.items():
         if not def_items:
             continue
@@ -296,9 +292,8 @@ def export_definjected(
         
         output_file = os.path.join(type_dir, f"{def_type}Defs.xml")
         
-        # 生成 XML 内容
-        root = ET.Element("LanguageData")
-        
+        # 构建翻译字典，用于智能合并或传统合并
+        translations = {}
         for def_name, fields in def_items.items():
             for field_path, text, tag in fields:
                 # 生成完整的键名
@@ -306,18 +301,54 @@ def export_definjected(
                     full_key = f"{def_name}.{field_path}"
                 else:
                     full_key = def_name
-                    
-                # 添加英文注释
-                comment = ET.Comment(sanitize_xcomment(f"EN: {text}"))
-                root.append(comment)
+                translations[full_key] = text
+        
+        # 根据用户选择的模式处理文件
+        if choice == "smart-merge":
+            # 使用智能合并
+            from ..utils.utils import smart_merge_xml_translations
+            smart_merge_xml_translations(output_file, translations, preserve_manual_edits=True)
+        elif choice == "merge":
+            # 使用传统合并（只更新现有元素）
+            if os.path.exists(output_file):
+                tree = processor.parse_xml(output_file)
+                if tree:
+                    processor.update_translations(tree, translations, merge=True)
+                    processor.save_xml(tree, output_file, pretty_print=True)
+                    logging.info(f"合并更新 DefInjected 文件: {output_file}")
+                else:
+                    _create_new_definjected_file(output_file, def_items, processor)
+            else:
+                _create_new_definjected_file(output_file, def_items, processor)
+        else:
+            # 替换模式或备份模式（重新生成文件）
+            _create_new_definjected_file(output_file, def_items, processor)
+
+
+def _create_new_definjected_file(output_file: str, def_items: dict, processor):
+    """创建新的 DefInjected 文件"""
+    # 生成 XML 内容
+    root = ET.Element("LanguageData")
+    
+    for def_name, fields in def_items.items():
+        for field_path, text, tag in fields:
+            # 生成完整的键名
+            if field_path:
+                full_key = f"{def_name}.{field_path}"
+            else:
+                full_key = def_name
                 
-                # 添加翻译元素
-                elem = ET.SubElement(root, full_key)
-                elem.text = sanitize_xml(text)
-                  # 保存文件
-        tree = ET.ElementTree(root)
-        processor.save_xml(tree, output_file, pretty_print=True)
-        logging.info(f"生成 DefInjected 文件: {output_file}")
+            # 添加英文注释
+            comment = ET.Comment(sanitize_xcomment(f"EN: {text}"))
+            root.append(comment)
+            
+            # 添加翻译元素
+            elem = ET.SubElement(root, full_key)
+            elem.text = sanitize_xml(text)
+              # 保存文件
+    tree = ET.ElementTree(root)
+    processor.save_xml(tree, output_file, pretty_print=True)
+    logging.info(f"生成 DefInjected 文件: {output_file}")
 
 def export_definjected_to_csv(definjected_dir: str, output_csv: str) -> None:
     """将 DefInjected 翻译导出到 CSV"""
@@ -420,15 +451,15 @@ def export_definjected_with_original_structure(
     export_dir: str,
     selected_translations: List[Tuple[str, str, str, str]],
     language: str = CONFIG.default_language,
-    source_language: str = CONFIG.source_language
+    source_language: str = CONFIG.source_language,
+    merge_mode: str = "smart-merge"
 ) -> None:
     """按照原英文DefInjected目录结构导出翻译，保持文件组织一致"""
     logging.info(f"按原结构导出 DefInjected: mod_dir={mod_dir}, translations_count={len(selected_translations)}")
     mod_dir = str(Path(mod_dir).resolve())
     export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
-    def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
-    
+    def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)    
     # 获取原英文DefInjected目录
     src_lang_path = get_language_folder_path(source_language, mod_dir)
     src_def_injected_path = os.path.join(src_lang_path, CONFIG.def_injected_dir)
@@ -442,14 +473,12 @@ def export_definjected_with_original_structure(
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
         logging.info(f"创建文件夹：{def_injected_path}")
-    
-    # 清理现有文件
-    for xml_file in Path(def_injected_path).rglob("*.xml"):
-        try:
-            os.remove(xml_file)
-            logging.info(f"删除文件：{xml_file}")
-        except OSError as e:
-            logging.error(f"无法删除 {xml_file}: {e}")
+    else:
+        # 使用封装的用户选择函数
+        choice = handle_existing_translations_choice(def_injected_path)
+        if choice == "skip":
+            logging.info("用户选择跳过，停止生成 DefInjected 文件")
+            return
     
     processor = XMLProcessor()
     
@@ -512,34 +541,39 @@ def export_definjected_with_original_structure(
             unmatched_translations.append((full_path, text, tag, file_path))
     
     logging.info(f"文件分组完成: {len(file_groups)} 个文件, {len(unmatched_translations)} 个未匹配")
-    
-    # 4. 为每个文件生成翻译内容
-    for rel_path, translations in file_groups.items():
-        if not translations:
+      # 4. 为每个文件生成翻译内容
+    for rel_path, translation_list in file_groups.items():
+        if not translation_list:
             continue
             
         # 创建对应的目录结构
         output_file = os.path.join(def_injected_path, rel_path)
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         
-        # 生成 XML 内容
-        root = ET.Element("LanguageData")
+        # 构建翻译字典
+        translations = {full_key: text for full_key, text, tag in translation_list}
         
-        # 按键名排序，保持一致性
-        for full_key, text, tag in sorted(translations, key=lambda x: x[0]):
-            # 添加英文注释
-            comment = ET.Comment(sanitize_xcomment(f"EN: {text}"))
-            root.append(comment)
-            
-            # 添加翻译元素
-            elem = ET.SubElement(root, full_key)
-            elem.text = sanitize_xml(text)
-        
-        # 保存文件
-        tree = ET.ElementTree(root)
-        processor.save_xml(tree, output_file, pretty_print=True)
-        logging.info(f"生成 DefInjected 文件: {output_file} ({len(translations)} 条翻译)")
-    
+        # 根据用户选择的模式处理文件
+        if choice == "smart-merge":
+            # 使用智能合并
+            from ..utils.utils import smart_merge_xml_translations
+            smart_merge_xml_translations(output_file, translations, preserve_manual_edits=True)
+        elif choice == "merge":
+            # 使用传统合并（只更新现有元素）
+            if os.path.exists(output_file):
+                tree = processor.parse_xml(output_file)
+                if tree:
+                    processor.update_translations(tree, translations, merge=True)
+                    processor.save_xml(tree, output_file, pretty_print=True)
+                    logging.info(f"合并更新 DefInjected 文件: {output_file} ({len(translations)} 条翻译)")
+                else:
+                    _create_new_original_structure_file(output_file, translation_list, processor)
+            else:
+                _create_new_original_structure_file(output_file, translation_list, processor)
+        else:
+            # 替换模式或备份模式（重新生成文件）
+            _create_new_original_structure_file(output_file, translation_list, processor)
+
     # 5. 处理未匹配的翻译（可选：生成到额外文件）
     if unmatched_translations:
         logging.warning(f"发现 {len(unmatched_translations)} 条未匹配的翻译")
@@ -547,8 +581,10 @@ def export_definjected_with_original_structure(
         
         # 生成额外文件
         additional_file = os.path.join(def_injected_path, "_Additional.xml")
-        root = ET.Element("LanguageData")
         
+        # 构建未匹配翻译的字典
+        unmatched_dict = {}
+        additional_content = []
         for full_path, text, tag, file_path in unmatched_translations:
             # 从full_path生成键名
             if '/' in full_path:
@@ -561,21 +597,57 @@ def export_definjected_with_original_structure(
             else:
                 full_key = full_path
             
-            comment = ET.Comment(sanitize_xcomment(f"EN: {text} (来源: {file_path})"))
-            root.append(comment)
-            
-            elem = ET.SubElement(root, full_key)
-            elem.text = sanitize_xml(text)
+            unmatched_dict[full_key] = text
+            additional_content.append((full_key, text, tag, file_path))
         
-        tree = ET.ElementTree(root)
-        processor.save_xml(tree, additional_file, pretty_print=True)
-        logging.info(f"生成额外翻译文件: {additional_file}")
+        # 根据用户选择的模式处理额外文件
+        if choice == "smart-merge":
+            # 使用智能合并
+            smart_merge_xml_translations(additional_file, unmatched_dict, preserve_manual_edits=True)
+        elif choice == "merge":
+            # 使用传统合并
+            if os.path.exists(additional_file):
+                tree = processor.parse_xml(additional_file)
+                if tree:
+                    processor.update_translations(tree, unmatched_dict, merge=True)
+                    processor.save_xml(tree, additional_file, pretty_print=True)
+                    logging.info(f"合并更新额外翻译文件: {additional_file}")
+                else:
+                    _create_additional_file(additional_file, additional_content, processor)
+            else:
+                _create_additional_file(additional_file, additional_content, processor)
+        else:
+            # 替换模式或备份模式
+            _create_additional_file(additional_file, additional_content, processor)
 
+
+def _create_new_original_structure_file(output_file: str, translation_list: list, processor):
+    """创建新的原始结构 DefInjected 文件"""
+    # 生成 XML 内容
+    root = ET.Element("LanguageData")
+    
+    # 按键名排序，保持一致性
+    for full_key, text, tag in sorted(translation_list, key=lambda x: x[0]):
+        # 添加英文注释
+        comment = ET.Comment(sanitize_xcomment(f"EN: {text}"))
+        root.append(comment)
+        
+        # 添加翻译元素
+        elem = ET.SubElement(root, full_key)
+        elem.text = sanitize_xml(text)
+    
+    # 保存文件
+    tree = ET.ElementTree(root)
+    processor.save_xml(tree, output_file, pretty_print=True)
+    logging.info(f"生成 DefInjected 文件: {output_file} ({len(translation_list)} 条翻译)")
+
+    
 def export_definjected_with_defs_structure(
     mod_dir: str,
     export_dir: str,
     selected_translations: List[Tuple[str, str, str, str]],
-    language: str = CONFIG.default_language
+    language: str = CONFIG.default_language,
+    merge_mode: str = "smart-merge"
 ) -> None:
     """按照原Defs目录结构导出DefInjected翻译"""
     logging.info(f"按Defs结构导出 DefInjected: mod_dir={mod_dir}, translations_count={len(selected_translations)}")
@@ -588,15 +660,13 @@ def export_definjected_with_defs_structure(
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
         logging.info(f"创建文件夹：{def_injected_path}")
-    
-    # 清理现有文件
-    for xml_file in Path(def_injected_path).rglob("*.xml"):
-        try:
-            os.remove(xml_file)
-            logging.info(f"删除文件：{xml_file}")
-        except OSError as e:
-            logging.error(f"无法删除 {xml_file}: {e}")
-    
+    else:
+        # 使用封装的用户选择函数
+        choice = handle_existing_translations_choice(def_injected_path)
+        if choice == "skip":
+            logging.info("用户选择跳过，停止生成 DefInjected 文件")
+            return
+        
     if not os.path.exists(defs_path):
         logging.warning(f"Defs 目录 {defs_path} 不存在，跳过")
         return
@@ -655,24 +725,64 @@ def export_definjected_with_defs_structure(
         # 创建目录结构：DefInjected/ThingDefs/
         type_dir = os.path.join(def_injected_path, f"{def_type}Defs")
         os.makedirs(type_dir, exist_ok=True)
-        
-        # 生成文件：DefInjected/ThingDefs/Weapons.xml
+          # 生成文件：DefInjected/ThingDefs/Weapons.xml
         output_file = os.path.join(type_dir, f"{file_name}.xml")
         
-        # 生成 XML 内容
-        root = ET.Element("LanguageData")
+        # 构建翻译字典
+        translation_dict = {full_key: text for full_key, text, tag in translations}
         
-        # 按键名排序，保持一致性
-        for full_key, text, tag in sorted(translations, key=lambda x: x[0]):
-            # 添加英文注释
-            comment = ET.Comment(sanitize_xcomment(f"EN: {text}"))
-            root.append(comment)
-            
-            # 添加翻译元素
-            elem = ET.SubElement(root, full_key)
-            elem.text = sanitize_xml(text)
+        # 根据用户选择的模式处理文件
+        if choice == "smart-merge":
+            # 使用智能合并
+            smart_merge_xml_translations(output_file, translation_dict, preserve_manual_edits=True)
+        elif choice == "merge":
+            # 使用传统合并（只更新现有元素）
+            if os.path.exists(output_file):
+                tree = processor.parse_xml(output_file)
+                if tree:
+                    processor.update_translations(tree, translation_dict, merge=True)
+                    processor.save_xml(tree, output_file, pretty_print=True)
+                    logging.info(f"合并更新 DefInjected 文件: {output_file} ({len(translations)} 条翻译)")
+                else:
+                    _create_new_defs_structure_file(output_file, translations, processor)
+            else:
+                _create_new_defs_structure_file(output_file, translations, processor)
+        else:
+            # 替换模式或备份模式（重新生成文件）
+            _create_new_defs_structure_file(output_file, translations, processor)
+
+
+def _create_new_defs_structure_file(output_file: str, translations: list, processor):
+    """创建新的 Defs 结构 DefInjected 文件"""
+    # 生成 XML 内容
+    root = ET.Element("LanguageData")
+    
+    # 按键名排序，保持一致性
+    for full_key, text, tag in sorted(translations, key=lambda x: x[0]):
+        # 添加英文注释
+        comment = ET.Comment(sanitize_xcomment(f"EN: {text}"))
+        root.append(comment)
         
-        # 保存文件
-        tree = ET.ElementTree(root)
-        processor.save_xml(tree, output_file, pretty_print=True)
-        logging.info(f"生成 DefInjected 文件: {output_file} ({len(translations)} 条翻译)")
+        # 添加翻译元素
+        elem = ET.SubElement(root, full_key)
+        elem.text = sanitize_xml(text)
+    
+    # 保存文件
+    tree = ET.ElementTree(root)
+    processor.save_xml(tree, output_file, pretty_print=True)
+    logging.info(f"生成 DefInjected 文件: {output_file} ({len(translations)} 条翻译)")
+
+def _create_additional_file(additional_file: str, additional_content: list, processor):
+    """创建额外翻译文件"""
+    root = ET.Element("LanguageData")
+    
+    for full_key, text, tag, file_path in additional_content:
+        comment = ET.Comment(sanitize_xcomment(f"EN: {text} (来源: {file_path})"))
+        root.append(comment)
+        
+        elem = ET.SubElement(root, full_key)
+        elem.text = sanitize_xml(text)
+    
+    tree = ET.ElementTree(root)
+    processor.save_xml(tree, additional_file, pretty_print=True)
+    logging.info(f"生成额外翻译文件: {additional_file}")

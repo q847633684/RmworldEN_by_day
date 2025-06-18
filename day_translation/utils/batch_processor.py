@@ -7,10 +7,9 @@ import time
 from dataclasses import dataclass
 from tqdm import tqdm
 from colorama import Fore, Style
-from ..utils.config_generator import generate_default_config
-from ..core.importers import load_translations_from_csv
+from ..utils.unified_config import get_config
+from ..core.importers import load_translations_from_csv  
 from ..utils.utils import XMLProcessor, get_language_folder_path, generate_element_key
-from ..utils.config import get_config
 from .filters import ContentFilter
 
 CONFIG = get_config()
@@ -139,11 +138,11 @@ class BatchProcessor:
         
         try:
             logging.debug(f"处理模组: {mod_dir}, csv_path={csv_path}")
-            
-            # 生成配置
+              # 生成配置
             config_path = os.path.join(mod_dir, "translation_config.json")
             try:
-                generate_default_config(config_path)
+                config = get_config()
+                config.export_config(config_path)
                 result.config_generated = True
             except Exception as e:
                 logging.warning(f"生成配置失败: {mod_dir}, 错误: {e}")

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<LanguageData>
+  <Sex_Rimming.label>rimming</Sex_Rimming.label>
+  <Sex_Rimming.logRulesInitiator.rulesStrings.0>r_logentry-&amp;gt;Rimmed by [RECIPIENT_nameDef].</Sex_Rimming.logRulesInitiator.rulesStrings.0>
+  <Sex_Rimming.logRulesRecipient.rulesStrings.0>r_logentry-&amp;gt;Rimmed [INITIATOR_nameDef].</Sex_Rimming.logRulesRecipient.rulesStrings.0>
+  <Sex_Rimming.modExtensions.0.RMBLabel>Receive anal rimming</Sex_Rimming.modExtensions.0.RMBLabel>
+</LanguageData>

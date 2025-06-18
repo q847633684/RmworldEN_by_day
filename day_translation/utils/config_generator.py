@@ -1,7 +1,7 @@
 import logging
 import os
 from typing import Optional, Set
-from .config import get_config
+from .unified_config import get_config
 from .utils import save_json
 
 CONFIG = get_config()

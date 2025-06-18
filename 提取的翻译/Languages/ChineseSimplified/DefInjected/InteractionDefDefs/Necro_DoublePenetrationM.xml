@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<LanguageData>
+  <Necro_DoublePenetrationM.label>double-penetration</Necro_DoublePenetrationM.label>
+  <Necro_DoublePenetrationM.logRulesInitiator.rulesStrings.0>r_logentry-&amp;gt;Double-penetrated [RECIPIENT_nameDef].</Necro_DoublePenetrationM.logRulesInitiator.rulesStrings.0>
+  <Necro_DoublePenetrationM.logRulesRecipient.rulesStrings.0>r_logentry-&amp;gt;Was double-penetrated by [INITIATOR_nameDef].</Necro_DoublePenetrationM.logRulesRecipient.rulesStrings.0>
+  <Necro_DoublePenetrationM.modExtensions.0.RMBLabel>Double-penetrate</Necro_DoublePenetrationM.modExtensions.0.RMBLabel>
+</LanguageData>

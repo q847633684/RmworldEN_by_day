@@ -1,0 +1,28 @@
+2025-06-18 11:21:18,028 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\logs\day_translation_20250618_112118.log
+2025-06-18 11:21:18,041 - INFO - 已加载用户配置
+2025-06-18 11:21:20,790 - INFO - 自动模式: replace
+2025-06-18 11:21:20,790 - INFO - 选择替换模式，删除现有翻译文件
+2025-06-18 11:21:20,792 - INFO - 删除文件：C:\Users\q8476\AppData\Local\Temp\tmpqg6x1wxa\translations\test_1.xml
+2025-06-18 11:21:20,793 - INFO - 删除文件：C:\Users\q8476\AppData\Local\Temp\tmpqg6x1wxa\translations\test_2.xml
+2025-06-18 11:21:20,794 - INFO - 删除文件：C:\Users\q8476\AppData\Local\Temp\tmpqg6x1wxa\translations\test_3.xml
+2025-06-18 11:21:20,802 - INFO - 自动模式: merge
+2025-06-18 11:21:20,803 - INFO - 选择合并模式，保留现有翻译文件
+2025-06-18 11:21:20,809 - INFO - 自动模式: backup
+2025-06-18 11:21:20,810 - INFO - 选择备份并替换模式
+2025-06-18 11:21:20,817 - INFO - 备份文件：C:\Users\q8476\AppData\Local\Temp\tmpqg6x1wxa\translations\test_1.xml -> C:\Users\q8476\AppData\Local\Temp\tmpqg6x1wxa\translations\backup_20250618_112120\test_1.xml
+2025-06-18 11:21:20,823 - INFO - 备份文件：C:\Users\q8476\AppData\Local\Temp\tmpqg6x1wxa\translations\test_2.xml -> C:\Users\q8476\AppData\Local\Temp\tmpqg6x1wxa\translations\backup_20250618_112120\test_2.xml
+2025-06-18 11:21:20,825 - INFO - 备份文件：C:\Users\q8476\AppData\Local\Temp\tmpqg6x1wxa\translations\test_3.xml -> C:\Users\q8476\AppData\Local\Temp\tmpqg6x1wxa\translations\backup_20250618_112120\test_3.xml
+2025-06-18 11:21:20,827 - INFO - 删除文件：C:\Users\q8476\AppData\Local\Temp\tmpqg6x1wxa\translations\test_1.xml
+2025-06-18 11:21:20,828 - INFO - 删除文件：C:\Users\q8476\AppData\Local\Temp\tmpqg6x1wxa\translations\test_2.xml
+2025-06-18 11:21:20,828 - INFO - 删除文件：C:\Users\q8476\AppData\Local\Temp\tmpqg6x1wxa\translations\test_3.xml
+2025-06-18 11:21:20,841 - WARNING - 无效的自动模式: skip，转为交互模式
+2025-06-18 11:21:38,909 - INFO - 选择合并模式，保留现有翻译文件
+2025-06-18 11:21:38,923 - INFO - 自动模式: incremental
+2025-06-18 11:21:38,923 - INFO - 选择增量更新模式
+2025-06-18 11:21:38,925 - INFO - 自动模式: preview
+2025-06-18 11:21:38,926 - INFO - 选择预览模式
+2025-06-18 11:22:08,685 - INFO - 选择合并模式，保留现有翻译文件
+2025-06-18 11:22:08,721 - WARNING - 无效的自动模式: invalid_mode，转为交互模式
+2025-06-18 11:22:17,629 - INFO - 选择替换模式，删除现有翻译文件
+2025-06-18 11:22:17,630 - INFO - 删除文件：C:\Users\q8476\AppData\Local\Temp\tmpj1lw6r_9\translations\test_1.xml
+2025-06-18 11:22:17,631 - INFO - 删除文件：C:\Users\q8476\AppData\Local\Temp\tmpj1lw6r_9\translations\test_2.xml

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<LanguageData>
+  <RemoveGenitals.label>remove genitals</RemoveGenitals.label>
+  <RemoveGenitals.description>Removes sex organs.</RemoveGenitals.description>
+  <RemoveGenitals.jobString>Removing genitals.</RemoveGenitals.jobString>
+  <RemoveBreasts.label>remove breasts</RemoveBreasts.label>
+  <RemoveBreasts.description>Removes breasts.</RemoveBreasts.description>
+  <RemoveBreasts.jobString>Removing breasts.</RemoveBreasts.jobString>
+  <RemoveAnus.label>remove anus</RemoveAnus.label>
+  <RemoveAnus.description>Removes anus.</RemoveAnus.description>
+  <RemoveAnus.jobString>Removing anus.</RemoveAnus.jobString>
+</LanguageData>

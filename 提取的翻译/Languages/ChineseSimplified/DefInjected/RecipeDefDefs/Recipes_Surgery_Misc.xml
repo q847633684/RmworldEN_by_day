@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<LanguageData>
+  <InstallPegArm.label>install peg arm</InstallPegArm.label>
+  <InstallPegArm.description>Install a peg arm.</InstallPegArm.description>
+  <InstallPegArm.jobString>Installing peg arm.</InstallPegArm.jobString>
+</LanguageData>

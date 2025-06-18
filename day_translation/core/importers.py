@@ -8,7 +8,7 @@ import logging
 import os
 from colorama import Fore, Style
 from ..utils.utils import XMLProcessor, XMLProcessorConfig, get_language_folder_path, handle_exceptions
-from ..utils.config import get_config
+from ..utils.unified_config import get_config
 
 CONFIG = get_config()
 

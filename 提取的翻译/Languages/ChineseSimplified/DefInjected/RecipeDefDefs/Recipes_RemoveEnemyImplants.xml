@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<LanguageData>
+  <RJW_RemoveRestraints.label>remove restraints</RJW_RemoveRestraints.label>
+  <RJW_RemoveRestraints.description>Removes restraints.</RJW_RemoveRestraints.description>
+  <RJW_RemoveRestraints.jobString>Removing restraints.</RJW_RemoveRestraints.jobString>
+  <RJW_RemoveCocoon.label>remove cocoon</RJW_RemoveCocoon.label>
+  <RJW_RemoveCocoon.description>Removes cocoon.</RJW_RemoveCocoon.description>
+  <RJW_RemoveCocoon.jobString>Removing cocoon.</RJW_RemoveCocoon.jobString>
+</LanguageData>

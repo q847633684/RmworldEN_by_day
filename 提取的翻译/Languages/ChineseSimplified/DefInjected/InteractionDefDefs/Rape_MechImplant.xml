@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<LanguageData>
+  <Rape_MechImplant.label>mechanoid implanting</Rape_MechImplant.label>
+  <Rape_MechImplant.logRulesInitiator.rulesStrings.0>r_logentry-&amp;gt;Assaulted [RECIPIENT_nameDef].</Rape_MechImplant.logRulesInitiator.rulesStrings.0>
+  <Rape_MechImplant.logRulesRecipient.rulesStrings.0>r_logentry-&amp;gt;Was violated by [INITIATOR_nameDef].</Rape_MechImplant.logRulesRecipient.rulesStrings.0>
+  <Rape_MechImplant.modExtensions.0.RMBLabel>Implant chip</Rape_MechImplant.modExtensions.0.RMBLabel>
+</LanguageData>
