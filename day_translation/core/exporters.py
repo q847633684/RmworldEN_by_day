@@ -29,17 +29,17 @@ def move_dir(src: str, dst: str) -> None:
 def export_definjected_from_english(
     mod_dir: str,
     export_dir: str,
-    language: str = CONFIG.default_language,
-    source_language: str = CONFIG.source_language
+    language: str = CONFIG.core.default_language,
+    source_language: str = CONFIG.core.source_language
 ) -> None:
     """从英文导出 DefInjected 翻译，添加 EN 注释"""
     logging.info(f"导出 DefInjected: mod_dir={mod_dir}, export_dir={export_dir}")
     mod_dir = str(Path(mod_dir).resolve())
     export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
-    def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
+    def_injected_path = os.path.join(lang_path, CONFIG.core.definjected_dir)
     src_lang_path = get_language_folder_path(source_language, mod_dir)
-    src_def_injected_path = os.path.join(src_lang_path, CONFIG.def_injected_dir)
+    src_def_injected_path = os.path.join(src_lang_path, CONFIG.core.definjected_dir)
     
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
@@ -73,8 +73,8 @@ def export_definjected_from_english(
 def handle_extract_translate(
     mod_dir: str,
     export_dir: str,
-    language: str = CONFIG.default_language,
-    source_language: str = CONFIG.source_language,
+    language: str = CONFIG.core.default_language,
+    source_language: str = CONFIG.core.source_language,
     extract_definjected_from_defs=None
 ) -> str:
     """
@@ -87,10 +87,10 @@ def handle_extract_translate(
     mod_dir = str(Path(mod_dir).resolve())
     export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
-    def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
+    def_injected_path = os.path.join(lang_path, CONFIG.core.definjected_dir)
     old_def_linked_path = os.path.join(lang_path, "DefLinked")
     src_lang_path = get_language_folder_path(source_language, mod_dir)
-    src_def_injected_path = os.path.join(src_lang_path, CONFIG.def_injected_dir)
+    src_def_injected_path = os.path.join(src_lang_path, CONFIG.core.definjected_dir)
     
     # 处理旧的 DefLinked 目录
     if os.path.exists(old_def_linked_path) and not os.path.exists(def_injected_path):
@@ -120,7 +120,7 @@ def handle_extract_translate(
 def cleanup_backstories_dir(
     mod_dir: str,
     export_dir: str,
-    language: str = CONFIG.default_language
+    language: str = CONFIG.core.default_language
 ) -> None:
     """清理背景故事目录"""
     export_dir = str(Path(export_dir).resolve())
@@ -138,17 +138,17 @@ def cleanup_backstories_dir(
 def export_keyed(
     mod_dir: str,
     export_dir: str,
-    language: str = CONFIG.default_language,
-    source_language: str = CONFIG.source_language
+    language: str = CONFIG.core.default_language,
+    source_language: str = CONFIG.core.source_language
 ) -> None:
     """导出 Keyed 翻译，添加 EN 注释"""
     logging.info(f"导出 Keyed: mod_dir={mod_dir}, export_dir={export_dir}")
     mod_dir = str(Path(mod_dir).resolve())
     export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
-    keyed_path = os.path.join(lang_path, CONFIG.keyed_dir)
+    keyed_path = os.path.join(lang_path, CONFIG.core.keyed_dir)
     src_lang_path = get_language_folder_path(source_language, mod_dir)
-    src_keyed_path = os.path.join(src_lang_path, CONFIG.keyed_dir)
+    src_keyed_path = os.path.join(src_lang_path, CONFIG.core.keyed_dir)
     
     if not os.path.exists(keyed_path):
         os.makedirs(keyed_path)
@@ -231,14 +231,14 @@ def export_definjected(
     mod_dir: str,
     export_dir: str,
     selected_translations: List[Tuple[str, str, str, str]],
-    language: str = CONFIG.default_language
+    language: str = CONFIG.core.default_language
 ) -> None:
     """从 Defs 导出 DefInjected 翻译，确保包含所有字段"""
     logging.info(f"导出 DefInjected: mod_dir={mod_dir}, translations_count={len(selected_translations)}")
     mod_dir = str(Path(mod_dir).resolve())
     export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
-    def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
+    def_injected_path = os.path.join(lang_path, CONFIG.core.definjected_dir)
     defs_path = os.path.join(mod_dir, "Defs")
     
     if not os.path.exists(def_injected_path):
@@ -450,8 +450,8 @@ def export_definjected_with_original_structure(
     mod_dir: str,
     export_dir: str,
     selected_translations: List[Tuple[str, str, str, str]],
-    language: str = CONFIG.default_language,
-    source_language: str = CONFIG.source_language,
+    language: str = CONFIG.core.default_language,
+    source_language: str = CONFIG.core.source_language,
     merge_mode: str = "smart-merge"
 ) -> None:
     """按照原英文DefInjected目录结构导出翻译，保持文件组织一致"""
@@ -459,10 +459,10 @@ def export_definjected_with_original_structure(
     mod_dir = str(Path(mod_dir).resolve())
     export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
-    def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)    
+    def_injected_path = os.path.join(lang_path, CONFIG.core.definjected_dir)    
     # 获取原英文DefInjected目录
     src_lang_path = get_language_folder_path(source_language, mod_dir)
-    src_def_injected_path = os.path.join(src_lang_path, CONFIG.def_injected_dir)
+    src_def_injected_path = os.path.join(src_lang_path, CONFIG.core.definjected_dir)
     
     if not os.path.exists(src_def_injected_path):
         logging.warning(f"原英文DefInjected目录不存在: {src_def_injected_path}，回退到默认结构")
@@ -646,7 +646,7 @@ def export_definjected_with_defs_structure(
     mod_dir: str,
     export_dir: str,
     selected_translations: List[Tuple[str, str, str, str]],
-    language: str = CONFIG.default_language,
+    language: str = CONFIG.core.default_language,
     merge_mode: str = "smart-merge"
 ) -> None:
     """按照原Defs目录结构导出DefInjected翻译"""
@@ -654,7 +654,7 @@ def export_definjected_with_defs_structure(
     mod_dir = str(Path(mod_dir).resolve())
     export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
-    def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
+    def_injected_path = os.path.join(lang_path, CONFIG.core.definjected_dir)
     defs_path = os.path.join(mod_dir, "Defs")
     
     if not os.path.exists(def_injected_path):

@@ -15,7 +15,7 @@ def extract_keyed_translations(mod_dir: str, language: str = CONFIG.core.source_
     content_filter = ContentFilter(CONFIG)
     translations: List[Tuple[str, str, str, str]] = []
     lang_path = get_language_folder_path(language, mod_dir)
-    keyed_dir = Path(lang_path) / CONFIG.keyed_dir
+    keyed_dir = Path(lang_path) / CONFIG.core.keyed_dir
     
     logging.debug(f"语言路径: {lang_path}")
     logging.debug(f"Keyed目录: {keyed_dir}")
@@ -44,7 +44,7 @@ def extract_keyed_translations(mod_dir: str, language: str = CONFIG.core.source_
     print(f"{Fore.GREEN}提取到 {len(translations)} 条 Keyed 翻译{Style.RESET_ALL}")
     return translations
 
-def scan_defs_sync(mod_dir: str, def_types: Set[str] = None, language: str = CONFIG.source_language) -> List[Tuple[str, str, str, str]]:
+def scan_defs_sync(mod_dir: str, def_types: Set[str] = None, language: str = CONFIG.core.source_language) -> List[Tuple[str, str, str, str]]:
     """扫描 Defs 目录中的可翻译内容（参考 Day_EN 完整实现）"""
     print(f"{Fore.GREEN}正在扫描 Defs 目录（模组目录：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}")
     processor = XMLProcessor()
@@ -169,7 +169,7 @@ def _extract_translatable_fields_recursive(node, def_type: str, def_name: str, c
     
     return translations
 
-def extract_definjected_translations(mod_dir: str, language: str = CONFIG.source_language) -> List[Tuple[str, str, str, str]]:
+def extract_definjected_translations(mod_dir: str, language: str = CONFIG.core.source_language) -> List[Tuple[str, str, str, str]]:
     """从 DefInjected 目录提取翻译数据"""
     print(f"{Fore.GREEN}正在从 DefInjected 目录提取翻译数据（模组目录：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}")
     processor = XMLProcessor()

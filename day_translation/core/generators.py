@@ -24,7 +24,7 @@ class TemplateGenerator:
     def generate_keyed_template(self, en_keyed_dir: str, export_dir: str = None) -> None:
         print(f"{Fore.GREEN}正在生成中文 Keyed 翻译模板...{Style.RESET_ALL}")
         base_dir = self.get_template_base_dir(export_dir)
-        zh_keyed_dir = base_dir / "Languages" / self.language / CONFIG.keyed_dir
+        zh_keyed_dir = base_dir / "Languages" / self.language / CONFIG.core.keyed_dir
         zh_keyed_dir.mkdir(parents=True, exist_ok=True)
         en_path = Path(en_keyed_dir)
         for en_xml_file in en_path.rglob("*.xml"):
@@ -39,7 +39,7 @@ class TemplateGenerator:
     def generate_keyed_template_from_data(self, keyed_translations: List[TranslationData], export_dir: str = None) -> None:
         logging.info("正在生成中文 Keyed 翻译模板...")
         base_dir = self.get_template_base_dir(export_dir)
-        zh_keyed_dir = base_dir / "Languages" / self.language / CONFIG.keyed_dir
+        zh_keyed_dir = base_dir / "Languages" / self.language / CONFIG.core.keyed_dir
         file_groups = self._group_translations_by_file(keyed_translations)
         for file_path, translations in file_groups.items():
             zh_xml_file = self._get_target_file_path(file_path, zh_keyed_dir)
@@ -50,7 +50,7 @@ class TemplateGenerator:
     def generate_definjected_template(self, defs_translations: List[TranslationData], export_dir: str = None) -> None:
         logging.info(f"{Fore.GREEN}正在生成 DefInjected 翻译模板...{Style.RESET_ALL}")
         base_dir = self.get_template_base_dir(export_dir)
-        zh_definjected_dir = base_dir / "Languages" / self.language / CONFIG.def_injected_dir
+        zh_definjected_dir = base_dir / "Languages" / self.language / CONFIG.core.definjected_dir
         def_groups = self._group_defs_by_type(defs_translations)
         for def_type, fields in def_groups.items():
             type_dir = zh_definjected_dir / f"{def_type}Defs"

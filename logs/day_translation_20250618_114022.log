@@ -1,5 +1,0 @@
-2025-06-18 11:40:22,473 - INFO - 日志系统初始化完成: C:\Users\q8476\Documents\我的工作\Day_汉化\logs\day_translation_20250618_114022.log
-2025-06-18 11:40:22,474 - INFO - 已加载用户配置
-2025-06-18 11:40:23,125 - ERROR - 智能合并XML翻译失败: 'XMLProcessor' object has no attribute 'load_xml'
-2025-06-18 11:40:23,147 - INFO - 保存 XML 文件: C:\Users\q8476\AppData\Local\Temp\tmpni24o4xi\test.xml
-2025-06-18 11:40:23,147 - INFO - 创建新的XML翻译文件: C:\Users\q8476\AppData\Local\Temp\tmpni24o4xi\test.xml, 包含 10 个翻译

@@ -19,7 +19,7 @@ CONFIG = get_config()
 class TemplateManager:
     """翻译模板管理器，负责模板的完整生命周期管理"""
     
-    def __init__(self, mod_dir: str, language: str = CONFIG.default_language, template_location: str = "mod"):
+    def __init__(self, mod_dir: str, language: str = CONFIG.core.default_language, template_location: str = "mod"):
         """
         初始化模板管理器
         
@@ -163,7 +163,7 @@ class TemplateManager:
         translations = []
         
         # 提取Keyed翻译
-        keyed_translations = extract_keyed_translations(str(self.mod_dir), CONFIG.source_language)
+        keyed_translations = extract_keyed_translations(str(self.mod_dir), CONFIG.core.source_language)
         translations.extend(keyed_translations)
         logging.debug(f"提取到 {len(keyed_translations)} 条 Keyed 翻译")
         
@@ -183,12 +183,12 @@ class TemplateManager:
             logging.info("从英文 DefInjected 目录提取翻译数据")
             
             # 从模组的英文DefInjected目录提取翻译数据
-            src_lang_path = get_language_folder_path(CONFIG.source_language, str(self.mod_dir))
+            src_lang_path = get_language_folder_path(CONFIG.core.source_language, str(self.mod_dir))
             src_definjected_dir = Path(src_lang_path) / CONFIG.def_injected_dir
             
             if src_definjected_dir.exists():
                 # 使用专门的 DefInjected 提取函数
-                definjected_translations = extract_definjected_translations(str(self.mod_dir), CONFIG.source_language)
+                definjected_translations = extract_definjected_translations(str(self.mod_dir), CONFIG.core.source_language)
                 translations.extend(definjected_translations)
                 logging.debug(f"从英文DefInjected提取到 {len(definjected_translations)} 条翻译")
             else:
@@ -205,7 +205,7 @@ class TemplateManager:
             # 
             # 优势：确保所有可翻译内容都被提取，不会遗漏
             # 适用：首次翻译、英文DefInjected不完整、模组结构有更新
-            defs_translations = scan_defs_sync(str(self.mod_dir), language=CONFIG.source_language)
+            defs_translations = scan_defs_sync(str(self.mod_dir), language=CONFIG.core.source_language)
             translations.extend(defs_translations)
             logging.debug(f"提取到 {len(defs_translations)} 条 DefInjected 翻译")
         
@@ -377,7 +377,7 @@ class TemplateManager:
                     mod_dir=str(self.mod_dir),
                     export_dir=output_dir,
                     language=self.language,
-                    source_language=CONFIG.source_language
+                    source_language=CONFIG.core.source_language
                 )
                 return extraction_mode
             except Exception as e:
@@ -394,7 +394,7 @@ class TemplateManager:
             return
             
         # 检查是否存在英文 DefInjected 目录
-        src_lang_path = get_language_folder_path(CONFIG.source_language, str(self.mod_dir))
+        src_lang_path = get_language_folder_path(CONFIG.core.source_language, str(self.mod_dir))
         src_definjected_dir = Path(src_lang_path) / CONFIG.def_injected_dir
         
         # 生成成功消息后缀

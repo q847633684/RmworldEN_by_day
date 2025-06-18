@@ -410,7 +410,7 @@ class PathManager:
             return result
             
         # 检查语言目录结构
-        required_dirs = {CONFIG.def_injected_dir, CONFIG.keyed_dir}
+        required_dirs = {CONFIG.core.definjected_dir, CONFIG.core.keyed_dir}
         found_dirs = {d.name for d in Path(result.normalized_path).iterdir() if d.is_dir()}
         
         if not required_dirs.intersection(found_dirs):

@@ -12,7 +12,7 @@ from ..utils.unified_config import get_config
 
 CONFIG = get_config()
 
-def update_all_xml(mod_dir: str, translations: Dict[str, str], language: str = CONFIG.default_language, merge: bool = True) -> None:
+def update_all_xml(mod_dir: str, translations: Dict[str, str], language: str = CONFIG.core.default_language, merge: bool = True) -> None:
     """
     更新所有 XML 文件中的翻译
     
@@ -48,7 +48,7 @@ def update_all_xml(mod_dir: str, translations: Dict[str, str], language: str = C
     print(f"{Fore.GREEN}更新了 {updated_count} 个文件{Style.RESET_ALL}")
 
 @handle_exceptions()
-def import_translations(csv_path: str, mod_dir: str, language: str = CONFIG.default_language, merge: bool = True) -> bool:
+def import_translations(csv_path: str, mod_dir: str, language: str = CONFIG.core.default_language, merge: bool = True) -> bool:
     """
     将翻译CSV导入到翻译模板
     

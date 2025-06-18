@@ -14,30 +14,26 @@ from day_translation.utils.unified_interaction_manager import UnifiedInteraction
 def test_unified_config():
     """测试统一配置系统的主要功能"""
     print("🧪 测试统一配置系统...")
-    
-    # 测试获取配置
+      # 测试获取配置
     config = get_config()
-    print(f"✅ 配置加载成功，配置文件路径: {config.config_file}")
-    
-    # 测试核心配置访问
-    print(f"✅ 默认语言: {config.default_language}")
-    print(f"✅ 源语言: {config.source_language}")
-    print(f"✅ 输出目录: {config.output_dir}")
+    print(f"✅ 配置加载成功，版本: {config.version}")
+      # 测试核心配置访问
+    print(f"✅ 默认语言: {config.core.default_language}")
+    print(f"✅ 源语言: {config.core.source_language}")
+    print(f"✅ 输出CSV: {config.core.output_csv}")
     
     # 测试用户配置访问
-    print(f"✅ 记住路径: {config.get_user_setting('general.remember_paths', True)}")
-    print(f"✅ 自动模式: {config.get_user_setting('general.auto_mode', False)}")
-    
-    # 测试路径记忆
-    remember_count = len(config.get_remembered_paths())
+    print(f"✅ 记住路径: {config.user.general.remember_paths}")
+    print(f"✅ 自动模式: {config.user.general.auto_mode}")
+      # 测试路径记忆
+    remember_count = len(config.user.remembered_paths)
     print(f"✅ 记住的路径数量: {remember_count}")
     
     # 测试API密钥功能
-    api_keys = config.get_all_api_keys()
-    print(f"✅ API密钥数量: {len(api_keys)}")
-    
-    # 测试路径历史
-    history_count = sum(len(paths) for paths in config.get_path_history().values())
+    has_aliyun_key = bool(config.user.api.aliyun_access_key_id)
+    print(f"✅ 阿里云密钥状态: {'已配置' if has_aliyun_key else '未配置'}")
+      # 测试路径历史
+    history_count = len(config.user.path_history)
     print(f"✅ 路径历史记录数量: {history_count}")
     
     print("🎉 统一配置系统测试通过！")
@@ -51,10 +47,9 @@ def test_unified_interaction_manager():
         # 创建交互管理器实例
         manager = UnifiedInteractionManager()
         print("✅ 统一交互管理器创建成功")
-        
-        # 测试配置访问
+          # 测试配置访问
         config = manager.config
-        print(f"✅ 通过交互管理器访问配置: {config.default_language}")
+        print(f"✅ 通过交互管理器访问配置: {config.core.default_language}")
         
         print("🎉 统一交互管理器测试通过！")
         
@@ -66,35 +61,29 @@ def test_config_operations():
     """测试配置操作功能"""
     print("\n🧪 测试配置操作功能...")
     
-    config = get_config()
-    
-    # 测试设置用户配置
-    test_key = "test.setting"
-    default_value = "default_test_value"
-    config.set_user_setting(test_key, "test_value")
-    retrieved_value = config.get_user_setting(test_key, default_value)
-    assert retrieved_value == "test_value", f"用户设置测试失败: {retrieved_value}"
-    print("✅ 用户设置存取测试通过")
-    
-    # 测试路径记忆
-    test_path = r"C:\test\path"
-    config.remember_path(test_path)
-    remembered_paths = config.get_remembered_paths()
-    assert test_path in remembered_paths, "路径记忆测试失败"
-    print("✅ 路径记忆测试通过")
-    
-    # 测试路径历史
-    config.add_to_history("mod_dir", test_path)
-    history = config.get_path_history()
-    assert "mod_dir" in history and test_path in history["mod_dir"], "路径历史测试失败"
-    print("✅ 路径历史测试通过")
-    
-    # 清理测试数据
-    config.remove_from_user_config(test_key)
-    config.forget_path(test_path)
-    config.clear_history("mod_dir")
-    
-    print("🎉 配置操作功能测试通过！")
+    try:
+        config = get_config()
+        
+        # 测试路径记忆
+        test_path = r"C:\test\path" 
+        test_path_type = "test_path"
+        config.remember_path(test_path_type, test_path)
+        remembered_path = config.get_remembered_path(test_path_type)
+        assert remembered_path == test_path, f"路径记忆测试失败: {remembered_path}"
+        print("✅ 路径记忆测试通过")
+          # 测试API密钥设置
+        test_key_name = "ALIYUN_ACCESS_KEY_ID"
+        test_key_value = "test_api_key_value"
+        config.set_api_key(test_key_name, test_key_value)
+        retrieved_key = config.get_api_key(test_key_name)
+        assert retrieved_key == test_key_value, f"API密钥测试失败: {retrieved_key}"
+        print("✅ API密钥测试通过")
+        
+        print("🎉 配置操作功能测试通过！")
+        
+    except Exception as e:
+        print(f"❌ 配置操作测试失败: {e}")
+        raise
 
 
 def main():

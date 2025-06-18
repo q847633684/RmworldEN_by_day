@@ -42,14 +42,14 @@ class BatchProcessor:
         self._results: Dict[str, ModProcessResult] = {}
         logging.debug(f"初始化 BatchProcessor: max_workers={max_workers}, timeout={timeout}")
 
-    def process_multiple_mods(self, mod_list: List[str], csv_path: str = None, language: str = CONFIG.default_language) -> Dict[str, ModProcessResult]:
+    def process_multiple_mods(self, mod_list: List[str], csv_path: str = None, language: str = CONFIG.core.default_language) -> Dict[str, ModProcessResult]:
         """
         批量处理多个模组，生成配置并更新 XML
 
         Args:
             mod_list (List[str]): 模组目录列表
             csv_path (str, optional): 翻译 CSV 文件路径，默认为 None
-            language (str): 目标语言，默认为 CONFIG.default_language
+            language (str): 目标语言，默认为 CONFIG.core.default_language
 
         Returns:
             Dict[str, ModProcessResult]: 处理结果字典，键为模组目录
@@ -190,7 +190,7 @@ class BatchProcessor:
         files_processed = 0
         files_updated = 0
         
-        for dir_name in [CONFIG.def_injected_dir, CONFIG.keyed_dir]:
+        for dir_name in [CONFIG.core.definjected_dir, CONFIG.core.keyed_dir]:
             dir_path = os.path.join(lang_path, dir_name)
             if not os.path.exists(dir_path):
                 logging.debug(f"目录不存在，跳过: {dir_path}")

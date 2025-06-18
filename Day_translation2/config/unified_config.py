@@ -1,6 +1,7 @@
 """
-统一配置管理模块 - 整合所有配置到分层结构中
-负责管理程序核心配置和用户偏好设置
+Day Translation 2 - 统一配置管理模块
+
+整合所有配置到分层结构中，负责管理程序核心配置和用户偏好设置。
 """
 
 import json
@@ -13,19 +14,10 @@ from dataclasses import dataclass, asdict, field
 from colorama import Fore, Style
 from datetime import datetime
 
+from ..models.config_models import CoreConfig, UserConfig, PathValidationResult, FilterConfig, ProcessingConfig
+from ..models.exceptions import ConfigError
+
 CONFIG_VERSION = "2.0.0"
-
-class ConfigError(Exception):
-    """配置相关错误"""
-    pass
-
-@dataclass
-class PathValidationResult:
-    """路径验证结果"""
-    is_valid: bool
-    error_message: Optional[str] = None
-    normalized_path: Optional[str] = None
-    path_type: Optional[str] = None
 
 @dataclass
 class PathHistory:
@@ -34,39 +26,7 @@ class PathHistory:
     max_length: int = 10
     last_used: Optional[str] = None
 
-# === 核心技术配置 ===
-@dataclass
-class CoreConfig:
-    """程序核心技术配置"""
-    default_language: str = "ChineseSimplified" # 默认语言
-    source_language: str = "English" #  源语言
-    def_injected_dir: str = "DefInjected" # DefInjected 目录
-    keyed_dir: str = "Keyed" # Keyed 目录
-    output_csv: str = "extracted_translations.csv" # 输出 CSV 文件名
-    log_file: str = ""  # 将在运行时动态生成
-    log_format: str = "%(asctime)s - %(levelname)s - %(message)s" # 日志格式
-    debug_mode: bool = False # 调试模式
-    preview_transatable_fields: int = 0 # 预览可翻译字段数量
-    # 默认字段集合
-    default_fields: set = field(default_factory=lambda: {
-        'label', 'description', 'labelShort', 'descriptionShort',
-        'title', 'text', 'message', 'tooltip', 'baseDesc',
-        'skillDescription', 'backstoryDesc', 'jobString',
-        'gerundLabel', 'verb', 'deathMessage', 'summary',
-        'note', 'flavor', 'quote', 'caption',
-        'RMBLabel', 'rulesStrings', 'labelNoun', 'gerund', 
-        'reportString', 'skillLabel', 'pawnLabel', 'titleShort',
-        'reportStringOverride', 'overrideReportString',
-        'overrideTooltip', 'overrideLabel', 'overrideDescription',
-        'overrideLabelShort', 'overrideDescriptionShort',
-        'overrideTitle', 'overrideText', 'overrideMessage',
-        'overrideTooltip', 'overrideBaseDesc', 'overrideSkillDescription',
-        'overrideBackstoryDesc', 'overrideJobString', 'overrideGerundLabel',
-        'overrideVerb', 'overrideDeathMessage', 'overrideSummary',
-        'overrideNote', 'overrideFlavor', 'overrideQuote', 'overrideCaption'
-    })
-
-# === 用户偏好配置 ===
+# === 扩展配置类 ===
 @dataclass
 class ExtractionPreferences:
     """提取操作的用户偏好"""
@@ -100,16 +60,21 @@ class GeneralPreferences:
     confirm_operations: bool = True # 是否在执行操作前确认
 
 @dataclass
-class UserConfig:
-    """用户配置（包含所有用户偏好）"""
+class ExtendedUserConfig(UserConfig):
+    """扩展的用户配置"""
     extraction: ExtractionPreferences = field(default_factory=ExtractionPreferences)
     import_prefs: ImportPreferences = field(default_factory=ImportPreferences)
     api: ApiPreferences = field(default_factory=ApiPreferences)
     general: GeneralPreferences = field(default_factory=GeneralPreferences)
     remembered_paths: Dict[str, str] = field(default_factory=dict)
     path_history: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+    
+    # 继承的配置
+    filter_config: FilterConfig = field(default_factory=FilterConfig)
+    processing_config: ProcessingConfig = field(default_factory=ProcessingConfig)
 
     def __post_init__(self):
+        super().__post_init__()
         # 确保子对象都是正确的类型
         if isinstance(self.extraction, dict):
             self.extraction = ExtractionPreferences(**self.extraction)
@@ -120,20 +85,53 @@ class UserConfig:
         if isinstance(self.general, dict):
             self.general = GeneralPreferences(**self.general)
 
+@dataclass
+class ExtendedCoreConfig(CoreConfig):
+    """扩展的核心配置"""
+    # 继承基础配置，添加扩展配置
+    default_language: str = "ChineseSimplified"
+    source_language: str = "English"
+    def_injected_dir: str = "DefInjected"
+    keyed_dir: str = "Keyed"
+    output_csv: str = "extracted_translations.csv"
+    log_file: str = ""
+    log_format: str = "%(asctime)s - %(levelname)s - %(message)s"
+    debug_mode: bool = False
+    preview_transatable_fields: int = 0
+    
+    # 默认字段集合
+    default_fields: set = field(default_factory=lambda: {
+        'label', 'description', 'labelShort', 'descriptionShort',
+        'title', 'text', 'message', 'tooltip', 'baseDesc',
+        'skillDescription', 'backstoryDesc', 'jobString',
+        'gerundLabel', 'verb', 'deathMessage', 'summary',
+        'note', 'flavor', 'quote', 'caption',
+        'RMBLabel', 'rulesStrings', 'labelNoun', 'gerund', 
+        'reportString', 'skillLabel', 'pawnLabel', 'titleShort',
+        'reportStringOverride', 'overrideReportString',
+        'overrideTooltip', 'overrideLabel', 'overrideDescription',
+        'overrideLabelShort', 'overrideDescriptionShort',
+        'overrideTitle', 'overrideText', 'overrideMessage',
+        'overrideTooltip', 'overrideBaseDesc', 'overrideSkillDescription',
+        'overrideBackstoryDesc', 'overrideJobString', 'overrideGerundLabel',
+        'overrideVerb', 'overrideDeathMessage', 'overrideSummary',
+        'overrideNote', 'overrideFlavor', 'overrideQuote', 'overrideCaption'
+    })
+
 # === 统一配置类 ===
 @dataclass
 class UnifiedConfig:
     """统一配置类 - 包含核心配置和用户配置"""
     version: str = CONFIG_VERSION
-    core: CoreConfig = field(default_factory=CoreConfig)
-    user: UserConfig = field(default_factory=UserConfig)
+    core: ExtendedCoreConfig = field(default_factory=ExtendedCoreConfig)
+    user: ExtendedUserConfig = field(default_factory=ExtendedUserConfig)
 
     def __post_init__(self):
         # 确保子对象都是正确的类型
         if isinstance(self.core, dict):
-            self.core = CoreConfig(**self.core)
+            self.core = ExtendedCoreConfig(**self.core)
         if isinstance(self.user, dict):
-            self.user = UserConfig(**self.user)
+            self.user = ExtendedUserConfig(**self.user)
         
         # 动态生成日志文件名
         if not self.core.log_file:
@@ -194,22 +192,22 @@ class UnifiedConfig:
             if not path_obj.exists():
                 return PathValidationResult(
                     is_valid=False,
-                    error_message=f"目录不存在: {path}"
+                    message=f"目录不存在: {path}"
                 )
             if not path_obj.is_dir():
                 return PathValidationResult(
                     is_valid=False,
-                    error_message=f"路径不是目录: {path}"
+                    message=f"路径不是目录: {path}"
                 )
             return PathValidationResult(
                 is_valid=True,
-                normalized_path=str(path_obj.resolve()),
-                path_type="directory"
+                message="目录验证通过",
+                path=path_obj.resolve()
             )
         except Exception as e:
             return PathValidationResult(
                 is_valid=False,
-                error_message=f"目录验证失败: {str(e)}"
+                message=f"目录验证失败: {str(e)}"
             )
 
     def _validate_directory_create(self, path: str) -> PathValidationResult:
@@ -222,12 +220,12 @@ class UnifiedConfig:
                 if not path_obj.is_dir():
                     return PathValidationResult(
                         is_valid=False,
-                        error_message=f"路径不是目录: {path}"
+                        message=f"路径不是目录: {path}"
                     )
                 return PathValidationResult(
                     is_valid=True,
-                    normalized_path=str(path_obj.resolve()),
-                    path_type="directory"
+                    message="目录验证通过",
+                    path=path_obj.resolve()
                 )
             
             # 目录不存在，检查父目录是否存在且可写
@@ -235,26 +233,26 @@ class UnifiedConfig:
             if not parent.exists():
                 return PathValidationResult(
                     is_valid=False,
-                    error_message=f"父目录不存在: {parent}"
+                    message=f"父目录不存在: {parent}"
                 )
             
             if not parent.is_dir():
                 return PathValidationResult(
                     is_valid=False,
-                    error_message=f"父路径不是目录: {parent}"
+                    message=f"父路径不是目录: {parent}"
                 )
             
             # 父目录存在且是目录，允许创建
             return PathValidationResult(
                 is_valid=True,
-                normalized_path=str(path_obj.resolve()),
-                path_type="directory_create"
+                message="可以创建目录",
+                path=path_obj.resolve()
             )
             
         except Exception as e:
             return PathValidationResult(
                 is_valid=False,
-                error_message=f"目录验证失败: {str(e)}"
+                message=f"目录验证失败: {str(e)}"
             )
 
     def _validate_file(self, path: str) -> PathValidationResult:
@@ -264,22 +262,22 @@ class UnifiedConfig:
             if not path_obj.exists():
                 return PathValidationResult(
                     is_valid=False,
-                    error_message=f"文件不存在: {path}"
+                    message=f"文件不存在: {path}"
                 )
             if not path_obj.is_file():
                 return PathValidationResult(
                     is_valid=False,
-                    error_message=f"路径不是文件: {path}"
+                    message=f"路径不是文件: {path}"
                 )
             return PathValidationResult(
                 is_valid=True,
-                normalized_path=str(path_obj.resolve()),
-                path_type="file"
+                message="文件验证通过",
+                path=path_obj.resolve()
             )
         except Exception as e:
             return PathValidationResult(
                 is_valid=False,
-                error_message=f"文件验证失败: {str(e)}"
+                message=f"文件验证失败: {str(e)}"
             )
 
     def _validate_csv_file(self, path: str) -> PathValidationResult:
@@ -288,7 +286,7 @@ class UnifiedConfig:
         if result.is_valid and not path.lower().endswith('.csv'):
             return PathValidationResult(
                 is_valid=False,
-                error_message="文件必须是CSV格式"
+                message="文件必须是CSV格式"
             )
         return result
 
@@ -298,7 +296,7 @@ class UnifiedConfig:
         if result.is_valid and not path.lower().endswith('.xml'):
             return PathValidationResult(
                 is_valid=False,
-                error_message="文件必须是XML格式"
+                message="文件必须是XML格式"
             )
         return result
 
@@ -308,7 +306,7 @@ class UnifiedConfig:
         if result.is_valid and not path.lower().endswith('.json'):
             return PathValidationResult(
                 is_valid=False,
-                error_message="文件必须是JSON格式"
+                message="文件必须是JSON格式"
             )
         return result
 
@@ -321,7 +319,7 @@ class UnifiedConfig:
             if not languages_dir.exists():
                 return PathValidationResult(
                     is_valid=False,
-                    error_message="目录中未找到Languages文件夹，可能不是有效的模组目录"
+                    message="目录中未找到Languages文件夹，可能不是有效的模组目录"
                 )
         return result
 
@@ -336,16 +334,17 @@ class UnifiedConfig:
             if not self._path_pattern.match(normalized):
                 return PathValidationResult(
                     is_valid=False,
-                    error_message="无效的路径格式"
+                    message="无效的路径格式"
                 )
             return PathValidationResult(
                 is_valid=True,
-                normalized_path=normalized
+                message="路径规范化完成",
+                path=Path(normalized)
             )
         except Exception as e:
             return PathValidationResult(
                 is_valid=False,
-                error_message=f"路径规范化失败: {str(e)}"
+                message=f"路径规范化失败: {str(e)}"
             )
 
     def validate_path(self, path: str, validator_type: str = 'file') -> PathValidationResult:
@@ -465,13 +464,14 @@ class UnifiedConfig:
                 
                 if result.is_valid:
                     # 记忆并保存到历史
-                    self.remember_path(path_type, result.normalized_path)
-                    return result.normalized_path
+                    final_path = str(result.path) if result.path else user_input
+                    self.remember_path(path_type, final_path)
+                    return final_path
                 else:
-                    print(f"{Fore.RED}❌ {result.error_message}{Style.RESET_ALL}")
+                    print(f"{Fore.RED}❌ {result.message}{Style.RESET_ALL}")
                     
                     # 如果是目录不存在，询问是否创建
-                    if validator_type == 'dir' and "不存在" in result.error_message:
+                    if validator_type == 'dir' and "不存在" in result.message:
                         if input(f"{Fore.YELLOW}目录不存在，是否创建？[y/n]: {Style.RESET_ALL}").lower() in ['y', 'yes']:
                             try:
                                 Path(user_input).mkdir(parents=True, exist_ok=True)
@@ -502,6 +502,10 @@ class UnifiedConfig:
         try:
             os.makedirs(os.path.dirname(config_path), exist_ok=True)
             config_dict = asdict(self)
+            # 处理 set 类型字段
+            if 'core' in config_dict and 'default_fields' in config_dict['core']:
+                config_dict['core']['default_fields'] = list(config_dict['core']['default_fields'])
+            
             with open(config_path, 'w', encoding='utf-8') as f:
                 json.dump(config_dict, f, indent=2, ensure_ascii=False)
             logging.debug(f"配置已保存到: {config_path}")
@@ -514,7 +518,10 @@ class UnifiedConfig:
         print(f"\n{Fore.BLUE}=== 当前配置 ==={Style.RESET_ALL}")
         
         print(f"\n{Fore.CYAN}核心配置:{Style.RESET_ALL}")
-        for key, value in asdict(self.core).items():
+        core_dict = asdict(self.core)
+        for key, value in core_dict.items():
+            if isinstance(value, set):
+                value = f"[{len(value)}个字段]"
             print(f"  {key}: {Fore.GREEN}{value}{Style.RESET_ALL}")
         
         print(f"\n{Fore.CYAN}用户偏好:{Style.RESET_ALL}")
@@ -537,14 +544,18 @@ class UnifiedConfig:
 
     def reset_config(self):
         """重置配置为默认值"""
-        self.core = CoreConfig()
-        self.user = UserConfig()
+        self.core = ExtendedCoreConfig()
+        self.user = ExtendedUserConfig()
         logging.info("配置已重置为默认值")
 
     def export_config(self, export_path: str):
         """导出配置到指定文件"""
         try:
             config_dict = asdict(self)
+            # 处理 set 类型字段
+            if 'core' in config_dict and 'default_fields' in config_dict['core']:
+                config_dict['core']['default_fields'] = list(config_dict['core']['default_fields'])
+            
             with open(export_path, 'w', encoding='utf-8') as f:
                 json.dump(config_dict, f, indent=2, ensure_ascii=False)
             print(f"{Fore.GREEN}✅ 配置已导出到: {export_path}{Style.RESET_ALL}")
@@ -566,11 +577,16 @@ class UnifiedConfig:
                 if input(f"{Fore.CYAN}是否继续导入？[y/N]: {Style.RESET_ALL}").lower() != 'y':
                     return
             
+            # 处理 set 类型字段
+            if 'core' in config_dict and 'default_fields' in config_dict['core']:
+                if isinstance(config_dict['core']['default_fields'], list):
+                    config_dict['core']['default_fields'] = set(config_dict['core']['default_fields'])
+            
             # 更新配置
             if 'core' in config_dict:
-                self.core = CoreConfig(**config_dict['core'])
+                self.core = ExtendedCoreConfig(**config_dict['core'])
             if 'user' in config_dict:
-                self.user = UserConfig(**config_dict['user'])
+                self.user = ExtendedUserConfig(**config_dict['user'])
             
             print(f"{Fore.GREEN}✅ 配置已导入{Style.RESET_ALL}")
             logging.info(f"配置已从 {import_path} 导入")
@@ -629,6 +645,12 @@ def get_config() -> UnifiedConfig:
             try:
                 with open(config_path, 'r', encoding='utf-8') as f:
                     config_dict = json.load(f)
+                    
+                # 处理 set 类型字段
+                if 'core' in config_dict and 'default_fields' in config_dict['core']:
+                    if isinstance(config_dict['core']['default_fields'], list):
+                        config_dict['core']['default_fields'] = set(config_dict['core']['default_fields'])
+                    
                 _global_config_instance = UnifiedConfig(**config_dict)
                 logging.debug(f"配置已加载: {config_path}")
             except Exception as e:

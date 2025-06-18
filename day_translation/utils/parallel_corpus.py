@@ -8,7 +8,7 @@ import csv
 import re
 from pathlib import Path
 from typing import List, Tuple
-from .config import get_config
+from .unified_config import get_config
 from .utils import XMLProcessor, get_language_folder_path, sanitize_xcomment
 from colorama import Fore, Style
 
@@ -61,8 +61,8 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
     output_csv = str(Path(mod_dir).parent / "parallel_corpus.csv")
     output_tsv = str(Path(mod_dir).parent / "parallel_corpus.tsv")
     
-    lang_path = get_language_folder_path(CONFIG.default_language, mod_dir)
-    src_lang_path = get_language_folder_path(CONFIG.source_language, mod_dir)
+    lang_path = get_language_folder_path(CONFIG.core.default_language, mod_dir)
+    src_lang_path = get_language_folder_path(CONFIG.core.source_language, mod_dir)
     
     corpus: List[Tuple[str, str]] = []
     seen = set()
@@ -80,10 +80,10 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
                     seen.add(key)
     elif mode == "2":
         # 从 DefInjected 和 Keyed 对比提取
-        def_injected_path = os.path.join(src_lang_path, CONFIG.def_injected_dir)
-        keyed_path = os.path.join(src_lang_path, CONFIG.keyed_dir)
-        zh_def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
-        zh_keyed_path = os.path.join(lang_path, CONFIG.keyed_dir)
+        def_injected_path = os.path.join(src_lang_path, CONFIG.core.definjected_dir)
+        keyed_path = os.path.join(src_lang_path, CONFIG.core.keyed_dir)
+        zh_def_injected_path = os.path.join(lang_path, CONFIG.core.definjected_dir)
+        zh_keyed_path = os.path.join(lang_path, CONFIG.core.keyed_dir)
         
         # 检查 DefInjured 兼容性
         if not os.path.exists(def_injected_path):

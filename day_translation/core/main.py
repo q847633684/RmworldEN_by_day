@@ -37,13 +37,13 @@ class ExportError(TranslationError):
 
 class TranslationFacade:
     """翻译操作的核心接口，管理模组翻译流程"""
-    def __init__(self, mod_dir: str, language: str = CONFIG.default_language, template_location: str = "mod"):
+    def __init__(self, mod_dir: str, language: str = CONFIG.core.default_language, template_location: str = "mod"):
         """
         初始化 TranslationFacade
 
         Args:
             mod_dir (str): 模组目录路径
-            language (str): 目标语言，默认为 CONFIG.default_language
+            language (str): 目标语言，默认为 CONFIG.core.default_language
             template_location (str): 模板位置，默认为 'mod'
 
         Raises:
@@ -135,7 +135,7 @@ class TranslationFacade:
         """
         try:
             logging.info("开始生成平行语料")
-            corpus = generate_parallel_corpus(self.mod_dir, CONFIG.source_language, self.language)
+            corpus = generate_parallel_corpus(self.mod_dir, CONFIG.core.source_language, self.language)
             
             if not corpus:
                 logging.warning("未找到任何平行语料")
@@ -177,7 +177,7 @@ class TranslationFacade:
                 output_csv or csv_path.replace(".csv", "_translated.csv"),
                 access_key_id,
                 access_key_secret,
-                CONFIG.source_language,
+                CONFIG.core.source_language,
                 self.language
             )
             
@@ -198,9 +198,35 @@ class TranslationFacade:
                 logging.debug(f"已保存 {key_name} 到用户配置文件")
         return key
 
+def _confirm_operation(interaction_manager: UnifiedInteractionManager, operation_name: str, details: str = "") -> bool:
+    """确认操作 - 根据用户配置决定是否需要确认"""
+    if not interaction_manager.config.user.general.confirm_operations:
+        return True
+    
+    print(f"\n{Fore.YELLOW}=== 操作确认 ==={Style.RESET_ALL}")
+    print(f"操作：{operation_name}")
+    if details:
+        print(f"详情：{details}")
+    
+    response = input(f"{Fore.CYAN}确认执行此操作？[Y/n]: {Style.RESET_ALL}").strip().lower()
+    return response in ['', 'y', 'yes']
+
+def _show_operation_result(success: bool, message: str, details: List[str] = None) -> None:
+    """显示操作结果"""
+    status_icon = "✅" if success else "❌"
+    color = Fore.GREEN if success else Fore.RED
+    
+    print(f"\n{color}{status_icon} {message}{Style.RESET_ALL}")
+    
+    if details:
+        for detail in details:
+            print(f"  {detail}")
+    print()
+
 def main():
     """主函数"""
-    try:        # 初始化统一交互管理器
+    try:
+        # 初始化统一交互管理器
         interaction_manager = UnifiedInteractionManager()
         interaction_manager.show_welcome()
         
@@ -247,10 +273,10 @@ def main():
                         handle_batch_processing_mode(interaction_manager)
                         
             except TranslationError as e:
-                interaction_manager.show_operation_result(False, str(e))
+                print(f"{Fore.RED}❌ 操作失败: {str(e)}{Style.RESET_ALL}")
                 logging.error(f"操作失败: {str(e)}")
             except Exception as e:
-                interaction_manager.show_operation_result(False, f"发生错误: {str(e)}")
+                print(f"{Fore.RED}❌ 发生错误: {str(e)}{Style.RESET_ALL}")
                 logging.exception("未预期的错误")
                 
     except KeyboardInterrupt:
@@ -269,7 +295,7 @@ def handle_extraction_mode(facade: TranslationFacade, interaction_manager: Unifi
     if not config:
         return
     
-    if interaction_manager.confirm_operation("提取翻译模板", f"模组: {mod_dir}"):
+    if _confirm_operation(interaction_manager, "提取翻译模板", f"模组: {mod_dir}"):
         facade.extract_templates_and_generate_csv(
             output_dir=config["output_dir"],
             en_keyed_dir=config["en_keyed_dir"],
@@ -277,7 +303,7 @@ def handle_extraction_mode(facade: TranslationFacade, interaction_manager: Unifi
             structure_choice=config["structure_choice"],
             merge_mode=config["merge_mode"]
         )
-        interaction_manager.show_operation_result(True, "模板提取完成")
+        print(f"{Fore.GREEN}✅ 模板提取完成{Style.RESET_ALL}")
 
 
 def handle_translation_mode(facade: TranslationFacade, interaction_manager: UnifiedInteractionManager):
@@ -372,28 +398,8 @@ def handle_batch_processing_mode(interaction_manager: UnifiedInteractionManager)
 
 
 def handle_preferences_management(interaction_manager: UnifiedInteractionManager):
-    """处理偏好设置管理"""
-    while True:
-        choice = interaction_manager.show_preferences_menu()
-        
-        if choice == 'b':
-            break
-        elif choice == "1":
-            interaction_manager.show_current_preferences()
-        elif choice == "2":
-            interaction_manager.user_interaction.configure_general_preferences()
-        elif choice == "3":
-            interaction_manager.user_interaction.show_current_extraction_config()
-        elif choice == "4":
-            interaction_manager.handle_preferences_reset()
-        elif choice == "5":
-            interaction_manager.handle_paths_clear()
-        elif choice == "6":
-            interaction_manager.export_preferences()
-        elif choice == "7":
-            interaction_manager.import_preferences()
-        else:
-            print(f"{Fore.RED}无效选择{Style.RESET_ALL}")
+    """处理偏好设置管理 - 重定向到设置中心"""
+    interaction_manager.handle_settings_menu()
 
 
 def handle_config_management(interaction_manager: UnifiedInteractionManager):

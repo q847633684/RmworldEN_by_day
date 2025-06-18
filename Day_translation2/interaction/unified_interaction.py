@@ -1,5 +1,7 @@
 """
-统一交互管理器 - 使用统一配置系统的用户交互层
+Day Translation 2 - 统一交互管理器
+
+使用统一配置系统的用户交互层，提供一致的用户体验。
 """
 
 import os
@@ -8,7 +10,8 @@ from pathlib import Path
 from typing import Optional, List, Dict, Any, Tuple
 from colorama import Fore, Style
 
-from .unified_config import get_config, UnifiedConfig
+from ..config import get_config, UnifiedConfig
+from ..models.result_models import OperationResult, OperationStatus
 
 
 class UnifiedInteractionManager:
@@ -148,6 +151,7 @@ class UnifiedInteractionManager:
         print(f"   1. {Fore.GREEN}模组内部{Style.RESET_ALL}（直接集成到模组Languages目录）")
         print(f"   2. {Fore.GREEN}外部目录{Style.RESET_ALL}（独立管理，推荐）")        
         default_choice = "2" if self.config.user.extraction.output_location == "external" else "1"
+        
         choice = input(f"{Fore.CYAN}请选择 (1/2, 默认{default_choice}): {Style.RESET_ALL}").strip() or default_choice
         
         if choice == "1":
@@ -534,11 +538,34 @@ class UnifiedInteractionManager:
             except Exception as e:
                 print(f"{Fore.RED}❌ 导入失败: {e}{Style.RESET_ALL}")
     
-    def handle_preferences_menu(self):
-        """处理偏好设置菜单 - 重定向到设置中心"""
-        self.handle_settings_menu()
-      def show_operation_result(self, success: bool, message: str, details: List[str] = None):
-        """显示操作结果"""
+    def show_operation_result(self, success: bool = None, message: str = "", details: List[str] = None, result: OperationResult = None):
+        """显示操作结果 - 支持多种参数形式"""
+        if result is not None:
+            # 使用 OperationResult 对象
+            success = result.is_success
+            message = result.message
+            details = []
+            
+            # 添加统计信息
+            if result.processed_count > 0:
+                details.append(f"处理总数: {result.processed_count}")
+                details.append(f"成功: {result.success_count}")
+                details.append(f"失败: {result.failed_count}")
+            
+            # 添加错误信息
+            if result.errors:
+                details.extend([f"错误: {error}" for error in result.errors])
+            
+            # 添加警告信息
+            if result.warnings:
+                details.extend([f"警告: {warning}" for warning in result.warnings])
+            
+            # 添加详细信息
+            if result.details:
+                for key, value in result.details.items():
+                    details.append(f"{key}: {value}")
+        
+        # 显示结果
         if success:
             print(f"{Fore.GREEN}✅ {message}{Style.RESET_ALL}")
         else:
@@ -550,6 +577,7 @@ class UnifiedInteractionManager:
             for detail in details:
                 print(f"  {detail}")
         
+        # 记录日志
         logging.info(f"操作结果: {'成功' if success else '失败'} - {message}")
         if details:
             logging.info(f"详细信息: {'; '.join(details)}")
@@ -592,18 +620,3 @@ class UnifiedInteractionManager:
                     self.config.save_config()
         
         return key
-    
-    def show_preferences_menu(self) -> str:
-        """显示偏好设置菜单 - 重定向到设置中心菜单"""
-        print(f"\n{Fore.BLUE}=== 偏好设置 ==={Style.RESET_ALL}")
-        print(f"注意：现在使用统一的设置中心来管理所有配置")
-        print(f"1. {Fore.GREEN}进入设置中心{Style.RESET_ALL}")
-        print(f"b. {Fore.YELLOW}返回主菜单{Style.RESET_ALL}")
-        
-        choice = input(f"\n{Fore.CYAN}请选择 (1, b): {Style.RESET_ALL}").strip().lower()
-        
-        if choice == "1":
-            self.handle_settings_menu()
-            return "b"  # 返回主菜单
-        else:
-            return "b"  # 返回主菜单

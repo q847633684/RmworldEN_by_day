@@ -32,11 +32,11 @@ def test_preferences_system():
     print(f"合并模式: {prefs.extraction.merge_mode}")
     
     # 模拟设置一些偏好
-    prefs.general.auto_mode = True
-    prefs.extraction.output_location = "external"
-    prefs.extraction.output_dir = "提取的翻译"
-    prefs.extraction.structure_choice = "original"
-    prefs.extraction.merge_mode = "smart-merge"
+    prefs.general.auto_mode = True # 自动模式
+    prefs.extraction.output_location = "external" # 输出位置选择
+    prefs.extraction.output_dir = "提取的翻译" # 假设这是外部目录
+    prefs.extraction.structure_choice = "original"  # 结构选择
+    prefs.extraction.merge_mode = "smart-merge" # 合并模式
     
     # 保存偏好
     prefs_manager.save_preferences()
