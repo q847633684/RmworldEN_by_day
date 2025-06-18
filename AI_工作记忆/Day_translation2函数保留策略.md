@@ -280,3 +280,105 @@
 ---
 
 **总结**: 建议保留所有核心业务函数，重构有问题的函数，整合重复的系统模块，废弃过时的辅助函数。这样可以在保持功能完整性的同时，显著提升代码质量和系统架构的清晰度。
+
+## 📊 未使用函数分析结果 (2025年6月19日更新)
+
+### 分析统计
+- **总函数数量**: 170个
+- **已使用函数**: 79个 (46.5%)
+- **未使用函数**: 91个 (53.5%)
+- **建议保留未使用函数**: 90个 (98.9%)
+- **建议移除函数**: 1个 (1.1%)
+
+### 🟢 未使用但建议保留的函数类型
+
+#### 1. 公共API方法 (25个)
+**位置**: `models/result_models.py`, `models/translation_data.py`, `models/config_models.py`
+```python
+# OperationResult API
+add_detail(), add_error(), add_warning(), complete(), duration()
+is_success(), is_failed(), is_partial(), success_rate()
+
+# TranslationData API  
+add_translation(), get_by_type(), get_by_status(), is_translated()
+update_translation(), translation_progress()
+
+# ConfigModels API
+default_fields(), from_dict(), get_extraction_pref()
+```
+**保留原因**: 这些是数据模型的公共API，虽然内部代码未调用，但可能被外部代码使用
+
+#### 2. 延迟加载访问器 (12个)
+**位置**: `__init__.py`文件中
+```python
+get_exceptions(), get_result_models(), get_translation_data()
+get_exporters(), get_importers(), get_xml_processor()
+```
+**保留原因**: 支持延迟导入的架构设计，避免循环依赖
+
+#### 3. 高级功能接口 (15个)
+**位置**: `core/exporters.py`, `core/translation_facade.py`, `utils/export_manager.py`
+```python
+export_keyed(), export_keyed_to_csv(), batch_export_with_smart_merge()
+process_with_workflow_automation(), analyze_corpus_quality()
+```
+**保留原因**: 高级功能接口，为未来功能扩展预留
+
+#### 4. 用户交互功能 (8个)
+**位置**: `interaction/unified_interaction.py`
+```python
+show_welcome(), configure_extraction_operation(), confirm_operation()
+get_csv_for_import(), handle_settings_menu()
+```
+**保留原因**: 用户界面功能，虽然当前未完全启用但是重要功能
+
+#### 5. 工具和辅助函数 (20个)
+**位置**: `utils/`目录下各文件
+```python
+ensure_directory_exists(), validate_mod_directory(), clean_text_content()
+get_element_by_xpath(), filter_translations()
+```
+**保留原因**: 基础工具函数，可能被其他模块或外部代码使用
+
+#### 6. 测试支持函数 (10个)
+**位置**: `tests/conftest.py`
+```python
+sample_config(), temp_dir(), assert_operation_success()
+create_test_file(), mock_xml_content()
+```
+**保留原因**: pytest测试框架的必要组件
+
+### 🟡 建议移除的函数 (1个)
+
+#### 遗留功能
+```python
+❌ scan_defs_sync_legacy()  # core/extractors.py
+```
+**移除原因**: 遗留的同步扫描功能，已被新的异步版本替代，保留会造成代码冗余
+
+### 📋 具体保留建议
+
+| 函数类型 | 数量 | 建议 | 原因 |
+|----------|------|------|------|
+| 公共API方法 | 25 | 🟢 保留 | 对外接口，向后兼容 |
+| 延迟加载访问器 | 12 | 🟢 保留 | 架构设计必需 |
+| 高级功能接口 | 15 | 🟢 保留 | 功能扩展预留 |
+| 用户交互功能 | 8 | 🟢 保留 | 用户体验必需 |
+| 工具辅助函数 | 20 | 🟢 保留 | 基础设施支持 |
+| 测试支持函数 | 10 | 🟢 保留 | 测试框架必需 |
+| 遗留功能 | 1 | 🟡 移除 | 已有替代方案 |
+
+### 🎯 函数使用率优化建议
+
+#### 短期目标 (提高现有函数使用率)
+1. **完善测试**: 为未使用的公共API添加单元测试
+2. **功能集成**: 逐步启用高级功能和用户交互功能
+3. **文档完善**: 为公共API添加使用示例
+
+#### 长期目标 (提升代码质量)
+1. **API设计**: 完善公共API的设计和文档
+2. **功能完善**: 激活更多高级功能
+3. **生态支持**: 支持外部插件和扩展
+
+---
+**结论**: Day_translation2项目的函数设计合理，大部分"未使用"函数实际上是设计良好的公共API和架构组件，应该保留以支持未来的功能扩展和外部集成。

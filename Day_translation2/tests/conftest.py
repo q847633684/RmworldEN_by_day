@@ -9,11 +9,16 @@ import tempfile
 import shutil
 from pathlib import Path
 from typing import Dict, Any
+import sys
+import os
 
-from ..models.exceptions import ProcessingError, ValidationError
-from ..models.result_models import OperationResult, OperationStatus, OperationType
-from ..models.translation_data import TranslationEntry, TranslationTemplate
-from ..config import get_config
+# 修复导入路径
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from models.exceptions import ProcessingError, ValidationError
+from models.result_models import OperationResult, OperationStatus, OperationType
+from models.translation_data import TranslationEntry, TranslationType
+from config import get_config
 
 
 @pytest.fixture
