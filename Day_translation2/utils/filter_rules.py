@@ -26,166 +26,28 @@ except ImportError:
 try:
     # 尝试相对导入 (包内使用)
     from ..models.exceptions import ValidationError, ConfigError
-    from ..constants.complete_definitions import DEFAULT_TRANSLATION_FIELDS, is_override_field, get_field_priority
-    from ..config.unified_models import FilterConfig
+    from ..constants.complete_definitions import (
+        DEFAULT_TRANSLATION_FIELDS, DEFAULT_IGNORE_FIELDS, NON_TEXT_PATTERNS,
+        FIELD_TYPES, FIELD_GROUPS, FIELD_PRIORITY, PRIORITY_LEVELS,
+        is_override_field, get_field_priority, get_field_type, get_field_group
+    )
+    from ..config.config_models import FilterConfig
 except ImportError:
     # 回退到绝对导入 (直接运行时)
     from models.exceptions import ValidationError, ConfigError
-    from constants.complete_definitions import DEFAULT_TRANSLATION_FIELDS, is_override_field, get_field_priority
-    from config.unified_models import FilterConfig
+    from constants.complete_definitions import (
+        DEFAULT_TRANSLATION_FIELDS, DEFAULT_IGNORE_FIELDS, NON_TEXT_PATTERNS,
+        FIELD_TYPES, FIELD_GROUPS, FIELD_PRIORITY, PRIORITY_LEVELS,
+        is_override_field, get_field_priority, get_field_type, get_field_group
+    )
+    from config.config_models import FilterConfig
 
 
 class AdvancedFilterRules:
-    """高级过滤规则管理器 - Day_translation2版本"""
-
-    # 扩展忽略字段
-    IGNORE_FIELDS = {
-        # 基础字段
-        "defName",
-        "id",
-        "cost",
-        "damage",
-        "x",
-        "y",
-        "z",
-        "width",
-        "height",
-        "priority",
-        "count",
-        "index",
-        "version",
-        "url",
-        "path",
-        "file",
-        "hash",
-        "key",
-        # 数值字段
-        "order",
-        "weight",
-        "value",
-        "amount",
-        "quantity",
-        "duration",
-        "cooldown",
-        "range",
-        "radius",
-        "angle",
-        "speed",
-        "force",
-        "power",
-        "energy",
-        "health",
-        "armor",
-        "shield",
-        "resistance",
-        "penetration",
-        "accuracy",
-        "evasion",
-        "critChance",
-        "critDamage",
-        "dodgeChance",
-        "blockChance",
-        "parryChance",
-        # 技术字段
-        "guid",
-        "uuid",
-        "timestamp",
-        "date",
-        "time",
-        "checksum",
-        "signature",
-        "token",
-        "secret",
-        "password",
-        "salt",
-        "encryption",
-        "compression",
-        "encoding",
-        "format",
-        "type",
-        "category",
-        "tag",
-        "group",
-        "class",
-        "style",
-    }
-
-    # 非文本模式 - 智能识别
-    NON_TEXT_PATTERNS = [
-        # 数字模式
-        r"^\d+$",  # 整数
-        r"^-?\d+\.\d+$",  # 浮点数
-        r"^[0-9a-fA-F]+$",  # 十六进制
-        r"^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$",  # 科学计数法
-        r"^\d+[kKmMgGtT]?$",  # 带单位的数字
-        # 空白模式
-        r"^\s*$",  # 纯空白
-        r"^[\s\-_]+$",  # 分隔符
-        # 布尔值
-        r"^(true|false)$",  # 布尔值
-        r"^(yes|no)$",  # 是/否
-        r"^(on|off)$",  # 开/关
-        # 路径模式
-        r"^[A-Za-z0-9_\-\.]+\.[A-Za-z0-9_\-]+$",  # 文件名
-        r"^[A-Za-z0-9_\-/\\\.]+[/\\][A-Za-z0-9_\-\.]+$",  # 路径
-        # URL模式
-        r'https?://[^\s<>"]+',  # HTTP URL
-        r'www\.[^\s<>"]+',  # www链接
-        # 标识符模式
-        r"^[A-Za-z0-9_\-]+#[A-Za-z0-9_\-]+$",  # 带#的标识符
-        r"^[A-Za-z0-9_\-]+@[A-Za-z0-9_\-\.]+\.[A-Za-z0-9_\-]+$",  # 邮箱格式
-        r"^[A-Za-z0-9_\-]+:[A-Za-z0-9_\-]+$",  # 带:的标识符
-    ]
-
-    # 字段类型定义
-    FIELD_TYPES = {
-        "translatable": "需要翻译的字段",
-        "ignored": "忽略的字段",
-        "conditional": "条件性翻译的字段",
-        "reference": "引用类型的字段",
-        "format": "格式化字符串字段",
-        "plural": "复数形式字段",
-        "gender": "性别相关字段",
-        "context": "上下文相关字段",
-    }
-
-    # 字段分组定义
-    FIELD_GROUPS = {
-        "basic": {
-            "name": "基础字段",
-            "description": "基本的文本字段",
-            "fields": {"label", "description", "text", "message"},
-        },
-        "ui": {
-            "name": "界面字段",
-            "description": "用户界面相关字段",
-            "fields": {"tooltip", "title", "caption", "button", "menu"},
-        },
-        "game": {
-            "name": "游戏字段",
-            "description": "游戏内容相关字段",
-            "fields": {"skillDescription", "backstoryDesc", "jobString", "deathMessage"},
-        },
-        "override": {
-            "name": "覆盖字段",
-            "description": "覆盖默认值的字段",
-            "fields": set(),  # 在初始化时动态填充
-        },
-        "custom": {
-            "name": "自定义字段",
-            "description": "用户自定义字段",
-            "fields": set(),  # 在初始化时动态填充
-        },
-    }
-
-    # 规则优先级定义
-    PRIORITY_LEVELS = {
-        "highest": 100,  # 最高优先级
-        "high": 75,  # 高优先级
-        "normal": 50,  # 普通优先级
-        "low": 25,  # 低优先级
-        "lowest": 0,  # 最低优先级
-    }
+    """高级过滤规则管理器 - Day_translation2版本
+    
+    从统一的 complete_definitions 导入所有字段定义和常量，避免重复定义。
+    """
 
     def __init__(
         self,
@@ -204,11 +66,12 @@ class AdvancedFilterRules:
             parent_rules: 父规则集        Raises:
             ValidationError: 当规则验证失败时
         """
+        
         try:
             self.parent_rules = parent_rules
             self.default_fields = default_fields or DEFAULT_TRANSLATION_FIELDS.copy()
-            self.ignore_fields = ignore_fields or self.IGNORE_FIELDS.copy()
-            self.non_text_patterns = non_text_patterns or self.NON_TEXT_PATTERNS.copy()
+            self.ignore_fields = ignore_fields or DEFAULT_IGNORE_FIELDS.copy()
+            self.non_text_patterns = non_text_patterns or NON_TEXT_PATTERNS.copy()
 
             # 初始化规则映射
             self.field_types: Dict[str, str] = {}
@@ -250,9 +113,7 @@ class AdvancedFilterRules:
             try:
                 re.compile(pattern)
             except re.error as e:
-                raise ValidationError(f"正则表达式编译失败: {pattern}, 错误: {e}")
-
-        # 检查字段冲突
+                raise ValidationError(f"正则表达式编译失败: {pattern}, 错误: {e}")        # 检查字段冲突
         conflicts = self.default_fields & self.ignore_fields
         if conflicts:
             logging.warning(f"发现字段冲突: {conflicts}")
@@ -260,7 +121,7 @@ class AdvancedFilterRules:
     def _initialize_field_groups(self) -> None:
         """初始化字段分组"""
         self.field_groups = {}
-        for group_id, group_info in self.FIELD_GROUPS.items():
+        for group_id, group_info in FIELD_GROUPS.items():
             self.field_groups[group_id] = {
                 "name": group_info["name"],
                 "description": group_info["description"],
@@ -279,9 +140,7 @@ class AdvancedFilterRules:
         # 设置默认字段类型
         for field in self.default_fields:
             if isinstance(field, str):
-                self.field_types[field] = "translatable"
-
-        # 设置忽略字段类型
+                self.field_types[field] = "translatable"        # 设置忽略字段类型
         for field in self.ignore_fields:
             if isinstance(field, str):
                 self.field_types[field] = "ignored"
@@ -290,11 +149,11 @@ class AdvancedFilterRules:
         """初始化字段优先级"""
         # 设置默认优先级
         for field in self.default_fields:
-            self.field_priorities[field] = self.PRIORITY_LEVELS["normal"]
+            self.field_priorities[field] = PRIORITY_LEVELS["normal"]
 
         # 忽略字段设置最低优先级
         for field in self.ignore_fields:
-            self.field_priorities[field] = self.PRIORITY_LEVELS["lowest"]
+            self.field_priorities[field] = PRIORITY_LEVELS["lowest"]
 
     def should_translate_field(self, field_name: str, field_value: str = "") -> bool:
         """
@@ -316,11 +175,9 @@ class AdvancedFilterRules:
         if field_type == "conditional":
             condition = self.conditional_rules.get(field_name)
             if condition and not condition(field_value):
-                return False
-
-        # 检查优先级
+                return False        # 检查优先级
         priority = self.get_field_priority(field_name)
-        if priority == self.PRIORITY_LEVELS["lowest"]:
+        if priority == PRIORITY_LEVELS["lowest"]:
             return False
 
         # 检查非文本模式
@@ -370,7 +227,7 @@ class AdvancedFilterRules:
             return self.field_priorities[field]
         if self.parent_rules:
             return self.parent_rules.get_field_priority(field)
-        return self.PRIORITY_LEVELS["normal"]
+        return PRIORITY_LEVELS["normal"]
 
     def add_field(
         self, field: str, field_type: str = "translatable", priority: str = "normal"
@@ -383,13 +240,14 @@ class AdvancedFilterRules:
             field_type: 字段类型
             priority: 优先级
         """
+        
         if field_type == "translatable":
             self.default_fields.add(field)
         elif field_type == "ignored":
             self.ignore_fields.add(field)
 
         self.field_types[field] = field_type
-        self.field_priorities[field] = self.PRIORITY_LEVELS.get(priority, 50)
+        self.field_priorities[field] = PRIORITY_LEVELS.get(priority, 50)
 
     def remove_field(self, field: str) -> None:
         """移除字段"""

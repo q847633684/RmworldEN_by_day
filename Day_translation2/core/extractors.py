@@ -44,9 +44,9 @@ try:
     from ..models.exceptions import (ProcessingError, TranslationError,
                                      ValidationError)
     from ..models.translation_data import TranslationData, TranslationType
-    from ..utils.advanced_filters import AdvancedFilterRules
+    from ..utils.filter_rules import AdvancedFilterRules
     # 导入新的高级组件
-    from ..utils.enterprise_xml_processor import AdvancedXMLProcessor
+    from ..utils.xml_processor import AdvancedXMLProcessor
     from ..utils.file_utils import get_language_folder_path
 except ImportError:
     # 回退到绝对导入（直接运行模式）
@@ -60,8 +60,8 @@ except ImportError:
     from models.exceptions import (ProcessingError, TranslationError,
                                    ValidationError)
     from models.translation_data import TranslationData, TranslationType
-    from utils.advanced_filters import AdvancedFilterRules
-    from utils.enterprise_xml_processor import AdvancedXMLProcessor
+    from utils.filter_rules import AdvancedFilterRules
+    from utils.xml_processor import AdvancedXMLProcessor
     from utils.file_utils import get_language_folder_path
 
 # 为了向后兼容，同时导入旧组件作为备选

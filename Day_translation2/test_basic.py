@@ -28,7 +28,7 @@ def test_basic_imports():
 
         print("✅ 模型模块导入成功")
         # 测试工具模块导入
-        from utils.advanced_filters import AdvancedFilterRules
+        from utils.filter_rules import AdvancedFilterRules
         from utils.xml_processor import XMLProcessor
 
         print("✅ 工具模块导入成功")

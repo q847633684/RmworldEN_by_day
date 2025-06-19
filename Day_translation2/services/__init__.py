@@ -7,7 +7,7 @@ Day Translation 2 - 服务层
 
 from .batch_processor import BatchProcessorService, process_multiple_mods
 from .corpus_generator import CorpusGeneratorService, generate_parallel_corpus
-from .machine_translate import (MachineTranslateService, translate_batch,
+from .translation_service import (MachineTranslateService, translate_batch,
                                 translate_text)
 from .validation_service import ValidationService, validate_translation_data
 

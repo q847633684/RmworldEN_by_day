@@ -19,9 +19,9 @@ if current_dir not in sys.path:
 def test_advanced_xml_processor():
     """测试高级XML处理器的实际功能"""
     print("🧪 测试高级XML处理器实际功能...")
-
+    
     try:
-        from utils.enterprise_xml_processor import AdvancedXMLProcessor
+        from utils.xml_processor import AdvancedXMLProcessor
 
         # 创建处理器实例
         processor = AdvancedXMLProcessor()
@@ -76,10 +76,10 @@ def test_advanced_xml_processor():
 def test_advanced_filters_integration():
     """测试高级过滤器与XML处理器的集成"""
     print("🧪 测试高级过滤器与XML处理器集成...")
-
+    
     try:
-        from utils.advanced_filters import AdvancedFilterRules
-        from utils.enterprise_xml_processor import AdvancedXMLProcessor
+        from utils.filter_rules import AdvancedFilterRules
+        from utils.xml_processor import AdvancedXMLProcessor
 
         # 创建实例
         processor = AdvancedXMLProcessor()
@@ -146,9 +146,9 @@ def test_advanced_filters_integration():
 def test_xml_smart_merge():
     """测试XML智能合并功能"""
     print("🧪 测试XML智能合并功能...")
-
+    
     try:
-        from utils.enterprise_xml_processor import AdvancedXMLProcessor
+        from utils.xml_processor import AdvancedXMLProcessor
 
         processor = AdvancedXMLProcessor()
 

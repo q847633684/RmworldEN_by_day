@@ -8,6 +8,6 @@ Day Translation 2 - 交互管理模块
 - 设置管理界面
 """
 
-from .unified_interaction import UnifiedInteractionManager
+from .interaction_manager import UnifiedInteractionManager
 
 __all__ = ["UnifiedInteractionManager"]

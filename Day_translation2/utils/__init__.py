@@ -24,7 +24,7 @@ def get_content_filter():
 
 def get_advanced_filter_rules():
     """获取高级过滤规则管理器"""
-    from .advanced_filters import AdvancedFilterRules
+    from .filter_rules import AdvancedFilterRules
 
     return AdvancedFilterRules
 

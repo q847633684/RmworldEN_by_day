@@ -22,7 +22,7 @@ logging.basicConfig(
 
 from .config import get_config
 from .core.translation_facade import TranslationFacade
-from .interaction.unified_interaction import UnifiedInteractionManager
+from .interaction.interaction_manager import UnifiedInteractionManager
 from .models.exceptions import ConfigError, TranslationError
 
 
@@ -161,7 +161,7 @@ def handle_translation_mode(interaction_manager: UnifiedInteractionManager) -> N
             return
 
         # 导入机器翻译服务
-        from .services.machine_translate import MachineTranslateService
+        from .services.translation_service import MachineTranslateService
 
         # 创建翻译服务
         translate_service = MachineTranslateService()

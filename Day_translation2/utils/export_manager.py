@@ -16,8 +16,8 @@ try:
     from ..models.exceptions import (ExportError, ProcessingError,
                                      ValidationError)
     from ..models.translation_data import TranslationEntry
-    from .advanced_filters import AdvancedFilterRules
-    from .enterprise_xml_processor import AdvancedXMLProcessor
+    from .filter_rules import AdvancedFilterRules
+    from .xml_processor import AdvancedXMLProcessor
 except ImportError:
     # 如果无法导入，定义临时异常类用于独立运行
     class ProcessingError(Exception):

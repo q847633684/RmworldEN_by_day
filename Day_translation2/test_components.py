@@ -86,7 +86,7 @@ def test_translation_entry():
 def test_advanced_filter_rules():
     """测试高级过滤规则"""
     try:
-        from utils.advanced_filters import AdvancedFilterRules
+        from utils.filter_rules import AdvancedFilterRules
 
         filter_rules = AdvancedFilterRules()
 

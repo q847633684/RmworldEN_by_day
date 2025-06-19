@@ -105,7 +105,7 @@ class TestIntegration:
         from Day_translation2.services.batch_processor import BatchProcessor
         from Day_translation2.services.corpus_generator import \
             generate_parallel_corpus
-        from Day_translation2.services.machine_translate import \
+        from Day_translation2.services.translation_service import \
             MachineTranslateService
 
         # 验证类和函数存在
@@ -115,7 +115,7 @@ class TestIntegration:
 
     def test_utils_import(self):
         """测试工具模块导入"""
-        from Day_translation2.utils.advanced_filters import AdvancedFilterRules
+        from Day_translation2.utils.filter_rules import AdvancedFilterRules
         from Day_translation2.utils.file_utils import ensure_directory_exists
         from Day_translation2.utils.xml_processor import XMLProcessor
 

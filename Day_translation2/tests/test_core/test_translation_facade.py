@@ -123,7 +123,7 @@ class TestTranslationFacade:
 
         assert "文件不存在" in str(exc_info.value)
 
-    @patch("Day_translation2.services.machine_translate.translate_csv")
+    @patch("Day_translation2.services.translation_service.translate_csv")
     def test_machine_translate_success(self, mock_translate, facade, temp_dir):
         """测试机器翻译成功"""
         # 创建测试CSV文件

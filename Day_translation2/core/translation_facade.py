@@ -228,7 +228,7 @@ class TranslationFacade:
             access_key_secret = self._get_api_key("ALIYUN_ACCESS_KEY_SECRET")
 
             # 导入翻译服务
-            from ..services.machine_translate import translate_csv
+            from ..services.translation_service import translate_csv
 
             # 执行翻译
             translate_csv(

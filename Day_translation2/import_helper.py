@@ -19,10 +19,9 @@ def ensure_imports():
     """确保所有必要的导入路径都可用"""
     try:
         # 测试关键模块导入
-        import config.unified_config
         import models.exceptions
         import models.translation_data
-        import utils.enterprise_xml_processor
+        import utils.xml_processor
 
         return True
     except ImportError as e:

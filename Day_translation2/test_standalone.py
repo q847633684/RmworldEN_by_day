@@ -131,7 +131,7 @@ def test_advanced_filter():
     print("🧪 测试高级过滤器...")
 
     try:
-        from utils.advanced_filters import AdvancedFilterRules
+        from utils.filter_rules import AdvancedFilterRules
 
         # 创建高级过滤器
         filter_rules = AdvancedFilterRules()
