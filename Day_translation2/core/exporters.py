@@ -17,28 +17,48 @@ import logging
 import os
 import shutil
 from datetime import datetime
+import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 from colorama import Fore, Style
 
-from ..config import get_config
-from ..models.exceptions import (ExportError, ProcessingError,
-                                 TranslationError, ValidationError)
-from ..models.result_models import (OperationResult, OperationStatus,
-                                    OperationType)
-from ..models.translation_data import TranslationEntry, TranslationType
-from ..utils.export_manager import ExportManager, ExportMode
-from ..utils.file_utils import get_language_folder_path
-from ..utils.user_interaction import UserInteractionManager
-from ..utils.xml_processor import XMLProcessor
+try:
+    # 尝试相对导入（包内使用）
+    from ..config import get_config
+    from ..models.exceptions import (ExportError, ProcessingError,
+                                     TranslationError, ValidationError)
+    from ..models.result_models import (OperationResult, OperationStatus,
+                                        OperationType)
+    from ..models.translation_data import TranslationData, TranslationType
+    from ..utils.export_manager import ExportManager, ExportMode
+    from ..utils.file_utils import get_language_folder_path
+    from ..utils.user_interaction import UserInteractionManager
+    from ..utils.xml_processor import AdvancedXMLProcessor
+except ImportError:
+    # 备用绝对导入（独立运行时�?
+    # 添加项目根目录到sys.path
+    current_dir = Path(__file__).parent.parent
+    if str(current_dir) not in sys.path:
+        sys.path.insert(0, str(current_dir))
+    
+    from config import get_config
+    from models.exceptions import (ExportError, ProcessingError,
+                                   TranslationError, ValidationError)
+    from models.result_models import (OperationResult, OperationStatus,
+                                      OperationType)
+    from models.translation_data import TranslationData, TranslationType
+    from utils.export_manager import ExportManager, ExportMode
+    from utils.file_utils import get_language_folder_path
+    from utils.user_interaction import UserInteractionManager
+    from utils.xml_processor import AdvancedXMLProcessor
 
 # 获取配置实例
 CONFIG = get_config()
 
 
 def export_keyed(
-    translations: List[TranslationEntry],
+    translations: List[TranslationData],
     output_dir: str,
     language: str = CONFIG.core.default_language,
 ) -> OperationResult:
@@ -86,15 +106,15 @@ def export_keyed(
         keyed_dir = Path(lang_path) / CONFIG.core.keyed_dir
         keyed_dir.mkdir(parents=True, exist_ok=True)
 
-        # 按文件路径分组
-        file_groups: Dict[str, List[TranslationEntry]] = {}
+        # 按文件路径分�?
+        file_groups: Dict[str, List[TranslationData]] = {}
         for translation in keyed_translations:
             file_path = translation.file_path or "Keyed.xml"
             if file_path not in file_groups:
                 file_groups[file_path] = []
             file_groups[file_path].append(translation)
 
-        processor = XMLProcessor()
+        processor = AdvancedXMLProcessor()
         exported_files = []
 
         # 为每个文件组生成XML
@@ -155,7 +175,7 @@ def export_keyed(
 
 
 def export_definjected(
-    translations: List[TranslationEntry],
+    translations: List[TranslationData],
     output_dir: str,
     language: str = CONFIG.core.default_language,
 ) -> OperationResult:
@@ -193,11 +213,11 @@ def export_definjected(
 
         # 创建输出目录
         lang_path = get_language_folder_path(language, output_dir)
-        definjected_dir = Path(lang_path) / CONFIG.core.def_injected_dir
+        definjected_dir = Path(lang_path) / CONFIG.core.definjected_dir
         definjected_dir.mkdir(parents=True, exist_ok=True)
 
         # 按def_type分组
-        type_groups: Dict[str, List[TranslationEntry]] = {}
+        type_groups: Dict[str, List[TranslationData]] = {}
         for translation in definjected_translations:
             def_type = translation.context_info.get("def_type", "Unknown")
             if def_type not in type_groups:
@@ -259,7 +279,7 @@ def export_definjected(
 
 
 def export_definjected_with_original_structure(
-    translations: List[TranslationEntry],
+    translations: List[TranslationData],
     output_dir: str,
     language: str = CONFIG.core.default_language,
 ) -> OperationResult:
@@ -291,11 +311,11 @@ def export_definjected_with_original_structure(
 
         # 创建输出目录
         lang_path = get_language_folder_path(language, output_dir)
-        definjected_dir = Path(lang_path) / CONFIG.core.def_injected_dir
+        definjected_dir = Path(lang_path) / CONFIG.core.definjected_dir
         definjected_dir.mkdir(parents=True, exist_ok=True)
 
-        # 按文件路径分组（保持原始结构）
-        file_groups: Dict[str, List[TranslationEntry]] = {}
+        # 按文件路径分组（保持原始结构�?
+        file_groups: Dict[str, List[TranslationData]] = {}
         for translation in definjected_translations:
             file_path = (
                 translation.file_path
@@ -313,8 +333,8 @@ def export_definjected_with_original_structure(
                 output_file = definjected_dir / file_path
                 output_file.parent.mkdir(parents=True, exist_ok=True)
 
-                # 按def_type进一步分组
-                type_groups: Dict[str, List[TranslationEntry]] = {}
+                # 按def_type进一步分�?
+                type_groups: Dict[str, List[TranslationData]] = {}
                 for translation in group_translations:
                     def_type = translation.context_info.get("def_type", "Unknown")
                     if def_type not in type_groups:
@@ -367,7 +387,7 @@ def export_definjected_with_original_structure(
 
 
 def export_definjected_with_defs_structure(
-    translations: List[TranslationEntry],
+    translations: List[TranslationData],
     output_dir: str,
     language: str = CONFIG.core.default_language,
 ) -> OperationResult:
@@ -389,7 +409,7 @@ def export_definjected_with_defs_structure(
 
 
 def export_to_csv(
-    translations: List[TranslationEntry], csv_path: str, include_context: bool = True
+    translations: List[TranslationData], csv_path: str, include_context: bool = True
 ) -> OperationResult:
     """
     将翻译数据导出为CSV格式
@@ -503,7 +523,7 @@ def export_keyed_to_csv(keyed_dir: str, csv_path: str) -> OperationResult:
         # 转换为TranslationEntry格式
         translations = []
         for key, text, tag, file_path in translations_data:
-            entry = TranslationEntry(
+            entry = TranslationData(
                 key=key,
                 source_text=text,
                 target_text="",
@@ -553,7 +573,7 @@ def export_definjected_to_csv(definjected_dir: str, csv_path: str) -> OperationR
         # 转换为TranslationEntry格式
         translations = []
         for key, text, tag, file_path in translations_data:
-            entry = TranslationEntry(
+            entry = TranslationData(
                 key=key,
                 source_text=text,
                 target_text="",
@@ -581,7 +601,7 @@ def export_definjected_to_csv(definjected_dir: str, csv_path: str) -> OperationR
 
 # 高级导出功能，集成ExportManager和UserInteractionManager
 def export_with_smart_merge(
-    translations: List[TranslationEntry],
+    translations: List[TranslationData],
     output_dir: str,
     language: str = CONFIG.core.default_language,
     mode: str = "smart-merge",
@@ -684,7 +704,7 @@ def export_with_smart_merge(
 
 
 def export_with_user_interaction(
-    translations: List[TranslationEntry],
+    translations: List[TranslationData],
     output_dir: str,
     language: str = CONFIG.core.default_language,
 ) -> OperationResult:
@@ -756,7 +776,7 @@ def export_with_user_interaction(
 
 
 def batch_export_with_smart_merge(
-    translation_groups: List[Tuple[List[TranslationEntry], str, str]],
+    translation_groups: List[Tuple[List[TranslationData], str, str]],
     base_output_dir: str,
     default_mode: str = "smart-merge",
     auto_mode: bool = False,
@@ -908,7 +928,7 @@ def export_all_with_advanced_features(
 # 私有辅助函数
 
 
-def _generate_keyed_xml(translations: List[TranslationEntry]) -> str:
+def _generate_keyed_xml(translations: List[TranslationData]) -> str:
     """生成Keyed XML内容"""
     lines = ['<?xml version="1.0" encoding="utf-8"?>', "<LanguageData>"]
 
@@ -925,12 +945,12 @@ def _generate_keyed_xml(translations: List[TranslationEntry]) -> str:
     return "\n".join(lines)
 
 
-def _generate_definjected_xml(translations: List[TranslationEntry], def_type: str) -> str:
+def _generate_definjected_xml(translations: List[TranslationData], def_type: str) -> str:
     """生成DefInjected XML内容"""
     lines = ['<?xml version="1.0" encoding="utf-8"?>', "<LanguageData>"]
 
     # 按def_name分组
-    name_groups: Dict[str, List[TranslationEntry]] = {}
+    name_groups: Dict[str, List[TranslationData]] = {}
     for translation in translations:
         def_name = translation.context_info.get("def_name", "Unknown")
         if def_name not in name_groups:
@@ -955,7 +975,7 @@ def _generate_definjected_xml(translations: List[TranslationEntry], def_type: st
     return "\n".join(lines)
 
 
-def _generate_definjected_xml_multi_type(type_groups: Dict[str, List[TranslationEntry]]) -> str:
+def _generate_definjected_xml_multi_type(type_groups: Dict[str, List[TranslationData]]) -> str:
     """生成包含多个def_type的DefInjected XML内容"""
     lines = ['<?xml version="1.0" encoding="utf-8"?>', "<LanguageData>"]
 
@@ -969,31 +989,3 @@ def _generate_definjected_xml_multi_type(type_groups: Dict[str, List[Translation
 
     lines.append("</LanguageData>")
     return "\n".join(lines)
-
-
-# 为了向后兼容，提供原始函数接口
-def handle_extract_translate(
-    translations_data: List[Tuple[str, str, str, str]],
-    output_dir: str,
-    language: str = CONFIG.core.default_language,
-) -> None:
-    """
-    处理提取和翻译流程（兼容原始接口）
-    """
-    # 转换为TranslationEntry格式
-    translations = []
-    for key, text, tag, file_path in translations_data:
-        entry = TranslationEntry(
-            key=key,
-            source_text=text,
-            target_text="",
-            translation_type=TranslationType.KEYED,  # 假设为Keyed类型
-            file_path=file_path,
-            xml_tag=tag,
-            context_info={"language": language},
-        )
-        translations.append(entry)
-
-    # 导出CSV
-    csv_path = str(Path(output_dir) / "translations.csv")
-    export_to_csv(translations, csv_path, include_context=True)

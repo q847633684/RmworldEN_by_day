@@ -1,0 +1,2 @@
+2025-06-19 20:55:43,296 - WARNING - 配置文件加载失败，使用默认配置: CoreConfig.__init__() got an unexpected keyword argument 'def_injected_dir'. Did you mean 'definjected_dir'?
+2025-06-19 20:55:43,348 - WARNING - 传统组件不可用，将使用新的高级组件

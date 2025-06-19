@@ -8,6 +8,11 @@ Day Translation 2 - 交互管理模块
 - 设置管理界面
 """
 
-from .interaction_manager import UnifiedInteractionManager
+try:
+    # 尝试相对导入（包内使用）
+    from .interaction_manager import UnifiedInteractionManager
+except ImportError:
+    # 备用绝对导入（独立运行时）
+    from interaction_manager import UnifiedInteractionManager
 
 __all__ = ["UnifiedInteractionManager"]

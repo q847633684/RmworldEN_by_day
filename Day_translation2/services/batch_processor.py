@@ -17,14 +17,33 @@ from typing import Dict, List, Optional, Tuple
 from colorama import Fore, Style
 from tqdm import tqdm
 
-from ..config import get_config
-from ..core.importers import import_translations_from_file
-from ..models.exceptions import ConfigError
-from ..models.exceptions import ImportError as TranslationImportError
-from ..models.exceptions import ProcessingError
-from ..models.result_models import (OperationResult, OperationStatus,
-                                    OperationType)
-from ..utils.xml_processor import XMLProcessor
+import sys
+from pathlib import Path
+
+try:
+    # 尝试相对导入 (包内使用)    from ..config import get_config
+    from ..core.importers import import_translations, load_translations_from_csv
+    from ..models.exceptions import ConfigError
+    from ..models.exceptions import ImportError as TranslationImportError
+    from ..models.exceptions import ProcessingError
+    from ..models.result_models import (OperationResult, OperationStatus,
+                                        OperationType)
+    from ..utils.xml_processor import AdvancedXMLProcessor
+except ImportError:
+    # 备用绝对导入 (独立运行时)
+    # 添加项目根目录到sys.path
+    current_dir = Path(__file__).parent.parent
+    if str(current_dir) not in sys.path:
+        sys.path.insert(0, str(current_dir))
+    
+    from config import get_config
+    from core.importers import import_translations, load_translations_from_csv
+    from models.exceptions import ConfigError
+    from models.exceptions import ImportError as TranslationImportError
+    from models.exceptions import ProcessingError
+    from models.result_models import (OperationResult, OperationStatus,
+                                      OperationType)
+    from utils.xml_processor import AdvancedXMLProcessor
 
 
 @dataclass
@@ -62,7 +81,7 @@ class BatchProcessor:
 
         self.max_workers = max_workers
         self.timeout = timeout
-        self.xml_processor = XMLProcessor()
+        self.xml_processor = AdvancedXMLProcessor()
         self._results: Dict[str, ModProcessResult] = {}
 
         try:
@@ -283,7 +302,7 @@ class BatchProcessor:
         """
         try:
             # 加载翻译数据
-            translations = import_translations_from_file(csv_path)
+            translations = load_translations_from_csv(csv_path)
             if not translations:
                 raise ProcessingError(f"未能从CSV文件加载翻译数据: {csv_path}")
 

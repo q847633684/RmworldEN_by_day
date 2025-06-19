@@ -5,20 +5,23 @@ Day Translation 2 - 服务层
 包括机器翻译、批量处理、验证、语料生成等服务。
 """
 
-from .batch_processor import BatchProcessorService, process_multiple_mods
-from .corpus_generator import CorpusGeneratorService, generate_parallel_corpus
-from .translation_service import (MachineTranslateService, translate_batch,
-                                translate_text)
-from .validation_service import ValidationService, validate_translation_data
+try:
+    # 尝试相对导入（包内使用）
+    from .batch_processor import BatchProcessor
+    from .corpus_generator import generate_parallel_corpus
+    from .translation_service import translate_csv
+    from .validation_service import TranslationValidator, validate_csv_file
+except ImportError:
+    # 备用绝对导入（独立运行时）
+    from batch_processor import BatchProcessor
+    from corpus_generator import generate_parallel_corpus
+    from translation_service import translate_csv
+    from validation_service import TranslationValidator, validate_csv_file
 
 __all__ = [
-    "MachineTranslateService",
-    "translate_text",
-    "translate_batch",
-    "BatchProcessorService",
-    "process_multiple_mods",
-    "ValidationService",
-    "validate_translation_data",
-    "CorpusGeneratorService",
+    "translate_csv",
+    "BatchProcessor",
+    "TranslationValidator",
+    "validate_csv_file",
     "generate_parallel_corpus",
 ]
