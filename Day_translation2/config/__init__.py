@@ -8,34 +8,25 @@ Day Translation 2 - 配置管理模块
 - 配置持久化
 """
 
-from .unified_config import (
-    UnifiedConfig,
-    ExtendedCoreConfig,
-    ExtendedUserConfig,
-    ExtractionPreferences,
-    ImportPreferences,
-    ApiPreferences,
-    GeneralPreferences,
-    PathHistory,
-    get_config,
-    save_config,
-    reset_config,
-    get_config_path,
-    CONFIG_VERSION
-)
+from .unified_config import (CONFIG_VERSION, ApiPreferences,
+                             ExtendedCoreConfig, ExtendedUserConfig,
+                             ExtractionPreferences, GeneralPreferences,
+                             ImportPreferences, PathHistory, UnifiedConfig,
+                             get_config, get_config_path, reset_config,
+                             save_config)
 
 __all__ = [
-    'UnifiedConfig',
-    'ExtendedCoreConfig', 
-    'ExtendedUserConfig',
-    'ExtractionPreferences',
-    'ImportPreferences',
-    'ApiPreferences',
-    'GeneralPreferences',
-    'PathHistory',
-    'get_config',
-    'save_config',
-    'reset_config',
-    'get_config_path',
-    'CONFIG_VERSION'
+    "UnifiedConfig",
+    "ExtendedCoreConfig",
+    "ExtendedUserConfig",
+    "ExtractionPreferences",
+    "ImportPreferences",
+    "ApiPreferences",
+    "GeneralPreferences",
+    "PathHistory",
+    "get_config",
+    "save_config",
+    "reset_config",
+    "get_config_path",
+    "CONFIG_VERSION",
 ]

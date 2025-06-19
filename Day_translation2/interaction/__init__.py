@@ -10,6 +10,4 @@ Day Translation 2 - 交互管理模块
 
 from .unified_interaction import UnifiedInteractionManager
 
-__all__ = [
-    'UnifiedInteractionManager'
-]
+__all__ = ["UnifiedInteractionManager"]

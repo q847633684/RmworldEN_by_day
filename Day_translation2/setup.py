@@ -5,8 +5,9 @@ Day Translation 2 安装脚本
 使用pip install -e . 进行开发安装
 """
 
-from setuptools import setup, find_packages
 import os
+
+from setuptools import find_packages, setup
 
 # 读取版本信息
 version = "2.0.0"
@@ -46,7 +47,6 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/day-translation/day-translation2",
-    
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -61,19 +61,16 @@ setup(
         "Topic :: Games/Entertainment",
         "Topic :: Software Development :: Localization",
     ],
-    
     python_requires=">=3.8",
     install_requires=requirements,
     extras_require={
         "dev": dev_requirements,
     },
-    
     entry_points={
         "console_scripts": [
-            "day-translation2=Day_translation2.main:main",
+            "day-translation2=main:main",
         ],
     },
-    
     include_package_data=True,
     zip_safe=False,
 )

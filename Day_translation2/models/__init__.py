@@ -10,31 +10,35 @@ Day Translation 2 - 数据模型层
 # 版本信息
 __version__ = "2.0.0"
 
+
 # 延迟导入函数
 def get_exceptions():
     """获取异常类"""
     from . import exceptions
+
     return exceptions
+
 
 def get_result_models():
     """获取结果模型"""
-    from . import result_models  
+    from . import result_models
+
     return result_models
+
 
 def get_translation_data():
     """获取翻译数据模型"""
     from . import translation_data
+
     return translation_data
+
 
 def get_config_models():
     """获取配置模型"""
     from . import config_models
+
     return config_models
 
+
 # 主要接口
-__all__ = [
-    'get_exceptions',
-    'get_result_models', 
-    'get_translation_data',
-    'get_config_models'
-]
+__all__ = ["get_exceptions", "get_result_models", "get_translation_data", "get_config_models"]

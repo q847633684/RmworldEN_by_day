@@ -1,0 +1,116 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "day-translation2"
+version = "2.0.0"
+authors = [
+    {name = "Day汉化项目组", email = "day-translation@example.com"},
+]
+description = "游戏本地化翻译工具 - 全新架构版本"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Games/Entertainment",
+    "Topic :: Software Development :: Localization",
+]
+keywords = ["translation", "localization", "gaming", "rimworld", "i18n"]
+dependencies = [
+    "colorama>=0.4.0",
+    "tqdm>=4.60.0",
+    "lxml>=4.6.0",
+    "requests>=2.25.0",
+    "pyyaml>=5.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0.0",
+    "pytest-cov>=2.10.0",
+    "black>=21.0.0",
+    "pylint>=2.7.0",
+    "mypy>=0.812",
+]
+
+[project.urls]
+Homepage = "https://github.com/day-translation/day-translation2"
+"Bug Reports" = "https://github.com/day-translation/day-translation2/issues"
+"Source" = "https://github.com/day-translation/day-translation2"
+
+[project.scripts]
+day-translation2 = "main:main"
+
+[tool.setuptools]
+packages = {find = {}}
+include-package-data = true
+
+[tool.setuptools.package-data]
+"*" = ["*.md", "*.txt", "*.yml", "*.yaml"]
+
+# Black 配置
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312', 'py313']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+# Pylint 配置
+[tool.pylint.messages_control]
+disable = [
+    "C0114",  # missing-module-docstring
+    "C0115",  # missing-class-docstring
+    "C0116",  # missing-function-docstring
+    "R0903",  # too-few-public-methods
+]
+
+[tool.pylint.format]
+max-line-length = 100
+
+# MyPy 配置
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+show_error_codes = true
+namespace_packages = true
+explicit_package_bases = true
+
+# Pytest 配置
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --cov=Day_translation2 --cov-report=term-missing"
+testpaths = [
+    "tests",
+]
+python_files = [
+    "test_*.py",
+    "*_test.py",
+]

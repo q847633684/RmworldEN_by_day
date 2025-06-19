@@ -5,24 +5,25 @@ Day Translation 2 - 验证服务
 遵循提示文件标准：PEP 8规范、具体异常处理、用户友好错误信息。
 """
 
-import re
 import logging
-from pathlib import Path
-from typing import List, Dict, Set, Tuple, Optional
+import re
+from collections import Counter, defaultdict
 from dataclasses import dataclass
-from collections import defaultdict, Counter
+from pathlib import Path
+from typing import Dict, List, Optional, Set, Tuple
 
-from ..models.exceptions import ValidationError, ProcessingError, ImportError as TranslationImportError
-from ..models.result_models import OperationResult, OperationStatus, OperationType
-from ..utils.filters import ContentFilter
 from ..config import get_config
+from ..models.exceptions import ImportError as TranslationImportError
+from ..models.exceptions import ProcessingError, ValidationError
+from ..models.result_models import (OperationResult, OperationStatus,
+                                    OperationType)
 
 
 @dataclass
 class ValidationIssue:
     """
     验证问题数据类
-    
+
     Attributes:
         issue_type: 问题类型
         severity: 严重程度 (error, warning, info)
@@ -31,6 +32,7 @@ class ValidationIssue:
         suggestion: 修改建议
         file_path: 文件路径
     """
+
     issue_type: str
     severity: str
     key: str
@@ -43,7 +45,7 @@ class ValidationIssue:
 class ValidationReport:
     """
     验证报告数据类
-    
+
     Attributes:
         total_entries: 总翻译条目数
         issues: 发现的问题列表
@@ -52,6 +54,7 @@ class ValidationReport:
         quality_score: 质量评分 (0-100)
         terminology_consistency: 术语一致性评分
     """
+
     total_entries: int
     issues: List[ValidationIssue]
     error_count: int
@@ -62,13 +65,12 @@ class ValidationReport:
 
 class TranslationValidator:
     """翻译验证器，负责验证翻译质量和一致性"""
-    
+
     def __init__(self):
         """初始化验证器"""
         self.config = get_config()
-        self.content_filter = ContentFilter(self.config)
         self.terminology_dict = self._load_terminology_dict()
-        
+
         # 验证规则配置
         self.validation_rules = {
             "check_empty_translations": True,
@@ -77,159 +79,173 @@ class TranslationValidator:
             "check_length_ratio": True,
             "check_special_chars": True,
             "max_length_ratio": 3.0,  # 翻译长度比例上限
-            "min_length_ratio": 0.2   # 翻译长度比例下限
+            "min_length_ratio": 0.2,  # 翻译长度比例下限
         }
-    
+
     def validate_translations(self, translations: List[Tuple[str, str, str]]) -> ValidationReport:
         """
         验证翻译列表
-        
+
         Args:
             translations: 翻译数据列表 [(key, source_text, target_text), ...]
-            
+
         Returns:
             验证报告
-            
+
         Raises:
             ValidationError: 当输入数据无效时
             ProcessingError: 当验证过程出现错误时
         """
         if not translations:
             raise ValidationError(
-                "翻译数据不能为空",
-                field_name="translations",
-                expected_type="非空列表"
+                "翻译数据不能为空", field_name="translations", expected_type="非空列表"
             )
-        
+
         try:
             logging.info(f"开始验证 {len(translations)} 条翻译")
-            
+
             issues = []
-            
+
             # 执行各项验证
             if self.validation_rules["check_empty_translations"]:
                 issues.extend(self._check_empty_translations(translations))
-            
+
             if self.validation_rules["check_format_consistency"]:
                 issues.extend(self._check_format_consistency(translations))
-            
+
             if self.validation_rules["check_terminology"]:
                 issues.extend(self._check_terminology_consistency(translations))
-            
+
             if self.validation_rules["check_length_ratio"]:
                 issues.extend(self._check_length_ratio(translations))
-            
+
             if self.validation_rules["check_special_chars"]:
                 issues.extend(self._check_special_characters(translations))
-            
+
             # 统计问题
             error_count = sum(1 for issue in issues if issue.severity == "error")
             warning_count = sum(1 for issue in issues if issue.severity == "warning")
-            
+
             # 计算质量评分
-            quality_score = self._calculate_quality_score(len(translations), error_count, warning_count)
-            
+            quality_score = self._calculate_quality_score(
+                len(translations), error_count, warning_count
+            )
+
             # 计算术语一致性评分
             terminology_score = self._calculate_terminology_score(translations, issues)
-            
+
             return ValidationReport(
                 total_entries=len(translations),
                 issues=issues,
                 error_count=error_count,
                 warning_count=warning_count,
                 quality_score=quality_score,
-                terminology_consistency=terminology_score
+                terminology_consistency=terminology_score,
             )
-            
+
         except Exception as e:
             if isinstance(e, ValidationError):
                 raise
             raise ProcessingError(
-                f"验证翻译时发生错误: {str(e)}",
-                operation="validate_translations",
-                stage="翻译验证"
+                f"验证翻译时发生错误: {str(e)}", operation="validate_translations", stage="翻译验证"
             )
-    
-    def _check_empty_translations(self, translations: List[Tuple[str, str, str]]) -> List[ValidationIssue]:
+
+    def _check_empty_translations(
+        self, translations: List[Tuple[str, str, str]]
+    ) -> List[ValidationIssue]:
         """检查空翻译"""
         issues = []
-        
+
         for key, source_text, target_text in translations:
             if not source_text.strip():
-                issues.append(ValidationIssue(
-                    issue_type="empty_source",
-                    severity="error",
-                    key=key,
-                    message="源文本为空",
-                    suggestion="检查源文件中的文本内容"
-                ))
-            
+                issues.append(
+                    ValidationIssue(
+                        issue_type="empty_source",
+                        severity="error",
+                        key=key,
+                        message="源文本为空",
+                        suggestion="检查源文件中的文本内容",
+                    )
+                )
+
             if not target_text.strip():
-                issues.append(ValidationIssue(
-                    issue_type="empty_translation",
-                    severity="error", 
-                    key=key,
-                    message="翻译文本为空",
-                    suggestion="添加翻译内容"
-                ))
-            
+                issues.append(
+                    ValidationIssue(
+                        issue_type="empty_translation",
+                        severity="error",
+                        key=key,
+                        message="翻译文本为空",
+                        suggestion="添加翻译内容",
+                    )
+                )
+
             if source_text.strip() == target_text.strip():
-                issues.append(ValidationIssue(
-                    issue_type="untranslated",
-                    severity="warning",
-                    key=key,
-                    message="翻译与源文本相同，可能未翻译",
-                    suggestion="检查是否需要翻译或保持原文"
-                ))
-        
+                issues.append(
+                    ValidationIssue(
+                        issue_type="untranslated",
+                        severity="warning",
+                        key=key,
+                        message="翻译与源文本相同，可能未翻译",
+                        suggestion="检查是否需要翻译或保持原文",
+                    )
+                )
+
         return issues
-    
-    def _check_format_consistency(self, translations: List[Tuple[str, str, str]]) -> List[ValidationIssue]:
+
+    def _check_format_consistency(
+        self, translations: List[Tuple[str, str, str]]
+    ) -> List[ValidationIssue]:
         """检查格式一致性"""
         issues = []
-        
+
         # 检查占位符格式
         placeholder_patterns = [
-            r'\{[^}]+\}',  # {placeholder}
-            r'%[sd]',      # %s, %d
-            r'\$[A-Za-z_][A-Za-z0-9_]*',  # $variable
+            r"\{[^}]+\}",  # {placeholder}
+            r"%[sd]",  # %s, %d
+            r"\$[A-Za-z_][A-Za-z0-9_]*",  # $variable
         ]
-        
+
         for key, source_text, target_text in translations:
             for pattern in placeholder_patterns:
                 source_placeholders = set(re.findall(pattern, source_text))
                 target_placeholders = set(re.findall(pattern, target_text))
-                
+
                 # 检查占位符数量是否匹配
                 if len(source_placeholders) != len(target_placeholders):
-                    issues.append(ValidationIssue(
-                        issue_type="placeholder_mismatch",
-                        severity="error",
-                        key=key,
-                        message=f"占位符数量不匹配: 源文本{len(source_placeholders)}个，翻译{len(target_placeholders)}个",
-                        suggestion="确保翻译中包含所有占位符"
-                    ))
-                
+                    issues.append(
+                        ValidationIssue(
+                            issue_type="placeholder_mismatch",
+                            severity="error",
+                            key=key,
+                            message=f"占位符数量不匹配: 源文本{len(source_placeholders)}个，翻译{len(target_placeholders)}个",
+                            suggestion="确保翻译中包含所有占位符",
+                        )
+                    )
+
                 # 检查占位符内容是否匹配
                 missing_placeholders = source_placeholders - target_placeholders
                 if missing_placeholders:
-                    issues.append(ValidationIssue(
-                        issue_type="missing_placeholder",
-                        severity="error",
-                        key=key,
-                        message=f"缺少占位符: {', '.join(missing_placeholders)}",
-                        suggestion=f"在翻译中添加: {', '.join(missing_placeholders)}"
-                    ))
-        
+                    issues.append(
+                        ValidationIssue(
+                            issue_type="missing_placeholder",
+                            severity="error",
+                            key=key,
+                            message=f"缺少占位符: {', '.join(missing_placeholders)}",
+                            suggestion=f"在翻译中添加: {', '.join(missing_placeholders)}",
+                        )
+                    )
+
         return issues
-    
-    def _check_terminology_consistency(self, translations: List[Tuple[str, str, str]]) -> List[ValidationIssue]:
+
+    def _check_terminology_consistency(
+        self, translations: List[Tuple[str, str, str]]
+    ) -> List[ValidationIssue]:
         """检查术语一致性"""
         issues = []
-        
+
         # 收集术语使用情况
         term_usage = defaultdict(Counter)
-        
+
         for key, source_text, target_text in translations:
             # 检查预定义术语
             for source_term, expected_translations in self.terminology_dict.items():
@@ -240,118 +256,136 @@ class TranslationValidator:
                         if expected.lower() in target_text.lower():
                             found_translation = expected
                             break
-                    
+
                     if found_translation:
                         term_usage[source_term][found_translation] += 1
                     else:
-                        issues.append(ValidationIssue(
-                            issue_type="terminology_inconsistency",
-                            severity="warning",
-                            key=key,
-                            message=f"术语 '{source_term}' 未使用标准翻译",
-                            suggestion=f"建议使用: {', '.join(expected_translations)}"
-                        ))
-        
+                        issues.append(
+                            ValidationIssue(
+                                issue_type="terminology_inconsistency",
+                                severity="warning",
+                                key=key,
+                                message=f"术语 '{source_term}' 未使用标准翻译",
+                                suggestion=f"建议使用: {', '.join(expected_translations)}",
+                            )
+                        )
+
         # 检查术语翻译一致性
         for source_term, translation_counts in term_usage.items():
             if len(translation_counts) > 1:
                 most_common = translation_counts.most_common()
                 if most_common[0][1] > most_common[1][1]:  # 有明显的主要翻译
-                    issues.append(ValidationIssue(
-                        issue_type="terminology_variation",
-                        severity="info",
-                        key="",
-                        message=f"术语 '{source_term}' 有多种翻译: {dict(translation_counts)}",
-                        suggestion=f"建议统一使用: {most_common[0][0]}"
-                    ))
-        
+                    issues.append(
+                        ValidationIssue(
+                            issue_type="terminology_variation",
+                            severity="info",
+                            key="",
+                            message=f"术语 '{source_term}' 有多种翻译: {dict(translation_counts)}",
+                            suggestion=f"建议统一使用: {most_common[0][0]}",
+                        )
+                    )
+
         return issues
-    
-    def _check_length_ratio(self, translations: List[Tuple[str, str, str]]) -> List[ValidationIssue]:
+
+    def _check_length_ratio(
+        self, translations: List[Tuple[str, str, str]]
+    ) -> List[ValidationIssue]:
         """检查翻译长度比例"""
         issues = []
-        
+
         max_ratio = self.validation_rules["max_length_ratio"]
         min_ratio = self.validation_rules["min_length_ratio"]
-        
+
         for key, source_text, target_text in translations:
             if len(source_text) == 0:
                 continue
-            
+
             length_ratio = len(target_text) / len(source_text)
-            
+
             if length_ratio > max_ratio:
-                issues.append(ValidationIssue(
-                    issue_type="translation_too_long",
-                    severity="warning",
-                    key=key,
-                    message=f"翻译过长，长度比例: {length_ratio:.2f} (最大: {max_ratio})",
-                    suggestion="检查翻译是否过于冗长"
-                ))
+                issues.append(
+                    ValidationIssue(
+                        issue_type="translation_too_long",
+                        severity="warning",
+                        key=key,
+                        message=f"翻译过长，长度比例: {length_ratio:.2f} (最大: {max_ratio})",
+                        suggestion="检查翻译是否过于冗长",
+                    )
+                )
             elif length_ratio < min_ratio:
-                issues.append(ValidationIssue(
-                    issue_type="translation_too_short",
-                    severity="warning",
-                    key=key,
-                    message=f"翻译过短，长度比例: {length_ratio:.2f} (最小: {min_ratio})",
-                    suggestion="检查翻译是否完整"
-                ))
-        
+                issues.append(
+                    ValidationIssue(
+                        issue_type="translation_too_short",
+                        severity="warning",
+                        key=key,
+                        message=f"翻译过短，长度比例: {length_ratio:.2f} (最小: {min_ratio})",
+                        suggestion="检查翻译是否完整",
+                    )
+                )
+
         return issues
-    
-    def _check_special_characters(self, translations: List[Tuple[str, str, str]]) -> List[ValidationIssue]:
+
+    def _check_special_characters(
+        self, translations: List[Tuple[str, str, str]]
+    ) -> List[ValidationIssue]:
         """检查特殊字符处理"""
         issues = []
-        
+
         # 需要保留的特殊字符
-        special_chars = ['<', '>', '"', "'", '\\n', '\\t', '&']
-        
+        special_chars = ["<", ">", '"', "'", "\\n", "\\t", "&"]
+
         for key, source_text, target_text in translations:
             for char in special_chars:
                 source_count = source_text.count(char)
                 target_count = target_text.count(char)
-                
+
                 if source_count != target_count:
-                    issues.append(ValidationIssue(
-                        issue_type="special_char_mismatch",
-                        severity="warning",
-                        key=key,
-                        message=f"特殊字符 '{char}' 数量不匹配: 源{source_count}个，译{target_count}个",
-                        suggestion="检查特殊字符是否正确处理"
-                    ))
-        
+                    issues.append(
+                        ValidationIssue(
+                            issue_type="special_char_mismatch",
+                            severity="warning",
+                            key=key,
+                            message=f"特殊字符 '{char}' 数量不匹配: 源{source_count}个，译{target_count}个",
+                            suggestion="检查特殊字符是否正确处理",
+                        )
+                    )
+
         return issues
-    
-    def _calculate_quality_score(self, total_entries: int, error_count: int, warning_count: int) -> float:
+
+    def _calculate_quality_score(
+        self, total_entries: int, error_count: int, warning_count: int
+    ) -> float:
         """计算质量评分"""
         if total_entries == 0:
             return 0.0
-        
+
         # 错误权重更高
         error_penalty = (error_count / total_entries) * 50
         warning_penalty = (warning_count / total_entries) * 20
-        
+
         score = 100 - error_penalty - warning_penalty
         return max(0.0, min(100.0, score))
-    
-    def _calculate_terminology_score(self, translations: List[Tuple[str, str, str]], 
-                                   issues: List[ValidationIssue]) -> float:
+
+    def _calculate_terminology_score(
+        self, translations: List[Tuple[str, str, str]], issues: List[ValidationIssue]
+    ) -> float:
         """计算术语一致性评分"""
         terminology_issues = [
-            issue for issue in issues 
+            issue
+            for issue in issues
             if issue.issue_type in ["terminology_inconsistency", "terminology_variation"]
         ]
-        
+
         if not translations:
             return 0.0
-        
+
         if not terminology_issues:
             return 100.0
-        
+
         issue_rate = len(terminology_issues) / len(translations)
         score = 100 - (issue_rate * 100)
         return max(0.0, min(100.0, score))
-    
+
     def _load_terminology_dict(self) -> Dict[str, List[str]]:
         """加载术语词典"""
         # 游戏UI常用术语字典
@@ -1127,75 +1161,71 @@ class TranslationValidator:
             "When": ["何时"],
             "Why": ["为什么"],
             "How": ["如何"],
-            "What": ["什么"]
+            "What": ["什么"],
         }
 
 
 def validate_csv_file(csv_path: str) -> OperationResult:
     """
     验证CSV翻译文件
-    
+
     Args:
         csv_path: CSV文件路径
-        
+
     Returns:
         验证操作结果
-        
+
     Raises:
         TranslationImportError: 当文件不存在时
         ProcessingError: 当验证过程出现错误时
     """
     if not Path(csv_path).is_file():
-        raise TranslationImportError(
-            f"CSV文件不存在: {csv_path}",
-            file_path=csv_path
-        )
-    
+        raise TranslationImportError(f"CSV文件不存在: {csv_path}", file_path=csv_path)
+
     try:
         # 加载CSV数据
         translations = []
         with open(csv_path, "r", encoding="utf-8") as f:
             import csv
+
             reader = csv.DictReader(f)
-            
+
             if "key" not in reader.fieldnames or "text" not in reader.fieldnames:
                 raise ValidationError(
                     f"CSV文件缺少必要的列（key, text）: {csv_path}",
                     field_name="csv_columns",
-                    actual_value=str(reader.fieldnames)
+                    actual_value=str(reader.fieldnames),
                 )
-            
+
             for row in reader:
                 key = row.get("key", "")
                 source = row.get("text", "")
                 target = row.get("translated", row.get("translation", ""))
-                
+
                 if key and source:
                     translations.append((key, source, target))
-        
+
         # 执行验证
         validator = TranslationValidator()
         report = validator.validate_translations(translations)
-        
+
         # 生成验证报告文件
         report_path = csv_path.replace(".csv", "_validation_report.txt")
         _save_validation_report(report, report_path)
-        
+
         return OperationResult(
             status=OperationStatus.SUCCESS if report.error_count == 0 else OperationStatus.WARNING,
             operation_type=OperationType.VALIDATION,
             message=f"验证完成: {report.error_count}个错误, {report.warning_count}个警告, 质量评分: {report.quality_score:.1f}",
             processed_count=report.total_entries,
-            success_count=report.total_entries - report.error_count
+            success_count=report.total_entries - report.error_count,
         )
-        
+
     except Exception as e:
         if isinstance(e, (TranslationImportError, ValidationError)):
             raise
         raise ProcessingError(
-            f"验证CSV文件失败: {str(e)}",
-            operation="validate_csv_file",
-            stage="文件验证"
+            f"验证CSV文件失败: {str(e)}", operation="validate_csv_file", stage="文件验证"
         )
 
 
@@ -1209,15 +1239,15 @@ def _save_validation_report(report: ValidationReport, output_path: str) -> None:
             f.write(f"警告数量: {report.warning_count}\n")
             f.write(f"质量评分: {report.quality_score:.1f}/100\n")
             f.write(f"术语一致性: {report.terminology_consistency:.1f}/100\n\n")
-            
+
             if report.issues:
                 f.write("## 发现的问题\n\n")
-                
+
                 # 按严重程度分组
                 errors = [issue for issue in report.issues if issue.severity == "error"]
                 warnings = [issue for issue in report.issues if issue.severity == "warning"]
                 infos = [issue for issue in report.issues if issue.severity == "info"]
-                
+
                 if errors:
                     f.write("### 错误 (必须修复)\n\n")
                     for issue in errors:
@@ -1225,7 +1255,7 @@ def _save_validation_report(report: ValidationReport, output_path: str) -> None:
                         if issue.suggestion:
                             f.write(f"  建议: {issue.suggestion}\n")
                         f.write("\n")
-                
+
                 if warnings:
                     f.write("### 警告 (建议修复)\n\n")
                     for issue in warnings:
@@ -1233,7 +1263,7 @@ def _save_validation_report(report: ValidationReport, output_path: str) -> None:
                         if issue.suggestion:
                             f.write(f"  建议: {issue.suggestion}\n")
                         f.write("\n")
-                
+
                 if infos:
                     f.write("### 信息 (供参考)\n\n")
                     for issue in infos:
@@ -1244,13 +1274,13 @@ def _save_validation_report(report: ValidationReport, output_path: str) -> None:
             else:
                 f.write("## 验证结果\n\n")
                 f.write("✅ 未发现问题，翻译质量良好。\n")
-        
+
         logging.info(f"验证报告已保存到: {output_path}")
-        
+
     except Exception as e:
         raise ProcessingError(
             f"保存验证报告失败: {str(e)}",
             operation="_save_validation_report",
             stage="报告保存",
-            affected_items=[output_path]
+            affected_items=[output_path],
         )

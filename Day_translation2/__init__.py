@@ -16,24 +16,29 @@ __version__ = "2.0.0"
 __author__ = "Day汉化项目组"
 __description__ = "游戏本地化翻译工具 - 全新架构版本"
 
+
 # 延迟导入，避免循环依赖
 def get_translation_facade():
     """获取翻译门面实例"""
     from .core.translation_facade import TranslationFacade
+
     return TranslationFacade
 
-# 主要接口
-__all__ = ['get_translation_facade', '__version__']
-from .models.exceptions import TranslationError, ValidationError, ProcessingError
-from .models.result_models import OperationResult, OperationStatus, OperationType
+
+# 导入主要组件
+from .models.exceptions import (ProcessingError, TranslationError,
+                                ValidationError)
+from .models.result_models import (OperationResult, OperationStatus,
+                                   OperationType)
 
 # 主要功能导出
 __all__ = [
-    "TranslationFacade",
-    "TranslationError", 
+    "get_translation_facade",
+    "__version__",
+    "TranslationError",
     "ValidationError",
     "ProcessingError",
     "OperationResult",
-    "OperationStatus", 
-    "OperationType"
+    "OperationStatus",
+    "OperationType",
 ]
