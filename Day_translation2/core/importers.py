@@ -26,9 +26,9 @@ from ..models.exceptions import (ProcessingError, TranslationError,
                                  ValidationError)
 from ..models.result_models import (OperationResult, OperationStatus,
                                     OperationType)
-from ..models.translation_data import TranslationEntry, TranslationType
+from ..models.translation_data import TranslationData, TranslationType
 from ..utils.file_utils import get_language_folder_path
-from ..utils.xml_processor import XMLProcessor
+from ..utils.xml_processor import AdvancedXMLProcessor
 
 # 获取配置实例
 CONFIG = get_config()
@@ -232,7 +232,7 @@ def update_all_xml(
         raise ValidationError("翻译数据不能为空")
 
     try:
-        processor = XMLProcessor()
+        processor = AdvancedXMLProcessor()
         language_dir = get_language_folder_path(language, mod_dir)
         language_path = Path(language_dir)
 
@@ -347,7 +347,7 @@ def update_all_xml(
 
 
 def import_translation_entries(
-    entries: List[TranslationEntry], mod_dir: str, merge: bool = True, backup: bool = True
+    entries: List[TranslationData], mod_dir: str, merge: bool = True, backup: bool = True
 ) -> OperationResult:
     """
     导入翻译条目到模组

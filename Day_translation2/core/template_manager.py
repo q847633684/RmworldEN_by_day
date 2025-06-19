@@ -481,7 +481,7 @@ class TemplateManager:
         src_lang_path = get_language_folder_path(
             self.config.core.source_language, str(self.mod_dir)
         )
-        src_definjected_dir = Path(src_lang_path) / self.config.core.def_injected_dir
+        src_definjected_dir = Path(src_lang_path) / self.config.core.definjected_dir
 
         # 生成成功消息后缀
         location_suffix = (

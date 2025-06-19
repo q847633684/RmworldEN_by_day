@@ -326,7 +326,7 @@ def extract_definjected_translations(
 
         # 构建DefInjected目录路径
         lang_path = get_language_folder_path(language, mod_dir)
-        definjected_dir = Path(lang_path) / CONFIG.core.def_injected_dir
+        definjected_dir = Path(lang_path) / CONFIG.core.definjected_dir
 
         if not definjected_dir.exists():
             logging.warning(f"DefInjected 目录不存在: {definjected_dir}")
