@@ -33,12 +33,5 @@ def get_translation_data():
     return translation_data
 
 
-def get_config_models():
-    """获取配置模型"""
-    from . import config_models
-
-    return config_models
-
-
 # 主要接口
-__all__ = ["get_exceptions", "get_result_models", "get_translation_data", "get_config_models"]
+__all__ = ["get_exceptions", "get_result_models", "get_translation_data"]

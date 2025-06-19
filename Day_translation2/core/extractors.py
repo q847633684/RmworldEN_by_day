@@ -39,7 +39,7 @@ except ImportError:
 
 try:
     # 优先使用相对导入（包模式）
-    from ..config.unified_config import get_config
+    from ..config import get_config
     from ..models.exceptions import ImportError as TranslationImportError
     from ..models.exceptions import (ProcessingError, TranslationError,
                                      ValidationError)
@@ -55,7 +55,7 @@ except ImportError:
 
     sys.path.insert(0, str(Path(__file__).parent.parent))
 
-    from config.unified_config import get_config
+    from config import get_config
     from models.exceptions import ImportError as TranslationImportError
     from models.exceptions import (ProcessingError, TranslationError,
                                    ValidationError)

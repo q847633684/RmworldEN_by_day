@@ -20,7 +20,7 @@ from typing import Any, Dict, List, Optional, Union
 
 from colorama import Fore, Style
 
-from ..config.unified_config import get_config
+from ..config import get_config
 from ..models.exceptions import ImportError as TranslationImportError
 from ..models.exceptions import (ProcessingError, TranslationError,
                                  ValidationError)

@@ -34,7 +34,7 @@ except ImportError:
     logging.warning("lxml 未安装，将使用 ElementTree")
 
 try:
-    from ..config.unified_config import UnifiedConfig
+    from ..config import UnifiedConfig
 
     CONFIG = UnifiedConfig()
 except ImportError:

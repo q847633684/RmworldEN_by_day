@@ -25,21 +25,14 @@ except ImportError:
 
 try:
     # 尝试相对导入 (包内使用)
-    from ..models.exceptions import ValidationError
-    from ..constants.field_definitions import DEFAULT_TRANSLATION_FIELDS, is_override_field, get_field_priority
+    from ..models.exceptions import ValidationError, ConfigError
+    from ..constants.complete_definitions import DEFAULT_TRANSLATION_FIELDS, is_override_field, get_field_priority
+    from ..config.unified_models import FilterConfig
 except ImportError:
     # 回退到绝对导入 (直接运行时)
-    from models.exceptions import ValidationError
-    from constants.field_definitions import DEFAULT_TRANSLATION_FIELDS, is_override_field, get_field_priority
-
-try:
-    # 尝试相对导入 (包内使用)
-    from ..models.config_models import FilterConfig
-    from ..models.exceptions import ConfigError, ValidationError
-except ImportError:
-    # 回退到绝对导入 (直接运行时)
-    from models.config_models import FilterConfig
-    from models.exceptions import ConfigError, ValidationError
+    from models.exceptions import ValidationError, ConfigError
+    from constants.complete_definitions import DEFAULT_TRANSLATION_FIELDS, is_override_field, get_field_priority
+    from config.unified_models import FilterConfig
 
 
 class AdvancedFilterRules:

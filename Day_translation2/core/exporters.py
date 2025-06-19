@@ -22,7 +22,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 from colorama import Fore, Style
 
-from ..config.unified_config import get_config
+from ..config import get_config
 from ..models.exceptions import (ExportError, ProcessingError,
                                  TranslationError, ValidationError)
 from ..models.result_models import (OperationResult, OperationStatus,
