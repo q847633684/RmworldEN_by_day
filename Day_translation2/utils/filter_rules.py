@@ -25,27 +25,43 @@ except ImportError:
 
 try:
     # 尝试相对导入 (包内使用)
-    from ..models.exceptions import ValidationError, ConfigError
-    from ..constants.complete_definitions import (
-        DEFAULT_TRANSLATION_FIELDS, DEFAULT_IGNORE_FIELDS, NON_TEXT_PATTERNS,
-        FIELD_TYPES, FIELD_GROUPS, FIELD_PRIORITY, PRIORITY_LEVELS,
-        is_override_field, get_field_priority, get_field_type, get_field_group
-    )
     from ..config.config_models import FilterConfig
+    from ..constants.complete_definitions import (
+        DEFAULT_IGNORE_FIELDS,
+        DEFAULT_TRANSLATION_FIELDS,
+        FIELD_GROUPS,
+        FIELD_PRIORITY,
+        FIELD_TYPES,
+        NON_TEXT_PATTERNS,
+        PRIORITY_LEVELS,
+        get_field_group,
+        get_field_priority,
+        get_field_type,
+        is_override_field,
+    )
+    from ..models.exceptions import ConfigError, ValidationError
 except ImportError:
     # 回退到绝对导入 (直接运行时)
-    from models.exceptions import ValidationError, ConfigError
-    from constants.complete_definitions import (
-        DEFAULT_TRANSLATION_FIELDS, DEFAULT_IGNORE_FIELDS, NON_TEXT_PATTERNS,
-        FIELD_TYPES, FIELD_GROUPS, FIELD_PRIORITY, PRIORITY_LEVELS,
-        is_override_field, get_field_priority, get_field_type, get_field_group
-    )
     from config.config_models import FilterConfig
+    from constants.complete_definitions import (
+        DEFAULT_IGNORE_FIELDS,
+        DEFAULT_TRANSLATION_FIELDS,
+        FIELD_GROUPS,
+        FIELD_PRIORITY,
+        FIELD_TYPES,
+        NON_TEXT_PATTERNS,
+        PRIORITY_LEVELS,
+        get_field_group,
+        get_field_priority,
+        get_field_type,
+        is_override_field,
+    )
+    from models.exceptions import ConfigError, ValidationError
 
 
 class AdvancedFilterRules:
     """高级过滤规则管理器 - Day_translation2版本
-    
+
     从统一的 complete_definitions 导入所有字段定义和常量，避免重复定义。
     """
 
@@ -66,7 +82,7 @@ class AdvancedFilterRules:
             parent_rules: 父规则集        Raises:
             ValidationError: 当规则验证失败时
         """
-        
+
         try:
             self.parent_rules = parent_rules
             self.default_fields = default_fields or DEFAULT_TRANSLATION_FIELDS.copy()
@@ -85,7 +101,9 @@ class AdvancedFilterRules:
             self._initialize_field_types()
             self._initialize_field_priorities()
 
-            logging.debug(f"高级过滤规则初始化完成: {len(self.default_fields)} 个默认字段")
+            logging.debug(
+                f"高级过滤规则初始化完成: {len(self.default_fields)} 个默认字段"
+            )
 
         except Exception as e:
             raise ValidationError(f"过滤规则初始化失败: {str(e)}")
@@ -113,7 +131,9 @@ class AdvancedFilterRules:
             try:
                 re.compile(pattern)
             except re.error as e:
-                raise ValidationError(f"正则表达式编译失败: {pattern}, 错误: {e}")        # 检查字段冲突
+                raise ValidationError(
+                    f"正则表达式编译失败: {pattern}, 错误: {e}"
+                )  # 检查字段冲突
         conflicts = self.default_fields & self.ignore_fields
         if conflicts:
             logging.warning(f"发现字段冲突: {conflicts}")
@@ -140,7 +160,7 @@ class AdvancedFilterRules:
         # 设置默认字段类型
         for field in self.default_fields:
             if isinstance(field, str):
-                self.field_types[field] = "translatable"        # 设置忽略字段类型
+                self.field_types[field] = "translatable"  # 设置忽略字段类型
         for field in self.ignore_fields:
             if isinstance(field, str):
                 self.field_types[field] = "ignored"
@@ -167,16 +187,16 @@ class AdvancedFilterRules:
             bool: 是否应该翻译
         """
         # 检查字段类型
-        field_type = self.get_field_type(field_name)
-        if field_type == "ignored":
+        field_type_result = get_field_type(field_name)
+        if field_type_result == "ignored":
             return False
 
         # 检查条件规则
-        if field_type == "conditional":
+        if field_type_result == "conditional":
             condition = self.conditional_rules.get(field_name)
             if condition and not condition(field_value):
-                return False        # 检查优先级
-        priority = self.get_field_priority(field_name)
+                return False  # 检查优先级
+        priority = get_field_priority(field_name)
         if priority == PRIORITY_LEVELS["lowest"]:
             return False
 
@@ -213,22 +233,6 @@ class AdvancedFilterRules:
 
         return False
 
-    def get_field_type(self, field: str) -> str:
-        """获取字段类型"""
-        if field in self.field_types:
-            return self.field_types[field]
-        if self.parent_rules:
-            return self.parent_rules.get_field_type(field)
-        return "unknown"
-
-    def get_field_priority(self, field: str) -> int:
-        """获取字段优先级"""
-        if field in self.field_priorities:
-            return self.field_priorities[field]
-        if self.parent_rules:
-            return self.parent_rules.get_field_priority(field)
-        return PRIORITY_LEVELS["normal"]
-
     def add_field(
         self, field: str, field_type: str = "translatable", priority: str = "normal"
     ) -> None:
@@ -240,7 +244,7 @@ class AdvancedFilterRules:
             field_type: 字段类型
             priority: 优先级
         """
-        
+
         if field_type == "translatable":
             self.default_fields.add(field)
         elif field_type == "ignored":
@@ -248,6 +252,49 @@ class AdvancedFilterRules:
 
         self.field_types[field] = field_type
         self.field_priorities[field] = PRIORITY_LEVELS.get(priority, 50)
+
+    def apply_filters(self, text: str, field_name: str = None) -> str:
+        """
+        对文本应用过滤规则
+
+        Args:
+            text: 要过滤的文本
+            field_name: 字段名（可选）
+
+        Returns:
+            str: 过滤后的文本
+        """
+        if not text or not isinstance(text, str):
+            return text
+
+        # 如果指定了字段名，检查是否应该翻译
+        if field_name and not self.should_translate_field(field_name, text):
+            return text
+
+        # 检查是否为非文本内容
+        if self.is_non_text_content(text):
+            return text
+
+        # 应用基本清理
+        filtered_text = text.strip()
+
+        # 移除多余的空白字符
+        filtered_text = re.sub(r"\s+", " ", filtered_text)
+
+        return filtered_text
+
+    def should_translate_xml_element(self, tag: str, text: str) -> bool:
+        """
+        检查XML元素是否应该翻译
+
+        Args:
+            tag: XML标签名
+            text: 元素文本内容
+
+        Returns:
+            bool: 是否应该翻译
+        """
+        return self.should_translate_field(tag, text)
 
     def remove_field(self, field: str) -> None:
         """移除字段"""
@@ -268,7 +315,9 @@ class AdvancedFilterRules:
             "field_priorities_count": len(self.field_priorities),
             "conditional_rules_count": len(self.conditional_rules),
             "field_type_distribution": {
-                field_type: len([f for f, t in self.field_types.items() if t == field_type])
+                field_type: len(
+                    [f for f, t in self.field_types.items() if t == field_type]
+                )
                 for field_type in self.FIELD_TYPES
             },
         }
@@ -327,7 +376,9 @@ class AdvancedFilterRules:
                     json.dump(data, f, indent=4, ensure_ascii=False)
             elif format.lower() == "yaml" and yaml:
                 with open(file_path, "w", encoding="utf-8") as f:
-                    yaml.safe_dump(data, f, allow_unicode=True, default_flow_style=False)
+                    yaml.safe_dump(
+                        data, f, allow_unicode=True, default_flow_style=False
+                    )
             else:
                 raise ConfigError(f"不支持的文件格式: {format}")
 
@@ -337,7 +388,9 @@ class AdvancedFilterRules:
             raise ConfigError(f"保存过滤规则失败: {str(e)}")
 
     @classmethod
-    def load_from_file(cls, file_path: str, format: str = "json") -> "AdvancedFilterRules":
+    def load_from_file(
+        cls, file_path: str, format: str = "json"
+    ) -> "AdvancedFilterRules":
         """
         从文件加载规则
 
@@ -377,7 +430,7 @@ class AdvancedFilterRules:
         """返回规则的字符串表示"""
         stats = self.get_stats()
         return (
-            f"AdvancedFilterRules("
+            "AdvancedFilterRules("
             f"默认字段: {stats['default_fields_count']}, "
             f"忽略字段: {stats['ignore_fields_count']}, "
             f"模式: {stats['non_text_patterns_count']})"
@@ -426,7 +479,9 @@ class AdvancedFilterRules:
         # Keyed翻译不限制default_fields，允许所有其他文本
         return True
 
-    def should_translate_def_field(self, text: str, field: str, def_type: str = "") -> bool:
+    def should_translate_def_field(
+        self, text: str, field: str, def_type: str = ""
+    ) -> bool:
         """
         检查DefInjected字段是否应该被翻译
 

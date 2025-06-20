@@ -42,6 +42,7 @@ class OperationType(Enum):
     VALIDATION = "validation"
     GENERATION = "generation"
     BATCH_PROCESSING = "batch_processing"
+    WORKFLOW = "workflow"
 
     def __str__(self) -> str:
         """返回用户友好的操作类型描述"""

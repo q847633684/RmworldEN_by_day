@@ -12,8 +12,7 @@ from unittest.mock import MagicMock, Mock, patch
 import pytest
 
 from ...models.exceptions import ProcessingError, ValidationError
-from ...models.result_models import (OperationResult, OperationStatus,
-                                     OperationType)
+from ...models.result_models import OperationResult, OperationStatus, OperationType
 from ...services.batch_processor import BatchProcessor, process_multiple_mods
 
 
@@ -56,12 +55,14 @@ class TestBatchProcessor:
         # 模拟翻译门面
         mock_facade_instance = Mock()
         mock_facade.return_value = mock_facade_instance
-        mock_facade_instance.extract_templates_and_generate_csv.return_value = OperationResult(
-            status=OperationStatus.SUCCESS,
-            operation_type=OperationType.EXTRACTION,
-            message="提取完成",
-            processed_count=10,
-            success_count=10,
+        mock_facade_instance.extract_templates_and_generate_csv.return_value = (
+            OperationResult(
+                status=OperationStatus.SUCCESS,
+                operation_type=OperationType.EXTRACTION,
+                message="提取完成",
+                processed_count=10,
+                success_count=10,
+            )
         )
 
         # 执行测试
@@ -91,17 +92,20 @@ class TestBatchProcessor:
         # 模拟翻译门面
         mock_facade_instance = Mock()
         mock_facade.return_value = mock_facade_instance
-        mock_facade_instance.extract_templates_and_generate_csv.return_value = OperationResult(
-            status=OperationStatus.SUCCESS,
-            operation_type=OperationType.EXTRACTION,
-            message="提取完成",
-            processed_count=5,
-            success_count=5,
+        mock_facade_instance.extract_templates_and_generate_csv.return_value = (
+            OperationResult(
+                status=OperationStatus.SUCCESS,
+                operation_type=OperationType.EXTRACTION,
+                message="提取完成",
+                processed_count=5,
+                success_count=5,
+            )
         )
 
         # 执行测试
         results = processor.process_multiple_mods(
-            mod_directories=mock_mod_directories, output_directory=str(temp_dir / "output")
+            mod_directories=mock_mod_directories,
+            output_directory=str(temp_dir / "output"),
         )
 
         # 验证结果
@@ -110,33 +114,44 @@ class TestBatchProcessor:
             assert result.is_success
             assert result.processed_count == 5
 
-    def test_process_multiple_mods_with_progress(self, processor, mock_mod_directories, temp_dir):
+    def test_process_multiple_mods_with_progress(
+        self, processor, mock_mod_directories, temp_dir
+    ):
         """测试带进度回调的批量处理"""
         progress_callback = Mock()
         processor.progress_callback = progress_callback
 
-        with patch("Day_translation2.core.translation_facade.TranslationFacade") as mock_facade:
+        with patch(
+            "Day_translation2.core.translation_facade.TranslationFacade"
+        ) as mock_facade:
             mock_facade_instance = Mock()
             mock_facade.return_value = mock_facade_instance
-            mock_facade_instance.extract_templates_and_generate_csv.return_value = OperationResult(
-                status=OperationStatus.SUCCESS,
-                operation_type=OperationType.EXTRACTION,
-                message="提取完成",
-                processed_count=1,
-                success_count=1,
+            mock_facade_instance.extract_templates_and_generate_csv.return_value = (
+                OperationResult(
+                    status=OperationStatus.SUCCESS,
+                    operation_type=OperationType.EXTRACTION,
+                    message="提取完成",
+                    processed_count=1,
+                    success_count=1,
+                )
             )
 
             # 执行测试
             results = processor.process_multiple_mods(
-                mod_directories=mock_mod_directories, output_directory=str(temp_dir / "output")
+                mod_directories=mock_mod_directories,
+                output_directory=str(temp_dir / "output"),
             )
 
             # 验证进度回调被调用
             assert progress_callback.call_count >= 3  # 每个模组至少调用一次
 
-    def test_process_multiple_mods_partial_failure(self, processor, mock_mod_directories, temp_dir):
+    def test_process_multiple_mods_partial_failure(
+        self, processor, mock_mod_directories, temp_dir
+    ):
         """测试部分失败的批量处理"""
-        with patch("Day_translation2.core.translation_facade.TranslationFacade") as mock_facade:
+        with patch(
+            "Day_translation2.core.translation_facade.TranslationFacade"
+        ) as mock_facade:
             mock_facade_instance = Mock()
             mock_facade.return_value = mock_facade_instance
 
@@ -158,11 +173,14 @@ class TestBatchProcessor:
                         success_count=5,
                     )
 
-            mock_facade_instance.extract_templates_and_generate_csv.side_effect = side_effect
+            mock_facade_instance.extract_templates_and_generate_csv.side_effect = (
+                side_effect
+            )
 
             # 执行测试
             results = processor.process_multiple_mods(
-                mod_directories=mock_mod_directories, output_directory=str(temp_dir / "output")
+                mod_directories=mock_mod_directories,
+                output_directory=str(temp_dir / "output"),
             )
 
             # 验证结果
@@ -184,19 +202,19 @@ class TestBatchProcessor:
                 ) as mock_facade:
                     mock_facade_instance = Mock()
                     mock_facade.return_value = mock_facade_instance
-                    mock_facade_instance.extract_templates_and_generate_csv.return_value = (
-                        OperationResult(
-                            status=OperationStatus.SUCCESS,
-                            operation_type=OperationType.EXTRACTION,
-                            message="提取完成",
-                            processed_count=1,
-                            success_count=1,
-                        )
+                    mock_facade_instance.extract_templates_and_generate_csv.return_value = OperationResult(
+                        status=OperationStatus.SUCCESS,
+                        operation_type=OperationType.EXTRACTION,
+                        message="提取完成",
+                        processed_count=1,
+                        success_count=1,
                     )
 
                     result = processor.process_single_mod(
                         mod_directory=mock_mod_directories[0],
-                        output_csv=str(temp_dir / f"output_{threading.current_thread().ident}.csv"),
+                        output_csv=str(
+                            temp_dir / f"output_{threading.current_thread().ident}.csv"
+                        ),
                     )
                     results.append(result)
             except Exception as e:
@@ -248,7 +266,9 @@ class TestBatchProcessorUtilities:
 
         # 执行测试
         result = process_multiple_mods(
-            mod_directories=["/mod1", "/mod2"], output_directory=str(temp_dir), max_workers=2
+            mod_directories=["/mod1", "/mod2"],
+            output_directory=str(temp_dir),
+            max_workers=2,
         )
 
         # 验证结果

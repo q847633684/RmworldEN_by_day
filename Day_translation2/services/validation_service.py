@@ -7,16 +7,22 @@ Day Translation 2 - 验证服务
 
 import logging
 import re
+import sys
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
-from ..config import get_config
-from ..models.exceptions import ImportError as TranslationImportError
-from ..models.exceptions import ProcessingError, ValidationError
-from ..models.result_models import (OperationResult, OperationStatus,
-                                    OperationType)
+# 添加项目根目录到sys.path
+project_root = Path(__file__).parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+# 使用绝对导入
+from config import get_config
+from models.exceptions import ImportError as TranslationImportError
+from models.exceptions import ProcessingError, ValidationError
+from models.result_models import OperationResult, OperationStatus, OperationType
 
 
 @dataclass
@@ -82,7 +88,9 @@ class TranslationValidator:
             "min_length_ratio": 0.2,  # 翻译长度比例下限
         }
 
-    def validate_translations(self, translations: List[Tuple[str, str, str]]) -> ValidationReport:
+    def validate_translations(
+        self, translations: List[Tuple[str, str, str]]
+    ) -> ValidationReport:
         """
         验证翻译列表
 
@@ -147,7 +155,9 @@ class TranslationValidator:
             if isinstance(e, ValidationError):
                 raise
             raise ProcessingError(
-                f"验证翻译时发生错误: {str(e)}", operation="validate_translations", stage="翻译验证"
+                f"验证翻译时发生错误: {str(e)}",
+                operation="validate_translations",
+                stage="翻译验证",
             )
 
     def _check_empty_translations(
@@ -373,7 +383,8 @@ class TranslationValidator:
         terminology_issues = [
             issue
             for issue in issues
-            if issue.issue_type in ["terminology_inconsistency", "terminology_variation"]
+            if issue.issue_type
+            in ["terminology_inconsistency", "terminology_variation"]
         ]
 
         if not translations:
@@ -405,7 +416,7 @@ class TranslationValidator:
             "Speed": ["速度"],
             "Level": ["等级", "级别"],
             "Experience": ["经验", "经验值"],
-            "Skill": ["技能"],
+            # "Skill": ["技能"],  # DUPLICATE: Removed to avoid F601
             "Inventory": ["背包", "物品栏"],
             "Equipment": ["装备"],
             "Weapon": ["武器"],
@@ -444,8 +455,8 @@ class TranslationValidator:
             "Potion": ["药水", "药剂"],
             "Heal": ["治疗", "回复"],
             "Restore": ["恢复", "回复"],
-            "Buff": ["增益", "强化"],
-            "Debuff": ["减益", "削弱"],
+            "Buf": ["增益", "强化"],
+            "Debuf": ["减益", "削弱"],
             "Status": ["状态"],
             "Effect": ["效果"],
             "Duration": ["持续时间"],
@@ -624,7 +635,7 @@ class TranslationValidator:
             "Dirty": ["脏的"],
             "Safe": ["安全的"],
             "Dangerous": ["危险的"],
-            "Easy": ["容易的"],
+            # DUPLICATE 'Easy': "Easy": ["容易的"],
             "Difficult": ["困难的"],
             "Simple": ["简单的"],
             "Complex": ["复杂的"],
@@ -632,7 +643,7 @@ class TranslationValidator:
             "Clear": ["清楚的", "清除"],
             "Unclear": ["不清楚的"],
             "Obvious": ["明显的"],
-            "Hidden": ["隐藏的"],
+            # DUPLICATE 'Hidden': "Hidden": ["隐藏的"],
             "Visible": ["可见的"],
             "Invisible": ["不可见的"],
             "Open": ["打开", "开放的"],
@@ -656,7 +667,7 @@ class TranslationValidator:
             "Activate": ["激活"],
             "Deactivate": ["停用"],
             "Turn On": ["打开"],
-            "Turn Off": ["关闭"],
+            "Turn Of": ["关闭"],
             "Switch": ["切换", "开关"],
             "Change": ["改变", "更改"],
             "Modify": ["修改"],
@@ -703,7 +714,7 @@ class TranslationValidator:
             "Show": ["显示", "展示"],
             "Hide": ["隐藏"],
             "Display": ["显示", "展示"],
-            "Present": ["展示", "现在的"],
+            # DUPLICATE 'Present': "Present": ["展示", "现在的"],
             "Represent": ["代表"],
             "Demonstrate": ["演示"],
             "Explain": ["解释"],
@@ -730,7 +741,7 @@ class TranslationValidator:
             "Purpose": ["目的"],
             "Goal": ["目标"],
             "Objective": ["目标", "客观的"],
-            "Target": ["目标"],
+            # DUPLICATE 'Target': "Target": ["目标"],
             "Aim": ["目标", "瞄准"],
             "Plan": ["计划"],
             "Strategy": ["策略"],
@@ -756,29 +767,29 @@ class TranslationValidator:
             "Check": ["检查"],
             "Verify": ["验证"],
             "Validate": ["验证"],
-            "Confirm": ["确认"],
+            # DUPLICATE 'Confirm': "Confirm": ["确认"],
             "Prove": ["证明"],
-            "Demonstrate": ["证明", "演示"],
+            # DUPLICATE 'Demonstrate': "Demonstrate": ["证明", "演示"],
             "Evidence": ["证据"],
-            "Proof": ["证明", "证据"],
+            "Proo": ["证明", "证据"],
             "Result": ["结果"],
             "Outcome": ["结果"],
             "Consequence": ["后果"],
-            "Effect": ["效果", "影响"],
+            # DUPLICATE 'Effect': "Effect": ["效果", "影响"],
             "Impact": ["影响", "冲击"],
             "Influence": ["影响"],
             "Affect": ["影响"],
-            "Change": ["改变"],
+            # DUPLICATE 'Change': "Change": ["改变"],
             "Alter": ["改变"],
             "Transform": ["转换", "变换"],
             "Convert": ["转换"],
             "Translate": ["翻译"],
             "Interpret": ["解释", "翻译"],
-            "Understand": ["理解"],
+            # DUPLICATE 'Understand': "Understand": ["理解"],
             "Comprehend": ["理解"],
             "Grasp": ["抓住", "理解"],
             "Realize": ["意识到", "实现"],
-            "Recognize": ["认识", "识别"],
+            # DUPLICATE 'Recognize': "Recognize": ["认识", "识别"],
             "Acknowledge": ["承认"],
             "Admit": ["承认"],
             "Confess": ["承认", "坦白"],
@@ -806,7 +817,7 @@ class TranslationValidator:
             "Give": ["给"],
             "Grant": ["授予"],
             "Award": ["奖励", "授予"],
-            "Present": ["展示", "礼物"],
+            # DUPLICATE 'Present': "Present": ["展示", "礼物"],
             "Gift": ["礼物"],
             "Reward": ["奖励"],
             "Prize": ["奖品"],
@@ -866,7 +877,7 @@ class TranslationValidator:
             "Unique": ["独特的"],
             "Special": ["特殊的"],
             "Ordinary": ["普通的"],
-            "Normal": ["正常的"],
+            # DUPLICATE 'Normal': "Normal": ["正常的"],
             "Abnormal": ["异常的"],
             "Strange": ["奇怪的"],
             "Weird": ["奇怪的"],
@@ -886,14 +897,14 @@ class TranslationValidator:
             "Flexible": ["灵活的"],
             "Rigid": ["刚性的"],
             "Soft": ["软的"],
-            "Hard": ["硬的", "困难的"],
+            # DUPLICATE 'Hard': "Hard": ["硬的", "困难的"],
             "Smooth": ["光滑的"],
             "Rough": ["粗糙的"],
             "Sharp": ["锋利的"],
             "Dull": ["钝的", "无聊的"],
             "Bright": ["明亮的"],
             "Dark": ["黑暗的"],
-            "Light": ["光", "轻的"],
+            # DUPLICATE 'Light': "Light": ["光", "轻的"],
             "Shadow": ["阴影"],
             "Shade": ["阴影", "遮蔽"],
             "Sunshine": ["阳光"],
@@ -941,7 +952,7 @@ class TranslationValidator:
             "Either": ["要么", "也"],
             "Neither": ["既不"],
             "Both": ["两者都"],
-            "Either": ["任一"],
+            # DUPLICATE 'Either': "Either": ["任一"],
             "Or": ["或者"],
             "And": ["和"],
             "But": ["但是"],
@@ -950,9 +961,9 @@ class TranslationValidator:
             "Although": ["虽然"],
             "Though": ["虽然"],
             "Despite": ["尽管"],
-            "In spite of": ["尽管"],
+            "In spite o": ["尽管"],
             "Because": ["因为"],
-            "Since": ["因为", "自从"],
+            # DUPLICATE 'Since': "Since": ["因为", "自从"],
             "As": ["因为", "作为"],
             "So": ["所以"],
             "Therefore": ["因此"],
@@ -963,7 +974,7 @@ class TranslationValidator:
             "For example": ["例如"],
             "For instance": ["例如"],
             "Such as": ["比如"],
-            "Like": ["像", "喜欢"],
+            # DUPLICATE 'Like': "Like": ["像", "喜欢"],
             "Including": ["包括"],
             "Except": ["除了"],
             "Besides": ["除了", "此外"],
@@ -971,7 +982,7 @@ class TranslationValidator:
             "Moreover": ["而且"],
             "Furthermore": ["此外"],
             "Additionally": ["另外"],
-            "Also": ["也"],
+            # DUPLICATE 'Also': "Also": ["也"],
             "Plus": ["加", "另外"],
             "Minus": ["减", "负的"],
             "Times": ["次", "乘"],
@@ -1067,8 +1078,8 @@ class TranslationValidator:
             "Properly": ["正确地"],
             "Correctly": ["正确地"],
             "Accurately": ["准确地"],
-            "Precisely": ["精确地"],
-            "Exactly": ["确切地"],
+            # DUPLICATE 'Precisely': "Precisely": ["精确地"],
+            # DUPLICATE 'Exactly': "Exactly": ["确切地"],
             "Perfectly": ["完美地"],
             "Ideally": ["理想地"],
             "Optimally": ["最佳地"],
@@ -1111,7 +1122,7 @@ class TranslationValidator:
             "Under": ["在...下"],
             "Beneath": ["在...下面"],
             "Behind": ["在...后面"],
-            "In front of": ["在...前面"],
+            "In front o": ["在...前面"],
             "Beside": ["在...旁边"],
             "Next to": ["在...旁边"],
             "Near": ["在...附近"],
@@ -1128,11 +1139,11 @@ class TranslationValidator:
             "Along": ["沿着"],
             "Around": ["围绕"],
             "Beyond": ["超越"],
-            "Past": ["经过", "过去"],
+            # DUPLICATE 'Past': "Past": ["经过", "过去"],
             "Into": ["进入"],
-            "Out of": ["从...出来"],
+            "Out o": ["从...出来"],
             "Onto": ["到...上"],
-            "Off": ["离开", "关闭"],
+            "Of": ["离开", "关闭"],
             "Up": ["向上"],
             "Down": ["向下"],
             "In": ["在...里"],
@@ -1144,24 +1155,24 @@ class TranslationValidator:
             "With": ["与", "用"],
             "By": ["被", "通过"],
             "For": ["为了"],
-            "Of": ["...的"],
-            "About": ["关于"],
-            "Like": ["像"],
-            "As": ["作为"],
+            "O": ["...的"],
+            # DUPLICATE 'About': "About": ["关于"],
+            # DUPLICATE 'Like': "Like": ["像"],
+            # DUPLICATE 'As': "As": ["作为"],
             "Than": ["比"],
-            "If": ["如果"],
+            "I": ["如果"],
             "Unless": ["除非"],
             "Whether": ["是否"],
-            "That": ["那个"],
-            "Which": ["哪个"],
-            "Who": ["谁"],
-            "Whom": ["谁"],
-            "Whose": ["谁的"],
-            "Where": ["哪里"],
-            "When": ["何时"],
-            "Why": ["为什么"],
-            "How": ["如何"],
-            "What": ["什么"],
+            # DUPLICATE 'That': "That": ["那个"],
+            # DUPLICATE 'Which': "Which": ["哪个"],
+            # DUPLICATE 'Who': "Who": ["谁"],
+            # DUPLICATE 'Whom': "Whom": ["谁"],
+            # DUPLICATE 'Whose': "Whose": ["谁的"],
+            # DUPLICATE 'Where': "Where": ["哪里"],
+            # DUPLICATE 'When': "When": ["何时"],
+            # DUPLICATE 'Why': "Why": ["为什么"],
+            # DUPLICATE 'How': "How": ["如何"],
+            # DUPLICATE 'What': "What": ["什么"],
         }
 
 
@@ -1214,7 +1225,11 @@ def validate_csv_file(csv_path: str) -> OperationResult:
         _save_validation_report(report, report_path)
 
         return OperationResult(
-            status=OperationStatus.SUCCESS if report.error_count == 0 else OperationStatus.WARNING,
+            status=(
+                OperationStatus.SUCCESS
+                if report.error_count == 0
+                else OperationStatus.WARNING
+            ),
             operation_type=OperationType.VALIDATION,
             message=f"验证完成: {report.error_count}个错误, {report.warning_count}个警告, 质量评分: {report.quality_score:.1f}",
             processed_count=report.total_entries,
@@ -1225,7 +1240,9 @@ def validate_csv_file(csv_path: str) -> OperationResult:
         if isinstance(e, (TranslationImportError, ValidationError)):
             raise
         raise ProcessingError(
-            f"验证CSV文件失败: {str(e)}", operation="validate_csv_file", stage="文件验证"
+            f"验证CSV文件失败: {str(e)}",
+            operation="validate_csv_file",
+            stage="文件验证",
         )
 
 
@@ -1245,7 +1262,9 @@ def _save_validation_report(report: ValidationReport, output_path: str) -> None:
 
                 # 按严重程度分组
                 errors = [issue for issue in report.issues if issue.severity == "error"]
-                warnings = [issue for issue in report.issues if issue.severity == "warning"]
+                warnings = [
+                    issue for issue in report.issues if issue.severity == "warning"
+                ]
                 infos = [issue for issue in report.issues if issue.severity == "info"]
 
                 if errors:

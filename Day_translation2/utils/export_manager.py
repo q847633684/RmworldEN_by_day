@@ -13,21 +13,42 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 try:
-    from ..models.exceptions import (ExportError, ProcessingError,
-                                     ValidationError)
-    from ..models.translation_data import TranslationEntry
+    from ..models.exceptions import ExportError, ProcessingError, ValidationError
+    from ..models.translation_data import TranslationData
     from .filter_rules import AdvancedFilterRules
     from .xml_processor import AdvancedXMLProcessor
 except ImportError:
-    # 如果无法导入，定义临时异常类用于独立运行
-    class ProcessingError(Exception):
-        pass
+    # 备用导入方式
+    import sys
 
-    class ValidationError(Exception):
-        pass
+    current_dir = Path(__file__).parent.parent
+    if str(current_dir) not in sys.path:
+        sys.path.insert(0, str(current_dir))
 
-    class ExportError(Exception):
-        pass
+    try:
+        from models.exceptions import ExportError, ProcessingError, ValidationError
+        from models.translation_data import TranslationData
+        from utils.filter_rules import AdvancedFilterRules
+        from utils.xml_processor import AdvancedXMLProcessor
+    except ImportError:
+        # 如果仍无法导入，定义临时异常类用于独立运行
+        class ProcessingError(Exception):
+            pass
+
+        class ValidationError(Exception):
+            pass
+
+        class ExportError(Exception):
+            pass
+
+        class AdvancedFilterRules:
+            pass
+
+        class AdvancedXMLProcessor:
+            pass
+
+        class TranslationData:
+            pass
 
 
 class ExportMode(Enum):
@@ -173,7 +194,9 @@ class ExportManager:
                 # 文件存在，执行合并
                 tree = self.xml_processor.parse_xml(output_file_path)
                 if tree:
-                    updated = self.xml_processor.update_translations(tree, translations, merge=True)
+                    updated = self.xml_processor.update_translations(
+                        tree, translations, merge=True
+                    )
                     if updated:
                         success = self.xml_processor.save_xml(tree, output_file_path)
                         result.success = success
@@ -251,7 +274,9 @@ class ExportManager:
 
         return result
 
-    def _create_new_xml_file(self, xml_file_path: str, translations: Dict[str, str]) -> bool:
+    def _create_new_xml_file(
+        self, xml_file_path: str, translations: Dict[str, str]
+    ) -> bool:
         """创建新的XML翻译文件"""
         return self.xml_processor._create_new_xml_file(xml_file_path, translations)
 
@@ -369,4 +394,9 @@ def export_with_smart_merge(
 
 
 # 导出主要接口
-__all__ = ["ExportManager", "ExportMode", "ExportResult", "export_with_smart_merge"]  # 兼容性函数
+__all__ = [
+    "ExportManager",
+    "ExportMode",
+    "ExportResult",
+    "export_with_smart_merge",
+]  # 兼容性函数

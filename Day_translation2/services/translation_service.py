@@ -7,17 +7,23 @@ Day Translation 2 - 机器翻译服务
 
 import csv
 import logging
+import sys
 import time
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from tqdm import tqdm
 
-from ..config import get_config
-from ..models.exceptions import ImportError as TranslationImportError
-from ..models.exceptions import ProcessingError, ValidationError
-from ..models.result_models import (OperationResult, OperationStatus,
-                                    OperationType)
+# 添加项目根目录到sys.path
+project_root = Path(__file__).parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+# 使用绝对导入
+from config import get_config
+from models.exceptions import ImportError as TranslationImportError
+from models.exceptions import ProcessingError, ValidationError
+from models.result_models import OperationResult, OperationStatus, OperationType
 
 
 def translate_csv(
@@ -50,11 +56,15 @@ def translate_csv(
     # 参数验证
     if not all([input_csv, output_csv, access_key, secret_key]):
         raise ValidationError(
-            "所有参数都不能为空", field_name="required_params", expected_type="非空字符串"
+            "所有参数都不能为空",
+            field_name="required_params",
+            expected_type="非空字符串",
         )
 
     if not Path(input_csv).is_file():
-        raise TranslationImportError(f"输入CSV文件不存在: {input_csv}", file_path=input_csv)
+        raise TranslationImportError(
+            f"输入CSV文件不存在: {input_csv}", file_path=input_csv
+        )
 
     try:
         # 创建翻译客户端
@@ -172,7 +182,9 @@ def _translate_data(
                         translated_data.append(translated_item)
                     else:
                         # 翻译失败，保留原文
-                        logging.warning(f"翻译失败: {item['key']}, 错误码: {response.body.code}")
+                        logging.warning(
+                            f"翻译失败: {item['key']}, 错误码: {response.body.code}"
+                        )
                         translated_item = item.copy()
                         translated_item["translated"] = item["text"]  # 保留原文
                         translated_data.append(translated_item)

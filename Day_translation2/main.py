@@ -20,10 +20,15 @@ logging.basicConfig(
     ],
 )
 
-from .config import get_config
-from .core.translation_facade import TranslationFacade
-from .interaction.interaction_manager import UnifiedInteractionManager
-from .models.exceptions import ConfigError, TranslationError
+# 添加当前目录到sys.path以支持模块导入
+current_dir = Path(__file__).parent
+if str(current_dir) not in sys.path:
+    sys.path.insert(0, str(current_dir))
+
+from config import get_config
+from core.translation_facade import TranslationFacade
+from interaction.interaction_manager import UnifiedInteractionManager
+from models.exceptions import ConfigError, TranslationError
 
 
 def main() -> None:
@@ -229,7 +234,8 @@ def handle_batch_mode(interaction_manager: UnifiedInteractionManager) -> None:
 
         # 创建批量处理器
         batch_processor = BatchProcessor(
-            max_workers=params.get("max_workers", 10), timeout=params.get("timeout", 300)
+            max_workers=params.get("max_workers", 10),
+            timeout=params.get("timeout", 300),
         )
 
         # 执行批量处理

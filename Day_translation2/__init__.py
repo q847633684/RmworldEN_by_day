@@ -12,6 +12,9 @@ Day Translation 2 - 游戏本地化翻译工具 (全新架构)
 - 性能优化: 多线程+批量处理
 """
 
+from .models.exceptions import ProcessingError, TranslationError, ValidationError
+from .models.result_models import OperationResult, OperationStatus, OperationType
+
 __version__ = "2.0.0"
 __author__ = "Day汉化项目组"
 __description__ = "游戏本地化翻译工具 - 全新架构版本"
@@ -26,10 +29,7 @@ def get_translation_facade():
 
 
 # 导入主要组件
-from .models.exceptions import (ProcessingError, TranslationError,
-                                ValidationError)
-from .models.result_models import (OperationResult, OperationStatus,
-                                   OperationType)
+
 
 # 主要功能导出
 __all__ = [

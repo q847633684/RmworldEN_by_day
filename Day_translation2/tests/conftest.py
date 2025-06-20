@@ -18,8 +18,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import get_config
 from models.exceptions import ProcessingError, ValidationError
-from models.result_models import (OperationResult, OperationStatus,
-                                  OperationType)
+from models.result_models import OperationResult, OperationStatus, OperationType
 from models.translation_data import TranslationData, TranslationType
 
 
@@ -35,8 +34,16 @@ def temp_dir():
 def sample_config():
     """提供测试用配置"""
     return {
-        "extraction": {"include_keys": True, "include_definjected": True, "filter_empty": True},
-        "translation": {"source_language": "en", "target_language": "zh", "api_timeout": 30},
+        "extraction": {
+            "include_keys": True,
+            "include_definjected": True,
+            "filter_empty": True,
+        },
+        "translation": {
+            "source_language": "en",
+            "target_language": "zh",
+            "api_timeout": 30,
+        },
         "validation": {
             "check_terminology": True,
             "check_length_ratio": True,

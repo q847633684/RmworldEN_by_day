@@ -1,0 +1,36 @@
+{
+  // VS Code扩展推荐列表 - 核心开发必需
+  "recommendations": [
+    // ========== AI开发助手 ==========
+    "github.copilot", // GitHub Copilot - AI代码助手
+    "github.copilot-chat", // GitHub Copilot Chat - AI对话助手
+
+    // ========== Python开发核心 ==========
+    "ms-python.python", // Python - 官方Python支持
+    "ms-python.black-formatter", // Black - 代码格式化
+    "ms-python.flake8", // Flake8 - 代码风格检查
+    "ms-python.mypy-type-checker", // MyPy - 类型检查
+    "ms-python.pylint", // Pylint - 代码质量检查
+    "ms-python.isort", // isort - 导入排序
+
+    // ========== 拼写和语言 ==========
+    "streetsidesoftware.code-spell-checker", // 拼写检查
+
+    // ========== Git版本控制 ==========
+    "eamodio.gitlens", // GitLens - Git增强
+    "mhutchie.git-graph", // Git Graph - 可视化Git历史
+
+    // ========== 文档和标记 ==========
+    "yzhang.markdown-all-in-one", // Markdown全功能支持
+    "redhat.vscode-yaml", // YAML语言支持
+
+    // ========== 开发辅助 ==========
+    "ms-vscode.vscode-todo-highlight", // TODO高亮
+    "alefragnani.Bookmarks" // 书签管理
+  ],
+  // 不推荐的扩展 (可能与项目配置冲突)
+  "unwantedRecommendations": [
+    "ms-python.autopep8", // 与Black冲突
+    "ms-python.pycodestyle" // 与Flake8重复
+  ]
+}

@@ -7,22 +7,39 @@ Day Translation 2 - 翻译门面模式
 
 import logging
 import os
+import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
-from ..config import get_config
-from ..models.exceptions import ConfigError
-from ..models.exceptions import ImportError as TranslationImportError
-from ..models.exceptions import TranslationError
-from ..models.result_models import (OperationResult, OperationStatus,
-                                    OperationType)
-from .template_manager import TemplateManager
+# 导入处理 - 修复E402问题
+try:
+    # 优先尝试相对导入
+    from ..config import get_config
+    from ..core.template_manager import TemplateManager
+    from ..models.exceptions import ConfigError
+    from ..models.exceptions import ImportError as TranslationImportError
+    from ..models.exceptions import TranslationError
+    from ..models.result_models import OperationResult, OperationStatus, OperationType
+except ImportError:
+    # 回退到绝对导入（需要修改sys.path）
+    project_root = Path(__file__).parent.parent
+    if str(project_root) not in sys.path:
+        sys.path.insert(0, str(project_root))
+
+    from config import get_config
+    from core.template_manager import TemplateManager
+    from models.exceptions import ConfigError
+    from models.exceptions import ImportError as TranslationImportError
+    from models.exceptions import TranslationError
+    from models.result_models import OperationResult, OperationStatus, OperationType
 
 
 class TranslationFacade:
     """翻译门面类，提供统一的翻译操作接口"""
 
-    def __init__(self, mod_dir: str, language: str = None, template_location: str = "mod"):
+    def __init__(
+        self, mod_dir: str, language: str = None, template_location: str = "mod"
+    ):
         """
         初始化 TranslationFacade
 
@@ -43,7 +60,9 @@ class TranslationFacade:
 
             self.language = language or self.config.core.default_language
             self.template_location = template_location
-            self.template_manager = TemplateManager(self.mod_dir, self.language, template_location)
+            self.template_manager = TemplateManager(
+                self.mod_dir, self.language, template_location
+            )
             self._validate_config()
 
             logging.debug(
@@ -83,11 +102,17 @@ class TranslationFacade:
             OperationResult: 操作结果
         """
         try:
-            logging.info(f"开始提取模板: output_dir={output_dir}, en_keyed_dir={en_keyed_dir}")
+            logging.info(
+                f"开始提取模板: output_dir={output_dir}, en_keyed_dir={en_keyed_dir}"
+            )
 
             # 调用模板管理器执行核心提取操作
             translations = self.template_manager.extract_and_generate_templates(
-                output_dir, en_keyed_dir, auto_choose_definjected, structure_choice, merge_mode
+                output_dir,
+                en_keyed_dir,
+                auto_choose_definjected,
+                structure_choice,
+                merge_mode,
             )
 
             # 创建成功结果
@@ -183,7 +208,9 @@ class TranslationFacade:
             result = OperationResult(
                 status=OperationStatus.SUCCESS if corpus else OperationStatus.PARTIAL,
                 operation_type=OperationType.GENERATION,
-                message=f"生成语料：{len(corpus)} 条" if corpus else "未找到任何平行语料",
+                message=(
+                    f"生成语料：{len(corpus)} 条" if corpus else "未找到任何平行语料"
+                ),
                 processed_count=len(corpus) if corpus else 0,
                 success_count=len(corpus) if corpus else 0,
             )
@@ -206,7 +233,9 @@ class TranslationFacade:
                 errors=[str(e)],
             )
 
-    def machine_translate(self, csv_path: str, output_csv: str = None) -> OperationResult:
+    def machine_translate(
+        self, csv_path: str, output_csv: str = None
+    ) -> OperationResult:
         """
         使用机器翻译处理 CSV 文件
 
@@ -246,7 +275,8 @@ class TranslationFacade:
                 message="机器翻译完成",
                 details={
                     "input_csv": csv_path,
-                    "output_csv": output_csv or csv_path.replace(".csv", "_translated.csv"),
+                    "output_csv": output_csv
+                    or csv_path.replace(".csv", "_translated.csv"),
                 },
             )
 
@@ -261,6 +291,22 @@ class TranslationFacade:
                 errors=[str(e)],
             )
 
+    def translate_csv(
+        self, csv_path: str, output_csv: str = None, **kwargs
+    ) -> OperationResult:
+        """
+        翻译CSV文件（工作流兼容方法）
+
+        Args:
+            csv_path: 输入CSV文件路径
+            output_csv: 输出CSV文件路径
+            **kwargs: 其他参数
+
+        Returns:
+            操作结果
+        """
+        return self.machine_translate_csv(csv_path, output_csv)
+
     def _get_api_key(self, key_name: str) -> str:
         """获取API密钥，支持从环境变量、配置文件或用户输入获取"""
         key = self.config.get_api_key(key_name) or os.getenv(key_name)
@@ -268,7 +314,12 @@ class TranslationFacade:
             from colorama import Fore, Style
 
             key = input(f"{Fore.CYAN}请输入 {key_name}: {Style.RESET_ALL}").strip()
-            if input(f"{Fore.YELLOW}保存API密钥到配置？[y/n]: {Style.RESET_ALL}").lower() == "y":
+            if (
+                input(
+                    f"{Fore.YELLOW}保存API密钥到配置？[y/n]: {Style.RESET_ALL}"
+                ).lower()
+                == "y"
+            ):
                 self.config.set_api_key(key_name, key)
                 self.config.save_config()
                 logging.debug(f"已保存 {key_name} 到用户配置文件")
@@ -299,7 +350,9 @@ class TranslationFacade:
             target_exists = os.path.exists(target_dir)
 
             result = OperationResult(
-                status=OperationStatus.SUCCESS if not issues else OperationStatus.PARTIAL,
+                status=(
+                    OperationStatus.SUCCESS if not issues else OperationStatus.PARTIAL
+                ),
                 operation_type=OperationType.VALIDATION,
                 message="模组结构验证完成",
                 details={
@@ -474,7 +527,9 @@ class TranslationFacade:
                 },
             )
 
-    def process_with_workflow_automation(self, workflow_config: Dict[str, Any]) -> OperationResult:
+    def process_with_workflow_automation(
+        self, workflow_config: Dict[str, Any]
+    ) -> OperationResult:
         """
         使用工作流自动化处理翻译
 
@@ -529,7 +584,7 @@ class TranslationFacade:
             message = f"工作流完成: {successful_steps}/{total_steps} 步骤成功"
 
             return OperationResult(
-                success=success,
+                status=OperationStatus.SUCCESS if success else OperationStatus.FAILED,
                 operation_type=OperationType.WORKFLOW,
                 message=message,
                 details={

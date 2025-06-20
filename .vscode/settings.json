@@ -1,17 +1,123 @@
 {
-    "commentTranslate.targetLanguage": "en",
+    // ========== Copilot AI助手设置 ==========
+    "github.copilot.chat.terminalConfirmation": "off",
+    "github.copilot.chat.autoExecuteTerminalCommands": true,
+    "github.copilot.enable": {
+        "*": true,
+        "markdown": true,
+        "json": true,
+        "jsonc": true
+    },
     "copilot.promptFiles": [
-        "${workspaceFolder}/.github/prompts/配置提示文件.prompt.md"
+        "${workspaceFolder}/.github/instructions/提示文件增强版.instructions.md"
     ],
-    "copilot.advanced": {
-        "memoryContext": "Day汉化项目重构专家",
-        "workflowMode": "双轨制记忆系统"
+
+    // ========== Python开发核心设置 ==========
+    "python.defaultInterpreterPath": "python",
+    "python.analysis.typeCheckingMode": "off",
+
+    // 🎯 正确的E501禁用配置
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.linting.flake8Args": [
+        "--ignore=E501,E402,W503,E203,F401,F841",
+        "--max-line-length=88",
+        "--exclude=__pycache__,.git,.pytest_cache"
+    ],
+
+    // ========== Pylint配置 ==========
+    "python.linting.pylintArgs": [
+        "--rcfile=${workspaceFolder}/.pylintrc"
+    ],
+
+    // ========== Mypy配置 ==========
+    "python.linting.mypyArgs": [
+        "--config-file=${workspaceFolder}/mypy.ini"
+    ],
+
+    // 禁用Pylance的部分诊断，启用质量工具协作
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.completeFunctionParens": true,
+    "python.analysis.diagnosticMode": "workspace",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingImports": "none",
+        "reportMissingTypeStubs": "none",
+        "reportUnusedImport": "none",
+        "reportUnusedVariable": "none",
+        "reportOptionalMemberAccess": "none",
+        "reportGeneralTypeIssues": "none",
+        "reportOptionalSubscript": "none",
+        "reportOptionalCall": "none",
+        "reportArgumentType": "none",
+        "reportAssignmentType": "none",
+        "reportReturnType": "none",
+        "reportUnknownParameterType": "none",
+        "reportUnknownArgumentType": "none",
+        "reportUnknownLambdaType": "none",
+        "reportUnknownVariableType": "none",
+        "reportUnknownMemberType": "none",
+        "reportIncompatibleMethodOverride": "none",
+        "reportInconsistentConstructor": "none"
     },
-    "files.associations": {
-        "*.prompt.md": "markdown",
-        "*.instructions.md": "markdown",
-        "*.chatmode.md": "markdown"
+
+    "python.formatting.provider": "black",
+
+    // ========== CSpell拼写检查配置 ==========
+    "cSpell.enabled": true,
+    "cSpell.import": ["${workspaceFolder}/cspell.json"],
+
+    // ========== 问题面板配置 ==========
+    "problems.decorations.enabled": true,
+    "problems.showCurrentInStatus": true,
+
+    // 其余配置保持不变...
+    // ========== 测试配置 ==========
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.autoTestDiscoverOnSaveEnabled": false,
+
+    // ========== 编辑器基础设置 ==========
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.rulers": [88],
+    "editor.wordWrap": "on",
+
+    // ========== 文件管理 ==========
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.encoding": "utf8",
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/.pytest_cache": true
     },
-    "markdown.preview.breaks": true,
-    "markdown.validate.enabled": true
+
+    // ========== 终端配置 ==========
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.confirmOnExit": "never",
+
+    // ========== 文件类型配置 ==========
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.rulers": [88]
+    },
+    "[json]": {
+        "editor.tabSize": 2
+    },
+    "[jsonc]": {
+        "editor.tabSize": 2
+    },
+
+    // ========== 搜索设置 ==========
+    "search.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/.pytest_cache": true
+    }
 }

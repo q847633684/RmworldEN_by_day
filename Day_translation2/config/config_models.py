@@ -12,26 +12,46 @@ import re
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set
 
 from colorama import Fore, Style
 
 try:
     # 尝试相对导入 (包内使用)
-    from ..constants.complete_definitions import (DEFAULT_TRANSLATION_FIELDS,
-                                                  DEFAULT_CONFIG, DEFAULT_DIRECTORIES,
-                                                  DEFAULT_FILENAMES, ENCODING_SETTINGS,
-                                                  LanguageCode)
+    from ..constants.complete_definitions import (
+        DEFAULT_DIRECTORIES,
+        DEFAULT_FILENAMES,
+        DEFAULT_TRANSLATION_FIELDS,
+        ENCODING_SETTINGS,
+        LanguageCode,
+    )
     from ..models.exceptions import ConfigError
 except ImportError:
     # 回退到绝对导入 (直接运行时)
-    from constants.complete_definitions import (DEFAULT_TRANSLATION_FIELDS,
-                                                DEFAULT_CONFIG, DEFAULT_DIRECTORIES,
-                                                DEFAULT_FILENAMES, ENCODING_SETTINGS,
-                                                LanguageCode)
+    from constants.complete_definitions import (
+        DEFAULT_DIRECTORIES,
+        DEFAULT_FILENAMES,
+        DEFAULT_TRANSLATION_FIELDS,
+        ENCODING_SETTINGS,
+        LanguageCode,
+    )
     from models.exceptions import ConfigError
 
 CONFIG_VERSION = "2.0.0"
+
+
+# ==================== 默认工厂函数 ====================
+
+
+def _default_translation_fields() -> Set[str]:
+    """默认翻译字段工厂函数"""
+    return set(DEFAULT_TRANSLATION_FIELDS)
+
+
+def _default_file_extensions() -> Set[str]:
+    """默认文件扩展名工厂函数"""
+    return {".xml"}
+
 
 # ==================== 基础数据模型 ====================
 
@@ -51,7 +71,7 @@ class FilterConfig:
     """过滤器配置"""
 
     # 字段过滤 - 使用统一的字段定义
-    included_fields: Set[str] = field(default_factory=lambda: DEFAULT_TRANSLATION_FIELDS.copy())
+    included_fields: Set[str] = field(default_factory=_default_translation_fields)
     excluded_fields: Set[str] = field(default_factory=set)
 
     # 内容过滤
@@ -62,7 +82,7 @@ class FilterConfig:
     exclude_special_chars_only: bool = True
 
     # 文件类型过滤
-    included_file_extensions: Set[str] = field(default_factory=lambda: {".xml"})
+    included_file_extensions: Set[str] = field(default_factory=_default_file_extensions)
     excluded_file_patterns: List[str] = field(default_factory=list)
 
     def should_include_field(self, field_name: str) -> bool:
@@ -83,7 +103,9 @@ class FilterConfig:
             return False
         if self.exclude_single_chars and len(content_stripped) == 1:
             return False
-        if self.exclude_special_chars_only and not any(c.isalnum() for c in content_stripped):
+        if self.exclude_special_chars_only and not any(
+            c.isalnum() for c in content_stripped
+        ):
             return False
 
         return True
@@ -138,7 +160,9 @@ class ExtractionPreferences:
     auto_detect_en_keyed: bool = True
     auto_choose_definjected: bool = False
     structure_choice: str = "original"  # "original", "defs", "structured"
-    merge_mode: str = "smart-merge"  # "merge", "replace", "backup", "skip", "smart-merge"
+    merge_mode: str = (
+        "smart-merge"  # "merge", "replace", "backup", "skip", "smart-merge"
+    )
 
 
 @dataclass
@@ -210,7 +234,9 @@ class CoreConfig:
         """初始化后处理"""
         if not self.log_file:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            self.log_file = f"{DEFAULT_DIRECTORIES['logs']}/day_translation_{timestamp}.log"
+            self.log_file = (
+                f"{DEFAULT_DIRECTORIES['logs']}/day_translation_{timestamp}.log"
+            )
 
     @property
     def default_fields(self) -> Set[str]:
@@ -327,7 +353,9 @@ class UnifiedConfig:
                 os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
                 DEFAULT_DIRECTORIES["logs"],
             )
-            self.core.log_file = os.path.join(log_dir, f"day_translation_{timestamp}.log")
+            self.core.log_file = os.path.join(
+                log_dir, f"day_translation_{timestamp}.log"
+            )
 
         self._setup_logging()
         self._setup_path_validators()
@@ -345,7 +373,9 @@ class UnifiedConfig:
 
             # 创建文件处理器和控制台处理器
             file_handler = logging.FileHandler(self.core.log_file, encoding="utf-8")
-            file_handler.setLevel(logging.DEBUG if self.core.debug_mode else logging.INFO)
+            file_handler.setLevel(
+                logging.DEBUG if self.core.debug_mode else logging.INFO
+            )
             file_handler.setFormatter(logging.Formatter(self.core.log_format))
 
             console_handler = logging.StreamHandler()
@@ -354,14 +384,22 @@ class UnifiedConfig:
 
             root_logger.addHandler(file_handler)
             root_logger.addHandler(console_handler)
-            root_logger.setLevel(logging.DEBUG if self.core.debug_mode else logging.INFO)
+            root_logger.setLevel(
+                logging.DEBUG if self.core.debug_mode else logging.INFO
+            )
 
+        except (OSError, IOError) as e:
+            print(f"日志文件创建失败: {e}")
+        except ValueError as e:
+            print(f"日志格式配置错误: {e}")
         except Exception as e:
             print(f"日志系统初始化失败: {e}")
 
     def _setup_path_validators(self):
         """设置路径验证器"""
-        self._path_pattern = re.compile(r"^[a-zA-Z]:[\\/]|^[\\/]{2}|^[a-zA-Z0-9_\-\.]+[\\/]")
+        self._path_pattern = re.compile(
+            r"^[a-zA-Z]:[\\/]|^[\\/]{2}|^[a-zA-Z0-9_\-\.]+[\\/]"
+        )
         self._validators: Dict[str, Callable[[str], PathValidationResult]] = {
             "dir": self._validate_directory,
             "dir_create": self._validate_directory_create,
@@ -380,12 +418,18 @@ class UnifiedConfig:
             path_obj = Path(path)
             if path_obj.exists() and path_obj.is_dir():
                 return PathValidationResult(
-                    is_valid=True, normalized_path=str(path_obj.absolute()), path_type="directory"
+                    is_valid=True,
+                    normalized_path=str(path_obj.absolute()),
+                    path_type="directory",
                 )
             else:
-                return PathValidationResult(is_valid=False, error_message=f"目录不存在: {path}")
-        except Exception as e:
-            return PathValidationResult(is_valid=False, error_message=f"路径验证失败: {e}")
+                return PathValidationResult(
+                    is_valid=False, error_message=f"目录不存在: {path}"
+                )
+        except (OSError, ValueError, TypeError) as e:
+            return PathValidationResult(
+                is_valid=False, error_message=f"路径验证失败: {e}"
+            )
 
     def _validate_directory_create(self, path: str) -> PathValidationResult:
         """验证目录路径，如果不存在则允许创建"""
@@ -415,8 +459,10 @@ class UnifiedConfig:
                     return PathValidationResult(
                         is_valid=False, error_message=f"父目录不存在: {parent}"
                     )
-        except Exception as e:
-            return PathValidationResult(is_valid=False, error_message=f"路径验证失败: {e}")
+        except (OSError, ValueError, TypeError) as e:
+            return PathValidationResult(
+                is_valid=False, error_message=f"路径验证失败: {e}"
+            )
 
     def _validate_file(self, path: str) -> PathValidationResult:
         """验证文件路径"""
@@ -424,12 +470,18 @@ class UnifiedConfig:
             path_obj = Path(path)
             if path_obj.exists() and path_obj.is_file():
                 return PathValidationResult(
-                    is_valid=True, normalized_path=str(path_obj.absolute()), path_type="file"
+                    is_valid=True,
+                    normalized_path=str(path_obj.absolute()),
+                    path_type="file",
                 )
             else:
-                return PathValidationResult(is_valid=False, error_message=f"文件不存在: {path}")
+                return PathValidationResult(
+                    is_valid=False, error_message=f"文件不存在: {path}"
+                )
         except Exception as e:
-            return PathValidationResult(is_valid=False, error_message=f"文件验证失败: {e}")
+            return PathValidationResult(
+                is_valid=False, error_message=f"文件验证失败: {e}"
+            )
 
     def _validate_csv_file(self, path: str) -> PathValidationResult:
         """验证CSV文件路径"""
@@ -471,9 +523,13 @@ class UnifiedConfig:
                 is_valid=True, normalized_path=normalized, path_type="normalized"
             )
         except Exception as e:
-            return PathValidationResult(is_valid=False, error_message=f"路径规范化失败: {e}")
+            return PathValidationResult(
+                is_valid=False, error_message=f"路径规范化失败: {e}"
+            )
 
-    def validate_path(self, path: str, validator_type: str = "file") -> PathValidationResult:
+    def validate_path(
+        self, path: str, validator_type: str = "file"
+    ) -> PathValidationResult:
         """验证路径"""
         if validator_type in self._validators:
             return self._validators[validator_type](path)
@@ -496,7 +552,11 @@ class UnifiedConfig:
     def add_to_history(self, path_type: str, path: str):
         """添加路径到历史记录"""
         if path_type not in self.user.path_history:
-            self.user.path_history[path_type] = {"paths": [], "max_length": 10, "last_used": None}
+            self.user.path_history[path_type] = {
+                "paths": [],
+                "max_length": 10,
+                "last_used": None,
+            }
 
         history = self.user.path_history[path_type]
 
@@ -560,15 +620,15 @@ class UnifiedConfig:
                 print(f"  {key}: {value}")
 
         print(f"\n{Fore.CYAN}用户偏好:{Style.RESET_ALL}")
-        print(f"  提取偏好:")
+        print("  提取偏好:")
         for key, value in asdict(self.user.extraction).items():
             print(f"    {key}: {value}")
 
-        print(f"  通用设置:")
+        print("  通用设置:")
         for key, value in asdict(self.user.general).items():
             print(f"    {key}: {value}")
 
-        print(f"  API配置:")
+        print("  API配置:")
         api_dict = asdict(self.user.api)
         for key, value in api_dict.items():
             if "secret" in key.lower():

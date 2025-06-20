@@ -10,11 +10,13 @@ from unittest.mock import Mock, patch
 import pytest
 
 from ...models.exceptions import ProcessingError, ValidationError
-from ...models.result_models import (OperationResult, OperationStatus,
-                                     OperationType)
-from ...services.validation_service import (TranslationValidator,
-                                            ValidationIssue, ValidationReport,
-                                            validate_csv_file)
+from ...models.result_models import OperationResult, OperationStatus, OperationType
+from ...services.validation_service import (
+    TranslationValidator,
+    ValidationIssue,
+    ValidationReport,
+    validate_csv_file,
+)
 
 
 class TestValidationIssue:
@@ -100,7 +102,10 @@ class TestTranslationValidator:
 
     def test_validate_translations_success(self, validator):
         """测试翻译验证成功"""
-        translations = [("Keyed.Welcome", "Welcome", "欢迎"), ("Keyed.Start", "Start", "开始")]
+        translations = [
+            ("Keyed.Welcome", "Welcome", "欢迎"),
+            ("Keyed.Start", "Start", "开始"),
+        ]
 
         report = validator.validate_translations(translations)
 
@@ -147,7 +152,9 @@ class TestTranslationValidator:
         issues = validator._check_format_consistency(translations)
 
         # 应该发现2个占位符问题
-        placeholder_issues = [i for i in issues if i.issue_type == "placeholder_mismatch"]
+        placeholder_issues = [
+            i for i in issues if i.issue_type == "placeholder_mismatch"
+        ]
         missing_issues = [i for i in issues if i.issue_type == "missing_placeholder"]
 
         assert len(placeholder_issues) >= 1
@@ -156,7 +163,10 @@ class TestTranslationValidator:
     def test_check_terminology_consistency(self, validator):
         """测试术语一致性检查"""
         # 模拟术语字典
-        validator.terminology_dict = {"Settings": ["设置", "选项"], "Save": ["保存", "存档"]}
+        validator.terminology_dict = {
+            "Settings": ["设置", "选项"],
+            "Save": ["保存", "存档"],
+        }
 
         translations = [
             ("Key1", "Open Settings", "打开配置"),  # 未使用标准术语
@@ -167,7 +177,9 @@ class TestTranslationValidator:
         issues = validator._check_terminology_consistency(translations)
 
         # 应该发现术语不一致问题
-        terminology_issues = [i for i in issues if i.issue_type == "terminology_inconsistency"]
+        terminology_issues = [
+            i for i in issues if i.issue_type == "terminology_inconsistency"
+        ]
         assert len(terminology_issues) >= 1
 
     def test_check_length_ratio(self, validator):
@@ -225,7 +237,9 @@ class TestTranslationValidator:
         assert score == 100.0
 
         # 有术语问题
-        issues = [ValidationIssue("terminology_inconsistency", "warning", "Key1", "术语问题")]
+        issues = [
+            ValidationIssue("terminology_inconsistency", "warning", "Key1", "术语问题")
+        ]
         score = validator._calculate_terminology_score(translations, issues)
         assert score < 100.0
 

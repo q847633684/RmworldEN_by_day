@@ -1,0 +1,39 @@
+# EditorConfig配置文件
+# 确保团队成员的编辑器设置一致
+
+# 这是根配置文件
+root = true
+
+# 所有文件的默认设置
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+
+# Python文件特定设置
+[*.py]
+indent_size = 4
+max_line_length = 88
+
+# JSON文件设置
+[*.{json,jsonc}]
+indent_size = 2
+
+# YAML文件设置
+[*.{yml,yaml}]
+indent_size = 2
+
+# Markdown文件设置
+[*.md]
+trim_trailing_whitespace = false
+
+# 配置文件设置
+[*.{ini,cfg,toml}]
+indent_size = 4
+
+# Shell脚本设置
+[*.{sh,bash}]
+indent_size = 2
+end_of_line = lf

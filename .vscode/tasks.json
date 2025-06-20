@@ -1,0 +1,385 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "测试核心模块导入",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "test_core_imports.py"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "测试基本功能",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "test_basic.py"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "测试组件功能",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "test_components.py"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "运行所有测试",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "测试核心模块导入",
+                "测试基本功能",
+                "测试组件功能"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+        {
+            "label": "启动自动终端工具",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "auto_terminal.py"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "pytest运行所有测试",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "-m",
+                "pytest",
+                ".",
+                "-v",
+                "--tb=short"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": [
+                "$python"
+            ]
+        },
+        {
+            "label": "pytest生成覆盖率报告",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "-m",
+                "pytest",
+                ".",
+                "--cov=.",
+                "--cov-report=html",
+                "--cov-report=term"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": [
+                "$python"
+            ]
+        },
+        {
+            "label": "代码格式化(black)",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "-m",
+                "black",
+                ".",
+                "--line-length",
+                "88"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "代码静态检查(flake8)",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "-m",
+                "flake8",
+                ".",
+                "--max-line-length=88",
+                "--extend-ignore=E203,W503"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": [
+                "$python"
+            ]
+        },
+        {
+            "label": "类型检查(mypy)",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "-m",
+                "mypy",
+                ".",
+                "--ignore-missing-imports"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": [
+                "$python"
+            ]
+        },
+        {
+            "label": "完整代码质量检查",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "代码格式化(black)",
+                "代码静态检查(flake8)",
+                "类型检查(mypy)",
+                "pytest运行所有测试"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+        {
+            "label": "Day_translation2开发环境检查",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "-c",
+                "import sys; print(f'Python: {sys.version}'); import pytest; print(f'pytest: {pytest.__version__}'); import black; print(f'black: {black.__version__}')"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+
+        // ========== 代码质量检查任务 ==========
+        {
+            "label": "Flake8检查",
+            "type": "shell",
+            "command": "python",
+            "args": ["-m", "flake8", "Day_translation2/"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": {
+                "owner": "flake8",
+                "fileLocation": "relative",
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(\\w+)\\s+(.*)",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
+            "label": "Pylint检查",
+            "type": "shell",
+            "command": "python",
+            "args": ["-m", "pylint", "Day_translation2/"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": {
+                "owner": "pylint",
+                "fileLocation": "relative",
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(\\w+):\\s+(.*)",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
+            "label": "Mypy类型检查",
+            "type": "shell",
+            "command": "python",
+            "args": ["-m", "mypy", "Day_translation2/"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": {
+                "owner": "mypy",
+                "fileLocation": "relative",
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+)?:?\\s+(error|warning|note):\\s+(.*)",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
+            "label": "完整质量检查",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Flake8检查",
+                "Pylint检查",
+                "Mypy类型检查"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+        {
+            "label": "CSpell拼写检查",
+            "type": "shell",
+            "command": "npx",
+            "args": ["cspell", "**/*.py", "**/*.md"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },            "problemMatcher": {
+                "owner": "cspell",
+                "fileLocation": "relative",
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+)\\s+-\\s+(.*)",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "message": 4
+                }
+            }
+        }
+    ]
+}

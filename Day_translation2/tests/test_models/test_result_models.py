@@ -6,8 +6,7 @@ Day Translation 2 - 操作结果模型测试
 
 import pytest
 
-from ...models.result_models import (OperationResult, OperationStatus,
-                                     OperationType)
+from ...models.result_models import OperationResult, OperationStatus, OperationType
 
 
 class TestOperationStatus:
@@ -90,12 +89,16 @@ class TestOperationResult:
     def test_is_success_property(self):
         """测试成功判断属性"""
         success_result = OperationResult(
-            status=OperationStatus.SUCCESS, operation_type=OperationType.EXTRACTION, message="成功"
+            status=OperationStatus.SUCCESS,
+            operation_type=OperationType.EXTRACTION,
+            message="成功",
         )
         assert success_result.is_success
 
         error_result = OperationResult(
-            status=OperationStatus.ERROR, operation_type=OperationType.EXTRACTION, message="失败"
+            status=OperationStatus.ERROR,
+            operation_type=OperationType.EXTRACTION,
+            message="失败",
         )
         assert not error_result.is_success
 
@@ -109,7 +112,9 @@ class TestOperationResult:
         assert warning_result.has_warnings
 
         success_result = OperationResult(
-            status=OperationStatus.SUCCESS, operation_type=OperationType.VALIDATION, message="成功"
+            status=OperationStatus.SUCCESS,
+            operation_type=OperationType.VALIDATION,
+            message="成功",
         )
         assert not success_result.has_warnings
 

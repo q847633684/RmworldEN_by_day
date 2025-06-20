@@ -10,6 +10,68 @@ import re
 from enum import Enum
 from typing import Any, Dict, List, Set, Tuple
 
+# ==================== XML标签和结构常量 ====================
+
+# 主要XML标签
+XML_TAGS = {
+    "ROOT": "LanguageData",
+    "DEF_ROOT": "Defs",
+    "COMMENT_START": "<!--",
+    "COMMENT_END": "-->",
+    "ENCODING": "utf-8",
+    "VERSION": "1.0",
+}
+
+# XML结构模式
+XML_PATTERNS = {
+    "XML_DECLARATION": r'<\?xml\s+version="1\.0"\s+encoding="utf-8"\s*\?>',
+    "LANGUAGE_DATA_START": r"<LanguageData>",
+    "LANGUAGE_DATA_END": r"</LanguageData>",
+    "DEFS_START": r"<Defs>",
+    "DEFS_END": r"</Defs>",
+    "COMMENT": r"<!--.*?-->",
+    "ELEMENT": r"<([^>]+)>([^<]*)</\1>",
+    "SELF_CLOSING": r"<[^>]+/>",
+}
+
+# XML验证规则
+XML_VALIDATION = {
+    "REQUIRED_ROOT_TAGS": {"LanguageData", "Defs"},
+    "FORBIDDEN_CHARACTERS": {
+        "\x00",
+        "\x01",
+        "\x02",
+        "\x03",
+        "\x04",
+        "\x05",
+        "\x06",
+        "\x07",
+        "\x08",
+        "\x0b",
+        "\x0c",
+        "\x0e",
+        "\x0f",
+        "\x10",
+        "\x11",
+        "\x12",
+        "\x13",
+        "\x14",
+        "\x15",
+        "\x16",
+        "\x17",
+        "\x18",
+        "\x19",
+        "\x1a",
+        "\x1b",
+        "\x1c",
+        "\x1d",
+        "\x1e",
+        "\x1f",
+    },
+    "MAX_ELEMENT_DEPTH": 10,
+    "MAX_ELEMENT_LENGTH": 10000,
+}
+
 # ==================== 语言和编码常量 ====================
 
 
@@ -122,7 +184,10 @@ CUSTOM_FIELDS: Set[str] = {
 
 # 统一的默认翻译字段集合
 DEFAULT_TRANSLATION_FIELDS: Set[str] = (
-    BASIC_TRANSLATION_FIELDS | RIMWORLD_SPECIFIC_FIELDS | OVERRIDE_FIELDS | CUSTOM_FIELDS
+    BASIC_TRANSLATION_FIELDS
+    | RIMWORLD_SPECIFIC_FIELDS
+    | OVERRIDE_FIELDS
+    | CUSTOM_FIELDS
 )
 
 # ==================== 忽略字段定义 ====================
@@ -321,23 +386,23 @@ FIELD_PRIORITY: Dict[str, int] = {
 ENCODING_SETTINGS: Dict[str, str] = {
     "xml": "utf-8",
     "csv": "utf-8-sig",
-    "default": "utf-8"
+    "default": "utf-8",
 }
 
 # === 默认目录结构 ===
 DEFAULT_DIRECTORIES: Dict[str, str] = {
     "keyed": "Keyed",
-    "definjected": "DefInjected", 
+    "definjected": "DefInjected",
     "logs": "logs",
     "output": "output",
-    "backup": "backup"
+    "backup": "backup",
 }
 
 # === 默认文件名 ===
 DEFAULT_FILENAMES: Dict[str, str] = {
     "output_csv": "extracted_translations.csv",
     "config": "day_translation_config.json",
-    "log": "day_translation.log"
+    "log": "day_translation.log",
 }
 
 # 默认配置值
@@ -506,9 +571,9 @@ __all__ = [
     "FIELD_TYPES",
     "FIELD_GROUPS",
     "PRIORITY_LEVELS",
-    "FIELD_PRIORITY",    # 配置
+    "FIELD_PRIORITY",  # 配置
     "ENCODING_SETTINGS",
-    "DEFAULT_DIRECTORIES", 
+    "DEFAULT_DIRECTORIES",
     "DEFAULT_FILENAMES",
     "DEFAULT_CONFIG",
     "VALIDATION_RULES",

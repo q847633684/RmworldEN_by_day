@@ -11,8 +11,7 @@ import pytest
 
 from ...core.translation_facade import TranslationFacade
 from ...models.exceptions import ProcessingError, ValidationError
-from ...models.result_models import (OperationResult, OperationStatus,
-                                     OperationType)
+from ...models.result_models import OperationResult, OperationStatus, OperationType
 
 
 class TestTranslationFacade:
@@ -160,7 +159,10 @@ class TestTranslationFacade:
 
         with pytest.raises(ValidationError) as exc_info:
             facade.machine_translate(
-                input_csv=str(input_csv), output_csv=str(output_csv), access_key="", secret_key=""
+                input_csv=str(input_csv),
+                output_csv=str(output_csv),
+                access_key="",
+                secret_key="",
             )
 
         assert "API密钥不能为空" in str(exc_info.value)

@@ -1,0 +1,238 @@
+{
+    "version": "0.2",
+    "language": "en,zh-CN",
+    "words": [
+        // 项目核心术语
+        "definjected",
+        "keyed",
+        "rimworld",
+        "modding",
+        "modder",
+        "mod",
+        "mods",
+
+        // API和服务
+        "aliyun",
+        "api",
+        "apis",
+        "oauth",
+        "auth",
+        "jwt",
+
+        // 配置和偏好
+        "prefs",
+        "config",
+        "configs",
+        "env",
+        "envs",
+
+        // 日志相关
+        "levelname",
+        "asctime",
+        "formatter",
+        "handlers",        // Python生态系统
+        "colorama",
+        "lxml",
+        "etree",
+        "xlsxwriter",
+        "openpyxl",
+        "pytest",
+        "mypy",
+        "pylint",
+        "flake8",
+        "isort",
+        "black",
+        "dataclass",
+        "dataclasses",
+        "enum",
+        "enums",
+
+        // Pylint特定术语
+        "fstring",
+        "rgxs",
+        "docstrings",
+        "docstring",        "interpolation",
+        "toplevel",
+        "rgx",
+        "reportmissingtypedict",
+        "pathlib",
+        "argparse",
+        "subprocess",
+
+        // 文件格式
+        "csv",
+        "xlsx",
+        "xml",
+        "json",
+        "yaml",
+        "toml",
+        "ini",
+
+        // 编码相关
+        "utf8",
+        "utf-8",
+        "gbk",
+        "ascii",
+        "unicode",
+        "encoding",
+        "encodings",
+        "decode",
+        "decoding",
+        "encode",
+
+        // 技术术语
+        "gui",
+        "ui",
+        "cli",
+        "regex",
+        "regexes",
+        "regexp",
+        "locale",
+        "locales",
+        "i18n",
+        "l10n",
+        "namespace",
+        "namespaces",
+        "middleware",
+        "validator",
+        "validators",
+        "serializer",
+        "serializers",
+        "deserialize",
+        "serialization",
+
+        // 项目特定文件夹和文件
+        "pyproject",
+        "pytest",
+        "conftest",
+        "vscode",
+        "gitignore",
+        "pylintrc",
+        "flake8",
+        "mypy",
+        "cspell",
+
+        // 常见缩写
+        "args",
+        "kwargs",
+        "params",
+        "impl",
+        "utils",
+        "misc",
+        "temp",
+        "tmp",
+        "src",
+        "dest",
+        "cfg",
+        "repo",
+        "repos",
+
+        // 业务逻辑术语
+        "extractor",
+        "extractors",
+        "importer",
+        "importers",
+        "exporter",
+        "exporters",
+        "processor",
+        "processors",
+        "translator",
+        "translators",
+        "generator",
+        "generators",
+        "formatter",
+        "formatters",
+        "filter",
+        "filters",
+        "matcher",
+        "matchers",
+        "handler",
+        "handlers",
+        "manager",
+        "managers",
+        "service",
+        "services",
+        "facade",
+        "facades",
+
+        // 数据结构
+        "dict",
+        "dicts",
+        "tuple",
+        "tuples",
+        "list",
+        "lists",
+        "set",
+        "sets",
+        "frozenset",
+        "deque",
+        "defaultdict",
+        "namedtuple",
+
+        // 异常和错误处理
+        "exc",
+        "exception",
+        "exceptions",
+        "error",
+        "errors",
+        "traceback",
+        "stacktrace"
+    ],
+    "ignorePaths": [
+        "**/__pycache__/**",
+        "**/.pytest_cache/**",
+        "**/node_modules/**",
+        "**/.git/**",
+        "**/logs/**",
+        "**/test_output/**",
+        "**/*.pyc",
+        "**/.mypy_cache/**",
+        "**/build/**",
+        "**/dist/**",
+        "**/*.egg-info/**"
+    ],
+    "overrides": [
+        {
+            "filename": "**/*.py",
+            "languageId": "python"
+        },
+        {
+            "filename": "**/*.md",
+            "languageId": "markdown"
+        },
+        {
+            "filename": "**/*.json",
+            "languageId": "json"
+        },
+        {
+            "filename": "**/*.jsonc",
+            "languageId": "jsonc"
+        }
+    ],
+    "patterns": [
+        {
+            "name": "markdown-code-blocks",
+            "pattern": "/```[\\s\\S]*?```/g"
+        },
+        {
+            "name": "inline-code",
+            "pattern": "/`[^`]*`/g"
+        }
+    ],
+    "dictionaries": [
+        "en_US",
+        "python",
+        "softwareTerms",
+        "misc"
+    ],
+    "dictionaryDefinitions": [
+        {
+            "name": "project-terms",
+            "words": [
+                "definjected",
+                "keyed",
+                "rimworld"
+            ]
+        }
+    ]
+}

@@ -40,7 +40,10 @@ class ConfigError(TranslationError):
     """
 
     def __init__(
-        self, message: str, config_path: Optional[str] = None, config_key: Optional[str] = None
+        self,
+        message: str,
+        config_path: Optional[str] = None,
+        config_key: Optional[str] = None,
     ):
         """初始化配置错误
 
@@ -67,7 +70,10 @@ class ImportError(TranslationError):
     """
 
     def __init__(
-        self, message: str, file_path: Optional[str] = None, line_number: Optional[int] = None
+        self,
+        message: str,
+        file_path: Optional[str] = None,
+        line_number: Optional[int] = None,
     ):
         """初始化导入错误
 
@@ -94,7 +100,10 @@ class ExportError(TranslationError):
     """
 
     def __init__(
-        self, message: str, output_path: Optional[str] = None, export_format: Optional[str] = None
+        self,
+        message: str,
+        output_path: Optional[str] = None,
+        export_format: Optional[str] = None,
     ):
         """初始化导出错误
 

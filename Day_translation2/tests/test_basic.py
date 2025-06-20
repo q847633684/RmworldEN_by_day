@@ -15,8 +15,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 def test_basic_import():
     """测试基本模块导入"""
     # 测试异常模块
-    from Day_translation2.models.exceptions import (ConfigError,
-                                                    TranslationError)
+    from models.exceptions import ConfigError, TranslationError
 
     # 验证异常类
     assert issubclass(TranslationError, Exception)
@@ -34,9 +33,11 @@ def test_basic_import():
 
 def test_result_models():
     """测试结果模型"""
-    from Day_translation2.models.result_models import (OperationResult,
-                                                       OperationStatus,
-                                                       OperationType)
+    from models.result_models import (
+        OperationResult,
+        OperationStatus,
+        OperationType,
+    )
 
     # 测试枚举
     assert OperationStatus.SUCCESS
@@ -44,7 +45,9 @@ def test_result_models():
 
     # 测试创建操作结果
     result = OperationResult(
-        status=OperationStatus.SUCCESS, operation_type=OperationType.EXTRACTION, message="测试成功"
+        status=OperationStatus.SUCCESS,
+        operation_type=OperationType.EXTRACTION,
+        message="测试成功",
     )
 
     assert result.status == OperationStatus.SUCCESS
@@ -56,8 +59,10 @@ def test_result_models():
 
 def test_translation_data():
     """测试翻译数据模型"""
-    from Day_translation2.models.translation_data import (TranslationData,
-                                                          TranslationType)
+    from models.translation_data import (
+        TranslationData,
+        TranslationType,
+    )
 
     # 测试枚举
     assert TranslationType.KEYED

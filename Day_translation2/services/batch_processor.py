@@ -7,6 +7,7 @@ Day Translation 2 - 批量处理服务
 
 import logging
 import os
+import sys
 import time
 from concurrent.futures import Future, ThreadPoolExecutor
 from concurrent.futures import TimeoutError as ConcurrentTimeoutError
@@ -17,33 +18,19 @@ from typing import Dict, List, Optional, Tuple
 from colorama import Fore, Style
 from tqdm import tqdm
 
-import sys
-from pathlib import Path
+# 添加项目根目录到sys.path
+project_root = Path(__file__).parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
 
-try:
-    # 尝试相对导入 (包内使用)    from ..config import get_config
-    from ..core.importers import import_translations, load_translations_from_csv
-    from ..models.exceptions import ConfigError
-    from ..models.exceptions import ImportError as TranslationImportError
-    from ..models.exceptions import ProcessingError
-    from ..models.result_models import (OperationResult, OperationStatus,
-                                        OperationType)
-    from ..utils.xml_processor import AdvancedXMLProcessor
-except ImportError:
-    # 备用绝对导入 (独立运行时)
-    # 添加项目根目录到sys.path
-    current_dir = Path(__file__).parent.parent
-    if str(current_dir) not in sys.path:
-        sys.path.insert(0, str(current_dir))
-    
-    from config import get_config
-    from core.importers import import_translations, load_translations_from_csv
-    from models.exceptions import ConfigError
-    from models.exceptions import ImportError as TranslationImportError
-    from models.exceptions import ProcessingError
-    from models.result_models import (OperationResult, OperationStatus,
-                                      OperationType)
-    from utils.xml_processor import AdvancedXMLProcessor
+# 使用绝对导入
+from config import get_config
+from core.importers import import_translations, load_translations_from_csv
+from models.exceptions import ConfigError
+from models.exceptions import ImportError as TranslationImportError
+from models.exceptions import ProcessingError
+from models.result_models import OperationResult, OperationStatus, OperationType
+from utils.xml_processor import AdvancedXMLProcessor
 
 
 @dataclass
@@ -92,7 +79,10 @@ class BatchProcessor:
         logging.debug(f"初始化批量处理器: max_workers={max_workers}, timeout={timeout}")
 
     def process_multiple_mods(
-        self, mod_list: List[str], csv_path: Optional[str] = None, language: Optional[str] = None
+        self,
+        mod_list: List[str],
+        csv_path: Optional[str] = None,
+        language: Optional[str] = None,
     ) -> OperationResult:
         """
         批量处理多个模组
@@ -165,7 +155,9 @@ class BatchProcessor:
                     continue
                 valid_mods.append(str(mod_path))
             except Exception as e:
-                print(f"{Fore.RED}❌ 模组目录验证失败: {mod_dir}, 错误: {e}{Style.RESET_ALL}")
+                print(
+                    f"{Fore.RED}❌ 模组目录验证失败: {mod_dir}, 错误: {e}{Style.RESET_ALL}"
+                )
                 logging.warning(f"模组目录验证失败: {mod_dir}, 错误: {e}")
                 continue
         return valid_mods
@@ -179,7 +171,9 @@ class BatchProcessor:
                 return False
             return True
         except Exception as e:
-            print(f"{Fore.RED}❌ CSV文件验证失败: {csv_path}, 错误: {e}{Style.RESET_ALL}")
+            print(
+                f"{Fore.RED}❌ CSV文件验证失败: {csv_path}, 错误: {e}{Style.RESET_ALL}"
+            )
             logging.error(f"CSV文件验证失败: {csv_path}, 错误: {e}")
             return False
 
@@ -192,7 +186,9 @@ class BatchProcessor:
 
             # 提交所有任务
             for mod_dir in mod_list:
-                future = executor.submit(self._process_single_mod, mod_dir, csv_path, language)
+                future = executor.submit(
+                    self._process_single_mod, mod_dir, csv_path, language
+                )
                 futures[mod_dir] = future
 
             # 显示进度并收集结果
@@ -211,7 +207,9 @@ class BatchProcessor:
 
                     except ConcurrentTimeoutError:
                         self._results[mod_dir] = ModProcessResult(
-                            mod_dir=mod_dir, success=False, error=f"处理超时（{self.timeout}秒）"
+                            mod_dir=mod_dir,
+                            success=False,
+                            error=f"处理超时（{self.timeout}秒）",
                         )
                         print(f"{Fore.RED}❌ 模组处理超时: {mod_dir}{Style.RESET_ALL}")
 
@@ -219,7 +217,9 @@ class BatchProcessor:
                         self._results[mod_dir] = ModProcessResult(
                             mod_dir=mod_dir, success=False, error=str(e)
                         )
-                        print(f"{Fore.RED}❌ 模组处理失败: {mod_dir}, 错误: {e}{Style.RESET_ALL}")
+                        print(
+                            f"{Fore.RED}❌ 模组处理失败: {mod_dir}, 错误: {e}{Style.RESET_ALL}"
+                        )
                         logging.error(f"模组处理失败: {mod_dir}, 错误: {e}")
 
                     finally:
@@ -285,7 +285,9 @@ class BatchProcessor:
             result.processing_time = time.time() - start_time
             return result
 
-    def _update_mod_xml(self, mod_dir: str, csv_path: str, language: str) -> Tuple[int, int]:
+    def _update_mod_xml(
+        self, mod_dir: str, csv_path: str, language: str
+    ) -> Tuple[int, int]:
         """
         更新模组的XML文件
 
@@ -315,7 +317,10 @@ class BatchProcessor:
             files_updated = 0
 
             # 处理DefInjected和Keyed目录
-            for dir_name in [self.config.core.definjected_dir, self.config.core.keyed_dir]:
+            for dir_name in [
+                self.config.core.definjected_dir,
+                self.config.core.keyed_dir,
+            ]:
                 dir_path = os.path.join(lang_path, dir_name)
                 if not os.path.exists(dir_path):
                     logging.debug(f"目录不存在，跳过: {dir_path}")
@@ -336,7 +341,9 @@ class BatchProcessor:
         except Exception as e:
             raise ProcessingError(f"更新模组XML失败: {str(e)}")
 
-    def _update_single_xml_file(self, xml_file_path: str, translations: Dict[str, str]) -> bool:
+    def _update_single_xml_file(
+        self, xml_file_path: str, translations: Dict[str, str]
+    ) -> bool:
         """
         更新单个XML文件
 
@@ -420,7 +427,9 @@ class BatchProcessor:
         )
 
         # 添加错误信息
-        failed_results = {mod: res for mod, res in self._results.items() if not res.success}
+        failed_results = {
+            mod: res for mod, res in self._results.items() if not res.success
+        }
         if failed_results:
             result.errors = [
                 f"{Path(mod).name}: {res.error}" for mod, res in failed_results.items()

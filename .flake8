@@ -1,0 +1,12 @@
+[flake8]
+ignore = E501,E402,W503,E203,F401,F841
+max-line-length = 88
+exclude =
+    .git,
+    __pycache__,
+    .pytest_cache,
+    build,
+    dist,
+    *.egg-info
+per-file-ignores =
+    __init__.py:F401

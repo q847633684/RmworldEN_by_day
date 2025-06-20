@@ -24,11 +24,14 @@ class UnifiedInteractionManager:
     def show_welcome(self):
         """显示程序欢迎界面"""
         has_api_key = bool(
-            self.config.user.api.aliyun_access_key_id or os.getenv("ALIYUN_ACCESS_KEY_ID")
+            self.config.user.api.aliyun_access_key_id
+            or os.getenv("ALIYUN_ACCESS_KEY_ID")
         )
 
-        print(f"\n{Fore.MAGENTA}=== 欢迎使用 Day Translation v2.0.0 ==={Style.RESET_ALL}")
-        print(f"功能：模组文本提取、阿里云机器翻译、翻译导入、批量处理")
+        print(
+            f"\n{Fore.MAGENTA}=== 欢迎使用 Day Translation v2.0.0 ==={Style.RESET_ALL}"
+        )
+        print("功能：模组文本提取、阿里云机器翻译、翻译导入、批量处理")
         print(
             f"阿里云密钥：{Fore.GREEN if has_api_key else Fore.RED}{'已配置' if has_api_key else '未配置'}{Style.RESET_ALL}"
         )
@@ -61,7 +64,9 @@ class UnifiedInteractionManager:
         print(f"8. {Fore.CYAN}设置中心{Style.RESET_ALL}：统一配置管理")
         print(f"q. {Fore.YELLOW}退出{Style.RESET_ALL}")
 
-        return input(f"\n{Fore.CYAN}选择模式 (1-8, q):{Style.RESET_ALL} ").strip().lower()
+        return (
+            input(f"\n{Fore.CYAN}选择模式 (1-8, q):{Style.RESET_ALL} ").strip().lower()
+        )
 
     def get_mod_directory(self) -> Optional[str]:
         """获取模组目录"""
@@ -89,7 +94,9 @@ class UnifiedInteractionManager:
                 }
 
             # 重新配置
-            cancelled, extraction_config = self._configure_extraction_preferences(mod_dir)
+            cancelled, extraction_config = self._configure_extraction_preferences(
+                mod_dir
+            )
             if cancelled:
                 return None
 
@@ -114,7 +121,9 @@ class UnifiedInteractionManager:
     def _ask_use_previous_config(self, operation_name: str) -> bool:
         """询问用户是否使用上次的配置"""
         if self.config.user.general.auto_mode:
-            print(f"{Fore.GREEN}🔄 自动模式：使用上次配置进行{operation_name}{Style.RESET_ALL}")
+            print(
+                f"{Fore.GREEN}🔄 自动模式：使用上次配置进行{operation_name}{Style.RESET_ALL}"
+            )
             return True
 
         print(f"\n{Fore.CYAN}=== {operation_name} 配置选择 ==={Style.RESET_ALL}")
@@ -144,7 +153,9 @@ class UnifiedInteractionManager:
         if extraction.output_dir:
             print(f"输出目录: {Fore.GREEN}{extraction.output_dir}{Style.RESET_ALL}")
         if extraction.en_keyed_dir:
-            print(f"英文Keyed目录: {Fore.GREEN}{extraction.en_keyed_dir}{Style.RESET_ALL}")
+            print(
+                f"英文Keyed目录: {Fore.GREEN}{extraction.en_keyed_dir}{Style.RESET_ALL}"
+            )
         print(f"结构选择: {Fore.GREEN}{extraction.structure_choice}{Style.RESET_ALL}")
         print(f"合并模式: {Fore.GREEN}{extraction.merge_mode}{Style.RESET_ALL}")
         print(
@@ -154,18 +165,26 @@ class UnifiedInteractionManager:
             f"自动选择DefInjected: {Fore.GREEN}{'是' if extraction.auto_choose_definjected else '否'}{Style.RESET_ALL}"
         )
 
-    def _configure_extraction_preferences(self, mod_dir: str) -> Tuple[bool, Dict[str, Any]]:
+    def _configure_extraction_preferences(
+        self, mod_dir: str
+    ) -> Tuple[bool, Dict[str, Any]]:
         """配置提取偏好设置"""
         extraction_config = {}
 
         # 1. 选择输出位置
         print(f"\n{Fore.CYAN}1. 请选择模板输出位置：{Style.RESET_ALL}")
-        print(f"   1. {Fore.GREEN}模组内部{Style.RESET_ALL}（直接集成到模组Languages目录）")
+        print(
+            f"   1. {Fore.GREEN}模组内部{Style.RESET_ALL}（直接集成到模组Languages目录）"
+        )
         print(f"   2. {Fore.GREEN}外部目录{Style.RESET_ALL}（独立管理，推荐）")
-        default_choice = "2" if self.config.user.extraction.output_location == "external" else "1"
+        default_choice = (
+            "2" if self.config.user.extraction.output_location == "external" else "1"
+        )
 
         choice = (
-            input(f"{Fore.CYAN}请选择 (1/2, 默认{default_choice}): {Style.RESET_ALL}").strip()
+            input(
+                f"{Fore.CYAN}请选择 (1/2, 默认{default_choice}): {Style.RESET_ALL}"
+            ).strip()
             or default_choice
         )
 
@@ -187,8 +206,12 @@ class UnifiedInteractionManager:
         auto_en_keyed_dir = os.path.join(mod_dir, "Languages", "English", "Keyed")
 
         if os.path.exists(auto_en_keyed_dir):
-            print(f"\n{Fore.GREEN}✅ 检测到英文Keyed目录: {auto_en_keyed_dir}{Style.RESET_ALL}")
-            if input(f"{Fore.CYAN}是否使用检测到的目录？[Y/n]: {Style.RESET_ALL}").lower() not in [
+            print(
+                f"\n{Fore.GREEN}✅ 检测到英文Keyed目录: {auto_en_keyed_dir}{Style.RESET_ALL}"
+            )
+            if input(
+                f"{Fore.CYAN}是否使用检测到的目录？[Y/n]: {Style.RESET_ALL}"
+            ).lower() not in [
                 "n",
                 "no",
             ]:
@@ -196,18 +219,24 @@ class UnifiedInteractionManager:
                 extraction_config["auto_detect_en_keyed"] = True
             else:
                 en_keyed_dir = self._get_directory_path(
-                    "英文Keyed目录", self.config.get_remembered_path("en_keyed_dir"), required=False
+                    "英文Keyed目录",
+                    self.config.get_remembered_path("en_keyed_dir"),
+                    required=False,
                 )
                 extraction_config["en_keyed_dir"] = en_keyed_dir
                 extraction_config["auto_detect_en_keyed"] = False
         else:
             print(f"\n{Fore.YELLOW}⚠️ 未检测到标准英文Keyed目录{Style.RESET_ALL}")
-            if input(f"{Fore.CYAN}是否手动指定英文Keyed目录？[y/N]: {Style.RESET_ALL}").lower() in [
+            if input(
+                f"{Fore.CYAN}是否手动指定英文Keyed目录？[y/N]: {Style.RESET_ALL}"
+            ).lower() in [
                 "y",
                 "yes",
             ]:
                 en_keyed_dir = self._get_directory_path(
-                    "英文Keyed目录", self.config.get_remembered_path("en_keyed_dir"), required=False
+                    "英文Keyed目录",
+                    self.config.get_remembered_path("en_keyed_dir"),
+                    required=False,
                 )
                 extraction_config["en_keyed_dir"] = en_keyed_dir
                 extraction_config["auto_detect_en_keyed"] = False
@@ -223,28 +252,46 @@ class UnifiedInteractionManager:
 
         structure_map = {"1": "original", "2": "defs", "3": "structured"}
         reverse_map = {v: k for k, v in structure_map.items()}
-        default_structure = reverse_map.get(self.config.user.extraction.structure_choice, "1")
+        default_structure = reverse_map.get(
+            self.config.user.extraction.structure_choice, "1"
+        )
 
         choice = (
-            input(f"{Fore.CYAN}请选择 (1-3, 默认{default_structure}): {Style.RESET_ALL}").strip()
+            input(
+                f"{Fore.CYAN}请选择 (1-3, 默认{default_structure}): {Style.RESET_ALL}"
+            ).strip()
             or default_structure
         )
         extraction_config["structure_choice"] = structure_map.get(choice, "original")
 
         # 4. 合并模式选择
-        print(f"\n{Fore.CYAN}4. 选择合并模式（处理已有翻译文件的方式）：{Style.RESET_ALL}")
-        print(f"   1. {Fore.GREEN}智能合并{Style.RESET_ALL}（推荐：保留手动编辑，添加新条目）")
+        print(
+            f"\n{Fore.CYAN}4. 选择合并模式（处理已有翻译文件的方式）：{Style.RESET_ALL}"
+        )
+        print(
+            f"   1. {Fore.GREEN}智能合并{Style.RESET_ALL}（推荐：保留手动编辑，添加新条目）"
+        )
         print(f"   2. {Fore.YELLOW}传统合并{Style.RESET_ALL}（只更新现有条目）")
         print(f"   3. {Fore.BLUE}备份替换{Style.RESET_ALL}（备份后完全替换）")
         print(f"   4. {Fore.RED}直接替换{Style.RESET_ALL}（完全替换，不备份）")
         print(f"   5. {Fore.MAGENTA}跳过处理{Style.RESET_ALL}（跳过已有文件）")
 
-        merge_map = {"1": "smart-merge", "2": "merge", "3": "backup", "4": "replace", "5": "skip"}
+        merge_map = {
+            "1": "smart-merge",
+            "2": "merge",
+            "3": "backup",
+            "4": "replace",
+            "5": "skip",
+        }
         reverse_merge_map = {v: k for k, v in merge_map.items()}
-        default_merge = reverse_merge_map.get(self.config.user.extraction.merge_mode, "1")
+        default_merge = reverse_merge_map.get(
+            self.config.user.extraction.merge_mode, "1"
+        )
 
         choice = (
-            input(f"{Fore.CYAN}请选择 (1-5, 默认{default_merge}): {Style.RESET_ALL}").strip()
+            input(
+                f"{Fore.CYAN}请选择 (1-5, 默认{default_merge}): {Style.RESET_ALL}"
+            ).strip()
             or default_merge
         )
         extraction_config["merge_mode"] = merge_map.get(choice, "smart-merge")
@@ -252,7 +299,9 @@ class UnifiedInteractionManager:
         # 5. 其他选项
         print(f"\n{Fore.CYAN}5. 其他选项：{Style.RESET_ALL}")
 
-        default_auto_def = "y" if self.config.user.extraction.auto_choose_definjected else "n"
+        default_auto_def = (
+            "y" if self.config.user.extraction.auto_choose_definjected else "n"
+        )
         auto_def = (
             input(
                 f"{Fore.CYAN}自动选择DefInjected提取方式？[y/N, 默认{default_auto_def}]: {Style.RESET_ALL}"
@@ -299,7 +348,9 @@ class UnifiedInteractionManager:
         # 检查目录是否存在以及内容
         if not os.path.exists(output_dir):
             # 目录不存在，询问是否创建
-            if input(f"{Fore.CYAN}目录不存在，是否创建？[Y/n]: {Style.RESET_ALL}").lower() not in [
+            if input(
+                f"{Fore.CYAN}目录不存在，是否创建？[Y/n]: {Style.RESET_ALL}"
+            ).lower() not in [
                 "n",
                 "no",
             ]:
@@ -338,7 +389,9 @@ class UnifiedInteractionManager:
                     print(f"     ... 还有 {len(csv_files) - 5} 个文件")
 
             print(f"\n{Fore.CYAN}请选择处理方式：{Style.RESET_ALL}")
-            print(f"1. {Fore.GREEN}合并模式{Style.RESET_ALL} - 保留现有文件，新文件与现有文件合并")
+            print(
+                f"1. {Fore.GREEN}合并模式{Style.RESET_ALL} - 保留现有文件，新文件与现有文件合并"
+            )
             print(f"2. {Fore.YELLOW}覆盖模式{Style.RESET_ALL} - 直接覆盖同名文件")
             print(f"3. {Fore.BLUE}备份覆盖{Style.RESET_ALL} - 备份现有文件后覆盖")
             print(f"4. {Fore.RED}重新选择{Style.RESET_ALL} - 选择其他目录")
@@ -351,7 +404,9 @@ class UnifiedInteractionManager:
                     print(f"{Fore.GREEN}✅ 选择合并模式{Style.RESET_ALL}")
                     return output_dir, "merge"
                 elif choice == "2":
-                    if input(f"{Fore.RED}确认覆盖现有文件？[y/N]: {Style.RESET_ALL}").lower() in [
+                    if input(
+                        f"{Fore.RED}确认覆盖现有文件？[y/N]: {Style.RESET_ALL}"
+                    ).lower() in [
                         "y",
                         "yes",
                     ]:
@@ -431,7 +486,11 @@ class UnifiedInteractionManager:
             print(f"9. {Fore.GREEN}清空路径记忆{Style.RESET_ALL}")
             print(f"b. {Fore.YELLOW}返回主菜单{Style.RESET_ALL}")
 
-            choice = input(f"\n{Fore.CYAN}请选择 (1-9, b): {Style.RESET_ALL}").strip().lower()
+            choice = (
+                input(f"\n{Fore.CYAN}请选择 (1-9, b): {Style.RESET_ALL}")
+                .strip()
+                .lower()
+            )
 
             if choice == "1":
                 self.config.show_config()
@@ -441,7 +500,9 @@ class UnifiedInteractionManager:
                 print(f"{Fore.YELLOW}请提供一个模组目录以配置提取偏好{Style.RESET_ALL}")
                 mod_dir = self.get_mod_directory()
                 if mod_dir:
-                    cancelled, extraction_config = self._configure_extraction_preferences(mod_dir)
+                    cancelled, extraction_config = (
+                        self._configure_extraction_preferences(mod_dir)
+                    )
                     if not cancelled:
                         for key, value in extraction_config.items():
                             if hasattr(self.config.user.extraction, key):
@@ -458,7 +519,9 @@ class UnifiedInteractionManager:
                 self._import_config()
             elif choice == "8":
                 if (
-                    input(f"{Fore.RED}确定要重置所有配置吗？[y/N]: {Style.RESET_ALL}").lower()
+                    input(
+                        f"{Fore.RED}确定要重置所有配置吗？[y/N]: {Style.RESET_ALL}"
+                    ).lower()
                     == "y"
                 ):
                     self.config.reset_config()
@@ -466,7 +529,9 @@ class UnifiedInteractionManager:
                     print(f"{Fore.GREEN}✅ 配置已重置{Style.RESET_ALL}")
             elif choice == "9":
                 if (
-                    input(f"{Fore.RED}确定要清空所有路径记忆吗？[y/N]: {Style.RESET_ALL}").lower()
+                    input(
+                        f"{Fore.RED}确定要清空所有路径记忆吗？[y/N]: {Style.RESET_ALL}"
+                    ).lower()
                     == "y"
                 ):
                     self.config.user.remembered_paths.clear()
@@ -553,24 +618,34 @@ class UnifiedInteractionManager:
         print(f"\n{Fore.BLUE}=== API配置 ==={Style.RESET_ALL}")
 
         # 阿里云密钥
-        current_key = "已设置" if self.config.user.api.aliyun_access_key_id else "未设置"
+        current_key = (
+            "已设置" if self.config.user.api.aliyun_access_key_id else "未设置"
+        )
         print(f"阿里云Access Key ID: {current_key}")
 
-        if input(f"{Fore.CYAN}是否修改阿里云Access Key ID？[y/N]: {Style.RESET_ALL}").lower() in [
+        if input(
+            f"{Fore.CYAN}是否修改阿里云Access Key ID？[y/N]: {Style.RESET_ALL}"
+        ).lower() in [
             "y",
             "yes",
         ]:
-            new_key = input(f"{Fore.CYAN}请输入新的Access Key ID: {Style.RESET_ALL}").strip()
+            new_key = input(
+                f"{Fore.CYAN}请输入新的Access Key ID: {Style.RESET_ALL}"
+            ).strip()
             if new_key:
                 self.config.user.api.aliyun_access_key_id = new_key
 
-        current_secret = "已设置" if self.config.user.api.aliyun_access_key_secret else "未设置"
+        current_secret = (
+            "已设置" if self.config.user.api.aliyun_access_key_secret else "未设置"
+        )
         print(f"阿里云Access Key Secret: {current_secret}")
 
         if input(
             f"{Fore.CYAN}是否修改阿里云Access Key Secret？[y/N]: {Style.RESET_ALL}"
         ).lower() in ["y", "yes"]:
-            new_secret = input(f"{Fore.CYAN}请输入新的Access Key Secret: {Style.RESET_ALL}").strip()
+            new_secret = input(
+                f"{Fore.CYAN}请输入新的Access Key Secret: {Style.RESET_ALL}"
+            ).strip()
             if new_secret:
                 self.config.user.api.aliyun_access_key_secret = new_secret
 
@@ -688,7 +763,9 @@ class UnifiedInteractionManager:
             key = input(f"{Fore.CYAN}请输入 {key_name}: {Style.RESET_ALL}").strip()
             if key and self.config.user.api.save_api_keys:
                 if (
-                    input(f"{Fore.YELLOW}保存API密钥到配置？[y/N]: {Style.RESET_ALL}").lower()
+                    input(
+                        f"{Fore.YELLOW}保存API密钥到配置？[y/N]: {Style.RESET_ALL}"
+                    ).lower()
                     == "y"
                 ):
                     if key_name == "ALIYUN_ACCESS_KEY_ID":

@@ -7,17 +7,22 @@ Day Translation 2 - 语料生成服务
 
 import csv
 import logging
+import sys
 from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-from ..config import get_config
-from ..core.extractors import (extract_definjected_translations,
-                               extract_keyed_translations)
-from ..models.exceptions import ImportError as TranslationImportError
-from ..models.exceptions import ProcessingError, ValidationError
-from ..models.result_models import (OperationResult, OperationStatus,
-                                    OperationType)
+# 添加项目根目录到sys.path
+project_root = Path(__file__).parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+# 使用绝对导入
+from config import get_config
+from core.extractors import extract_definjected_translations, extract_keyed_translations
+from models.exceptions import ImportError as TranslationImportError
+from models.exceptions import ProcessingError, ValidationError
+from models.result_models import OperationResult, OperationStatus, OperationType
 
 
 def generate_parallel_corpus(
@@ -87,7 +92,9 @@ def generate_parallel_corpus(
         if isinstance(e, (ValidationError, TranslationImportError, ProcessingError)):
             raise
         raise ProcessingError(
-            f"生成平行语料失败: {str(e)}", operation="generate_parallel_corpus", stage="语料生成"
+            f"生成平行语料失败: {str(e)}",
+            operation="generate_parallel_corpus",
+            stage="语料生成",
         )
 
 
@@ -138,11 +145,15 @@ def _match_translations(
 
     except Exception as e:
         raise ProcessingError(
-            f"匹配翻译对照失败: {str(e)}", operation="_match_translations", stage="翻译匹配"
+            f"匹配翻译对照失败: {str(e)}",
+            operation="_match_translations",
+            stage="翻译匹配",
         )
 
 
-def _generate_corpus_statistics(parallel_pairs: List[Tuple[str, str, str]]) -> Dict[str, any]:
+def _generate_corpus_statistics(
+    parallel_pairs: List[Tuple[str, str, str]],
+) -> Dict[str, any]:
     """生成语料统计信息"""
     try:
         statistics = {
@@ -183,12 +194,16 @@ def _generate_corpus_statistics(parallel_pairs: List[Tuple[str, str, str]]) -> D
 
     except Exception as e:
         raise ProcessingError(
-            f"生成语料统计失败: {str(e)}", operation="_generate_corpus_statistics", stage="统计生成"
+            f"生成语料统计失败: {str(e)}",
+            operation="_generate_corpus_statistics",
+            stage="统计生成",
         )
 
 
 def _save_parallel_corpus(
-    parallel_pairs: List[Tuple[str, str, str]], output_path: str, statistics: Dict[str, any]
+    parallel_pairs: List[Tuple[str, str, str]],
+    output_path: str,
+    statistics: Dict[str, any],
 ) -> None:
     """保存平行语料到CSV文件"""
     try:
@@ -203,16 +218,24 @@ def _save_parallel_corpus(
             writer.writerow([f"# 总对数: {statistics['total_pairs']}"])
             writer.writerow([f"# 源语言字符数: {statistics['source_chars']}"])
             writer.writerow([f"# 目标语言字符数: {statistics['target_chars']}"])
-            writer.writerow([f"# 平均源语言长度: {statistics['avg_source_length']:.1f}"])
-            writer.writerow([f"# 平均目标语言长度: {statistics['avg_target_length']:.1f}"])
+            writer.writerow(
+                [f"# 平均源语言长度: {statistics['avg_source_length']:.1f}"]
+            )
+            writer.writerow(
+                [f"# 平均目标语言长度: {statistics['avg_target_length']:.1f}"]
+            )
             writer.writerow([])
 
             # 写入列标题
-            writer.writerow(["key", "source_text", "target_text", "source_length", "target_length"])
+            writer.writerow(
+                ["key", "source_text", "target_text", "source_length", "target_length"]
+            )
 
             # 写入语料数据
             for key, source_text, target_text in parallel_pairs:
-                writer.writerow([key, source_text, target_text, len(source_text), len(target_text)])
+                writer.writerow(
+                    [key, source_text, target_text, len(source_text), len(target_text)]
+                )
 
         logging.info(f"平行语料已保存到: {output_path}")
 
@@ -240,7 +263,9 @@ def analyze_corpus_quality(corpus_csv: str) -> Dict[str, any]:
         ProcessingError: 当分析过程出现错误时
     """
     if not Path(corpus_csv).is_file():
-        raise TranslationImportError(f"语料文件不存在: {corpus_csv}", file_path=corpus_csv)
+        raise TranslationImportError(
+            f"语料文件不存在: {corpus_csv}", file_path=corpus_csv
+        )
 
     try:
         quality_metrics = {
@@ -270,17 +295,23 @@ def analyze_corpus_quality(corpus_csv: str) -> Dict[str, any]:
 
                     # 计算长度比例
                     length_ratio = (
-                        len(target_text) / len(source_text) if len(source_text) > 0 else 0
+                        len(target_text) / len(source_text)
+                        if len(source_text) > 0
+                        else 0
                     )
                     length_ratios.append(length_ratio)
 
         if pairs:
             quality_metrics["total_pairs"] = len(pairs)
-            quality_metrics["length_ratio_avg"] = sum(length_ratios) / len(length_ratios)
+            quality_metrics["length_ratio_avg"] = sum(length_ratios) / len(
+                length_ratios
+            )
 
             # 计算标准差
             avg_ratio = quality_metrics["length_ratio_avg"]
-            variance = sum((r - avg_ratio) ** 2 for r in length_ratios) / len(length_ratios)
+            variance = sum((r - avg_ratio) ** 2 for r in length_ratios) / len(
+                length_ratios
+            )
             quality_metrics["length_ratio_std"] = variance**0.5
 
             # 找出可疑的翻译对
@@ -290,8 +321,12 @@ def analyze_corpus_quality(corpus_csv: str) -> Dict[str, any]:
                     quality_metrics["suspicious_pairs"].append(
                         {
                             "key": key,
-                            "source": source[:50] + "..." if len(source) > 50 else source,
-                            "target": target[:50] + "..." if len(target) > 50 else target,
+                            "source": (
+                                source[:50] + "..." if len(source) > 50 else source
+                            ),
+                            "target": (
+                                target[:50] + "..." if len(target) > 50 else target
+                            ),
                             "length_ratio": ratio,
                         }
                     )
@@ -304,5 +339,7 @@ def analyze_corpus_quality(corpus_csv: str) -> Dict[str, any]:
 
     except Exception as e:
         raise ProcessingError(
-            f"分析语料质量失败: {str(e)}", operation="analyze_corpus_quality", stage="质量分析"
+            f"分析语料质量失败: {str(e)}",
+            operation="analyze_corpus_quality",
+            stage="质量分析",
         )

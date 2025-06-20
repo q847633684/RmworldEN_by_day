@@ -20,7 +20,11 @@ class TranslationType(Enum):
 
     def __str__(self) -> str:
         """返回用户友好的类型描述"""
-        type_names = {self.KEYED: "界面文本", self.DEFINJECTED: "游戏内容", self.CORPUS: "平行语料"}
+        type_names = {
+            self.KEYED: "界面文本",
+            self.DEFINJECTED: "游戏内容",
+            self.CORPUS: "平行语料",
+        }
         return type_names.get(self, self.value)
 
 

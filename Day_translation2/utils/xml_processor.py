@@ -23,7 +23,7 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from functools import wraps
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 try:
     from lxml import etree
@@ -145,7 +145,9 @@ class AdvancedXMLProcessor:
                 raise ValidationError(f"XML格式验证失败: {str(e)}")
             return False
 
-    def parse_xml(self, file_path: str, schema_path: Optional[str] = None) -> Optional[Any]:
+    def parse_xml(
+        self, file_path: str, schema_path: Optional[str] = None
+    ) -> Optional[Any]:
         """
         安全解析 XML 文件
 
@@ -219,15 +221,33 @@ class AdvancedXMLProcessor:
         try:
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
-            pretty_print = self.config.pretty_print if pretty_print is None else pretty_print
+            pretty_print = (
+                self.config.pretty_print if pretty_print is None else pretty_print
+            )
             encoding = self.config.encoding if encoding is None else encoding
 
             if self.use_lxml:
                 tree.write(
-                    file_path, encoding=encoding, xml_declaration=True, pretty_print=pretty_print
+                    file_path,
+                    encoding=encoding,
+                    xml_declaration=True,
+                    pretty_print=pretty_print,
                 )
             else:
+                # ElementTree不支持pretty_print参数
                 tree.write(file_path, encoding=encoding, xml_declaration=True)
+
+                # 如果需要格式化，手动处理
+                if pretty_print:
+                    try:
+                        import xml.dom.minidom
+
+                        dom = xml.dom.minidom.parse(file_path)
+                        with open(file_path, "w", encoding=encoding) as f:
+                            f.write(dom.toprettyxml(indent="  ", encoding=None))
+                    except Exception:
+                        # 如果格式化失败，保持原样
+                        pass
 
             logging.debug(f"XML保存成功: {file_path}")
             return True
@@ -308,7 +328,11 @@ class AdvancedXMLProcessor:
         elements = root.xpath(".//*") if self.use_lxml else root.iter()
 
         for elem in elements:
-            key = generate_key_func(elem) if generate_key_func else self._get_element_key(elem)
+            key = (
+                generate_key_func(elem)
+                if generate_key_func
+                else self._get_element_key(elem)
+            )
 
             # 更新元素文本
             if key in translations:
@@ -322,7 +346,9 @@ class AdvancedXMLProcessor:
                     attr_key = f"{key}@{attr_name}"
                     if attr_key in translations:
                         if elem.get(attr_name) != translations[attr_key] or not merge:
-                            elem.set(attr_name, self.sanitize_xml(translations[attr_key]))
+                            elem.set(
+                                attr_name, self.sanitize_xml(translations[attr_key])
+                            )
                             modified = True
 
         return modified
@@ -440,14 +466,18 @@ class AdvancedXMLProcessor:
             success = self.save_xml(tree, xml_file_path)
 
             if success:
-                logging.info(f"智能合并完成: 更新{updated_count}个, 添加{added_count}个翻译")
+                logging.info(
+                    f"智能合并完成: 更新{updated_count}个, 添加{added_count}个翻译"
+                )
 
             return success
 
         except Exception as e:
             raise ProcessingError(f"智能合并XML翻译失败: {str(e)}")
 
-    def _create_new_xml_file(self, xml_file_path: str, translations: Dict[str, str]) -> bool:
+    def _create_new_xml_file(
+        self, xml_file_path: str, translations: Dict[str, str]
+    ) -> bool:
         """创建新的XML翻译文件"""
         try:
             # 创建XML结构
@@ -541,7 +571,7 @@ class AdvancedXMLProcessor:
     def __repr__(self) -> str:
         """返回处理器的详细表示"""
         return (
-            f"AdvancedXMLProcessor(\n"
+            "AdvancedXMLProcessor(\n"
             f"  use_lxml={self.use_lxml},\n"
             f"  validate_xml={self.config.validate_xml},\n"
             f"  parser={self.parser}\n)"
@@ -549,7 +579,9 @@ class AdvancedXMLProcessor:
 
 
 # 兼容性函数，支持旧代码调用
-def get_xml_processor(config: Optional[XMLProcessorConfig] = None) -> AdvancedXMLProcessor:
+def get_xml_processor(
+    config: Optional[XMLProcessorConfig] = None,
+) -> AdvancedXMLProcessor:
     """获取XML处理器实例（兼容性函数）"""
     return AdvancedXMLProcessor(config)
 

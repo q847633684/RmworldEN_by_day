@@ -20,15 +20,28 @@ from typing import Any, Dict, List, Optional, Union
 
 from colorama import Fore, Style
 
-from ..config import get_config
-from ..models.exceptions import ImportError as TranslationImportError
-from ..models.exceptions import (ProcessingError, TranslationError,
-                                 ValidationError)
-from ..models.result_models import (OperationResult, OperationStatus,
-                                    OperationType)
-from ..models.translation_data import TranslationData, TranslationType
-from ..utils.file_utils import get_language_folder_path
-from ..utils.xml_processor import AdvancedXMLProcessor
+try:
+    # 尝试相对导入 (包内使用)
+    from ..config import get_config
+    from ..models.exceptions import ImportError as TranslationImportError
+    from ..models.exceptions import ProcessingError, TranslationError, ValidationError
+    from ..models.result_models import OperationResult, OperationStatus, OperationType
+    from ..models.translation_data import TranslationData, TranslationType
+    from ..utils.file_utils import get_language_folder_path
+except ImportError:
+    # 降级到绝对导入 (独立运行)
+    import sys
+
+    # Path already imported at top of file
+
+    sys.path.append(str(Path(__file__).parent.parent))
+    from config import get_config
+    from models.exceptions import ImportError as TranslationImportError
+    from models.exceptions import ProcessingError, TranslationError, ValidationError
+    from models.result_models import OperationResult, OperationStatus, OperationType
+    from models.translation_data import TranslationData, TranslationType
+    from utils.file_utils import get_language_folder_path
+    from utils.xml_processor import AdvancedXMLProcessor
 
 # 获取配置实例
 CONFIG = get_config()
@@ -61,7 +74,9 @@ def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
 
             # 尝试检测分隔符
             sniffer = csv.Sniffer()
-            delimiter = sniffer.sniff(sample).delimiter if sniffer.has_header(sample) else ","
+            delimiter = (
+                sniffer.sniff(sample).delimiter if sniffer.has_header(sample) else ","
+            )
 
             reader = csv.DictReader(csvfile, delimiter=delimiter)
 
@@ -123,7 +138,8 @@ def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
         error_msg = f"读取CSV文件失败: {str(e)}"
         logging.error(error_msg)
         raise ProcessingError(
-            error_msg, context={"csv_path": csv_path, "operation": "load_translations_from_csv"}
+            error_msg,
+            context={"csv_path": csv_path, "operation": "load_translations_from_csv"},
         )
 
 
@@ -152,7 +168,9 @@ def import_translations(
         TranslationImportError: 导入失败
         ProcessingError: 处理过程出错
     """
-    print(f"{Fore.GREEN}开始导入翻译到模组（{mod_dir}, 语言：{language}）...{Style.RESET_ALL}")
+    print(
+        f"{Fore.GREEN}开始导入翻译到模组（{mod_dir}, 语言：{language}）...{Style.RESET_ALL}"
+    )
 
     # 参数验证
     if not csv_path or not Path(csv_path).exists():
@@ -327,7 +345,10 @@ def update_all_xml(
         logging.info(f"XML更新完成: {message}")
 
         return OperationResult(
-            success=success, operation_type=OperationType.IMPORT, message=message, details=details
+            success=success,
+            operation_type=OperationType.IMPORT,
+            message=message,
+            details=details,
         )
 
     except ValidationError:
@@ -347,7 +368,10 @@ def update_all_xml(
 
 
 def import_translation_entries(
-    entries: List[TranslationData], mod_dir: str, merge: bool = True, backup: bool = True
+    entries: List[TranslationData],
+    mod_dir: str,
+    merge: bool = True,
+    backup: bool = True,
 ) -> OperationResult:
     """
     导入翻译条目到模组
@@ -362,7 +386,9 @@ def import_translation_entries(
         操作结果
     """
     # 转换为字典格式
-    translations = {entry.key: entry.target_text for entry in entries if entry.target_text}
+    translations = {
+        entry.key: entry.target_text for entry in entries if entry.target_text
+    }
 
     if not translations:
         return OperationResult(
@@ -413,3 +439,145 @@ def validate_translation_data(translations: Dict[str, str]) -> List[str]:
         issues.append("发现重复的翻译键")
 
     return issues
+
+
+class AdvancedImporter:
+    """
+    高级导入器类 - 游戏本地化数据导入的门面类
+
+    提供统一的接口来导入翻译数据到游戏模组：
+    - CSV翻译导入
+    - XML文件批量更新
+    - 智能合并策略
+    - 自动备份机制
+    """
+
+    def __init__(self, mod_dir: str, language: str = None):
+        """
+        初始化高级导入器
+
+        Args:
+            mod_dir: 模组目录路径
+            language: 目标语言，默认使用配置中的默认语言
+        """
+        self.mod_dir = mod_dir
+        self.language = language or CONFIG.core.default_language
+        self.config = CONFIG
+
+        # 初始化组件
+        self.xml_processor = AdvancedXMLProcessor()
+
+        # 设置日志
+        self.logger = logging.getLogger(__name__)
+
+    def import_from_csv(self, csv_path: str, backup: bool = True) -> OperationResult:
+        """
+        从CSV文件导入翻译数据
+
+        Args:
+            csv_path: CSV文件路径
+            backup: 是否备份原文件
+
+        Returns:
+            导入操作结果
+        """
+        try:  # 加载翻译数据
+            translations = load_translations_from_csv(csv_path)
+
+            # 验证翻译数据
+            validation_issues = validate_translation_data(translations)
+            if validation_issues:
+                self.logger.warning(f"翻译数据验证发现问题: {validation_issues}")
+
+            # 执行导入
+            result = import_translations(
+                self.mod_dir, translations, self.language, backup
+            )
+
+            self.logger.info(f"CSV导入完成: {csv_path}")
+            return result
+
+        except Exception as e:
+            self.logger.error(f"CSV导入失败: {e}")
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                operation_type=OperationType.IMPORT,
+                message=f"CSV导入失败: {str(e)}",
+                context={"csv_path": csv_path, "mod_dir": self.mod_dir},
+            )
+
+    def import_translations_dict(
+        self, translations: Dict[str, str], backup: bool = True
+    ) -> OperationResult:
+        """
+        从翻译字典导入数据
+
+        Args:
+            translations: 翻译数据字典
+            backup: 是否备份原文件
+              Returns:
+            导入操作结果
+        """
+        try:
+            # 验证翻译数据
+            validation_issues = validate_translation_data(translations)
+            if validation_issues:
+                self.logger.warning(f"翻译数据验证发现问题: {validation_issues}")
+
+            # 执行导入
+            result = import_translations(
+                self.mod_dir, translations, self.language, backup
+            )
+
+            self.logger.info(f"翻译字典导入完成，共 {len(translations)} 条数据")
+            return result
+
+        except Exception as e:
+            self.logger.error(f"翻译字典导入失败: {e}")
+            return OperationResult(
+                success=False,
+                status=OperationStatus.FAILED,
+                operation_type=OperationType.IMPORT,
+                message=f"翻译字典导入失败: {str(e)}",
+                context={
+                    "translation_count": len(translations),
+                    "mod_dir": self.mod_dir,
+                },
+            )
+
+    def get_import_statistics(self, csv_path: str) -> Dict[str, Any]:
+        """
+        获取导入统计信息
+
+        Args:
+            csv_path: CSV文件路径
+              Returns:
+            统计信息字典
+        """
+        try:
+            translations = load_translations_from_csv(csv_path)
+            validation_issues = validate_translation_data(translations)
+
+            return {
+                "total_translations": len(translations),
+                "validation_issues": len(validation_issues),
+                "issues_detail": validation_issues,
+                "csv_file": csv_path,
+                "target_mod": self.mod_dir,
+                "target_language": self.language,
+            }
+
+        except Exception as e:
+            self.logger.error(f"获取导入统计信息失败: {e}")
+            return {"error": str(e), "csv_file": csv_path, "target_mod": self.mod_dir}
+
+
+# 导出所有函数和类
+__all__ = [
+    # 主要导入函数
+    "load_translations_from_csv",
+    "import_translations",
+    # 高级导入器类
+    "AdvancedImporter",
+]

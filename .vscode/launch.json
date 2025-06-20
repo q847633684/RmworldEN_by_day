@@ -1,0 +1,72 @@
+{
+  // 使用 IntelliSense 了解相关属性。
+  // 悬停以查看现有属性的描述。
+  // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: 当前文件",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Python: Day_translation2 主程序",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/Day_translation2/main.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}/Day_translation2"
+    },
+    {
+      "name": "Python: Day_EN 主程序",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/Day_EN/main.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}/Day_EN"
+    },
+    {
+      "name": "Python: 测试 (当前文件)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": [
+        "${file}",
+        "-v"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Python: 测试 (Day_translation2)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": [
+        "${workspaceFolder}/Day_translation2/tests/",
+        "-v",
+        "--tb=short"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}/Day_translation2"
+    },
+    {
+      "name": "Python: 调试模式 (详细日志)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}",
+        "DEBUG": "1"
+      }
+    }
+  ]
+}

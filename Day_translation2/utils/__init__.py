@@ -19,7 +19,9 @@ def get_xml_processor():
 
 def get_content_filter():
     """获取基础内容过滤器（已废弃，使用AdvancedFilterRules替代）"""
-    raise DeprecationWarning("ContentFilter已废弃，请使用get_advanced_filter_rules()替代")
+    raise DeprecationWarning(
+        "ContentFilter已废弃，请使用get_advanced_filter_rules()替代"
+    )
 
 
 def get_advanced_filter_rules():
@@ -36,4 +38,9 @@ def get_file_utils():
     return file_utils
 
 
-__all__ = ["get_xml_processor", "get_content_filter", "get_advanced_filter_rules", "get_file_utils"]
+__all__ = [
+    "get_xml_processor",
+    "get_content_filter",
+    "get_advanced_filter_rules",
+    "get_file_utils",
+]

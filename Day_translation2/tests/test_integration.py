@@ -5,16 +5,18 @@ Day Translation 2 - 集成测试
 """
 
 import os
+import sys
 import tempfile
 from pathlib import Path
 
 import pytest
 
-from Day_translation2.core.translation_facade import TranslationFacade
-from Day_translation2.models.exceptions import ConfigError, TranslationError
-from Day_translation2.models.result_models import (OperationResult,
-                                                   OperationStatus)
-from Day_translation2.services.batch_processor import BatchProcessor
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+
+from core.translation_facade import TranslationFacade
+from models.exceptions import ConfigError, TranslationError
+from models.result_models import OperationResult, OperationStatus
+from services.batch_processor import BatchProcessor
 
 
 class TestIntegration:
@@ -63,13 +65,17 @@ class TestIntegration:
 
     def test_models_import(self):
         """测试模型类导入"""
-        from Day_translation2.models.exceptions import (ConfigError,
-                                                        ImportError,
-                                                        ProcessingError,
-                                                        TranslationError)
-        from Day_translation2.models.result_models import (OperationResult,
-                                                           OperationStatus,
-                                                           OperationType)
+        from models.exceptions import (
+            ImportError,
+            ProcessingError,
+        )
+
+        # TranslationError, ConfigError already imported at top of file
+        from models.result_models import (
+            OperationResult,
+            OperationStatus,
+            OperationType,
+        )
 
         # 验证异常类
         assert issubclass(TranslationError, Exception)
@@ -89,38 +95,36 @@ class TestIntegration:
 
     def test_core_modules_import(self):
         """测试核心模块导入"""
-        from Day_translation2.core.exporters import DataExporter
-        from Day_translation2.core.extractors import DataExtractor
-        from Day_translation2.core.importers import DataImporter
-        from Day_translation2.core.translation_facade import TranslationFacade
+        from core.exporters import AdvancedExporter
+        from core.extractors import AdvancedExtractor
+        from core.importers import AdvancedImporter
+        from core.translation_facade import TranslationFacade
 
         # 验证类存在
-        assert DataExtractor is not None
-        assert DataImporter is not None
-        assert DataExporter is not None
+        assert AdvancedExtractor is not None
+        assert AdvancedImporter is not None
+        assert AdvancedExporter is not None
         assert TranslationFacade is not None
 
     def test_services_import(self):
         """测试服务模块导入"""
-        from Day_translation2.services.batch_processor import BatchProcessor
-        from Day_translation2.services.corpus_generator import \
-            generate_parallel_corpus
-        from Day_translation2.services.translation_service import \
-            MachineTranslateService
+        from services.batch_processor import BatchProcessor
+        from services.corpus_generator import generate_parallel_corpus
+        from services.translation_service import translate_csv
 
         # 验证类和函数存在
         assert BatchProcessor is not None
-        assert MachineTranslateService is not None
+        assert translate_csv is not None
         assert generate_parallel_corpus is not None
 
     def test_utils_import(self):
         """测试工具模块导入"""
-        from Day_translation2.utils.filter_rules import AdvancedFilterRules
-        from Day_translation2.utils.file_utils import ensure_directory_exists
-        from Day_translation2.utils.xml_processor import XMLProcessor
+        from utils.file_utils import ensure_directory_exists
+        from utils.filter_rules import AdvancedFilterRules
+        from utils.xml_processor import AdvancedXMLProcessor
 
         # 验证类和函数存在
-        assert XMLProcessor is not None
+        assert AdvancedXMLProcessor is not None
         assert AdvancedFilterRules is not None
         assert ensure_directory_exists is not None
 
