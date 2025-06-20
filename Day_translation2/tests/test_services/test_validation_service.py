@@ -22,7 +22,7 @@ from ...services.validation_service import (
 class TestValidationIssue:
     """测试验证问题数据类"""
 
-    def test_validation_issue_creation(self):
+    def test_validation_issue_creation(self) -> None:
         """测试验证问题创建"""
         issue = ValidationIssue(
             issue_type="empty_translation",
@@ -44,7 +44,7 @@ class TestValidationIssue:
 class TestValidationReport:
     """测试验证报告数据类"""
 
-    def test_validation_report_creation(self):
+    def test_validation_report_creation(self) -> None:
         """测试验证报告创建"""
         issues = [
             ValidationIssue("error", "error", "key1", "错误1"),
@@ -93,14 +93,14 @@ class TestTranslationValidator:
             ),  # 过长翻译
         ]
 
-    def test_validator_initialization(self, validator):
+    def test_validator_initialization(self, validator) -> None:
         """测试验证器初始化"""
         assert validator.config is not None
         assert validator.content_filter is not None
         assert validator.terminology_dict is not None
         assert validator.validation_rules["check_empty_translations"] is True
 
-    def test_validate_translations_success(self, validator):
+    def test_validate_translations_success(self, validator) -> None:
         """测试翻译验证成功"""
         translations = [
             ("Keyed.Welcome", "Welcome", "欢迎"),
@@ -113,14 +113,14 @@ class TestTranslationValidator:
         assert report.total_entries == 2
         assert report.quality_score > 0
 
-    def test_validate_translations_empty_input(self, validator):
+    def test_validate_translations_empty_input(self, validator) -> None:
         """测试空输入验证"""
         with pytest.raises(ValidationError) as exc_info:
             validator.validate_translations([])
 
         assert "翻译数据不能为空" in str(exc_info.value)
 
-    def test_check_empty_translations(self, validator):
+    def test_check_empty_translations(self, validator) -> None:
         """测试空翻译检查"""
         translations = [
             ("Key1", "Source", ""),  # 空翻译
@@ -140,7 +140,7 @@ class TestTranslationValidator:
         assert "empty_source" in issue_types
         assert "untranslated" in issue_types
 
-    def test_check_format_consistency(self, validator):
+    def test_check_format_consistency(self, validator) -> None:
         """测试格式一致性检查"""
         translations = [
             ("Key1", "Hello {name}", "你好 {name}"),  # 正确的占位符
@@ -160,7 +160,7 @@ class TestTranslationValidator:
         assert len(placeholder_issues) >= 1
         assert len(missing_issues) >= 1
 
-    def test_check_terminology_consistency(self, validator):
+    def test_check_terminology_consistency(self, validator) -> None:
         """测试术语一致性检查"""
         # 模拟术语字典
         validator.terminology_dict = {
@@ -182,7 +182,7 @@ class TestTranslationValidator:
         ]
         assert len(terminology_issues) >= 1
 
-    def test_check_length_ratio(self, validator):
+    def test_check_length_ratio(self, validator) -> None:
         """测试长度比例检查"""
         translations = [
             ("Key1", "Short", "短"),  # 正常比例
@@ -199,7 +199,7 @@ class TestTranslationValidator:
         assert len(too_long) >= 1
         assert len(too_short) >= 1
 
-    def test_check_special_characters(self, validator):
+    def test_check_special_characters(self, validator) -> None:
         """测试特殊字符检查"""
         translations = [
             ("Key1", "Text with <tag>", "带有 <tag> 的文本"),  # 正确保留
@@ -213,7 +213,7 @@ class TestTranslationValidator:
         char_issues = [i for i in issues if i.issue_type == "special_char_mismatch"]
         assert len(char_issues) >= 1
 
-    def test_calculate_quality_score(self, validator):
+    def test_calculate_quality_score(self, validator) -> None:
         """测试质量评分计算"""
         # 测试满分情况
         score = validator._calculate_quality_score(100, 0, 0)
@@ -228,7 +228,7 @@ class TestTranslationValidator:
         score = validator._calculate_quality_score(0, 0, 0)
         assert score == 0.0
 
-    def test_calculate_terminology_score(self, validator):
+    def test_calculate_terminology_score(self, validator) -> None:
         """测试术语一致性评分计算"""
         translations = [("Key1", "Test", "测试")]
 
@@ -247,7 +247,7 @@ class TestTranslationValidator:
 class TestValidationUtilities:
     """测试验证工具函数"""
 
-    def test_validate_csv_file_success(self, temp_dir):
+    def test_validate_csv_file_success(self, temp_dir) -> None:
         """测试CSV文件验证成功"""
         # 创建测试CSV文件
         csv_file = temp_dir / "test.csv"
@@ -263,7 +263,7 @@ Keyed.Start,Start,开始"""
         assert result.is_success or result.status == OperationStatus.WARNING
         assert result.operation_type == OperationType.VALIDATION
 
-    def test_validate_csv_file_missing_columns(self, temp_dir):
+    def test_validate_csv_file_missing_columns(self, temp_dir) -> None:
         """测试缺少必要列的CSV文件"""
         # 创建缺少列的CSV文件
         csv_file = temp_dir / "invalid.csv"
@@ -277,7 +277,7 @@ Test1,测试1"""
 
         assert "缺少必要的列" in str(exc_info.value)
 
-    def test_validate_csv_file_not_exists(self):
+    def test_validate_csv_file_not_exists(self) -> None:
         """测试不存在的CSV文件"""
         with pytest.raises(ValidationError) as exc_info:
             validate_csv_file("/nonexistent/file.csv")
@@ -285,7 +285,7 @@ Test1,测试1"""
         assert "文件不存在" in str(exc_info.value)
 
     @patch("Day_translation2.services.validation_service._save_validation_report")
-    def test_validation_report_generation(self, mock_save_report, temp_dir):
+    def test_validation_report_generation(self, mock_save_report, temp_dir) -> None:
         """测试验证报告生成"""
         # 创建测试CSV文件
         csv_file = temp_dir / "test.csv"

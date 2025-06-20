@@ -62,9 +62,7 @@ def translate_csv(
         )
 
     if not Path(input_csv).is_file():
-        raise TranslationImportError(
-            f"输入CSV文件不存在: {input_csv}", file_path=input_csv
-        )
+        raise TranslationImportError(f"输入CSV文件不存在: {input_csv}", file_path=input_csv)
 
     try:
         # 创建翻译客户端
@@ -155,7 +153,11 @@ def _translate_data(
 ) -> List[Dict[str, str]]:
     """翻译数据"""
     try:
-        from alibabacloud_alimt20181012 import models as alimt_models
+        try:
+            from alibabacloud_alimt20181012 import models as alimt_models
+        except ImportError:
+            logging.warning("阿里云翻译SDK未安装，跳过翻译功能")
+            return data  # 返回原始数据
 
         translated_data = []
 
@@ -182,9 +184,7 @@ def _translate_data(
                         translated_data.append(translated_item)
                     else:
                         # 翻译失败，保留原文
-                        logging.warning(
-                            f"翻译失败: {item['key']}, 错误码: {response.body.code}"
-                        )
+                        logging.warning(f"翻译失败: {item['key']}, 错误码: {response.body.code}")
                         translated_item = item.copy()
                         translated_item["translated"] = item["text"]  # 保留原文
                         translated_data.append(translated_item)

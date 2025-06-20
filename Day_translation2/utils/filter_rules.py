@@ -253,7 +253,7 @@ class AdvancedFilterRules:
         self.field_types[field] = field_type
         self.field_priorities[field] = PRIORITY_LEVELS.get(priority, 50)
 
-    def apply_filters(self, text: str, field_name: str = None) -> str:
+    def apply_filters(self, text: str, field_name: Optional[str] = None) -> str:
         """
         对文本应用过滤规则
 

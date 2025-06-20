@@ -7,6 +7,7 @@ Day Translation 2 - 批量处理服务测试
 import threading
 import time
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 from unittest.mock import MagicMock, Mock, patch
 
 import pytest
@@ -37,20 +38,20 @@ class TestBatchProcessor:
             mod_dirs.append(str(mod_dir))
         return mod_dirs
 
-    def test_processor_initialization(self, processor):
+    def test_processor_initialization(self, processor) -> None:
         """测试处理器初始化"""
         assert processor.max_workers == 2
         assert processor.progress_callback is None
         assert hasattr(processor, "executor")
 
-    def test_processor_with_progress_callback(self):
+    def test_processor_with_progress_callback(self) -> None:
         """测试带进度回调的处理器"""
         callback = Mock()
         processor = BatchProcessor(max_workers=1, progress_callback=callback)
         assert processor.progress_callback == callback
 
     @patch("Day_translation2.core.translation_facade.TranslationFacade")
-    def test_process_single_mod_success(self, mock_facade, processor, temp_dir):
+    def test_process_single_mod_success(self, mock_facade, processor, temp_dir) -> None:
         """测试单个模组处理成功"""
         # 模拟翻译门面
         mock_facade_instance = Mock()
@@ -75,7 +76,7 @@ class TestBatchProcessor:
         assert result.processed_count == 10
         mock_facade_instance.extract_templates_and_generate_csv.assert_called_once()
 
-    def test_process_single_mod_invalid_directory(self, processor):
+    def test_process_single_mod_invalid_directory(self, processor) -> None:
         """测试无效目录的单个模组处理"""
         with pytest.raises(ValidationError) as exc_info:
             processor.process_single_mod(
@@ -87,7 +88,7 @@ class TestBatchProcessor:
     @patch("Day_translation2.core.translation_facade.TranslationFacade")
     def test_process_multiple_mods_success(
         self, mock_facade, processor, mock_mod_directories, temp_dir
-    ):
+    ) -> None:
         """测试多个模组批量处理成功"""
         # 模拟翻译门面
         mock_facade_instance = Mock()
@@ -116,7 +117,7 @@ class TestBatchProcessor:
 
     def test_process_multiple_mods_with_progress(
         self, processor, mock_mod_directories, temp_dir
-    ):
+    ) -> None:
         """测试带进度回调的批量处理"""
         progress_callback = Mock()
         processor.progress_callback = progress_callback
@@ -147,7 +148,7 @@ class TestBatchProcessor:
 
     def test_process_multiple_mods_partial_failure(
         self, processor, mock_mod_directories, temp_dir
-    ):
+    ) -> None:
         """测试部分失败的批量处理"""
         with patch(
             "Day_translation2.core.translation_facade.TranslationFacade"
@@ -190,7 +191,7 @@ class TestBatchProcessor:
             assert success_count == 2
             assert error_count == 1
 
-    def test_thread_safety(self, processor, mock_mod_directories, temp_dir):
+    def test_thread_safety(self, processor, mock_mod_directories, temp_dir) -> None:
         """测试多线程安全性"""
         results = []
         exceptions = []
@@ -242,7 +243,9 @@ class TestBatchProcessorUtilities:
     """测试批量处理工具函数"""
 
     @patch("Day_translation2.services.batch_processor.BatchProcessor")
-    def test_process_multiple_mods_function(self, mock_batch_processor, temp_dir):
+    def test_process_multiple_mods_function(
+        self, mock_batch_processor, temp_dir
+    ) -> None:
         """测试批量处理函数"""
         # 模拟批量处理器
         mock_processor = Mock()
@@ -278,14 +281,14 @@ class TestBatchProcessorUtilities:
         assert result.processed_count == 18  # 10 + 8
         assert result.success_count == 18
 
-    def test_process_multiple_mods_empty_list(self):
+    def test_process_multiple_mods_empty_list(self) -> None:
         """测试空模组列表处理"""
         with pytest.raises(ValidationError) as exc_info:
             process_multiple_mods(mod_directories=[], output_directory="/test/output")
 
         assert "模组目录列表不能为空" in str(exc_info.value)
 
-    def test_process_multiple_mods_invalid_parameters(self):
+    def test_process_multiple_mods_invalid_parameters(self) -> None:
         """测试无效参数的批量处理"""
         with pytest.raises(ValidationError):
             process_multiple_mods(mod_directories=None, output_directory="/test/output")

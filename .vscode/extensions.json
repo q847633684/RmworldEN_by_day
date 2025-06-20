@@ -1,5 +1,5 @@
 {
-  // VS Code扩展推荐列表 - 核心开发必需
+  // VS Code扩展推荐列表 - 按专业AI建议优化
   "recommendations": [
     // ========== AI开发助手 ==========
     "github.copilot", // GitHub Copilot - AI代码助手
@@ -7,11 +7,15 @@
 
     // ========== Python开发核心 ==========
     "ms-python.python", // Python - 官方Python支持
+    "ms-python.vscode-pylance", // Pylance - 智能补全(类型检查已关闭)
+
+    // ========== 格式化工具 ==========
     "ms-python.black-formatter", // Black - 代码格式化
-    "ms-python.flake8", // Flake8 - 代码风格检查
-    "ms-python.mypy-type-checker", // MyPy - 类型检查
-    "ms-python.pylint", // Pylint - 代码质量检查
     "ms-python.isort", // isort - 导入排序
+
+    // ========== 代码质量检查 ==========
+    "ms-python.pylint", // Pylint - 代码质量检查(选择Pylint而非Flake8)
+    "ms-python.mypy-type-checker", // MyPy - 专门负责类型检查
 
     // ========== 拼写和语言 ==========
     "streetsidesoftware.code-spell-checker", // 拼写检查
@@ -28,9 +32,10 @@
     "ms-vscode.vscode-todo-highlight", // TODO高亮
     "alefragnani.Bookmarks" // 书签管理
   ],
-  // 不推荐的扩展 (可能与项目配置冲突)
+  // 不推荐的扩展 (避免工具冲突)
   "unwantedRecommendations": [
+    "ms-python.flake8", // 与Pylint功能重复，按专业AI建议移除
     "ms-python.autopep8", // 与Black冲突
-    "ms-python.pycodestyle" // 与Flake8重复
+    "ms-python.pycodestyle" // 与Pylint重复
   ]
 }

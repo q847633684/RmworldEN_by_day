@@ -38,7 +38,10 @@ class TranslationFacade:
     """翻译门面类，提供统一的翻译操作接口"""
 
     def __init__(
-        self, mod_dir: str, language: str = None, template_location: str = "mod"
+        self,
+        mod_dir: str,
+        language: Optional[str] = None,
+        template_location: str = "mod",
     ):
         """
         初始化 TranslationFacade
@@ -83,7 +86,7 @@ class TranslationFacade:
     def extract_templates_and_generate_csv(
         self,
         output_dir: str,
-        en_keyed_dir: str = None,
+        en_keyed_dir: Optional[str] = None,
         auto_choose_definjected: bool = False,
         structure_choice: str = "original",
         merge_mode: str = "smart-merge",
@@ -234,7 +237,7 @@ class TranslationFacade:
             )
 
     def machine_translate(
-        self, csv_path: str, output_csv: str = None
+        self, csv_path: str, output_csv: Optional[str] = None
     ) -> OperationResult:
         """
         使用机器翻译处理 CSV 文件
@@ -292,7 +295,7 @@ class TranslationFacade:
             )
 
     def translate_csv(
-        self, csv_path: str, output_csv: str = None, **kwargs
+        self, csv_path: str, output_csv: Optional[str] = None, **kwargs
     ) -> OperationResult:
         """
         翻译CSV文件（工作流兼容方法）
@@ -380,7 +383,7 @@ class TranslationFacade:
     def export_with_advanced_features(
         self,
         translations: List = None,
-        output_dir: str = None,
+        output_dir: Optional[str] = None,
         export_config: Optional[Dict[str, Any]] = None,
     ) -> OperationResult:
         """
@@ -431,7 +434,7 @@ class TranslationFacade:
     def export_with_smart_merge(
         self,
         translations: List = None,
-        output_dir: str = None,
+        output_dir: Optional[str] = None,
         mode: str = "smart-merge",
         auto_mode: bool = False,
     ) -> OperationResult:
@@ -484,7 +487,7 @@ class TranslationFacade:
             )
 
     def export_with_user_interaction(
-        self, translations: List = None, output_dir: str = None
+        self, translations: List = None, output_dir: Optional[str] = None
     ) -> OperationResult:
         """
         使用用户交互模式导出翻译

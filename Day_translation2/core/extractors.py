@@ -708,7 +708,7 @@ class AdvancedExtractor:
     - 批量处理和过滤
     """
 
-    def __init__(self, mod_dir: str, language: str = None):
+    def __init__(self, mod_dir: str, language: Optional[str] = None):
         """
         初始化高级提取器
 

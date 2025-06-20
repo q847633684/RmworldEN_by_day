@@ -93,7 +93,7 @@ class LanguageCode(Enum):
             self.JAPANESE: "日语",
             self.KOREAN: "韩语",
         }
-        return language_names.get(self, self.value)
+        return language_names.get(self.value, self.value)
 
 
 # ==================== 翻译字段定义 ====================
@@ -470,7 +470,7 @@ def is_custom_field(field_name: str) -> bool:
 
 def get_field_priority(field_name: str) -> int:
     """获取字段优先级"""
-    return FIELD_PRIORITY.get(field_name, FIELD_PRIORITY["default"])
+    return FIELD_PRIORITY.get(field_name.value, FIELD_PRIORITY["default"])
 
 
 def get_field_type(field_name: str) -> str:

@@ -18,7 +18,7 @@ from ..models.result_models import OperationResult, OperationStatus
 class UnifiedInteractionManager:
     """统一交互管理器，使用统一配置系统"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.config = get_config()
 
     def show_welcome(self):

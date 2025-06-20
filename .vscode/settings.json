@@ -16,16 +16,11 @@
     "python.defaultInterpreterPath": "python",
     "python.analysis.typeCheckingMode": "off",
 
-    // 🎯 正确的E501禁用配置
+    // 🎯 按专业AI建议：Pylint + Mypy 组合，关闭Flake8
     "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true,
-    "python.linting.pylintEnabled": true,
-    "python.linting.mypyEnabled": true,
-    "python.linting.flake8Args": [
-        "--ignore=E501,E402,W503,E203,F401,F841",
-        "--max-line-length=88",
-        "--exclude=__pycache__,.git,.pytest_cache"
-    ],
+    "python.linting.flake8Enabled": false,    // 关闭Flake8，避免与Pylint重复
+    "python.linting.pylintEnabled": true,     // 保留Pylint做细致检查
+    "python.linting.mypyEnabled": true,       // 保留Mypy专门做类型检查
 
     // ========== Pylint配置 ==========
     "python.linting.pylintArgs": [
@@ -62,8 +57,6 @@
         "reportIncompatibleMethodOverride": "none",
         "reportInconsistentConstructor": "none"
     },
-
-    "python.formatting.provider": "black",
 
     // ========== CSpell拼写检查配置 ==========
     "cSpell.enabled": true,

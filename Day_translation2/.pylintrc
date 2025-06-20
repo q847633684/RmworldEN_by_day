@@ -1,0 +1,119 @@
+[MASTER]
+# 忽略的文件或目录
+ignore = __pycache__,
+         .git,
+         .pytest_cache,
+         build,
+         dist,
+         *.egg-info
+
+# 忽略的文件模式
+ignore-patterns = test_.*\.py,
+                  .*_test\.py,
+                  conftest\.py
+
+[MESSAGES CONTROL]
+# 禁用的检查项 (专业AI建议：Pylint关闭格式相关规则，专注代码质量)
+disable =
+    # ===== 格式相关规则全部关闭 (由Black + isort处理) =====
+    C0301,  # line-too-long
+    C0302,  # too-many-lines
+    C0303,  # trailing-whitespace
+    C0304,  # missing-final-newline
+    C0305,  # trailing-newlines
+    W0311,  # bad-indentation
+
+    # ===== 导入和命名格式 (由isort和Black处理) =====
+    C0103,  # invalid-name (让Black处理命名格式)
+    C0411,  # wrong-import-order (由isort处理)
+    C0412,  # ungrouped-imports (由isort处理)
+    C0413,  # wrong-import-position (由isort处理)
+
+    # ===== 文档字符串格式 (项目自定义) =====
+    C0114,  # missing-module-docstring
+    C0115,  # missing-class-docstring
+    C0116,  # missing-function-docstring
+
+    # 设计相关 (项目特定调整)
+    R0903,  # too-few-public-methods
+    R0913,  # too-many-arguments
+    R0914,  # too-many-locals
+    R0915,  # too-many-statements
+    R0902,  # too-many-instance-attributes
+    R0912,  # too-many-branches
+
+    # 导入相关 (由isort处理)
+    W0611,  # unused-import
+    C0415,  # import-outside-toplevel
+
+    # 其他常见问题
+    W0613,  # unused-argument
+    W0622,  # redefined-builtin
+    W0718,  # broad-exception-caught
+    W0719,  # broad-exception-raised
+    R1705,  # no-else-return
+    W1203,  # logging-fstring-interpolation
+    W0707,  # raise-missing-from
+
+    # ===== 类型相关错误全部禁用 (让Mypy专门处理) =====
+    E1101,  # no-member (实例没有某个成员)
+    E1102,  # not-callable (对象不可调用)
+    E1103,  # maybe-no-member (可能没有某个成员)
+    E1111,  # assignment-from-no-return (从无返回值的函数赋值)
+    E1120,  # no-value-for-parameter (缺少参数值)
+    E1121,  # too-many-function-args (函数参数过多)
+    E1123,  # unexpected-keyword-arg (意外的关键字参数)
+    E1124,  # redundant-keyword-arg (冗余的关键字参数)
+    E1125,  # missing-kwoa (缺少关键字参数)
+    E1126,  # invalid-sequence-index (无效的序列索引)
+    E1127,  # invalid-slice-index (无效的切片索引)
+    E1128,  # assignment-from-none (从None赋值)
+    E1129,  # not-context-manager (不是上下文管理器)
+    E1130,  # invalid-unary-operand-type (无效的一元操作数类型)
+    E1131,  # unsupported-binary-operation (不支持的二元操作)
+    E1132,  # repeated-keyword (重复的关键字)
+    E1133,  # not-an-iterable (不是可迭代对象)
+    E1134,  # not-a-mapping (不是映射对象)
+    E1135,  # unsupported-membership-test (不支持的成员测试)
+    E1136,  # unsubscriptable-object (对象不支持下标)
+    E1137,  # unsupported-assignment-operation (不支持的赋值操作)
+    E1138,  # unsupported-delete-operation (不支持的删除操作)
+    E1139,  # invalid-metaclass (无效的元类)
+    E1140,  # unhashable-type (不可哈希的类型)
+    E1141,  # dict-iter-missing-items (字典迭代缺少items)
+
+[FORMAT]
+# 最大行长度 (与Black保持一致)
+max-line-length = 88
+
+[VARIABLES]
+# 允许的变量名
+good-names = i,j,k,ex,_,e,f,df,fn,id,md,os,re,x,y,z,ui,api,csv,xml,url,uri,dt
+
+[BASIC]
+# 函数名规则 (snake_case)
+function-rgx = ^[a-z_][a-z0-9_]{2,30}$
+
+# 方法名规则 (snake_case)
+method-rgx = ^[a-z_][a-z0-9_]{2,30}$
+
+# 类名规则 (PascalCase)
+class-rgx = ^[A-Z][a-zA-Z0-9]+$
+
+# 常量名规则 (UPPER_CASE)
+const-rgx = ^([A-Z_][A-Z0-9_]*|__[a-z0-9_]+__)$
+
+[DESIGN]
+# 类的最大属性数量
+max-attributes = 15
+
+# 类的最大方法数量
+max-public-methods = 25
+
+[REPORTS]
+# 输出格式
+output-format = colorized
+# 不显示详细报告
+reports = no
+# 显示评分
+score = yes

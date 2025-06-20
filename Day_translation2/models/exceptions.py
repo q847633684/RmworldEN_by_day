@@ -14,7 +14,7 @@ class TranslationError(Exception):
     所有翻译相关的异常都应该继承这个基类。
     """
 
-    def __init__(self, message: str, context: Optional[Dict[str, Any]] = None):
+    def __init__(self, message: str, context: Optional[Dict[str, Any]] = None) -> None:
         """初始化翻译异常
 
         Args:
@@ -44,7 +44,7 @@ class ConfigError(TranslationError):
         message: str,
         config_path: Optional[str] = None,
         config_key: Optional[str] = None,
-    ):
+    ) -> None:
         """初始化配置错误
 
         Args:
@@ -74,7 +74,7 @@ class ImportError(TranslationError):
         message: str,
         file_path: Optional[str] = None,
         line_number: Optional[int] = None,
-    ):
+    ) -> None:
         """初始化导入错误
 
         Args:
@@ -104,7 +104,7 @@ class ExportError(TranslationError):
         message: str,
         output_path: Optional[str] = None,
         export_format: Optional[str] = None,
-    ):
+    ) -> None:
         """初始化导出错误
 
         Args:
@@ -135,7 +135,7 @@ class ValidationError(TranslationError):
         field_name: Optional[str] = None,
         expected_type: Optional[str] = None,
         actual_value: Optional[Any] = None,
-    ):
+    ) -> None:
         """初始化验证错误
 
         Args:
@@ -170,7 +170,7 @@ class ProcessingError(TranslationError):
         operation: Optional[str] = None,
         stage: Optional[str] = None,
         affected_items: Optional[List[str]] = None,
-    ):
+    ) -> None:
         """初始化处理错误
 
         Args:
@@ -205,7 +205,7 @@ class NetworkError(TranslationError):
         url: Optional[str] = None,
         status_code: Optional[int] = None,
         response_text: Optional[str] = None,
-    ):
+    ) -> None:
         """初始化网络错误
 
         Args:

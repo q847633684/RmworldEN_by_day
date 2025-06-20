@@ -25,7 +25,7 @@ class TranslationType(Enum):
             self.DEFINJECTED: "游戏内容",
             self.CORPUS: "平行语料",
         }
-        return type_names.get(self, self.value)
+        return type_names.get(self.value, self.value)
 
 
 class TranslationStatus(Enum):
@@ -44,7 +44,7 @@ class TranslationStatus(Enum):
             self.REVIEWED: "已审核",
             self.APPROVED: "已批准",
         }
-        return status_names.get(self, self.value)
+        return status_names.get(self.value, self.value)
 
 
 @dataclass

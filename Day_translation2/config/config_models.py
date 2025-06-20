@@ -583,7 +583,7 @@ class UnifiedConfig:
 
     # ==================== 配置管理功能 ====================
 
-    def save_config(self, config_path: str = None):
+    def save_config(self, config_path: Optional[str] = None):
         """保存配置到文件"""
         if not config_path:
             config_path = get_config_path()

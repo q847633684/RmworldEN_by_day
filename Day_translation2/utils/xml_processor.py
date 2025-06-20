@@ -42,17 +42,22 @@ except ImportError:
 
 # 导入异常类
 try:
-    from ..models.exceptions import ImportError as TranslationImportError
-    from ..models.exceptions import ProcessingError, ValidationError
+    from ..models.exceptions import (
+        ImportError as TranslationImportError,  # type: ignore
+    )
+    from ..models.exceptions import (  # type: ignore
+        ProcessingError,
+        ValidationError,
+    )
 except ImportError:
     # 如果无法导入，定义临时异常类用于独立运行
-    class ValidationError(Exception):
+    class ValidationError(Exception):  # type: ignore[no-redef]
         pass
 
-    class ProcessingError(Exception):
+    class ProcessingError(Exception):  # type: ignore[no-redef]
         pass
 
-    class TranslationImportError(Exception):
+    class TranslationImportError(Exception):  # type: ignore[no-redef]
         pass
 
 
@@ -75,7 +80,7 @@ class XMLProcessorConfig:
 class AdvancedXMLProcessor:
     """企业级 XML 处理器，专注于翻译内容的提取和更新"""
 
-    def __init__(self, config: Optional[XMLProcessorConfig] = None):
+    def __init__(self, config: Optional[XMLProcessorConfig] = None) -> None:
         """
         初始化 XML 处理器
 
@@ -98,8 +103,8 @@ class AdvancedXMLProcessor:
             else:
                 self.parser = None
 
-            self._schema_cache = {}
-            self._namespace_map = {}
+            self._schema_cache: Dict[str, Any] = {}
+            self._namespace_map: Dict[str, str] = {}
 
             if self.config.default_namespace:
                 self._namespace_map[None] = self.config.default_namespace

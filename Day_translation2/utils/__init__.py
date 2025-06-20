@@ -12,16 +12,14 @@ Day Translation 2 - 工具模块
 # 延迟导入函数
 def get_xml_processor():
     """获取XML处理器"""
-    from .xml_processor import XMLProcessor
+    from .xml_processor import AdvancedXMLProcessor
 
-    return XMLProcessor
+    return AdvancedXMLProcessor
 
 
 def get_content_filter():
     """获取基础内容过滤器（已废弃，使用AdvancedFilterRules替代）"""
-    raise DeprecationWarning(
-        "ContentFilter已废弃，请使用get_advanced_filter_rules()替代"
-    )
+    raise DeprecationWarning("ContentFilter已废弃，请使用get_advanced_filter_rules()替代")
 
 
 def get_advanced_filter_rules():

@@ -12,14 +12,14 @@ from ...models.result_models import OperationResult, OperationStatus, OperationT
 class TestOperationStatus:
     """测试操作状态枚举"""
 
-    def test_status_values(self):
+    def test_status_values(self) -> None:
         """测试状态值"""
         assert OperationStatus.SUCCESS.value == "success"
         assert OperationStatus.ERROR.value == "error"
         assert OperationStatus.WARNING.value == "warning"
         assert OperationStatus.CANCELLED.value == "cancelled"
 
-    def test_status_comparison(self):
+    def test_status_comparison(self) -> None:
         """测试状态比较"""
         assert OperationStatus.SUCCESS != OperationStatus.ERROR
         assert OperationStatus.SUCCESS == OperationStatus.SUCCESS
@@ -28,7 +28,7 @@ class TestOperationStatus:
 class TestOperationType:
     """测试操作类型枚举"""
 
-    def test_type_values(self):
+    def test_type_values(self) -> None:
         """测试类型值"""
         assert OperationType.EXTRACTION.value == "extraction"
         assert OperationType.TRANSLATION.value == "translation"
@@ -40,7 +40,7 @@ class TestOperationType:
 class TestOperationResult:
     """测试操作结果类"""
 
-    def test_success_result_creation(self):
+    def test_success_result_creation(self) -> None:
         """测试成功结果创建"""
         result = OperationResult(
             status=OperationStatus.SUCCESS,
@@ -59,7 +59,7 @@ class TestOperationResult:
         assert result.details == []
         assert result.execution_time is None
 
-    def test_error_result_creation(self):
+    def test_error_result_creation(self) -> None:
         """测试错误结果创建"""
         result = OperationResult(
             status=OperationStatus.ERROR,
@@ -75,7 +75,7 @@ class TestOperationResult:
         assert result.error_count == 5
         assert result.details == ["文件不存在", "格式错误"]
 
-    def test_result_with_execution_time(self):
+    def test_result_with_execution_time(self) -> None:
         """测试带执行时间的结果"""
         result = OperationResult(
             status=OperationStatus.SUCCESS,
@@ -86,7 +86,7 @@ class TestOperationResult:
 
         assert result.execution_time == 2.5
 
-    def test_is_success_property(self):
+    def test_is_success_property(self) -> None:
         """测试成功判断属性"""
         success_result = OperationResult(
             status=OperationStatus.SUCCESS,
@@ -102,7 +102,7 @@ class TestOperationResult:
         )
         assert not error_result.is_success
 
-    def test_has_warnings_property(self):
+    def test_has_warnings_property(self) -> None:
         """测试警告判断属性"""
         warning_result = OperationResult(
             status=OperationStatus.WARNING,
@@ -118,7 +118,7 @@ class TestOperationResult:
         )
         assert not success_result.has_warnings
 
-    def test_success_rate_property(self):
+    def test_success_rate_property(self) -> None:
         """测试成功率属性"""
         result = OperationResult(
             status=OperationStatus.SUCCESS,
@@ -138,7 +138,7 @@ class TestOperationResult:
         )
         assert empty_result.success_rate == 0.0
 
-    def test_str_representation(self):
+    def test_str_representation(self) -> None:
         """测试字符串表示"""
         result = OperationResult(
             status=OperationStatus.SUCCESS,

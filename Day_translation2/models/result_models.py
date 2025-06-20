@@ -29,7 +29,7 @@ class OperationStatus(Enum):
             self.CANCELLED: "已取消",
             self.IN_PROGRESS: "进行中",
         }
-        return status_names.get(self, self.value)
+        return status_names.get(self.value, self.value)
 
 
 class OperationType(Enum):
@@ -55,7 +55,7 @@ class OperationType(Enum):
             self.GENERATION: "生成",
             self.BATCH_PROCESSING: "批量处理",
         }
-        return type_names.get(self, self.value)
+        return type_names.get(self.value, self.value)
 
 
 @dataclass

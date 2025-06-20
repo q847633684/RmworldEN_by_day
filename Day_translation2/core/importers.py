@@ -28,11 +28,10 @@ try:
     from ..models.result_models import OperationResult, OperationStatus, OperationType
     from ..models.translation_data import TranslationData, TranslationType
     from ..utils.file_utils import get_language_folder_path
+    from ..utils.xml_processor import AdvancedXMLProcessor
 except ImportError:
     # 降级到绝对导入 (独立运行)
-    import sys
-
-    # Path already imported at top of file
+    import sys  # Path already imported at top of file
 
     sys.path.append(str(Path(__file__).parent.parent))
     from config import get_config
@@ -41,7 +40,6 @@ except ImportError:
     from models.result_models import OperationResult, OperationStatus, OperationType
     from models.translation_data import TranslationData, TranslationType
     from utils.file_utils import get_language_folder_path
-    from utils.xml_processor import AdvancedXMLProcessor
 
 # 获取配置实例
 CONFIG = get_config()
@@ -74,9 +72,7 @@ def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
 
             # 尝试检测分隔符
             sniffer = csv.Sniffer()
-            delimiter = (
-                sniffer.sniff(sample).delimiter if sniffer.has_header(sample) else ","
-            )
+            delimiter = sniffer.sniff(sample).delimiter if sniffer.has_header(sample) else ","
 
             reader = csv.DictReader(csvfile, delimiter=delimiter)
 
@@ -168,9 +164,7 @@ def import_translations(
         TranslationImportError: 导入失败
         ProcessingError: 处理过程出错
     """
-    print(
-        f"{Fore.GREEN}开始导入翻译到模组（{mod_dir}, 语言：{language}）...{Style.RESET_ALL}"
-    )
+    print(f"{Fore.GREEN}开始导入翻译到模组（{mod_dir}, 语言：{language}）...{Style.RESET_ALL}")
 
     # 参数验证
     if not csv_path or not Path(csv_path).exists():
@@ -386,9 +380,7 @@ def import_translation_entries(
         操作结果
     """
     # 转换为字典格式
-    translations = {
-        entry.key: entry.target_text for entry in entries if entry.target_text
-    }
+    translations = {entry.key: entry.target_text for entry in entries if entry.target_text}
 
     if not translations:
         return OperationResult(
@@ -452,7 +444,7 @@ class AdvancedImporter:
     - 自动备份机制
     """
 
-    def __init__(self, mod_dir: str, language: str = None):
+    def __init__(self, mod_dir: str, language: Optional[str] = None):
         """
         初始化高级导入器
 
@@ -490,9 +482,7 @@ class AdvancedImporter:
                 self.logger.warning(f"翻译数据验证发现问题: {validation_issues}")
 
             # 执行导入
-            result = import_translations(
-                self.mod_dir, translations, self.language, backup
-            )
+            result = import_translations(self.mod_dir, translations, self.language, backup)
 
             self.logger.info(f"CSV导入完成: {csv_path}")
             return result
@@ -526,9 +516,7 @@ class AdvancedImporter:
                 self.logger.warning(f"翻译数据验证发现问题: {validation_issues}")
 
             # 执行导入
-            result = import_translations(
-                self.mod_dir, translations, self.language, backup
-            )
+            result = import_translations(self.mod_dir, translations, self.language, backup)
 
             self.logger.info(f"翻译字典导入完成，共 {len(translations)} 条数据")
             return result

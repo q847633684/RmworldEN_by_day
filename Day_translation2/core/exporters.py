@@ -957,7 +957,9 @@ class AdvancedExporter:
     - 高级导出功能集成
     """
 
-    def __init__(self, output_dir: str = None, language: str = None):
+    def __init__(
+        self, output_dir: Optional[str] = None, language: Optional[str] = None
+    ):
         """
         初始化高级导出器
 
@@ -1012,7 +1014,7 @@ class AdvancedExporter:
             )
 
     def export_keyed_xml(
-        self, translations: List[TranslationData], output_dir: str = None
+        self, translations: List[TranslationData], output_dir: Optional[str] = None
     ) -> OperationResult:
         """
         导出Keyed翻译为XML格式
@@ -1053,7 +1055,7 @@ class AdvancedExporter:
             )
 
     def export_definjected_xml(
-        self, translations: List[TranslationData], output_dir: str = None
+        self, translations: List[TranslationData], output_dir: Optional[str] = None
     ) -> OperationResult:
         """
         导出DefInjected翻译为XML格式
