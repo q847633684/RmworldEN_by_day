@@ -5,19 +5,23 @@ Day Translation 2 - 验证服务
 遵循提示文件标准：PEP 8规范、具体异常处理、用户友好错误信息。
 """
 
+import csv
 import logging
+import os
 import re
 import sys
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set, Tuple
+
 from collections import Counter, defaultdict
 from dataclasses import dataclass
-from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
 
-# 使用绝对导入
-from services.config_service import config_service
 from models.exceptions import ImportError as TranslationImportError
 from models.exceptions import ProcessingError, ValidationError
 from models.result_models import OperationResult, OperationStatus, OperationType
+
+# 使用绝对导入
+from services.config_service import config_service
 
 # 添加项目根目录到sys.path
 project_root = Path(__file__).parent.parent
@@ -76,6 +80,7 @@ class TranslationValidator:
         """初始化验证器"""
         self.config = config_service.get_unified_config()
         self.terminology_dict = self._load_terminology_dict()
+        self.content_filter = self._create_content_filter()
 
         # 验证规则配置
         self.validation_rules = {
@@ -392,6 +397,21 @@ class TranslationValidator:
         score = 100 - (issue_rate * 100)
         return max(0.0, min(100.0, score))
 
+    def _create_content_filter(self) -> Dict[str, Any]:
+        """
+        创建内容过滤器
+
+        Returns:
+            内容过滤器配置字典
+        """
+        return {
+            "min_length": 1,
+            "max_length": 1000,
+            "forbidden_chars": ["<", ">"],
+            "required_format_patterns": [],
+            "encoding": "utf-8",
+        }
+
     def _load_terminology_dict(self) -> Dict[str, List[str]]:
         """加载术语词典"""
         # 游戏UI常用术语字典
@@ -411,7 +431,6 @@ class TranslationValidator:
             "Speed": ["速度"],
             "Level": ["等级", "级别"],
             "Experience": ["经验", "经验值"],
-            # "Skill": ["技能"],  # DUPLICATE: Removed to avoid F601
             "Inventory": ["背包", "物品栏"],
             "Equipment": ["装备"],
             "Weapon": ["武器"],
@@ -450,8 +469,8 @@ class TranslationValidator:
             "Potion": ["药水", "药剂"],
             "Heal": ["治疗", "回复"],
             "Restore": ["恢复", "回复"],
-            "Bu": ["增益", "强化"],
-            "Debu": ["减益", "削弱"],
+            "Buff": ["增益", "强化"],
+            "Debuff": ["减益", "削弱"],
             "Status": ["状态"],
             "Effect": ["效果"],
             "Duration": ["持续时间"],
@@ -630,7 +649,7 @@ class TranslationValidator:
             "Dirty": ["脏的"],
             "Safe": ["安全的"],
             "Dangerous": ["危险的"],
-            # DUPLICATE 'Easy': "Easy": ["容易的"],
+            # DUPLICATE 'Easy' already defined above
             "Difficult": ["困难的"],
             "Simple": ["简单的"],
             "Complex": ["复杂的"],
@@ -638,7 +657,7 @@ class TranslationValidator:
             "Clear": ["清楚的", "清除"],
             "Unclear": ["不清楚的"],
             "Obvious": ["明显的"],
-            # DUPLICATE 'Hidden': "Hidden": ["隐藏的"],
+            # DUPLICATE 'Hidden' already defined above
             "Visible": ["可见的"],
             "Invisible": ["不可见的"],
             "Open": ["打开", "开放的"],
@@ -662,7 +681,7 @@ class TranslationValidator:
             "Activate": ["激活"],
             "Deactivate": ["停用"],
             "Turn On": ["打开"],
-            "Turn O": ["关闭"],
+            "Turn Off": ["关闭"],
             "Switch": ["切换", "开关"],
             "Change": ["改变", "更改"],
             "Modify": ["修改"],
@@ -892,14 +911,14 @@ class TranslationValidator:
             "Flexible": ["灵活的"],
             "Rigid": ["刚性的"],
             "Soft": ["软的"],
-            # DUPLICATE 'Hard': "Hard": ["硬的", "困难的"],
+            # DUPLICATE 'Hard' already defined above
             "Smooth": ["光滑的"],
             "Rough": ["粗糙的"],
             "Sharp": ["锋利的"],
             "Dull": ["钝的", "无聊的"],
             "Bright": ["明亮的"],
             "Dark": ["黑暗的"],
-            # DUPLICATE 'Light': "Light": ["光", "轻的"],
+            # DUPLICATE 'Light' already defined above
             "Shadow": ["阴影"],
             "Shade": ["阴影", "遮蔽"],
             "Sunshine": ["阳光"],
@@ -947,7 +966,7 @@ class TranslationValidator:
             "Either": ["要么", "也"],
             "Neither": ["既不"],
             "Both": ["两者都"],
-            # DUPLICATE 'Either': "Either": ["任一"],
+            # DUPLICATE 'Either' already defined above
             "Or": ["或者"],
             "And": ["和"],
             "But": ["但是"],
@@ -956,9 +975,9 @@ class TranslationValidator:
             "Although": ["虽然"],
             "Though": ["虽然"],
             "Despite": ["尽管"],
-            "In spite o": ["尽管"],
+            "In spite of": ["尽管"],
             "Because": ["因为"],
-            # DUPLICATE 'Since': "Since": ["因为", "自从"],
+            # DUPLICATE 'Since' already defined above
             "As": ["因为", "作为"],
             "So": ["所以"],
             "Therefore": ["因此"],
@@ -969,7 +988,7 @@ class TranslationValidator:
             "For example": ["例如"],
             "For instance": ["例如"],
             "Such as": ["比如"],
-            # DUPLICATE 'Like': "Like": ["像", "喜欢"],
+            # DUPLICATE 'Like' already defined above
             "Including": ["包括"],
             "Except": ["除了"],
             "Besides": ["除了", "此外"],
@@ -977,7 +996,7 @@ class TranslationValidator:
             "Moreover": ["而且"],
             "Furthermore": ["此外"],
             "Additionally": ["另外"],
-            # DUPLICATE 'Also': "Also": ["也"],
+            # DUPLICATE 'Also' already defined above
             "Plus": ["加", "另外"],
             "Minus": ["减", "负的"],
             "Times": ["次", "乘"],
@@ -1117,7 +1136,7 @@ class TranslationValidator:
             "Under": ["在...下"],
             "Beneath": ["在...下面"],
             "Behind": ["在...后面"],
-            "In front o": ["在...前面"],
+            "In front of": ["在...前面"],
             "Beside": ["在...旁边"],
             "Next to": ["在...旁边"],
             "Near": ["在...附近"],
@@ -1134,11 +1153,11 @@ class TranslationValidator:
             "Along": ["沿着"],
             "Around": ["围绕"],
             "Beyond": ["超越"],
-            # DUPLICATE 'Past': "Past": ["经过", "过去"],
+            # DUPLICATE 'Past' already defined above
             "Into": ["进入"],
-            "Out o": ["从...出来"],
+            "Out of": ["从...出来"],
             "Onto": ["到...上"],
-            "O": ["离开", "关闭"],
+            "Off": ["离开", "关闭"],
             "Up": ["向上"],
             "Down": ["向下"],
             "In": ["在...里"],
@@ -1150,24 +1169,8 @@ class TranslationValidator:
             "With": ["与", "用"],
             "By": ["被", "通过"],
             "For": ["为了"],
-            "O": ["...的"],
-            # DUPLICATE 'About': "About": ["关于"],
-            # DUPLICATE 'Like': "Like": ["像"],
-            # DUPLICATE 'As': "As": ["作为"],
-            "Than": ["比"],
-            "I": ["如果"],
-            "Unless": ["除非"],
-            "Whether": ["是否"],
-            # DUPLICATE 'That': "That": ["那个"],
-            # DUPLICATE 'Which': "Which": ["哪个"],
-            # DUPLICATE 'Who': "Who": ["谁"],
-            # DUPLICATE 'Whom': "Whom": ["谁"],
-            # DUPLICATE 'Whose': "Whose": ["谁的"],
-            # DUPLICATE 'Where': "Where": ["哪里"],
-            # DUPLICATE 'When': "When": ["何时"],
-            # DUPLICATE 'Why': "Why": ["为什么"],
-            # DUPLICATE 'How': "How": ["如何"],
-            # DUPLICATE 'What': "What": ["什么"],
+            "Of": ["...的"],
+            # DUPLICATE entries already defined above - removing to avoid F601 errors
         }
 
 
@@ -1192,11 +1195,11 @@ def validate_csv_file(csv_path: str) -> OperationResult:
         # 加载CSV数据
         translations = []
         with open(csv_path, "r", encoding="utf-8") as f:
-            import csv
-
             reader = csv.DictReader(f)
 
-            if "key" not in reader.fieldnames or "text" not in reader.fieldnames:
+            if reader.fieldnames and (
+                "key" not in reader.fieldnames or "text" not in reader.fieldnames
+            ):
                 raise ValidationError(
                     f"CSV文件缺少必要的列（key, text）: {csv_path}",
                     field_name="csv_columns",

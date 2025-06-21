@@ -24,9 +24,9 @@ class TestTranslationFacade:
     """测试翻译门面类"""
 
     @pytest.fixture
-    def facade(self):
+    def facade(self, temp_dir):
         """创建翻译门面实例"""
-        return TranslationFacade()
+        return TranslationFacade(mod_dir=str(temp_dir))
 
     @pytest.fixture
     def mock_config(self):

@@ -17,46 +17,22 @@ import os
 import re
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set, Union
-
-try:
-    import yaml
-except ImportError:
-    yaml = None
-
-try:
-    # 尝试相对导入 (包内使用)
-    from ..config import FilterConfig
-    from ..constants.complete_definitions import (
-        DEFAULT_IGNORE_FIELDS,
-        DEFAULT_TRANSLATION_FIELDS,
-        FIELD_GROUPS,
-        FIELD_PRIORITY,
-        FIELD_TYPES,
-        NON_TEXT_PATTERNS,
-        PRIORITY_LEVELS,
-        get_field_group,
-        get_field_priority,
-        get_field_type,
-        is_override_field,
-    )
-    from ..models.exceptions import ConfigError, ValidationError
-except ImportError:
-    # 回退到绝对导入 (直接运行时)
-    from config import FilterConfig
-    from constants.complete_definitions import (
-        DEFAULT_IGNORE_FIELDS,
-        DEFAULT_TRANSLATION_FIELDS,
-        FIELD_GROUPS,
-        FIELD_PRIORITY,
-        FIELD_TYPES,
-        NON_TEXT_PATTERNS,
-        PRIORITY_LEVELS,
-        get_field_group,
-        get_field_priority,
-        get_field_type,
-        is_override_field,
-    )
-    from models.exceptions import ConfigError, ValidationError
+import yaml
+from config import FilterConfig
+from constants.complete_definitions import (
+    DEFAULT_IGNORE_FIELDS,
+    DEFAULT_TRANSLATION_FIELDS,
+    FIELD_GROUPS,
+    FIELD_PRIORITY,
+    FIELD_TYPES,
+    NON_TEXT_PATTERNS,
+    PRIORITY_LEVELS,
+    get_field_group,
+    get_field_priority,
+    get_field_type,
+    is_override_field,
+)
+from models.exceptions import ConfigError, ValidationError
 
 
 class AdvancedFilterRules:
@@ -64,6 +40,9 @@ class AdvancedFilterRules:
 
     从统一的 complete_definitions 导入所有字段定义和常量，避免重复定义。
     """
+
+    # 定义字段类型常量
+    FIELD_TYPES = {"translatable", "ignored", "conditional", "override", "custom"}
 
     def __init__(
         self,
@@ -362,19 +341,19 @@ class AdvancedFilterRules:
         """
         try:
             data = self.to_dict()
-            file_path = Path(file_path)
-            file_path.parent.mkdir(parents=True, exist_ok=True)
+            path_obj = Path(file_path)
+            path_obj.parent.mkdir(parents=True, exist_ok=True)
 
             if format.lower() == "json":
-                with open(file_path, "w", encoding="utf-8") as f:
+                with open(path_obj, "w", encoding="utf-8") as f:
                     json.dump(data, f, indent=4, ensure_ascii=False)
             elif format.lower() == "yaml" and yaml:
-                with open(file_path, "w", encoding="utf-8") as f:
+                with open(path_obj, "w", encoding="utf-8") as f:
                     yaml.safe_dump(data, f, allow_unicode=True, default_flow_style=False)
             else:
                 raise ConfigError(f"不支持的文件格式: {format}")
 
-            logging.info(f"过滤规则已保存到: {file_path}")
+            logging.info(f"过滤规则已保存到: {path_obj}")
 
         except Exception as e:
             raise ConfigError(f"保存过滤规则失败: {str(e)}")
@@ -460,8 +439,6 @@ class AdvancedFilterRules:
             return False
 
         # 检查非文本模式（较宽松）
-        import re
-
         for pattern in self.non_text_patterns:
             if re.match(pattern, text):
                 return False
@@ -570,8 +547,6 @@ class AdvancedFilterRules:
             return False
 
         # 检查是否为数字表达式
-        import re
-
         if re.match(r"^[0-9\.\-\+\s]+$", text):
             return False
 
@@ -584,4 +559,4 @@ class AdvancedFilterRules:
 
 
 # 导出主要接口
-__all__ = ["AdvancedFilterRules", "get_unified_filter_rules"]
+__all__ = ["AdvancedFilterRules"]

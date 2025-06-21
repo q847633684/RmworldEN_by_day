@@ -25,10 +25,10 @@ current_dir = Path(__file__).parent
 if str(current_dir) not in sys.path:
     sys.path.insert(0, str(current_dir))
 
-from services.config_service import config_service
 from core.translation_facade import TranslationFacade
 from interaction.interaction_manager import UnifiedInteractionManager
 from models.exceptions import ConfigError, TranslationError
+from services.config_service import config_service
 
 
 def main() -> None:

@@ -12,9 +12,8 @@ from pathlib import Path
 from typing import Optional
 
 from colorama import Fore, Style
-
-from models.exceptions import ValidationError
 from config.data_models import PathValidationResult, UnifiedConfig
+from models.exceptions import ValidationError
 
 
 class PathValidationService:
@@ -38,7 +37,9 @@ class PathValidationService:
         try:
             if not path or not path.strip():
                 return PathValidationResult(
-                    is_valid=False, error_message="路径不能为空", suggestion="请输入有效的路径"
+                    is_valid=False,
+                    error_message="路径不能为空",
+                    suggestion="请输入有效的路径",
                 )
 
             path = path.strip()
@@ -94,7 +95,10 @@ class PathValidationService:
 
         if not os.access(path, os.R_OK):
             return PathValidationResult(
-                is_valid=False, path=path, error_message="目录无法访问", suggestion="请检查目录权限"
+                is_valid=False,
+                path=path,
+                error_message="目录无法访问",
+                suggestion="请检查目录权限",
             )
 
         return PathValidationResult(is_valid=True, path=path)
@@ -144,7 +148,10 @@ class PathValidationService:
 
         if not os.access(path, os.R_OK):
             return PathValidationResult(
-                is_valid=False, path=path, error_message="文件无法读取", suggestion="请检查文件权限"
+                is_valid=False,
+                path=path,
+                error_message="文件无法读取",
+                suggestion="请检查文件权限",
             )
 
         return PathValidationResult(is_valid=True, path=path)
@@ -270,14 +277,18 @@ class PathValidationService:
 
                 if result.is_valid:
                     print(f"{Fore.GREEN}✅ 路径验证通过{Style.RESET_ALL}")
-                    return result.path
+                    assert result.path is not None  # 验证通过时path不应为None
+                    validated_path: str = result.path
+                    return validated_path
                 else:
                     print(f"{Fore.RED}❌ {result.error_message}{Style.RESET_ALL}")
                     if result.suggestion:
                         print(f"{Fore.YELLOW}💡 {result.suggestion}{Style.RESET_ALL}")
 
                     # 询问是否重新输入
-                    retry = input(f"{Fore.CYAN}是否重新输入？[Y/n]: {Style.RESET_ALL}").lower()
+                    retry = input(
+                        f"{Fore.CYAN}是否重新输入？[Y/n]: {Style.RESET_ALL}"
+                    ).lower()
                     if retry in ["n", "no"]:
                         return None
 
@@ -322,14 +333,94 @@ class PathValidationService:
             self.logger.error(f"获取文件大小失败: {e}")
         return None
 
-    def get_directory_file_count(self, path: str, extension: Optional[str] = None) -> int:
+    def normalize_path(self, path: str) -> PathValidationResult:
+        """
+        规范化路径
+
+        Args:
+            path: 原始路径
+
+        Returns:
+            路径验证结果，包含规范化后的路径
+        """
+        try:
+            # 转换为Path对象并解析
+            path_obj = Path(path).resolve()
+            normalized = str(path_obj)
+
+            return PathValidationResult(
+                is_valid=True, path=path, normalized_path=normalized, error_message=None
+            )
+        except Exception as e:
+            return PathValidationResult(
+                is_valid=False,
+                path=path,
+                normalized_path=path,
+                error_message=f"路径规范化失败: {e}",
+            )
+
+    def get_directory_info(self, path: str) -> dict:
+        """
+        获取目录详细信息
+
+        Args:
+            path: 目录路径
+
+        Returns:
+            目录信息字典
+        """
+        try:
+            if not self.check_directory_exists(path):
+                return {
+                    "exists": False,
+                    "path": path,
+                    "error": "目录不存在",
+                    "is_directory": False,
+                }
+
+            path_obj = Path(path)
+            stat_info = path_obj.stat()
+
+            # 统计文件数量
+            file_count = 0
+            dir_count = 0
+            for item in path_obj.iterdir():
+                if item.is_file():
+                    file_count += 1
+                elif item.is_dir():
+                    dir_count += 1
+
+            return {
+                "exists": True,
+                "is_directory": True,
+                "path": str(path_obj.resolve()),
+                "size": stat_info.st_size,
+                "created": stat_info.st_ctime,
+                "modified": stat_info.st_mtime,
+                "file_count": file_count,
+                "dir_count": dir_count,
+                "total_items": file_count + dir_count,
+            }
+
+        except Exception as e:
+            self.logger.error(f"获取目录信息失败: {e}")
+            return {
+                "exists": False,
+                "path": path,
+                "error": str(e),
+                "is_directory": False,
+            }
+
+    def get_directory_file_count(
+        self, path: str, extension: Optional[str] = None
+    ) -> int:
         """获取目录中文件数量"""
         try:
             if not self.check_directory_exists(path):
                 return 0
 
             count = 0
-            for root, dirs, files in os.walk(path):
+            for _, _, files in os.walk(path):
                 for file in files:
                     if extension is None or file.lower().endswith(extension.lower()):
                         count += 1

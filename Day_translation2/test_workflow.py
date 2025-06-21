@@ -47,7 +47,12 @@ def create_test_mod_structure(mod_dir: Path):
 </LanguageData>"""
 
     definjected_file = (
-        mod_dir / "Languages" / "English" / "DefInjected" / "ThingDe" / "Items_Resource_Stuff.xml"
+        mod_dir
+        / "Languages"
+        / "English"
+        / "DefInjected"
+        / "ThingDe"
+        / "Items_Resource_Stuff.xml"
     )
     definjected_file.write_text(definjected_content, encoding="utf-8")
 
@@ -94,7 +99,9 @@ def test_complete_workflow():
             # 验证翻译数据结构
             if all_translations:
                 sample = all_translations[0]
-                print(f"✅ 数据结构验证: key={sample.key}, type={sample.translation_type}")
+                print(
+                    f"✅ 数据结构验证: key={sample.key}, type={sample.translation_type}"
+                )
 
             # 5. 导出为CSV
             print("\n📋 步骤4: 导出为CSV")

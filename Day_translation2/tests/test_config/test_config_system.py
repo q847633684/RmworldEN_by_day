@@ -4,14 +4,14 @@
 测试新的配置架构，不考虑向后兼容
 """
 
-import pytest
 import json
 import tempfile
 from pathlib import Path
-from unittest.mock import patch, mock_open
+from unittest.mock import mock_open, patch
 
-from config.data_models import UnifiedConfig, CoreConfig, UserConfig, GeneralConfig
+import pytest
 from config.config_manager import ConfigManager
+from config.data_models import CoreConfig, GeneralConfig, UnifiedConfig, UserConfig
 from services.config_service import ConfigService
 
 
@@ -34,7 +34,11 @@ def sample_config_data():
             "debug_mode": False,
         },
         "user": {
-            "general": {"auto_mode": False, "remember_paths": True, "confirm_operations": True},
+            "general": {
+                "auto_mode": False,
+                "remember_paths": True,
+                "confirm_operations": True,
+            },
             "remembered_paths": {},
             "path_history": {},
         },
@@ -47,7 +51,9 @@ class TestDataModels:
 
     def test_core_config_creation(self):
         """测试核心配置创建"""
-        config = CoreConfig(default_language="zh_CN", source_language="en", debug_mode=True)
+        config = CoreConfig(
+            default_language="zh_CN", source_language="en", debug_mode=True
+        )
 
         assert config.default_language == "zh_CN"
         assert config.source_language == "en"
@@ -121,7 +127,10 @@ class TestConfigManager:
         # 验证配置内容
         assert loaded_config.version == config.version
         assert loaded_config.core.default_language == config.core.default_language
-        assert loaded_config.user.general.remember_paths == config.user.general.remember_paths
+        assert (
+            loaded_config.user.general.remember_paths
+            == config.user.general.remember_paths
+        )
 
     def test_load_nonexistent_config(self, temp_config_file):
         """测试加载不存在的配置文件"""
@@ -254,7 +263,10 @@ class TestConfigService:
         service = ConfigService(manager)
 
         # 模拟旧版本配置
-        old_config_data = {"version": "1.0.0", "settings": {"language": "zh_CN", "debug": False}}
+        old_config_data = {
+            "version": "1.0.0",
+            "settings": {"language": "zh_CN", "debug": False},
+        }
 
         # 迁移配置
         migrated_config = service.migrate_config(old_config_data)
@@ -312,8 +324,8 @@ class TestConfigIntegration:
         with open(config_file, "w") as f:
             f.write('{"invalid": json')
 
-        # 加载应该失败但返回默认配置
-        config = manager.load_config(str(config_file))
+        # 加载应该失败但返回默认配置（启用错误恢复）
+        config = manager.load_config(str(config_file), error_recovery=True)
 
         assert isinstance(config, UnifiedConfig)
         assert config.version == "2.0.0"

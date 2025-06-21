@@ -19,15 +19,18 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
+
 from colorama import Fore, Style
-# 项目模块导入
-from services.config_service import config_service
 from models.exceptions import ImportError as TranslationImportError
 from models.exceptions import ProcessingError, TranslationError, ValidationError
 from models.result_models import OperationResult, OperationStatus, OperationType
 from models.translation_data import TranslationData, TranslationType
+
+# 项目模块导入
+from services.config_service import config_service
 from utils.file_utils import get_language_folder_path
 from utils.xml_processor import AdvancedXMLProcessor
+
 # 确保能够导入项目模块
 current_dir = Path(__file__).parent.parent
 if str(current_dir) not in sys.path:
@@ -64,7 +67,9 @@ def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
 
             # 尝试检测分隔符
             sniffer = csv.Sniffer()
-            delimiter = sniffer.sniff(sample).delimiter if sniffer.has_header(sample) else ","
+            delimiter = (
+                sniffer.sniff(sample).delimiter if sniffer.has_header(sample) else ","
+            )
 
             reader = csv.DictReader(csv_file, delimiter=delimiter)
 
@@ -158,7 +163,9 @@ def import_translations(
         TranslationImportError: 导入失败
         ProcessingError: 处理过程出错
     """
-    print(f"{Fore.GREEN}开始导入翻译到模组（{mod_dir}, 语言：{language}）...{Style.RESET_ALL}")
+    print(
+        f"{Fore.GREEN}开始导入翻译到模组（{mod_dir}, 语言：{language}）...{Style.RESET_ALL}"
+    )
 
     # 参数验证
     if not csv_path or not Path(csv_path).exists():
@@ -307,7 +314,11 @@ def update_all_xml(
                 continue
 
         # 生成操作结果
-        status = OperationStatus.SUCCESS if len(updated_files) > 0 else OperationStatus.FAILED
+        status = (
+            OperationStatus.SUCCESS
+            if len(updated_files) > 0
+            else OperationStatus.FAILED
+        )
         total_files = len(xml_files)
 
         details = {
@@ -368,7 +379,9 @@ def import_translation_entries(
         操作结果
     """
     # 转换为字典格式
-    translations = {entry.key: entry.translated_text for entry in entries if entry.translated_text}
+    translations = {
+        entry.key: entry.translated_text for entry in entries if entry.translated_text
+    }
 
     if not translations:
         return OperationResult(
@@ -470,7 +483,9 @@ class AdvancedImporter:
                 self.logger.warning(f"翻译数据验证发现问题: {validation_issues}")
 
             # 执行导入
-            result = update_all_xml(self.mod_dir, translations, self.language, True, backup)
+            result = update_all_xml(
+                self.mod_dir, translations, self.language, True, backup
+            )
 
             self.logger.info(f"CSV导入完成: {csv_path}")
             return result
@@ -503,7 +518,9 @@ class AdvancedImporter:
                 self.logger.warning(f"翻译数据验证发现问题: {validation_issues}")
 
             # 执行导入
-            result = update_all_xml(self.mod_dir, translations, self.language, True, backup)
+            result = update_all_xml(
+                self.mod_dir, translations, self.language, True, backup
+            )
 
             self.logger.info(f"翻译字典导入完成，共 {len(translations)} 条数据")
             return result

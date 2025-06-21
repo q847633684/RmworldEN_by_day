@@ -158,7 +158,9 @@ class TestTranslationValidator:
         issues = validator._check_format_consistency(translations)
 
         # 应该发现2个占位符问题
-        placeholder_issues = [i for i in issues if i.issue_type == "placeholder_mismatch"]
+        placeholder_issues = [
+            i for i in issues if i.issue_type == "placeholder_mismatch"
+        ]
         missing_issues = [i for i in issues if i.issue_type == "missing_placeholder"]
 
         assert len(placeholder_issues) >= 1
@@ -181,15 +183,25 @@ class TestTranslationValidator:
         issues = validator._check_terminology_consistency(translations)
 
         # 应该发现术语不一致问题
-        terminology_issues = [i for i in issues if i.issue_type == "terminology_inconsistency"]
+        terminology_issues = [
+            i for i in issues if i.issue_type == "terminology_inconsistency"
+        ]
         assert len(terminology_issues) >= 1
 
     def test_check_length_ratio(self, validator) -> None:
         """测试长度比例检查"""
         translations = [
             ("Key1", "Short", "短"),  # 正常比例
-            ("Key2", "Short", "这是一个非常非常长的翻译"),  # 过长
-            ("Key3", "Very long source text", "短"),  # 过短
+            (
+                "Key2",
+                "Short",
+                "这是一个非常非常长的翻译，超出正常比例范围的文本内容",
+            ),  # 过长，超过3.0倍
+            (
+                "Key3",
+                "Very very very long source text with many words",
+                "短",
+            ),  # 过短，低于0.2倍
         ]
 
         issues = validator._check_length_ratio(translations)
@@ -239,7 +251,9 @@ class TestTranslationValidator:
         assert score == 100.0
 
         # 有术语问题
-        issues = [ValidationIssue("terminology_inconsistency", "warning", "Key1", "术语问题")]
+        issues = [
+            ValidationIssue("terminology_inconsistency", "warning", "Key1", "术语问题")
+        ]
         score = validator._calculate_terminology_score(translations, issues)
         assert score < 100.0
 
@@ -279,12 +293,14 @@ Test1,测试1"""
 
     def test_validate_csv_file_not_exists(self) -> None:
         """测试不存在的CSV文件"""
-        with pytest.raises(ValidationError) as exc_info:
+        from models.exceptions import ImportError as TranslationImportError
+
+        with pytest.raises(TranslationImportError) as exc_info:
             validate_csv_file("/nonexistent/file.csv")
 
         assert "文件不存在" in str(exc_info.value)
 
-    @patch("Day_translation2.services.validation_service._save_validation_report")
+    @patch("services.validation_service._save_validation_report")
     def test_validation_report_generation(self, mock_save_report, temp_dir) -> None:
         """测试验证报告生成"""
         # 创建测试CSV文件

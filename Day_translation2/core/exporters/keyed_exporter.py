@@ -10,12 +10,12 @@ from pathlib import Path
 from typing import Dict, List
 
 from colorama import Fore, Style
-
-from services.config_service import config_service
 from models.exceptions import ExportError, ValidationError
 from models.result_models import OperationResult, OperationStatus, OperationType
 from models.translation_data import TranslationData, TranslationType
+from services.config_service import config_service
 from utils.file_utils import get_language_folder_path
+
 from .xml_generators import generate_keyed_xml
 
 CONFIG = config_service.get_unified_config()
@@ -101,9 +101,7 @@ def export_keyed(
                 continue
 
         success = len(exported_files) > 0
-        message = (
-            f"成功导出 {len(exported_files)} 个Keyed文件，包含 {len(keyed_translations)} 条翻译"
-        )
+        message = f"成功导出 {len(exported_files)} 个Keyed文件，包含 {len(keyed_translations)} 条翻译"
 
         if success:
             print(f"{Fore.GREEN}✅ {message}{Style.RESET_ALL}")

@@ -4,12 +4,12 @@
 测试新架构的历史记录管理功能，不考虑向后兼容
 """
 
-import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch
 
+import pytest
+from config.data_models import GeneralConfig, UnifiedConfig, UserConfig
 from services.history_service import HistoryService, history_service
-from config.data_models import UnifiedConfig, UserConfig, GeneralConfig
 
 
 @pytest.fixture
@@ -138,19 +138,21 @@ class TestHistoryService:
         assert stats["type2"]["count"] == 1
         assert stats["type1"]["has_last_used"] is True
 
-    @patch("pathlib.Path.exists")
-    def test_validate_and_clean_history(self, mock_exists, history_service_instance, test_config):
+    def test_validate_and_clean_history(
+        self, history_service_instance, test_config, tmp_path
+    ):
         """测试验证和清理历史记录"""
         service = history_service_instance
         path_type = "test_path"
 
-        # 模拟一些路径存在，一些不存在
-        mock_exists.side_effect = lambda path: str(path).endswith("1")
+        # 创建一些测试路径
+        existing_path = tmp_path / "existing_file.txt"
+        existing_path.write_text("test")
+        nonexistent_path = tmp_path / "nonexistent_file.txt"
 
         # 添加历史记录
-        service.add_to_history(path_type, "/path/1", test_config)  # 存在
-        service.add_to_history(path_type, "/path/2", test_config)  # 不存在
-        service.add_to_history(path_type, "/path/3", test_config)  # 不存在
+        service.add_to_history(path_type, str(existing_path), test_config)  # 存在
+        service.add_to_history(path_type, str(nonexistent_path), test_config)  # 不存在
 
         # 验证和清理
         service.validate_and_clean_history(test_config)
@@ -158,7 +160,7 @@ class TestHistoryService:
         # 验证只保留存在的路径
         history = service.get_history(path_type, test_config)
         assert len(history) == 1
-        assert history[0] == "/path/1"
+        assert history[0] == str(existing_path)
 
     def test_empty_config_handling(self, history_service_instance):
         """测试空配置的处理"""
@@ -206,7 +208,9 @@ class TestHistoryServiceIntegration:
         # 2. 添加历史记录
         service.add_to_history("mod_folder", "/games/rimworld/mods/mod1", test_config)
         service.add_to_history("mod_folder", "/games/rimworld/mods/mod2", test_config)
-        service.add_to_history("source_file", "/work/translations/file1.csv", test_config)
+        service.add_to_history(
+            "source_file", "/work/translations/file1.csv", test_config
+        )
 
         # 3. 验证状态
         remembered = service.get_remembered_path("mod_folder", test_config)

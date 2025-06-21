@@ -10,9 +10,9 @@ Author: Day汉化项目
 Created: 2024-12-19
 """
 
-from typing import List, Optional, Dict, Any
 import logging
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 from config.data_models import UnifiedConfig
 
@@ -98,7 +98,9 @@ class HistoryService:
             logger.error(f"获取历史记录失败: {path_type}, 错误: {e}")
             return []
 
-    def get_last_used_path(self, path_type: str, config: UnifiedConfig) -> Optional[str]:
+    def get_last_used_path(
+        self, path_type: str, config: UnifiedConfig
+    ) -> Optional[str]:
         """获取最后使用的路径
 
         Args:
@@ -139,7 +141,9 @@ class HistoryService:
             logger.error(f"记住路径失败: {path_type} -> {path}, 错误: {e}")
             raise
 
-    def get_remembered_path(self, path_type: str, config: UnifiedConfig) -> Optional[str]:
+    def get_remembered_path(
+        self, path_type: str, config: UnifiedConfig
+    ) -> Optional[str]:
         """获取记住的路径
 
         Args:
@@ -223,7 +227,9 @@ class HistoryService:
                     paths = history_data.get("paths", [])
                     stats[path_type] = {
                         "count": len(paths) if isinstance(paths, list) else 0,
-                        "max_length": history_data.get("max_length", self.default_max_history),
+                        "max_length": history_data.get(
+                            "max_length", self.default_max_history
+                        ),
                         "has_last_used": history_data.get("last_used") is not None,
                     }
 
@@ -272,7 +278,9 @@ class HistoryService:
                     # 检查last_used是否还有效
                     last_used = history_data.get("last_used")
                     if last_used and last_used not in valid_paths:
-                        history_data["last_used"] = valid_paths[0] if valid_paths else None
+                        history_data["last_used"] = (
+                            valid_paths[0] if valid_paths else None
+                        )
                         cleaned_count += 1
 
             if cleaned_count > 0:

@@ -12,20 +12,40 @@ from pathlib import Path
 
 def check_module_imports():
     """检查所有核心模块的导入"""
-    print("� 检查核心模块导入...")
+    print("🔍 检查核心模块导入...")
 
     modules_to_check = [
-        ("core.extractors", "extract_keyed_translations, AdvancedExtractor"),
-        ("core.importers", "import_translations, AdvancedImporter"),
+        # Core 核心模块 (P0)
+        ("core.extractors", "extract_all_translations"),
+        ("core.importers", "AdvancedImporter"),
         ("core.generators", "TemplateGenerator"),
+        ("core.template_manager", "TemplateManager"),
+        ("core.translation_facade", "TranslationFacade"),
         ("core.exporters", "export_keyed, AdvancedExporter"),
-        ("models.exceptions", "ProcessingError, ValidationError"),
-        ("models.result_models", "OperationResult, OperationStatus"),
+        # Models 数据模型 (P0)
+        ("models.exceptions", "ProcessingError, ValidationError, TranslationError"),
+        ("models.result_models", "OperationResult, OperationStatus, OperationType"),
         ("models.translation_data", "TranslationData, TranslationType"),
+        # Config 配置系统 (P0)
+        ("config", "CONFIG_VERSION, ConfigManager"),
+        ("config.data_models", "GeneralConfig, CoreConfig, UserConfig, UnifiedConfig"),
+        ("constants.complete_definitions", "LanguageCode, XML_TAGS"),
+        # Services 服务层 (P1)
+        ("services.config_service", "config_service"),
+        ("services.path_service", "path_validation_service"),
+        ("services.history_service", "history_service"),
+        ("services.validation_service", "TranslationValidator, validate_csv_file"),
+        ("services.batch_processor", "BatchProcessor"),
+        ("services.user_interaction_service", "user_interaction_service"),
+        ("services.translation_service", "translate_csv"),
+        # Utils 工具模块 (P1)
         ("utils.xml_processor", "AdvancedXMLProcessor"),
         ("utils.filter_rules", "AdvancedFilterRules"),
-        ("utils.file_utils", "get_language_folder_path"),
-        ("config", "get_config"),
+        ("utils.file_utils", "get_language_folder_path, ensure_directory_exists"),
+        ("utils.export_manager", "ExportManager"),
+        ("utils.user_interaction", "UserInteractionManager"),
+        # Interaction 交互层 (P2)
+        ("interaction.interaction_manager", "UnifiedInteractionManager"),
     ]
 
     failed_imports = []
@@ -53,7 +73,6 @@ def check_project_structure():
         "core/generators.py",
         "core/translation_facade.py",
         "core/template_manager.py",
-
         # 导出器子模块
         "core/exporters/__init__.py",
         "core/exporters/xml_generators.py",
@@ -62,30 +81,30 @@ def check_project_structure():
         "core/exporters/csv_exporter.py",
         "core/exporters/export_utils.py",
         "core/exporters/advanced_exporter.py",
-
         # 模型
         "models/__init__.py",
         "models/exceptions.py",
         "models/result_models.py",
         "models/translation_data.py",
-
         # 工具
         "utils/__init__.py",
         "utils/xml_processor.py",
         "utils/filter_rules.py",
         "utils/file_utils.py",
-
         # 服务
         "services/__init__.py",
         "services/validation_service.py",
         "services/batch_processor.py",
-
+        "services/config_service.py",
+        "services/path_service.py",
+        "services/history_service.py",
+        "services/user_interaction_service.py",
         # 配置
         "config/__init__.py",
-        "config/config_models.py",
+        "config/data_models.py",
+        "config/config_manager.py",
         "constants/__init__.py",
         "constants/complete_definitions.py",
-
         # 测试
         "tests/__init__.py",
         "pytest.ini",
@@ -140,39 +159,71 @@ def run_pylint_check():
     """运行Pylint代码质量检查"""
     print("\n🔍 运行Pylint质量检查...")
 
-    core_modules = [
+    # 扩展的模块列表，按重要性分类
+    critical_modules = [
+        # 核心模块 (P0)
         "core/extractors.py",
         "core/importers.py",
         "core/generators.py",
+        "core/translation_facade.py",
+        "core/template_manager.py",
+        # 导出器模块 (P0) - exporters文件夹下的各个模块
+        "core/exporters/xml_generators.py",
+        "core/exporters/keyed_exporter.py",
+        "core/exporters/definjected_exporter.py",
+        "core/exporters/csv_exporter.py",
+        "core/exporters/export_utils.py",
+        "core/exporters/advanced_exporter.py",
+        # 数据模型 (P0)
         "models/exceptions.py",
         "models/result_models.py",
+        "models/translation_data.py",
+        # 配置系统 (P0)
+        "config/data_models.py",
+        "config/config_manager.py",
+        # 服务层 (P1)
+        "services/config_service.py",
+        "services/path_service.py",
+        "services/history_service.py",
+        "services/validation_service.py",
+        "services/batch_processor.py",
+        # 工具模块 (P1)
         "utils/xml_processor.py",
+        "utils/file_utils.py",
+        "utils/filter_rules.py",
+        # 交互层 (P2)
+        "interaction/interaction_manager.py",
     ]
 
     pylint_results = []
 
-    for module in core_modules:
+    for module in critical_modules:
         if Path(module).exists():
             try:
                 result = subprocess.run(
                     [sys.executable, "-m", "pylint", module, "--score=yes"],
                     capture_output=True,
                     text=True,
-                    timeout=30,
+                    timeout=45,  # 增加超时时间
                 )
 
                 # 提取评分
                 score = "N/A"
                 if "Your code has been rated at" in result.stdout:
-                    lines = result.stdout.split('\n')
+                    lines = result.stdout.split("\n")
                     for line in lines:
                         if "Your code has been rated at" in line:
-                            score = line.split("Your code has been rated at")[1].split("(")[0].strip()
+                            score = (
+                                line.split("Your code has been rated at")[1].split("(")[0].strip()
+                            )
                             break
 
                 print(f"📊 {module}: {score}")
                 pylint_results.append((module, score, result.stdout))
 
+            except subprocess.TimeoutExpired:
+                print(f"⏰ {module}: Pylint检查超时")
+                pylint_results.append((module, "TIMEOUT", "检查超时"))
             except Exception as e:
                 print(f"⚠️ {module}: Pylint检查失败 ({e})")
                 pylint_results.append((module, "ERROR", str(e)))
@@ -182,29 +233,32 @@ def run_pylint_check():
     return pylint_results
 
 
-def run_import_test():
-    """运行导入测试"""
-    print("\n🧪 运行导入测试...")
+def run_new_architecture_test():
+    """运行新架构导入测试"""
+    print("\n🧪 运行新架构测试...")
 
     try:
-        result = subprocess.run(
-            [sys.executable, "../test_core_imports.py"],
-            capture_output=True,
-            text=True,
-            timeout=30,
-            cwd="."
-        )
+        # 测试基础配置导入
+        from config import CONFIG_VERSION, ConfigManager, GeneralConfig
 
-        if result.returncode == 0:
-            print("✅ 核心模块导入测试通过")
-            return True
-        else:
-            print(f"❌ 导入测试失败:\n{result.stderr}")
-            return False
+        print("✅ 配置模块导入成功")
+
+        # 测试服务层导入
+        from services.config_service import config_service
+        from services.history_service import history_service
+        from services.path_service import path_validation_service
+
+        print("✅ 服务层导入成功")
+
+        # 测试配置对象创建
+        config = GeneralConfig()
+        print("✅ 配置对象创建成功")
+
+        return True
 
     except Exception as e:
-        print(f"⚠️ 导入测试跳过: {e}")
-        return None
+        print(f"❌ 新架构测试失败: {e}")
+        return False
 
 
 def run_comprehensive_check():
@@ -232,8 +286,8 @@ def run_comprehensive_check():
     # 4. Pylint质量检查
     pylint_results = run_pylint_check()
 
-    # 5. 导入测试
-    import_test_result = run_import_test()
+    # 5. 新架构测试
+    import_test_result = run_new_architecture_test()
 
     # 生成总结报告
     print("\n" + "=" * 60)
@@ -253,17 +307,91 @@ def run_comprehensive_check():
     if syntax_errors:
         print(f"   语法错误: {len(syntax_errors)} 个")
 
-    print(f"\n🧪 导入测试: {'✅ 通过' if import_test_result else '❌ 失败' if import_test_result is False else '⚠️ 跳过'}")
+    print(f"\n🧪 新架构测试: {'✅ 通过' if import_test_result else '❌ 失败'}")
 
     print(f"\n📈 Pylint评分:")
     high_quality_count = 0
-    for module, score, _ in pylint_results:
-        print(f"   - {module}: {score}")
-        if score != "ERROR" and score != "N/A" and float(score.split('/')[0]) >= 9.0:
-            high_quality_count += 1
+    excellent_count = 0
+    good_count = 0
+    needs_improvement_count = 0
+    error_count = 0
+
+    # 按分类统计
+    critical_modules = []
+    service_modules = []
+    util_modules = []
+    other_modules = []
+
+    for module, score, output in pylint_results:
+        if score in ["ERROR", "TIMEOUT", "N/A"]:
+            print(f"   - {module}: {score}")
+            error_count += 1
+        else:
+            try:
+                numeric_score = float(score.split("/")[0])
+                print(f"   - {module}: {score}")
+
+                # 分类计数
+                if numeric_score >= 9.8:
+                    excellent_count += 1
+                elif numeric_score >= 9.0:
+                    high_quality_count += 1
+                elif numeric_score >= 8.0:
+                    good_count += 1
+                else:
+                    needs_improvement_count += 1
+
+                # 按模块类型分类
+                if module.startswith(("core/", "models/", "config/")):
+                    critical_modules.append((module, numeric_score))
+                elif module.startswith("services/"):
+                    service_modules.append((module, numeric_score))
+                elif module.startswith("utils/"):
+                    util_modules.append((module, numeric_score))
+                else:
+                    other_modules.append((module, numeric_score))
+
+            except (ValueError, IndexError):
+                print(f"   - {module}: {score} (格式错误)")
+                error_count += 1
 
     print(f"\n🎯 质量总结:")
-    print(f"   - 高质量模块 (≥9.0分): {high_quality_count}/{len(pylint_results)}")
+    total_checked = len(pylint_results)
+    print(f"   - 检查模块总数: {total_checked}")
+    print(f"   - 优秀模块 (≥9.8分): {excellent_count}")
+    print(f"   - 高质量模块 (≥9.0分): {high_quality_count}")
+    print(f"   - 良好模块 (≥8.0分): {good_count}")
+    print(f"   - 需改进模块 (<8.0分): {needs_improvement_count}")
+    print(f"   - 检查失败模块: {error_count}")
+
+    # 按模块类型分析
+    def calc_avg_score(modules_list):
+        if not modules_list:
+            return 0.0
+        return sum(score for _, score in modules_list) / len(modules_list)
+
+    if critical_modules:
+        avg_critical = calc_avg_score(critical_modules)
+        print(f"   - 核心模块平均分: {avg_critical:.2f} ({len(critical_modules)}个)")
+
+    if service_modules:
+        avg_service = calc_avg_score(service_modules)
+        print(f"   - 服务层平均分: {avg_service:.2f} ({len(service_modules)}个)")
+
+    if util_modules:
+        avg_util = calc_avg_score(util_modules)
+        print(f"   - 工具模块平均分: {avg_util:.2f} ({len(util_modules)}个)")
+
+    # 评判整体质量
+    quality_ratio = (excellent_count + high_quality_count) / max(total_checked - error_count, 1)
+    if quality_ratio >= 0.8:
+        quality_status = "🎉 优秀"
+    elif quality_ratio >= 0.6:
+        quality_status = "👍 良好"
+    else:
+        quality_status = "⚠️ 需要改进"
+
+    print(f"   - 整体质量状态: {quality_status}")
     print(f"   - 整体状态: {'🎉 优秀' if overall_status else '⚠️ 需要改进'}")
 
     if overall_status:

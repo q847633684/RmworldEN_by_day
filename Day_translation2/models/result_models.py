@@ -5,10 +5,12 @@ Day Translation 2 - 操作结果数据模型
 遵循提示文件标准：使用PascalCase类命名，提供用户友好的信息。
 """
 
+# 标准库
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
+# 第三方库
 from dataclasses import dataclass, field
 
 
@@ -75,8 +77,8 @@ class OperationResult:
     operation_type: OperationType
     message: str
 
-    # 可选的详细信息 - 支持两种类型以兼容测试
-    details: Union[Dict[str, Any], List[str]] = field(default_factory=list)
+    # 可选的详细信息
+    details: Dict[str, Any] = field(default_factory=dict)
     errors: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
 
@@ -218,29 +220,47 @@ class OperationResult:
 
     @classmethod
     def success(
-        cls, message: str, operation_type: OperationType = OperationType.EXTRACTION, **kwargs
+        cls,
+        message: str,
+        operation_type: OperationType = OperationType.EXTRACTION,
+        **kwargs,
     ) -> "OperationResult":
         """创建成功结果"""
         return cls(
-            status=OperationStatus.SUCCESS, operation_type=operation_type, message=message, **kwargs
+            status=OperationStatus.SUCCESS,
+            operation_type=operation_type,
+            message=message,
+            **kwargs,
         )
 
     @classmethod
     def failed(
-        cls, message: str, operation_type: OperationType = OperationType.EXTRACTION, **kwargs
+        cls,
+        message: str,
+        operation_type: OperationType = OperationType.EXTRACTION,
+        **kwargs,
     ) -> "OperationResult":
         """创建失败结果"""
         return cls(
-            status=OperationStatus.FAILED, operation_type=operation_type, message=message, **kwargs
+            status=OperationStatus.FAILED,
+            operation_type=operation_type,
+            message=message,
+            **kwargs,
         )
 
     @classmethod
     def warning(
-        cls, message: str, operation_type: OperationType = OperationType.EXTRACTION, **kwargs
+        cls,
+        message: str,
+        operation_type: OperationType = OperationType.EXTRACTION,
+        **kwargs,
     ) -> "OperationResult":
         """创建警告结果"""
         return cls(
-            status=OperationStatus.WARNING, operation_type=operation_type, message=message, **kwargs
+            status=OperationStatus.WARNING,
+            operation_type=operation_type,
+            message=message,
+            **kwargs,
         )
 
     def __str__(self) -> str:

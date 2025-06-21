@@ -23,7 +23,11 @@ def generate_keyed_xml(translations: List[TranslationData]) -> str:
     lines = ['<?xml version="1.0" encoding="utf-8"?>', "<LanguageData>"]
 
     for translation in translations:
-        comment = f"  <!-- EN: {translation.original_text} -->" if translation.original_text else ""
+        comment = (
+            f"  <!-- EN: {translation.original_text} -->"
+            if translation.original_text
+            else ""
+        )
         if comment:
             lines.append(comment)
 

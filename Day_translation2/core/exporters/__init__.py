@@ -17,11 +17,28 @@ Day Translation 2 - 导出模块统一接口
     from core.exporters.advanced_exporter import AdvancedExporter
 """
 
-# XML生成工具
-from .xml_generators import (
-    generate_keyed_xml,
-    generate_definjected_xml,
-    generate_definjected_xml_multi_type,
+# 高级导出器门面类
+from .advanced_exporter import AdvancedExporter
+
+# CSV导出功能
+from .csv_exporter import (
+    export_to_csv,
+)
+
+# DefInjected导出功能
+from .definjected_exporter import (
+    export_definjected,
+    export_definjected_to_csv,
+    export_definjected_with_defs_structure,
+    export_definjected_with_original_structure,
+)
+
+# 高级导出工具
+from .export_utils import (
+    batch_export_with_smart_merge,
+    export_all_with_advanced_features,
+    export_with_smart_merge,
+    export_with_user_interaction,
 )
 
 # Keyed导出功能
@@ -30,29 +47,12 @@ from .keyed_exporter import (
     export_keyed_to_csv,
 )
 
-# DefInjected导出功能
-from .definjected_exporter import (
-    export_definjected,
-    export_definjected_with_original_structure,
-    export_definjected_with_defs_structure,
-    export_definjected_to_csv,
+# XML生成工具
+from .xml_generators import (
+    generate_definjected_xml,
+    generate_definjected_xml_multi_type,
+    generate_keyed_xml,
 )
-
-# CSV导出功能
-from .csv_exporter import (
-    export_to_csv,
-)
-
-# 高级导出工具
-from .export_utils import (
-    export_with_smart_merge,
-    batch_export_with_smart_merge,
-    export_with_user_interaction,
-    export_all_with_advanced_features,
-)
-
-# 高级导出器门面类
-from .advanced_exporter import AdvancedExporter
 
 # 向后兼容的导出函数别名
 __all__ = [

@@ -10,29 +10,14 @@ import os
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+from services import config_service
+from core.template_manager import TemplateManager
+from models.exceptions import ConfigError
+from models.exceptions import ImportError as TranslationImportError
+from models.exceptions import TranslationError
+from models.result_models import OperationResult, OperationStatus, OperationType
 from .extractors import extract_all_translations
-
-# 导入处理 - 修复E402问题
-try:
-    # 优先尝试相对导入
-    from ..config import get_config
-    from ..core.template_manager import TemplateManager
-    from ..models.exceptions import ConfigError
-    from ..models.exceptions import ImportError as TranslationImportError
-    from ..models.exceptions import TranslationError
-    from ..models.result_models import OperationResult, OperationStatus, OperationType
-except ImportError:
-    # 回退到绝对导入（需要修改sys.path）
-    project_root = Path(__file__).parent.parent
-    if str(project_root) not in sys.path:
-        sys.path.insert(0, str(project_root))
-
-    from services.config_service import config_service
-    from core.template_manager import TemplateManager
-    from models.exceptions import ConfigError
-    from models.exceptions import ImportError as TranslationImportError
-    from models.exceptions import TranslationError
-    from models.result_models import OperationResult, OperationStatus, OperationType
 
 
 class TranslationFacade:
@@ -82,7 +67,7 @@ class TranslationFacade:
         if not os.path.exists(os.path.join(self.mod_dir, "Languages")):
             logging.warning(f"模组目录中未找到 Languages 文件夹: {self.mod_dir}")
 
-    def extract_templates_and_generate_csv(
+    def extract_templates_and_generate_csv(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         output_dir: str,
         en_keyed_dir: Optional[str] = None,
@@ -300,19 +285,21 @@ class TranslationFacade:
         Returns:
             操作结果
         """
-        return self.machine_translate_csv(csv_path, output_csv)
+        return self.machine_translate(csv_path, output_csv)
 
     def _get_api_key(self, key_name: str) -> str:
         """获取API密钥，支持从环境变量、配置文件或用户输入获取"""
-        key = self.config.get_api_key(key_name) or os.getenv(key_name)
+        # 首先尝试从环境变量获取
+        key = os.getenv(key_name)
         if not key:
             from colorama import Fore, Style
 
             key = input(f"{Fore.CYAN}请输入 {key_name}: {Style.RESET_ALL}").strip()
-            if input(f"{Fore.YELLOW}保存API密钥到配置？[y/n]: {Style.RESET_ALL}").lower() == "y":
-                self.config.set_api_key(key_name, key)
-                self.config.save_config()
-                logging.debug(f"已保存 {key_name} 到用户配置文件")
+            if (
+                input(f"{Fore.YELLOW}保存API密钥到环境变量？[y/n]: {Style.RESET_ALL}").lower()
+                == "y"
+            ):
+                logging.info(f"请手动设置环境变量 {key_name}")
         return key
 
     def validate_mod_structure(self) -> OperationResult:
@@ -367,7 +354,7 @@ class TranslationFacade:
 
     def export_with_advanced_features(
         self,
-        translations: List = None,
+        translations: Optional[List[Any]] = None,
         output_dir: Optional[str] = None,
         export_config: Optional[Dict[str, Any]] = None,
     ) -> OperationResult:
@@ -385,8 +372,6 @@ class TranslationFacade:
         try:
             # 如果没有提供翻译数据，则提取当前模组的翻译
             if translations is None:
-                from .extractors import extract_all_translations
-
                 translations = extract_all_translations(self.mod_dir, self.language)
 
             # 如果没有提供输出目录，则使用模组目录
@@ -396,12 +381,13 @@ class TranslationFacade:
             # 导入高级导出功能
             from .exporters import export_all_with_advanced_features
 
-            return export_all_with_advanced_features(
+            result = export_all_with_advanced_features(
                 translations=translations,
                 output_dir=output_dir,
                 language=self.language,
                 export_config=export_config,
             )
+            return result
 
         except Exception as e:
             error_msg = f"高级导出失败: {str(e)}"
@@ -418,7 +404,7 @@ class TranslationFacade:
 
     def export_with_smart_merge(
         self,
-        translations: List = None,
+        translations: Optional[List[Any]] = None,
         output_dir: Optional[str] = None,
         mode: str = "smart-merge",
         auto_mode: bool = False,
@@ -448,13 +434,14 @@ class TranslationFacade:
             # 导入智能导出功能
             from .exporters import export_with_smart_merge
 
-            return export_with_smart_merge(
+            result = export_with_smart_merge(
                 translations=translations,
                 output_dir=output_dir,
                 language=self.language,
                 mode=mode,
                 auto_mode=auto_mode,
             )
+            return result
 
         except Exception as e:
             error_msg = f"智能导出失败: {str(e)}"
@@ -471,7 +458,7 @@ class TranslationFacade:
             )
 
     def export_with_user_interaction(
-        self, translations: List = None, output_dir: Optional[str] = None
+        self, translations: Optional[List[Any]] = None, output_dir: Optional[str] = None
     ) -> OperationResult:
         """
         使用用户交互模式导出翻译
@@ -486,8 +473,6 @@ class TranslationFacade:
         try:
             # 如果没有提供翻译数据，则提取当前模组的翻译
             if translations is None:
-                from .extractors import extract_all_translations
-
                 translations = extract_all_translations(self.mod_dir, self.language)
 
             # 如果没有提供输出目录，则使用模组目录
@@ -497,9 +482,10 @@ class TranslationFacade:
             # 导入交互式导出功能
             from .exporters import export_with_user_interaction
 
-            return export_with_user_interaction(
+            result = export_with_user_interaction(
                 translations=translations, output_dir=output_dir, language=self.language
             )
+            return result
 
         except Exception as e:
             error_msg = f"交互式导出失败: {str(e)}"

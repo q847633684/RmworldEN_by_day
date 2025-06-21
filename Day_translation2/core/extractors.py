@@ -16,13 +16,14 @@ import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
-from colorama import Fore, Style
 
-# 统一导入配置和异常处理
-from services.config_service import config_service
+from colorama import Fore, Style
 from models.exceptions import ImportError as TranslationImportError
 from models.exceptions import ProcessingError, TranslationError, ValidationError
 from models.translation_data import TranslationData, TranslationType
+
+# 统一导入配置和异常处理
+from services.config_service import config_service
 from utils.file_utils import get_language_folder_path
 from utils.filter_rules import AdvancedFilterRules
 from utils.xml_processor import AdvancedXMLProcessor
@@ -54,12 +55,14 @@ except ImportError:
         return _TqdmProgressBar(*args, **kwargs)
 
 
-# 获取配置实例
-CONFIG = config_service.get_unified_config()
+# 延迟加载配置，避免循环导入问题
+def _get_config():
+    """获取配置对象（延迟加载）"""
+    return config_service.get_unified_config()
 
 
 def extract_keyed_translations(
-    mod_dir: str, language: str = CONFIG.core.source_language
+    mod_dir: str, language: Optional[str] = None
 ) -> List[TranslationData]:
     """
     提取Keyed翻译数据
@@ -93,8 +96,9 @@ def extract_keyed_translations(
         translations: List[TranslationData] = []
 
         # 构建Keyed目录路径
+        config = _get_config()
         lang_path = get_language_folder_path(language, mod_dir)
-        keyed_dir = Path(lang_path) / CONFIG.core.keyed_dir
+        keyed_dir = Path(lang_path) / config.core.keyed_dir
 
         logging.debug(f"语言路径: {lang_path}")
         logging.debug(f"Keyed目录: {keyed_dir}")
@@ -119,7 +123,9 @@ def extract_keyed_translations(
                 if tree:
                     file_translations = []
                     # 使用新的高级XML处理器提取翻译
-                    translations_raw = xml_processor.extract_translations(tree, context="Keyed")
+                    translations_raw = xml_processor.extract_translations(
+                        tree, context="Keyed"
+                    )
 
                     for key, text, tag in translations_raw:
                         # 应用高级过滤规则
@@ -136,7 +142,9 @@ def extract_keyed_translations(
                             )
                             file_translations.append(entry)
 
-                    logging.debug(f"从 {xml_file.name} 提取到 {len(file_translations)} 条翻译")
+                    logging.debug(
+                        f"从 {xml_file.name} 提取到 {len(file_translations)} 条翻译"
+                    )
                     translations.extend(file_translations)
                 else:
                     logging.error(f"无法解析XML文件: {xml_file}")
@@ -146,7 +154,9 @@ def extract_keyed_translations(
                 # 继续处理其他文件，不中断整个流程
                 continue
 
-        print(f"{Fore.GREEN}✅ 提取到 {len(translations)} 条 Keyed 翻译{Style.RESET_ALL}")
+        print(
+            f"{Fore.GREEN}✅ 提取到 {len(translations)} 条 Keyed 翻译{Style.RESET_ALL}"
+        )
         logging.info(f"Keyed翻译提取完成: {len(translations)} 条")
 
         return translations
@@ -168,7 +178,7 @@ def extract_keyed_translations(
 def scan_defs_sync(
     mod_dir: str,
     def_types: Optional[Set[str]] = None,
-    language: str = CONFIG.core.source_language,
+    language: Optional[str] = None,
     max_workers: int = 4,
 ) -> List[TranslationData]:
     """
@@ -187,6 +197,10 @@ def scan_defs_sync(
         ValidationError: 参数验证失败
         ProcessingError: 扫描处理失败
     """
+    config = _get_config()
+    if language is None:
+        language = config.core.source_language
+
     print(
         f"{Fore.GREEN}正在扫描 Defs 目录（模组：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}"
     )
@@ -260,7 +274,9 @@ def scan_defs_sync(
                         finally:
                             progress_bar.update(1)
 
-        print(f"{Fore.GREEN}✅ 扫描到 {len(translations)} 条 Defs 翻译{Style.RESET_ALL}")
+        print(
+            f"{Fore.GREEN}✅ 扫描到 {len(translations)} 条 Defs 翻译{Style.RESET_ALL}"
+        )
         logging.info(f"Defs扫描完成: {len(translations)} 条")
 
         return translations
@@ -279,7 +295,7 @@ def scan_defs_sync(
 
 
 def extract_definjected_translations(
-    mod_dir: str, language: str = CONFIG.core.source_language
+    mod_dir: str, language: Optional[str] = None
 ) -> List[TranslationData]:
     """
     提取DefInjected翻译数据
@@ -295,6 +311,10 @@ def extract_definjected_translations(
         ValidationError: 参数验证失败
         ProcessingError: 提取处理失败
     """
+    config = _get_config()
+    if language is None:
+        language = config.core.source_language
+
     print(
         f"{Fore.GREEN}正在提取 DefInjected 翻译（模组：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}"
     )  # 参数验证
@@ -308,7 +328,7 @@ def extract_definjected_translations(
 
         # 构建DefInjected目录路径
         lang_path = get_language_folder_path(language, mod_dir)
-        definjected_dir = Path(lang_path) / CONFIG.core.definjected_dir
+        definjected_dir = Path(lang_path) / config.core.definjected_dir
 
         if not definjected_dir.exists():
             logging.warning(f"DefInjected 目录不存在: {definjected_dir}")
@@ -346,7 +366,9 @@ def extract_definjected_translations(
                         )
                         file_translations.append(entry)
 
-                    logging.debug(f"从 {xml_file.name} 提取到 {len(file_translations)} 条翻译")
+                    logging.debug(
+                        f"从 {xml_file.name} 提取到 {len(file_translations)} 条翻译"
+                    )
                     translations.extend(file_translations)
                 else:
                     logging.error(f"无法解析DefInjected XML文件: {xml_file}")
@@ -355,7 +377,9 @@ def extract_definjected_translations(
                 logging.error(f"处理DefInjected XML文件失败 {xml_file}: {str(e)}")
                 continue
 
-        print(f"{Fore.GREEN}✅ 提取到 {len(translations)} 条 DefInjected 翻译{Style.RESET_ALL}")
+        print(
+            f"{Fore.GREEN}✅ 提取到 {len(translations)} 条 DefInjected 翻译{Style.RESET_ALL}"
+        )
         logging.info(f"DefInjected翻译提取完成: {len(translations)} 条")
 
         return translations
@@ -405,7 +429,9 @@ def _extract_translatable_fields_recursive(
         # 检查当前元素是否包含可翻译文本
         if hasattr(element, "text") and element.text:
             text = element.text.strip()
-            if text and filter_rules.should_translate_def_field(text, element.tag, def_type):
+            if text and filter_rules.should_translate_def_field(
+                text, element.tag, def_type
+            ):
                 # 构建字段路径
                 field_path = current_path if current_path else element.tag
                 results.append((field_path, text, element.tag))
@@ -413,7 +439,9 @@ def _extract_translatable_fields_recursive(
         # 递归处理子元素
         if hasattr(element, "iter"):
             for child in element:
-                child_path = f"{current_path}.{child.tag}" if current_path else child.tag
+                child_path = (
+                    f"{current_path}.{child.tag}" if current_path else child.tag
+                )
                 child_results = _extract_translatable_fields_recursive(
                     child,
                     def_type,
@@ -431,7 +459,9 @@ def _extract_translatable_fields_recursive(
     return results
 
 
-def _extract_keyed_from_file(file_path: str, processor) -> List[Tuple[str, str, str, str]]:
+def _extract_keyed_from_file(
+    file_path: str, processor
+) -> List[Tuple[str, str, str, str]]:
     """
     从单个Keyed XML文件提取翻译数据
 
@@ -471,7 +501,9 @@ def _extract_keyed_from_file(file_path: str, processor) -> List[Tuple[str, str, 
         )
 
 
-def _extract_definjected_from_file(file_path: str, processor) -> List[Tuple[str, str, str, str]]:
+def _extract_definjected_from_file(
+    file_path: str, processor
+) -> List[Tuple[str, str, str, str]]:
     """
     从单个DefInjected XML文件提取翻译数据
 
@@ -553,7 +585,9 @@ def _process_single_defs_file(
                 if def_name_elem is not None and def_name_elem.text:
                     definition_nodes.append(elem)
 
-            logging.debug(f"在 {xml_file.name} 中找到 {len(definition_nodes)} 个定义节点")
+            logging.debug(
+                f"在 {xml_file.name} 中找到 {len(definition_nodes)} 个定义节点"
+            )
 
             for def_node in definition_nodes:
                 def_type = def_node.tag
@@ -630,8 +664,8 @@ class AdvancedExtractor:
             language: 源语言，默认使用配置中的源语言
         """
         self.mod_dir = mod_dir
-        self.language = language or CONFIG.core.source_language
-        self.config = CONFIG
+        self.config = _get_config()
+        self.language = language or self.config.core.source_language
 
         # 初始化组件
         self.xml_processor = AdvancedXMLProcessor()
@@ -688,7 +722,9 @@ class AdvancedExtractor:
             # 提取DefInjected翻译
             self.logger.info("开始提取DefInjected翻译...")
             results["definjected"] = self.extract_definjected()
-            self.logger.info(f"DefInjected翻译提取完成，共 {len(results['definjected'])} 条")
+            self.logger.info(
+                f"DefInjected翻译提取完成，共 {len(results['definjected'])} 条"
+            )
 
             # 扫描Defs定义
             self.logger.info("开始扫描Defs定义...")
@@ -729,12 +765,39 @@ class AdvancedExtractor:
             }
 
 
+# 便利函数：提取所有翻译
+def extract_all_translations(
+    mod_dir: str, language: Optional[str] = None
+) -> List[TranslationData]:
+    """
+    便利函数：提取所有类型的翻译数据并合并为一个列表
+
+    Args:
+        mod_dir: 模组目录路径
+        language: 目标语言代码
+
+    Returns:
+        所有翻译数据的合并列表
+    """
+    extractor = AdvancedExtractor(mod_dir, language)
+    all_data = extractor.extract_all()
+
+    # 合并所有翻译数据
+    combined_translations = []
+    for translation_list in all_data.values():
+        if translation_list:
+            combined_translations.extend(translation_list)
+
+    return combined_translations
+
+
 # 导出所有函数和类
 __all__ = [
     # 主要提取函数
     "extract_keyed_translations",
     "extract_definjected_translations",
     "scan_defs_sync",
+    "extract_all_translations",  # 新增便利函数
     # 高级提取器类
     "AdvancedExtractor",
 ]

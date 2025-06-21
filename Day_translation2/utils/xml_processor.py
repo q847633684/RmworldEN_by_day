@@ -41,18 +41,17 @@ except ImportError:
     _Element = None  # type: ignore
     _ElementTree = None  # type: ignore
 
+# 本地模块导入
 try:
     from ..config import UnifiedConfig
 
-    CONFIG = UnifiedConfig()
+    CONFIG: Optional[UnifiedConfig] = UnifiedConfig()
 except ImportError:
     CONFIG = None
 
-# 导入异常类
+# 导入异常类（本地模块）
 try:
-    from ..models.exceptions import (
-        ImportError as TranslationImportError,
-    )
+    from ..models.exceptions import ImportError as TranslationImportError
     from ..models.exceptions import (
         ProcessingError,
         ValidationError,
@@ -109,7 +108,7 @@ class AdvancedXMLProcessor:
             self.use_lxml = self.config.use_lxml and LXML_AVAILABLE
 
             if self.use_lxml:
-                self.parser = etree.XMLParser(
+                self.parser = etree.XMLParser(  # pylint: disable=c-extension-no-member
                     remove_comments=not self.config.preserve_comments,
                     recover=not self.config.error_on_invalid,
                     remove_blank_text=not self.config.preserve_whitespace,
@@ -135,8 +134,12 @@ class AdvancedXMLProcessor:
 
         if schema_path not in self._schema_cache:
             try:
-                schema_doc = cast(Any, etree.parse(schema_path))
-                schema = cast(Any, etree.XMLSchema(schema_doc))
+                schema_doc = cast(
+                    Any, etree.parse(schema_path)  # pylint: disable=c-extension-no-member
+                )
+                schema = cast(
+                    Any, etree.XMLSchema(schema_doc)  # pylint: disable=c-extension-no-member
+                )
                 if len(self._schema_cache) >= self.config.schema_cache_size:
                     # 移除最旧的缓存
                     self._schema_cache.pop(next(iter(self._schema_cache)))
@@ -198,7 +201,10 @@ class AdvancedXMLProcessor:
 
         try:
             if self.use_lxml:
-                tree = cast(Any, etree.parse(file_path, self.parser))
+                tree = cast(
+                    Any,
+                    etree.parse(file_path, self.parser),  # pylint: disable=c-extension-no-member
+                )
                 # Schema验证
                 if schema_path and not self.validate_against_schema(tree, schema_path):
                     logging.warning(f"XML Schema验证失败: {file_path}")
@@ -208,7 +214,10 @@ class AdvancedXMLProcessor:
             logging.debug(f"XML解析成功: {file_path}")
             return tree
 
-        except (etree.XMLSyntaxError, ET.ParseError) as e:
+        except (
+            etree.XMLSyntaxError,  # pylint: disable=c-extension-no-member
+            ET.ParseError,
+        ) as e:
             raise ProcessingError(f"XML解析失败: {file_path}, 错误: {e}")
         except Exception as e:
             raise ProcessingError(f"解析XML时发生未知错误: {file_path}, 错误: {e}")
@@ -317,7 +326,7 @@ class AdvancedXMLProcessor:
 
         return translations
 
-    def update_translations(
+    def update_translations(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         tree: Any,
         translations: Dict[str, str],
@@ -490,8 +499,10 @@ class AdvancedXMLProcessor:
         try:
             # 创建XML结构
             if self.use_lxml:
-                root = cast(Any, etree.Element("LanguageData"))
-                tree = cast(Any, etree.ElementTree(root))
+                root = cast(
+                    Any, etree.Element("LanguageData")  # pylint: disable=c-extension-no-member
+                )
+                tree = cast(Any, etree.ElementTree(root))  # pylint: disable=c-extension-no-member
             else:
                 root = ET.Element("LanguageData")
                 tree = ET.ElementTree(root)
@@ -511,7 +522,9 @@ class AdvancedXMLProcessor:
         """添加新元素"""
         try:
             if self.use_lxml:
-                elem = cast(Any, etree.SubElement(parent, tag))
+                elem = cast(
+                    Any, etree.SubElement(parent, tag)  # pylint: disable=c-extension-no-member
+                )
             else:
                 elem = ET.SubElement(parent, tag)
 

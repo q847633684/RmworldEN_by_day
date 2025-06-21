@@ -6,8 +6,8 @@ Day Translation 2 - 基本功能测试
 测试核心模块的基本导入和初始化功能
 """
 
-import sys
 import os
+import sys
 
 # 设置输出编码为UTF-8
 if hasattr(sys.stdout, "reconfigure"):
@@ -21,9 +21,9 @@ def test_basic_imports():
     try:  # 测试核心模块导入 - 使用简单导入
         sys.path.insert(0, os.path.dirname(__file__))
 
+        from core.exporters import AdvancedExporter
         from core.extractors import AdvancedExtractor
         from core.importers import AdvancedImporter
-        from core.exporters import AdvancedExporter
         from core.translation_facade import TranslationFacade
 
         print("✅ 核心模块导入成功")  # 测试模型导入
@@ -31,8 +31,8 @@ def test_basic_imports():
         from models.translation_data import TranslationData
 
         print("✅ 模型模块导入成功")  # 测试工具模块导入
-        from utils.xml_processor import AdvancedXMLProcessor
         from utils.filter_rules import AdvancedFilterRules
+        from utils.xml_processor import AdvancedXMLProcessor
 
         print("✅ 工具模块导入成功")
 

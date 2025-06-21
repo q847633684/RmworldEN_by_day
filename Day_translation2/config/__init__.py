@@ -13,18 +13,18 @@ Day Translation 2 - 配置管理模块
 - 所有业务逻辑已迁移到 services/ 下专属模块
 """
 
-# 纯数据模型
-from .data_models import (
-    GeneralConfig,
-    ExtractionConfig,
-    APIConfig,
-    ProcessingConfig,
-    FilterConfig,
-    PathValidationResult,
-)
-
 # 配置管理器
 from .config_manager import ConfigManager
+
+# 纯数据模型
+from .data_models import (
+    APIConfig,
+    ExtractionConfig,
+    FilterConfig,
+    GeneralConfig,
+    PathValidationResult,
+    ProcessingConfig,
+)
 
 # 版本信息
 CONFIG_VERSION = "2.0.0"

@@ -11,10 +11,9 @@ from datetime import datetime
 from typing import Optional
 
 from colorama import Fore, Style
-
-from models.exceptions import ConfigError
-from config.data_models import UnifiedConfig
 from config.config_manager import ConfigManager
+from config.data_models import UnifiedConfig
+from models.exceptions import ConfigError
 
 
 class ConfigService:
@@ -89,7 +88,9 @@ class ConfigService:
 
             # 验证配置版本
             if "version" not in config_data:
-                print(f"{Fore.YELLOW}⚠️ 配置文件缺少版本信息，可能不兼容{Style.RESET_ALL}")
+                print(
+                    f"{Fore.YELLOW}⚠️ 配置文件缺少版本信息，可能不兼容{Style.RESET_ALL}"
+                )
 
             # 检查导出时间
             if "exported_at" in config_data:
@@ -114,7 +115,9 @@ class ConfigService:
             print(f"{Fore.RED}❌ {error_msg}{Style.RESET_ALL}")
             return None
 
-    def merge_configs(self, base: UnifiedConfig, override: UnifiedConfig) -> UnifiedConfig:
+    def merge_configs(
+        self, base: UnifiedConfig, override: UnifiedConfig
+    ) -> UnifiedConfig:
         """
         合并配置
 
@@ -154,7 +157,11 @@ class ConfigService:
             version=override.version or base.version,
             default_language=override.default_language or base.default_language,
             source_language=override.source_language or base.source_language,
-            debug_mode=override.debug_mode if override.debug_mode is not None else base.debug_mode,
+            debug_mode=(
+                override.debug_mode
+                if override.debug_mode is not None
+                else base.debug_mode
+            ),
             encoding=override.encoding or base.encoding,
             backup_enabled=(
                 override.backup_enabled
@@ -171,7 +178,10 @@ class ConfigService:
         merged_config = UserConfig()
 
         # 合并记住的路径
-        merged_config.remembered_paths = {**base.remembered_paths, **override.remembered_paths}
+        merged_config.remembered_paths = {
+            **base.remembered_paths,
+            **override.remembered_paths,
+        }
 
         # 合并路径历史
         merged_config.path_history = self._merge_path_history(
@@ -180,21 +190,27 @@ class ConfigService:
 
         # 合并其他配置（使用override优先）
         merged_config.general = (
-            override.general if hasattr(override, "general") and override.general else base.general
+            override.general
+            if hasattr(override, "general") and override.general
+            else base.general
         )
         merged_config.extraction = (
             override.extraction
             if hasattr(override, "extraction") and override.extraction
             else base.extraction
         )
-        merged_config.api = override.api if hasattr(override, "api") and override.api else base.api
+        merged_config.api = (
+            override.api if hasattr(override, "api") and override.api else base.api
+        )
         merged_config.processing = (
             override.processing
             if hasattr(override, "processing") and override.processing
             else base.processing
         )
         merged_config.filter = (
-            override.filter if hasattr(override, "filter") and override.filter else base.filter
+            override.filter
+            if hasattr(override, "filter") and override.filter
+            else base.filter
         )
 
         return merged_config
@@ -211,16 +227,24 @@ class ConfigService:
             override_data = override_history.get(path_type, {})
 
             # 合并路径列表
-            base_paths = base_data.get("paths", []) if isinstance(base_data, dict) else []
+            base_paths = (
+                base_data.get("paths", []) if isinstance(base_data, dict) else []
+            )
             override_paths = (
-                override_data.get("paths", []) if isinstance(override_data, dict) else []
+                override_data.get("paths", [])
+                if isinstance(override_data, dict)
+                else []
             )
 
             # 去重并保持顺序
             all_paths = list(dict.fromkeys(base_paths + override_paths))
 
             # 使用最新的最后使用路径
-            last_used = override_data.get("last_used") if isinstance(override_data, dict) else None
+            last_used = (
+                override_data.get("last_used")
+                if isinstance(override_data, dict)
+                else None
+            )
             if not last_used and isinstance(base_data, dict):
                 last_used = base_data.get("last_used")
 
@@ -231,7 +255,9 @@ class ConfigService:
 
         return merged_history
 
-    def backup_config(self, config: UnifiedConfig, backup_suffix: Optional[str] = None) -> bool:
+    def backup_config(
+        self, config: UnifiedConfig, backup_suffix: Optional[str] = None
+    ) -> bool:
         """
         备份配置
 
@@ -280,7 +306,9 @@ class ConfigService:
                 # 保存恢复的配置
                 self.manager.save_config(restored_config)
                 self.logger.info(f"配置已从备份恢复: {backup_path}")
-                print(f"{Fore.GREEN}✅ 配置已从备份恢复: {backup_path}{Style.RESET_ALL}")
+                print(
+                    f"{Fore.GREEN}✅ 配置已从备份恢复: {backup_path}{Style.RESET_ALL}"
+                )
 
             return restored_config
 
@@ -313,7 +341,9 @@ class ConfigService:
             from config.data_models import CONFIG_VERSION
 
             if config_version != CONFIG_VERSION:
-                self.logger.warning(f"配置版本不匹配: {config_version} != {CONFIG_VERSION}")
+                self.logger.warning(
+                    f"配置版本不匹配: {config_version} != {CONFIG_VERSION}"
+                )
                 # 可以考虑版本迁移逻辑
                 return True  # 暂时允许版本不匹配
 
@@ -403,6 +433,57 @@ class ConfigService:
         except Exception as e:
             self.logger.error(f"重置配置失败: {e}")
             raise ConfigError(f"配置重置失败: {e}")
+
+    def migrate_config(
+        self, old_version: str, new_version: Optional[str] = None
+    ) -> UnifiedConfig:
+        """
+        迁移配置到新版本
+
+        Args:
+            old_version: 旧版本号
+            new_version: 新版本号，默认为当前版本
+
+        Returns:
+            迁移后的配置对象
+
+        Raises:
+            ConfigError: 迁移失败时
+        """
+        if new_version is None:
+            from config.data_models import CONFIG_VERSION
+
+            new_version = CONFIG_VERSION
+
+        try:
+            # 加载当前配置
+            current_config = self.get_unified_config()
+
+            # 如果版本相同，无需迁移
+            if current_config.version == new_version:
+                self.logger.info(f"配置版本已是最新: {new_version}")
+                return current_config
+
+            # 创建迁移后的配置
+            migrated_config = UnifiedConfig(
+                version=new_version,
+                core=current_config.core,
+                user=current_config.user,
+            )
+
+            # 更新核心配置版本号
+            migrated_config.core.version = new_version
+
+            # 保存迁移后的配置
+            self.save_unified_config(migrated_config)
+
+            self.logger.info(f"配置迁移成功: {old_version} -> {new_version}")
+            return migrated_config
+
+        except Exception as e:
+            error_msg = f"配置迁移失败: {e}"
+            self.logger.error(error_msg)
+            raise ConfigError(error_msg)
 
     def get_config_file_path(self) -> str:
         """

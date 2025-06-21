@@ -8,22 +8,28 @@ Day Translation 2 - 服务层
 import sys
 from pathlib import Path
 
-# 添加项目根目录到sys.path
+# 绝对导入项目内服务模块
+from services.batch_processor import BatchProcessor
+from services.config_service import ConfigService
+from services.history_service import HistoryService, history_service
+from services.path_service import PathValidationService, path_validation_service
+
+# from services.corpus_generator import generate_parallel_corpus  # 临时注释掉避免循环导入
+from services.translation_service import translate_csv
+from services.user_interaction_service import (
+    UserInteractionService,
+    user_interaction_service,
+)
+from services.validation_service import TranslationValidator, validate_csv_file
+
+# 将项目根目录添加到 sys.path，方便绝对导入
 project_root = Path(__file__).parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-# 使用绝对导入
-from services.batch_processor import BatchProcessor
-from services.corpus_generator import generate_parallel_corpus
-from services.translation_service import translate_csv
-from services.validation_service import TranslationValidator, validate_csv_file
 
-# 配置相关服务
-from services.path_service import PathValidationService, path_validation_service
-from services.config_service import ConfigService
-from services.history_service import HistoryService, history_service
-from services.user_interaction_service import UserInteractionService, user_interaction_service
+# 创建配置服务实例
+config_service = ConfigService()
 
 __all__ = [
     # 翻译服务
@@ -31,7 +37,7 @@ __all__ = [
     "BatchProcessor",
     "TranslationValidator",
     "validate_csv_file",
-    "generate_parallel_corpus",
+    # "generate_parallel_corpus",  # 临时注释掉避免循环导入
     # 配置服务
     "PathValidationService",
     "ConfigService",
@@ -39,6 +45,7 @@ __all__ = [
     "UserInteractionService",
     # 服务单例
     "path_validation_service",
+    "config_service",
     "history_service",
     "user_interaction_service",
 ]

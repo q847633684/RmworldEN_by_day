@@ -19,11 +19,12 @@ project_root = Path(__file__).parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-# 使用绝对导入
-from services.config_service import config_service
 from models.exceptions import ImportError as TranslationImportError
 from models.exceptions import ProcessingError, ValidationError
 from models.result_models import OperationResult, OperationStatus, OperationType
+
+# 使用绝对导入
+from services.config_service import config_service
 
 
 def translate_csv(
@@ -62,7 +63,9 @@ def translate_csv(
         )
 
     if not Path(input_csv).is_file():
-        raise TranslationImportError(f"输入CSV文件不存在: {input_csv}", file_path=input_csv)
+        raise TranslationImportError(
+            f"输入CSV文件不存在: {input_csv}", file_path=input_csv
+        )
 
     try:
         # 创建翻译客户端
@@ -184,7 +187,9 @@ def _translate_data(
                         translated_data.append(translated_item)
                     else:
                         # 翻译失败，保留原文
-                        logging.warning(f"翻译失败: {item['key']}, 错误码: {response.body.code}")
+                        logging.warning(
+                            f"翻译失败: {item['key']}, 错误码: {response.body.code}"
+                        )
                         translated_item = item.copy()
                         translated_item["translated"] = item["text"]  # 保留原文
                         translated_data.append(translated_item)

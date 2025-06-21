@@ -57,7 +57,9 @@ class TestBatchProcessor:
         assert processor.timeout == 60
 
     @patch("Day_translation2.core.translation_facade.TranslationFacade")
-    def test_process_multiple_mods_single_mod(self, mock_facade, processor, temp_dir) -> None:
+    def test_process_multiple_mods_single_mod(
+        self, mock_facade, processor, temp_dir
+    ) -> None:
         """测试单个模组处理（通过批量处理方法）"""
         # 创建一个模拟的模组目录结构
         mod_dir = temp_dir / "test_mod"
@@ -94,12 +96,14 @@ class TestBatchProcessor:
         # 模拟翻译门面
         mock_facade_instance = Mock()
         mock_facade.return_value = mock_facade_instance
-        mock_facade_instance.extract_templates_and_generate_csv.return_value = OperationResult(
-            status=OperationStatus.SUCCESS,
-            operation_type=OperationType.EXTRACTION,
-            message="提取完成",
-            processed_count=5,
-            success_count=5,
+        mock_facade_instance.extract_templates_and_generate_csv.return_value = (
+            OperationResult(
+                status=OperationStatus.SUCCESS,
+                operation_type=OperationType.EXTRACTION,
+                message="提取完成",
+                processed_count=5,
+                success_count=5,
+            )
         )
 
         # 执行测试
@@ -142,7 +146,9 @@ class TestBatchProcessor:
         self, processor, mock_mod_directories, temp_dir
     ) -> None:
         """测试部分失败的批量处理"""
-        with patch("Day_translation2.core.translation_facade.TranslationFacade") as mock_facade:
+        with patch(
+            "Day_translation2.core.translation_facade.TranslationFacade"
+        ) as mock_facade:
             mock_facade_instance = Mock()
             mock_facade.return_value = mock_facade_instance
 
@@ -164,7 +170,9 @@ class TestBatchProcessor:
                         success_count=5,
                     )
 
-            mock_facade_instance.extract_templates_and_generate_csv.side_effect = side_effect
+            mock_facade_instance.extract_templates_and_generate_csv.side_effect = (
+                side_effect
+            )
 
             # 执行测试
             results = processor.process_multiple_mods(
@@ -192,19 +200,19 @@ class TestBatchProcessor:
                 ) as mock_facade:
                     mock_facade_instance = Mock()
                     mock_facade.return_value = mock_facade_instance
-                    mock_facade_instance.extract_templates_and_generate_csv.return_value = (
-                        OperationResult(
-                            status=OperationStatus.SUCCESS,
-                            operation_type=OperationType.EXTRACTION,
-                            message="提取完成",
-                            processed_count=1,
-                            success_count=1,
-                        )
+                    mock_facade_instance.extract_templates_and_generate_csv.return_value = OperationResult(
+                        status=OperationStatus.SUCCESS,
+                        operation_type=OperationType.EXTRACTION,
+                        message="提取完成",
+                        processed_count=1,
+                        success_count=1,
                     )
 
                     result = processor.process_multiple_mods(
                         mod_list=[mock_mod_directories[0]],  # 只使用第一个模组目录
-                        csv_path=str(temp_dir / f"output_{threading.current_thread().ident}.csv"),
+                        csv_path=str(
+                            temp_dir / f"output_{threading.current_thread().ident}.csv"
+                        ),
                     )
                     results.append(result)
             except Exception as e:

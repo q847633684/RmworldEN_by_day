@@ -10,11 +10,10 @@ import os
 from typing import Any, Dict, List, Optional, Tuple
 
 from colorama import Fore, Style
-
-from services.config_service import config_service
 from models.exceptions import ExportError
 from models.result_models import OperationResult, OperationStatus, OperationType
 from models.translation_data import TranslationData, TranslationType
+from services.config_service import config_service
 from utils.export_manager import ExportManager, ExportMode
 from utils.user_interaction import UserInteractionManager
 
@@ -65,9 +64,13 @@ def export_with_smart_merge(
 
         # 导出Keyed翻译
         if keyed_translations:
-            print(f"{Fore.CYAN}📝 导出Keyed翻译 ({len(keyed_translations)} 条)...{Style.RESET_ALL}")
+            print(
+                f"{Fore.CYAN}📝 导出Keyed翻译 ({len(keyed_translations)} 条)...{Style.RESET_ALL}"
+            )
             # 转换为字典格式
-            keyed_dict = {t.key: t.translated_text or t.original_text for t in keyed_translations}
+            keyed_dict = {
+                t.key: t.translated_text or t.original_text for t in keyed_translations
+            }
             keyed_output_path = os.path.join(output_dir, "Keyed")
             os.makedirs(keyed_output_path, exist_ok=True)
             keyed_result = export_manager.export_translations(
@@ -84,7 +87,8 @@ def export_with_smart_merge(
             )
             # 转换为字典格式
             definjected_dict = {
-                t.key: t.translated_text or t.original_text for t in definjected_translations
+                t.key: t.translated_text or t.original_text
+                for t in definjected_translations
             }
             definjected_output_path = os.path.join(output_dir, "DefInjected")
             os.makedirs(definjected_output_path, exist_ok=True)
@@ -221,7 +225,9 @@ def batch_export_with_smart_merge(
 
         for i, (translations, output_dir, language) in enumerate(translation_groups, 1):
             try:
-                print(f"\n{Fore.CYAN}📦 处理第 {i}/{total_groups} 组翻译...{Style.RESET_ALL}")
+                print(
+                    f"\n{Fore.CYAN}📦 处理第 {i}/{total_groups} 组翻译...{Style.RESET_ALL}"
+                )
 
                 # 确保输出目录是绝对路径
                 if not os.path.isabs(output_dir):
@@ -242,7 +248,9 @@ def batch_export_with_smart_merge(
                     print(f"{Fore.GREEN}✅ 第 {i} 组导出成功{Style.RESET_ALL}")
                 else:
                     failed_groups += 1
-                    print(f"{Fore.RED}❌ 第 {i} 组导出失败: {result.message}{Style.RESET_ALL}")
+                    print(
+                        f"{Fore.RED}❌ 第 {i} 组导出失败: {result.message}{Style.RESET_ALL}"
+                    )
 
             except Exception as e:
                 failed_groups += 1
@@ -320,7 +328,9 @@ def export_all_with_advanced_features(
             # 智能模式
             mode = config.get("mode", "smart-merge")
             auto_mode = config.get("auto_mode", False)
-            return export_with_smart_merge(translations, output_dir, language, mode, auto_mode)
+            return export_with_smart_merge(
+                translations, output_dir, language, mode, auto_mode
+            )
 
     except Exception as e:
         error_msg = f"高级导出失败: {str(e)}"

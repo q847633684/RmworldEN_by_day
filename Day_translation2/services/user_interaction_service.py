@@ -10,13 +10,13 @@ Author: Day汉化项目
 Created: 2024-12-19
 """
 
-from typing import Optional, List
 import logging
-from colorama import Fore, Style
+from typing import List, Optional
 
+from colorama import Fore, Style
 from config.data_models import UnifiedConfig
-from services.path_service import path_validation_service
 from services.history_service import history_service
+from services.path_service import path_validation_service
 
 logger = logging.getLogger(__name__)
 
@@ -80,11 +80,15 @@ class UserInteractionService:
                     # 记住路径（如果启用）
                     if config.user.general.remember_paths:
                         history_service.remember_path(path_type, validated_path, config)
-                        history_service.add_to_history(path_type, validated_path, config)
+                        history_service.add_to_history(
+                            path_type, validated_path, config
+                        )
 
                     return validated_path
                 else:
-                    print(f"{Fore.RED}❌ {validation_result.error_message}{Style.RESET_ALL}")
+                    print(
+                        f"{Fore.RED}❌ {validation_result.error_message}{Style.RESET_ALL}"
+                    )
 
         except Exception as e:
             logger.error(f"获取路径输入失败: {path_type}, 错误: {e}")
@@ -132,7 +136,11 @@ class UserInteractionService:
             # 显示选择列表
             print(f"\n{prompt}")
             for i, choice in enumerate(choices, 1):
-                marker = " (默认)" if default_index is not None and i - 1 == default_index else ""
+                marker = (
+                    " (默认)"
+                    if default_index is not None and i - 1 == default_index
+                    else ""
+                )
                 print(f"  {i}. {choice}{marker}")
 
             # 获取用户输入
@@ -153,7 +161,9 @@ class UserInteractionService:
                     if 1 <= choice_num <= len(choices):
                         return choices[choice_num - 1]
                     else:
-                        print(f"{Fore.RED}请输入 1-{len(choices)} 之间的数字{Style.RESET_ALL}")
+                        print(
+                            f"{Fore.RED}请输入 1-{len(choices)} 之间的数字{Style.RESET_ALL}"
+                        )
                 except ValueError:
                     print(f"{Fore.RED}请输入有效的数字{Style.RESET_ALL}")
 

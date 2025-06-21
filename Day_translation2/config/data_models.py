@@ -5,9 +5,13 @@ Day Translation 2 - 纯配置数据模型
 遵循"配置只做配置"的架构原则。
 """
 
-from dataclasses import asdict, dataclass, field
+# 标准库
 from typing import Any, Dict, List, Optional, Set
 
+# 第三方库
+from dataclasses import asdict, dataclass, field
+
+# 本地模块
 from constants.complete_definitions import (
     DEFAULT_DIRECTORIES,
     DEFAULT_FILENAMES,
@@ -35,6 +39,7 @@ def _default_file_extensions() -> Set[str]:
 # ==================== 基础数据模型 ====================
 
 
+@dataclass
 @dataclass
 @dataclass
 class PathValidationResult:
@@ -163,19 +168,39 @@ class UserConfig:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "UserConfig":
         """从字典创建实例"""
-        # 处理 Set 类型字段
-        if "filter" in data:
-            filter_data = data["filter"]
-            if "default_fields" in filter_data and isinstance(filter_data["default_fields"], list):
-                filter_data["default_fields"] = set(filter_data["default_fields"])
-            if "ignore_fields" in filter_data and isinstance(filter_data["ignore_fields"], list):
-                filter_data["ignore_fields"] = set(filter_data["ignore_fields"])
-            if "file_extensions" in filter_data and isinstance(
-                filter_data["file_extensions"], list
-            ):
-                filter_data["file_extensions"] = set(filter_data["file_extensions"])
+        # 创建嵌套配置对象
+        general = GeneralConfig(**data.get("general", {})) if "general" in data else GeneralConfig()
+        extraction = (
+            ExtractionConfig(**data.get("extraction", {}))
+            if "extraction" in data
+            else ExtractionConfig()
+        )
+        api = APIConfig(**data.get("api", {})) if "api" in data else APIConfig()
+        processing = (
+            ProcessingConfig(**data.get("processing", {}))
+            if "processing" in data
+            else ProcessingConfig()
+        )
 
-        return cls(**data)
+        # 处理 FilterConfig 的 Set 类型字段
+        filter_data = data.get("filter", {})
+        if "default_fields" in filter_data and isinstance(filter_data["default_fields"], list):
+            filter_data["default_fields"] = set(filter_data["default_fields"])
+        if "ignore_fields" in filter_data and isinstance(filter_data["ignore_fields"], list):
+            filter_data["ignore_fields"] = set(filter_data["ignore_fields"])
+        if "file_extensions" in filter_data and isinstance(filter_data["file_extensions"], list):
+            filter_data["file_extensions"] = set(filter_data["file_extensions"])
+        filter_config = FilterConfig(**filter_data)
+
+        return cls(
+            general=general,
+            extraction=extraction,
+            api=api,
+            processing=processing,
+            filter=filter_config,
+            remembered_paths=data.get("remembered_paths", {}),
+            path_history=data.get("path_history", {}),
+        )
 
 
 # ==================== 统一配置容器 ====================

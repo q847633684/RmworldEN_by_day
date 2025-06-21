@@ -10,13 +10,16 @@ from pathlib import Path
 from typing import Dict, List
 
 from colorama import Fore, Style
-
-from services.config_service import config_service
 from models.exceptions import ExportError, ValidationError
 from models.result_models import OperationResult, OperationStatus, OperationType
 from models.translation_data import TranslationData, TranslationType
+from services.config_service import config_service
 from utils.file_utils import get_language_folder_path
-from .xml_generators import generate_definjected_xml, generate_definjected_xml_multi_type
+
+from .xml_generators import (
+    generate_definjected_xml,
+    generate_definjected_xml_multi_type,
+)
 
 CONFIG = config_service.get_unified_config()
 
@@ -157,7 +160,8 @@ def export_definjected_with_original_structure(
         file_groups: Dict[str, List[TranslationData]] = {}
         for translation in definjected_translations:
             file_path = (
-                translation.file_path or f"{translation.metadata.get('def_type', 'Unknown')}.xml"
+                translation.file_path
+                or f"{translation.metadata.get('def_type', 'Unknown')}.xml"
             )
             if file_path not in file_groups:
                 file_groups[file_path] = []

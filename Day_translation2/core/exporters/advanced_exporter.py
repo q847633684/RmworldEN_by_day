@@ -15,10 +15,11 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from services.config_service import config_service
 from models.result_models import OperationResult, OperationStatus, OperationType
 from models.translation_data import TranslationData, TranslationType
+from services.config_service import config_service
 from utils.export_manager import ExportManager
+
 from .csv_exporter import export_to_csv
 from .definjected_exporter import export_definjected
 from .export_utils import export_all_with_advanced_features
@@ -38,7 +39,9 @@ class AdvancedExporter:
     - 高级导出功能集成
     """
 
-    def __init__(self, output_dir: Optional[str] = None, language: Optional[str] = None):
+    def __init__(
+        self, output_dir: Optional[str] = None, language: Optional[str] = None
+    ):
         """
         初始化高级导出器
 
@@ -135,10 +138,14 @@ class AdvancedExporter:
         try:
             target_dir = output_dir or self.output_dir
             definjected_translations = [
-                t for t in translations if t.translation_type == TranslationType.DEFINJECTED
+                t
+                for t in translations
+                if t.translation_type == TranslationType.DEFINJECTED
             ]
 
-            result = export_definjected(definjected_translations, target_dir, self.language)
+            result = export_definjected(
+                definjected_translations, target_dir, self.language
+            )
             self.logger.info(f"DefInjected XML导出完成: {target_dir}")
             return result
 
@@ -200,7 +207,9 @@ class AdvancedExporter:
 
         return results
 
-    def get_export_statistics(self, translations: List[TranslationData]) -> Dict[str, Any]:
+    def get_export_statistics(
+        self, translations: List[TranslationData]
+    ) -> Dict[str, Any]:
         """
         获取导出统计信息
 
@@ -215,7 +224,11 @@ class AdvancedExporter:
                 [t for t in translations if t.translation_type == TranslationType.KEYED]
             )
             definjected_count = len(
-                [t for t in translations if t.translation_type == TranslationType.DEFINJECTED]
+                [
+                    t
+                    for t in translations
+                    if t.translation_type == TranslationType.DEFINJECTED
+                ]
             )
 
             return {

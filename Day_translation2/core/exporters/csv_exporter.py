@@ -17,11 +17,10 @@ from pathlib import Path
 from typing import List
 
 from colorama import Fore, Style
-
+from core.extractors import extract_keyed_translations
 from models.exceptions import ExportError, ValidationError
 from models.result_models import OperationResult, OperationStatus, OperationType
 from models.translation_data import TranslationData, TranslationType
-from core.extractors import extract_keyed_translations
 
 
 def export_to_csv(
@@ -62,7 +61,9 @@ def export_to_csv(
         ]
 
         if include_context:
-            fieldnames.extend(["def_type", "def_name", "field_path", "language", "mod_dir"])
+            fieldnames.extend(
+                ["def_type", "def_name", "field_path", "language", "mod_dir"]
+            )
 
         # 写入CSV文件
         with open(csv_path, "w", newline="", encoding="utf-8") as csv_file:

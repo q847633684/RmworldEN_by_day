@@ -4,11 +4,12 @@ pytest配置文件 - Day汉化项目测试框架
 不考虑向后兼容，全面现代化的测试框架
 """
 
-import pytest
 import os
 import sys
 from pathlib import Path
 from typing import Any, Dict
+
+import pytest
 
 # 添加项目根目录到 Python 路径
 project_root = Path(__file__).parent
@@ -89,11 +90,11 @@ def clean_services():
     # 这里可以添加服务层的清理逻辑
 
 
-# 性能测试配置
-def pytest_benchmark_update_json(config, benchmarks, output_json):
-    """更新基准测试结果"""
-    output_json["project"] = "Day汉化项目"
-    output_json["version"] = "2.0.0"
+# 性能测试配置 - 需要pytest-benchmark插件
+# def pytest_benchmark_update_json(config, benchmarks, output_json):
+#     """更新基准测试结果"""
+#     output_json["project"] = "Day汉化项目"
+#     output_json["version"] = "2.0.0"
 
 
 # 测试收集钩子
@@ -111,8 +112,8 @@ def pytest_collection_modifyitems(config, items):
             item.add_marker(pytest.mark.unit)
 
 
-# 跳过条件
-def pytest_configure_node(node):
-    """配置测试节点"""
-    # 可以根据环境动态跳过某些测试
-    pass
+# 跳过条件 - 自定义钩子
+# def pytest_configure_node(node):
+#     """配置测试节点"""
+#     # 可以根据环境动态跳过某些测试
+#     pass
