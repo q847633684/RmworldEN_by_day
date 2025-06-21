@@ -63,9 +63,7 @@ def translate_csv(
         )
 
     if not Path(input_csv).is_file():
-        raise TranslationImportError(
-            f"输入CSV文件不存在: {input_csv}", file_path=input_csv
-        )
+        raise TranslationImportError(f"输入CSV文件不存在: {input_csv}", file_path=input_csv)
 
     try:
         # 创建翻译客户端
@@ -131,10 +129,9 @@ def _load_csv_data(csv_path: str) -> List[Dict[str, str]]:
     try:
         data = []
         with open(csv_path, "r", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-
-            # 验证必要的列
-            if "key" not in reader.fieldnames or "text" not in reader.fieldnames:
+            reader = csv.DictReader(f)  # 验证必要的列
+            fieldnames = reader.fieldnames or []
+            if "key" not in fieldnames or "text" not in fieldnames:
                 raise TranslationImportError(
                     f"CSV文件缺少必要的列（key, text）: {csv_path}", file_path=csv_path
                 )
@@ -187,9 +184,7 @@ def _translate_data(
                         translated_data.append(translated_item)
                     else:
                         # 翻译失败，保留原文
-                        logging.warning(
-                            f"翻译失败: {item['key']}, 错误码: {response.body.code}"
-                        )
+                        logging.warning(f"翻译失败: {item['key']}, 错误码: {response.body.code}")
                         translated_item = item.copy()
                         translated_item["translated"] = item["text"]  # 保留原文
                         translated_data.append(translated_item)

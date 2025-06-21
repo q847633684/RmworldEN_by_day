@@ -74,9 +74,7 @@ class TemplateManager:
             )
 
             # 步骤2：提取翻译数据
-            translations = self._extract_all_translations(
-                definjected_mode=definjected_extract_mode
-            )
+            translations = self._extract_all_translations(definjected_mode=definjected_extract_mode)
 
             if not translations:
                 logging.warning("未找到任何翻译数据")
@@ -193,9 +191,7 @@ class TemplateManager:
             logging.error(f"自动创建模板失败: {e}")
             return False
 
-    def _extract_all_translations(
-        self, definjected_mode: str = "defs"
-    ) -> List[TranslationData]:
+    def _extract_all_translations(self, definjected_mode: str = "defs") -> List[TranslationData]:
         """
         提取所有翻译数据
 
@@ -235,18 +231,14 @@ class TemplateManager:
                 src_lang_path = get_language_folder_path(
                     self.config.core.source_language, str(self.mod_dir)
                 )
-                src_definjected_dir = (
-                    Path(src_lang_path) / self.config.core.definjected_dir
-                )
+                src_definjected_dir = Path(src_lang_path) / self.config.core.definjected_dir
 
                 if src_definjected_dir.exists():
                     definjected_translations = extract_definjected_translations(
                         str(self.mod_dir), self.config.core.source_language
                     )
                     translations.extend(definjected_translations)
-                    logging.debug(
-                        f"从英文DefInjected提取到 {len(definjected_translations)} 条翻译"
-                    )
+                    logging.debug(f"从英文DefInjected提取到 {len(definjected_translations)} 条翻译")
                 else:
                     logging.warning(
                         f"英文DefInjected目录不存在: {src_definjected_dir}，回退到defs模式"
@@ -281,14 +273,13 @@ class TemplateManager:
         ]
         def_translations = [
             t for t in translations if t.translation_type == TranslationType.DEFINJECTED
-        ]
-
-        # 生成Keyed模板
+        ]  # 生成Keyed模板
         if keyed_translations:
             if en_keyed_dir:
                 self.generator.generate_keyed_template(en_keyed_dir)
-            # 使用新的生成器方法，传入TranslationData对象
-            self.generator.generate_keyed_template_from_data(keyed_translations)
+            # 转换TranslationData对象为元组格式
+            keyed_tuples = [t.to_tuple() for t in keyed_translations]
+            self.generator.generate_keyed_template_from_data(keyed_tuples)
             logging.info(f"生成 {len(keyed_translations)} 条 Keyed 模板")
 
         # 生成DefInjected模板
@@ -332,18 +323,18 @@ class TemplateManager:
         ]
 
         # 临时切换生成器的输出目录
-        original_mod_dir: str = self.generator.mod_dir
-        self.generator.mod_dir = str(output_path)
+        original_mod_dir = self.generator.mod_dir
+        self.generator.mod_dir = output_path
 
         try:
             # 生成Keyed模板
             if keyed_translations:
                 if en_keyed_dir:
                     self.generator.generate_keyed_template(en_keyed_dir)
-                self.generator.generate_keyed_template_from_data(keyed_translations)
-                logging.info(
-                    f"生成 {len(keyed_translations)} 条 Keyed 模板到 {keyed_dir}"
-                )
+                # 转换TranslationData对象为元组格式
+                keyed_tuples = [t.to_tuple() for t in keyed_translations]
+                self.generator.generate_keyed_template_from_data(keyed_tuples)
+                logging.info(f"生成 {len(keyed_translations)} 条 Keyed 模板到 {keyed_dir}")
 
             # 生成DefInjected模板
             if def_translations:
@@ -359,9 +350,7 @@ class TemplateManager:
             # 恢复原始输出目录
             self.generator.mod_dir = original_mod_dir
 
-    def _save_translations_to_csv(
-        self, translations: List[TranslationData], csv_path: str
-    ):
+    def _save_translations_to_csv(self, translations: List[TranslationData], csv_path: str):
         """保存翻译数据到CSV文件"""
         try:
             Path(csv_path).parent.mkdir(parents=True, exist_ok=True)
@@ -375,7 +364,7 @@ class TemplateManager:
                             translation.key,
                             translation.original_text,
                             translation.tag,
-                            translation.source_file,
+                            translation.file_path,
                         ]
                     )
 
@@ -420,9 +409,7 @@ class TemplateManager:
             print(f"{Fore.RED}❌ 加载CSV文件失败: {e}{Style.RESET_ALL}")
             return {}
 
-    def _update_all_xml_files(
-        self, translations: Dict[str, str], merge: bool = True
-    ) -> int:
+    def _update_all_xml_files(self, translations: Dict[str, str], merge: bool = True) -> int:
         """更新所有XML文件中的翻译"""
         from utils.file_utils import get_language_folder_path
 
@@ -522,24 +509,23 @@ class TemplateManager:
                     output_dir=export_dir,
                     language=self.language,
                 )
-                logging.info(
-                    f"生成 {len(def_translations)} 条 DefInjected 模板（按Defs结构）"
-                )
-            elif structure_choice == "structured":
-                # 按DefType自动分组
+                logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按Defs结构）")
+            elif structure_choice == "structured":  # 按DefType自动分组
                 if is_internal_mode:
-                    self.generator.generate_definjected_template(def_translations)
+                    # 转换TranslationData对象为元组格式
+                    def_tuples = [t.to_tuple() for t in def_translations]
+                    self.generator.generate_definjected_template(def_tuples)
                 else:
                     # 外部模式需要临时切换生成器目录
-                    original_mod_dir_1: str = self.generator.mod_dir
-                    self.generator.mod_dir = export_dir
+                    original_mod_dir_1 = self.generator.mod_dir
+                    self.generator.mod_dir = Path(export_dir)
                     try:
-                        self.generator.generate_definjected_template(def_translations)
+                        # 转换TranslationData对象为元组格式
+                        def_tuples = [t.to_tuple() for t in def_translations]
+                        self.generator.generate_definjected_template(def_tuples)
                     finally:
                         self.generator.mod_dir = original_mod_dir_1
-                logging.info(
-                    f"生成 {len(def_translations)} 条 DefInjected 模板（按DefType分组）"
-                )
+                logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按DefType分组）")
             else:
                 # 默认：保持原英文DefInjected结构（original）
                 export_definjected_with_original_structure(
@@ -547,26 +533,25 @@ class TemplateManager:
                     output_dir=export_dir,
                     language=self.language,
                 )
-                logging.info(
-                    f"生成 {len(def_translations)} 条 DefInjected 模板（保持原结构）"
-                )
+                logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（保持原结构）")
         else:
             # 没有英文 DefInjected 的情况
             if structure_choice == "structured":
                 # 按DefType自动分组
                 if is_internal_mode:
-                    self.generator.generate_definjected_template(def_translations)
-                else:
-                    # 外部模式需要临时切换生成器目录
-                    original_mod_dir_2: str = self.generator.mod_dir
-                    self.generator.mod_dir = export_dir
+                    # 转换TranslationData对象为元组格式
+                    def_tuples = [t.to_tuple() for t in def_translations]
+                    self.generator.generate_definjected_template(def_tuples)
+                else:  # 外部模式需要临时切换生成器目录
+                    original_mod_dir_2 = self.generator.mod_dir
+                    self.generator.mod_dir = Path(export_dir)
                     try:
-                        self.generator.generate_definjected_template(def_translations)
+                        # 转换TranslationData对象为元组格式
+                        def_tuples = [t.to_tuple() for t in def_translations]
+                        self.generator.generate_definjected_template(def_tuples)
                     finally:
                         self.generator.mod_dir = original_mod_dir_2
-                logging.info(
-                    f"生成 {len(def_translations)} 条 DefInjected 模板（按DefType分组）"
-                )
+                logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按DefType分组）")
             else:
                 # 默认：按原Defs目录结构（original或defs都用这个）
                 export_definjected_with_defs_structure(
@@ -574,6 +559,4 @@ class TemplateManager:
                     output_dir=export_dir,
                     language=self.language,
                 )
-                logging.info(
-                    f"生成 {len(def_translations)} 条 DefInjected 模板（按Defs结构）"
-                )
+                logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按Defs结构）")

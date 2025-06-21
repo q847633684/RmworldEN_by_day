@@ -156,9 +156,7 @@ class BatchProcessor:
                     continue
                 valid_mods.append(str(mod_path))
             except Exception as e:
-                print(
-                    f"{Fore.RED}❌ 模组目录验证失败: {mod_dir}, 错误: {e}{Style.RESET_ALL}"
-                )
+                print(f"{Fore.RED}❌ 模组目录验证失败: {mod_dir}, 错误: {e}{Style.RESET_ALL}")
                 logging.warning(f"模组目录验证失败: {mod_dir}, 错误: {e}")
                 continue
         return valid_mods
@@ -172,9 +170,7 @@ class BatchProcessor:
                 return False
             return True
         except Exception as e:
-            print(
-                f"{Fore.RED}❌ CSV文件验证失败: {csv_path}, 错误: {e}{Style.RESET_ALL}"
-            )
+            print(f"{Fore.RED}❌ CSV文件验证失败: {csv_path}, 错误: {e}{Style.RESET_ALL}")
             logging.error(f"CSV文件验证失败: {csv_path}, 错误: {e}")
             return False
 
@@ -187,9 +183,7 @@ class BatchProcessor:
 
             # 提交所有任务
             for mod_dir in mod_list:
-                future = executor.submit(
-                    self._process_single_mod, mod_dir, csv_path, language
-                )
+                future = executor.submit(self._process_single_mod, mod_dir, csv_path, language)
                 futures[mod_dir] = future
 
             # 显示进度并收集结果
@@ -218,9 +212,7 @@ class BatchProcessor:
                         self._results[mod_dir] = ModProcessResult(
                             mod_dir=mod_dir, success=False, error=str(e)
                         )
-                        print(
-                            f"{Fore.RED}❌ 模组处理失败: {mod_dir}, 错误: {e}{Style.RESET_ALL}"
-                        )
+                        print(f"{Fore.RED}❌ 模组处理失败: {mod_dir}, 错误: {e}{Style.RESET_ALL}")
                         logging.error(f"模组处理失败: {mod_dir}, 错误: {e}")
 
                     finally:
@@ -247,12 +239,12 @@ class BatchProcessor:
         result = ModProcessResult(mod_dir=mod_dir, success=True)
 
         try:
-            logging.debug(f"处理模组: {mod_dir}, csv_path={csv_path}")
-
-            # 生成配置文件
+            logging.debug(f"处理模组: {mod_dir}, csv_path={csv_path}")  # 生成配置文件
             try:
                 config_path = os.path.join(mod_dir, "translation_config.json")
-                self.config.export_config(config_path)
+                from services.config_service import config_service
+
+                config_service.export_config(self.config, config_path)
                 result.config_generated = True
                 logging.debug(f"配置文件已生成: {config_path}")
             except Exception as e:
@@ -286,9 +278,7 @@ class BatchProcessor:
             result.processing_time = time.time() - start_time
             return result
 
-    def _update_mod_xml(
-        self, mod_dir: str, csv_path: str, language: str
-    ) -> Tuple[int, int]:
+    def _update_mod_xml(self, mod_dir: str, csv_path: str, language: str) -> Tuple[int, int]:
         """
         更新模组的XML文件
 
@@ -342,9 +332,7 @@ class BatchProcessor:
         except Exception as e:
             raise ProcessingError(f"更新模组XML失败: {str(e)}")
 
-    def _update_single_xml_file(
-        self, xml_file_path: str, translations: Dict[str, str]
-    ) -> bool:
+    def _update_single_xml_file(self, xml_file_path: str, translations: Dict[str, str]) -> bool:
         """
         更新单个XML文件
 
@@ -428,9 +416,7 @@ class BatchProcessor:
         )
 
         # 添加错误信息
-        failed_results = {
-            mod: res for mod, res in self._results.items() if not res.success
-        }
+        failed_results = {mod: res for mod, res in self._results.items() if not res.success}
         if failed_results:
             result.errors = [
                 f"{Path(mod).name}: {res.error}" for mod, res in failed_results.items()

@@ -144,41 +144,6 @@ class ExportError(TranslationError):
         self.export_format = format_value  # 向后兼容
 
 
-class ValidationError(TranslationError):
-    """验证相关错误
-
-    数据验证、格式检查失败时抛出。
-    """
-
-    def __init__(
-        self,
-        message: str,
-        field_name: Optional[str] = None,
-        expected_type: Optional[str] = None,
-        actual_value: Optional[Any] = None,
-    ) -> None:
-        """初始化验证错误
-
-        Args:
-            message: 错误消息
-            field_name: 验证失败的字段名
-            expected_type: 期望的类型
-            actual_value: 实际值
-        """
-        context = {}
-        if field_name:
-            context["field_name"] = field_name
-        if expected_type:
-            context["expected_type"] = expected_type
-        if actual_value is not None:
-            context["actual_value"] = str(actual_value)
-
-        super().__init__(message, context)
-        self.field_name = field_name
-        self.expected_type = expected_type
-        self.actual_value = actual_value
-
-
 class ProcessingError(TranslationError):
     """处理过程中的错误
 
@@ -212,6 +177,47 @@ class ProcessingError(TranslationError):
         self.operation = operation
         self.stage = stage
         self.affected_items = affected_items or []
+
+
+class ValidationError(ProcessingError):
+    """验证相关错误
+
+    数据验证、格式检查失败时抛出。
+    """
+
+    def __init__(
+        self,
+        message: str,
+        field_name: Optional[str] = None,
+        field: Optional[str] = None,  # 添加field参数支持
+        expected_type: Optional[str] = None,
+        actual_value: Optional[Any] = None,
+    ) -> None:
+        """初始化验证错误
+
+        Args:
+            message: 错误消息
+            field_name: 验证失败的字段名
+            field: 验证失败的字段名（别名）
+            expected_type: 期望的类型
+            actual_value: 实际值
+        """
+        context = {}
+        # 优先使用field，如果没有则使用field_name
+        field_value = field or field_name
+        if field_value:
+            context["field_name"] = field_value
+
+        if expected_type:
+            context["expected_type"] = expected_type
+        if actual_value is not None:
+            context["actual_value"] = str(actual_value)
+
+        super().__init__(message, context)
+        self.field_name = field_value
+        self.field = field_value  # 别名支持
+        self.expected_type = expected_type
+        self.actual_value = actual_value
 
 
 class NetworkError(TranslationError):

@@ -544,11 +544,11 @@ class TranslationFacade:
                 results.append(result)
 
                 # 如果步骤失败且配置要求停止，则中断工作流
-                if not result.success and workflow_config.get("stop_on_failure", True):
+                if not result.is_success and workflow_config.get("stop_on_failure", True):
                     break
 
             # 汇总结果
-            successful_steps = sum(1 for r in results if r.success)
+            successful_steps = sum(1 for r in results if r.is_success)
             total_steps = len(results)
 
             success = successful_steps == total_steps

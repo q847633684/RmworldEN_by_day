@@ -7,7 +7,7 @@ Day Translation 2 - 导出管理器
 
 import logging
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -31,24 +31,10 @@ except ImportError:
         from utils.filter_rules import AdvancedFilterRules
         from utils.xml_processor import AdvancedXMLProcessor
     except ImportError:
-        # 如果仍无法导入，定义临时异常类用于独立运行
-        class ProcessingError(Exception):
-            pass
+        # 如果仍无法导入，记录警告但继续运行
+        import logging
 
-        class ValidationError(Exception):
-            pass
-
-        class ExportError(Exception):
-            pass
-
-        class AdvancedFilterRules:
-            pass
-
-        class AdvancedXMLProcessor:
-            pass
-
-        class TranslationData:
-            pass
+        logging.warning("无法导入部分模块，某些功能可能受限")
 
 
 class ExportMode(Enum):
@@ -75,14 +61,8 @@ class ExportResult:
     files_backed_up: int = 0
     translations_added: int = 0
     translations_updated: int = 0
-    errors: List[str] = None
-    warnings: List[str] = None
-
-    def __post_init__(self):
-        if self.errors is None:
-            self.errors = []
-        if self.warnings is None:
-            self.warnings = []
+    errors: List[str] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
 
 
 class ExportManager:
@@ -194,9 +174,7 @@ class ExportManager:
                 # 文件存在，执行合并
                 tree = self.xml_processor.parse_xml(output_file_path)
                 if tree:
-                    updated = self.xml_processor.update_translations(
-                        tree, translations, merge=True
-                    )
+                    updated = self.xml_processor.update_translations(tree, translations, merge=True)
                     if updated:
                         success = self.xml_processor.save_xml(tree, output_file_path)
                         result.success = success
@@ -274,9 +252,7 @@ class ExportManager:
 
         return result
 
-    def _create_new_xml_file(
-        self, xml_file_path: str, translations: Dict[str, str]
-    ) -> bool:
+    def _create_new_xml_file(self, xml_file_path: str, translations: Dict[str, str]) -> bool:
         """创建新的XML翻译文件"""
         return self.xml_processor._create_new_xml_file(xml_file_path, translations)
 

@@ -130,6 +130,9 @@ class CoreConfig:
     debug_mode: bool = False
     encoding: str = ENCODING_SETTINGS["default"]
     backup_enabled: bool = True
+    # 目录配置
+    keyed_dir: str = "Keyed"
+    definjected_dir: str = "DefInjected"
 
     def to_dict(self) -> Dict[str, Any]:
         """转换为字典"""

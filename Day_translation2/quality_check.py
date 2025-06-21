@@ -33,11 +33,11 @@ def run_command(cmd, description) -> Tuple[int, str]:
         else:
             print(f"❌ {description} - 失败 (退出码: {result.returncode})")
 
-        return result.returncode == 0
+        return result.returncode, result.stdout + result.stderr
 
     except Exception as e:
         print(f"❌ 执行失败: {e}")
-        return False
+        return 1, str(e)
 
 
 def main():

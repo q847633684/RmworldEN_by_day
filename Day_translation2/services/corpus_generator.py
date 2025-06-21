@@ -10,7 +10,7 @@ import logging
 import sys
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 # 添加项目根目录到sys.path
 project_root = Path(__file__).parent.parent
@@ -102,17 +102,15 @@ def generate_parallel_corpus(
 def _extract_language_translations(mod_dir: str, language: str) -> Dict[str, str]:
     """提取指定语言的翻译数据"""
     try:
-        translations = {}
-
-        # 提取Keyed翻译
+        translations = {}  # 提取Keyed翻译
         keyed_data = extract_keyed_translations(mod_dir, language)
-        for key, text, tag, file_path in keyed_data:
-            translations[key] = text
+        for translation in keyed_data:
+            translations[translation.key] = translation.translated_text
 
         # 提取DefInjected翻译
         definjected_data = extract_definjected_translations(mod_dir, language)
-        for key, text, tag, file_path in definjected_data:
-            translations[key] = text
+        for translation in definjected_data:
+            translations[translation.key] = translation.translated_text
 
         return translations
 
@@ -154,10 +152,10 @@ def _match_translations(
 
 def _generate_corpus_statistics(
     parallel_pairs: List[Tuple[str, str, str]],
-) -> Dict[str, any]:
+) -> Dict[str, Any]:
     """生成语料统计信息"""
     try:
-        statistics = {
+        statistics: Dict[str, Any] = {
             "total_pairs": len(parallel_pairs),
             "source_chars": 0,
             "target_chars": 0,
@@ -204,7 +202,7 @@ def _generate_corpus_statistics(
 def _save_parallel_corpus(
     parallel_pairs: List[Tuple[str, str, str]],
     output_path: str,
-    statistics: Dict[str, any],
+    statistics: Dict[str, Any],
 ) -> None:
     """保存平行语料到CSV文件"""
     try:
@@ -219,24 +217,16 @@ def _save_parallel_corpus(
             writer.writerow([f"# 总对数: {statistics['total_pairs']}"])
             writer.writerow([f"# 源语言字符数: {statistics['source_chars']}"])
             writer.writerow([f"# 目标语言字符数: {statistics['target_chars']}"])
-            writer.writerow(
-                [f"# 平均源语言长度: {statistics['avg_source_length']:.1f}"]
-            )
-            writer.writerow(
-                [f"# 平均目标语言长度: {statistics['avg_target_length']:.1f}"]
-            )
+            writer.writerow([f"# 平均源语言长度: {statistics['avg_source_length']:.1f}"])
+            writer.writerow([f"# 平均目标语言长度: {statistics['avg_target_length']:.1f}"])
             writer.writerow([])
 
             # 写入列标题
-            writer.writerow(
-                ["key", "source_text", "target_text", "source_length", "target_length"]
-            )
+            writer.writerow(["key", "source_text", "target_text", "source_length", "target_length"])
 
             # 写入语料数据
             for key, source_text, target_text in parallel_pairs:
-                writer.writerow(
-                    [key, source_text, target_text, len(source_text), len(target_text)]
-                )
+                writer.writerow([key, source_text, target_text, len(source_text), len(target_text)])
 
         logging.info(f"平行语料已保存到: {output_path}")
 
@@ -249,7 +239,7 @@ def _save_parallel_corpus(
         )
 
 
-def analyze_corpus_quality(corpus_csv: str) -> Dict[str, any]:
+def analyze_corpus_quality(corpus_csv: str) -> Dict[str, Any]:
     """
     分析语料质量
 
@@ -264,21 +254,19 @@ def analyze_corpus_quality(corpus_csv: str) -> Dict[str, any]:
         ProcessingError: 当分析过程出现错误时
     """
     if not Path(corpus_csv).is_file():
-        raise TranslationImportError(
-            f"语料文件不存在: {corpus_csv}", file_path=corpus_csv
-        )
+        raise TranslationImportError(f"语料文件不存在: {corpus_csv}", file_path=corpus_csv)
 
     try:
-        quality_metrics = {
+        quality_metrics: Dict[str, Any] = {
             "total_pairs": 0,
-            "length_ratio_avg": 0,
-            "length_ratio_std": 0,
+            "length_ratio_avg": 0.0,
+            "length_ratio_std": 0.0,
             "suspicious_pairs": [],
-            "quality_score": 0,
+            "quality_score": 0.0,
         }
 
-        pairs = []
-        length_ratios = []
+        pairs: List[Tuple[str, str, str]] = []
+        length_ratios: List[float] = []
 
         with open(corpus_csv, "r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
@@ -296,23 +284,17 @@ def analyze_corpus_quality(corpus_csv: str) -> Dict[str, any]:
 
                     # 计算长度比例
                     length_ratio = (
-                        len(target_text) / len(source_text)
-                        if len(source_text) > 0
-                        else 0
+                        len(target_text) / len(source_text) if len(source_text) > 0 else 0
                     )
                     length_ratios.append(length_ratio)
 
         if pairs:
             quality_metrics["total_pairs"] = len(pairs)
-            quality_metrics["length_ratio_avg"] = sum(length_ratios) / len(
-                length_ratios
-            )
+            quality_metrics["length_ratio_avg"] = sum(length_ratios) / len(length_ratios)
 
             # 计算标准差
             avg_ratio = quality_metrics["length_ratio_avg"]
-            variance = sum((r - avg_ratio) ** 2 for r in length_ratios) / len(
-                length_ratios
-            )
+            variance = sum((r - avg_ratio) ** 2 for r in length_ratios) / len(length_ratios)
             quality_metrics["length_ratio_std"] = variance**0.5
 
             # 找出可疑的翻译对
@@ -322,12 +304,8 @@ def analyze_corpus_quality(corpus_csv: str) -> Dict[str, any]:
                     quality_metrics["suspicious_pairs"].append(
                         {
                             "key": key,
-                            "source": (
-                                source[:50] + "..." if len(source) > 50 else source
-                            ),
-                            "target": (
-                                target[:50] + "..." if len(target) > 50 else target
-                            ),
+                            "source": (source[:50] + "..." if len(source) > 50 else source),
+                            "target": (target[:50] + "..." if len(target) > 50 else target),
                             "length_ratio": ratio,
                         }
                     )

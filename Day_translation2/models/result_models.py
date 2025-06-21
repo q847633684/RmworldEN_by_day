@@ -24,6 +24,7 @@ class OperationStatus(Enum):
     CANCELLED = "cancelled"
     IN_PROGRESS = "in_progress"
     WARNING = "warning"
+    PENDING = "pending"  # 添加缺失的PENDING状态
 
     def __str__(self) -> str:
         """返回用户友好的状态描述"""
@@ -35,6 +36,7 @@ class OperationStatus(Enum):
             OperationStatus.CANCELLED: "已取消",
             OperationStatus.IN_PROGRESS: "进行中",
             OperationStatus.WARNING: "警告",
+            OperationStatus.PENDING: "待处理",
         }
         return status_names.get(self, self.value)
 

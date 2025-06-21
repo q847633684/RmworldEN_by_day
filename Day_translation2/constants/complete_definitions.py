@@ -184,10 +184,7 @@ CUSTOM_FIELDS: Set[str] = {
 
 # 统一的默认翻译字段集合
 DEFAULT_TRANSLATION_FIELDS: Set[str] = (
-    BASIC_TRANSLATION_FIELDS
-    | RIMWORLD_SPECIFIC_FIELDS
-    | OVERRIDE_FIELDS
-    | CUSTOM_FIELDS
+    BASIC_TRANSLATION_FIELDS | RIMWORLD_SPECIFIC_FIELDS | OVERRIDE_FIELDS | CUSTOM_FIELDS
 )
 
 # ==================== 忽略字段定义 ====================
@@ -470,7 +467,7 @@ def is_custom_field(field_name: str) -> bool:
 
 def get_field_priority(field_name: str) -> int:
     """获取字段优先级"""
-    return FIELD_PRIORITY.get(field_name.value, FIELD_PRIORITY["default"])
+    return FIELD_PRIORITY.get(field_name, FIELD_PRIORITY["default"])
 
 
 def get_field_type(field_name: str) -> str:

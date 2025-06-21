@@ -17,6 +17,7 @@ class TranslationType(Enum):
     KEYED = "keyed"
     DEFINJECTED = "definjected"
     CORPUS = "corpus"
+    BACKSTORY = "backstory"  # 添加缺失的BACKSTORY类型
 
     def __str__(self) -> str:
         """返回用户友好的类型描述"""
@@ -24,6 +25,7 @@ class TranslationType(Enum):
             self.KEYED: "界面文本",
             self.DEFINJECTED: "游戏内容",
             self.CORPUS: "平行语料",
+            self.BACKSTORY: "背景故事",
         }
         return type_names.get(self.value, self.value)
 

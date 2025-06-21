@@ -13,8 +13,10 @@ from pathlib import Path
 # 设置UTF-8编码
 if sys.platform.startswith("win"):
     os.system("chcp 65001 > nul")
-    sys.stdout.reconfigure(encoding="utf-8")
-    sys.stderr.reconfigure(encoding="utf-8")
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8")
 
 
 def run_command(command, description):

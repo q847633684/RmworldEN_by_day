@@ -67,15 +67,12 @@ def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
 
             # 尝试检测分隔符
             sniffer = csv.Sniffer()
-            delimiter = (
-                sniffer.sniff(sample).delimiter if sniffer.has_header(sample) else ","
-            )
+            delimiter = sniffer.sniff(sample).delimiter if sniffer.has_header(sample) else ","
 
-            reader = csv.DictReader(csv_file, delimiter=delimiter)
-
-            # 验证必需的列
+            reader = csv.DictReader(csv_file, delimiter=delimiter)  # 验证必需的列
             required_columns = ["key", "target_text"]
-            if not all(col in reader.fieldnames for col in required_columns):
+            fieldnames = reader.fieldnames or []
+            if not all(col in fieldnames for col in required_columns):
                 # 尝试常见的列名变体
                 column_mapping = {
                     "key": ["key", "Key", "ID", "id"],
@@ -91,7 +88,7 @@ def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
                 actual_mapping = {}
                 for req_col, variants in column_mapping.items():
                     for variant in variants:
-                        if variant in reader.fieldnames:
+                        if variant in fieldnames:
                             actual_mapping[req_col] = variant
                             break
 
@@ -163,9 +160,7 @@ def import_translations(
         TranslationImportError: 导入失败
         ProcessingError: 处理过程出错
     """
-    print(
-        f"{Fore.GREEN}开始导入翻译到模组（{mod_dir}, 语言：{language}）...{Style.RESET_ALL}"
-    )
+    print(f"{Fore.GREEN}开始导入翻译到模组（{mod_dir}, 语言：{language}）...{Style.RESET_ALL}")
 
     # 参数验证
     if not csv_path or not Path(csv_path).exists():
@@ -314,11 +309,7 @@ def update_all_xml(
                 continue
 
         # 生成操作结果
-        status = (
-            OperationStatus.SUCCESS
-            if len(updated_files) > 0
-            else OperationStatus.FAILED
-        )
+        status = OperationStatus.SUCCESS if len(updated_files) > 0 else OperationStatus.FAILED
         total_files = len(xml_files)
 
         details = {
@@ -379,9 +370,7 @@ def import_translation_entries(
         操作结果
     """
     # 转换为字典格式
-    translations = {
-        entry.key: entry.translated_text for entry in entries if entry.translated_text
-    }
+    translations = {entry.key: entry.translated_text for entry in entries if entry.translated_text}
 
     if not translations:
         return OperationResult(
@@ -389,14 +378,12 @@ def import_translation_entries(
             operation_type=OperationType.IMPORT,
             message="没有有效的翻译数据",
             details={"entries_count": len(entries)},
-        )
-
-    # 假设所有条目使用相同的语言（从第一个条目获取）
-    language = (
-        entries[0].context.get("language", CONFIG.core.default_language)
-        if entries and entries[0].context
-        else CONFIG.core.default_language
-    )
+        )  # 假设所有条目使用相同的语言（从第一个条目获取）
+    language = CONFIG.core.default_language
+    if entries and entries[0].context:
+        if isinstance(entries[0].context, dict):
+            language = entries[0].context.get("language", CONFIG.core.default_language)
+        # 如果context是字符串，使用默认语言
 
     return update_all_xml(mod_dir, translations, language, merge, backup)
 
@@ -483,9 +470,7 @@ class AdvancedImporter:
                 self.logger.warning(f"翻译数据验证发现问题: {validation_issues}")
 
             # 执行导入
-            result = update_all_xml(
-                self.mod_dir, translations, self.language, True, backup
-            )
+            result = update_all_xml(self.mod_dir, translations, self.language, True, backup)
 
             self.logger.info(f"CSV导入完成: {csv_path}")
             return result
@@ -518,9 +503,7 @@ class AdvancedImporter:
                 self.logger.warning(f"翻译数据验证发现问题: {validation_issues}")
 
             # 执行导入
-            result = update_all_xml(
-                self.mod_dir, translations, self.language, True, backup
-            )
+            result = update_all_xml(self.mod_dir, translations, self.language, True, backup)
 
             self.logger.info(f"翻译字典导入完成，共 {len(translations)} 条数据")
             return result

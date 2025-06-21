@@ -111,10 +111,8 @@ def handle_extraction_mode(interaction_manager: UnifiedInteractionManager) -> No
             auto_choose_definjected=params.get("auto_choose_definjected", False),
             structure_choice=params.get("structure_choice", "original"),
             merge_mode=params.get("merge_mode", "smart-merge"),
-        )
-
-        # 显示结果
-        interaction_manager.show_operation_result(result)
+        )  # 显示结果
+        interaction_manager.show_operation_result(result=result)
 
     except Exception as e:
         logging.error(f"提取模式处理失败: {e}")
@@ -143,10 +141,8 @@ def handle_import_mode(interaction_manager: UnifiedInteractionManager) -> None:
         # 执行导入
         result = facade.import_translations_to_templates(
             csv_path=params["csv_path"], merge=params.get("merge", True)
-        )
-
-        # 显示结果
-        interaction_manager.show_operation_result(result)
+        )  # 显示结果
+        interaction_manager.show_operation_result(result=result)
 
     except Exception as e:
         logging.error(f"导入模式处理失败: {e}")
@@ -204,13 +200,11 @@ def handle_corpus_mode(interaction_manager: UnifiedInteractionManager) -> None:
             mod_dir=params["mod_dir"],
             language=params.get("language"),
             template_location=params.get("template_location", "mod"),
-        )
-
-        # 生成语料
+        )  # 生成语料
         result = facade.generate_corpus()
 
         # 显示结果
-        interaction_manager.show_operation_result(result)
+        interaction_manager.show_operation_result(result=result)
 
     except Exception as e:
         logging.error(f"语料生成模式处理失败: {e}")
