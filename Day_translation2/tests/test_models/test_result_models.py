@@ -4,9 +4,14 @@ Day Translation 2 - 操作结果模型测试
 测试OperationResult及相关枚举类的功能。
 """
 
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
 import pytest
 
-from ...models.result_models import OperationResult, OperationStatus, OperationType
+from models.result_models import OperationResult, OperationStatus, OperationType
 
 
 class TestOperationStatus:

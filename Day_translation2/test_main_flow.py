@@ -21,7 +21,7 @@ def test_core_imports():
     print("🔍 测试核心模块导入...")
 
     try:
-        from config import get_config
+        from services.config_service import config_service
 
         print("✅ 配置模块导入成功")
     except Exception as e:
@@ -60,9 +60,9 @@ def test_basic_functionality():
     print("\n🚀 测试基本功能...")
 
     try:
-        from config import get_config
+        from services.config_service import config_service
 
-        config = get_config()
+        config = config_service.get_unified_config()
         print(f"✅ 配置获取成功: {config.core.default_language}")
     except Exception as e:
         print(f"❌ 配置获取失败: {e}")

@@ -11,38 +11,30 @@ Day Translation 2 - 数据导入核心模块
 - 备份机制: 导入前自动备份原文件
 """
 
+# 标准库导入
 import csv
 import logging
 import shutil
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
-
 from colorama import Fore, Style
-
-try:
-    # 尝试相对导入 (包内使用)
-    from ..config import get_config
-    from ..models.exceptions import ImportError as TranslationImportError
-    from ..models.exceptions import ProcessingError, TranslationError, ValidationError
-    from ..models.result_models import OperationResult, OperationStatus, OperationType
-    from ..models.translation_data import TranslationData, TranslationType
-    from ..utils.file_utils import get_language_folder_path
-    from ..utils.xml_processor import AdvancedXMLProcessor
-except ImportError:
-    # 降级到绝对导入 (独立运行)
-    import sys  # Path already imported at top of file
-
-    sys.path.append(str(Path(__file__).parent.parent))
-    from config import get_config
-    from models.exceptions import ImportError as TranslationImportError
-    from models.exceptions import ProcessingError, TranslationError, ValidationError
-    from models.result_models import OperationResult, OperationStatus, OperationType
-    from models.translation_data import TranslationData, TranslationType
-    from utils.file_utils import get_language_folder_path
+# 项目模块导入
+from services.config_service import config_service
+from models.exceptions import ImportError as TranslationImportError
+from models.exceptions import ProcessingError, TranslationError, ValidationError
+from models.result_models import OperationResult, OperationStatus, OperationType
+from models.translation_data import TranslationData, TranslationType
+from utils.file_utils import get_language_folder_path
+from utils.xml_processor import AdvancedXMLProcessor
+# 确保能够导入项目模块
+current_dir = Path(__file__).parent.parent
+if str(current_dir) not in sys.path:
+    sys.path.insert(0, str(current_dir))
 
 # 获取配置实例
-CONFIG = get_config()
+CONFIG = config_service.get_unified_config()
 
 
 def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
@@ -65,16 +57,16 @@ def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
     try:
         translations: Dict[str, str] = {}
 
-        with open(csv_path, "r", encoding="utf-8") as csvfile:
+        with open(csv_path, "r", encoding="utf-8") as csv_file:
             # 自动检测CSV格式
-            sample = csvfile.read(1024)
-            csvfile.seek(0)
+            sample = csv_file.read(1024)
+            csv_file.seek(0)
 
             # 尝试检测分隔符
             sniffer = csv.Sniffer()
             delimiter = sniffer.sniff(sample).delimiter if sniffer.has_header(sample) else ","
 
-            reader = csv.DictReader(csvfile, delimiter=delimiter)
+            reader = csv.DictReader(csv_file, delimiter=delimiter)
 
             # 验证必需的列
             required_columns = ["key", "target_text"]
@@ -135,7 +127,9 @@ def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
         logging.error(error_msg)
         raise ProcessingError(
             error_msg,
-            context={"csv_path": csv_path, "operation": "load_translations_from_csv"},
+            operation="load_translations_from_csv",
+            stage="CSV读取",
+            affected_items=[csv_path],
         )
 
 
@@ -180,7 +174,7 @@ def import_translations(
         if not translations:
             logging.warning("CSV文件中没有有效的翻译数据")
             return OperationResult(
-                success=False,
+                status=OperationStatus.FAILED,
                 operation_type=OperationType.IMPORT,
                 message="CSV文件中没有有效的翻译数据",
                 details={"csv_path": csv_path, "mod_dir": mod_dir},
@@ -189,7 +183,7 @@ def import_translations(
         # 更新XML文件
         result = update_all_xml(mod_dir, translations, language, merge, backup)
 
-        if result.success:
+        if result.status == OperationStatus.SUCCESS:
             print(f"{Fore.GREEN}✅ 翻译导入完成{Style.RESET_ALL}")
         else:
             print(f"{Fore.RED}❌ 翻译导入失败: {result.message}{Style.RESET_ALL}")
@@ -203,12 +197,9 @@ def import_translations(
         logging.error(error_msg)
         raise ProcessingError(
             error_msg,
-            context={
-                "csv_path": csv_path,
-                "mod_dir": mod_dir,
-                "language": language,
-                "operation": "import_translations",
-            },
+            operation="import_translations",
+            stage="导入处理",
+            affected_items=[csv_path, mod_dir],
         )
 
 
@@ -251,7 +242,7 @@ def update_all_xml(
         if not language_path.exists():
             logging.warning(f"语言目录不存在: {language_path}")
             return OperationResult(
-                success=False,
+                status=OperationStatus.FAILED,
                 operation_type=OperationType.IMPORT,
                 message=f"语言目录不存在: {language_path}",
                 details={"mod_dir": mod_dir, "language": language},
@@ -263,7 +254,7 @@ def update_all_xml(
         if not xml_files:
             logging.warning(f"在语言目录中未找到XML文件: {language_path}")
             return OperationResult(
-                success=False,
+                status=OperationStatus.FAILED,
                 operation_type=OperationType.IMPORT,
                 message="在语言目录中未找到XML文件",
                 details={"language_dir": str(language_path)},
@@ -316,7 +307,7 @@ def update_all_xml(
                 continue
 
         # 生成操作结果
-        success = len(updated_files) > 0
+        status = OperationStatus.SUCCESS if len(updated_files) > 0 else OperationStatus.FAILED
         total_files = len(xml_files)
 
         details = {
@@ -329,7 +320,7 @@ def update_all_xml(
             "backup_dir": str(backup_dir) if backup_dir else None,
         }
 
-        if success:
+        if status == OperationStatus.SUCCESS:
             message = f"成功更新 {len(updated_files)}/{total_files} 个XML文件"
             print(f"{Fore.GREEN}✅ {message}{Style.RESET_ALL}")
         else:
@@ -339,7 +330,7 @@ def update_all_xml(
         logging.info(f"XML更新完成: {message}")
 
         return OperationResult(
-            success=success,
+            status=status,
             operation_type=OperationType.IMPORT,
             message=message,
             details=details,
@@ -352,12 +343,9 @@ def update_all_xml(
         logging.error(error_msg)
         raise ProcessingError(
             error_msg,
-            context={
-                "mod_dir": mod_dir,
-                "language": language,
-                "translations_count": len(translations),
-                "operation": "update_all_xml",
-            },
+            operation="update_all_xml",
+            stage="XML更新",
+            affected_items=[mod_dir, language],
         )
 
 
@@ -380,11 +368,11 @@ def import_translation_entries(
         操作结果
     """
     # 转换为字典格式
-    translations = {entry.key: entry.target_text for entry in entries if entry.target_text}
+    translations = {entry.key: entry.translated_text for entry in entries if entry.translated_text}
 
     if not translations:
         return OperationResult(
-            success=False,
+            status=OperationStatus.FAILED,
             operation_type=OperationType.IMPORT,
             message="没有有效的翻译数据",
             details={"entries_count": len(entries)},
@@ -392,8 +380,8 @@ def import_translation_entries(
 
     # 假设所有条目使用相同的语言（从第一个条目获取）
     language = (
-        entries[0].context_info.get("language", CONFIG.core.default_language)
-        if entries
+        entries[0].context.get("language", CONFIG.core.default_language)
+        if entries and entries[0].context
         else CONFIG.core.default_language
     )
 
@@ -482,7 +470,7 @@ class AdvancedImporter:
                 self.logger.warning(f"翻译数据验证发现问题: {validation_issues}")
 
             # 执行导入
-            result = import_translations(self.mod_dir, translations, self.language, backup)
+            result = update_all_xml(self.mod_dir, translations, self.language, True, backup)
 
             self.logger.info(f"CSV导入完成: {csv_path}")
             return result
@@ -490,11 +478,10 @@ class AdvancedImporter:
         except Exception as e:
             self.logger.error(f"CSV导入失败: {e}")
             return OperationResult(
-                success=False,
                 status=OperationStatus.FAILED,
                 operation_type=OperationType.IMPORT,
                 message=f"CSV导入失败: {str(e)}",
-                context={"csv_path": csv_path, "mod_dir": self.mod_dir},
+                details={"csv_path": csv_path, "mod_dir": self.mod_dir},
             )
 
     def import_translations_dict(
@@ -516,7 +503,7 @@ class AdvancedImporter:
                 self.logger.warning(f"翻译数据验证发现问题: {validation_issues}")
 
             # 执行导入
-            result = import_translations(self.mod_dir, translations, self.language, backup)
+            result = update_all_xml(self.mod_dir, translations, self.language, True, backup)
 
             self.logger.info(f"翻译字典导入完成，共 {len(translations)} 条数据")
             return result
@@ -524,11 +511,10 @@ class AdvancedImporter:
         except Exception as e:
             self.logger.error(f"翻译字典导入失败: {e}")
             return OperationResult(
-                success=False,
                 status=OperationStatus.FAILED,
                 operation_type=OperationType.IMPORT,
                 message=f"翻译字典导入失败: {str(e)}",
-                context={
+                details={
                     "translation_count": len(translations),
                     "mod_dir": self.mod_dir,
                 },

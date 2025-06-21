@@ -6,32 +6,48 @@ Day Translation 2 - 配置管理模块
 - 用户偏好设置
 - 路径验证和管理
 - 配置持久化
+
+新架构（纯架构）：
+- data_models.py - 纯数据模型
+- config_manager.py - 配置CRUD操作
+- 所有业务逻辑已迁移到 services/ 下专属模块
 """
 
-from .config_models import (
-    CONFIG_VERSION,
-    CoreConfig,
+# 纯数据模型
+from .data_models import (
+    GeneralConfig,
+    ExtractionConfig,
+    APIConfig,
+    ProcessingConfig,
     FilterConfig,
     PathValidationResult,
-    ProcessingConfig,
-    UnifiedConfig,
-    UserConfig,
-    get_config,
-    get_config_path,
-    reset_config,
-    save_config,
 )
 
+# 配置管理器
+from .config_manager import ConfigManager
+
+# 版本信息
+CONFIG_VERSION = "2.0.0"
+
+# 向后兼容类型别名
+CoreConfig = GeneralConfig
+UserConfig = dict
+UnifiedConfig = dict
+
 __all__ = [
-    "UnifiedConfig",
+    # 版本
+    "CONFIG_VERSION",
+    # 新架构数据模型
+    "GeneralConfig",
+    "ExtractionConfig",
+    "APIConfig",
+    "ProcessingConfig",
+    "FilterConfig",
+    "PathValidationResult",
+    # 配置管理器
+    "ConfigManager",
+    # 向后兼容类型别名
     "CoreConfig",
     "UserConfig",
-    "FilterConfig",
-    "ProcessingConfig",
-    "PathValidationResult",
-    "get_config",
-    "save_config",
-    "reset_config",
-    "get_config_path",
-    "CONFIG_VERSION",
+    "UnifiedConfig",
 ]

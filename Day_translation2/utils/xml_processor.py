@@ -16,22 +16,30 @@
 原始来源: day_translation/utils/utils.py
 """
 
+# 标准库导入
 import logging
 import os
 import re
 import xml.etree.ElementTree as ET
-from dataclasses import dataclass
 from functools import wraps
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple, cast
+
+# 第三方库导入
+from dataclasses import dataclass
 
 try:
     from lxml import etree
+    from lxml.etree import XMLParser, _Element, _ElementTree
 
     LXML_AVAILABLE = True
 except ImportError:
     LXML_AVAILABLE = False
     logging.warning("lxml 未安装，将使用 ElementTree")
+    # 定义兼容性类型
+    XMLParser = None  # type: ignore
+    _Element = None  # type: ignore
+    _ElementTree = None  # type: ignore
 
 try:
     from ..config import UnifiedConfig
@@ -43,9 +51,9 @@ except ImportError:
 # 导入异常类
 try:
     from ..models.exceptions import (
-        ImportError as TranslationImportError,  # type: ignore
+        ImportError as TranslationImportError,
     )
-    from ..models.exceptions import (  # type: ignore
+    from ..models.exceptions import (
         ProcessingError,
         ValidationError,
     )
@@ -80,6 +88,12 @@ class XMLProcessorConfig:
 class AdvancedXMLProcessor:
     """企业级 XML 处理器，专注于翻译内容的提取和更新"""
 
+    parser: Optional[Any]
+    config: XMLProcessorConfig
+    use_lxml: bool
+    _schema_cache: Dict[str, Any]
+    _namespace_map: Dict[str, str]
+
     def __init__(self, config: Optional[XMLProcessorConfig] = None) -> None:
         """
         初始化 XML 处理器
@@ -107,7 +121,7 @@ class AdvancedXMLProcessor:
             self._namespace_map: Dict[str, str] = {}
 
             if self.config.default_namespace:
-                self._namespace_map[None] = self.config.default_namespace
+                self._namespace_map[""] = self.config.default_namespace
 
             logging.debug(f"XML处理器初始化完成: use_lxml={self.use_lxml}")
 
@@ -121,7 +135,8 @@ class AdvancedXMLProcessor:
 
         if schema_path not in self._schema_cache:
             try:
-                schema = etree.XMLSchema(etree.parse(schema_path))
+                schema_doc = cast(Any, etree.parse(schema_path))
+                schema = cast(Any, etree.XMLSchema(schema_doc))
                 if len(self._schema_cache) >= self.config.schema_cache_size:
                     # 移除最旧的缓存
                     self._schema_cache.pop(next(iter(self._schema_cache)))
@@ -143,16 +158,15 @@ class AdvancedXMLProcessor:
             return True
 
         try:
-            return schema.validate(tree)
+            result = schema.validate(tree)
+            return cast(bool, result)
         except Exception as e:
             logging.error(f"Schema 验证失败: {e}")
             if self.config.error_on_invalid:
                 raise ValidationError(f"XML格式验证失败: {str(e)}")
             return False
 
-    def parse_xml(
-        self, file_path: str, schema_path: Optional[str] = None
-    ) -> Optional[Any]:
+    def parse_xml(self, file_path: str, schema_path: Optional[str] = None) -> Optional[Any]:
         """
         安全解析 XML 文件
 
@@ -184,7 +198,7 @@ class AdvancedXMLProcessor:
 
         try:
             if self.use_lxml:
-                tree = etree.parse(file_path, self.parser)
+                tree = cast(Any, etree.parse(file_path, self.parser))
                 # Schema验证
                 if schema_path and not self.validate_against_schema(tree, schema_path):
                     logging.warning(f"XML Schema验证失败: {file_path}")
@@ -226,9 +240,7 @@ class AdvancedXMLProcessor:
         try:
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
-            pretty_print = (
-                self.config.pretty_print if pretty_print is None else pretty_print
-            )
+            pretty_print = self.config.pretty_print if pretty_print is None else pretty_print
             encoding = self.config.encoding if encoding is None else encoding
 
             if self.use_lxml:
@@ -333,11 +345,7 @@ class AdvancedXMLProcessor:
         elements = root.xpath(".//*") if self.use_lxml else root.iter()
 
         for elem in elements:
-            key = (
-                generate_key_func(elem)
-                if generate_key_func
-                else self._get_element_key(elem)
-            )
+            key = generate_key_func(elem) if generate_key_func else self._get_element_key(elem)
 
             # 更新元素文本
             if key in translations:
@@ -351,9 +359,7 @@ class AdvancedXMLProcessor:
                     attr_key = f"{key}@{attr_name}"
                     if attr_key in translations:
                         if elem.get(attr_name) != translations[attr_key] or not merge:
-                            elem.set(
-                                attr_name, self.sanitize_xml(translations[attr_key])
-                            )
+                            elem.set(attr_name, self.sanitize_xml(translations[attr_key]))
                             modified = True
 
         return modified
@@ -362,11 +368,11 @@ class AdvancedXMLProcessor:
         """获取元素的键"""
         if self.use_lxml:
             # lxml支持xpath
-            xpath = elem.getroottree().getpath(elem)
+            xpath = cast(str, elem.getroottree().getpath(elem))
             return xpath.replace("/", ".").lstrip(".")
         else:
             # ElementTree使用标签名
-            return elem.tag
+            return str(elem.tag)
 
     def get_element_by_xpath(self, tree: Any, xpath: str) -> List[Any]:
         """
@@ -385,7 +391,8 @@ class AdvancedXMLProcessor:
 
         try:
             root = tree.getroot() if hasattr(tree, "getroot") else tree
-            return root.xpath(xpath, namespaces=self._namespace_map)
+            result = root.xpath(xpath, namespaces=self._namespace_map)
+            return cast(List[Any], result)
         except Exception as e:
             logging.error(f"XPath查询失败: {xpath}, 错误: {e}")
             return []
@@ -471,24 +478,20 @@ class AdvancedXMLProcessor:
             success = self.save_xml(tree, xml_file_path)
 
             if success:
-                logging.info(
-                    f"智能合并完成: 更新{updated_count}个, 添加{added_count}个翻译"
-                )
+                logging.info(f"智能合并完成: 更新{updated_count}个, 添加{added_count}个翻译")
 
             return success
 
         except Exception as e:
             raise ProcessingError(f"智能合并XML翻译失败: {str(e)}")
 
-    def _create_new_xml_file(
-        self, xml_file_path: str, translations: Dict[str, str]
-    ) -> bool:
+    def _create_new_xml_file(self, xml_file_path: str, translations: Dict[str, str]) -> bool:
         """创建新的XML翻译文件"""
         try:
             # 创建XML结构
             if self.use_lxml:
-                root = etree.Element("LanguageData")
-                tree = etree.ElementTree(root)
+                root = cast(Any, etree.Element("LanguageData"))
+                tree = cast(Any, etree.ElementTree(root))
             else:
                 root = ET.Element("LanguageData")
                 tree = ET.ElementTree(root)
@@ -508,7 +511,7 @@ class AdvancedXMLProcessor:
         """添加新元素"""
         try:
             if self.use_lxml:
-                elem = etree.SubElement(parent, tag)
+                elem = cast(Any, etree.SubElement(parent, tag))
             else:
                 elem = ET.SubElement(parent, tag)
 

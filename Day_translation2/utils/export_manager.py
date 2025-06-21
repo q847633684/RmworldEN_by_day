@@ -194,9 +194,7 @@ class ExportManager:
                 # 文件存在，执行合并
                 tree = self.xml_processor.parse_xml(output_file_path)
                 if tree:
-                    updated = self.xml_processor.update_translations(
-                        tree, translations, merge=True
-                    )
+                    updated = self.xml_processor.update_translations(tree, translations, merge=True)
                     if updated:
                         success = self.xml_processor.save_xml(tree, output_file_path)
                         result.success = success
@@ -274,9 +272,7 @@ class ExportManager:
 
         return result
 
-    def _create_new_xml_file(
-        self, xml_file_path: str, translations: Dict[str, str]
-    ) -> bool:
+    def _create_new_xml_file(self, xml_file_path: str, translations: Dict[str, str]) -> bool:
         """创建新的XML翻译文件"""
         return self.xml_processor._create_new_xml_file(xml_file_path, translations)
 
@@ -355,48 +351,9 @@ class ExportManager:
         return stats
 
 
-# 兼容性函数，支持旧代码调用
-def export_with_smart_merge(
-    output_file_path: str, translations: Dict[str, str], merge_mode: str = "replace"
-) -> bool:
-    """
-    兼容性函数：根据合并模式导出翻译文件
-
-    Args:
-        output_file_path: 输出文件路径
-        translations: 翻译内容
-        merge_mode: 合并模式 ("replace", "merge", "smart-merge", "backup")
-
-    Returns:
-        bool: 是否成功导出
-    """
-    try:
-        # 转换字符串模式到枚举
-        mode_map = {
-            "replace": ExportMode.REPLACE,
-            "merge": ExportMode.MERGE,
-            "smart-merge": ExportMode.SMART_MERGE,
-            "backup": ExportMode.BACKUP,
-            "skip": ExportMode.SKIP,
-        }
-
-        mode = mode_map.get(merge_mode, ExportMode.REPLACE)
-
-        # 使用导出管理器
-        manager = ExportManager()
-        result = manager.export_translations(translations, output_file_path, mode)
-
-        return result.success
-
-    except Exception as e:
-        logging.error(f"兼容性导出函数失败: {e}")
-        return False
-
-
 # 导出主要接口
 __all__ = [
     "ExportManager",
     "ExportMode",
     "ExportResult",
-    "export_with_smart_merge",
-]  # 兼容性函数
+]

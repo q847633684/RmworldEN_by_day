@@ -112,5 +112,9 @@
         "**/__pycache__": true,
         "**/*.pyc": true,
         "**/.pytest_cache": true
+    },
+    "python.analysis.showOnlyDirectDependenciesInAutoImport": true,
+    "editor.codeActionsOnSave": {
+      
     }
 }

@@ -13,16 +13,16 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
+# 使用绝对导入
+from services.config_service import config_service
+from models.exceptions import ImportError as TranslationImportError
+from models.exceptions import ProcessingError, ValidationError
+from models.result_models import OperationResult, OperationStatus, OperationType
+
 # 添加项目根目录到sys.path
 project_root = Path(__file__).parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
-
-# 使用绝对导入
-from config import get_config
-from models.exceptions import ImportError as TranslationImportError
-from models.exceptions import ProcessingError, ValidationError
-from models.result_models import OperationResult, OperationStatus, OperationType
 
 
 @dataclass
@@ -74,7 +74,7 @@ class TranslationValidator:
 
     def __init__(self):
         """初始化验证器"""
-        self.config = get_config()
+        self.config = config_service.get_unified_config()
         self.terminology_dict = self._load_terminology_dict()
 
         # 验证规则配置
@@ -88,9 +88,7 @@ class TranslationValidator:
             "min_length_ratio": 0.2,  # 翻译长度比例下限
         }
 
-    def validate_translations(
-        self, translations: List[Tuple[str, str, str]]
-    ) -> ValidationReport:
+    def validate_translations(self, translations: List[Tuple[str, str, str]]) -> ValidationReport:
         """
         验证翻译列表
 
@@ -206,9 +204,7 @@ class TranslationValidator:
         self, translations: List[Tuple[str, str, str]]
     ) -> List[ValidationIssue]:
         """检查格式一致性"""
-        issues = []
-
-        # 检查占位符格式
+        issues = []  # 检查占位符格式
         placeholder_patterns = [
             r"\{[^}]+\}",  # {placeholder}
             r"%[sd]",  # %s, %d
@@ -240,8 +236,8 @@ class TranslationValidator:
                             issue_type="missing_placeholder",
                             severity="error",
                             key=key,
-                            message=f"缺少占位符: {', '.join(missing_placeholders)}",
-                            suggestion=f"在翻译中添加: {', '.join(missing_placeholders)}",
+                            message="缺少占位符: " + ", ".join(missing_placeholders),
+                            suggestion="在翻译中添加: " + ", ".join(missing_placeholders),
                         )
                     )
 
@@ -254,7 +250,7 @@ class TranslationValidator:
         issues = []
 
         # 收集术语使用情况
-        term_usage = defaultdict(Counter)
+        term_usage: Dict[str, Counter] = defaultdict(Counter)
 
         for key, source_text, target_text in translations:
             # 检查预定义术语
@@ -276,7 +272,7 @@ class TranslationValidator:
                                 severity="warning",
                                 key=key,
                                 message=f"术语 '{source_term}' 未使用标准翻译",
-                                suggestion=f"建议使用: {', '.join(expected_translations)}",
+                                suggestion="建议使用: " + ", ".join(expected_translations),
                             )
                         )
 
@@ -383,8 +379,7 @@ class TranslationValidator:
         terminology_issues = [
             issue
             for issue in issues
-            if issue.issue_type
-            in ["terminology_inconsistency", "terminology_variation"]
+            if issue.issue_type in ["terminology_inconsistency", "terminology_variation"]
         ]
 
         if not translations:
@@ -455,8 +450,8 @@ class TranslationValidator:
             "Potion": ["药水", "药剂"],
             "Heal": ["治疗", "回复"],
             "Restore": ["恢复", "回复"],
-            "Buf": ["增益", "强化"],
-            "Debuf": ["减益", "削弱"],
+            "Bu": ["增益", "强化"],
+            "Debu": ["减益", "削弱"],
             "Status": ["状态"],
             "Effect": ["效果"],
             "Duration": ["持续时间"],
@@ -667,7 +662,7 @@ class TranslationValidator:
             "Activate": ["激活"],
             "Deactivate": ["停用"],
             "Turn On": ["打开"],
-            "Turn Of": ["关闭"],
+            "Turn O": ["关闭"],
             "Switch": ["切换", "开关"],
             "Change": ["改变", "更改"],
             "Modify": ["修改"],
@@ -1143,7 +1138,7 @@ class TranslationValidator:
             "Into": ["进入"],
             "Out o": ["从...出来"],
             "Onto": ["到...上"],
-            "Of": ["离开", "关闭"],
+            "O": ["离开", "关闭"],
             "Up": ["向上"],
             "Down": ["向下"],
             "In": ["在...里"],
@@ -1226,9 +1221,7 @@ def validate_csv_file(csv_path: str) -> OperationResult:
 
         return OperationResult(
             status=(
-                OperationStatus.SUCCESS
-                if report.error_count == 0
-                else OperationStatus.WARNING
+                OperationStatus.SUCCESS if report.error_count == 0 else OperationStatus.WARNING
             ),
             operation_type=OperationType.VALIDATION,
             message=f"验证完成: {report.error_count}个错误, {report.warning_count}个警告, 质量评分: {report.quality_score:.1f}",
@@ -1262,9 +1255,7 @@ def _save_validation_report(report: ValidationReport, output_path: str) -> None:
 
                 # 按严重程度分组
                 errors = [issue for issue in report.issues if issue.severity == "error"]
-                warnings = [
-                    issue for issue in report.issues if issue.severity == "warning"
-                ]
+                warnings = [issue for issue in report.issues if issue.severity == "warning"]
                 infos = [issue for issue in report.issues if issue.severity == "info"]
 
                 if errors:

@@ -16,7 +16,7 @@ import pytest
 # 修复导入路径
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from config import get_config
+from services.config_service import config_service
 from models.exceptions import ProcessingError, ValidationError
 from models.result_models import OperationResult, OperationStatus, OperationType
 from models.translation_data import TranslationData, TranslationType

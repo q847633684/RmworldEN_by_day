@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "core": {
+    "default_language": "ChineseSimplified",
+    "source_language": "English",
+    "keyed_dir": "Keyed",
+    "definjected_dir": "DefInjected",
+    "output_csv": "extracted_translations.csv",
+    "log_file": "logs/day_translation_20250621_140719.log",
+    "log_format": "%(asctime)s - %(levelname)s - %(message)s",
+    "debug_mode": false,
+    "preview_translatable_fields": 0,
+    "filter_config": {
+      "included_fields": 

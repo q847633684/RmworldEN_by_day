@@ -14,21 +14,17 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-try:
-    # 尝试相对导入 (包内使用)
-    from ..config import get_config
-    from ..utils.file_utils import ensure_directory_exists
-    from ..utils.xml_processor import AdvancedXMLProcessor
-except ImportError:
-    # 降级到绝对导入 (独立运行)
-    import sys
+# 标准库导入
+import sys
+from services.config_service import config_service
+from utils.file_utils import ensure_directory_exists
+from utils.xml_processor import AdvancedXMLProcessor
+# 确保能够导入项目模块
+current_dir = Path(__file__).parent.parent
+if str(current_dir) not in sys.path:
+    sys.path.insert(0, str(current_dir))
 
-    # Path already imported at top of file
-
-    sys.path.append(str(Path(__file__).parent.parent))
-    from config import get_config
-    from utils.file_utils import ensure_directory_exists
-    from utils.xml_processor import AdvancedXMLProcessor
+# 项目模块导入
 
 # 创建别名以保持代码简洁
 ensure_directory = ensure_directory_exists
@@ -51,7 +47,7 @@ def sanitize_xml(text: str) -> str:
     if not isinstance(text, str):
         return str(text)
 
-    # 移除XML非法字符
+    # 移除XML非法字符 (FFFD是Unicode替换字符)
     text = re.sub(r"[^\u0020-\uD7FF\uE000-\uFFFD]", "", text)
 
     # 转义XML特殊字符
@@ -83,7 +79,7 @@ class TemplateGenerator:
         self.language = language
         self.template_location = template_location
         self.processor = AdvancedXMLProcessor()
-        self.config = get_config()
+        self.config = config_service.get_unified_config()
 
         # 设置日志
         self.logger = logging.getLogger(__name__)
@@ -102,9 +98,7 @@ class TemplateGenerator:
             return Path(export_dir) / "templates"
         return self.mod_dir
 
-    def generate_keyed_template(
-        self, en_keyed_dir: str, export_dir: Optional[str] = None
-    ) -> None:
+    def generate_keyed_template(self, en_keyed_dir: str, export_dir: Optional[str] = None) -> None:
         """
         从英文Keyed目录生成中文翻译模板
 
@@ -115,10 +109,8 @@ class TemplateGenerator:
         self.logger.info("正在生成中文 Keyed 翻译模板...")
 
         base_dir = self.get_template_base_dir(export_dir)
-        zh_keyed_dir = (
-            base_dir / "Languages" / self.language / self.config.core.keyed_dir
-        )
-        ensure_directory(zh_keyed_dir)
+        zh_keyed_dir = base_dir / "Languages" / self.language / self.config.core.keyed_dir
+        ensure_directory(str(zh_keyed_dir))
 
         en_path = Path(en_keyed_dir)
         processed_count = 0
@@ -132,7 +124,7 @@ class TemplateGenerator:
                     zh_xml_file = zh_keyed_dir / rel_path
 
                     # 确保目标目录存在
-                    ensure_directory(zh_xml_file.parent)
+                    ensure_directory(str(zh_xml_file.parent))
 
                     self.processor.save_xml(ET.ElementTree(zh_root), str(zh_xml_file))
                     processed_count += 1
@@ -158,10 +150,8 @@ class TemplateGenerator:
         self.logger.info("正在从数据生成中文 Keyed 翻译模板...")
 
         base_dir = self.get_template_base_dir(export_dir)
-        zh_keyed_dir = (
-            base_dir / "Languages" / self.language / self.config.core.keyed_dir
-        )
-        ensure_directory(zh_keyed_dir)
+        zh_keyed_dir = base_dir / "Languages" / self.language / self.config.core.keyed_dir
+        ensure_directory(str(zh_keyed_dir))
 
         # 按文件分组翻译数据
         file_groups = self._group_translations_by_file(keyed_translations)
@@ -170,7 +160,7 @@ class TemplateGenerator:
         for file_path, translations in file_groups.items():
             try:
                 zh_xml_file = self._get_target_file_path(file_path, zh_keyed_dir)
-                ensure_directory(zh_xml_file.parent)
+                ensure_directory(str(zh_xml_file.parent))
 
                 zh_root = self._create_keyed_xml_from_data(translations)
                 self.processor.save_xml(ET.ElementTree(zh_root), str(zh_xml_file))
@@ -197,7 +187,7 @@ class TemplateGenerator:
         zh_definjected_dir = (
             base_dir / "Languages" / self.language / self.config.core.definjected_dir
         )
-        ensure_directory(zh_definjected_dir)
+        ensure_directory(str(zh_definjected_dir))
 
         # 按定义类型分组
         def_groups = self._group_defs_by_type(defs_translations)
@@ -206,7 +196,7 @@ class TemplateGenerator:
         for def_type, fields in def_groups.items():
             try:
                 type_dir = zh_definjected_dir / f"{def_type}Defs"
-                ensure_directory(type_dir)
+                ensure_directory(str(type_dir))
 
                 output_file = type_dir / f"{def_type}Defs.xml"
                 root = self._create_definjected_xml_from_data(fields)
@@ -238,9 +228,7 @@ class TemplateGenerator:
 
         return zh_root
 
-    def _create_keyed_xml_from_data(
-        self, translations: List[KeyedTranslation]
-    ) -> ET.Element:
+    def _create_keyed_xml_from_data(self, translations: List[KeyedTranslation]) -> ET.Element:
         """
         从翻译数据创建Keyed XML模板
 
@@ -252,7 +240,7 @@ class TemplateGenerator:
         """
         zh_root = ET.Element("LanguageData")
 
-        for key, text, tag in translations:
+        for key, text, _ in translations:
             zh_elem = ET.SubElement(zh_root, key)
             zh_elem.text = sanitize_xml(text) if text else ""
 
@@ -288,7 +276,7 @@ class TemplateGenerator:
         Returns:
             按文件分组的翻译数据字典
         """
-        file_groups = {}
+        file_groups: Dict[str, List[KeyedTranslation]] = {}
         for key, text, tag, file_path in translations:
             if file_path not in file_groups:
                 file_groups[file_path] = []
@@ -307,8 +295,8 @@ class TemplateGenerator:
         Returns:
             按定义类型分组的翻译数据字典
         """
-        def_groups = {}
-        for full_path, text, tag, file_path in defs_translations:
+        def_groups: Dict[str, Dict[str, str]] = {}
+        for full_path, text, _, _ in defs_translations:
             if "/" in full_path:
                 def_type_part, field_part = full_path.split("/", 1)
                 def_type = def_type_part

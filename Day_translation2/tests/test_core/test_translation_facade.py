@@ -4,14 +4,20 @@ Day Translation 2 - 翻译门面类测试
 测试TranslationFacade的核心功能和接口。
 """
 
+import sys
 from pathlib import Path
 from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 
-from ...core.translation_facade import TranslationFacade
-from ...models.exceptions import ProcessingError, ValidationError
-from ...models.result_models import OperationResult, OperationStatus, OperationType
+# 添加项目根目录到Python路径
+project_root = Path(__file__).parent.parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+from core.translation_facade import TranslationFacade
+from models.exceptions import ProcessingError, ValidationError
+from models.result_models import OperationResult, OperationStatus, OperationType
 
 
 class TestTranslationFacade:

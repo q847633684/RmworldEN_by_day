@@ -242,7 +242,7 @@ class MypyErrorFixer:
         self.fix_enum_dict_access()
         self.fix_type_annotations()
 
-        logger.info(f"✅ 修复完成！")
+        logger.info("✅ 修复完成！")
         logger.info(f"   - 修复文件数: {len(set(self.fixed_files))}")
         logger.info(f"   - 修复错误数: {self.errors_fixed}")
 
@@ -256,11 +256,11 @@ def main():
     fixer = MypyErrorFixer(project_root)
     files_fixed, errors_fixed = fixer.run_all_fixes()
 
-    print(f"\n🎉 Mypy 类型错误修复完成！")
+    print("\n🎉 Mypy 类型错误修复完成！")
     print(f"📁 修复文件: {files_fixed} 个")
     print(f"🔧 修复错误: {errors_fixed} 个")
     print(
-        f"\n下一步：运行 'python -m mypy core utils services --config-file=mypy.ini' 验证修复效果"
+        "\n下一步：运行 'python -m mypy core utils services --config-file=mypy.ini' 验证修复效果"
     )
 
 

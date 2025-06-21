@@ -14,16 +14,26 @@ class TranslationError(Exception):
     所有翻译相关的异常都应该继承这个基类。
     """
 
-    def __init__(self, message: str, context: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(
+        self,
+        message: str,
+        context: Optional[Dict[str, Any]] = None,
+        operation: Optional[str] = None,
+        stage: Optional[str] = None,
+    ) -> None:
         """初始化翻译异常
 
         Args:
             message: 错误消息
             context: 错误上下文信息
+            operation: 操作名称
+            stage: 阶段名称
         """
         super().__init__(message)
         self.message = message
         self.context = context or {}
+        self.operation = operation
+        self.stage = stage
 
     def __str__(self) -> str:
         """返回格式化的错误信息"""
@@ -44,6 +54,7 @@ class ConfigError(TranslationError):
         message: str,
         config_path: Optional[str] = None,
         config_key: Optional[str] = None,
+        config_value: Optional[str] = None,
     ) -> None:
         """初始化配置错误
 
@@ -51,16 +62,20 @@ class ConfigError(TranslationError):
             message: 错误消息
             config_path: 配置文件路径
             config_key: 出错的配置键
+            config_value: 配置值
         """
         context = {}
         if config_path:
             context["config_path"] = config_path
         if config_key:
             context["config_key"] = config_key
+        if config_value:
+            context["config_value"] = config_value
 
         super().__init__(message, context)
         self.config_path = config_path
         self.config_key = config_key
+        self.config_value = config_value
 
 
 class ImportError(TranslationError):
@@ -86,7 +101,7 @@ class ImportError(TranslationError):
         if file_path:
             context["file_path"] = file_path
         if line_number:
-            context["line_number"] = line_number
+            context["line_number"] = str(line_number)
 
         super().__init__(message, context)
         self.file_path = file_path
@@ -103,24 +118,30 @@ class ExportError(TranslationError):
         self,
         message: str,
         output_path: Optional[str] = None,
-        export_format: Optional[str] = None,
+        format_type: Optional[str] = None,  # 修改参数名以匹配测试
+        export_format: Optional[str] = None,  # 保留旧名称支持
     ) -> None:
         """初始化导出错误
 
         Args:
             message: 错误消息
             output_path: 输出路径
-            export_format: 导出格式
+            format_type: 导出格式类型
+            export_format: 导出格式(向后兼容)
         """
         context = {}
         if output_path:
             context["output_path"] = output_path
-        if export_format:
-            context["export_format"] = export_format
+
+        # 优先使用format_type，如果没有则使用export_format
+        format_value = format_type or export_format
+        if format_value:
+            context["format_type"] = format_value
 
         super().__init__(message, context)
         self.output_path = output_path
-        self.export_format = export_format
+        self.format_type = format_value
+        self.export_format = format_value  # 向后兼容
 
 
 class ValidationError(TranslationError):
@@ -185,7 +206,7 @@ class ProcessingError(TranslationError):
         if stage:
             context["stage"] = stage
         if affected_items:
-            context["affected_items"] = affected_items
+            context["affected_items"] = ", ".join(affected_items)
 
         super().__init__(message, context)
         self.operation = operation
@@ -218,7 +239,7 @@ class NetworkError(TranslationError):
         if url:
             context["url"] = url
         if status_code:
-            context["status_code"] = status_code
+            context["status_code"] = str(status_code)
         if response_text:
             context["response_text"] = response_text[:200]  # 限制长度
 
@@ -228,7 +249,8 @@ class NetworkError(TranslationError):
         self.response_text = response_text
 
 
-# 为了向后兼容，创建一些常用的异常别名
+# 异常类别名
+ConfigurationError = ConfigError
 FileError = ImportError
 FormatError = ValidationError
 APIError = NetworkError

@@ -18,7 +18,7 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 # 使用绝对导入
-from config import get_config
+from services.config_service import config_service
 from core.extractors import extract_definjected_translations, extract_keyed_translations
 from models.exceptions import ImportError as TranslationImportError
 from models.exceptions import ProcessingError, ValidationError
@@ -218,24 +218,16 @@ def _save_parallel_corpus(
             writer.writerow([f"# 总对数: {statistics['total_pairs']}"])
             writer.writerow([f"# 源语言字符数: {statistics['source_chars']}"])
             writer.writerow([f"# 目标语言字符数: {statistics['target_chars']}"])
-            writer.writerow(
-                [f"# 平均源语言长度: {statistics['avg_source_length']:.1f}"]
-            )
-            writer.writerow(
-                [f"# 平均目标语言长度: {statistics['avg_target_length']:.1f}"]
-            )
+            writer.writerow([f"# 平均源语言长度: {statistics['avg_source_length']:.1f}"])
+            writer.writerow([f"# 平均目标语言长度: {statistics['avg_target_length']:.1f}"])
             writer.writerow([])
 
             # 写入列标题
-            writer.writerow(
-                ["key", "source_text", "target_text", "source_length", "target_length"]
-            )
+            writer.writerow(["key", "source_text", "target_text", "source_length", "target_length"])
 
             # 写入语料数据
             for key, source_text, target_text in parallel_pairs:
-                writer.writerow(
-                    [key, source_text, target_text, len(source_text), len(target_text)]
-                )
+                writer.writerow([key, source_text, target_text, len(source_text), len(target_text)])
 
         logging.info(f"平行语料已保存到: {output_path}")
 
@@ -263,9 +255,7 @@ def analyze_corpus_quality(corpus_csv: str) -> Dict[str, any]:
         ProcessingError: 当分析过程出现错误时
     """
     if not Path(corpus_csv).is_file():
-        raise TranslationImportError(
-            f"语料文件不存在: {corpus_csv}", file_path=corpus_csv
-        )
+        raise TranslationImportError(f"语料文件不存在: {corpus_csv}", file_path=corpus_csv)
 
     try:
         quality_metrics = {
@@ -295,23 +285,17 @@ def analyze_corpus_quality(corpus_csv: str) -> Dict[str, any]:
 
                     # 计算长度比例
                     length_ratio = (
-                        len(target_text) / len(source_text)
-                        if len(source_text) > 0
-                        else 0
+                        len(target_text) / len(source_text) if len(source_text) > 0 else 0
                     )
                     length_ratios.append(length_ratio)
 
         if pairs:
             quality_metrics["total_pairs"] = len(pairs)
-            quality_metrics["length_ratio_avg"] = sum(length_ratios) / len(
-                length_ratios
-            )
+            quality_metrics["length_ratio_avg"] = sum(length_ratios) / len(length_ratios)
 
             # 计算标准差
             avg_ratio = quality_metrics["length_ratio_avg"]
-            variance = sum((r - avg_ratio) ** 2 for r in length_ratios) / len(
-                length_ratios
-            )
+            variance = sum((r - avg_ratio) ** 2 for r in length_ratios) / len(length_ratios)
             quality_metrics["length_ratio_std"] = variance**0.5
 
             # 找出可疑的翻译对
@@ -321,12 +305,8 @@ def analyze_corpus_quality(corpus_csv: str) -> Dict[str, any]:
                     quality_metrics["suspicious_pairs"].append(
                         {
                             "key": key,
-                            "source": (
-                                source[:50] + "..." if len(source) > 50 else source
-                            ),
-                            "target": (
-                                target[:50] + "..." if len(target) > 50 else target
-                            ),
+                            "source": (source[:50] + "..." if len(source) > 50 else source),
+                            "target": (target[:50] + "..." if len(target) > 50 else target),
                             "length_ratio": ratio,
                         }
                     )

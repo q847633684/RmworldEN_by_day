@@ -36,9 +36,7 @@ def get_language_folder_path(language: str, mod_dir: str) -> str:
         TranslationImportError: 当路径不存在时
     """
     if not language:
-        raise ValidationError(
-            "语言代码不能为空", field_name="language", expected_type="非空字符串"
-        )
+        raise ValidationError("语言代码不能为空", field_name="language", expected_type="非空字符串")
 
     if not mod_dir:
         raise ValidationError(
@@ -48,9 +46,7 @@ def get_language_folder_path(language: str, mod_dir: str) -> str:
     try:
         mod_path = Path(mod_dir)
         if not mod_path.exists():
-            raise TranslationImportError(
-                f"模组目录不存在: {mod_dir}", file_path=mod_dir
-            )
+            raise TranslationImportError(f"模组目录不存在: {mod_dir}", file_path=mod_dir)
 
         lang_path = mod_path / "Languages" / language
         return str(lang_path)
@@ -58,9 +54,7 @@ def get_language_folder_path(language: str, mod_dir: str) -> str:
     except Exception as e:
         if isinstance(e, (ValidationError, TranslationImportError)):
             raise
-        raise TranslationImportError(
-            f"获取语言文件夹路径失败: {str(e)}", file_path=mod_dir
-        )
+        raise TranslationImportError(f"获取语言文件夹路径失败: {str(e)}", file_path=mod_dir)
 
 
 def ensure_directory_exists(directory_path: str) -> None:
@@ -76,9 +70,7 @@ def ensure_directory_exists(directory_path: str) -> None:
     try:
         Path(directory_path).mkdir(parents=True, exist_ok=True)
     except Exception as e:
-        raise TranslationImportError(
-            f"创建目录失败: {str(e)}", file_path=directory_path
-        )
+        raise TranslationImportError(f"创建目录失败: {str(e)}", file_path=directory_path)
 
 
 def get_xml_files(directory: str, recursive: bool = True) -> List[str]:
@@ -98,9 +90,7 @@ def get_xml_files(directory: str, recursive: bool = True) -> List[str]:
     try:
         dir_path = Path(directory)
         if not dir_path.exists():
-            raise TranslationImportError(
-                f"目录不存在: {directory}", file_path=directory
-            )
+            raise TranslationImportError(f"目录不存在: {directory}", file_path=directory)
 
         if recursive:
             xml_files = list(dir_path.rglob("*.xml"))
@@ -112,9 +102,7 @@ def get_xml_files(directory: str, recursive: bool = True) -> List[str]:
     except Exception as e:
         if isinstance(e, TranslationImportError):
             raise
-        raise TranslationImportError(
-            f"获取XML文件列表失败: {str(e)}", file_path=directory
-        )
+        raise TranslationImportError(f"获取XML文件列表失败: {str(e)}", file_path=directory)
 
 
 def validate_mod_directory(mod_dir: str) -> bool:

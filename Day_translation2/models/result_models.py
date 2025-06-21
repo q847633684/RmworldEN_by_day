@@ -5,31 +5,36 @@ Day Translation 2 - 操作结果数据模型
 遵循提示文件标准：使用PascalCase类命名，提供用户友好的信息。
 """
 
-from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
+
+from dataclasses import dataclass, field
 
 
 class OperationStatus(Enum):
     """操作状态枚举"""
 
     SUCCESS = "success"
-    FAILED = "failed"
+    ERROR = "error"  # 修改为ERROR以匹配测试期望
+    FAILED = "failed"  # 保留FAILED作为别名
     PARTIAL = "partial"
     CANCELLED = "cancelled"
     IN_PROGRESS = "in_progress"
+    WARNING = "warning"
 
     def __str__(self) -> str:
         """返回用户友好的状态描述"""
         status_names = {
-            self.SUCCESS: "成功",
-            self.FAILED: "失败",
-            self.PARTIAL: "部分成功",
-            self.CANCELLED: "已取消",
-            self.IN_PROGRESS: "进行中",
+            OperationStatus.SUCCESS: "成功",
+            OperationStatus.ERROR: "错误",
+            OperationStatus.FAILED: "失败",
+            OperationStatus.PARTIAL: "部分成功",
+            OperationStatus.CANCELLED: "已取消",
+            OperationStatus.IN_PROGRESS: "进行中",
+            OperationStatus.WARNING: "警告",
         }
-        return status_names.get(self.value, self.value)
+        return status_names.get(self, self.value)
 
 
 class OperationType(Enum):
@@ -47,15 +52,16 @@ class OperationType(Enum):
     def __str__(self) -> str:
         """返回用户友好的操作类型描述"""
         type_names = {
-            self.EXTRACTION: "提取",
-            self.IMPORT: "导入",
-            self.EXPORT: "导出",
-            self.TRANSLATION: "翻译",
-            self.VALIDATION: "验证",
-            self.GENERATION: "生成",
-            self.BATCH_PROCESSING: "批量处理",
+            OperationType.EXTRACTION: "提取",
+            OperationType.IMPORT: "导入",
+            OperationType.EXPORT: "导出",
+            OperationType.TRANSLATION: "翻译",
+            OperationType.VALIDATION: "验证",
+            OperationType.GENERATION: "生成",
+            OperationType.BATCH_PROCESSING: "批量处理",
+            OperationType.WORKFLOW: "工作流",
         }
-        return type_names.get(self.value, self.value)
+        return type_names.get(self, self.value)
 
 
 @dataclass
@@ -69,8 +75,8 @@ class OperationResult:
     operation_type: OperationType
     message: str
 
-    # 可选的详细信息
-    details: Dict[str, Any] = field(default_factory=dict)
+    # 可选的详细信息 - 支持两种类型以兼容测试
+    details: Union[Dict[str, Any], List[str]] = field(default_factory=list)
     errors: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
 
@@ -82,6 +88,7 @@ class OperationResult:
     # 时间信息
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
+    execution_time: Optional[float] = None  # 支持直接设置执行时间
 
     # 相关文件路径
     input_files: List[str] = field(default_factory=list)
@@ -91,6 +98,12 @@ class OperationResult:
         """初始化后处理"""
         if self.start_time is None:
             self.start_time = datetime.now()
+
+        # 如果设置了execution_time，自动计算end_time
+        if self.execution_time is not None and self.start_time:
+            from datetime import timedelta
+
+            self.end_time = self.start_time + timedelta(seconds=self.execution_time)
 
     @property
     def is_success(self) -> bool:
@@ -121,6 +134,11 @@ class OperationResult:
             return self.success_count / self.processed_count
         return 0.0
 
+    @property
+    def has_warnings(self) -> bool:
+        """是否有警告"""
+        return len(self.warnings) > 0 or self.status == OperationStatus.WARNING
+
     def add_error(self, error: str):
         """添加错误信息"""
         self.errors.append(error)
@@ -132,7 +150,18 @@ class OperationResult:
 
     def add_detail(self, key: str, value: Any):
         """添加详细信息"""
-        self.details[key] = value
+        # 如果 details 是列表，转换为字典
+        if isinstance(self.details, list):
+            # 将现有列表转换为字典
+            old_details = self.details.copy()
+            self.details = {}
+            # 添加原来的列表项作为编号键
+            for i, item in enumerate(old_details):
+                self.details[f"detail_{i}"] = item
+
+        # 现在可以安全地添加新的键值对
+        if isinstance(self.details, dict):
+            self.details[key] = value
 
     def complete(self, status: Optional[OperationStatus] = None):
         """标记操作完成"""
@@ -186,6 +215,42 @@ class OperationResult:
             summary_parts.append(f"耗时: {self.duration:.2f}秒")
 
         return " | ".join(summary_parts)
+
+    @classmethod
+    def success(
+        cls, message: str, operation_type: OperationType = OperationType.EXTRACTION, **kwargs
+    ) -> "OperationResult":
+        """创建成功结果"""
+        return cls(
+            status=OperationStatus.SUCCESS, operation_type=operation_type, message=message, **kwargs
+        )
+
+    @classmethod
+    def failed(
+        cls, message: str, operation_type: OperationType = OperationType.EXTRACTION, **kwargs
+    ) -> "OperationResult":
+        """创建失败结果"""
+        return cls(
+            status=OperationStatus.FAILED, operation_type=operation_type, message=message, **kwargs
+        )
+
+    @classmethod
+    def warning(
+        cls, message: str, operation_type: OperationType = OperationType.EXTRACTION, **kwargs
+    ) -> "OperationResult":
+        """创建警告结果"""
+        return cls(
+            status=OperationStatus.WARNING, operation_type=operation_type, message=message, **kwargs
+        )
+
+    def __str__(self) -> str:
+        """返回用户友好的字符串表示"""
+        parts = [self.message, self.status.name]  # 使用.name获取枚举名称(如SUCCESS)
+
+        if self.processed_count > 0:
+            parts.append(f"{self.success_count}/{self.processed_count}")
+
+        return " | ".join(parts)
 
 
 @dataclass

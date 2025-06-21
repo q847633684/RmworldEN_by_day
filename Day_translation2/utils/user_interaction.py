@@ -103,9 +103,7 @@ class UserInteractionManager:
 
             # 自动模式处理
             if auto_mode:
-                return self._handle_auto_mode(
-                    auto_mode, existing_files, output_dir_path
-                )
+                return self._handle_auto_mode(auto_mode, existing_files, output_dir_path)
 
             # 交互模式
             return self._handle_interactive_mode(
@@ -136,9 +134,7 @@ class UserInteractionManager:
             return self._execute_choice(mode, existing_files, output_dir_path)
         else:
             logging.warning(f"无效的自动模式: {auto_mode}，转为交互模式")
-            return self._handle_interactive_mode(
-                existing_files, output_dir_path, True, False
-            )
+            return self._handle_interactive_mode(existing_files, output_dir_path, True, False)
 
     def _handle_interactive_mode(
         self,
@@ -153,9 +149,7 @@ class UserInteractionManager:
         self._display_existing_files_info(existing_files, output_dir_path)
 
         # 显示处理选项
-        choice_map = self._display_processing_options(
-            backup_enabled, enable_advanced_options
-        )
+        choice_map = self._display_processing_options(backup_enabled, enable_advanced_options)
 
         # 获取用户选择
         choice = self._get_user_choice(choice_map, "2")  # 默认选择合并模式
@@ -163,9 +157,7 @@ class UserInteractionManager:
         mode = choice_map[choice]
         return self._execute_choice(mode, existing_files, output_dir_path)
 
-    def _display_existing_files_info(
-        self, existing_files: List[Path], output_dir_path: str
-    ):
+    def _display_existing_files_info(self, existing_files: List[Path], output_dir_path: str):
         """显示现有文件信息"""
         if not self.enable_colors:
             print(f"\n检测到输出目录中已存在 {len(existing_files)} 个翻译文件")
@@ -222,9 +214,7 @@ class UserInteractionManager:
 
         if backup_enabled:
             if self.enable_colors:
-                print(
-                    f"4. {Fore.BLUE}备份并替换{Style.RESET_ALL}（备份现有文件，然后重新生成）"
-                )
+                print(f"4. {Fore.BLUE}备份并替换{Style.RESET_ALL}（备份现有文件，然后重新生成）")
             else:
                 print("4. 备份并替换（备份现有文件，然后重新生成）")
             choice_map["4"] = ExportMode.BACKUP
@@ -250,18 +240,14 @@ class UserInteractionManager:
             option_count += 1
 
         if self.enable_colors:
-            print(
-                f"{option_count}. {Fore.YELLOW}跳过{Style.RESET_ALL}（不生成新文件，保持现状）"
-            )
+            print(f"{option_count}. {Fore.YELLOW}跳过{Style.RESET_ALL}（不生成新文件，保持现状）")
         else:
             print(f"{option_count}. 跳过（不生成新文件，保持现状）")
         choice_map[str(option_count)] = ExportMode.SKIP
 
         return choice_map
 
-    def _get_user_choice(
-        self, choice_map: Dict[str, ExportMode], default_choice: str = "2"
-    ) -> str:
+    def _get_user_choice(self, choice_map: Dict[str, ExportMode], default_choice: str = "2") -> str:
         """获取用户选择"""
         valid_choices = list(choice_map.keys())
 
@@ -308,9 +294,7 @@ class UserInteractionManager:
             self._execute_skip_mode()
 
         elif mode == ExportMode.INCREMENTAL:
-            changed_files = self._execute_incremental_mode(
-                existing_files, output_dir_path
-            )
+            changed_files = self._execute_incremental_mode(existing_files, output_dir_path)
             if not changed_files:
                 return ExportMode.SKIP
 
@@ -360,9 +344,7 @@ class UserInteractionManager:
         else:
             print("🧠 将使用智能合并模式处理翻译文件")
 
-    def _execute_backup_mode(
-        self, existing_files: List[Path], output_dir_path: str
-    ) -> bool:
+    def _execute_backup_mode(self, existing_files: List[Path], output_dir_path: str) -> bool:
         """执行备份模式"""
         logging.info("选择备份并替换模式")
         if self.enable_colors:
@@ -427,9 +409,7 @@ class UserInteractionManager:
 
         return changed_files
 
-    def _execute_preview_mode(
-        self, existing_files: List[Path], output_dir_path: str
-    ) -> ExportMode:
+    def _execute_preview_mode(self, existing_files: List[Path], output_dir_path: str) -> ExportMode:
         """执行预览模式"""
         logging.info("选择预览模式")
         if self.enable_colors:
@@ -442,9 +422,7 @@ class UserInteractionManager:
 
         # 询问用户是否确认执行
         if self.enable_colors:
-            confirm_prompt = (
-                f"\n{Fore.CYAN}确认执行这些变化吗？(y/N): {Style.RESET_ALL}"
-            )
+            confirm_prompt = f"\n{Fore.CYAN}确认执行这些变化吗？(y/N): {Style.RESET_ALL}"
         else:
             confirm_prompt = "\n确认执行这些变化吗？(y/N): "
 
@@ -484,9 +462,7 @@ class UserInteractionManager:
                 print("⏭️ 用户取消操作")
             return ExportMode.SKIP
 
-    def _backup_existing_files(
-        self, existing_files: List[Path], output_dir_path: str
-    ) -> bool:
+    def _backup_existing_files(self, existing_files: List[Path], output_dir_path: str) -> bool:
         """备份现有文件"""
         try:
             import shutil
@@ -623,46 +599,8 @@ class UserInteractionManager:
         print("  - 备份操作将先备份现有文件")
 
 
-# 兼容性函数，支持旧代码调用
-def handle_existing_translations_choice(
-    output_dir_path: str,
-    file_pattern: str = "*.xml",
-    backup_enabled: bool = True,
-    auto_mode: Optional[str] = None,
-    enable_advanced_options: bool = False,
-) -> str:
-    """
-    兼容性函数：处理现有翻译文件的用户选择
-
-    Returns:
-        str: 处理模式字符串（为了兼容性）
-    """
-    manager = UserInteractionManager()
-    mode = manager.handle_existing_translations_choice(
-        output_dir_path,
-        file_pattern,
-        backup_enabled,
-        auto_mode,
-        enable_advanced_options,
-    )
-
-    # 转换回字符串格式
-    mode_map = {
-        ExportMode.REPLACE: "replace",
-        ExportMode.MERGE: "merge",
-        ExportMode.SMART_MERGE: "smart-merge",
-        ExportMode.BACKUP: "backup",
-        ExportMode.SKIP: "skip",
-        ExportMode.INCREMENTAL: "incremental",
-        ExportMode.PREVIEW: "preview",
-    }
-
-    return mode_map.get(mode, "replace")
-
-
 # 导出主要接口
 __all__ = [
     "UserInteractionManager",
     "FileAnalysisResult",
-    "handle_existing_translations_choice",  # 兼容性函数
 ]

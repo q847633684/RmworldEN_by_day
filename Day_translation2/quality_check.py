@@ -88,9 +88,10 @@ def main():
         success_count += 1
 
     # 总结
-    print(f"\n{'=' * 60}")
+    separator = "=" * 60
+    print(f"\n{separator}")
     print(f"📊 质量检查完成: {success_count}/{total_steps} 步骤成功")
-    print(f"{'=' * 60}")
+    print(f"{separator}")
 
     if success_count == total_steps:
         print("🎉 所有检查通过!")

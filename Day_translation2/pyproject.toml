@@ -102,6 +102,7 @@ warn_unused_ignores = true
 show_error_codes = true
 namespace_packages = true
 explicit_package_bases = true
+extension_pkg_allow_list = ["lxml.etree"]
 
 # Pytest 配置
 [tool.pytest.ini_options]

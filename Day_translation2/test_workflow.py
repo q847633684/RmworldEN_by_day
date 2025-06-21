@@ -47,12 +47,7 @@ def create_test_mod_structure(mod_dir: Path):
 </LanguageData>"""
 
     definjected_file = (
-        mod_dir
-        / "Languages"
-        / "English"
-        / "DefInjected"
-        / "ThingDef"
-        / "Items_Resource_Stuff.xml"
+        mod_dir / "Languages" / "English" / "DefInjected" / "ThingDe" / "Items_Resource_Stuff.xml"
     )
     definjected_file.write_text(definjected_content, encoding="utf-8")
 
@@ -99,9 +94,7 @@ def test_complete_workflow():
             # 验证翻译数据结构
             if all_translations:
                 sample = all_translations[0]
-                print(
-                    f"✅ 数据结构验证: key={sample.key}, type={sample.translation_type}"
-                )
+                print(f"✅ 数据结构验证: key={sample.key}, type={sample.translation_type}")
 
             # 5. 导出为CSV
             print("\n📋 步骤4: 导出为CSV")
@@ -163,9 +156,9 @@ def test_advanced_features():
     try:
         # 测试配置系统
         print("📋 测试配置系统")
-        from config import get_config
+        from services.config_service import config_service
 
-        config = get_config()
+        config = config_service.get_unified_config()
         print(f"✅ 配置获取成功: 默认语言 = {config.core.default_language}")
         # 测试过滤规则
         print("📋 测试过滤规则")

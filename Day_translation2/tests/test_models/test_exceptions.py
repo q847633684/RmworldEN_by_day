@@ -32,9 +32,7 @@ class TestTranslationError:
 
     def test_with_context(self):
         """测试带上下文的异常创建"""
-        error = TranslationError(
-            "处理失败", operation="test_operation", stage="validation"
-        )
+        error = TranslationError("处理失败", operation="test_operation", stage="validation")
         assert str(error) == "处理失败"
         assert error.operation == "test_operation"
         assert error.stage == "validation"
@@ -110,9 +108,7 @@ class TestExportError:
 
     def test_export_error_creation(self):
         """测试导出错误创建"""
-        error = ExportError(
-            "导出失败", output_path="/test/output.xml", format_type="XML"
-        )
+        error = ExportError("导出失败", output_path="/test/output.xml", format_type="XML")
         assert "导出失败" in str(error)
         assert error.output_path == "/test/output.xml"
         assert error.format_type == "XML"
@@ -128,9 +124,7 @@ class TestConfigurationError:
 
     def test_configuration_error_creation(self):
         """测试配置错误创建"""
-        error = ConfigurationError(
-            "配置无效", config_key="api.timeout", config_value="invalid"
-        )
+        error = ConfigurationError("配置无效", config_key="api.timeout", config_value="invalid")
         assert "配置无效" in str(error)
         assert error.config_key == "api.timeout"
         assert error.config_value == "invalid"

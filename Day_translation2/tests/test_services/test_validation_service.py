@@ -4,14 +4,20 @@ Day Translation 2 - 验证服务测试
 测试翻译质量验证、术语一致性检查和格式规范验证功能。
 """
 
+import sys
 from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
 
-from ...models.exceptions import ProcessingError, ValidationError
-from ...models.result_models import OperationResult, OperationStatus, OperationType
-from ...services.validation_service import (
+# 添加项目根目录到Python路径
+project_root = Path(__file__).parent.parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+from models.exceptions import ProcessingError, ValidationError
+from models.result_models import OperationResult, OperationStatus, OperationType
+from services.validation_service import (
     TranslationValidator,
     ValidationIssue,
     ValidationReport,
@@ -152,9 +158,7 @@ class TestTranslationValidator:
         issues = validator._check_format_consistency(translations)
 
         # 应该发现2个占位符问题
-        placeholder_issues = [
-            i for i in issues if i.issue_type == "placeholder_mismatch"
-        ]
+        placeholder_issues = [i for i in issues if i.issue_type == "placeholder_mismatch"]
         missing_issues = [i for i in issues if i.issue_type == "missing_placeholder"]
 
         assert len(placeholder_issues) >= 1
@@ -177,9 +181,7 @@ class TestTranslationValidator:
         issues = validator._check_terminology_consistency(translations)
 
         # 应该发现术语不一致问题
-        terminology_issues = [
-            i for i in issues if i.issue_type == "terminology_inconsistency"
-        ]
+        terminology_issues = [i for i in issues if i.issue_type == "terminology_inconsistency"]
         assert len(terminology_issues) >= 1
 
     def test_check_length_ratio(self, validator) -> None:
@@ -237,9 +239,7 @@ class TestTranslationValidator:
         assert score == 100.0
 
         # 有术语问题
-        issues = [
-            ValidationIssue("terminology_inconsistency", "warning", "Key1", "术语问题")
-        ]
+        issues = [ValidationIssue("terminology_inconsistency", "warning", "Key1", "术语问题")]
         score = validator._calculate_terminology_score(translations, issues)
         assert score < 100.0
 

@@ -20,7 +20,7 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 # 使用绝对导入
-from config import get_config
+from services.config_service import config_service
 from models.exceptions import ImportError as TranslationImportError
 from models.exceptions import ProcessingError, ValidationError
 from models.result_models import OperationResult, OperationStatus, OperationType

@@ -25,7 +25,7 @@ except ImportError:
 
 try:
     # 尝试相对导入 (包内使用)
-    from ..config.config_models import FilterConfig
+    from ..config import FilterConfig
     from ..constants.complete_definitions import (
         DEFAULT_IGNORE_FIELDS,
         DEFAULT_TRANSLATION_FIELDS,
@@ -42,7 +42,7 @@ try:
     from ..models.exceptions import ConfigError, ValidationError
 except ImportError:
     # 回退到绝对导入 (直接运行时)
-    from config.config_models import FilterConfig
+    from config import FilterConfig
     from constants.complete_definitions import (
         DEFAULT_IGNORE_FIELDS,
         DEFAULT_TRANSLATION_FIELDS,
@@ -101,9 +101,7 @@ class AdvancedFilterRules:
             self._initialize_field_types()
             self._initialize_field_priorities()
 
-            logging.debug(
-                f"高级过滤规则初始化完成: {len(self.default_fields)} 个默认字段"
-            )
+            logging.debug(f"高级过滤规则初始化完成: {len(self.default_fields)} 个默认字段")
 
         except Exception as e:
             raise ValidationError(f"过滤规则初始化失败: {str(e)}")
@@ -131,9 +129,7 @@ class AdvancedFilterRules:
             try:
                 re.compile(pattern)
             except re.error as e:
-                raise ValidationError(
-                    f"正则表达式编译失败: {pattern}, 错误: {e}"
-                )  # 检查字段冲突
+                raise ValidationError(f"正则表达式编译失败: {pattern}, 错误: {e}")  # 检查字段冲突
         conflicts = self.default_fields & self.ignore_fields
         if conflicts:
             logging.warning(f"发现字段冲突: {conflicts}")
@@ -315,9 +311,7 @@ class AdvancedFilterRules:
             "field_priorities_count": len(self.field_priorities),
             "conditional_rules_count": len(self.conditional_rules),
             "field_type_distribution": {
-                field_type: len(
-                    [f for f, t in self.field_types.items() if t == field_type]
-                )
+                field_type: len([f for f, t in self.field_types.items() if t == field_type])
                 for field_type in self.FIELD_TYPES
             },
         }
@@ -376,9 +370,7 @@ class AdvancedFilterRules:
                     json.dump(data, f, indent=4, ensure_ascii=False)
             elif format.lower() == "yaml" and yaml:
                 with open(file_path, "w", encoding="utf-8") as f:
-                    yaml.safe_dump(
-                        data, f, allow_unicode=True, default_flow_style=False
-                    )
+                    yaml.safe_dump(data, f, allow_unicode=True, default_flow_style=False)
             else:
                 raise ConfigError(f"不支持的文件格式: {format}")
 
@@ -388,9 +380,7 @@ class AdvancedFilterRules:
             raise ConfigError(f"保存过滤规则失败: {str(e)}")
 
     @classmethod
-    def load_from_file(
-        cls, file_path: str, format: str = "json"
-    ) -> "AdvancedFilterRules":
+    def load_from_file(cls, file_path: str, format: str = "json") -> "AdvancedFilterRules":
         """
         从文件加载规则
 
@@ -479,9 +469,7 @@ class AdvancedFilterRules:
         # Keyed翻译不限制default_fields，允许所有其他文本
         return True
 
-    def should_translate_def_field(
-        self, text: str, field: str, def_type: str = ""
-    ) -> bool:
+    def should_translate_def_field(self, text: str, field: str, def_type: str = "") -> bool:
         """
         检查DefInjected字段是否应该被翻译
 
@@ -593,12 +581,6 @@ class AdvancedFilterRules:
                 return False
 
         return True
-
-
-# 兼容性函数，支持旧代码调用
-def get_unified_filter_rules() -> AdvancedFilterRules:
-    """获取统一过滤规则实例（兼容性函数）"""
-    return AdvancedFilterRules()
 
 
 # 导出主要接口
