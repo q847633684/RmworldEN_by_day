@@ -1,2 +1,0 @@
-[console_scripts]
-day-translation2 = main:main

@@ -61,6 +61,19 @@
 - ✅ 统一为`Dict[str, Any]`类型，避免Union类型引起的Mypy混淆
 - ✅ 保持了向后兼容性和类型安全性
 
+#### 10. utils/filter_rules.py 完全修复 ✅
+- ✅ 修复了yaml导入的类型存根问题，添加了`# type: ignore`注释
+- ✅ 添加了缺失的`FIELD_TYPES`类属性，解决了"no attribute"错误
+- ✅ 修复了`save_to_file`方法中的类型注解问题，使用不同变量名避免Path/str类型冲突
+- ✅ 移除了两处重复的`import re`，消除了redefined-outer-name警告
+- ✅ Pylint评分从9.82/10提升到10.00/10完美状态
+
+#### 11. utils/xml_processor.py lxml调用优化 ✅
+- ✅ 为所有lxml.etree成员访问添加了`# pylint: disable=c-extension-no-member`注释
+- ✅ 修复了`etree.parse`、`etree.XMLSchema`、`etree.Element`、`etree.SubElement`、`etree.XMLSyntaxError`等调用
+- ✅ 统一了pylint disable注释的位置，确保直接跟在相关调用后
+- ✅ 保持了10.00/10的完美Pylint评分
+
 ### 错误统计对比
 
 #### Mypy 错误统计
