@@ -7,36 +7,21 @@ from typing import List, Tuple, Optional, Dict, Any
 from tqdm import tqdm
 from colorama import init, Fore, Style
 
-# 添加项目根目录到 sys.path 以支持直接运行
-if __name__ == "__main__":
-    # 当直接运行时，添加项目根目录到 sys.path
-    project_root = str(Path(__file__).parent.parent.parent.resolve())
-    if project_root not in sys.path:
-        sys.path.insert(0, project_root)
+# 添加当前模块的父目录到sys.path，以支持day_translation模块导入
+current_dir = Path(__file__).parent
+project_root = current_dir.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
 
-# 根据运行方式选择导入方式
-try:
-    # 尝试相对导入（作为模块运行时）
-    from .utils.config import ConfigError, get_config, get_user_config, save_user_config_to_file
-    from .utils.utils import get_history_list, update_history_list
-    from .utils.config_generator import generate_default_config
-    from .utils.path_manager import PathManager
-    from .core.template_manager import TemplateManager
-    from .utils.machine_translate import translate_csv
-    from .utils.parallel_corpus import generate_parallel_corpus
-    from .utils.batch_processor import BatchProcessor
-    from .utils.filter_config import UnifiedFilterRules
-except ImportError:
-    # 如果相对导入失败，尝试绝对导入（直接运行时）
-    from day_translation.utils.config import ConfigError, get_config, get_user_config, save_user_config_to_file
-    from day_translation.utils.utils import get_history_list, update_history_list
-    from day_translation.utils.config_generator import generate_default_config
-    from day_translation.utils.path_manager import PathManager
-    from day_translation.core.template_manager import TemplateManager
-    from day_translation.utils.machine_translate import translate_csv
-    from day_translation.utils.parallel_corpus import generate_parallel_corpus
-    from day_translation.utils.batch_processor import BatchProcessor
-    from day_translation.utils.filter_config import UnifiedFilterRules
+from day_translation.utils.config import ConfigError, get_config, get_user_config, save_user_config_to_file
+from day_translation.utils.utils import get_history_list, update_history_list
+from day_translation.utils.config_generator import generate_default_config
+from day_translation.utils.path_manager import PathManager
+from day_translation.core.template_manager import TemplateManager
+from day_translation.utils.machine_translate import translate_csv
+from day_translation.utils.parallel_corpus import generate_parallel_corpus
+from day_translation.utils.batch_processor import BatchProcessor
+from day_translation.utils.filter_config import UnifiedFilterRules
 
 # 初始化 colorama 以支持 Windows 终端颜色
 init()
