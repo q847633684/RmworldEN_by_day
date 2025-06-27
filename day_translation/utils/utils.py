@@ -38,7 +38,7 @@ class XMLProcessor:
     def __init__(self, config: Optional[XMLProcessorConfig] = None):
         """
         初始化 XML 处理器
-        
+
         Args:
             config (Optional[XMLProcessorConfig]): 处理器配置
         """
@@ -61,7 +61,7 @@ class XMLProcessor:
         """获取 XML Schema"""
         if not self.use_lxml or not self.config.validate_xml:
             return None
-            
+
         if schema_path not in self._schema_cache:
             try:
                 schema = etree.XMLSchema(etree.parse(schema_path))
@@ -80,11 +80,11 @@ class XMLProcessor:
         """验证 XML 是否符合 Schema"""
         if not self.use_lxml or not self.config.validate_xml:
             return True
-            
+
         schema = self._get_schema(schema_path)
         if not schema:
             return True
-            
+
         try:
             return schema.validate(tree)
         except Exception as e:
@@ -96,11 +96,11 @@ class XMLProcessor:
     def parse_xml(self, file_path: str, schema_path: Optional[str] = None) -> Optional[Any]:
         """
         安全解析 XML 文件
-        
+
         Args:
             file_path (str): XML 文件路径
             schema_path (Optional[str]): XML Schema 路径
-            
+
         Returns:
             Optional[Any]: XML 树对象，解析失败返回 None
         """
@@ -110,7 +110,7 @@ class XMLProcessor:
             if self.config.error_on_invalid:
                 raise FileNotFoundError(f"文件不存在: {file_path}")
             return None
-            
+
         # 检查文件大小
         file_size = os.path.getsize(file_path)
         if file_size > self.config.max_file_size:
@@ -119,7 +119,7 @@ class XMLProcessor:
             if self.config.error_on_invalid:
                 raise ValueError(msg)
             return None
-            
+
         try:
             if self.use_lxml:
                 tree = etree.parse(file_path, self.parser)
@@ -150,34 +150,34 @@ class XMLProcessor:
                 encoding: Optional[str] = None) -> bool:
         """
         保存 XML 文件
-        
+
         Args:
             tree (Any): XML 树对象
             file_path (str): 保存路径
             pretty_print (Optional[bool]): 是否美化输出
             encoding (Optional[str]): 文件编码
-            
+
         Returns:
             bool: 是否保存成功
         """
         file_path = str(Path(file_path).resolve())
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
-        
+
         pretty_print = self.config.pretty_print if pretty_print is None else pretty_print
         encoding = self.config.encoding if encoding is None else encoding
-        
+
         try:
             # 检查树对象的类型和模块
             tree_type = str(type(tree))
             is_lxml_tree = 'lxml' in tree_type
-            
+
             if self.use_lxml and is_lxml_tree:                # 使用 lxml 的 write 方法
                 tree.write(file_path, encoding=encoding, xml_declaration=True,
                           pretty_print=pretty_print)
             else:
                 # 使用标准库的 ElementTree
                 root = tree.getroot()
-                
+
                 # 如果需要格式化，使用 xml.dom.minidom 进行美化
                 if pretty_print:
                     try:
@@ -185,7 +185,7 @@ class XMLProcessor:
                         rough_string = ET.tostring(root, encoding)
                         reparsed = minidom.parseString(rough_string)
                         pretty_xml = reparsed.toprettyxml(indent="  ", encoding=encoding)
-                        
+
                         with open(file_path, "wb") as f:
                             f.write(pretty_xml)
                     except ImportError:
@@ -213,22 +213,22 @@ class XMLProcessor:
                            include_attributes: bool = True) -> List[Tuple[str, str, str]]:
         """
         提取可翻译内容
-        
+
         Args:
             tree (Any): XML 树对象
             context (str): 上下文
             filter_func (Optional[Callable]): 过滤函数
             include_attributes (bool): 是否包含属性
-            
+
         Returns:
             List[Tuple[str, str, str]]: 提取的翻译列表
         """
         translations = []
         root = tree.getroot() if hasattr(tree, 'getroot') else tree
-        
+
         # 使用 xpath 或 iter 遍历
         elements = root.xpath(".//*") if self.use_lxml else root.iter()
-        
+
         for elem in elements:
             # 检查文本内容
             if elem.text and elem.text.strip():
@@ -237,7 +237,7 @@ class XMLProcessor:
                 if filter_func and not filter_func(key, text, context):
                     continue
                 translations.append((key, text, elem.tag))
-                
+
             # 检查属性
             if include_attributes:
                 for attr_name, attr_value in elem.attrib.items():
@@ -247,7 +247,7 @@ class XMLProcessor:
                         if filter_func and not filter_func(key, text, context):
                             continue
                         translations.append((key, text, f"{elem.tag}.{attr_name}"))
-                    
+
         return translations
 
     def update_translations(self, tree: Any, translations: Dict[str, str],
@@ -256,24 +256,24 @@ class XMLProcessor:
                           include_attributes: bool = True) -> bool:
         """
         更新 XML 中的翻译
-        
+
         Args:
             tree (Any): XML 树对象
             translations (Dict[str, str]): 翻译字典
             generate_key_func (Optional[Callable]): 生成键的函数
             merge (bool): 是否合并更新
             include_attributes (bool): 是否更新属性
-            
+
         Returns:
             bool: 是否更新成功
         """
         modified = False
         root = tree.getroot() if self.use_lxml else tree
         parent_map = {c: p for p in root.iter() for c in p} if not self.use_lxml else None
-        
+
         # 使用 xpath 或 iter 遍历
         elements = root.xpath(".//*") if self.use_lxml else root.iter()
-        
+
         for elem in elements:
             # 更新文本内容
             if elem.text and elem.text.strip():
@@ -286,7 +286,7 @@ class XMLProcessor:
                     elif not merge:
                         elem.text = sanitize_xml(translations[key])
                         modified = True
-                        
+
             # 更新属性
             if include_attributes:
                 for attr_name, attr_value in elem.attrib.items():
@@ -301,7 +301,7 @@ class XMLProcessor:
                             elif not merge:
                                 elem.set(attr_name, sanitize_xml(translations[key]))
                                 modified = True
-                            
+
         return modified
 
     def _get_element_key(self, elem: Any) -> str:
@@ -315,7 +315,7 @@ class XMLProcessor:
                     comment_func: Optional[Callable] = None) -> None:
         """
         为 XML 元素添加注释
-        
+
         Args:
             tree (Any): XML 树对象
             comment_prefix (str): 注释前缀
@@ -324,13 +324,13 @@ class XMLProcessor:
         if not self.config.preserve_comments:
             logging.warning("注释功能已禁用")
             return
-            
+
         root = tree.getroot() if self.use_lxml else tree
         parent_map = {c: p for p in root.iter() for c in p} if not self.use_lxml else None
-        
+
         # 使用 xpath 或 iter 遍历
         elements = root.xpath(".//*") if self.use_lxml else root.iter()
-        
+
         for elem in elements:
             if elem.text and elem.text.strip():
                 original = elem.text.strip()
@@ -338,7 +338,7 @@ class XMLProcessor:
                               else f"{comment_prefix}: {original}")
                 comment = (etree.Comment(sanitize_xcomment(comment_text)) if self.use_lxml
                          else ET.Comment(sanitize_xcomment(comment_text)))
-                
+
                 parent = parent_map.get(elem) if not self.use_lxml else elem.getparent()
                 if parent is not None:
                     idx = list(parent).index(elem)
@@ -347,18 +347,18 @@ class XMLProcessor:
     def get_element_by_xpath(self, tree: Any, xpath: str) -> List[Any]:
         """
         使用 XPath 获取元素
-        
+
         Args:
             tree (Any): XML 树对象
             xpath (str): XPath 表达式
-            
+
         Returns:
             List[Any]: 匹配的元素列表
         """
         if not self.use_lxml:
             logging.warning("ElementTree 不支持 XPath")
             return []
-            
+
         try:
             root = tree.getroot() if self.use_lxml else tree
             return root.xpath(xpath, namespaces=self._namespace_map)
@@ -372,13 +372,13 @@ class XMLProcessor:
                            attr_value: str, exact: bool = True) -> List[Any]:
         """
         通过属性获取元素
-        
+
         Args:
             tree (Any): XML 树对象
             attr_name (str): 属性名
             attr_value (str): 属性值
             exact (bool): 是否精确匹配
-            
+
         Returns:
             List[Any]: 匹配的元素列表
         """
@@ -402,11 +402,11 @@ class XMLProcessor:
     def get_element_by_tag(self, tree: Any, tag: str) -> List[Any]:
         """
         通过标签获取元素
-        
+
         Args:
             tree (Any): XML 树对象
             tag (str): 标签名
-            
+
         Returns:
             List[Any]: 匹配的元素列表
         """
@@ -423,12 +423,12 @@ class XMLProcessor:
                            exact: bool = True) -> List[Any]:
         """
         通过文本内容获取元素
-        
+
         Args:
             tree (Any): XML 树对象
             text (str): 文本内容
             exact (bool): 是否精确匹配
-            
+
         Returns:
             List[Any]: 匹配的元素列表
         """
@@ -452,17 +452,17 @@ class XMLProcessor:
     def get_element_path(self, elem: Any) -> str:
         """
         获取元素的 XPath 路径
-        
+
         Args:
             elem (Any): XML 元素
-            
+
         Returns:
             str: XPath 路径
         """
         if not self.use_lxml:
             logging.warning("ElementTree 不支持 XPath 路径")
             return ""
-            
+
         try:
             return elem.getroottree().getpath(elem)
         except Exception as e:
@@ -474,10 +474,10 @@ class XMLProcessor:
     def get_element_depth(self, elem: Any) -> int:
         """
         获取元素的深度
-        
+
         Args:
             elem (Any): XML 元素
-            
+
         Returns:
             int: 元素深度
         """
@@ -491,10 +491,10 @@ class XMLProcessor:
     def get_element_children_count(self, elem: Any) -> int:
         """
         获取元素的子元素数量
-        
+
         Args:
             elem (Any): XML 元素
-            
+
         Returns:
             int: 子元素数量
         """
@@ -503,10 +503,10 @@ class XMLProcessor:
     def get_element_attributes(self, elem: Any) -> Dict[str, str]:
         """
         获取元素的所有属性
-        
+
         Args:
             elem (Any): XML 元素
-            
+
         Returns:
             Dict[str, str]: 属性字典
         """
@@ -515,11 +515,11 @@ class XMLProcessor:
     def get_element_text(self, elem: Any, strip: bool = True) -> str:
         """
         获取元素的文本内容
-        
+
         Args:
             elem (Any): XML 元素
             strip (bool): 是否去除空白
-            
+
         Returns:
             str: 文本内容
         """
@@ -530,7 +530,7 @@ class XMLProcessor:
     def set_element_text(self, elem: Any, text: str) -> None:
         """
         设置元素的文本内容
-        
+
         Args:
             elem (Any): XML 元素
             text (str): 文本内容
@@ -540,7 +540,7 @@ class XMLProcessor:
     def set_element_attribute(self, elem: Any, name: str, value: str) -> None:
         """
         设置元素的属性
-        
+
         Args:
             elem (Any): XML 元素
             name (str): 属性名
@@ -551,7 +551,7 @@ class XMLProcessor:
     def remove_element_attribute(self, elem: Any, name: str) -> None:
         """
         移除元素的属性
-        
+
         Args:
             elem (Any): XML 元素
             name (str): 属性名
@@ -563,13 +563,13 @@ class XMLProcessor:
                    attributes: Optional[Dict[str, str]] = None) -> Any:
         """
         添加新元素
-        
+
         Args:
             parent (Any): 父元素
             tag (str): 标签名
             text (Optional[str]): 文本内容
             attributes (Optional[Dict[str, str]]): 属性字典
-            
+
         Returns:
             Any: 新创建的元素
         """
@@ -584,7 +584,7 @@ class XMLProcessor:
     def remove_element(self, elem: Any) -> None:
         """
         移除元素
-        
+
         Args:
             elem (Any): 要移除的元素
         """

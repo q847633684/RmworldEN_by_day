@@ -20,7 +20,7 @@ def generate_config_for_mod(mod_dir: str, config_file: str, custom_fields: Optio
     """为特定模组生成配置文件"""
     logging.info("生成模组配置文件: %s -> %s", mod_dir, config_file)
     custom_fields = custom_fields or set()
-    
+
     # 安全获取默认字段
     try:
         default_fields = CONFIG.default_fields or set()
@@ -29,9 +29,9 @@ def generate_config_for_mod(mod_dir: str, config_file: str, custom_fields: Optio
     except Exception as e:
         logging.warning("获取配置字段失败: %s", e)
         default_fields = set()
-        ignore_fields = set()  
+        ignore_fields = set()
         non_text_patterns = []
-    
+
     template = {
         "default_fields": list(default_fields | custom_fields),
         "ignore_fields": list(ignore_fields),

@@ -15,7 +15,7 @@ CONFIG = get_config()
 def update_all_xml(mod_dir: str, translations: Dict[str, str], language: str = CONFIG.default_language, merge: bool = True) -> None:
     """
     更新所有 XML 文件中的翻译
-    
+
     Args:
         mod_dir (str): 模组目录
         translations (Dict[str, str]): 翻译字典
@@ -28,36 +28,36 @@ def update_all_xml(mod_dir: str, translations: Dict[str, str], language: str = C
     except ImportError:
         # 回退到 ElementTree
         processor = XMLProcessor(XMLProcessorConfig(use_lxml=False))
-        
+
     language_dir = get_language_folder_path(mod_dir, language)
     updated_count = 0
-    
+
     for xml_file in Path(language_dir).rglob("*.xml"):
         try:
             tree = processor.parse_xml(str(xml_file))
             if tree is None:
                 continue
-                
+
             if processor.update_translations(tree, translations, merge=merge):
                 processor.save_xml(tree, str(xml_file))
                 updated_count += 1
                 print(f"{Fore.GREEN}更新文件: {xml_file}{Style.RESET_ALL}")
         except Exception as e:
             logging.error("处理文件失败: %s: %s", xml_file, e)
-            
+
     print(f"{Fore.GREEN}更新了 {updated_count} 个文件{Style.RESET_ALL}")
 
 @handle_exceptions()
 def import_translations(csv_path: str, mod_dir: str, language: str = CONFIG.default_language, merge: bool = True) -> bool:
     """
     将翻译CSV导入到翻译模板
-    
+
     Args:
         csv_path (str): 翻译CSV文件路径
         mod_dir (str): 模组目录路径
         language (str): 目标语言
         merge (bool): 是否合并现有翻译
-        
+
     Returns:
         bool: 导入是否成功
     """

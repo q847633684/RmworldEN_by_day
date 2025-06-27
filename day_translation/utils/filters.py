@@ -14,7 +14,7 @@ def is_non_text(text: str) -> bool:
         return True
     if re.match(r'^[0-9\.\-\+]+$', text):
         return True
-    
+
     # 从配置中获取非文本模式进行检查 - 添加安全检查
     try:
         config = get_config()
@@ -35,7 +35,7 @@ class ContentFilter:
         self.default_fields = config.default_fields  # 这会调用 @property 方法
         self.ignore_fields = config.ignore_fields    # 这会调用 @property 方法
         self.non_text_patterns = config.non_text_patterns  # 这会调用 @property 方法
-    
+
     def filter_content(self, key: str, text: str, context: str = "") -> bool:
         """过滤可翻译内容"""
         if not text or not isinstance(text, str):
@@ -44,17 +44,17 @@ class ContentFilter:
         if is_non_text(text):
             logging.debug("过滤掉（%s）: 文本（%s）为非文本内容", key, text)
             return False
-        
+
         # 智能提取字段名：从后往前找到第一个非数字的部分
         parts = key.split('.')
         tag = key  # 默认值
-        
+
         # 从后往前遍历，找到第一个非数字的部分
         for i in range(len(parts) - 1, -1, -1):
             if not parts[i].isdigit():
                 tag = parts[i]
                 break
-        
+
         # 安全检查 ignore_fields
         try:
             ignore_fields = self.ignore_fields
@@ -63,7 +63,7 @@ class ContentFilter:
                 return False
         except Exception as e:
             logging.warning("检查忽略字段时出错: %s", e)
-        
+
         # 对于 Keyed 翻译，不限制 default_fields，因为 Keyed 使用自定义标签名
         # 对于 DefInjected 翻译，才检查 default_fields
         if context == "DefInjected":
@@ -74,7 +74,7 @@ class ContentFilter:
                     return False
             except Exception as e:
                 logging.warning("检查默认字段时出错: %s", e)
-        
+
         # 安全检查非文本模式
         try:
             patterns = self.non_text_patterns
@@ -85,5 +85,5 @@ class ContentFilter:
                         return False
         except Exception as e:
             logging.warning("检查非文本模式时出错: %s", e)
-            
+
         return True

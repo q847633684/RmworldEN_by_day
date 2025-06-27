@@ -30,22 +30,20 @@ CONFIG = get_config()
 
 class TranslationError(Exception):
     """翻译操作的基础异常类"""
-    pass
 
 # class ConfigError(TranslationError):
 #     """配置相关错误"""
 #     pass
 class TranslationImportError(TranslationError):
     """导入相关错误"""
-    pass
 
 class ExportError(TranslationError):
     """导出相关错误"""
-    pass
 
 class TranslationFacade:
     """翻译操作的核心接口，管理模组翻译流程"""
-    def __init__(self, mod_dir: str, language: str = CONFIG.default_language, template_location: str = "mod"):
+    def __init__(self, mod_dir: str, language: str = CONFIG.default_language,
+                 template_location: str = "mod"):
         """
         初始化 TranslationFacade
 
@@ -68,7 +66,7 @@ class TranslationFacade:
             self._validate_config()
             logging.debug("初始化 TranslationFacade: mod_dir=%s, language=%s", self.mod_dir, self.language)
         except Exception as e:
-            raise ConfigError(f"初始化失败: {str(e)}")
+            raise ConfigError(f"初始化失败: {str(e)}") from e
 
     def _validate_config(self) -> None:
         """验证配置是否有效"""
@@ -86,20 +84,20 @@ class TranslationFacade:
         try:
             # 记录提取操作的开始，包含所有关键参数用于调试和审计
             logging.info("开始提取模板: output_dir=%s, en_keyed_dir=%s, auto_choose_definjected=%s", output_dir, en_keyed_dir, auto_choose_definjected)
-            
+
             # 调用模板管理器执行核心提取操作
             # - output_dir: 输出目录，模板和CSV文件的保存位置
             # - en_keyed_dir: 英文Keyed目录，用于确保UI文本翻译完整性
             # - auto_choose_definjected: DefInjected提取方式选择（True=自动，False=交互）
             translations = self.template_manager.extract_and_generate_templates(output_dir, en_keyed_dir, auto_choose_definjected)
-            
+
             # 返回提取到的翻译数据列表，格式：[(key, text, group, file_info), ...]
             return translations
         except Exception as e:
             # 捕获并处理提取过程中的任何异常
             error_msg = f"提取模板失败: {str(e)}"           # 构建详细错误信息
             logging.error(error_msg)                        # 记录错误到日志文件
-            raise ExportError(error_msg)                    # 抛出自定义异常，便于上层处理
+            raise ExportError(error_msg) from e                    # 抛出自定义异常，便于上层处理
 
     def import_translations_to_templates(self, csv_path: str, merge: bool = True) -> None:
         """
@@ -115,16 +113,16 @@ class TranslationFacade:
         try:
             if not os.path.isfile(csv_path):
                 raise TranslationImportError(f"CSV文件不存在: {csv_path}")
-                
+
             logging.info("导入翻译到模板: csv_path=%s, merge=%s", csv_path, merge)
-            
+
             if not self.template_manager.import_translations(csv_path, merge):
                 raise TranslationImportError("导入翻译失败")
-                
+
         except Exception as e:
             error_msg = f"导入翻译失败: {str(e)}"
             logging.error(error_msg)
-            raise TranslationImportError(error_msg)
+            raise TranslationImportError(error_msg) from e
 
     def generate_corpus(self) -> List[Tuple[str, str]]:
         """
@@ -141,21 +139,21 @@ class TranslationFacade:
             # generate_parallel_corpus 函数签名：(mode: str, mod_dir: str) -> int
             # 使用模式 "2" 表示从 DefInjected 和 Keyed 提取
             corpus_count = generate_parallel_corpus("2", self.mod_dir)
-            
+
             if not corpus_count:
                 logging.warning("未找到任何平行语料")
                 print(f"{Fore.YELLOW}⚠️ 未找到任何平行语料{Style.RESET_ALL}")
                 return []
             else:
                 print(f"{Fore.GREEN}✅ 生成语料：{corpus_count} 条{Style.RESET_ALL}")
-                
+
             # 由于 generate_parallel_corpus 返回数量而非实际语料，这里返回空列表
             # 实际的语料文件已经保存到磁盘
             return []
         except Exception as e:
             error_msg = f"生成语料失败: {str(e)}"
             logging.error(error_msg)
-            raise ExportError(error_msg)
+            raise ExportError(error_msg) from e
 
     def machine_translate(self, csv_path: str, output_csv: str = None) -> None:
         """
@@ -171,15 +169,15 @@ class TranslationFacade:
         try:
             if not os.path.isfile(csv_path):
                 raise ExportError(f"CSV文件不存在: {csv_path}")
-                
+
             logging.info("开始机器翻译: csv_path=%s, output_csv=%s", csv_path, output_csv)
               # 获取用户配置
             user_config = get_user_config()
-            
+
             # 获取API密钥
             access_key_id = self._get_api_key("ALIYUN_ACCESS_KEY_ID", user_config)
             access_key_secret = self._get_api_key("ALIYUN_ACCESS_KEY_SECRET", user_config)
-            
+
             # 执行翻译
             translate_csv(
                 csv_path,
@@ -189,13 +187,13 @@ class TranslationFacade:
                 source_language=CONFIG.source_language,
                 target_language=self.language
             )
-            
+
             print(f"{Fore.GREEN}✅ 机器翻译完成{Style.RESET_ALL}")
-            
+
         except Exception as e:
             error_msg = f"机器翻译失败: {str(e)}"
             logging.error(error_msg)
-            raise ExportError(error_msg)
+            raise ExportError(error_msg) from e
 
     def _get_api_key(self, key_name: str, user_config: Dict[str, Any]) -> str:
         """获取API密钥，支持从环境变量、配置文件或用户输入获取"""
@@ -228,9 +226,9 @@ def get_user_input_with_history(prompt: str, history_key: str, required: bool = 
             for i, path in enumerate(history, 1):
                 print(f"{i}. {path}")
             print(f"0. {Fore.YELLOW}输入新路径{Style.RESET_ALL}")
-            
+
             choice = input(f"\n{Fore.CYAN}选择历史记录 (0-{len(history)}) 或直接输入新路径：{Style.RESET_ALL}").strip()
-            
+
             if choice.isdigit() and 0 <= int(choice) <= len(history):
                 if int(choice) == 0:
                     path = input(f"{Fore.CYAN}{prompt}{Style.RESET_ALL}").strip()
@@ -240,18 +238,18 @@ def get_user_input_with_history(prompt: str, history_key: str, required: bool = 
                 path = choice
         else:
             path = input(f"{Fore.CYAN}{prompt}{Style.RESET_ALL}").strip()
-            
+
         if not path and not required:
             return None
-            
+
         if not path:
             print(f"{Fore.RED}❌ 输入不能为空{Style.RESET_ALL}")
             continue
-            
+
         if validate_func and not validate_func(path):
             print(f"{Fore.RED}❌ 输入验证失败{Style.RESET_ALL}")
             continue
-            
+
         update_history_list(history_key, path)
         return path
 
@@ -293,9 +291,9 @@ def main():
     try:
         show_welcome()
         logging.info("启动主工作流")
-        
+
         path_manager = PathManager()
-        
+
         while True:
             print(f"\n{Fore.MAGENTA}=== Day Translation 主菜单 ==={Style.RESET_ALL}")
             print(f"\n{Fore.BLUE}可用模式：{Style.RESET_ALL}")
@@ -307,12 +305,12 @@ def main():
             print(f"6. {Fore.GREEN}批量处理{Style.RESET_ALL}：处理多个模组")
             print(f"7. {Fore.GREEN}配置管理{Style.RESET_ALL}：管理翻译配置")
             print(f"q. {Fore.YELLOW}退出{Style.RESET_ALL}")
-            
+
             mode = input(f"\n{Fore.CYAN}选择模式 (1-7, q):{Style.RESET_ALL} ").strip().lower()
-            
+
             if mode == 'q':
                 break
-                
+
             if mode not in ['1', '2', '3', '4', '5', '6', '7']:
                 print(f"{Fore.RED}无效选择，请输入 1-7 或 q{Style.RESET_ALL}")
                 continue
@@ -329,12 +327,12 @@ def main():
                         print(f"5. {Fore.GREEN}导入配置{Style.RESET_ALL}")
                         print(f"6. {Fore.GREEN}加载规则配置{Style.RESET_ALL}")
                         print(f"b. {Fore.YELLOW}返回主菜单{Style.RESET_ALL}")
-                        
+
                         config_mode = input(f"\n{Fore.CYAN}选择操作 (1-6, b):{Style.RESET_ALL} ").strip().lower()
-                        
+
                         if config_mode == 'b':
                             break
-                            
+
                         if config_mode == "1":
                             CONFIG.show_config()
                         elif config_mode == "2":
@@ -414,15 +412,15 @@ def main():
                             print(f"{Fore.RED}无效选择{Style.RESET_ALL}")
                     continue  # 配置管理完成后返回主菜单
                 mod_dir = path_manager.get_path(
-                    path_type="mod_dir", 
-                    prompt="请输入模组目录（例如：C:\\Mods\\MyMod）: ", 
-                    validator_type="mod", 
+                    path_type="mod_dir",
+                    prompt="请输入模组目录（例如：C:\\Mods\\MyMod）: ",
+                    validator_type="mod",
                     default=path_manager.get_remembered_path("mod_dir")                )
                 if not mod_dir:
                     continue
-                    
+
                 facade = TranslationFacade(mod_dir)
-                
+
                 if mode == "1":
                     # ==================== 模式1：提取翻译模板并生成 CSV 文件 ====================
                     # 这是最核心的功能，从模组中提取所有可翻译文本并生成翻译模板
@@ -432,14 +430,14 @@ def main():
                     print(f"1. {Fore.GREEN}模组内部{Style.RESET_ALL}（直接集成到模组Languages目录，适合开发模组）")
                     print(f"2. {Fore.GREEN}外部目录{Style.RESET_ALL}（独立管理，适合翻译工作和分发）")
                     print(f"b. {Fore.YELLOW}返回主菜单{Style.RESET_ALL}")
-                    
+
                     output_choice = input(f"{Fore.CYAN}请输入选项编号（1/2/b，回车默认2）：{Style.RESET_ALL}").strip().lower()
-                    
+
                     if output_choice == 'b':
                         continue  # 返回主菜单
-                    
+
                     output_dir = None                                              # 初始化输出目录变量
-                    
+
                     if output_choice == "1":
                         # 选择内部模式：直接输出到模组内部
                         print(f"{Fore.GREEN}✅ 将生成模板到模组内部Languages目录{Style.RESET_ALL}")
@@ -455,14 +453,14 @@ def main():
                         )
                         if not output_dir:                                         # 用户取消或输入无效
                             continue                                               # 返回主菜单
-                        
+
                     # 步骤2：处理英文 Keyed 目录选择
                     # Keyed 是 RimWorld 中UI文本的存储方式，英文模板可以确保翻译完整性
                     en_keyed_dir = None                                           # 初始化英文Keyed目录变量
                       # 步骤2a：自动检测英文 Keyed 目录
                     # 构建标准的英文Keyed目录路径：ModDir/Languages/English/Keyed
                     auto_en_keyed_dir = os.path.join(mod_dir, "Languages", "English", CONFIG.keyed_dir)
-                    
+
                     if os.path.exists(auto_en_keyed_dir):                         # 如果检测到英文Keyed目录存在
                         # 自动使用检测到的英文Keyed目录，确保翻译完整性
                         en_keyed_dir = auto_en_keyed_dir                          # 直接使用自动检测的目录
@@ -472,7 +470,7 @@ def main():
                         # 某些模组可能将英文文本放在非标准位置
                         print(f"{Fore.YELLOW}未检测到英文 Keyed 目录{Style.RESET_ALL}")
                         keyed_choice = input(f"{Fore.CYAN}是否手动指定英文Keyed目录？[y/n/b] (b=返回主菜单):{Style.RESET_ALL} ").lower().strip()
-                        
+
                         if keyed_choice == 'b':
                             continue  # 返回主菜单
                         elif keyed_choice == 'y':
@@ -485,7 +483,7 @@ def main():
                             )
                             if not en_keyed_dir:                                 # 用户取消输入
                                 continue                                         # 返回主菜单
-                    
+
                     # 步骤3：执行提取和生成操作
                     try:
                         # 调用核心功能：提取翻译文本、生成模板文件、导出CSV
@@ -498,7 +496,7 @@ def main():
                     except Exception as e:
                         print(f"\n{Fore.RED}❌ 提取模板失败: {str(e)}{Style.RESET_ALL}")
                         logging.error("提取模板失败: %s", str(e), exc_info=True)
-                    
+
                 elif mode == "2":
                     # 模式2：机器翻译
                     csv_path = path_manager.get_path(
@@ -509,7 +507,7 @@ def main():
                     )
                     if not csv_path:
                         continue
-                        
+
                     output_csv = None
                     if input(f"{Fore.YELLOW}指定输出文件？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
                         output_csv = path_manager.get_path(
@@ -520,9 +518,9 @@ def main():
                         )
                         if not output_csv:
                             continue
-                            
+
                     facade.machine_translate(csv_path, output_csv)
-                    
+
                 elif mode == "3":
                     # 模式3：将翻译后的 CSV 导入翻译模板
                     csv_path = path_manager.get_path(
@@ -533,14 +531,14 @@ def main():
                     )
                     if not csv_path:
                         continue
-                        
+
                     if input(f"{Fore.YELLOW}确认导入翻译到模板？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
                         facade.import_translations_to_templates(csv_path)
-                        
+
                 elif mode == "4":
                     # 模式4：生成语料
                     facade.generate_corpus()
-                    
+
                 elif mode == "5":
                     # 模式5：完整流程
                     export_csv = path_manager.get_path(
@@ -551,7 +549,7 @@ def main():
                     )
                     if not export_csv:
                         continue
-                        
+
                     en_keyed_dir = None
                     if input(f"{Fore.YELLOW}是否指定英文 Keyed 目录？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
                         en_keyed_dir = path_manager.get_path(
@@ -562,9 +560,9 @@ def main():
                         )
                         if not en_keyed_dir:
                             continue
-                            
+
                     translations = facade.extract_templates_and_generate_csv(export_csv, en_keyed_dir, auto_choose_definjected=True)
-                    
+
                     if translations and input(f"{Fore.YELLOW}确认翻译并导入？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
                         output_csv = None
                         if input(f"{Fore.YELLOW}指定输出文件？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
@@ -576,11 +574,11 @@ def main():
                             )
                             if not output_csv:
                                 continue
-                                
+
                         facade.machine_translate(export_csv, output_csv)
                         final_csv = output_csv or export_csv.replace('.csv', '_translated.csv')
                         facade.import_translations_to_templates(final_csv)
-                        
+
                 elif mode == "6":
                     # 模式6：批量处理
                     mod_list = []
@@ -595,11 +593,11 @@ def main():
                         if not mod_dir:
                             break
                         mod_list.append(mod_dir)
-                        
+
                     if not mod_list:
                         print(f"{Fore.YELLOW}未指定任何模组目录{Style.RESET_ALL}")
                         continue
-                        
+
                     csv_path = None
                     if input(f"{Fore.YELLOW}是否指定翻译 CSV？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
                         csv_path = path_manager.get_path(
@@ -610,23 +608,23 @@ def main():
                         )
                         if not csv_path:
                             continue
-                            
+
                     processor = BatchProcessor()
                     results = processor.process_multiple_mods(mod_list, csv_path)
-                    
+
                     if results:
                         print(f"\n{Fore.GREEN}=== 批量处理完成 ==={Style.RESET_ALL}")
                         for mod_dir, result in results.items():
                             status = f"{Fore.GREEN}✓{Style.RESET_ALL}" if result.success else f"{Fore.RED}✗{Style.RESET_ALL}"
                             print(f"{status} {Path(mod_dir).name}: {result.error or '成功'}")
-                            
+
             except TranslationError as e:
                 print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
                 logging.error("操作失败: %s", str(e))
             except Exception as e:
                 print(f"{Fore.RED}❌ 发生错误: {str(e)}{Style.RESET_ALL}")
                 logging.exception("未预期的错误")
-                
+
     except KeyboardInterrupt:
         print(f"\n{Fore.YELLOW}程序被用户中断{Style.RESET_ALL}")
         logging.info("程序被用户中断")

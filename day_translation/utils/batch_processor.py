@@ -57,7 +57,7 @@ class BatchProcessor:
         """
         logging.info("批量处理 %s 个模组", len(mod_list))
         print(f"{Fore.BLUE}开始处理 {len(mod_list)} 个模组...{Style.RESET_ALL}")
-        
+
         # 验证输入
         valid_mods = []
         for mod_dir in mod_list:
@@ -136,10 +136,10 @@ class BatchProcessor:
         """
         start_time = time.time()
         result = ModProcessResult(mod_dir=mod_dir, success=True)
-        
+
         try:
             logging.debug("处理模组: %s, csv_path=%s", mod_dir, csv_path)
-            
+
             # 生成配置
             config_path = os.path.join(mod_dir, "translation_config.json")
             try:
@@ -148,7 +148,7 @@ class BatchProcessor:
             except Exception as e:
                 logging.warning("生成配置失败: %s, 错误: %s", mod_dir, e)
                 result.error = f"配置生成失败: {e}"
-            
+
             # 更新XML
             if csv_path:
                 try:
@@ -160,10 +160,10 @@ class BatchProcessor:
                     logging.error("更新XML失败: %s, 错误: %s", mod_dir, e)
                     result.error = f"XML更新失败: {e}"
                     result.success = False
-            
+
             result.processing_time = time.time() - start_time
             return result
-            
+
         except Exception as e:
             logging.error("模组处理失败: %s, 错误: %s", mod_dir, e)
             result.success = False
@@ -187,16 +187,16 @@ class BatchProcessor:
         translations = load_translations_from_csv(csv_path)
         content_filter = ContentFilter(CONFIG)
         lang_path = get_language_folder_path(language, mod_dir)
-        
+
         files_processed = 0
         files_updated = 0
-        
+
         for dir_name in [CONFIG.def_injected_dir, CONFIG.keyed_dir]:
             dir_path = os.path.join(lang_path, dir_name)
             if not os.path.exists(dir_path):
                 logging.debug("目录不存在，跳过: %s", dir_path)
                 continue
-                
+
             for xml_file in Path(dir_path).rglob("*.xml"):
                 files_processed += 1
                 try:
@@ -209,22 +209,22 @@ class BatchProcessor:
                 except Exception as e:
                     logging.error("处理文件失败: %s, 错误: %s", xml_file, e)
                     continue
-                    
+
         return files_processed, files_updated
 
     def _show_processing_summary(self) -> None:
         """显示处理结果统计"""
         if not self._results:
             return
-            
+
         total_mods = len(self._results)
         successful_mods = sum(1 for r in self._results.values() if r.success)
         failed_mods = total_mods - successful_mods
-        
+
         total_files_processed = sum(r.files_processed for r in self._results.values())
         total_files_updated = sum(r.files_updated for r in self._results.values())
         total_time = sum(r.processing_time for r in self._results.values())
-        
+
         print(f"\n{Fore.BLUE}=== 处理结果统计 ==={Style.RESET_ALL}")
         print(f"总模组数: {total_mods}")
         print(f"成功: {Fore.GREEN}{successful_mods}{Style.RESET_ALL}")
@@ -232,11 +232,11 @@ class BatchProcessor:
         print(f"处理文件数: {total_files_processed}")
         print(f"更新文件数: {total_files_updated}")
         print(f"总处理时间: {total_time:.2f}秒")
-        
+
         if failed_mods > 0:
             print(f"\n{Fore.RED}=== 失败详情 ==={Style.RESET_ALL}")
             for mod_dir, result in self._results.items():
                 if not result.success:
                     print(f"{Path(mod_dir).name}: {result.error}")
-                    
+
         print(f"{Fore.BLUE}==================={Style.RESET_ALL}\n")
