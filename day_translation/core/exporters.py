@@ -34,7 +34,7 @@ def export_definjected_from_english(
     source_language: str = CONFIG.source_language
 ) -> None:
     """从英文导出 DefInjected 翻译，添加 EN 注释"""
-    logging.info(f"导出 DefInjected: mod_dir={mod_dir}, export_dir={export_dir}")
+    logging.info("导出 DefInjected: mod_dir=%s, export_dir=%s", mod_dir, export_dir)
     mod_dir = str(Path(mod_dir).resolve())
     export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
@@ -44,10 +44,10 @@ def export_definjected_from_english(
     
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
-        logging.info(f"创建文件夹：{def_injected_path}")
+        logging.info("创建文件夹：%s", def_injected_path)
         
     if not os.path.exists(src_def_injected_path):
-        logging.warning(f"英文 DefInjected 目录 {src_def_injected_path} 不存在，跳过")
+        logging.warning("英文 DefInjected 目录 %s 不存在，跳过", src_def_injected_path)
         return
         
     processor = XMLProcessor()
@@ -58,7 +58,7 @@ def export_definjected_from_english(
             dst_file = os.path.join(def_injected_path, rel_path)
             os.makedirs(os.path.dirname(dst_file), exist_ok=True)
             shutil.copy2(src_file, dst_file)
-            logging.info(f"复制 {src_file} 到 {dst_file}")
+            logging.info("复制 %s 到 %s", src_file, dst_file)
             
             tree = processor.parse_xml(str(dst_file))
             if tree is None:
@@ -69,7 +69,7 @@ def export_definjected_from_english(
             processor.save_xml(tree, str(dst_file), pretty_print=True)
             
         except Exception as e:
-            logging.error(f"处理文件失败: {src_file}: {e}")
+            logging.error("处理文件失败: %s: %s", src_file, e)
 
 def handle_extract_translate(
     mod_dir: str,
@@ -84,7 +84,7 @@ def handle_extract_translate(
     Returns:
         str: 选择的提取方式 ('definjected' 或 'defs')
     """
-    logging.info(f"处理翻译提取: mod_dir={mod_dir}, export_dir={export_dir}")
+    logging.info("处理翻译提取: mod_dir=%s, export_dir=%s", mod_dir, export_dir)
     mod_dir = str(Path(mod_dir).resolve())
     export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
@@ -125,7 +125,7 @@ def handle_extract_translate(
             else:
                 print(f"{Fore.RED}❌ 无效选择，请输入 1、2 或 b{Style.RESET_ALL}")
     else:
-        logging.info(f"未找到英文 DefInjected {src_def_injected_path}，从 Defs 提取")
+        logging.info("未找到英文 DefInjected %s，从 Defs 提取", src_def_injected_path)
         print(f"{Fore.YELLOW}未找到英文 DefInjected 目录，将从 Defs 提取可翻译字段{Style.RESET_ALL}")
         return "defs"
 
@@ -142,10 +142,10 @@ def cleanup_backstories_dir(
         delete_me_path = os.path.join(lang_path, "Backstories DELETE_ME")
         try:
             shutil.move(backstories_path, delete_me_path)
-            logging.info(f"重命名背景故事为 {delete_me_path}")
+            logging.info("重命名背景故事为 %s", delete_me_path)
             print(f"背景故事文件夹重命名为 {delete_me_path}，请检查并删除")
         except OSError as e:
-            logging.error(f"无法重命名 {backstories_path}: {e}")
+            logging.error("无法重命名 %s: %s", backstories_path, e)
 
 def export_keyed(
     mod_dir: str,
@@ -154,7 +154,7 @@ def export_keyed(
     source_language: str = CONFIG.source_language
 ) -> None:
     """导出 Keyed 翻译，添加 EN 注释"""
-    logging.info(f"导出 Keyed: mod_dir={mod_dir}, export_dir={export_dir}")
+    logging.info("导出 Keyed: mod_dir=%s, export_dir=%s", mod_dir, export_dir)
     mod_dir = str(Path(mod_dir).resolve())
     export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
@@ -164,15 +164,15 @@ def export_keyed(
     
     if not os.path.exists(keyed_path):
         os.makedirs(keyed_path)
-        logging.info(f"创建文件夹：{keyed_path}")
+        logging.info("创建文件夹：%s", keyed_path)
         
     if not os.path.exists(src_keyed_path):
-        logging.warning(f"英文 Keyed 目录 {src_keyed_path} 不存在，跳过")
+        logging.warning("英文 Keyed 目录 %s 不存在，跳过", src_keyed_path)
         return
         
     xml_files = list(Path(src_keyed_path).rglob("*.xml"))
     if not xml_files:
-        logging.warning(f"英文 Keyed 目录 {src_keyed_path} 没有 XML 文件，跳过")
+        logging.warning("英文 Keyed 目录 %s 没有 XML 文件，跳过", src_keyed_path)
         return
         
     processor = XMLProcessor()
@@ -183,7 +183,7 @@ def export_keyed(
             dst_file = os.path.join(keyed_path, rel_path)
             os.makedirs(os.path.dirname(dst_file), exist_ok=True)
             shutil.copy2(src_file, dst_file)
-            logging.info(f"复制 {src_file} 到 {dst_file}")
+            logging.info("复制 %s 到 %s", src_file, dst_file)
             
             tree = processor.parse_xml(str(dst_file))
             if tree is None:
@@ -193,7 +193,7 @@ def export_keyed(
             processor.save_xml(tree, str(dst_file), pretty_print=True)
             
         except Exception as e:
-            logging.error(f"处理文件失败: {src_file}: {e}")
+            logging.error("处理文件失败: %s: %s", src_file, e)
 
 def process_def_file(
     xml_file: Path,
@@ -230,7 +230,7 @@ def process_def_file(
         return output_path, pairs
         
     except Exception as e:
-        logging.error(f"处理文件失败: {xml_file}: {e}")
+        logging.error("处理文件失败: %s: %s", xml_file, e)
         return str(xml_file), []
 
 def process_def_file_wrapper(args: Tuple[Path, List[Tuple[str, str, str, str]]]) -> Tuple[str, List[Tuple[str, List[Tuple[str, str, str]]]]]:
@@ -246,7 +246,7 @@ def export_definjected(
     language: str = CONFIG.default_language
 ) -> None:
     """从 Defs 导出 DefInjected 翻译，确保包含所有字段"""
-    logging.info(f"导出 DefInjected: mod_dir={mod_dir}, translations_count={len(selected_translations)}")
+    logging.info("导出 DefInjected: mod_dir=%s, translations_count=%s", mod_dir, len(selected_translations))
     mod_dir = str(Path(mod_dir).resolve())
     export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
@@ -255,18 +255,18 @@ def export_definjected(
     
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
-        logging.info(f"创建文件夹：{def_injected_path}")
+        logging.info("创建文件夹：%s", def_injected_path)
         
     # 清理现有文件
     for xml_file in Path(def_injected_path).rglob("*.xml"):
         try:
             os.remove(xml_file)
-            logging.info(f"删除文件：{xml_file}")
+            logging.info("删除文件：%s", xml_file)
         except OSError as e:
-            logging.error(f"无法删除 {xml_file}: {e}")
+            logging.error("无法删除 %s: %s", xml_file, e)
             
     if not os.path.exists(defs_path):
-        logging.warning(f"Defs 目录 {defs_path} 不存在，跳过")
+        logging.warning("Defs 目录 %s 不存在，跳过", defs_path)
         return
         
     processor = XMLProcessor()
@@ -328,11 +328,11 @@ def export_definjected(
                   # 保存文件
         tree = ET.ElementTree(root)
         processor.save_xml(tree, output_file, pretty_print=True)
-        logging.info(f"生成 DefInjected 文件: {output_file}")
+        logging.info("生成 DefInjected 文件: %s", output_file)
 
 def export_definjected_to_csv(definjected_dir: str, output_csv: str) -> None:
     """将 DefInjected 翻译导出到 CSV"""
-    logging.info(f"导出 DefInjected 到 CSV: {definjected_dir} -> {output_csv}")
+    logging.info("导出 DefInjected 到 CSV: %s -> %s", definjected_dir, output_csv)
     processor = XMLProcessor()
     rows = []
     
@@ -367,25 +367,25 @@ def export_definjected_to_csv(definjected_dir: str, output_csv: str) -> None:
                     })
                     file_rows += 1
                     
-            logging.info(f"从 {xml_file.name} 提取了 {file_rows} 条翻译")
+            logging.info("从 %s 提取了 %s 条翻译", xml_file.name, file_rows)
             
         except Exception as e:
-            logging.error(f"处理文件失败: {xml_file}: {e}")
+            logging.error("处理文件失败: %s: %s", xml_file, e)
             
     if rows:
         try:
             with open(output_csv, 'a', encoding='utf-8', newline='') as f:
                 writer = csv.DictWriter(f, fieldnames=["key", "text", "en_text", "tag"])
                 writer.writerows(rows)
-            logging.info(f"追加 {len(rows)} 条翻译到 {output_csv}")
+            logging.info("追加 %s 条翻译到 %s", len(rows), output_csv)
         except Exception as e:
-            logging.error(f"写入 CSV 失败: {output_csv}: {e}")
+            logging.error("写入 CSV 失败: %s: %s", output_csv, e)
     else:
-        logging.warning(f"没有找到可导出的翻译")
+        logging.warning("没有找到可导出的翻译")
 
 def export_keyed_to_csv(keyed_dir: str, output_csv: str) -> None:
     """将 Keyed 翻译导出到 CSV"""
-    logging.info(f"导出 Keyed 到 CSV: {keyed_dir} -> {output_csv}")
+    logging.info("导出 Keyed 到 CSV: %s -> %s", keyed_dir, output_csv)
     processor = XMLProcessor()
     rows = []
     
@@ -410,21 +410,21 @@ def export_keyed_to_csv(keyed_dir: str, output_csv: str) -> None:
                     })
                     file_rows += 1
             
-            logging.info(f"从 {xml_file.name} 提取了 {file_rows} 条翻译")
+            logging.info("从 %s 提取了 %s 条翻译", xml_file.name, file_rows)
             
         except Exception as e:
-            logging.error(f"处理文件失败: {xml_file}: {e}")
+            logging.error("处理文件失败: %s: %s", xml_file, e)
             
     if rows:
         try:
             with open(output_csv, 'a', encoding='utf-8', newline='') as f:
                 writer = csv.DictWriter(f, fieldnames=["key", "text", "tag"])
                 writer.writerows(rows)
-            logging.info(f"追加 {len(rows)} 条翻译到 {output_csv}")
+            logging.info("追加 %s 条翻译到 %s", len(rows), output_csv)
         except Exception as e:
-            logging.error(f"写入 CSV 失败: {output_csv}: {e}")
+            logging.error("写入 CSV 失败: %s: %s", output_csv, e)
     else:
-        logging.warning(f"没有找到可导出的翻译")
+        logging.warning("没有找到可导出的翻译")
 
 def export_definjected_with_original_structure(
     mod_dir: str,
@@ -434,7 +434,7 @@ def export_definjected_with_original_structure(
     source_language: str = CONFIG.source_language
 ) -> None:
     """按照原英文DefInjected目录结构导出翻译，保持文件组织一致"""
-    logging.info(f"按原结构导出 DefInjected: mod_dir={mod_dir}, translations_count={len(selected_translations)}")
+    logging.info("按原结构导出 DefInjected: mod_dir=%s, translations_count=%s", mod_dir, len(selected_translations))
     mod_dir = str(Path(mod_dir).resolve())
     export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
@@ -445,22 +445,22 @@ def export_definjected_with_original_structure(
     src_def_injected_path = os.path.join(src_lang_path, CONFIG.def_injected_dir)
     
     if not os.path.exists(src_def_injected_path):
-        logging.warning(f"原英文DefInjected目录不存在: {src_def_injected_path}，回退到默认结构")
+        logging.warning("原英文DefInjected目录不存在: %s，回退到默认结构", src_def_injected_path)
         # 回退到原来的函数
         export_definjected(mod_dir, export_dir, selected_translations, language)
         return
     
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
-        logging.info(f"创建文件夹：{def_injected_path}")
+        logging.info("创建文件夹：%s", def_injected_path)
     
     # 清理现有文件
     for xml_file in Path(def_injected_path).rglob("*.xml"):
         try:
             os.remove(xml_file)
-            logging.info(f"删除文件：{xml_file}")
+            logging.info("删除文件：%s", xml_file)
         except OSError as e:
-            logging.error(f"无法删除 {xml_file}: {e}")
+            logging.error("无法删除 %s: %s", xml_file, e)
     
     processor = XMLProcessor()
     
@@ -491,9 +491,9 @@ def export_definjected_with_original_structure(
                     key_to_file_map[elem.tag] = rel_path
                     
         except Exception as e:
-            logging.error(f"解析原文件失败 {xml_file}: {e}")
+            logging.error("解析原文件失败 %s: %s", xml_file, e)
     
-    logging.info(f"建立键映射: {len(key_to_file_map)} 个键")
+    logging.info("建立键映射: %s 个键", len(key_to_file_map))
     
     # 3. 按文件分组翻译数据
     file_groups = {}  # {relative_path: [(key, text, tag), ...]}
@@ -522,7 +522,7 @@ def export_definjected_with_original_structure(
             # 无法匹配到原文件的翻译
             unmatched_translations.append((full_path, text, tag, file_path))
     
-    logging.info(f"文件分组完成: {len(file_groups)} 个文件, {len(unmatched_translations)} 个未匹配")
+    logging.info("文件分组完成: %s 个文件, %s 个未匹配", len(file_groups), len(unmatched_translations))
     
     # 4. 为每个文件生成翻译内容
     for rel_path, translations in file_groups.items():
@@ -549,11 +549,11 @@ def export_definjected_with_original_structure(
         # 保存文件
         tree = ET.ElementTree(root)
         processor.save_xml(tree, output_file, pretty_print=True)
-        logging.info(f"生成 DefInjected 文件: {output_file} ({len(translations)} 条翻译)")
+        logging.info("生成 DefInjected 文件: %s (%s 条翻译)", output_file, len(translations))
     
     # 5. 处理未匹配的翻译（可选：生成到额外文件）
     if unmatched_translations:
-        logging.warning(f"发现 {len(unmatched_translations)} 条未匹配的翻译")
+        logging.warning("发现 %s 条未匹配的翻译", len(unmatched_translations))
         print(f"{Fore.YELLOW}⚠️ 发现 {len(unmatched_translations)} 条未匹配的翻译，将生成到 _Additional.xml{Style.RESET_ALL}")
         
         # 生成额外文件
@@ -580,7 +580,7 @@ def export_definjected_with_original_structure(
         
         tree = ET.ElementTree(root)
         processor.save_xml(tree, additional_file, pretty_print=True)
-        logging.info(f"生成额外翻译文件: {additional_file}")
+        logging.info("生成额外翻译文件: %s", additional_file)
 
 def export_definjected_with_defs_structure(
     mod_dir: str,
@@ -589,7 +589,7 @@ def export_definjected_with_defs_structure(
     language: str = CONFIG.default_language
 ) -> None:
     """按照原Defs目录结构导出DefInjected翻译"""
-    logging.info(f"按Defs结构导出 DefInjected: mod_dir={mod_dir}, translations_count={len(selected_translations)}")
+    logging.info("按Defs结构导出 DefInjected: mod_dir=%s, translations_count=%s", mod_dir, len(selected_translations))
     mod_dir = str(Path(mod_dir).resolve())
     export_dir = str(Path(export_dir).resolve())
     lang_path = get_language_folder_path(language, export_dir)
@@ -598,18 +598,18 @@ def export_definjected_with_defs_structure(
     
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
-        logging.info(f"创建文件夹：{def_injected_path}")
+        logging.info("创建文件夹：%s", def_injected_path)
     
     # 清理现有文件
     for xml_file in Path(def_injected_path).rglob("*.xml"):
         try:
             os.remove(xml_file)
-            logging.info(f"删除文件：{xml_file}")
+            logging.info("删除文件：%s", xml_file)
         except OSError as e:
-            logging.error(f"无法删除 {xml_file}: {e}")
+            logging.error("无法删除 %s: %s", xml_file, e)
     
     if not os.path.exists(defs_path):
-        logging.warning(f"Defs 目录 {defs_path} 不存在，跳过")
+        logging.warning("Defs 目录 %s 不存在，跳过", defs_path)
         return
         
     processor = XMLProcessor()
@@ -634,7 +634,7 @@ def export_definjected_with_defs_structure(
             file_groups[file_path] = []
         file_groups[file_path].append((full_key, text, tag))
     
-    logging.info(f"按文件分组完成: {len(file_groups)} 个文件")
+    logging.info("按文件分组完成: %s 个文件", len(file_groups))
     
     # 为每个原始文件生成对应的 DefInjected 文件
     for original_file_path, translations in file_groups.items():
@@ -686,4 +686,4 @@ def export_definjected_with_defs_structure(
         # 保存文件
         tree = ET.ElementTree(root)
         processor.save_xml(tree, output_file, pretty_print=True)
-        logging.info(f"生成 DefInjected 文件: {output_file} ({len(translations)} 条翻译)")
+        logging.info("生成 DefInjected 文件: %s (%s 条翻译)", output_file, len(translations))

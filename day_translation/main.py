@@ -32,11 +32,10 @@ class TranslationError(Exception):
     """翻译操作的基础异常类"""
     pass
 
-class ConfigError(TranslationError):
-    """配置相关错误"""
-    pass
-
-class ImportError(TranslationError):
+# class ConfigError(TranslationError):
+#     """配置相关错误"""
+#     pass
+class TranslationImportError(TranslationError):
     """导入相关错误"""
     pass
 
@@ -62,14 +61,12 @@ class TranslationFacade:
         try:
             self.mod_dir = str(Path(mod_dir).resolve())
             if not os.path.isdir(self.mod_dir):
-                raise ImportError(f"无效的模组目录: {mod_dir}")
-                
+                raise TranslationImportError(f"无效的模组目录: {mod_dir}")
             self.language = language
             self.template_location = template_location
             self.template_manager = TemplateManager(self.mod_dir, language, template_location)
             self._validate_config()
-            
-            logging.debug(f"初始化 TranslationFacade: mod_dir={self.mod_dir}, language={self.language}")
+            logging.debug("初始化 TranslationFacade: mod_dir=%s, language=%s", self.mod_dir, self.language)
         except Exception as e:
             raise ConfigError(f"初始化失败: {str(e)}")
 
@@ -80,7 +77,7 @@ class TranslationFacade:
         if not os.path.isdir(self.mod_dir):
             raise ConfigError(f"模组目录不存在: {self.mod_dir}")
         if not os.path.exists(os.path.join(self.mod_dir, "Languages")):
-            logging.warning(f"模组目录中未找到 Languages 文件夹: {self.mod_dir}")
+            logging.warning("模组目录中未找到 Languages 文件夹: %s", self.mod_dir)
 
     def extract_templates_and_generate_csv(self, output_dir: str, en_keyed_dir: str = None, auto_choose_definjected: bool = False) -> List[Tuple[str, str, str, str]]:
         """
@@ -88,7 +85,7 @@ class TranslationFacade:
         """
         try:
             # 记录提取操作的开始，包含所有关键参数用于调试和审计
-            logging.info(f"开始提取模板: output_dir={output_dir}, en_keyed_dir={en_keyed_dir}, auto_choose_definjected={auto_choose_definjected}")
+            logging.info("开始提取模板: output_dir=%s, en_keyed_dir=%s, auto_choose_definjected=%s", output_dir, en_keyed_dir, auto_choose_definjected)
             
             # 调用模板管理器执行核心提取操作
             # - output_dir: 输出目录，模板和CSV文件的保存位置
@@ -117,17 +114,17 @@ class TranslationFacade:
         """
         try:
             if not os.path.isfile(csv_path):
-                raise ImportError(f"CSV文件不存在: {csv_path}")
+                raise TranslationImportError(f"CSV文件不存在: {csv_path}")
                 
-            logging.info(f"导入翻译到模板: csv_path={csv_path}, merge={merge}")
+            logging.info("导入翻译到模板: csv_path=%s, merge=%s", csv_path, merge)
             
             if not self.template_manager.import_translations(csv_path, merge):
-                raise ImportError("导入翻译失败")
+                raise TranslationImportError("导入翻译失败")
                 
         except Exception as e:
             error_msg = f"导入翻译失败: {str(e)}"
             logging.error(error_msg)
-            raise ImportError(error_msg)
+            raise TranslationImportError(error_msg)
 
     def generate_corpus(self) -> List[Tuple[str, str]]:
         """
@@ -141,15 +138,20 @@ class TranslationFacade:
         """
         try:
             logging.info("开始生成平行语料")
-            corpus = generate_parallel_corpus(self.mod_dir, CONFIG.source_language, self.language)
+            # generate_parallel_corpus 函数签名：(mode: str, mod_dir: str) -> int
+            # 使用模式 "2" 表示从 DefInjected 和 Keyed 提取
+            corpus_count = generate_parallel_corpus("2", self.mod_dir)
             
-            if not corpus:
+            if not corpus_count:
                 logging.warning("未找到任何平行语料")
                 print(f"{Fore.YELLOW}⚠️ 未找到任何平行语料{Style.RESET_ALL}")
+                return []
             else:
-                print(f"{Fore.GREEN}✅ 生成语料：{len(corpus)} 条{Style.RESET_ALL}")
+                print(f"{Fore.GREEN}✅ 生成语料：{corpus_count} 条{Style.RESET_ALL}")
                 
-            return corpus
+            # 由于 generate_parallel_corpus 返回数量而非实际语料，这里返回空列表
+            # 实际的语料文件已经保存到磁盘
+            return []
         except Exception as e:
             error_msg = f"生成语料失败: {str(e)}"
             logging.error(error_msg)
@@ -170,7 +172,7 @@ class TranslationFacade:
             if not os.path.isfile(csv_path):
                 raise ExportError(f"CSV文件不存在: {csv_path}")
                 
-            logging.info(f"开始机器翻译: csv_path={csv_path}, output_csv={output_csv}")
+            logging.info("开始机器翻译: csv_path=%s, output_csv=%s", csv_path, output_csv)
               # 获取用户配置
             user_config = get_user_config()
             
@@ -182,10 +184,10 @@ class TranslationFacade:
             translate_csv(
                 csv_path,
                 output_csv or csv_path.replace(".csv", "_translated.csv"),
-                access_key_id,
-                access_key_secret,
-                CONFIG.source_language,
-                self.language
+                access_key_id=access_key_id,
+                access_key_secret=access_key_secret,
+                source_language=CONFIG.source_language,
+                target_language=self.language
             )
             
             print(f"{Fore.GREEN}✅ 机器翻译完成{Style.RESET_ALL}")
@@ -203,7 +205,7 @@ class TranslationFacade:
             if input(f"{Fore.YELLOW}保存到配置文件？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
                 user_config[key_name] = key
                 save_user_config_to_file(user_config)
-                logging.debug(f"已保存 {key_name} 到用户配置文件")
+                logging.debug("已保存 %s 到用户配置文件", key_name)
         return key
 
 def get_user_input_with_history(prompt: str, history_key: str, required: bool = True, validate_func: Optional[callable] = None) -> Optional[str]:
@@ -258,10 +260,10 @@ def validate_dir(path: str) -> bool:
     try:
         path = Path(path).resolve()
         is_valid = path.is_dir() and os.access(path, os.R_OK)
-        logging.debug(f"验证目录: {path}, 结果={is_valid}")
+        logging.debug("验证目录: %s, 结果=%s", path, is_valid)
         return is_valid
     except Exception as e:
-        logging.debug(f"验证目录失败: {path}, 错误={e}")
+        logging.debug("验证目录失败: %s, 错误=%s", path, e)
         return False
 
 def validate_file(path: str) -> bool:
@@ -272,7 +274,7 @@ def validate_file(path: str) -> bool:
             return os.access(path, os.R_OK)
         return os.access(path.parent, os.W_OK)
     except Exception as e:
-        logging.debug(f"验证文件失败: {path}, 错误={e}")
+        logging.debug("验证文件失败: %s, 错误=%s", path, e)
         return False
 
 def show_welcome():
@@ -383,33 +385,33 @@ def main():
                                 else:
                                     print(f"{Fore.GREEN}✅ 当前已是默认配置{Style.RESET_ALL}")
                         elif config_mode == "4":
-                             config_path = path_manager.get_path(path_type="config_export", prompt="请输入导出配置路径（例如：config_export.json）: ", validator_type="json", default=path_manager.get_remembered_path("config_export"))
-                             if config_path:
-                                 try:
-                                     CONFIG.export_config(config_path)
-                                     print(f"{Fore.GREEN}✅ 配置已导出到：{config_path}{Style.RESET_ALL}")
-                                 except ConfigError as e:
-                                     print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
+                            config_path = path_manager.get_path(path_type="config_export", prompt="请输入导出配置路径（例如：config_export.json）: ", validator_type="json", default=path_manager.get_remembered_path("config_export"))
+                            if config_path:
+                                try:
+                                    CONFIG.export_config(config_path)
+                                    print(f"{Fore.GREEN}✅ 配置已导出到：{config_path}{Style.RESET_ALL}")
+                                except ConfigError as e:
+                                    print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
                         elif config_mode == "5":
-                             config_path = path_manager.get_path(path_type="config_import", prompt="请输入导入配置路径（例如：config_import.json）: ", validator_type="json", default=path_manager.get_remembered_path("config_import"))
-                             if config_path:
-                                 try:
-                                     CONFIG.import_config(config_path)
-                                     print(f"{Fore.GREEN}✅ 配置已导入{Style.RESET_ALL}")
-                                     CONFIG.save_user_config()
-                                 except ConfigError as e:
-                                     print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
+                            config_path = path_manager.get_path(path_type="config_import", prompt="请输入导入配置路径（例如：config_import.json）: ", validator_type="json", default=path_manager.get_remembered_path("config_import"))
+                            if config_path:
+                                try:
+                                    CONFIG.import_config(config_path)
+                                    print(f"{Fore.GREEN}✅ 配置已导入{Style.RESET_ALL}")
+                                    CONFIG.save_user_config()
+                                except ConfigError as e:
+                                    print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
                         elif config_mode == "6":
-                             rules_path = path_manager.get_path(path_type="rules_config", prompt="请输入自定义规则配置文件路径（例如：rules.json）: ", validator_type="json", default=path_manager.get_remembered_path("rules_config"))
-                             if rules_path:
-                                 try:
-                                     CONFIG.load_custom_rules(rules_path)
-                                     print(f"{Fore.GREEN}✅ 规则配置已加载{Style.RESET_ALL}")
-                                     CONFIG.save_user_config()
-                                 except ConfigError as e:
-                                     print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
+                            rules_path = path_manager.get_path(path_type="rules_config", prompt="请输入自定义规则配置文件路径（例如：rules.json）: ", validator_type="json", default=path_manager.get_remembered_path("rules_config"))
+                            if rules_path:
+                                try:
+                                    CONFIG.load_custom_rules(rules_path)
+                                    print(f"{Fore.GREEN}✅ 规则配置已加载{Style.RESET_ALL}")
+                                    CONFIG.save_user_config()
+                                except ConfigError as e:
+                                    print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
                         else:
-                             print(f"{Fore.RED}无效选择{Style.RESET_ALL}")
+                            print(f"{Fore.RED}无效选择{Style.RESET_ALL}")
                     continue  # 配置管理完成后返回主菜单
                 mod_dir = path_manager.get_path(
                     path_type="mod_dir", 
@@ -495,7 +497,7 @@ def main():
                         continue  # 返回主菜单
                     except Exception as e:
                         print(f"\n{Fore.RED}❌ 提取模板失败: {str(e)}{Style.RESET_ALL}")
-                        logging.error(f"提取模板失败: {str(e)}", exc_info=True)
+                        logging.error("提取模板失败: %s", str(e), exc_info=True)
                     
                 elif mode == "2":
                     # 模式2：机器翻译
@@ -620,7 +622,7 @@ def main():
                             
             except TranslationError as e:
                 print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
-                logging.error(f"操作失败: {str(e)}")
+                logging.error("操作失败: %s", str(e))
             except Exception as e:
                 print(f"{Fore.RED}❌ 发生错误: {str(e)}{Style.RESET_ALL}")
                 logging.exception("未预期的错误")

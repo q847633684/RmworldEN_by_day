@@ -24,7 +24,7 @@ def extract_pairs_from_file(filepath: str) -> List[Tuple[str, str]]:
         with open(filepath, 'r', encoding='utf-8') as f:
             lines = f.readlines()
     except (FileNotFoundError, UnicodeDecodeError) as e:
-        logging.error(f"文件读取失败: {filepath}，错误: {e}")
+        logging.error("文件读取失败: %s，错误: %s", filepath, e)
         return pairs
     
     en = None
@@ -115,7 +115,7 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
                             if en_text and zh_text:
                                 corpus.append((en_text, zh_text))
                 except Exception as e:
-                    logging.error(f"处理文件失败: {src_file} 或 {zh_file}: {e}")
+                    logging.error("处理文件失败: %s 或 %s: %s", src_file, zh_file, e)
     
     if not corpus:
         print(f"{Fore.YELLOW}未提取到平行语料{Style.RESET_ALL}")

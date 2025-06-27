@@ -43,7 +43,7 @@ def update_all_xml(mod_dir: str, translations: Dict[str, str], language: str = C
                 updated_count += 1
                 print(f"{Fore.GREEN}更新文件: {xml_file}{Style.RESET_ALL}")
         except Exception as e:
-            logging.error(f"处理文件失败: {xml_file}: {e}")
+            logging.error("处理文件失败: %s: %s", xml_file, e)
             
     print(f"{Fore.GREEN}更新了 {updated_count} 个文件{Style.RESET_ALL}")
 
@@ -66,7 +66,7 @@ def import_translations(csv_path: str, mod_dir: str, language: str = CONFIG.defa
         update_all_xml(mod_dir, load_translations_from_csv(csv_path), language, merge)
         return True
     except Exception as e:
-        logging.error(f"导入翻译时发生错误: {e}", exc_info=True)
+        logging.error("导入翻译时发生错误: %s", e, exc_info=True)
         print(f"{Fore.RED}❌ 导入失败: {e}{Style.RESET_ALL}")
         return False
 

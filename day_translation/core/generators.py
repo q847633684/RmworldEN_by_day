@@ -34,7 +34,7 @@ class TemplateGenerator:
                 rel_path = en_xml_file.relative_to(en_path)
                 zh_xml_file = zh_keyed_dir / rel_path
                 self.processor.save_xml(ET.ElementTree(zh_root), str(zh_xml_file))
-                logging.info(f"生成 Keyed 模板: {zh_xml_file.name}{Style.RESET_ALL}")
+                logging.info("生成 Keyed 模板: %s%s", zh_xml_file.name, Style.RESET_ALL)
 
     def generate_keyed_template_from_data(self, keyed_translations: List[TranslationData], export_dir: str = None) -> None:
         logging.info("正在生成中文 Keyed 翻译模板...")
@@ -45,10 +45,10 @@ class TemplateGenerator:
             zh_xml_file = self._get_target_file_path(file_path, zh_keyed_dir)
             zh_root = self._create_keyed_xml_from_data(translations)
             self.processor.save_xml(ET.ElementTree(zh_root), str(zh_xml_file))
-            logging.info(f"生成 Keyed 模板: {zh_xml_file.name}{Style.RESET_ALL}")
+            logging.info("生成 Keyed 模板: %s%s", zh_xml_file.name, Style.RESET_ALL)
 
     def generate_definjected_template(self, defs_translations: List[TranslationData], export_dir: str = None) -> None:
-        logging.info(f"{Fore.GREEN}正在生成 DefInjected 翻译模板...{Style.RESET_ALL}")
+        logging.info("%s正在生成 DefInjected 翻译模板...%s", Fore.GREEN, Style.RESET_ALL)
         base_dir = self.get_template_base_dir(export_dir)
         zh_definjected_dir = base_dir / "Languages" / self.language / CONFIG.def_injected_dir
         def_groups = self._group_defs_by_type(defs_translations)
@@ -57,7 +57,7 @@ class TemplateGenerator:
             output_file = type_dir / f"{def_type}Defs.xml"
             root = self._create_definjected_xml_from_data(fields)
             self.processor.save_xml(ET.ElementTree(root), str(output_file))
-            logging.info(f"生成 DefInjected 模板: {def_type}Defs.xml{Style.RESET_ALL}{Style.RESET_ALL}")
+            logging.info("生成 DefInjected 模板: %sDefs.xml%s%s", def_type, Style.RESET_ALL, Style.RESET_ALL)
 
     def _create_keyed_xml_from_source(self, source_root: ET.Element) -> ET.Element:
         zh_root = ET.Element("LanguageData")

@@ -64,7 +64,7 @@ class PathManager:
                             last_used=paths[0] if paths else None
                         )
         except Exception as e:
-            logging.error(f"加载历史记录失败: {e}")
+            logging.error("加载历史记录失败: %s", e)
             self._history_cache = {}
             
     def _save_history(self) -> None:
@@ -78,7 +78,7 @@ class PathManager:
             with open(self._history_file, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
         except Exception as e:
-            logging.error(f"保存历史记录失败: {e}")
+            logging.error("保存历史记录失败: %s", e)
             
     def _sanitize_history(self, paths: List[str]) -> List[str]:
         """清理历史记录"""
@@ -200,7 +200,7 @@ class PathManager:
                     print(f"{Fore.RED}{result.error_message}{Style.RESET_ALL}")
                     
         except Exception as e:
-            logging.error(f"获取路径失败: {e}")
+            logging.error("获取路径失败: %s", e)
             print(f"{Fore.RED}获取路径时发生错误: {e}{Style.RESET_ALL}")
             return None
             
@@ -237,7 +237,7 @@ class PathManager:
             
             return True
         except Exception as e:
-            logging.error(f"记住路径失败: {e}")
+            logging.error("记住路径失败: %s", e)
             return False
             
     def get_remembered_path(self, path_type: str) -> Optional[str]:
@@ -257,7 +257,7 @@ class PathManager:
                 if result.is_valid and os.path.exists(result.normalized_path):
                     return result.normalized_path
         except Exception as e:
-            logging.error(f"获取记忆路径失败: {e}")
+            logging.error("获取记忆路径失败: %s", e)
         return None
         
     def _validate_directory(self, path: str) -> PathValidationResult:
@@ -498,7 +498,7 @@ class PathManager:
             os.makedirs(result.normalized_path, exist_ok=True)
             return True
         except Exception as e:
-            logging.error(f"创建目录失败: {e}")
+            logging.error("创建目录失败: %s", e)
             return False
             
     def get_relative_path(self, path: str, base: str) -> Optional[str]:
@@ -521,5 +521,5 @@ class PathManager:
                 
             return os.path.relpath(path_result.normalized_path, base_result.normalized_path)
         except Exception as e:
-            logging.error(f"获取相对路径失败: {e}")
+            logging.error("获取相对路径失败: %s", e)
             return None

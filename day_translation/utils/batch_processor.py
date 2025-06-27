@@ -41,7 +41,7 @@ class BatchProcessor:
         self.timeout = timeout
         self.processor = XMLProcessor()
         self._results: Dict[str, ModProcessResult] = {}
-        logging.debug(f"初始化 BatchProcessor: max_workers={max_workers}, timeout={timeout}")
+        logging.debug("初始化 BatchProcessor: max_workers=%s, timeout=%s", max_workers, timeout)
 
     def process_multiple_mods(self, mod_list: List[str], csv_path: str = None, language: str = CONFIG.default_language) -> Dict[str, ModProcessResult]:
         """
@@ -55,7 +55,7 @@ class BatchProcessor:
         Returns:
             Dict[str, ModProcessResult]: 处理结果字典，键为模组目录
         """
-        logging.info(f"批量处理 {len(mod_list)} 个模组")
+        logging.info("批量处理 %s 个模组", len(mod_list))
         print(f"{Fore.BLUE}开始处理 {len(mod_list)} 个模组...{Style.RESET_ALL}")
         
         # 验证输入
@@ -138,7 +138,7 @@ class BatchProcessor:
         result = ModProcessResult(mod_dir=mod_dir, success=True)
         
         try:
-            logging.debug(f"处理模组: {mod_dir}, csv_path={csv_path}")
+            logging.debug("处理模组: %s, csv_path=%s", mod_dir, csv_path)
             
             # 生成配置
             config_path = os.path.join(mod_dir, "translation_config.json")
@@ -146,7 +146,7 @@ class BatchProcessor:
                 generate_default_config(config_path)
                 result.config_generated = True
             except Exception as e:
-                logging.warning(f"生成配置失败: {mod_dir}, 错误: {e}")
+                logging.warning("生成配置失败: %s, 错误: %s", mod_dir, e)
                 result.error = f"配置生成失败: {e}"
             
             # 更新XML
@@ -157,7 +157,7 @@ class BatchProcessor:
                     result.files_processed = files_processed
                     result.files_updated = files_updated
                 except Exception as e:
-                    logging.error(f"更新XML失败: {mod_dir}, 错误: {e}")
+                    logging.error("更新XML失败: %s, 错误: %s", mod_dir, e)
                     result.error = f"XML更新失败: {e}"
                     result.success = False
             
@@ -165,7 +165,7 @@ class BatchProcessor:
             return result
             
         except Exception as e:
-            logging.error(f"模组处理失败: {mod_dir}, 错误: {e}")
+            logging.error("模组处理失败: %s, 错误: %s", mod_dir, e)
             result.success = False
             result.error = str(e)
             result.processing_time = time.time() - start_time
@@ -183,7 +183,7 @@ class BatchProcessor:
         Returns:
             Tuple[int, int]: (处理的文件数, 更新的文件数)
         """
-        logging.debug(f"更新模组 XML: mod_dir={mod_dir}, csv_path={csv_path}")
+        logging.debug("更新模组 XML: mod_dir=%s, csv_path=%s", mod_dir, csv_path)
         translations = load_translations_from_csv(csv_path)
         content_filter = ContentFilter(CONFIG)
         lang_path = get_language_folder_path(language, mod_dir)
@@ -194,20 +194,20 @@ class BatchProcessor:
         for dir_name in [CONFIG.def_injected_dir, CONFIG.keyed_dir]:
             dir_path = os.path.join(lang_path, dir_name)
             if not os.path.exists(dir_path):
-                logging.debug(f"目录不存在，跳过: {dir_path}")
+                logging.debug("目录不存在，跳过: %s", dir_path)
                 continue
                 
             for xml_file in Path(dir_path).rglob("*.xml"):
                 files_processed += 1
                 try:
-                    logging.debug(f"处理 XML 文件: {xml_file}")
+                    logging.debug("处理 XML 文件: %s", xml_file)
                     tree = self.processor.parse_xml(str(xml_file))
                     if tree and self.processor.update_translations(tree, translations, generate_element_key):
                         self.processor.save_xml(tree, str(xml_file))
                         files_updated += 1
-                        logging.debug(f"更新 XML 文件: {xml_file}")
+                        logging.debug("更新 XML 文件: %s", xml_file)
                 except Exception as e:
-                    logging.error(f"处理文件失败: {xml_file}, 错误: {e}")
+                    logging.error("处理文件失败: %s, 错误: %s", xml_file, e)
                     continue
                     
         return files_processed, files_updated

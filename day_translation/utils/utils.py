@@ -70,7 +70,7 @@ class XMLProcessor:
                     self._schema_cache.pop(next(iter(self._schema_cache)))
                 self._schema_cache[schema_path] = schema
             except Exception as e:
-                logging.error(f"加载 Schema 失败: {schema_path}: {e}")
+                logging.error("加载 Schema 失败: %s: %s", schema_path, e)
                 if self.config.error_on_invalid:
                     raise
                 return None
@@ -88,7 +88,7 @@ class XMLProcessor:
         try:
             return schema.validate(tree)
         except Exception as e:
-            logging.error(f"Schema 验证失败: {e}")
+            logging.error("Schema 验证失败: %s", e)
             if self.config.error_on_invalid:
                 raise
             return False
@@ -106,7 +106,7 @@ class XMLProcessor:
         """
         file_path = str(Path(file_path).resolve())
         if not os.path.exists(file_path):
-            logging.error(f"文件不存在: {file_path}")
+            logging.error("文件不存在: %s", file_path)
             if self.config.error_on_invalid:
                 raise FileNotFoundError(f"文件不存在: {file_path}")
             return None
@@ -136,12 +136,12 @@ class XMLProcessor:
                     logging.warning("ElementTree 不支持 Schema 验证")
                 return tree
         except (etree.XMLSyntaxError, ET.ParseError) as e:
-            logging.error(f"XML 解析失败: {file_path}: {e}")
+            logging.error("XML 解析失败: %s: %s", file_path, e)
             if self.config.error_on_invalid:
                 raise
             return None
         except Exception as e:
-            logging.error(f"处理文件失败: {file_path}: {e}")
+            logging.error("处理文件失败: %s: %s", file_path, e)
             if self.config.error_on_invalid:
                 raise
             return None
@@ -200,10 +200,10 @@ class XMLProcessor:
                     with open(file_path, "wb") as f:
                         f.write(f'<?xml version="1.0" encoding="{encoding}"?>\n'.encode(encoding))
                         new_tree.write(f, encoding=encoding)
-            logging.info(f"保存 XML 文件: {file_path}")
+            logging.info("保存 XML 文件: %s", file_path)
             return True
         except Exception as e:
-            logging.error(f"保存 XML 失败: {file_path}: {e}")
+            logging.error("保存 XML 失败: %s: %s", file_path, e)
             if self.config.error_on_invalid:
                 raise
             return False
@@ -363,7 +363,7 @@ class XMLProcessor:
             root = tree.getroot() if self.use_lxml else tree
             return root.xpath(xpath, namespaces=self._namespace_map)
         except Exception as e:
-            logging.error(f"XPath 查询失败: {e}")
+            logging.error("XPath 查询失败: %s", e)
             if self.config.error_on_invalid:
                 raise
             return []
@@ -466,7 +466,7 @@ class XMLProcessor:
         try:
             return elem.getroottree().getpath(elem)
         except Exception as e:
-            logging.error(f"获取元素路径失败: {e}")
+            logging.error("获取元素路径失败: %s", e)
             if self.config.error_on_invalid:
                 raise
             return ""
@@ -621,9 +621,9 @@ def save_json(data: Dict, file_path: str) -> None:
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
-        logging.info(f"保存 JSON 文件: {file_path}")
+        logging.info("保存 JSON 文件: %s", file_path)
     except Exception as e:
-        logging.error(f"保存 JSON 失败: {file_path}: {e}")
+        logging.error("保存 JSON 失败: %s: %s", file_path, e)
 
 def get_language_folder_path(language: str, mod_dir: str) -> str:
     """获取语言文件夹路径"""
@@ -642,7 +642,7 @@ def update_history_list(key: str, value: str) -> None:
         with open(history_file, "w", encoding="utf-8") as f:
             json.dump({key: history}, f, indent=2)
     except Exception as e:
-        logging.error(f"更新历史记录失败: {e}")
+        logging.error("更新历史记录失败: %s", e)
 
 def get_history_list(key: str) -> List[str]:
     """获取历史记录"""
@@ -654,7 +654,7 @@ def get_history_list(key: str) -> List[str]:
                 data = json.load(f)
                 return data.get(key, [])
     except Exception as e:
-        logging.error(f"读取历史记录失败: {e}")
+        logging.error("读取历史记录失败: %s", e)
     return []
 
 def handle_exceptions(default_return=None):
@@ -665,7 +665,7 @@ def handle_exceptions(default_return=None):
             try:
                 return func(*args, **kwargs)
             except Exception as e:
-                logging.error(f"错误在 {func.__name__}: {e}")
+                logging.error("错误在 %s: %s", func.__name__, e)
                 return default_return
         return wrapper
     return decorator
@@ -700,7 +700,7 @@ def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
                 if key and translated:
                     translations[key] = translated
     except Exception as e:
-        logging.error(f"CSV 解析失败: {csv_path}: {e}")
+        logging.error("CSV 解析失败: %s: %s", csv_path, e)
     return translations
 
 def save_xml_to_file(tree: Any, file_path: str, use_lxml: bool = LXML_AVAILABLE) -> bool:

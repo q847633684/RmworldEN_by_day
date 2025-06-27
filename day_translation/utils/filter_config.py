@@ -177,9 +177,9 @@ class UnifiedFilterRules:
                     if isinstance(field, str):
                         self.field_types[field] = "translatable"
             else:
-                logging.warning(f"default_fields 不可迭代: {type(default_fields)}")
+                logging.warning("default_fields 不可迭代: %s", type(default_fields))
         except Exception as e:
-            logging.error(f"初始化默认字段类型时出错: {e}")
+            logging.error("初始化默认字段类型时出错: %s", e)
             
         try:
             ignore_fields = self.ignore_fields  
@@ -188,9 +188,9 @@ class UnifiedFilterRules:
                     if isinstance(field, str):
                         self.field_types[field] = "ignored"
             else:
-                logging.warning(f"ignore_fields 不可迭代: {type(ignore_fields)}")
+                logging.warning("ignore_fields 不可迭代: %s", type(ignore_fields))
         except Exception as e:
-            logging.error(f"初始化忽略字段类型时出错: {e}")
+            logging.error("初始化忽略字段类型时出错: %s", e)
             
     def _initialize_field_groups(self) -> None:
         """初始化字段分组"""
@@ -211,7 +211,7 @@ class UnifiedFilterRules:
                     if isinstance(field, str):
                         self.field_priorities[field] = self.PRIORITY_LEVELS["normal"]
         except Exception as e:
-            logging.error(f"初始化默认字段优先级时出错: {e}")
+            logging.error("初始化默认字段优先级时出错: %s", e)
             
         try:
             ignore_fields = self.ignore_fields
@@ -220,7 +220,7 @@ class UnifiedFilterRules:
                     if isinstance(field, str):
                         self.field_priorities[field] = self.PRIORITY_LEVELS["lowest"]
         except Exception as e:
-            logging.error(f"初始化忽略字段优先级时出错: {e}")
+            logging.error("初始化忽略字段优先级时出错: %s", e)
             
     def _validate_rules(self) -> None:
         """验证规则的有效性"""
@@ -468,9 +468,9 @@ class UnifiedFilterRules:
                     yaml.safe_dump(data, f, allow_unicode=True)
             else:
                 raise ValueError(f"不支持的文件格式: {format}")
-            logging.info(f"规则已保存到: {file_path}")
+            logging.info("规则已保存到: %s", file_path)
         except Exception as e:
-            logging.error(f"保存规则失败: {e}")
+            logging.error("保存规则失败: %s", e)
             raise
 
     @classmethod
@@ -523,7 +523,7 @@ class UnifiedFilterRules:
             
             return rules
         except Exception as e:
-            logging.error(f"加载规则失败: {e}")
+            logging.error("加载规则失败: %s", e)
             return cls()
             
     def merge(self, other: 'UnifiedFilterRules', priority: str = 'normal') -> 'UnifiedFilterRules':
@@ -870,7 +870,7 @@ class UnifiedFilterRules:
                 
             self._validate_rules()
         except Exception as e:
-            logging.error(f"导入规则失败: {e}")
+            logging.error("导入规则失败: %s", e)
             raise
 
     @classmethod

@@ -98,7 +98,7 @@ class TemplateManager:
             print(f"{Fore.GREEN}✅ CSV文件已生成: {csv_path}{Style.RESET_ALL}")
             
         # 记录完成状态并向用户显示结果统计
-        logging.info(f"模板生成完成，总计 {len(translations)} 条翻译")
+        logging.info("模板生成完成，总计 %s 条翻译", len(translations))
         print(f"{Fore.GREEN}✅ 提取完成：{len(translations)} 条{Style.RESET_ALL}")
         
         # 返回提取到的翻译数据，供调用方进一步处理（如机器翻译、导入等）
@@ -116,7 +116,7 @@ class TemplateManager:
         Returns:
             bool: 导入是否成功
         """
-        logging.info(f"开始导入翻译到模板: {csv_path}")
+        logging.info("开始导入翻译到模板: %s", csv_path)
         
         try:
             # 步骤1：确保翻译模板存在
@@ -142,7 +142,7 @@ class TemplateManager:
             success = self._verify_import_results()
             
             if success:
-                logging.info(f"翻译导入到模板完成，更新了 {updated_count} 个文件")
+                logging.info("翻译导入到模板完成，更新了 %s 个文件", updated_count)
                 print(f"{Fore.GREEN}✅ 翻译已成功导入到模板{Style.RESET_ALL}")
             else:
                 logging.warning("翻译导入可能存在问题")
@@ -151,7 +151,7 @@ class TemplateManager:
             return success
             
         except Exception as e:
-            logging.error(f"导入翻译时发生错误: {e}", exc_info=True)
+            logging.error("导入翻译时发生错误: %s", e, exc_info=True)
             print(f"{Fore.RED}❌ 导入失败: {e}{Style.RESET_ALL}")
             return False
             
@@ -187,7 +187,7 @@ class TemplateManager:
         # 提取Keyed翻译
         keyed_translations = extract_keyed_translations(str(self.mod_dir), CONFIG.source_language)
         translations.extend(keyed_translations)
-        logging.debug(f"提取到 {len(keyed_translations)} 条 Keyed 翻译")
+        logging.debug("提取到 %s 条 Keyed 翻译", len(keyed_translations))
         
         # 根据模式提取DefInjected翻译
         # 
@@ -212,9 +212,9 @@ class TemplateManager:
                 # 使用专门的 DefInjected 提取函数
                 definjected_translations = extract_definjected_translations(str(self.mod_dir), CONFIG.source_language)
                 translations.extend(definjected_translations)
-                logging.debug(f"从英文DefInjected提取到 {len(definjected_translations)} 条翻译")
+                logging.debug("从英文DefInjected提取到 %s 条翻译", len(definjected_translations))
             else:
-                logging.warning(f"英文DefInjected目录不存在: {src_definjected_dir}，回退到defs模式")
+                logging.warning("英文DefInjected目录不存在: %s，回退到defs模式", src_definjected_dir)
                 definjected_mode = "defs"
         
         if definjected_mode == "defs":
@@ -229,7 +229,7 @@ class TemplateManager:
             # 适用：首次翻译、英文DefInjected不完整、模组结构有更新
             defs_translations = scan_defs_sync(str(self.mod_dir), language=CONFIG.source_language)
             translations.extend(defs_translations)
-            logging.debug(f"提取到 {len(defs_translations)} 条 DefInjected 翻译")
+            logging.debug("提取到 %s 条 DefInjected 翻译", len(defs_translations))
         
         return translations
         
@@ -244,7 +244,7 @@ class TemplateManager:
             if en_keyed_dir:
                 self.generator.generate_keyed_template(en_keyed_dir)
             self.generator.generate_keyed_template_from_data(keyed_translations)
-            logging.info(f"生成 {len(keyed_translations)} 条 Keyed 模板")        # 生成DefInjected模板
+            logging.info("生成 %s 条 Keyed 模板", len(keyed_translations))        # 生成DefInjected模板
         if def_translations:
             try:
                 self._handle_definjected_structure_choice(
@@ -282,7 +282,7 @@ class TemplateManager:
                 if en_keyed_dir:
                     self.generator.generate_keyed_template(en_keyed_dir)
                 self.generator.generate_keyed_template_from_data(keyed_translations)
-                logging.info(f"生成 {len(keyed_translations)} 条 Keyed 模板到 {keyed_dir}")
+                logging.info("生成 %s 条 Keyed 模板到 %s", len(keyed_translations), keyed_dir)
                 print(f"{Fore.GREEN}✅ Keyed模板已生成: {keyed_dir}{Style.RESET_ALL}")            # 生成DefInjected模板
             if def_translations:
                 try:
@@ -308,12 +308,12 @@ class TemplateManager:
             writer.writerow(["key", "text", "tag", "file"])
             writer.writerows(translations)
             
-        logging.info(f"翻译数据已保存到CSV: {csv_path}")
+        logging.info("翻译数据已保存到CSV: %s", csv_path)
         
     def _validate_csv_file(self, csv_path: str) -> bool:
         """验证CSV文件"""
         if not Path(csv_path).is_file():
-            logging.error(f"CSV文件不存在: {csv_path}")
+            logging.error("CSV文件不存在: %s", csv_path)
             return False
             
         try:
@@ -325,7 +325,7 @@ class TemplateManager:
                     return False
                 return True
         except Exception as e:
-            logging.error(f"验证CSV文件时发生错误: {e}")
+            logging.error("验证CSV文件时发生错误: %s", e)
             return False
             
     def _load_translations_from_csv(self, csv_path: str) -> Dict[str, str]:
@@ -339,7 +339,7 @@ class TemplateManager:
                         translations[row["key"]] = row["text"]
             return translations
         except Exception as e:
-            logging.error(f"加载CSV文件时发生错误: {e}")
+            logging.error("加载CSV文件时发生错误: %s", e)
             print(f"{Fore.RED}❌ 加载CSV文件失败: {e}{Style.RESET_ALL}")
             return {}
             
@@ -410,7 +410,7 @@ class TemplateManager:
                 # 用户选择返回，抛出异常让上层处理
                 raise
             except Exception as e:
-                logging.warning(f"智能选择失败，回退到 defs 模式: {e}")
+                logging.warning("智能选择失败，回退到 defs 模式: %s", e)
                 return "defs"
         else:
             # 没有输出目录时，默认使用 defs 模式
@@ -472,7 +472,7 @@ class TemplateManager:
                     selected_translations=def_translations,
                     language=self.language
                 )
-                logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按Defs结构）")
+                logging.info("生成 %s 条 DefInjected 模板（按Defs结构）", len(def_translations))
                 print(f"{Fore.GREEN}✅ DefInjected模板已生成（按Defs结构）{location_suffix}{Style.RESET_ALL}")
             elif structure_choice == "3":
                 # 按DefType自动分组
@@ -486,7 +486,7 @@ class TemplateManager:
                         self.generator.generate_definjected_template(def_translations)
                     finally:
                         self.generator.mod_dir = original_mod_dir
-                logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按DefType分组）")
+                logging.info("生成 %s 条 DefInjected 模板（按DefType分组）", len(def_translations))
                 print(f"{Fore.GREEN}✅ DefInjected模板已生成（按DefType分组）{location_suffix}{Style.RESET_ALL}")
             else:
                 # 默认：保持原英文DefInjected结构
@@ -496,7 +496,7 @@ class TemplateManager:
                     selected_translations=def_translations,
                     language=self.language
                 )
-                logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（保持原结构）")
+                logging.info("生成 %s 条 DefInjected 模板（保持原结构）", len(def_translations))
                 print(f"{Fore.GREEN}✅ DefInjected模板已生成（保持原结构）{location_suffix}{Style.RESET_ALL}")
         else:
             # 没有英文 DefInjected 的情况
@@ -512,7 +512,7 @@ class TemplateManager:
                         self.generator.generate_definjected_template(def_translations)
                     finally:
                         self.generator.mod_dir = original_mod_dir
-                logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按DefType分组）")
+                logging.info("生成 %s 条 DefInjected 模板（按DefType分组）", len(def_translations))
                 print(f"{Fore.GREEN}✅ DefInjected模板已生成（按DefType分组）{location_suffix}{Style.RESET_ALL}")
             else:
                 # 默认：按原Defs目录结构
@@ -522,5 +522,5 @@ class TemplateManager:
                     selected_translations=def_translations,
                     language=self.language
                 )
-                logging.info(f"生成 {len(def_translations)} 条 DefInjected 模板（按Defs结构）")
+                logging.info("生成 %s 条 DefInjected 模板（按Defs结构）", len(def_translations))
                 print(f"{Fore.GREEN}✅ DefInjected模板已生成（按Defs结构）{location_suffix}{Style.RESET_ALL}")

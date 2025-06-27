@@ -17,29 +17,29 @@ def extract_keyed_translations(mod_dir: str, language: str = CONFIG.source_langu
     lang_path = get_language_folder_path(language, mod_dir)
     keyed_dir = Path(lang_path) / CONFIG.keyed_dir
     
-    logging.debug(f"语言路径: {lang_path}")
-    logging.debug(f"Keyed目录: {keyed_dir}")
-    logging.debug(f"目录是否存在: {keyed_dir.exists()}")
+    logging.debug("语言路径: %s", lang_path)
+    logging.debug("Keyed目录: %s", keyed_dir)
+    logging.debug("目录是否存在: %s", keyed_dir.exists())
     
     if not keyed_dir.exists():
-        logging.warning(f"Keyed 目录不存在: {keyed_dir}")
+        logging.warning("Keyed 目录不存在: %s", keyed_dir)
         return []
         
     # 查找所有XML文件
     xml_files = list(keyed_dir.rglob("*.xml"))
-    logging.debug(f"找到 {len(xml_files)} 个XML文件")
+    logging.debug("找到 %s 个XML文件", len(xml_files))
     
     for xml_file in xml_files:
-        logging.debug(f"处理文件: {xml_file}")
+        logging.debug("处理文件: %s", xml_file)
         tree = processor.parse_xml(str(xml_file))
         if tree:
             file_translations = []
             for key, text, tag in processor.extract_translations(tree, context="Keyed", filter_func=content_filter.filter_content):
                 file_translations.append((key, text, tag, str(xml_file.relative_to(keyed_dir))))
-            logging.debug(f"从 {xml_file.name} 提取到 {len(file_translations)} 条翻译")
+            logging.debug("从 %s 提取到 %s 条翻译", xml_file.name, len(file_translations))
             translations.extend(file_translations)
         else:
-            logging.error(f"无法解析XML文件: {xml_file}")
+            logging.error("无法解析XML文件: %s", xml_file)
     
     print(f"{Fore.GREEN}提取到 {len(translations)} 条 Keyed 翻译{Style.RESET_ALL}")
     return translations
@@ -53,15 +53,15 @@ def scan_defs_sync(mod_dir: str, def_types: Set[str] = None, language: str = CON
     defs_dir = Path(mod_dir) / "Defs"
     
     if not defs_dir.exists():
-        logging.warning(f"Defs 目录不存在: {defs_dir}")
+        logging.warning("Defs 目录不存在: %s", defs_dir)
         return []
     
     # 添加调试信息
     xml_files = list(defs_dir.rglob("*.xml"))
-    logging.debug(f"找到 {len(xml_files)} 个Defs XML文件")
+    logging.debug("找到 %s 个Defs XML文件", len(xml_files))
     
     for xml_file in xml_files:
-        logging.debug(f"处理文件: {xml_file}")
+        logging.debug("处理文件: %s", xml_file)
         tree = processor.parse_xml(str(xml_file))
         if tree:
             root = tree.getroot() if hasattr(tree, 'getroot') else tree
@@ -73,7 +73,7 @@ def scan_defs_sync(mod_dir: str, def_types: Set[str] = None, language: str = CON
                 if defname_elem is not None and defname_elem.text:
                     def_nodes.append(elem)
             
-            logging.debug(f"在 {xml_file.name} 中找到 {len(def_nodes)} 个定义节点")
+            logging.debug("在 %s 中找到 %s 个定义节点", xml_file.name, len(def_nodes))
             
             for def_node in def_nodes:
                 def_type = def_node.tag
@@ -95,9 +95,9 @@ def scan_defs_sync(mod_dir: str, def_types: Set[str] = None, language: str = CON
                     full_path = f"{def_type}/{def_name}.{clean_path}"
                     translations.append((full_path, text, tag, str(xml_file.relative_to(defs_dir))))
                 
-                logging.debug(f"从 {def_name} 提取到 {len(field_translations)} 条翻译")
+                logging.debug("从 %s 提取到 %s 条翻译", def_name, len(field_translations))
         else:
-            logging.error(f"无法解析XML文件: {xml_file}")
+            logging.error("无法解析XML文件: %s", xml_file)
     
     print(f"{Fore.GREEN}提取到 {len(translations)} 条 DefInjected 翻译{Style.RESET_ALL}")
     return translations
@@ -138,7 +138,7 @@ def _extract_translatable_fields_recursive(node, def_type: str, def_name: str, c
                     if isinstance(f, str):
                         default_fields_lower.add(f.lower())
         except Exception as e:
-            logging.warning(f"获取 default_fields 失败: {e}")
+            logging.warning("获取 default_fields 失败: %s", e)
             default_fields_lower = set()
         
         if node_tag == 'li':
@@ -185,20 +185,20 @@ def extract_definjected_translations(mod_dir: str, language: str = CONFIG.source
     lang_path = get_language_folder_path(language, mod_dir)
     definjected_dir = Path(lang_path) / CONFIG.def_injected_dir
     
-    logging.debug(f"语言路径: {lang_path}")
-    logging.debug(f"DefInjected目录: {definjected_dir}")
-    logging.debug(f"目录是否存在: {definjected_dir.exists()}")
+    logging.debug("语言路径: %s", lang_path)
+    logging.debug("DefInjected目录: %s", definjected_dir)
+    logging.debug("目录是否存在: %s", definjected_dir.exists())
     
     if not definjected_dir.exists():
-        logging.warning(f"DefInjected 目录不存在: {definjected_dir}")
+        logging.warning("DefInjected 目录不存在: %s", definjected_dir)
         return []
         
     # 查找所有XML文件
     xml_files = list(definjected_dir.rglob("*.xml"))
-    logging.debug(f"找到 {len(xml_files)} 个DefInjected XML文件")
+    logging.debug("找到 %s 个DefInjected XML文件", len(xml_files))
     
     for xml_file in xml_files:
-        logging.debug(f"处理DefInjected文件: {xml_file}")
+        logging.debug("处理DefInjected文件: %s", xml_file)
         tree = processor.parse_xml(str(xml_file))
         if tree:
             file_translations = []
@@ -211,10 +211,10 @@ def extract_definjected_translations(mod_dir: str, language: str = CONFIG.source
                 # 格式："[待翻译] 英文原文" - 这样用户能清楚看到原文并知道需要翻译
                 template_text = f"[待翻译] {text}"
                 file_translations.append((key, template_text, tag, rel_path))
-            logging.debug(f"从 {xml_file.name} 提取到 {len(file_translations)} 条DefInjected模板")
+            logging.debug("从 %s 提取到 %s 条DefInjected模板", xml_file.name, len(file_translations))
             translations.extend(file_translations)
         else:
-            logging.error(f"无法解析DefInjected XML文件: {xml_file}")
+            logging.error("无法解析DefInjected XML文件: %s", xml_file)
     
     print(f"{Fore.GREEN}以英文DefInjected结构为基础生成 {len(translations)} 条模板{Style.RESET_ALL}")
     return translations
