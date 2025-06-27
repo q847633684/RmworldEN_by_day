@@ -1,0 +1,19 @@
+[tool.pylint.master]
+ignore = ["Day_EN"]
+
+[tool.pylint.messages_control]
+disable = [
+    "C0103",  # invalid-name
+    "C0301",  # line-too-long
+    "R0902",  # too-many-instance-attributes
+    "R0912",  # too-many-branches
+    "R0914",  # too-many-locals
+    "R0915",  # too-many-statements
+    "C0415",  # import-outside-toplevel
+    "W0603",  # global-statement
+    "E0402",  # relative-beyond-top-level
+    "E0401",  # import-error
+]
+
+[tool.pylint.format]
+max-line-length = 120

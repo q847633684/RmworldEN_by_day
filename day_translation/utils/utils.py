@@ -69,7 +69,7 @@ class XMLProcessor:
                     # 移除最旧的缓存
                     self._schema_cache.pop(next(iter(self._schema_cache)))
                 self._schema_cache[schema_path] = schema
-            except Exception as e:
+            except (OSError, IOError, etree.XMLSyntaxError, etree.DocumentInvalid) as e:
                 logging.error("加载 Schema 失败: %s: %s", schema_path, e)
                 if self.config.error_on_invalid:
                     raise
@@ -87,7 +87,7 @@ class XMLProcessor:
 
         try:
             return schema.validate(tree)
-        except Exception as e:
+        except (AttributeError, TypeError, etree.XMLSyntaxError) as e:
             logging.error("Schema 验证失败: %s", e)
             if self.config.error_on_invalid:
                 raise
@@ -140,7 +140,7 @@ class XMLProcessor:
             if self.config.error_on_invalid:
                 raise
             return None
-        except Exception as e:
+        except (OSError, IOError, PermissionError, ValueError) as e:
             logging.error("处理文件失败: %s: %s", file_path, e)
             if self.config.error_on_invalid:
                 raise
@@ -202,7 +202,7 @@ class XMLProcessor:
                         new_tree.write(f, encoding=encoding)
             logging.info("保存 XML 文件: %s", file_path)
             return True
-        except Exception as e:
+        except (OSError, IOError, PermissionError, UnicodeError, AttributeError) as e:
             logging.error("保存 XML 失败: %s: %s", file_path, e)
             if self.config.error_on_invalid:
                 raise
@@ -362,7 +362,7 @@ class XMLProcessor:
         try:
             root = tree.getroot() if self.use_lxml else tree
             return root.xpath(xpath, namespaces=self._namespace_map)
-        except Exception as e:
+        except (AttributeError, TypeError, etree.XPathEvalError) as e:
             logging.error("XPath 查询失败: %s", e)
             if self.config.error_on_invalid:
                 raise
@@ -465,7 +465,7 @@ class XMLProcessor:
 
         try:
             return elem.getroottree().getpath(elem)
-        except Exception as e:
+        except (AttributeError, TypeError, ValueError) as e:
             logging.error("获取元素路径失败: %s", e)
             if self.config.error_on_invalid:
                 raise
@@ -622,7 +622,7 @@ def save_json(data: Dict, file_path: str) -> None:
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
         logging.info("保存 JSON 文件: %s", file_path)
-    except Exception as e:
+    except (OSError, IOError, PermissionError, TypeError, ValueError) as e:
         logging.error("保存 JSON 失败: %s: %s", file_path, e)
 
 def get_language_folder_path(language: str, mod_dir: str) -> str:
@@ -641,7 +641,7 @@ def update_history_list(key: str, value: str) -> None:
         history = history[:10]
         with open(history_file, "w", encoding="utf-8") as f:
             json.dump({key: history}, f, indent=2)
-    except Exception as e:
+    except (OSError, IOError, PermissionError, TypeError, ValueError) as e:
         logging.error("更新历史记录失败: %s", e)
 
 def get_history_list(key: str) -> List[str]:
@@ -653,7 +653,7 @@ def get_history_list(key: str) -> List[str]:
             with open(history_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 return data.get(key, [])
-    except Exception as e:
+    except (OSError, IOError, PermissionError, ValueError, TypeError) as e:
         logging.error("读取历史记录失败: %s", e)
     return []
 
@@ -664,7 +664,7 @@ def handle_exceptions(default_return=None):
         def wrapper(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 logging.error("错误在 %s: %s", func.__name__, e)
                 return default_return
         return wrapper
@@ -699,7 +699,7 @@ def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
                 translated = row.get("translated", row.get("text", "")).strip()
                 if key and translated:
                     translations[key] = translated
-    except Exception as e:
+    except (OSError, IOError, PermissionError, UnicodeError, csv.Error) as e:
         logging.error("CSV 解析失败: %s: %s", csv_path, e)
     return translations
 

@@ -32,7 +32,7 @@ import logging
 import os
 import sys
 from pathlib import Path
-from typing import List, Tuple, Optional, Dict, Any
+from typing import List, Tuple, Optional, Dict, Any, Callable
 from colorama import init, Fore, Style
 
 # 添加当前模块的父目录到sys.path，以支持day_translation模块导入
@@ -105,7 +105,7 @@ class TranslationFacade:
         if not os.path.exists(os.path.join(self.mod_dir, "Languages")):
             logging.warning("模组目录中未找到 Languages 文件夹: %s", self.mod_dir)
 
-    def extract_templates_and_generate_csv(self, output_dir: str, en_keyed_dir: str = None, auto_choose_definjected: bool = False) -> List[Tuple[str, str, str, str]]:
+    def extract_templates_and_generate_csv(self, output_dir: str, en_keyed_dir: Optional[str] = None, auto_choose_definjected: bool = False) -> List[Tuple[str, str, str, str]]:
         """
         提取翻译模板并生成 CSV 文件
         """
@@ -180,7 +180,7 @@ class TranslationFacade:
             logging.error(error_msg)
             raise ExportError(error_msg) from e
 
-    def machine_translate(self, csv_path: str, output_csv: str = None) -> None:
+    def machine_translate(self, csv_path: str, output_csv: Optional[str] = None) -> None:
         """
         使用阿里云翻译 CSV 文件
 
@@ -231,7 +231,7 @@ class TranslationFacade:
                 logging.debug("已保存 %s 到用户配置文件", key_name)
         return key
 
-def get_user_input_with_history(prompt: str, history_key: str, required: bool = True, validate_func: Optional[callable] = None) -> Optional[str]:
+def get_user_input_with_history(prompt: str, history_key: str, required: bool = True, validate_func: Optional[Callable[[str], bool]] = None) -> Optional[str]:
     """
     获取用户输入，支持历史记录和验证
 
@@ -281,8 +281,8 @@ def get_user_input_with_history(prompt: str, history_key: str, required: bool = 
 def validate_dir(path: str) -> bool:
     """验证目录是否存在且可访问"""
     try:
-        path = Path(path).resolve()
-        is_valid = path.is_dir() and os.access(path, os.R_OK)
+        path_obj = Path(path).resolve()
+        is_valid = path_obj.is_dir() and os.access(path_obj, os.R_OK)
         logging.debug("验证目录: %s, 结果=%s", path, is_valid)
         return is_valid
     except (OSError, ValueError, TypeError) as e:
@@ -292,10 +292,10 @@ def validate_dir(path: str) -> bool:
 def validate_file(path: str) -> bool:
     """验证文件是否存在或可写入"""
     try:
-        path = Path(path).resolve()
-        if path.exists():
-            return os.access(path, os.R_OK)
-        return os.access(path.parent, os.W_OK)
+        path_obj = Path(path).resolve()
+        if path_obj.exists():
+            return os.access(path_obj, os.R_OK)
+        return os.access(path_obj.parent, os.W_OK)
     except (OSError, ValueError, TypeError) as e:
         logging.debug("验证文件失败: %s, 错误=%s", path, e)
         return False
