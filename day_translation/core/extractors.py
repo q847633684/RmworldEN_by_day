@@ -16,7 +16,7 @@ def extract_keyed_translations(mod_dir: str, language: str = CONFIG.source_langu
     translations: List[Tuple[str, str, str, str]] = []
     lang_path = get_language_folder_path(language, mod_dir)
     keyed_dir = Path(lang_path) / CONFIG.keyed_dir
-
+    # 添加调试信息  
     logging.debug("语言路径: %s", lang_path)
     logging.debug("Keyed目录: %s", keyed_dir)
     logging.debug("目录是否存在: %s", keyed_dir.exists())

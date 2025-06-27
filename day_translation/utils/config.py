@@ -50,11 +50,12 @@ class TranslationConfig:
         root_logger = logging.getLogger()
         if root_logger.handlers:
             return  # 已经初始化，直接返回
-
+        # 确保日志目录存在
         try:
             log_dir = os.path.dirname(self.log_file)
             if log_dir:
-                os.makedirs(log_dir, exist_ok=True)            # 创建文件处理器和控制台处理器
+                os.makedirs(log_dir, exist_ok=True)
+            # 创建文件处理器和控制台处理器
             file_handler = logging.FileHandler(self.log_file, encoding="utf-8")
             file_handler.setLevel(logging.DEBUG if self.debug_mode else logging.INFO)
             file_handler.setFormatter(logging.Formatter(self.log_format))

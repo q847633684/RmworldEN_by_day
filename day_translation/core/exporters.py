@@ -8,12 +8,10 @@ import re
 import shutil
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import List, Tuple, Dict
+from typing import List, Tuple
 import csv
-from multiprocessing import Pool
-from tqdm import tqdm
 from ..utils.config import get_config
-from ..utils.utils import XMLProcessor, save_xml_to_file, sanitize_xcomment, get_language_folder_path, sanitize_xml
+from ..utils.utils import XMLProcessor, sanitize_xcomment, get_language_folder_path, sanitize_xml
 from colorama import Fore, Style
 
 CONFIG = get_config()
@@ -101,12 +99,12 @@ def handle_extract_translate(
         print(f"\n{Fore.CYAN}检测到英文 DefInjected 目录: {src_def_injected_path}{Style.RESET_ALL}")
         print(f"\n{Fore.YELLOW}请选择 DefInjected 处理方式：{Style.RESET_ALL}")
         print(f"1. {Fore.GREEN}以英文 DefInjected 为基础{Style.RESET_ALL}")
-        print(f"   💡 基于现有翻译结构，保持文件组织一致性")
-        print(f"   💡 生成带'[待翻译]'标记的模板，包含英文原文作参考")
-        print(f"   💡 推荐用于已有翻译基础或希望保持结构稳定的情况")
+        print("   💡 基于现有翻译结构，保持文件组织一致性")
+        print("   💡 生成带'[待翻译]'标记的模板，包含英文原文作参考")
+        print("   💡 推荐用于已有翻译基础或希望保持结构稳定的情况")
         print(f"2. {Fore.GREEN}直接从 Defs 目录重新提取可翻译字段{Style.RESET_ALL}")
-        print(f"   💡 全量扫描模组定义文件，确保不遗漏任何可翻译内容")
-        print(f"   💡 推荐用于首次翻译、结构有变动或需要完整提取的情况")
+        print("   💡 全量扫描模组定义文件，确保不遗漏任何可翻译内容")
+        print("   💡 推荐用于首次翻译、结构有变动或需要完整提取的情况")
         print(f"b. {Fore.YELLOW}返回上级菜单{Style.RESET_ALL}")
 
         while True:

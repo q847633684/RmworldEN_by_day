@@ -1,9 +1,13 @@
+"""
+统一的过滤规则管理器模块
+
+提供 UnifiedFilterRules 类用于管理翻译字段的过滤规则，
+包括默认字段、忽略字段、非文本模式等配置。
+"""
 import re
 import logging
-import os
 import json
 from typing import Set, List, Dict, Any, Optional, Union, Callable
-from pathlib import Path
 
 class UnifiedFilterRules:
     """统一的过滤规则管理器"""
@@ -21,7 +25,7 @@ class UnifiedFilterRules:
         'reportString', 'skillLabel', 'pawnLabel', 'titleShort',
         # 新增字段
         'reportStringOverride', 'overrideReportString',
-        'overrideTooltip', 'overrideLabel', 'overrideDescription',
+        'overrideLabel', 'overrideDescription',
         'overrideLabelShort', 'overrideDescriptionShort',
         'overrideTitle', 'overrideText', 'overrideMessage',
         'overrideTooltip', 'overrideBaseDesc', 'overrideSkillDescription',
@@ -42,7 +46,7 @@ class UnifiedFilterRules:
         # 基础字段
         'defName', 'id', 'cost', 'damage', 'x', 'y', 'z',
         'width', 'height', 'priority', 'count', 'index',
-        'version', 'url', 'path', 'file', 'hash', 'key',
+        'version', 'url', 'path', 'file', 'key',
         # 新增字段
         'order', 'weight', 'value', 'amount', 'quantity',
         'duration', 'cooldown', 'range', 'radius', 'angle',
@@ -79,9 +83,18 @@ class UnifiedFilterRules:
         r'^[A-Za-z0-9_-]+\\[A-Za-z0-9_-]+$',  # Windows路径
         # URL模式
         r'https?://[^\s<>"]+|www\.[^\s<>"]+',  # URL
-        r'^[A-Za-z0-9_-]+\.(com|org|net|edu|gov|io|co|uk|cn|jp|ru|de|fr|it|es|nl|be|ch|at|dk|se|no|fi|pl|cz|hu|ro|bg|gr|tr|il|sa|ae|in|br|mx|ar|cl|co|pe|ve|za|au|nz|sg|my|id|ph|vn|th|kr|tw|hk|mo)$',  # 域名
+        # 域名模式
+        (r'^[A-Za-z0-9_-]+\.(com|org|net|edu|gov|io|co|uk|cn|jp|ru|de|fr|it|es|nl|'
+         r'be|ch|at|dk|se|no|fi|pl|cz|hu|ro|bg|gr|tr|il|sa|ae|in|br|mx|ar|cl|co|'
+         r'pe|ve|za|au|nz|sg|my|id|ph|vn|th|kr|tw|hk|mo)$'),  # 域名
         # 文件模式
-        r'^[A-Za-z0-9_-]+\.(xml|json|txt|csv|ini|cfg|conf|config|yaml|yml|toml|md|markdown|rst|log|dat|bin|exe|dll|so|dylib|py|pyc|pyo|pyd|java|class|jar|war|ear|zip|rar|7z|tar|gz|bz2|xz|iso|img|vhd|vmdk|ova|ovf|qcow2|raw|vdi|vbox|vmx|vhd|vhdx|vmdk|vmsd|vmsn|vmss|vmtm|vmx|vmxf|nvram|vmem|vswp|vmtx|vmtm|vmsd|vmsn|vmss|vmtm|vmx|vmxf|nvram|vmem|vswp|vmtx)$',  # 文件扩展名
+        # 文件扩展名模式
+        (r'^[A-Za-z0-9_-]+\.(xml|json|txt|csv|ini|cfg|conf|config|yaml|yml|toml|'
+         r'md|markdown|rst|log|dat|bin|exe|dll|so|dylib|py|pyc|pyo|pyd|java|'
+         r'class|jar|war|ear|zip|rar|7z|tar|gz|bz2|xz|iso|img|vhd|vmdk|ova|ovf|'
+         r'qcow2|raw|vdi|vbox|vmx|vhd|vhdx|vmdk|vmsd|vmsn|vmss|vmtm|vmx|vmxf|'
+         r'nvram|vmem|vswp|vmtx|vmtm|vmsd|vmsn|vmss|vmtm|vmx|vmxf|nvram|vmem|'
+         r'vswp|vmtx)$'),  # 文件扩展名
         # 特殊模式
         r'^[A-Za-z0-9_-]+#[A-Za-z0-9_-]+$',  # 带#的标识符
         r'^[A-Za-z0-9_-]+@[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$',  # 邮箱
@@ -449,25 +462,25 @@ class UnifiedFilterRules:
             }
         }
 
-    def save_to_file(self, file_path: str, format: str = 'json') -> None:
+    def save_to_file(self, file_path: str, file_format: str = 'json') -> None:
         """
         保存规则到文件
 
         Args:
             file_path (str): 文件路径
-            format (str): 文件格式（'json' 或 'yaml'）
+            file_format (str): 文件格式（'json' 或 'yaml'）
         """
         try:
             data = self.to_dict()
-            if format.lower() == 'json':
+            if file_format.lower() == 'json':
                 with open(file_path, 'w', encoding='utf-8') as f:
                     json.dump(data, f, indent=4, ensure_ascii=False)
-            elif format.lower() == 'yaml':
+            elif file_format.lower() == 'yaml':
                 import yaml
                 with open(file_path, 'w', encoding='utf-8') as f:
                     yaml.safe_dump(data, f, allow_unicode=True)
             else:
-                raise ValueError(f"不支持的文件格式: {format}")
+                raise ValueError(f"不支持的文件格式: {file_format}")
             logging.info("规则已保存到: %s", file_path)
         except Exception as e:
             logging.error("保存规则失败: %s", e)
@@ -628,11 +641,19 @@ class UnifiedFilterRules:
     def __str__(self) -> str:
         """返回规则的字符串表示"""
         stats = self.get_stats()
-        return f"UnifiedFilterRules(默认字段: {stats['default_fields']}, 忽略字段: {stats['ignore_fields']}, 非文本模式: {stats['non_text_patterns']})"
+        return (f"UnifiedFilterRules(默认字段: {stats['default_fields']}, "
+                f"忽略字段: {stats['ignore_fields']}, "
+                f"非文本模式: {stats['non_text_patterns']})")
 
     def __repr__(self) -> str:
         """返回规则的详细表示"""
-        return f"UnifiedFilterRules(\n  default_fields={self.default_fields},\n  ignore_fields={self.ignore_fields},\n  non_text_patterns={self.non_text_patterns},\n  field_types={self.field_types},\n  field_groups={self.field_groups},\n  field_priorities={self.field_priorities},\n  conditional_rules={self.conditional_rules}\n)"
+        return (f"UnifiedFilterRules(\n  default_fields={self.default_fields},"
+                f"\n  ignore_fields={self.ignore_fields},"
+                f"\n  non_text_patterns={self.non_text_patterns},"
+                f"\n  field_types={self.field_types},"
+                f"\n  field_groups={self.field_groups},"
+                f"\n  field_priorities={self.field_priorities},"
+                f"\n  conditional_rules={self.conditional_rules}\n)")
 
     def inherit_from(self, parent_rules: 'UnifiedFilterRules', inherit_types: bool = True,
                     inherit_groups: bool = True, inherit_priorities: bool = True,

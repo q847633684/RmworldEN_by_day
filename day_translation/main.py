@@ -1,10 +1,38 @@
+"""
+Day Translation 主程序模块
+
+这是 Day Translation 项目的主要入口点，提供以下核心功能：
+- 模组翻译文本提取和模板生成
+- 阿里云机器翻译服务集成
+- 翻译结果导入和模板管理
+- 英中平行语料生成
+- 批量处理多个模组
+- 配置管理和用户交互
+
+主要类：
+- TranslationFacade: 翻译操作的核心接口
+- TranslationError: 翻译相关异常的基类
+- TranslationImportError: 导入操作异常
+- ExportError: 导出操作异常
+
+主要函数：
+- main(): 程序主入口，提供交互式菜单
+- validate_dir(): 验证目录路径
+- validate_file(): 验证文件路径
+- show_welcome(): 显示欢迎界面
+
+使用方法:
+    python main.py
+
+作者: Day Translation Team
+版本: 0.1.0
+"""
+
 import logging
 import os
-import json
 import sys
 from pathlib import Path
 from typing import List, Tuple, Optional, Dict, Any
-from tqdm import tqdm
 from colorama import init, Fore, Style
 
 # 添加当前模块的父目录到sys.path，以支持day_translation模块导入
@@ -13,15 +41,15 @@ project_root = current_dir.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
+# pylint: disable=wrong-import-position
 from day_translation.utils.config import ConfigError, get_config, get_user_config, save_user_config_to_file
 from day_translation.utils.utils import get_history_list, update_history_list
-from day_translation.utils.config_generator import generate_default_config
 from day_translation.utils.path_manager import PathManager
 from day_translation.core.template_manager import TemplateManager
 from day_translation.utils.machine_translate import translate_csv
 from day_translation.utils.parallel_corpus import generate_parallel_corpus
 from day_translation.utils.batch_processor import BatchProcessor
-from day_translation.utils.filter_config import UnifiedFilterRules
+# pylint: enable=wrong-import-position
 
 # 初始化 colorama 以支持 Windows 终端颜色
 init()
@@ -90,7 +118,6 @@ class TranslationFacade:
             # - en_keyed_dir: 英文Keyed目录，用于确保UI文本翻译完整性
             # - auto_choose_definjected: DefInjected提取方式选择（True=自动，False=交互）
             translations = self.template_manager.extract_and_generate_templates(output_dir, en_keyed_dir, auto_choose_definjected)
-
             # 返回提取到的翻译数据列表，格式：[(key, text, group, file_info), ...]
             return translations
         except Exception as e:
@@ -113,9 +140,7 @@ class TranslationFacade:
         try:
             if not os.path.isfile(csv_path):
                 raise TranslationImportError(f"CSV文件不存在: {csv_path}")
-
             logging.info("导入翻译到模板: csv_path=%s, merge=%s", csv_path, merge)
-
             if not self.template_manager.import_translations(csv_path, merge):
                 raise TranslationImportError("导入翻译失败")
 
@@ -260,7 +285,7 @@ def validate_dir(path: str) -> bool:
         is_valid = path.is_dir() and os.access(path, os.R_OK)
         logging.debug("验证目录: %s, 结果=%s", path, is_valid)
         return is_valid
-    except Exception as e:
+    except (OSError, ValueError, TypeError) as e:
         logging.debug("验证目录失败: %s, 错误=%s", path, e)
         return False
 
@@ -271,7 +296,7 @@ def validate_file(path: str) -> bool:
         if path.exists():
             return os.access(path, os.R_OK)
         return os.access(path.parent, os.W_OK)
-    except Exception as e:
+    except (OSError, ValueError, TypeError) as e:
         logging.debug("验证文件失败: %s, 错误=%s", path, e)
         return False
 
@@ -280,7 +305,7 @@ def show_welcome():
     user_config = get_user_config()
     has_api_key = bool(user_config.get('ALIYUN_ACCESS_KEY_ID') or os.getenv('ALIYUN_ACCESS_KEY_ID'))
     print(f"\n{Fore.MAGENTA}=== 欢迎使用 Day Translation v0.1.0 ==={Style.RESET_ALL}")
-    print(f"功能：模组文本提取、阿里云机器翻译、翻译导入、批量处理")
+    print("功能：模组文本提取、阿里云机器翻译、翻译导入、批量处理")
     print(f"阿里云密钥：{Fore.GREEN if has_api_key else Fore.RED}{'已配置' if has_api_key else '未配置'}{Style.RESET_ALL}")
     print(f"输入 '{Fore.RED}q{Style.RESET_ALL}' 随时退出，'{Fore.YELLOW}b{Style.RESET_ALL}' 返回主菜单")
     print(f"{Fore.MAGENTA}====================================={Style.RESET_ALL}\n")
@@ -493,7 +518,7 @@ def main():
                     except KeyboardInterrupt:
                         print(f"\n{Fore.YELLOW}⚠️ 用户取消操作，返回主菜单{Style.RESET_ALL}")
                         continue  # 返回主菜单
-                    except Exception as e:
+                    except (TranslationError, ConfigError, OSError, IOError) as e:
                         print(f"\n{Fore.RED}❌ 提取模板失败: {str(e)}{Style.RESET_ALL}")
                         logging.error("提取模板失败: %s", str(e), exc_info=True)
 
@@ -621,14 +646,23 @@ def main():
             except TranslationError as e:
                 print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
                 logging.error("操作失败: %s", str(e))
-            except Exception as e:
+            except (OSError, IOError, ValueError, TypeError) as e:
+                print(f"{Fore.RED}❌ 系统错误: {str(e)}{Style.RESET_ALL}")
+                logging.exception("系统错误")
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 print(f"{Fore.RED}❌ 发生错误: {str(e)}{Style.RESET_ALL}")
                 logging.exception("未预期的错误")
 
     except KeyboardInterrupt:
         print(f"\n{Fore.YELLOW}程序被用户中断{Style.RESET_ALL}")
         logging.info("程序被用户中断")
-    except Exception as e:
+    except (TranslationError, ConfigError) as e:
+        print(f"{Fore.RED}❌ 程序配置或翻译错误: {str(e)}{Style.RESET_ALL}")
+        logging.exception("程序配置或翻译错误")
+    except (OSError, IOError, PermissionError) as e:
+        print(f"{Fore.RED}❌ 程序文件系统错误: {str(e)}{Style.RESET_ALL}")
+        logging.exception("程序文件系统错误")
+    except Exception as e:  # pylint: disable=broad-exception-caught
         print(f"{Fore.RED}❌ 程序发生严重错误: {str(e)}{Style.RESET_ALL}")
         logging.exception("程序发生严重错误")
     finally:

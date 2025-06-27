@@ -4,7 +4,7 @@ import re
 import csv
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional, Any, Callable, Union
+from typing import Dict, List, Tuple, Optional, Any, Callable
 from functools import wraps
 from dataclasses import dataclass
 try:

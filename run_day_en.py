@@ -11,7 +11,7 @@ def main():
     project_root = str(Path(__file__).parent.resolve())
     if project_root not in sys.path:
         sys.path.insert(0, project_root)
-    
+
     # 导入并运行 Day_EN 的主函数
     try:
         from Day_EN.main import main as day_en_main
