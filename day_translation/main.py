@@ -371,7 +371,8 @@ def main():
                                     continue
                                 print(f"{Fore.GREEN}  ✅ 配置已更新{Style.RESET_ALL}")
                                 CONFIG.save_user_config()
-                            except ConfigError as e:                                print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
+                            except ConfigError as e:
+                                print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
                         elif config_mode == "3":
                             if input(f"{Fore.YELLOW}确认重置配置？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
                                 # 提示用户手动删除配置文件来重置
@@ -409,7 +410,7 @@ def main():
                                      print(f"{Fore.RED}❌ {str(e)}{Style.RESET_ALL}")
                         else:
                              print(f"{Fore.RED}无效选择{Style.RESET_ALL}")
-                        continue                # 其他模式需要模组目录
+                    continue  # 配置管理完成后返回主菜单
                 mod_dir = path_manager.get_path(
                     path_type="mod_dir", 
                     prompt="请输入模组目录（例如：C:\\Mods\\MyMod）: ", 
@@ -428,8 +429,12 @@ def main():
                     print(f"\n{Fore.CYAN}请选择模板输出位置：{Style.RESET_ALL}")
                     print(f"1. {Fore.GREEN}模组内部{Style.RESET_ALL}（直接集成到模组Languages目录，适合开发模组）")
                     print(f"2. {Fore.GREEN}外部目录{Style.RESET_ALL}（独立管理，适合翻译工作和分发）")
+                    print(f"b. {Fore.YELLOW}返回主菜单{Style.RESET_ALL}")
                     
-                    output_choice = input(f"{Fore.CYAN}请输入选项编号（1/2，回车默认2）：{Style.RESET_ALL}").strip()
+                    output_choice = input(f"{Fore.CYAN}请输入选项编号（1/2/b，回车默认2）：{Style.RESET_ALL}").strip().lower()
+                    
+                    if output_choice == 'b':
+                        continue  # 返回主菜单
                     
                     output_dir = None                                              # 初始化输出目录变量
                     
@@ -463,7 +468,12 @@ def main():
                     else:                                                         # 未检测到英文Keyed目录
                         # 步骤2b：询问用户是否手动指定英文Keyed目录
                         # 某些模组可能将英文文本放在非标准位置
-                        if input(f"{Fore.YELLOW}未检测到英文 Keyed 目录，是否手动指定？[y/n]:{Style.RESET_ALL} ").lower() == 'y':
+                        print(f"{Fore.YELLOW}未检测到英文 Keyed 目录{Style.RESET_ALL}")
+                        keyed_choice = input(f"{Fore.CYAN}是否手动指定英文Keyed目录？[y/n/b] (b=返回主菜单):{Style.RESET_ALL} ").lower().strip()
+                        
+                        if keyed_choice == 'b':
+                            continue  # 返回主菜单
+                        elif keyed_choice == 'y':
                             # 让用户手动选择英文Keyed目录路径
                             en_keyed_dir = path_manager.get_path(
                                 path_type="en_keyed_dir",                         # 路径类型：英文Keyed目录
@@ -473,11 +483,19 @@ def main():
                             )
                             if not en_keyed_dir:                                 # 用户取消输入
                                 continue                                         # 返回主菜单
-                            
+                    
                     # 步骤3：执行提取和生成操作
-                    # 调用核心功能：提取翻译文本、生成模板文件、导出CSV
-                    # auto_choose_definjected=False 启用DefInjected智能选择交互
-                    facade.extract_templates_and_generate_csv(output_dir, en_keyed_dir, auto_choose_definjected=False)
+                    try:
+                        # 调用核心功能：提取翻译文本、生成模板文件、导出CSV
+                        # auto_choose_definjected=False 启用DefInjected智能选择交互
+                        facade.extract_templates_and_generate_csv(output_dir, en_keyed_dir, auto_choose_definjected=False)
+                        print(f"\n{Fore.GREEN}✅ 提取模板操作完成！{Style.RESET_ALL}")
+                    except KeyboardInterrupt:
+                        print(f"\n{Fore.YELLOW}⚠️ 用户取消操作，返回主菜单{Style.RESET_ALL}")
+                        continue  # 返回主菜单
+                    except Exception as e:
+                        print(f"\n{Fore.RED}❌ 提取模板失败: {str(e)}{Style.RESET_ALL}")
+                        logging.error(f"提取模板失败: {str(e)}", exc_info=True)
                     
                 elif mode == "2":
                     # 模式2：机器翻译

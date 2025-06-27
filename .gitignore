@@ -115,7 +115,25 @@ Thumbs.db
 
 # 日志文件
 *.log
+*.log.*
 logs/
+log/
+*.out
+*.err
+# 特定的日志文件名模式
+*_log.txt
+*_log.csv
+day_translation_*.log
+*.access.log
+*.error.log
+debug.log
+error.log
+application.log
+# 旋转日志文件
+*.log.1
+*.log.2
+*.log.gz
+*.log.zip
 
 # 临时文件
 tmp/

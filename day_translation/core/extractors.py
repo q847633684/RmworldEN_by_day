@@ -170,8 +170,15 @@ def _extract_translatable_fields_recursive(node, def_type: str, def_name: str, c
     return translations
 
 def extract_definjected_translations(mod_dir: str, language: str = CONFIG.source_language) -> List[Tuple[str, str, str, str]]:
-    """从 DefInjected 目录提取翻译数据"""
-    print(f"{Fore.GREEN}正在从 DefInjected 目录提取翻译数据（模组目录：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}")
+    """
+    从 DefInjected 目录提取翻译结构，生成模板数据
+    
+    这个函数的目的是以英文DefInjected的结构为基础，生成翻译模板的占位符数据。
+    提供两种模式：
+    1. 保留英文原文作为参考（带标记）
+    2. 生成空白占位符（便于翻译）
+    """
+    print(f"{Fore.GREEN}正在以英文 DefInjected 结构为基础生成模板（模组目录：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}")
     processor = XMLProcessor()
     content_filter = ContentFilter(CONFIG)
     translations: List[Tuple[str, str, str, str]] = []
@@ -199,11 +206,15 @@ def extract_definjected_translations(mod_dir: str, language: str = CONFIG.source
             for key, text, tag in processor.extract_translations(tree, context="DefInjected", filter_func=content_filter.filter_content):
                 # 构建相对路径，包含 DefInjected 子目录结构
                 rel_path = str(xml_file.relative_to(definjected_dir))
-                file_translations.append((key, text, tag, rel_path))
-            logging.debug(f"从 {xml_file.name} 提取到 {len(file_translations)} 条DefInjected翻译")
+                
+                # 生成模板内容：保留英文原文作为翻译参考，同时明确标记为待翻译
+                # 格式："[待翻译] 英文原文" - 这样用户能清楚看到原文并知道需要翻译
+                template_text = f"[待翻译] {text}"
+                file_translations.append((key, template_text, tag, rel_path))
+            logging.debug(f"从 {xml_file.name} 提取到 {len(file_translations)} 条DefInjected模板")
             translations.extend(file_translations)
         else:
             logging.error(f"无法解析DefInjected XML文件: {xml_file}")
     
-    print(f"{Fore.GREEN}从DefInjected目录提取到 {len(translations)} 条翻译{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}以英文DefInjected结构为基础生成 {len(translations)} 条模板{Style.RESET_ALL}")
     return translations

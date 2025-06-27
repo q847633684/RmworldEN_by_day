@@ -159,10 +159,42 @@ class TranslationConfig:
 
     def show_config(self) -> None:
         """显示当前配置"""
+        # 定义中文字段名映射
+        field_names = {
+            'default_language': '默认语言',
+            'source_language': '源语言',
+            'output_csv_path': '输出CSV路径',
+            'debug_mode': '调试模式',
+            'log_file': '日志文件路径',
+            'preserve_comments': '保留注释',
+            'preserve_original_structure': '保留原始结构',
+            'use_machine_translation': '使用机器翻译',
+            'translation_api': '翻译API',
+            'api_key': 'API密钥',
+            'api_endpoint': 'API端点',
+            'request_timeout': '请求超时',
+            'request_delay': '请求延迟',
+            'max_retries': '最大重试次数',
+            'backup_enabled': '备份启用',
+            'backup_dir': '备份目录',
+            'backup_count': '备份数量',
+            'keyed_dir': 'Keyed目录',
+            'def_injected_dir': 'DefInjected目录',
+            'languages_dir': 'Languages目录',
+            'defs_dir': 'Defs目录'
+        }
+        
         print(f"\n{Fore.BLUE}=== 当前配置 ==={Style.RESET_ALL}")
-        for key, value in asdict(self).items():
+        config_dict = asdict(self)
+        for key, value in config_dict.items():
             if not key.startswith('_'):
-                print(f"{key}: {value}")
+                chinese_name = field_names.get(key, key)
+                # 特殊处理敏感信息
+                if 'key' in key.lower() and value:
+                    display_value = f"{'*' * (len(str(value)) - 4)}{str(value)[-4:]}" if len(str(value)) > 4 else "****"
+                else:
+                    display_value = value
+                print(f"  {chinese_name}: {Fore.CYAN}{display_value}{Style.RESET_ALL}")
 
     def export_config(self, config_file: str) -> None:
         """

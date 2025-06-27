@@ -246,11 +246,15 @@ class TemplateManager:
             self.generator.generate_keyed_template_from_data(keyed_translations)
             logging.info(f"生成 {len(keyed_translations)} 条 Keyed 模板")        # 生成DefInjected模板
         if def_translations:
-            self._handle_definjected_structure_choice(
-                def_translations=def_translations,
-                export_dir=str(self.mod_dir),  # 内部模式：输出到模组目录
-                is_internal_mode=True
-            )
+            try:
+                self._handle_definjected_structure_choice(
+                    def_translations=def_translations,
+                    export_dir=str(self.mod_dir),  # 内部模式：输出到模组目录
+                    is_internal_mode=True
+                )
+            except KeyboardInterrupt:
+                # 用户选择返回，重新抛出异常
+                raise
             
     def _generate_templates_to_output_dir(self, translations: List[Tuple[str, str, str, str]], output_dir: str, en_keyed_dir: str = None):
         """在指定输出目录生成翻译模板结构"""
@@ -281,11 +285,15 @@ class TemplateManager:
                 logging.info(f"生成 {len(keyed_translations)} 条 Keyed 模板到 {keyed_dir}")
                 print(f"{Fore.GREEN}✅ Keyed模板已生成: {keyed_dir}{Style.RESET_ALL}")            # 生成DefInjected模板
             if def_translations:
-                self._handle_definjected_structure_choice(
-                    def_translations=def_translations,
-                    export_dir=str(output_path),  # 外部模式：输出到指定目录
-                    is_internal_mode=False
-                )
+                try:
+                    self._handle_definjected_structure_choice(
+                        def_translations=def_translations,
+                        export_dir=str(output_path),  # 外部模式：输出到指定目录
+                        is_internal_mode=False
+                    )
+                except KeyboardInterrupt:
+                    # 用户选择返回，重新抛出异常
+                    raise
                 
         finally:
             # 恢复原始输出目录
@@ -398,6 +406,9 @@ class TemplateManager:
                     source_language=CONFIG.source_language
                 )
                 return extraction_mode
+            except KeyboardInterrupt:
+                # 用户选择返回，抛出异常让上层处理
+                raise
             except Exception as e:
                 logging.warning(f"智能选择失败，回退到 defs 模式: {e}")
                 return "defs"
@@ -418,16 +429,35 @@ class TemplateManager:
         if src_definjected_dir.exists():
             # 有英文 DefInjected，提供3种选择
             print(f"\n{Fore.CYAN}检测到英文 DefInjected 目录，请选择文件结构：{Style.RESET_ALL}")
-            print(f"1. {Fore.GREEN}保持原英文DefInjected结构{Style.RESET_ALL}（推荐：与原模组翻译文件一致）")
-            print(f"2. {Fore.GREEN}按原Defs目录结构生成{Style.RESET_ALL}（按原始定义文件组织）")
-            print(f"3. {Fore.GREEN}按DefType自动分组{Style.RESET_ALL}（传统方式：ThingDefs、PawnKindDefs等）")
+            print(f"1. {Fore.GREEN}保持原英文DefInjected结构{Style.RESET_ALL}")
+            print(f"   💡 与原模组翻译文件保持一致，便于维护和更新")
+            print(f"2. {Fore.GREEN}按原Defs目录结构生成{Style.RESET_ALL}")
+            print(f"   💡 按原始定义文件的目录结构组织翻译")
+            print(f"3. {Fore.GREEN}按DefType自动分组{Style.RESET_ALL}")
+            print(f"   💡 传统方式：ThingDefs、PawnKindDefs等类型分组")
+            print(f"b. {Fore.YELLOW}返回上级菜单{Style.RESET_ALL}")
         else:
             # 没有英文 DefInjected，提供2种选择
             print(f"\n{Fore.YELLOW}未检测到英文 DefInjected 目录，请选择文件结构：{Style.RESET_ALL}")
-            print(f"1. {Fore.GREEN}按原Defs目录结构生成{Style.RESET_ALL}（推荐：按原始定义文件组织）")
-            print(f"2. {Fore.GREEN}按DefType自动分组{Style.RESET_ALL}（传统方式：ThingDefs、PawnKindDefs等）")
+            print(f"1. {Fore.GREEN}按原Defs目录结构生成{Style.RESET_ALL}")
+            print(f"   💡 推荐：按原始定义文件的目录结构组织翻译")
+            print(f"2. {Fore.GREEN}按DefType自动分组{Style.RESET_ALL}")
+            print(f"   💡 传统方式：ThingDefs、PawnKindDefs等类型分组")
+            print(f"b. {Fore.YELLOW}返回上级菜单{Style.RESET_ALL}")
         
-        structure_choice = input(f"{Fore.CYAN}请输入选项编号（回车默认1）：{Style.RESET_ALL}").strip()
+        while True:
+            structure_choice = input(f"\n{Fore.CYAN}请输入选项编号（回车默认1）：{Style.RESET_ALL}").strip().lower()
+            
+            if structure_choice == 'b':
+                raise KeyboardInterrupt("用户选择返回")
+            elif structure_choice in ['1', '2', '3', '']:
+                break
+            else:
+                print(f"{Fore.RED}❌ 无效选择，请重新输入{Style.RESET_ALL}")
+        
+        # 处理用户选择（确保默认值为'1'）
+        if structure_choice == '':
+            structure_choice = '1'
         
         # 生成成功消息后缀
         location_suffix = "到模组内部" if is_internal_mode else f": {Path(export_dir) / 'Languages' / self.language / 'DefInjected'}"
