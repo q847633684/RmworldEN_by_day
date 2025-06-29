@@ -35,14 +35,14 @@ class TemplateManager:
         self.generator = TemplateGenerator(str(self.mod_dir), language, template_location)
         self.processor = XMLProcessor()
 
-    def extract_and_generate_templates(self, output_dir: Optional[str] = None, en_keyed_dir: Optional[str] = None, auto_choose_definjected: bool = False) -> List[Tuple[str, str, str, str]]:
+    def extract_and_generate_templates(self, output_dir: Optional[str] = None, en_keyed_dir: Optional[str] = None, data_source_choice: str = 'defs_only') -> List[Tuple[str, str, str, str]]:
         """
         提取翻译数据并生成模板，同时导出CSV
 
         Args:
             output_dir (str): 输出目录路径
             en_keyed_dir (str): 英文Keyed目录路径（可选）
-            auto_choose_definjected (bool): 是否自动选择DefInjected提取方式
+            data_source_choice (str): 数据来源选择 ('definjected_only' 或 'defs_only')
 
         Returns:
             List[Tuple[str, str, str, str]]: 提取的翻译数据
@@ -63,9 +63,9 @@ class TemplateManager:
         #    - 适合首次翻译或结构有变动的情况，确保完整性
         #
         # 【智能选择逻辑】
-        # - auto_choose=True: 使用"definjected"模式（从英文DefInjected目录提取）
-        # - auto_choose=False: 使用"defs"模式（从Defs目录扫描提取）
-        if auto_choose_definjected:
+        # - data_source_choice='definjected_only': 使用"definjected"模式（从英文DefInjected目录提取）
+        # - data_source_choice='defs_only': 使用"defs"模式（从Defs目录扫描提取）
+        if data_source_choice == 'definjected_only':
             definjected_extract_mode = "definjected"
         else:
             definjected_extract_mode = "defs"

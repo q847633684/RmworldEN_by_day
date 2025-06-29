@@ -7,12 +7,14 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Any
 from colorama import Fore, Style
+from day_translation.utils.utils import XMLProcessor
 
 class SmartMerger:
     """智能合并器 - 根据key和text差异进行智能合并"""
     
     def __init__(self):
         self.logger = logging.getLogger(__name__)
+        self.xml_processor = XMLProcessor()
     
     def merge_translation_files(self, existing_file_path: str, new_translations: Dict[str, str]) -> Dict[str, Any]:
         """
@@ -146,11 +148,50 @@ class SmartMerger:
             element = ET.SubElement(root, key)
             element.text = text
         
-        # 生成格式化的XML字符串
-        xml_str = ET.tostring(root, encoding='unicode')
+        # 使用XMLProcessor生成格式化的XML
+        tree = ET.ElementTree(root)
         
-        # 添加XML声明
-        return f'<?xml version="1.0" encoding="utf-8"?>\n{xml_str}'
+        # 创建临时文件来获取格式化的XML内容
+        import tempfile
+        import os
+        
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.xml', delete=False, encoding='utf-8') as temp_file:
+            temp_path = temp_file.name
+        
+        try:
+            # 使用XMLProcessor保存格式化XML
+            success = self.xml_processor.save_xml(tree, temp_path, pretty_print=True)
+            if success:
+                # 读取格式化后的内容
+                with open(temp_path, 'r', encoding='utf-8') as f:
+                    formatted_xml = f.read()
+                return formatted_xml
+            else:
+                # 如果XMLProcessor失败，回退到手动格式化
+                return self._fallback_generate_xml(translations)
+        finally:
+            # 清理临时文件
+            if os.path.exists(temp_path):
+                os.unlink(temp_path)
+    
+    def _fallback_generate_xml(self, translations: Dict[str, str]) -> str:
+        """
+        回退的XML生成方法
+        
+        Args:
+            translations (Dict[str, str]): 翻译字典 {key: text}
+            
+        Returns:
+            str: XML字符串
+        """
+        formatted_lines = ['<?xml version="1.0" encoding="utf-8"?>', '<LanguageData>']
+        
+        for key, text in sorted(translations.items()):
+            formatted_lines.append(f'  <{key}>{text}</{key}>')
+        
+        formatted_lines.append('</LanguageData>')
+        
+        return '\n'.join(formatted_lines)
     
     def merge_multiple_files(self, file_mappings: List[Tuple[str, Dict[str, str]]]) -> Dict[str, Any]:
         """

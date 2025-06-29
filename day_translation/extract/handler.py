@@ -47,7 +47,7 @@ def handle_extract():
             # 执行四步智能流程
             smart_config = interaction_manager.handle_smart_extraction_workflow(mod_dir)
             
-            # 从智能配置中获取输出目录和冲突处理方式
+            # 从智能配置中获取所有参数
             output_dir = smart_config['output_config']['output_dir']
             conflict_resolution = smart_config['output_config']['conflict_resolution']
             data_source_choice = smart_config['data_sources']['choice']
@@ -71,6 +71,14 @@ def handle_extract():
                             show_info(f"📁 翻译目录不存在，无需清空：{languages_dir}")
                     except PermissionError as e:
                         show_warning(f"⚠️ 无法删除某些文件（可能是系统文件），跳过：{e}")
+                
+                # 重建后执行提取
+                translations = facade.extract_templates_and_generate_csv(
+                    output_dir=output_dir,
+                    data_source_choice=data_source_choice
+                )
+                show_success(f"重建完成！共提取 {len(translations)} 条翻译")
+                
             elif conflict_resolution == 'overwrite':
                 # 覆盖：删除现有的翻译文件
                 import shutil
@@ -84,26 +92,45 @@ def handle_extract():
                 if keyed_dir.exists():
                     shutil.rmtree(keyed_dir)
                     show_info(f"🗑️ 已删除Keyed目录：{keyed_dir}")
+                
+                # 覆盖后执行提取
+                translations = facade.extract_templates_and_generate_csv(
+                    output_dir=output_dir,
+                    data_source_choice=data_source_choice
+                )
+                show_success(f"覆盖完成！共提取 {len(translations)} 条翻译")
+                
             elif conflict_resolution == 'merge':
                 # 合并：使用智能合并功能
                 show_info("🔄 正在执行智能合并...")
-                merge_results = _perform_smart_merge(output_dir, translations, smart_merger)
+                
+                # 直接提取新的翻译数据，不生成模板文件
+                if data_source_choice == 'definjected_only':
+                    definjected_extract_mode = "definjected"
+                else:
+                    definjected_extract_mode = "defs"
+                
+                new_translations = facade.template_manager._extract_all_translations(
+                    definjected_mode=definjected_extract_mode, 
+                    direct_dir=None
+                )
+                
+                # 执行智能合并（_perform_smart_merge会直接从文件系统读取现有翻译）
+                merge_results = _perform_smart_merge(output_dir, new_translations, smart_merger)
                 if merge_results:
                     show_success(f"智能合并完成！")
                     show_info(f"合并统计：替换 {merge_results['summary']['total_replaced']} 个，新增 {merge_results['summary']['total_added']} 个，保持 {merge_results['summary']['total_unchanged']} 个")
                 else:
                     show_warning("智能合并未执行，可能是没有现有文件需要合并")
+                
+                translations = new_translations  # 用于显示总数
+            
             else:
-                if data_source_choice == 'definjected_only':
-                    translations = facade.extract_templates_and_generate_csv(
-                        output_dir=output_dir,
-                        auto_choose_definjected=True
-                    )
-                else:
-                    translations = facade.extract_templates_and_generate_csv(
-                        output_dir=output_dir,
-                        auto_choose_definjected=False
-                    )
+                # 新建：直接提取
+                translations = facade.extract_templates_and_generate_csv(
+                    output_dir=output_dir,
+                    data_source_choice=data_source_choice
+                )
                 show_success(f"智能提取完成！共提取 {len(translations)} 条翻译")
             
             show_info(f"输出目录：{output_dir}")

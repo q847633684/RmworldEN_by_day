@@ -51,7 +51,7 @@ def handle_full_pipeline():
             if not en_keyed_dir:
                 return
 
-        translations = facade.extract_templates_and_generate_csv(export_csv, en_keyed_dir, auto_choose_definjected=True)
+        translations = facade.extract_templates_and_generate_csv(export_csv, en_keyed_dir, data_source_choice='definjected_only')
 
         if translations and confirm_action("确认翻译并导入？"):
             # 选择翻译方式
