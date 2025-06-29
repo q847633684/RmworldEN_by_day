@@ -75,7 +75,8 @@ def handle_extract():
                 # 重建后执行提取
                 translations = facade.extract_templates_and_generate_csv(
                     output_dir=output_dir,
-                    data_source_choice=data_source_choice
+                    data_source_choice=data_source_choice,
+                    template_structure=template_structure
                 )
                 show_success(f"重建完成！共提取 {len(translations)} 条翻译")
                 
@@ -92,11 +93,11 @@ def handle_extract():
                 if keyed_dir.exists():
                     shutil.rmtree(keyed_dir)
                     show_info(f"🗑️ 已删除Keyed目录：{keyed_dir}")
-                
                 # 覆盖后执行提取
                 translations = facade.extract_templates_and_generate_csv(
                     output_dir=output_dir,
-                    data_source_choice=data_source_choice
+                    data_source_choice=data_source_choice,
+                    template_structure=template_structure
                 )
                 show_success(f"覆盖完成！共提取 {len(translations)} 条翻译")
                 
@@ -106,12 +107,12 @@ def handle_extract():
                 
                 # 直接提取新的翻译数据，不生成模板文件
                 if data_source_choice == 'definjected_only':
-                    definjected_extract_mode = "definjected"
+                    definjected_extract_mode = "definjected_only"
                 else:
-                    definjected_extract_mode = "defs"
+                    definjected_extract_mode = "defs_only"
                 
                 new_translations = facade.template_manager._extract_all_translations(
-                    definjected_mode=definjected_extract_mode, 
+                    data_source_choice=definjected_extract_mode, 
                     direct_dir=None
                 )
                 
@@ -129,7 +130,8 @@ def handle_extract():
                 # 新建：直接提取
                 translations = facade.extract_templates_and_generate_csv(
                     output_dir=output_dir,
-                    data_source_choice=data_source_choice
+                    data_source_choice=data_source_choice,
+                    template_structure=template_structure
                 )
                 show_success(f"智能提取完成！共提取 {len(translations)} 条翻译")
             

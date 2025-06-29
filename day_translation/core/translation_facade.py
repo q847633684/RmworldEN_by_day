@@ -60,19 +60,20 @@ class TranslationFacade:
         if not os.path.exists(os.path.join(self.mod_dir, "Languages")):
             logging.warning("模组目录中未找到 Languages 文件夹: %s", self.mod_dir)
 
-    def extract_templates_and_generate_csv(self, output_dir: str, en_keyed_dir: Optional[str] = None, auto_choose_definjected: bool = False) -> List[Tuple[str, str, str, str]]:
+    def extract_templates_and_generate_csv(self, output_dir: str, en_keyed_dir: Optional[str] = None, auto_choose_definjected: bool = False, data_source_choice: str = None, template_structure: str = None) -> List[Tuple[str, str, str, str]]:
         """
         提取翻译模板并生成 CSV 文件
         """
         try:
             # 记录提取操作的开始，包含所有关键参数用于调试和审计
-            logging.info("开始提取模板: output_dir=%s, en_keyed_dir=%s, auto_choose_definjected=%s", output_dir, en_keyed_dir, auto_choose_definjected)
+            logging.info("开始提取模板: output_dir=%s, en_keyed_dir=%s, auto_choose_definjected=%s, data_source_choice=%s", output_dir, en_keyed_dir, auto_choose_definjected, data_source_choice)
 
             # 调用模板管理器执行核心提取操作
             # - output_dir: 输出目录，模板和CSV文件的保存位置
             # - en_keyed_dir: 英文Keyed目录，用于确保UI文本翻译完整性
-            # - auto_choose_definjected: DefInjected提取方式选择（True=使用DefInjected目录，False=使用Defs扫描）
-            translations = self.template_manager.extract_and_generate_templates(output_dir, en_keyed_dir, auto_choose_definjected)
+            # - data_source_choice: 数据来源选择（'definjected_only', 'defs_only', 'both'）
+            # 如果传入了data_source_choice，直接使用；否则根据auto_choose_definjected转换
+            translations = self.template_manager.extract_and_generate_templates(output_dir, en_keyed_dir, data_source_choice,template_structure)
             # 返回提取到的翻译数据列表，格式：[(key, text, group, file_info), ...]
             return translations
         except Exception as e:
