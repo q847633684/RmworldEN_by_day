@@ -6,7 +6,7 @@ import re
 import json
 import logging
 from pathlib import Path
-from typing import Dict, Optional, Callable, List, Set, Union
+from typing import Dict, Optional, Callable, List, Set, Union, Any
 from dataclasses import dataclass, field
 from colorama import Fore, Style
 
@@ -159,7 +159,6 @@ class PathManager:
                 print(f"\n{Fore.BLUE}历史记录：{Style.RESET_ALL}")
                 for i, path in enumerate(history.paths, 1):
                     print(f"{i}. {path}")
-                print(f"0. {Fore.YELLOW}输入新路径{Style.RESET_ALL}")
 
             # 获取用户输入
             while True:
@@ -168,10 +167,7 @@ class PathManager:
                 if choice.lower() == 'q':
                     return None
 
-                if choice.isdigit() and 0 <= int(choice) <= len(history.paths):
-                    if int(choice) == 0:
-                        path = input(f"{Fore.CYAN}请输入新路径：{Style.RESET_ALL}").strip()
-                    else:
+                if choice.isdigit() and 1 <= int(choice) <= len(history.paths):
                         path = history.paths[int(choice) - 1]
                 else:
                     path = choice
@@ -382,26 +378,105 @@ class PathManager:
         )
 
     def _validate_mod_directory(self, path: str) -> PathValidationResult:
-        """验证模组目录"""
+        """只判断 About 文件夹是否存在，有则为有效模组目录，否则报错。"""
         result = self._validate_directory(path)
         if not result.is_valid:
             return result
 
-        # 检查模组目录结构
-        required_dirs = {'Languages', 'Defs', 'Textures', 'Sounds'}
-        found_dirs = {d.name for d in Path(result.normalized_path).iterdir() if d.is_dir()}
-
-        if not required_dirs.intersection(found_dirs):
+        about_dir = os.path.join(result.normalized_path, "About")
+        if os.path.isdir(about_dir):
+            return PathValidationResult(
+                is_valid=True,
+                normalized_path=result.normalized_path,
+                path_type='mod'
+            )
+        else:
             return PathValidationResult(
                 is_valid=False,
-                error_message=f"目录不是有效的模组目录: {path}",
+                error_message=f"目录不是有效的模组目录（缺少 About 文件夹）: {path}",
                 normalized_path=result.normalized_path
             )
-        return PathValidationResult(
-            is_valid=True,
-            normalized_path=result.normalized_path,
-            path_type='mod'
-        )
+
+    def get_mod_path_with_version_detection(self, path_type: str, prompt: str) -> Optional[str]:
+        """
+        获取模组路径，支持版本检测和智能选择。
+        用户选择版本号后，直接返回最终目录，后续流程只用这个目录。
+        """
+        while True:
+            # 获取用户输入的路径
+            path = self.get_path(path_type, prompt, validator_type='mod', required=True)
+            if not path:
+                return None
+            
+            # 验证路径
+            result = self._validate_mod_directory(path)
+            
+            if result.is_valid:
+                # 检查是否为版本号结构
+                structure_type, mod_dir, content_dir = self._detect_mod_structure_type(result.normalized_path)
+                if structure_type == 'versioned':
+                    # 让用户选择版本号，直接返回最终目录
+                    final_dir = self._choose_versioned_content_dir(mod_dir)
+                    if final_dir:
+                        return final_dir
+                    else:
+                        continue
+                else:
+                    return result.normalized_path
+            else:
+                print(f"{Fore.RED}{result.error_message}{Style.RESET_ALL}")
+                continue
+
+    def _choose_versioned_content_dir(self, mod_dir: str) -> Optional[str]:
+        """
+        让用户选择版本号内容目录，直接返回最终目录
+        """
+        version_dirs = []
+        try:
+            for item in os.listdir(mod_dir):
+                item_path = os.path.join(mod_dir, item)
+                if os.path.isdir(item_path):
+                    if self._is_version_number(item):
+                        content_dirs = {'Defs', 'Languages', 'Textures', 'Sounds'}
+                        found_content_dirs = {d for d in os.listdir(item_path) 
+                                             if os.path.isdir(os.path.join(item_path, d))}
+                        if content_dirs.intersection(found_content_dirs):
+                            version_dirs.append({
+                                'name': item,
+                                'path': item_path,
+                                'version': self._parse_version_number(item)
+                            })
+        except Exception as e:
+            logging.error(f"检测版本目录失败: {e}")
+        
+        if version_dirs:
+            version_dirs.sort(key=lambda x: x['version'], reverse=True)
+            print(f"\n{Fore.CYAN}📁 检测到版本号结构模组{Style.RESET_ALL}")
+            print(f"   模组目录: {mod_dir}")
+            print(f"\n{Fore.BLUE}发现以下可用版本：{Style.RESET_ALL}")
+            for i, version_info in enumerate(version_dirs, 1):
+                status_icon = "✅" if i == 1 else "📋"
+                status_text = " (推荐)" if i == 1 else ""
+                print(f"{i}. {status_icon} {version_info['name']}{status_text}")
+            print(f"0. {Fore.YELLOW}使用默认选择（{version_dirs[0]['name']}）{Style.RESET_ALL}")
+            while True:
+                choice = input(f"\n{Fore.CYAN}请选择版本 (1-{len(version_dirs)}，回车默认0): {Style.RESET_ALL}").strip()
+                if not choice:
+                    choice = "0"
+                if choice == "0":
+                    selected_version = version_dirs[0]
+                    break
+                elif choice.isdigit() and 1 <= int(choice) <= len(version_dirs):
+                    selected_version = version_dirs[int(choice) - 1]
+                    break
+                else:
+                    print(f"{Fore.RED}❌ 无效选择，请输入 1-{len(version_dirs)} 或 0{Style.RESET_ALL}")
+            print(f"{Fore.GREEN}✅ 选择版本: {selected_version['name']}{Style.RESET_ALL}")
+            print(f"   内容目录: {selected_version['path']}")
+            return selected_version['path']
+        else:
+            print(f"{Fore.RED}未检测到有效的版本号内容目录{Style.RESET_ALL}")
+            return None
 
     def _validate_language_directory(self, path: str) -> PathValidationResult:
         """验证语言目录"""
@@ -523,3 +598,204 @@ class PathManager:
         except Exception as e:
             logging.error("获取相对路径失败: %s", e)
             return None
+
+    def get_path_with_smart_recommendations(self,
+                                          path_type: str,
+                                          prompt: str,
+                                          validator_type: str = 'file',
+                                          required: bool = True,
+                                          default: Optional[str] = None,
+                                          smart_recommendations: Optional[List[str]] = None,
+                                          recommendation_reasons: Optional[Dict[str, str]] = None) -> Optional[str]:
+        """
+        获取路径输入，支持智能推荐（基于现有 get_path 的增强版本）
+
+        Args:
+            path_type (str): 路径类型
+            prompt (str): 提示文本
+            validator_type (str): 验证器类型
+            required (bool): 是否必需
+            default (Optional[str]): 默认路径
+            smart_recommendations (Optional[List[str]]): 智能推荐路径列表
+            recommendation_reasons (Optional[Dict[str, str]]): 推荐原因说明
+
+        Returns:
+            Optional[str]: 验证后的路径
+        """
+        try:
+            # 如果有智能推荐，优先显示
+            if smart_recommendations:
+                print(f"\n{Fore.CYAN}💡 智能推荐：{Style.RESET_ALL}")
+                for i, rec_path in enumerate(smart_recommendations, 1):
+                    reason = recommendation_reasons.get(rec_path, "") if recommendation_reasons else ""
+                    reason_text = f" ({Fore.GREEN}{reason}{Style.RESET_ALL})" if reason else ""
+                    print(f"{i}. {rec_path}{reason_text}")
+                
+                print(f"0. {Fore.YELLOW}手动输入其他路径{Style.RESET_ALL}")
+                
+                choice = input(f"\n{Fore.CYAN}选择推荐项 (1-{len(smart_recommendations)}) 或 0 手动输入：{Style.RESET_ALL}").strip()
+                
+                if choice.isdigit() and 1 <= int(choice) <= len(smart_recommendations):
+                    selected_path = smart_recommendations[int(choice) - 1]
+                    # 验证选择的推荐路径
+                    validator = self._validators.get(validator_type, self._validate_file)
+                    result = validator(selected_path)
+                    if result.is_valid:
+                        # 更新历史记录（复用现有逻辑）
+                        if path_type not in self._history_cache:
+                            self._history_cache[path_type] = PathHistory()
+                        history = self._history_cache[path_type]
+                        if result.normalized_path in history.paths:
+                            history.paths.remove(result.normalized_path)
+                        history.paths.insert(0, result.normalized_path)
+                        history.paths = history.paths[:history.max_length]
+                        history.last_used = result.normalized_path
+                        self._save_history()
+                        
+                        return result.normalized_path
+                    else:
+                        print(f"{Fore.RED}❌ 推荐路径无效: {result.error_message}{Style.RESET_ALL}")
+                        # 继续到常规输入流程
+                elif choice == "0":
+                    # 用户选择手动输入，继续到常规流程
+                    pass
+                else:
+                    print(f"{Fore.RED}❌ 无效选择，使用常规输入方式{Style.RESET_ALL}")
+
+            # 调用现有的 get_path 方法处理常规流程
+            return self.get_path(path_type, prompt, validator_type, required, default)
+
+        except Exception as e:
+            logging.error(f"智能推荐路径输入失败: {e}")
+            # 降级到常规方法
+            return self.get_path(path_type, prompt, validator_type, required, default)
+
+    def _detect_mod_structure_type(self, mod_dir: str) -> tuple[str, str, str]:
+        """
+        检测模组目录结构类型
+        
+        Args:
+            mod_dir (str): 模组目录路径
+            
+        Returns:
+            tuple[str, str, str]: (结构类型, 模组目录, 内容目录)
+                结构类型: 'standard' | 'versioned' | 'unknown'
+                模组目录: 包含About的目录
+                内容目录: 包含Defs/Languages的目录
+        """
+        # 检查根目录是否有About
+        about_dir = os.path.join(mod_dir, "About")
+        if os.path.isdir(about_dir):
+            # 检查根目录是否有模组内容
+            content_dirs = {'Defs', 'Languages', 'Textures', 'Sounds'}
+            found_content_dirs = {d for d in os.listdir(mod_dir) 
+                                 if os.path.isdir(os.path.join(mod_dir, d))}
+            
+            if content_dirs.intersection(found_content_dirs):
+                # 标准结构：根目录既有About又有内容
+                return 'standard', mod_dir, mod_dir
+            else:
+                # 版本号结构：根目录有About但没有内容，需要找版本号子目录
+                return self._find_version_content_dir(mod_dir)
+        
+        return 'unknown', mod_dir, mod_dir
+    
+    def _find_version_content_dir(self, mod_dir: str) -> tuple[str, str, str]:
+        """
+        在版本号子目录中查找内容目录
+        
+        Args:
+            mod_dir (str): 模组根目录路径
+            
+        Returns:
+            tuple[str, str, str]: (结构类型, 模组目录, 内容目录)
+        """
+        version_dirs = []
+        try:
+            for item in os.listdir(mod_dir):
+                item_path = os.path.join(mod_dir, item)
+                if os.path.isdir(item_path):
+                    # 检查是否为版本号格式（如 1.5, 1.4, 1.3 等）
+                    if self._is_version_number(item):
+                        # 检查该版本目录下是否有模组内容
+                        content_dirs = {'Defs', 'Languages', 'Textures', 'Sounds'}
+                        found_content_dirs = {d for d in os.listdir(item_path) 
+                                             if os.path.isdir(os.path.join(item_path, d))}
+                        
+                        if content_dirs.intersection(found_content_dirs):
+                            version_dirs.append({
+                                'name': item,
+                                'path': item_path,
+                                'version': self._parse_version_number(item)
+                            })
+        except Exception as e:
+            logging.error(f"检测版本目录失败: {e}")
+        
+        if version_dirs:
+            # 按版本号排序，选择最新版本
+            version_dirs.sort(key=lambda x: x['version'], reverse=True)
+            latest_version = version_dirs[0]
+            return 'versioned', mod_dir, latest_version['path']
+        
+        # 没有找到版本号内容目录
+        return 'unknown', mod_dir, mod_dir
+    
+    def _is_version_number(self, name: str) -> bool:
+        """
+        判断字符串是否为版本号格式
+        
+        Args:
+            name (str): 目录名
+            
+        Returns:
+            bool: 是否为版本号格式
+        """
+        # 匹配版本号格式：1.5, 1.4, 1.3, 1.5.0, v1.5 等
+        import re
+        pattern = r'^v?(\d+\.)+\d+$'
+        return bool(re.match(pattern, name))
+    
+    def _parse_version_number(self, version_str: str) -> tuple:
+        """
+        解析版本号字符串为可比较的元组
+        
+        Args:
+            version_str (str): 版本号字符串
+            
+        Returns:
+            tuple: 版本号元组
+        """
+        try:
+            # 去掉可能的 'v' 前缀
+            clean_version = version_str.strip().lower()
+            if clean_version.startswith('v'):
+                clean_version = clean_version[1:]
+            
+            # 分割版本号并转换为整数
+            parts = []
+            for part in clean_version.split('.'):
+                parts.append(int(part))
+            
+            return tuple(parts)
+        except Exception:
+            # 如果解析失败，返回 (0,) 表示最低版本
+            return (0,)
+
+    def get_history_list(self, path_type: str) -> List[str]:
+        """
+        获取指定类型的历史记录列表
+        
+        Args:
+            path_type (str): 路径类型
+            
+        Returns:
+            List[str]: 历史记录列表
+        """
+        try:
+            if path_type not in self._history_cache:
+                return []
+            history = self._history_cache[path_type]
+            return history.paths[:]  # 返回副本
+        except Exception as e:
+            logging.error("获取历史记录失败: %s", e)
+            return []

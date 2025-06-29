@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LanguageData>
-  <!--EN: Try to figure out who is the father.-->
-  <DeterminePaternity.description>Try to figure out who is the father.</DeterminePaternity.description>
-  <!--EN: Check Paternity.-->
-  <DeterminePaternity.jobString>Check Paternity.</DeterminePaternity.jobString>
-  <!--EN: check Paternity-->
-  <DeterminePaternity.label>check Paternity</DeterminePaternity.label>
-</LanguageData>

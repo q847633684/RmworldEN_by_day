@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!--EN: [PAWN_nameDef] really likes getting fucked in the butt and prefers anal sex acts.-->
+  <ButtSlut.degreeDatas.0.description>[PAWN_nameDef] really likes getting fucked in the butt and prefers anal sex acts.</ButtSlut.degreeDatas.0.description>
+  <!--EN: Buttslut-->
+  <ButtSlut.degreeDatas.0.label>Buttslut</ButtSlut.degreeDatas.0.label>
+  <!--EN: [PAWN_nameDef] really likes cum and prefers fellatio sex acts.-->
+  <CumSlut.degreeDatas.0.description>[PAWN_nameDef] really likes cum and prefers fellatio sex acts.</CumSlut.degreeDatas.0.description>
+  <!--EN: Cumslut-->
+  <CumSlut.degreeDatas.0.label>Cumslut</CumSlut.degreeDatas.0.label>
+  <!--EN: [PAWN_nameDef] really likes feet and prefers sex acts involving them.-->
+  <FootSlut.degreeDatas.0.description>[PAWN_nameDef] really likes feet and prefers sex acts involving them.</FootSlut.degreeDatas.0.description>
+  <!--EN: Footslut-->
+  <FootSlut.degreeDatas.0.label>Footslut</FootSlut.degreeDatas.0.label>
+  <!--EN: Dead people can't say no, can they?-->
+  <Necrophiliac.degreeDatas.0.description>Dead people can't say no, can they?</Necrophiliac.degreeDatas.0.description>
+  <!--EN: necrophile-->
+  <Necrophiliac.degreeDatas.0.label>necrophile</Necrophiliac.degreeDatas.0.label>
+  <!--EN: [PAWN_nameDef] loves sex and always wants more. Can regain psyfocus only through sex.-->
+  <Nymphomaniac.degreeDatas.0.description>[PAWN_nameDef] loves sex and always wants more. Can regain psyfocus only through sex.</Nymphomaniac.degreeDatas.0.description>
+  <!--EN: hypersexual-->
+  <Nymphomaniac.degreeDatas.0.label>hypersexual</Nymphomaniac.degreeDatas.0.label>
+  <!--EN: [PAWN_nameDef] doesn't take "No" as an answer.-->
+  <Rapist.degreeDatas.0.description>[PAWN_nameDef] doesn't take "No" as an answer.</Rapist.degreeDatas.0.description>
+  <!--EN: rapist-->
+  <Rapist.degreeDatas.0.label>rapist</Rapist.degreeDatas.0.label>
+  <!--EN: [PAWN_nameDef] likes to walk on the wild side.-->
+  <Zoophile.degreeDatas.0.description>[PAWN_nameDef] likes to walk on the wild side.</Zoophile.degreeDatas.0.description>
+  <!--EN: zoophile-->
+  <Zoophile.degreeDatas.0.label>zoophile</Zoophile.degreeDatas.0.label>
+</LanguageData>

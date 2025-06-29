@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LanguageData>
-  <!-- EN: Rjw containment area. -->
-  <RJW_MainButton.description>Rjw containment area.</RJW_MainButton.description>
-  <!-- EN: rjw.MainTab.MainTabWindow -->
-  <RJW_MainButton.tabWindowClass>rjw.MainTab.MainTabWindow</RJW_MainButton.tabWindowClass>
-</LanguageData>
