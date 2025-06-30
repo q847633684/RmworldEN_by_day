@@ -3,7 +3,8 @@ from typing import List, Tuple, Dict
 import logging
 import xml.etree.ElementTree as ET
 from day_translation.utils.config import get_config
-from day_translation.utils.utils import XMLProcessor, sanitize_xml
+from day_translation.utils.utils import XMLProcessor
+from day_translation.extract.xml_utils import save_xml, sanitize_xml
 from colorama import Fore, Style
 
 CONFIG = get_config()
@@ -21,34 +22,6 @@ class TemplateGenerator:
             return Path(export_dir)
         return self.mod_dir
 
-    def generate_keyed_template(self, en_keyed_dir: str, export_dir: str = None) -> None:
-        print(f"{Fore.GREEN}正在生成中文 Keyed 翻译模板...{Style.RESET_ALL}")
-        base_dir = self.get_template_base_dir(export_dir)
-        zh_keyed_dir = base_dir / "Languages" / self.language / CONFIG.keyed_dir
-        zh_keyed_dir.mkdir(parents=True, exist_ok=True)
-        en_path = Path(en_keyed_dir)
-        for en_xml_file in en_path.rglob("*.xml"):
-            tree = self.processor.parse_xml(str(en_xml_file))
-            if tree:
-                zh_root = self._create_keyed_xml_from_source(tree.getroot() if self.processor.use_lxml else tree)
-                rel_path = en_xml_file.relative_to(en_path)
-                zh_xml_file = zh_keyed_dir / rel_path
-                self.processor.save_xml(ET.ElementTree(zh_root), str(zh_xml_file))
-                logging.info("生成 Keyed 模板: %s%s", zh_xml_file.name, Style.RESET_ALL)
-
-    def generate_keyed_template_from_data(self, keyed_translations: List[TranslationData], export_dir: str = None) -> None:
-        logging.info("正在生成中文 Keyed 翻译模板...")
-        # 在export_dir下创建Keyed目录
-        zh_keyed_dir = Path(export_dir) / CONFIG.keyed_dir
-
-        zh_keyed_dir.mkdir(parents=True, exist_ok=True)
-        file_groups = self._group_translations_by_file(keyed_translations)
-        for file_path, translations in file_groups.items():
-            zh_xml_file = self._get_target_file_path(file_path, zh_keyed_dir)
-            zh_root = self._create_keyed_xml_from_data(translations)
-            self.processor.save_xml(ET.ElementTree(zh_root), str(zh_xml_file))
-            logging.info("生成 Keyed 模板: %s%s", zh_xml_file.name, Style.RESET_ALL)
-
     def generate_definjected_template(self, defs_translations: List[TranslationData], export_dir: str = None) -> None:
         logging.info("%s正在生成 DefInjected 翻译模板...%s", Fore.GREEN, Style.RESET_ALL)
         # 在export_dir下创建DefInjected目录
@@ -58,23 +31,11 @@ class TemplateGenerator:
             type_dir = zh_definjected_dir / f"{def_type}Defs"
             output_file = type_dir / f"{def_type}Defs.xml"
             root = self._create_definjected_xml_from_data(fields)
-            self.processor.save_xml(ET.ElementTree(root), str(output_file))
-            logging.info("生成 DefInjected 模板: %sDefs.xml%s%s", def_type, Style.RESET_ALL, Style.RESET_ALL)
-
-    def _create_keyed_xml_from_source(self, source_root: ET.Element) -> ET.Element:
-        zh_root = ET.Element("LanguageData")
-        for elem in source_root:
-            if isinstance(elem.tag, str) and elem.text and elem.text.strip():
-                zh_elem = ET.SubElement(zh_root, elem.tag)
-                zh_elem.text = sanitize_xml(elem.text.strip())
-        return zh_root
-
-    def _create_keyed_xml_from_data(self, translations: List[Tuple[str, str, str]]) -> ET.Element:
-        zh_root = ET.Element("LanguageData")
-        for key, text, tag in translations:
-            zh_elem = ET.SubElement(zh_root, key)
-            zh_elem.text = sanitize_xml(text)
-        return zh_root
+            ok = save_xml(ET.ElementTree(root), str(output_file))
+            if ok:
+                logging.info(f"生成 DefInjected 模板: {def_type}Defs.xml{Style.RESET_ALL}{Style.RESET_ALL}")
+            else:
+                logging.error(f"写入失败: {output_file}")
 
     def _create_definjected_xml_from_data(self, fields: Dict[str, str]) -> ET.Element:
         root = ET.Element("LanguageData")
@@ -82,14 +43,6 @@ class TemplateGenerator:
             elem = ET.SubElement(root, field_key)
             elem.text = sanitize_xml(text)
         return root
-
-    def _group_translations_by_file(self, translations: List[TranslationData]) -> Dict[str, List[Tuple[str, str, str]]]:
-        file_groups = {}
-        for key, text, tag, file_path in translations:
-            if file_path not in file_groups:
-                file_groups[file_path] = []
-            file_groups[file_path].append((key, text, tag))
-        return file_groups
 
     def _group_defs_by_type(self, defs_translations: List[TranslationData]) -> Dict[str, Dict[str, str]]:
         def_groups = {}

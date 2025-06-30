@@ -93,7 +93,8 @@ def scan_defs_sync(mod_dir: str, def_types: Set[str] = None, language: str = CON
                         clean_path = clean_path[len(def_type) + 1:]
 
                     full_path = f"{def_type}/{def_name}.{clean_path}"
-                    translations.append((full_path, text, tag, str(xml_file.relative_to(defs_dir))))
+                    rel_path = str(xml_file.relative_to(defs_dir))
+                    translations.append((full_path, text, tag, rel_path))
 
                 logging.debug("从 %s 提取到 %s 条翻译", def_name, len(field_translations))
         else:
@@ -169,65 +170,10 @@ def _extract_translatable_fields_recursive(node, def_type: str, def_name: str, c
 
     return translations
 
-def extract_definjected_translations_backup(mod_dir: str, language: str = CONFIG.source_language) -> List[Tuple[str, str, str, str]]:
-    """
-    从 DefInjected 目录提取翻译结构，生成模板数据（备份版本）
-
-    这个函数的目的是以英文DefInjected的结构为基础，生成翻译模板的占位符数据。
-    提供两种模式：
-    1. 保留英文原文作为参考（带标记）
-    2. 生成空白占位符（便于翻译）
-    """
-    print(f"{Fore.GREEN}正在以英文 DefInjected 结构为基础生成模板（模组目录：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}")
-    processor = XMLProcessor()
-    content_filter = ContentFilter(CONFIG)
-    translations: List[Tuple[str, str, str, str]] = []
-    lang_path = get_language_folder_path(language, mod_dir)
-    definjected_dir = Path(lang_path) / CONFIG.def_injected_dir
-
-    logging.debug("语言路径: %s", lang_path)
-    logging.debug("DefInjected目录: %s", definjected_dir)
-    logging.debug("目录是否存在: %s", definjected_dir.exists())
-
-    if not definjected_dir.exists():
-        logging.warning("DefInjected 目录不存在: %s", definjected_dir)
-        return []
-
-    # 查找所有XML文件
-    xml_files = list(definjected_dir.rglob("*.xml"))
-    logging.debug("找到 %s 个DefInjected XML文件", len(xml_files))
-
-    for xml_file in xml_files:
-        logging.debug("处理DefInjected文件: %s", xml_file)
-        tree = processor.parse_xml(str(xml_file))
-        if tree:
-            file_translations = []
-            # DefInjected 文件的结构和 Keyed 文件不同，需要特殊处理
-            for key, text, tag in processor.extract_translations(tree, context="DefInjected", filter_func=content_filter.filter_content):
-                # 构建相对路径，包含 DefInjected 子目录结构
-                rel_path = str(xml_file.relative_to(definjected_dir))
-
-                # 生成模板内容：保留英文原文作为翻译参考，同时明确标记为待翻译
-                # 格式："[待翻译] 英文原文" - 这样用户能清楚看到原文并知道需要翻译
-                template_text = f"[待翻译] {text}"
-                file_translations.append((key, template_text, tag, rel_path))
-            logging.debug("从 %s 提取到 %s 条DefInjected模板", xml_file.name, len(file_translations))
-            translations.extend(file_translations)
-        else:
-            logging.error("无法解析DefInjected XML文件: %s", xml_file)
-
-    print(f"{Fore.GREEN}以英文DefInjected结构为基础生成 {len(translations)} 条模板{Style.RESET_ALL}")
-    return translations
-
 def extract_definjected_translations(mod_dir: str, language: str = CONFIG.source_language, direct_dir: str = None) -> List[Tuple[str, str, str, str]]:
     """
     从 DefInjected 目录提取翻译结构，生成模板数据
 
-    这个函数的目的是以英文DefInjected的结构为基础，生成翻译模板的占位符数据。
-    提供两种模式：
-    1. 保留英文原文作为参考（带标记）
-    2. 生成空白占位符（便于翻译）
-    
     Args:
         mod_dir (str): 模组目录路径
         language (str): 语言代码
@@ -238,11 +184,9 @@ def extract_definjected_translations(mod_dir: str, language: str = CONFIG.source
     translations: List[Tuple[str, str, str, str]] = []
     
     if direct_dir:
-        # 直接使用指定的目录
         definjected_dir = Path(direct_dir)
         print(f"{Fore.GREEN}正在从指定目录提取DefInjected翻译（目录：{direct_dir}）...{Style.RESET_ALL}")
     else:
-        # 使用传统的模组目录结构
         lang_path = get_language_folder_path(language, mod_dir)
         definjected_dir = Path(lang_path) / CONFIG.def_injected_dir
         print(f"{Fore.GREEN}正在以英文 DefInjected 结构为基础生成模板（模组目录：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}")
@@ -254,7 +198,6 @@ def extract_definjected_translations(mod_dir: str, language: str = CONFIG.source
         logging.warning("DefInjected 目录不存在: %s", definjected_dir)
         return []
 
-    # 查找所有XML文件
     xml_files = list(definjected_dir.rglob("*.xml"))
     logging.debug("找到 %s 个DefInjected XML文件", len(xml_files))
 
@@ -263,15 +206,9 @@ def extract_definjected_translations(mod_dir: str, language: str = CONFIG.source
         tree = processor.parse_xml(str(xml_file))
         if tree:
             file_translations = []
-            # DefInjected 文件的结构和 Keyed 文件不同，需要特殊处理
             for key, text, tag in processor.extract_translations(tree, context="DefInjected", filter_func=content_filter.filter_content):
-                # 构建相对路径，包含 DefInjected 子目录结构
                 rel_path = str(xml_file.relative_to(definjected_dir))
-
-                # 生成模板内容：保留英文原文作为翻译参考，同时明确标记为待翻译
-                # 格式："[待翻译] 英文原文" - 这样用户能清楚看到原文并知道需要翻译
-                template_text = f"[待翻译] {text}"
-                file_translations.append((key, template_text, tag, rel_path))
+                file_translations.append((key, text, tag, rel_path))
             logging.debug("从 %s 提取到 %s 条DefInjected模板", xml_file.name, len(file_translations))
             translations.extend(file_translations)
         else:

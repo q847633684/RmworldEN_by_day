@@ -6,8 +6,9 @@ import re
 import csv
 from pathlib import Path
 from dataclasses import dataclass
+from day_translation.extract.xml_utils import sanitize_xml, sanitize_xcomment
 try:
-    from lxml import etree
+    import lxml.etree as etree
     LXML_AVAILABLE = True
 except ImportError:
     LXML_AVAILABLE = False
@@ -351,19 +352,6 @@ class XMLProcessor:
         """返回处理器的详细表示"""
         return f"XMLProcessor(\n  use_lxml={self.use_lxml},\n  validate_xml={self.config.validate_xml},\n  parser={self.parser}\n)"
 
-def sanitize_xml(text: str) -> str:
-    """清理 XML 文本"""
-    if not isinstance(text, str):
-        return str(text)
-    text = re.sub(r'[^\u0020-\uD7FF\uE000-\uFFFD]', '', text)
-    text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-    return text
-
-def sanitize_xcomment(text: str) -> str:
-    """清理 XML 注释"""
-    if not isinstance(text, str):
-        return str(text)
-    return re.sub(r'--+', '-', text)
 
 def get_language_folder_path(language: str, mod_dir: str) -> str:
     """获取语言文件夹路径"""

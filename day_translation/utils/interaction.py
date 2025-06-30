@@ -12,27 +12,6 @@ from .path_manager import PathManager
 # 全局路径管理器实例
 path_manager = PathManager()
 
-def show_welcome():
-    """显示欢迎信息"""
-    print(f"{Fore.CYAN}╔══════════════════════════════════════════════════════════════╗")
-    print(f"║              🎮 Day Translation v0.1.0 🎮              ║")
-    print(f"║                RimWorld 模组汉化工具                    ║")
-    print(f"╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}")
-    
-    print(f"\n{Fore.GREEN}✨ 核心功能：{Style.RESET_ALL}")
-    print(f"   📤 模组文本提取  ── 智能提取翻译模板")
-    print(f"   🤖 阿里云机器翻译 ── 高质量AI翻译")
-    print(f"   📥 翻译导入      ── 一键导入翻译结果")
-    print(f"   📦 批量处理      ── 多模组批量处理")
-    
-    print(f"\n{Fore.YELLOW}💡 使用提示：{Style.RESET_ALL}")
-    print(f"   • 输入 'q' 随时退出程序")
-    print(f"   • 输入 'b' 返回上级菜单")
-    print(f"   • 支持历史记录快速选择")
-    print(f"   • 智能检测模组版本结构")
-    
-    print(f"\n{Fore.CYAN}────────────────────────────────────────────────────────────────{Style.RESET_ALL}")
-
 def show_main_menu() -> str:
     """显示主菜单并返回用户选择"""
     print(f"\n{Fore.CYAN}╔══════════════════════════════════════════════════════════════╗")

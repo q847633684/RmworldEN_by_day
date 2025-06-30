@@ -17,7 +17,7 @@ from day_translation.utils.interaction import (
     show_warning
 )
 from day_translation.utils.path_manager import PathManager
-from .smart_merger import SmartMerger
+from .smart_merger import SmartMerger, _perform_smart_merge, _extract_file_translations
 
 path_manager = PathManager()
 
@@ -143,79 +143,3 @@ def handle_extract():
     except Exception as e:
         show_error(f"提取模板功能失败: {str(e)}")
         logging.error("提取模板功能失败: %s", str(e), exc_info=True)
-
-def _perform_smart_merge(output_dir: str, translations: List[Tuple[str, str, str, str]], smart_merger: SmartMerger) -> Optional[Dict]:
-    """
-    执行智能合并操作
-    
-    Args:
-        output_dir (str): 输出目录
-        translations (List[Tuple[str, str, str, str]]): 提取的翻译数据，格式为 (key, text, group, file_info)
-        smart_merger (SmartMerger): 智能合并器实例
-        
-    Returns:
-        Optional[Dict]: 合并结果，如果没有需要合并的文件则返回None
-    """
-    try:
-        output_path = Path(output_dir)
-        file_mappings = []
-        
-        # 处理DefInjected文件
-        definjected_dir = output_path / "DefInjected"
-        if definjected_dir.exists():
-            for xml_file in definjected_dir.rglob("*.xml"):
-                if xml_file.is_file():
-                    # 从translations中提取对应文件的翻译内容
-                    file_translations = _extract_file_translations(xml_file, translations)
-                    if file_translations:
-                        file_mappings.append((str(xml_file), file_translations))
-        
-        # 处理Keyed文件
-        keyed_dir = output_path / "Keyed"
-        if keyed_dir.exists():
-            for xml_file in keyed_dir.glob("*.xml"):
-                if xml_file.is_file():
-                    # 从translations中提取对应文件的翻译内容
-                    file_translations = _extract_file_translations(xml_file, translations)
-                    if file_translations:
-                        file_mappings.append((str(xml_file), file_translations))
-        
-        if not file_mappings:
-            return None
-        
-        # 执行批量合并
-        results = smart_merger.merge_multiple_files(file_mappings)
-        
-        # 打印合并结果
-        smart_merger.print_batch_summary(results)
-        
-        return results
-        
-    except Exception as e:
-        logging.error(f"智能合并失败: {e}")
-        show_error(f"智能合并失败: {str(e)}")
-        return None
-
-def _extract_file_translations(xml_file: Path, translations: List[Tuple[str, str, str, str]]) -> Dict[str, str]:
-    """
-    从翻译数据中提取对应文件的翻译内容
-    
-    Args:
-        xml_file (Path): XML文件路径
-        translations (List[Tuple[str, str, str, str]]): 翻译数据列表，格式为 (key, text, group, file_info)
-        
-    Returns:
-        Dict[str, str]: 该文件的翻译内容 {key: text}
-    """
-    file_translations = {}
-    
-    # 获取XML文件的相对路径，用于匹配翻译数据
-    xml_file_name = xml_file.name
-    
-    # 遍历翻译数据，格式为 (key, text, group, file_info)
-    for key, text, group, file_info in translations:
-        # 检查文件信息是否匹配当前XML文件
-        if file_info and (file_info.endswith(xml_file_name) or xml_file_name in file_info):
-            file_translations[key] = text
-    
-    return file_translations 

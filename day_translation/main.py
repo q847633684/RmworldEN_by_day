@@ -52,35 +52,44 @@ from day_translation.batch.handler import handle_batch
 from day_translation.corpus.handler import handle_corpus
 from day_translation.full_pipeline.handler import handle_full_pipeline
 from day_translation.config_manage.handler import handle_config_manage
-from day_translation.utils.interaction import show_welcome, show_main_menu
+from day_translation.utils.interaction import show_main_menu
 
 
 def main():
     """主程序入口"""
-    show_welcome()
     while True:
         mode = show_main_menu()
         if mode == "1":
             handle_extract()
+            input("\n按回车返回主菜单...")
         elif mode == "2":
             handle_python_translate()
+            input("\n按回车返回主菜单...")
         elif mode == "3":
             handle_import_template()
+            input("\n按回车返回主菜单...")
         elif mode == "4":
             handle_corpus()
+            input("\n按回车返回主菜单...")
         elif mode == "5":
             handle_full_pipeline()
+            input("\n按回车返回主菜单...")
         elif mode == "6":
             handle_batch()
+            input("\n按回车返回主菜单...")
         elif mode == "7":
             handle_config_manage()
+            input("\n按回车返回主菜单...")
         elif mode == "8":
             handle_java_translate()
+            input("\n按回车返回主菜单...")
         elif mode == "q":
             print("👋 感谢使用 Day Translation！")
             break
         else:
             print("❌ 无效选项，请重新输入。")
+            input("\n按回车返回主菜单...")
+        os.system('cls' if os.name == 'nt' else 'clear')
 
 
 if __name__ == "__main__":

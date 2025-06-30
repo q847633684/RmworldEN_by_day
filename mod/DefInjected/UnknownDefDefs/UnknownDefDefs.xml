@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LanguageData>
-  <!--EN: All-->
-  <AllowedSex.All>All</AllowedSex.All>
-  <!--EN: Gay-->
-  <AllowedSex.Homo>Gay</AllowedSex.Homo>
-  <!--EN: Straight-->
-  <AllowedSex.Nohomo>Straight</AllowedSex.Nohomo>
-</LanguageData>
