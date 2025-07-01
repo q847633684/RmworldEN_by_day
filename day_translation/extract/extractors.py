@@ -170,22 +170,14 @@ def _extract_translatable_fields_recursive(node, def_type: str, def_name: str, c
 
     return translations
 
-def extract_definjected_translations(mod_dir: str, language: str = CONFIG.source_language, direct_dir: str = None) -> List[Tuple[str, str, str, str]]:
+def extract_definjected_translations(mod_dir: str, language: str = CONFIG.source_language, direct_dir: str = None) -> list:
     """
-    从 DefInjected 目录提取翻译结构，生成模板数据
-
-    Args:
-        mod_dir (str): 模组目录路径
-        language (str): 语言代码
-        direct_dir (str): 直接指定DefInjected目录路径，如果提供则忽略mod_dir和language参数
+    从 DefInjected 目录提取翻译结构，支持提取 EN 注释
+    返回: List[Tuple[key, test, tag, rel_path, en_test]]
     """
-    processor = XMLProcessor()
-    content_filter = ContentFilter(CONFIG)
-    translations: List[Tuple[str, str, str, str]] = []
-    
+    translations = []
     if direct_dir:
         definjected_dir = Path(direct_dir)
-        print(f"{Fore.GREEN}正在从指定目录提取DefInjected翻译（目录：{direct_dir}）...{Style.RESET_ALL}")
     else:
         lang_path = get_language_folder_path(language, mod_dir)
         definjected_dir = Path(lang_path) / CONFIG.def_injected_dir
@@ -195,24 +187,45 @@ def extract_definjected_translations(mod_dir: str, language: str = CONFIG.source
     logging.debug("目录是否存在: %s", definjected_dir.exists())
 
     if not definjected_dir.exists():
-        logging.warning("DefInjected 目录不存在: %s", definjected_dir)
         return []
 
     xml_files = list(definjected_dir.rglob("*.xml"))
-    logging.debug("找到 %s 个DefInjected XML文件", len(xml_files))
-
     for xml_file in xml_files:
-        logging.debug("处理DefInjected文件: %s", xml_file)
-        tree = processor.parse_xml(str(xml_file))
-        if tree:
-            file_translations = []
-            for key, text, tag in processor.extract_translations(tree, context="DefInjected", filter_func=content_filter.filter_content):
-                rel_path = str(xml_file.relative_to(definjected_dir))
-                file_translations.append((key, text, tag, rel_path))
-            logging.debug("从 %s 提取到 %s 条DefInjected模板", xml_file.name, len(file_translations))
-            translations.extend(file_translations)
-        else:
-            logging.error("无法解析DefInjected XML文件: %s", xml_file)
-
-    print(f"{Fore.GREEN}以英文DefInjected结构为基础生成 {len(translations)} 条模板{Style.RESET_ALL}")
+        try:
+            tree = XMLProcessor().parse_xml(str(xml_file))
+            root = tree.getroot()
+            rel_path = str(xml_file.relative_to(definjected_dir))
+            last_en_comment = ""
+            for elem in root.iter():
+                if elem is root:
+                    continue  # 跳过根节点
+                if type(elem).__name__ == "Comment":
+                    text = elem.text or ""
+                    if text.strip().startswith("EN:"):
+                        last_en_comment = text.strip()[3:].strip()
+                elif isinstance(elem.tag, str) and not elem.tag.startswith('{'):
+                    # key生成逻辑与原函数一致
+                    parent_tags = []
+                    # 获取父标签
+                    parent = elem.getparent()
+                    while parent is not None and parent.tag != root.tag:
+                        # 获取父标签 并添加到列表中
+                        parent_tags.append(parent.tag)
+                        parent = parent.getparent()
+                    # 反转列表
+                    parent_tags = list(reversed(parent_tags))
+                    # 生成key
+                    key = "/".join(parent_tags + [elem.tag]) if parent_tags else elem.tag
+                    # 生成test
+                    test = elem.text or ""
+                    # 生成tag
+                    tag = elem.tag
+                    # 添加到列表中
+                    translations.append((key, test, tag, rel_path, last_en_comment))
+                    # 清空注释
+                    last_en_comment = ""
+        except Exception as e:
+            logging.error("处理DefInjected文件时发生错误: %s", e)
+            continue
+    print(f"{Fore.GREEN}以英文 DefInjected 结构为基础生成 {len(translations)} 条模板{Style.RESET_ALL}")
     return translations

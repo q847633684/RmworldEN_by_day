@@ -49,6 +49,139 @@
 
 ---
 
+## 智能合并数据结构与实现建议
+
+### 1. 数据提取与结构
+
+- **输入目录**：通过 `_extract_all_translations` 获取  
+  - 返回：`key, test, tag, file`
+- **输出目录**：通过 `_extract_all_translations` 获取  
+  - 返回：`key, test, tag, file, en_test`  
+    - 其中 `en_test` 是该 key 对应的 EN 注释内容（如有）
+
+### 2. 合并逻辑（5.1 规则，结合实际需求）
+
+- 遍历输入目录的所有 key
+  - **如果 key 在输出目录也存在**：
+    - 如果 `test`（输入）和 `en_test`（输出的EN注释）相同：  
+      → 删除这条数据（无需变更，保持原状）
+    - 如果 `test`（输入）和 `en_test` 不同：  
+      → 用输入的 `test` 替换输出的 `test`，并将原本的 `test` 作为历史注释插入
+  - **如果 key 在输出目录不存在**：  
+    → 新增，带 EN 注释
+
+### 3. 合并后数据结构
+
+- 新增：`{"key": ..., "test": ..., "tag": ..., "file": ..., "en_test": ...}`
+- 替换：`{"key": ..., "test": ..., "tag": ..., "file": ..., "en_test": ..., "history": ...}`
+
+### 4. 实现建议
+
+- **扩展 extract_definjected_translations**  
+  - 支持提取 EN 注释（如 `<!--EN: ...-->`），并作为 `en_test` 字段返回
+  - 建议用 lxml 解析注释节点，关联到下一个 key
+- **合并算法**  
+  - 用 dict 结构加速 key 匹配
+  - 合并时按上述规则处理，生成最终 list
+- **写回 XML**  
+  - 按 file 分组，批量写回
+  - 替换时插入历史注释，新增时插入 EN 注释
+
+### 5. 伪代码
+
+```python
+# 1. 提取输入和输出目录数据
+input_data = _extract_all_translations(input_dir)  # key, test, tag, file
+output_data = _extract_all_translations(output_dir)  # key, test, tag, file, en_test
+
+# 2. 构建 key->数据 的映射
+input_map = {item['key']: item for item in input_data}
+output_map = {item['key']: item for item in output_data}
+
+merged = []
+for key, in_item in input_map.items():
+    out_item = output_map.get(key)
+    if out_item:
+        if in_item['test'] == out_item['en_test']:
+            # 不变，跳过
+            continue
+        else:
+            # 替换，保留历史注释
+            merged.append({
+                **in_item,
+                "en_test": out_item['en_test'],
+                "history": out_item['test']
+            })
+    else:
+        # 新增
+        merged.append({
+            **in_item,
+            "en_test": in_item['test']
+        })
+
+# 3. 按 file 分组，写回 XML，插入注释
+```
+
+---
+
+**注意事项**：
+- EN注释的提取与关联需增强 XML 解析逻辑，确保能把注释和 key 关联起来。
+- 历史注释建议统一用 `<!--HISTORY: 原翻译内容：xxx，替换于YYYY-MM-DD-->`。
+- 大文件建议用 lxml，且用 dict 加速 key 匹配。
+- Keyed 目录如需同样处理，建议同步扩展。
+
+---
+
+## 智能合并主流程（新版）
+
+1. **参数获取**  
+   智能合并首先需要获取以下几个关键参数：  
+   - 输入模组目录（input_mod_dir）
+   - 输出目录（output_dir）
+   - 数据源选择（data_source_choice）
+   - 模板结构（template_structure）
+
+2. **提取输入目录翻译**  
+   通过 `_extract_all_translations` 方法，传入输入目录路径和相关参数，获取输入目录下所有可用的翻译数据。
+
+3. **提取输出目录翻译**  
+   通过 `_extract_all_translations` 方法，传入输出目录路径和相关参数，获取输出目录下所有现有的翻译数据。
+
+4. **翻译对比与合并**  
+   对比输入目录（源语言）和输出目录（目标语言）的翻译内容，按照5.1合并逻辑（key、EN注释、历史注释等）进行合并处理，生成最终的合并结果。
+
+5. **后续处理**  
+   - 生成合并后的模板文件
+   - 输出合并统计信息
+
+### 伪代码示例
+
+```python
+# 1. 获取参数
+# input_mod_dir, output_dir, data_source_choice, template_structure
+
+# 2. 提取输入目录翻译
+input_translations = _extract_all_translations(
+    data_source_choice=data_source_choice,
+    direct_dir=input_mod_dir
+)
+
+# 3. 提取输出目录翻译
+output_translations = _extract_all_translations(
+    data_source_choice=data_source_choice,
+    direct_dir=output_dir
+)
+
+# 4. 对比并合并
+merged_translations = _compare_translations(
+    input_translations, output_translations, source_language, target_language
+)
+
+# 5. 生成模板/输出统计
+```
+
+---
+
 ## 6.1 合并提取逻辑
 - 合并时**以输出目录为主**，输入目录（新提取的数据）为增量/更新。
 - 遍历输出目录 DefInjected 的 key，和输入目录新提取的 key 进行比对，按 5.1 逻辑处理。

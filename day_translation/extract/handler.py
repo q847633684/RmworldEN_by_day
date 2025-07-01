@@ -4,10 +4,9 @@
 """
 
 import logging
-from colorama import Fore, Style
 from pathlib import Path
-from typing import List, Dict, Optional, Tuple
-
+from day_translation.extract.smart_merger import SmartMerger
+from day_translation.extract.exporters import write_merged_definjected_translations
 from day_translation.utils.interaction import (
     select_mod_path_with_version_detection,
     select_output_directory,
@@ -17,7 +16,6 @@ from day_translation.utils.interaction import (
     show_warning
 )
 from day_translation.utils.path_manager import PathManager
-from .smart_merger import SmartMerger, _perform_smart_merge, _extract_file_translations
 
 path_manager = PathManager()
 
@@ -38,9 +36,6 @@ def handle_extract():
         
         # 创建智能交互管理器
         interaction_manager = InteractionManager()
-        
-        # 创建智能合并器
-        smart_merger = SmartMerger()
 
         show_info("=== 开始智能提取模板 ===")
         try:
@@ -102,29 +97,23 @@ def handle_extract():
                 show_success(f"覆盖完成！共提取 {len(translations)} 条翻译")
                 
             elif conflict_resolution == 'merge':
-                # 合并：使用智能合并功能
-                show_info("🔄 正在执行智能合并...")
-                
-                # 直接提取新的翻译数据，不生成模板文件
-                if data_source_choice == 'definjected_only':
-                    definjected_extract_mode = "definjected_only"
-                else:
-                    definjected_extract_mode = "defs_only"
-                
-                new_translations = facade.template_manager._extract_all_translations(
-                    data_source_choice=definjected_extract_mode, 
+                # 1. 提取输入目录数据（英文/原始）
+                input_data = facade.template_manager._extract_all_translations(
+                    data_source_choice=data_source_choice,
                     direct_dir=None
                 )
-                
-                # 执行智能合并（_perform_smart_merge会直接从文件系统读取现有翻译）
-                merge_results = _perform_smart_merge(output_dir, new_translations, smart_merger)
-                if merge_results:
-                    show_success(f"智能合并完成！")
-                    show_info(f"合并统计：替换 {merge_results['summary']['total_replaced']} 个，新增 {merge_results['summary']['total_added']} 个，保持 {merge_results['summary']['total_unchanged']} 个")
-                else:
-                    show_warning("智能合并未执行，可能是没有现有文件需要合并")
-                
-                translations = new_translations  # 用于显示总数
+                # 2. 提取输出目录数据（中文/现有）
+                output_data = facade.template_manager._extract_all_translations(
+                    data_source_choice="definjected_only",
+                    direct_dir=output_dir
+                )
+                # 3. 智能合并（使用新版 SmartMerger 类）
+                merger = SmartMerger(input_data, output_data)
+                merged = merger.smart_merge_definjected_translations()
+                show_info("🔄 正在执行智能合并...")
+                # 4. 写回 XML
+                write_merged_definjected_translations(merged, output_dir)
+                show_success(f"智能合并完成！共处理 {len(merged)} 条翻译。")
             
             else:
                 # 新建：直接提取

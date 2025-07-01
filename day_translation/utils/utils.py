@@ -6,7 +6,7 @@ import re
 import csv
 from pathlib import Path
 from dataclasses import dataclass
-from day_translation.extract.xml_utils import sanitize_xml, sanitize_xcomment
+from lxml import etree as LET
 try:
     import lxml.etree as etree
     LXML_AVAILABLE = True
@@ -337,7 +337,7 @@ class XMLProcessor:
                 comment_text = (comment_func(original) if comment_func
                               else f"{comment_prefix}: {original}")
                 comment = (etree.Comment(sanitize_xcomment(comment_text)) if self.use_lxml
-                         else ET.Comment(sanitize_xcomment(comment_text)))
+                         else ET.Comment(sanitize_xcomment(comment_text))) # type: ignore
                 
                 parent = parent_map.get(elem) if not self.use_lxml else elem.getparent()
                 if parent is not None:
@@ -352,6 +352,55 @@ class XMLProcessor:
         """返回处理器的详细表示"""
         return f"XMLProcessor(\n  use_lxml={self.use_lxml},\n  validate_xml={self.config.validate_xml},\n  parser={self.parser}\n)"
 
+    @staticmethod
+    def generate_element_key(elem: Any, root: Any, parent_map: Dict = None) -> str:
+        """生成元素键（支持递归路径）"""
+        key = elem.get("key") or elem.tag
+        path_parts = []
+        current = elem
+        if parent_map:  # ElementTree
+            while current is not None and current != root:
+                if current.tag != "LanguageData":
+                    path_parts.append(current.tag)
+                current = parent_map.get(current)
+        else:  # lxml
+            while current is not None and current != root:
+                if current.tag != "LanguageData":
+                    path_parts.append(current.tag)
+                current = current.getparent()
+        path_parts.reverse()
+        return ".".join(path_parts) if path_parts else key
+
+def sanitize_xml(text: str) -> str:
+    """清理 XML 文本，去除所有非法字符并转义"""
+    if not isinstance(text, str):
+        text = str(text)
+    # 去除所有非法 XML 字符（包括 C0/C1 控制符）
+    text = re.sub(
+        r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F]', '', text
+    )
+    # 转义特殊字符
+    text = (
+        text.replace('&', '&amp;')
+            .replace('<', '&lt;')
+            .replace('>', '&gt;')
+            .replace('"', '&quot;')
+            .replace("'", '&apos;')
+    )
+    return text
+
+def sanitize_xcomment(text: str) -> str:
+    """清理 XML 注释内容，防止非法字符和注释断裂"""
+    if not isinstance(text, str):
+        text = str(text)
+    text = text.replace('--', '- -')
+    text = text.replace('<', '＜').replace('>', '＞').replace('&', '＆')
+    # 去除所有控制字符
+    text = ''.join(c for c in text if c >= ' ' or c == '\n' or c == '\r')
+    # 注释不能以 - 结尾
+    if text.endswith('-'):
+         text += ' '
+    return text
 
 def get_language_folder_path(language: str, mod_dir: str) -> str:
     """获取语言文件夹路径"""
@@ -385,24 +434,6 @@ def get_history_list(key: str) -> List[str]:
         logging.error(f"读取历史记录失败: {e}")
     return []
 
-def generate_element_key(elem: Any, root: Any, parent_map: Dict = None) -> str:
-    """生成元素键"""
-    key = elem.get("key") or elem.tag
-    path_parts = []
-    current = elem
-    if parent_map:  # ElementTree
-        while current is not None and current != root:
-            if current.tag != "LanguageData":
-                path_parts.append(current.tag)
-            current = parent_map.get(current)
-    else:  # lxml
-        while current is not None and current != root:
-            if current.tag != "LanguageData":
-                path_parts.append(current.tag)
-            current = current.getparent()
-    path_parts.reverse()
-    return ".".join(path_parts) if path_parts else key
-
 def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
     """从 CSV 加载翻译"""
     translations = {}
@@ -417,8 +448,3 @@ def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
     except Exception as e:
         logging.error(f"CSV 解析失败: {csv_path}: {e}")
     return translations
-
-def save_xml_to_file(tree: Any, file_path: str, use_lxml: bool = LXML_AVAILABLE) -> bool:
-    """兼容旧版保存 XML 文件"""
-    processor = XMLProcessor(use_lxml=use_lxml)
-    return processor.save_xml(tree, file_path) 

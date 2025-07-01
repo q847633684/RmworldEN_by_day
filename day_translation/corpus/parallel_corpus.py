@@ -10,7 +10,6 @@ from pathlib import Path
 from typing import List, Tuple
 from day_translation.utils.config import get_config
 from day_translation.utils.utils import XMLProcessor, get_language_folder_path
-from day_translation.extract.xml_utils import sanitize_xcomment
 from colorama import Fore, Style
 
 CONFIG = get_config()
