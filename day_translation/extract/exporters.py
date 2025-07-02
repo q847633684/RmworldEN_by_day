@@ -21,9 +21,8 @@ import os
 import re
 from pathlib import Path
 from typing import List, Tuple, Dict
-from lxml import etree as LET
 from day_translation.utils.config import get_config
-from day_translation.utils.utils import sanitize_xcomment, sanitize_xml, XMLProcessor
+from day_translation.utils.utils import sanitize_xml, XMLProcessor
 
 CONFIG = get_config()
 
@@ -32,8 +31,8 @@ def export_definjected_with_original_structure(
     mod_dir: str,
     export_dir: str,
     selected_translations: list,
-    language: str = CONFIG.default_language,
-    source_language: str = CONFIG.source_language,
+    _language: str = CONFIG.default_language,  # 未使用，保留接口兼容性
+    _source_language: str = CONFIG.source_language,  # 未使用，保留接口兼容性
 ) -> None:
     """按 file_path 创建目录和文件结构导出 DefInjected 翻译，key 作为标签名，text 作为内容"""
     logging.info(
@@ -72,20 +71,19 @@ def export_definjected_with_original_structure(
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
         # 生成 XML 内容
-        root = LET.Element("LanguageData")
+        processor = XMLProcessor()
+        root = processor.create_element("LanguageData")
 
         # 按键名排序，保持一致性
-        for key, text, tag in sorted(translations, key=lambda x: x[0]):
+        for key, text, _ in sorted(translations, key=lambda x: x[0]):  # tag 未使用
             # 添加英文注释
-            comment = LET.Comment(sanitize_xcomment(f"EN: {text}"))
+            comment = processor.create_comment(f"EN: {text}")
             root.append(comment)
 
             # 添加翻译元素
-            elem = LET.SubElement(root, key)
-            elem.text = sanitize_xml(text)
+            elem = processor.create_subelement(root, key, text)
 
         # 保存文件
-        processor = XMLProcessor()
         ok = processor.save_xml(root, output_file, pretty_print=True)
         if ok:
             logging.info(
@@ -99,7 +97,7 @@ def export_definjected_with_defs_structure(
     mod_dir: str,
     export_dir: str,
     selected_translations: list,
-    language: str = CONFIG.default_language,
+    _language: str = CONFIG.default_language,  # 未使用，保留接口兼容性
 ) -> None:
     """按照按DefType分组导出DefInjected翻译"""
     logging.info(
@@ -120,7 +118,7 @@ def export_definjected_with_defs_structure(
     file_groups: Dict[str, List[Tuple[str, str, str]]] = {}
 
     for item in selected_translations:
-        full_path, text, tag, rel_path = item[:4]
+        full_path, text, tag, _ = item[:4]  # rel_path 未使用
         # 从 full_path 生成键名和提取 def_type
         if "/" in full_path:
             def_type_part, field_part = full_path.split("/", 1)
@@ -158,20 +156,19 @@ def export_definjected_with_defs_structure(
         output_file = os.path.join(type_dir, f"{def_type}Defs.xml")
 
         # 生成 XML 内容
-        root = LET.Element("LanguageData")
+        processor = XMLProcessor()
+        root = processor.create_element("LanguageData")
 
         # 按键名排序，保持一致性
-        for full_key, text, tag in sorted(translations, key=lambda x: x[0]):
+        for full_key, text, _ in sorted(translations, key=lambda x: x[0]):  # tag 未使用
             # 添加英文注释
-            comment = LET.Comment(sanitize_xcomment(f"EN: {text}"))
+            comment = processor.create_comment(f"EN: {text}")
             root.append(comment)
 
             # 添加翻译元素
-            elem = LET.SubElement(root, full_key)
-            elem.text = sanitize_xml(text)
+            elem = processor.create_subelement(root, full_key, text)
 
         # 保存文件
-        processor = XMLProcessor()
         ok = processor.save_xml(root, output_file, pretty_print=True)
         if ok:
             logging.info(
@@ -185,7 +182,7 @@ def export_definjected_with_file_structure(
     mod_dir: str,
     export_dir: str,
     selected_translations: list,
-    language: str = CONFIG.default_language,
+    _language: str = CONFIG.default_language,  # 未使用，保留接口兼容性
 ) -> None:
     """按原始Defs文件目录结构导出DefInjected翻译，key 结构为 DefType/defName.字段，导出时去除 DefType/ 只保留 defName.字段作为标签名，目录结构用 rel_path，内容用 text。"""
     logging.info(
@@ -216,8 +213,11 @@ def export_definjected_with_file_structure(
             continue
         output_file = os.path.join(def_injected_path, rel_path)
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
-        root = LET.Element("LanguageData")
-        for key, text, tag in sorted(translations, key=lambda x: x[0]):
+
+        processor = XMLProcessor()
+        root = processor.create_element("LanguageData")
+
+        for key, text, _ in sorted(translations, key=lambda x: x[0]):  # tag 未使用
             if text is None:
                 text = ""
             assert isinstance(text, str), f"text 非字符串: {text}"
@@ -230,11 +230,12 @@ def export_definjected_with_file_structure(
             tag_name = re.sub(r"[^A-Za-z0-9_.]", ".", tag_name)
             if not re.match(r"^[A-Za-z_]", tag_name):
                 tag_name = "_" + tag_name
-            comment = LET.Comment(sanitize_xcomment(f"EN: {text}"))
+            # 添加英文注释
+            comment = processor.create_comment(f"EN: {text}")
             root.append(comment)
-            elem = LET.SubElement(root, tag_name)
-            elem.text = sanitize_xml(text)
-        processor = XMLProcessor()
+            # 添加翻译元素
+            elem = processor.create_subelement(root, tag_name, text)
+
         ok = processor.save_xml(root, output_file, pretty_print=True)
         if ok:
             logging.info(
@@ -248,7 +249,7 @@ def export_keyed_template(
     mod_dir: str,
     export_dir: str,
     selected_translations: list,
-    language: str = CONFIG.default_language,
+    _language: str = CONFIG.default_language,  # 未使用，保留接口兼容性
 ) -> None:
     """导出 Keyed 翻译模板，按文件分组生成 XML 文件"""
     logging.info(
@@ -287,20 +288,19 @@ def export_keyed_template(
         output_file = os.path.join(keyed_path, Path(file_path).name)
 
         # 生成 XML 内容
-        root = LET.Element("LanguageData")
+        processor = XMLProcessor()
+        root = processor.create_element("LanguageData")
 
         # 按键名排序，保持一致性
-        for key, text, tag in sorted(translations, key=lambda x: x[0]):
+        for key, text, _ in sorted(translations, key=lambda x: x[0]):  # tag 未使用
             # 添加英文注释
-            comment = LET.Comment(sanitize_xcomment(f"EN: {text}"))
+            comment = processor.create_comment(f"EN: {text}")
             root.append(comment)
 
             # 添加翻译元素
-            elem = LET.SubElement(root, key)
-            elem.text = sanitize_xml(text)
+            elem = processor.create_subelement(root, key, text)
 
         # 保存文件
-        processor = XMLProcessor()
         ok = processor.save_xml(root, output_file, pretty_print=True)
         if ok:
             logging.info(
@@ -341,13 +341,13 @@ def write_merged_definjected_translations(
             else:
                 # 文件存在但解析失败，创建新的
                 logging.warning("无法解析现有文件，将重新创建: %s", output_file)
-                root = LET.Element("LanguageData")
+                root = processor.create_element("LanguageData")
                 output_file.parent.mkdir(parents=True, exist_ok=True)
         else:
             # 文件不存在，创建新文件和目录
             logging.info("创建新文件: %s", output_file)
             output_file.parent.mkdir(parents=True, exist_ok=True)
-            root = LET.Element("LanguageData")
+            root = processor.create_element("LanguageData")
 
         # 更新或添加翻译条目
         for key, test, _, _, en_test, history in sorted(items, key=lambda x: x[0]):
@@ -359,10 +359,8 @@ def write_merged_definjected_translations(
                 original_text = existing_elem.text or ""
                 if original_text != test:
                     # 如果内容有变化，添加历史注释
-                    history_comment = LET.Comment(
-                        sanitize_xcomment(
-                            f"HISTORY: 原翻译内容：{original_text}，替换于YYYY-MM-DD"
-                        )
+                    history_comment = processor.create_comment(
+                        f"HISTORY: 原翻译内容：{original_text}，替换于YYYY-MM-DD"
                     )
                     # 在元素前插入历史注释
                     elem_index = list(root).index(existing_elem)
@@ -374,21 +372,18 @@ def write_merged_definjected_translations(
                 # 添加新元素
                 # 先添加历史注释（如果有，且不为空）
                 if history and history.strip():
-                    history_comment = LET.Comment(
-                        sanitize_xcomment(
-                            f"HISTORY: 原翻译内容：{history}，替换于YYYY-MM-DD"
-                        )
+                    history_comment = processor.create_comment(
+                        f"HISTORY: 原翻译内容：{history}，替换于YYYY-MM-DD"
                     )
                     root.append(history_comment)
 
                 # 添加英文注释（如果有）
                 if en_test:
-                    en_comment = LET.Comment(sanitize_xcomment(f"EN: {en_test}"))
+                    en_comment = processor.create_comment(f"EN: {en_test}")
                     root.append(en_comment)
 
                 # 创建新的翻译元素
-                elem = LET.SubElement(root, key)
-                elem.text = sanitize_xml(test)
+                elem = processor.create_subelement(root, key, test)
 
         # 保存更新后的文件
         success = processor.save_xml(root, output_file, pretty_print=True)
