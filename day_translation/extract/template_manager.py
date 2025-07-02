@@ -20,6 +20,7 @@ from day_translation.extract.exporters import (
     export_keyed_template,
 )
 from day_translation.utils.config import get_config
+
 if TYPE_CHECKING:
     from typing_extensions import Literal
 CONFIG = get_config()
@@ -100,6 +101,7 @@ class TemplateManager:
         if output_dir:
             csv_path = os.path.join(output_dir, "translations.csv")
             self._save_translations_to_csv(translations, csv_path)
+            logging.info("翻译数据已保存到CSV: %s", csv_path)
             print(f"{Fore.GREEN}✅ CSV文件已生成: {csv_path}{Style.RESET_ALL}")
 
         logging.info("模板生成完成，总计 %s 条翻译", len(translations))
@@ -109,88 +111,71 @@ class TemplateManager:
     def extract_all_translations(
         self,
         data_source_choice: str = "defs",
-        direct_dir: Optional[str] = None,
+        language: str = CONFIG.source_language,
     ):
         """
         提取所有翻译数据
         Args:
             data_source_choice (str): 数据来源选择 ('definjected_only', 'defs_only')
-            direct_dir (str): 直接指定DefInjected目录路径，用于从输出目录提取现有翻译
+            language (str): 目标语言代码
 
         Returns:
-            根据 direct_dir 自动判断返回格式：
-            - direct_dir=None: 返回四元组 (key, test, tag, rel_path) - 用于输入数据
-            - direct_dir=指定路径: 返回五元组 (key, test, tag, rel_path, en_test) - 用于输出数据
+            返回五元组 (key, test, tag, rel_path, en_test)
 
             提取参数说明：
                 extract_keyed_translations: 提取 Keyed 翻译
                 scan_defs_sync: 扫描 Defs 目录中的可翻译内容
                 extract_definjected_translations: 从 DefInjected 目录提取翻译结构
         """
-        translations = []
-
         # 提取Keyed翻译（总是提取）
-        print("📊 正在扫描 Keyed 翻译...")
-        keyed_translations = extract_keyed_translations(
-            str(self.mod_dir), CONFIG.source_language
-        )
-        print(f"   ✅ 提取到 {len(keyed_translations)} 条 Keyed 翻译")
-        logging.debug("提取到 %s 条 Keyed 翻译", len(keyed_translations))
+        logging.info("正在扫描 Keyed 目录...")
+        print(f"{Fore.GREEN}📊 正在扫描 Keyed 目录...{Style.RESET_ALL}")
+        keyed_translations = extract_keyed_translations(str(self.mod_dir), language)
+        print(f"   ✅ 从Keyed 目录提取到 {len(keyed_translations)} 条 Keyed 翻译")
+        logging.info("从Keyed 目录提取到 %s 条 Keyed 翻译", len(keyed_translations))
 
         if data_source_choice == "definjected_only":
-            logging.info("从 DefInjected 目录提取翻译数据")
-            print("📊 正在扫描 DefInjected 目录提取翻译...")
+            logging.info("正在扫描 DefInjected 目录...")
+            print(f"{Fore.GREEN}📊 正在扫描 DefInjected 目录...{Style.RESET_ALL}")
             # 从DefInjected目录提取翻译数据
-            # extract_definjected_translations 会根据 direct_dir 自动返回四元组或五元组
             definjected_translations = extract_definjected_translations(
-                str(self.mod_dir), CONFIG.source_language, direct_dir=direct_dir
+                str(self.mod_dir), language
             )
 
-            # 检查返回的是四元组还是五元组
-            if definjected_translations and len(definjected_translations[0]) == 5:
-                # 五元组：需要将Keyed也转换为五元组保持一致性
-                keyed_as_five = [
-                    (k, t, g, f, t)
-                    for k, t, g, f in keyed_translations  # en_test用test填充
-                ]
-                return keyed_as_five + definjected_translations  # type: ignore
-            else:
-                # 四元组：直接合并
-                translations.extend(keyed_translations)
-                translations.extend(definjected_translations)  # type: ignore
-
-            print(f"   ✅ 提取到 {len(definjected_translations)} 条 DefInjected 翻译")
-            logging.debug(
-                "从DefInjected提取到 %s 条翻译", len(definjected_translations)
+            # 现在总是返回五元组，需要将Keyed也转换为五元组保持一致性
+            keyed_as_five = [
+                (k, t, g, f, t)  # en_test用test填充
+                for k, t, g, f in keyed_translations
+            ]
+            print(
+                f"   ✅ 从DefInjected 目录提取到 {len(definjected_translations)} 条 DefInjected 翻译"
             )
+            logging.info(
+                "从DefInjected 目录提取到 %s 条 DefInjected 翻译",
+                len(definjected_translations),
+            )
+            return keyed_as_five + definjected_translations  # type: ignore
 
         elif data_source_choice == "defs_only":
-            print("📊 正在扫描 Defs 目录...")
-            defs_translations = scan_defs_sync(
-                str(self.mod_dir), language=CONFIG.source_language
-            )
+            logging.info("正在扫描 Defs 目录...")
+            print(f"{Fore.GREEN}📊 正在扫描 Defs 目录...{Style.RESET_ALL}")
+            defs_translations = scan_defs_sync(str(self.mod_dir))
 
-            # defs_translations 总是四元组，如果有 direct_dir 需要转换为五元组
-            if direct_dir:
-                # 输出场景：将四元组转换为五元组
-                keyed_as_five = [
-                    (k, t, g, f, t)
-                    for k, t, g, f in keyed_translations  # en_test用test填充
-                ]
-                defs_as_five = [
-                    (k, t, g, f, t)
-                    for k, t, g, f in defs_translations  # en_test用test填充
-                ]
-                return keyed_as_five + defs_as_five
-            else:
-                # 输入场景：保持四元组格式
-                translations.extend(keyed_translations)
-                translations.extend(defs_translations)
+            # defs_translations 总是四元组，需要转换为五元组
+            keyed_as_five = [
+                (k, t, g, f, t)
+                for k, t, g, f in keyed_translations  # en_test用test填充
+            ]
+            defs_as_five = [
+                (k, t, g, f, t) for k, t, g, f in defs_translations  # en_test用test填充
+            ]
+            print(f"   ✅ 从Defs目录提取到 {len(defs_translations)} 条 Defs 翻译")
+            logging.info("从Defs目录提取到 %s 条 Defs 翻译", len(defs_translations))
+            return keyed_as_five + defs_as_five
 
-            print(f"   ✅ 提取到 {len(defs_translations)} 条 DefInjected 翻译")
-            logging.debug("提取到 %s 条 DefInjected 翻译", len(defs_translations))
-
-        return translations  # type: ignore
+        # 如果到了这里，说明没有匹配的data_source_choice
+        logging.warning("未知的data_source_choice: %s", data_source_choice)
+        return []
 
     def _generate_templates_to_output_dir_with_structure(
         self, translations: list, output_dir: str, template_structure: str
@@ -227,7 +212,7 @@ class TemplateManager:
             logging.info(
                 "生成 %s 条 Keyed 模板到 %s", len(keyed_translations), output_path
             )
-            print(f"   ✅ Keyed 模板已生成: {output_path}")
+            print("   ✅ Keyed 模板已生成")
 
         # 生成DefInjected模板 - 完全复用exporters.py中的函数
         if def_translations:

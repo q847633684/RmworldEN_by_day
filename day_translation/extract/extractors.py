@@ -13,7 +13,7 @@ RimWorld 翻译提取器模块
 """
 
 import logging
-from typing import List, Tuple, Dict, Optional, Union
+from typing import List, Tuple, Dict, Optional
 from pathlib import Path
 from colorama import Fore, Style
 from day_translation.utils.utils import XMLProcessor, get_language_folder_path
@@ -29,14 +29,15 @@ def extract_keyed_translations(
 ) -> List[Tuple[str, str, str, str]]:
     """提取 Keyed 翻译"""
     print(
-        f"{Fore.GREEN}正在提取 Keyed 翻译（模组目录：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}"
+        f"{Fore.GREEN}正在扫描 Keyed 目录（模组目录：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}"
     )
-    logging.info("正在提取 Keyed 翻译（模组目录：%s, 语言：%s）...", mod_dir, language)
+    logging.info("正在扫描 Keyed 目录（模组目录：%s, 语言：%s）...", mod_dir, language)
     processor = XMLProcessor()
     content_filter = ContentFilter(CONFIG)
     translations: List[Tuple[str, str, str, str]] = []
     lang_path = get_language_folder_path(language, mod_dir)
     keyed_dir = Path(lang_path) / CONFIG.keyed_dir
+    print(f"   ✅ 获取 Keyed 目录: {keyed_dir}")
     # 添加调试信息
     logging.debug("语言路径: %s", lang_path)
     logging.debug("Keyed目录: %s", keyed_dir)
@@ -67,24 +68,20 @@ def extract_keyed_translations(
             translations.extend(file_translations)
         else:
             logging.error("无法解析XML文件: %s", xml_file)
-
-    print(f"{Fore.GREEN}提取到 {len(translations)} 条 Keyed 翻译{Style.RESET_ALL}")
     return translations
 
 
-def scan_defs_sync(
-    mod_dir: str, language: str = CONFIG.source_language
-) -> List[Tuple[str, str, str, str]]:
+def scan_defs_sync(mod_dir: str) -> List[Tuple[str, str, str, str]]:
     """扫描 Defs 目录中的可翻译内容（参考 Day_EN 完整实现）"""
-    print(
-        f"{Fore.GREEN}正在扫描 Defs 目录（模组目录：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}"
-    )
-    logging.info("正在扫描 Defs 目录（模组目录：%s, 语言：%s）...", mod_dir, language)
+    print(f"{Fore.GREEN}正在扫描 Defs 目录（模组目录：{mod_dir}）...{Style.RESET_ALL}")
+    logging.info("正在扫描 Defs 目录（模组目录：%s）...", mod_dir)
     processor = XMLProcessor()
     content_filter = ContentFilter(CONFIG)
     translations: List[Tuple[str, str, str, str]] = []
     defs_dir = Path(mod_dir) / "Defs"
-
+    print(f"   ✅ 获取 Defs 目录: {defs_dir}")
+    logging.debug("Defs目录: %s", defs_dir)
+    logging.debug("目录是否存在: %s", defs_dir.exists())
     if not defs_dir.exists():
         logging.warning("Defs 目录不存在: %s", defs_dir)
         return []
@@ -138,10 +135,6 @@ def scan_defs_sync(
                 )
         else:
             logging.error("无法解析XML文件: %s", xml_file)
-
-    print(
-        f"{Fore.GREEN}提取到 {len(translations)} 条 DefInjected 翻译{Style.RESET_ALL}"
-    )
     return translations
 
 
@@ -247,40 +240,29 @@ def _extract_translatable_fields_recursive(
 def extract_definjected_translations(
     mod_dir: str,
     language: str = CONFIG.source_language,
-    direct_dir: Optional[str] = None,
-) -> Union[List[Tuple[str, str, str, str]], List[Tuple[str, str, str, str, str]]]:
+) -> List[Tuple[str, str, str, str, str]]:
     """
     从 DefInjected 目录提取翻译结构，支持提取 EN 注释
 
     Args:
         mod_dir: 模组目录路径
         language: 语言代码
-        direct_dir: 直接指定DefInjected目录路径
 
     Returns:
-        - direct_dir=None: 返回四元组 List[Tuple[key, test, tag, rel_path]]
-        - direct_dir=指定路径: 返回五元组 List[Tuple[key, test, tag, rel_path, en_test]]
+        返回五元组 List[Tuple[key, test, tag, rel_path, en_test]]
     """
+    print(
+        f"{Fore.GREEN}正在扫描 DefInjected 目录（模组目录：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}"
+    )
+    logging.info(
+        "正在扫描 DefInjected 目录（模组目录：%s, 语言：%s）...",
+        mod_dir,
+        language,
+    )
     translations = []
-    if direct_dir:
-        definjected_dir = Path(direct_dir)
-        logging.info(
-            "正在以direct_dir DefInjected 结构为基础生成模板（模组目录：%s, 语言：%s）...",
-            mod_dir,
-            language,
-        )
-    else:
-        lang_path = get_language_folder_path(language, mod_dir)
-        definjected_dir = Path(lang_path) / CONFIG.def_injected_dir
-        print(
-            f"{Fore.GREEN}正在以英文 DefInjected 结构为基础生成模板（模组目录：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}"
-        )
-        logging.info(
-            "正在以英文 DefInjected 结构为基础生成模板（模组目录：%s, 语言：%s）...",
-            mod_dir,
-            language,
-        )
-
+    lang_path = get_language_folder_path(language, mod_dir)
+    definjected_dir = Path(lang_path) / CONFIG.def_injected_dir
+    print(f"   ✅ 获取 DefInjected 目录: {definjected_dir}")
     logging.debug("DefInjected目录: %s", definjected_dir)
     logging.debug("目录是否存在: %s", definjected_dir.exists())
 
@@ -323,19 +305,11 @@ def extract_definjected_translations(
                     test = elem.text or ""
                     # 生成tag
                     tag = elem.tag
-                    # 添加到列表中
-                    if direct_dir:
-                        # 有 direct_dir：返回五元组，包含 EN 注释
-                        translations.append((key, test, tag, rel_path, last_en_comment))  # type: ignore
-                    else:
-                        # 无 direct_dir：返回四元组，不包含 EN 注释
-                        translations.append((key, test, tag, rel_path))  # type: ignore
+                    # 添加到列表中，始终返回五元组，包含 EN 注释
+                    translations.append((key, test, tag, rel_path, last_en_comment))  # type: ignore
                     # 清空注释
                     last_en_comment = ""
         except (OSError, ValueError, AttributeError) as e:
             logging.error("处理DefInjected文件时发生错误: %s", e)
             continue
-    print(
-        f"{Fore.GREEN}以 DefInjected 结构为基础生成 {len(translations)} 条模板{Style.RESET_ALL}"
-    )
     return translations  # type: ignore

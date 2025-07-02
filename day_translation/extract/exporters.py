@@ -81,7 +81,7 @@ def export_definjected_with_original_structure(
             root.append(comment)
 
             # 添加翻译元素
-            elem = processor.create_subelement(root, key, text)
+            processor.create_subelement(root, key, text)
 
         # 保存文件
         ok = processor.save_xml(root, output_file, pretty_print=True)
@@ -166,7 +166,7 @@ def export_definjected_with_defs_structure(
             root.append(comment)
 
             # 添加翻译元素
-            elem = processor.create_subelement(root, full_key, text)
+            processor.create_subelement(root, full_key, text)
 
         # 保存文件
         ok = processor.save_xml(root, output_file, pretty_print=True)
@@ -234,7 +234,7 @@ def export_definjected_with_file_structure(
             comment = processor.create_comment(f"EN: {text}")
             root.append(comment)
             # 添加翻译元素
-            elem = processor.create_subelement(root, tag_name, text)
+            processor.create_subelement(root, tag_name, text)
 
         ok = processor.save_xml(root, output_file, pretty_print=True)
         if ok:
@@ -298,7 +298,7 @@ def export_keyed_template(
             root.append(comment)
 
             # 添加翻译元素
-            elem = processor.create_subelement(root, key, text)
+            processor.create_subelement(root, key, text)
 
         # 保存文件
         ok = processor.save_xml(root, output_file, pretty_print=True)
@@ -383,7 +383,7 @@ def write_merged_definjected_translations(
                     root.append(en_comment)
 
                 # 创建新的翻译元素
-                elem = processor.create_subelement(root, key, test)
+                processor.create_subelement(root, key, test)
 
         # 保存更新后的文件
         success = processor.save_xml(root, output_file, pretty_print=True)

@@ -7,6 +7,7 @@ import logging
 from pathlib import Path
 from day_translation.extract.smart_merger import SmartMerger
 from day_translation.extract.exporters import write_merged_definjected_translations
+from day_translation.utils.config import get_config
 from day_translation.utils.interaction import (
     select_mod_path_with_version_detection,
     show_success,
@@ -16,6 +17,7 @@ from day_translation.utils.interaction import (
 )
 from day_translation.utils.path_manager import PathManager
 
+CONFIG = get_config()
 path_manager = PathManager()
 
 
@@ -58,17 +60,18 @@ def handle_extract():
                 output_path = Path(output_dir)
                 if output_path.exists():
                     try:
-                        # 只删除翻译相关的目录，不删除整个目录
-                        languages_dir = output_path / "Languages"
-                        if languages_dir.exists():
-                            import shutil
-
-                            shutil.rmtree(languages_dir)
-                            show_info(f"🗑️ 已清空翻译目录：{languages_dir}")
-                        else:
-                            show_info(f"📁 翻译目录不存在，无需清空：{languages_dir}")
+                        # 清空输出目录中的所有内容，但保留目录本身
+                        import shutil
+                        for item in output_path.iterdir():
+                            if item.is_dir():
+                                shutil.rmtree(item)
+                            else:
+                                item.unlink()
+                        show_info(f"�️ 已清空输出目录：{output_path}")
                     except PermissionError as e:
                         show_warning(f"⚠️ 无法删除某些文件（可能是系统文件），跳过：{e}")
+                else:
+                    show_info(f"📁 输出目录不存在，将创建：{output_path}")
 
                 # 重建后执行提取
                 translations = facade.template_manager.extract_and_generate_templates(
@@ -101,15 +104,15 @@ def handle_extract():
                 show_success(f"覆盖完成！共提取 {len(translations)} 条翻译")
 
             elif conflict_resolution == "merge":
-                # 1. 提取输入目录数据（英文/原始）- 返回四元组
+                # 1. 提取输入目录数据（英文/原始）- 返回五元组
                 input_data = facade.template_manager.extract_all_translations(
                     data_source_choice=data_source_choice,
-                    direct_dir=None,
+                    language=CONFIG.source_language,
                 )
                 # 2. 提取输出目录数据（中文/现有）- 返回五元组
                 output_data = facade.template_manager.extract_all_translations(
                     data_source_choice="definjected_only",
-                    direct_dir=output_dir,
+                    language=CONFIG.default_language,
                 )
                 # 3. 智能合并（使用新版 SmartMerger 类）
                 merger = SmartMerger(input_data, output_data)
