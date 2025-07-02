@@ -5,8 +5,9 @@
 
 import logging
 import os
+from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, Union
 from colorama import Fore, Style
 
 from day_translation.utils.path_manager import PathManager
@@ -66,35 +67,28 @@ class InteractionManager:
             Dict[str, Any]: 智能流程决策结果
         """
         self._print_separator("智能提取翻译模板工作流", "=", 60)
-        
         # 第一步：检测英文目录状态
         self._print_step_header(1, 5, "检测英文目录状态")
         english_status = self._detect_english_directories(mod_dir)
-        
         # 第二步：检测输出目录状态
         self._print_step_header(2, 5, "检测输出目录状态")
         output_dir = self._get_output_directory(mod_dir)
         output_status = self._detect_output_directories(output_dir)
-        
         # 第三步：选择数据来源
         self._print_step_header(3, 5, "选择数据来源")
         data_source_choice = self._choose_data_source(english_status)
-        
         # 第四步：处理输出冲突
         self._print_step_header(4, 5, "处理输出冲突")
         conflict_resolution = self._handle_output_conflicts(output_status)
-        
         # 第五步：选择模板结构（根据决策树逻辑）
         self._print_step_header(5, 5, "选择模板结构")
-        
         # 根据你的决策树，如果选择了merge，则使用5.1合并逻辑，不需要选择模板结构
         if conflict_resolution == 'merge':
             print(f"{Fore.BLUE}检测到选择合并模式{Style.RESET_ALL}")
             print(f"   {Fore.GREEN}✅ 将使用5.1智能合并逻辑，无需选择模板结构{Style.RESET_ALL}")
             template_structure = 'merge_logic'  # 特殊标识
         else:
-            template_structure = self._choose_template_structure(data_source_choice, english_status, conflict_resolution)
-        
+            template_structure = self._choose_template_structure(data_source_choice, conflict_resolution)
         # 构建智能配置
         smart_config = {
             'data_sources': {
@@ -108,7 +102,6 @@ class InteractionManager:
             'organization': 'group_by_type',  # 默认按类型分组
             'template_structure': template_structure
         }
-        
         # 配置确认和验证
         if self._confirm_configuration(smart_config):
             self._print_separator("✅ 智能流程决策完成", "=", 60)
@@ -128,9 +121,9 @@ class InteractionManager:
             bool: 用户是否确认配置
         """
         print(f"\n{Fore.CYAN}📋 配置摘要确认：{Style.RESET_ALL}")
-        print(f"   y = 确认，继续执行")
-        print(f"   n = 取消，退出流程")
-        print(f"   r = 重新配置，回到第一步")
+        print("   y = 确认，继续执行")
+        print("   n = 取消，退出流程")
+        print("   r = 重新配置，回到第一步")
         print(f"   📊 数据来源：{self._format_choice_description(config['data_sources']['choice'])}")
         print(f"   📁 输出目录：{config['output_config']['output_dir']}")
         print(f"   ⚙️ 冲突处理：{self._format_conflict_description(config['output_config']['conflict_resolution'])}")
@@ -175,7 +168,7 @@ class InteractionManager:
         }
         return descriptions.get(structure, structure)
 
-    def _detect_english_directories(self, mod_dir: str) -> Dict[str, bool]:
+    def _detect_english_directories(self, mod_dir: str) -> Dict[str, Union[bool, Optional[str]]]:
         """
         检测英文目录状态
 
@@ -183,7 +176,7 @@ class InteractionManager:
             mod_dir (str): 模组目录路径
 
         Returns:
-            Dict[str, bool]: 英文目录状态
+            Dict[str, Union[bool, Optional[str]]]: 英文目录状态
         """
         print(f"{Fore.BLUE}🔍 正在检测英文目录状态...{Style.RESET_ALL}")
         
@@ -217,10 +210,9 @@ class InteractionManager:
         path_manager = PathManager()
         default_dir = str(Path(mod_dir) / 'Languages' / 'ChineseSimplified')
         history = path_manager.get_history_list("output_dir")
-        
         print(f"{Fore.BLUE}📁 请选择输出目录：{Style.RESET_ALL}")
         print(f"{Fore.GREEN}1. 使用默认目录：{default_dir}{Style.RESET_ALL}")
-        
+
         # 展示所有历史记录
         if history:
             print(f"{Fore.YELLOW}历史记录：{Style.RESET_ALL}")
@@ -228,12 +220,9 @@ class InteractionManager:
                 print(f"   {i}. {hist_path}")
         else:
             print(f"{Fore.YELLOW}暂无历史记录{Style.RESET_ALL}")
-        
         max_choice = len(history) + 1
-        
         while True:
             choice = input(f"\n{Fore.CYAN}请选择 (1-{max_choice}) 或直接输入路径: {Style.RESET_ALL}").strip()
-            
             if choice == '1':
                 print(f"   {Fore.GREEN}✅ 选择：{default_dir}{Style.RESET_ALL}")
                 path_manager.remember_path("output_dir", default_dir)
@@ -255,7 +244,7 @@ class InteractionManager:
             else:
                 print(f"   {Fore.RED}❌ 请输入选择或路径{Style.RESET_ALL}")
 
-    def _detect_output_directories(self, output_dir: str) -> Dict[str, bool]:
+    def _detect_output_directories(self, output_dir: str) -> Dict[str, Union[bool, Optional[str]]]:
         """
         检测输出目录状态
 
@@ -263,7 +252,7 @@ class InteractionManager:
             output_dir (str): 输出目录路径
 
         Returns:
-            Dict[str, bool]: 输出目录状态
+            Dict[str, Union[bool, Optional[str]]]: 输出目录状态
         """
         output_path = Path(output_dir)
         print(f"{Fore.BLUE}🔍 正在检测输出目录：{output_dir}{Style.RESET_ALL}")
@@ -272,10 +261,8 @@ class InteractionManager:
         output_keyed_dir = output_path / "Keyed"      
         has_output_definjected = output_definjected_dir.exists() and any(output_definjected_dir.rglob('*.xml'))
         has_output_keyed = output_keyed_dir.exists() and any(output_keyed_dir.rglob('*.xml'))
-        
         print(f"   {Fore.CYAN}检测DefInjected目录：{Fore.GREEN if has_output_definjected else Fore.RED}{'✅ 有' if has_output_definjected else '❌ 否'}{Style.RESET_ALL}")
         print(f"   {Fore.CYAN}检测Keyed目录：{Fore.GREEN if has_output_keyed else Fore.RED}{'✅ 有' if has_output_keyed else '❌ 否'}{Style.RESET_ALL}")
-        
         return {
             'has_definjected': has_output_definjected,
             'has_keyed': has_output_keyed,
@@ -283,35 +270,33 @@ class InteractionManager:
             'keyed_path': str(output_keyed_dir) if has_output_keyed else None
         }
 
-    def _choose_data_source(self, english_status: Dict[str, bool]) -> str:
+    def _choose_data_source(self, english_status: Dict[str, Union[bool, Optional[str]]]) -> str:
         """
         选择数据来源
 
         Args:
-            english_status (Dict[str, bool]): 英文目录状态
+            english_status (Dict[str, Union[bool, Optional[str]]]): 英文目录状态
 
         Returns:
             str: 数据来源选择
         """
         has_definjected = english_status['has_definjected']
-        
         if has_definjected:
             # 智能分析英文DefInjected的内容质量
-            recommendation = self._analyze_definjected_quality(english_status['definjected_path'])
-            
+            definjected_path = english_status['definjected_path']
+            if definjected_path is None:
+                return 'defs_only'
+            recommendation = self._analyze_definjected_quality(str(definjected_path))
             print(f"{Fore.BLUE}检测DefInjected目录：{Fore.GREEN}✅ 有{Style.RESET_ALL}")
-            
             # 显示智能推荐
             if recommendation['recommended'] == 'definjected_only':
                 print(f"{Fore.GREEN}🤖 智能推荐：使用DefInjected目录提取 (理由: {recommendation['reason']}){Style.RESET_ALL}")
             else:
                 print(f"{Fore.YELLOW}🤖 智能推荐：扫描Defs文件重新提取 (理由: {recommendation['reason']}){Style.RESET_ALL}")
-            
             print(f"{Fore.YELLOW}请选择数据来源：{Style.RESET_ALL}")
             print(f"   {Fore.GREEN}1. 使用DefInjected目录提取翻译（更快）{Style.RESET_ALL}")
             print(f"   {Fore.CYAN}2. 扫描Defs文件重新提取（完整扫描）{Style.RESET_ALL}")
             print(f"   {Fore.BLUE}3. 采用智能推荐{Style.RESET_ALL}")
-            
             while True:
                 choice = input(f"\n{Fore.CYAN}请选择 (1/2/3，回车默认采用推荐): {Style.RESET_ALL}").strip()
                 if choice == '1':
@@ -343,7 +328,6 @@ class InteractionManager:
         try:
             definjected_dir = Path(definjected_path)
             xml_files = list(definjected_dir.rglob("*.xml"))
-            
             if len(xml_files) == 0:
                 return {
                     'recommended': 'defs_only',
@@ -356,15 +340,11 @@ class InteractionManager:
                 }
             else:
                 # 检查文件的修改时间，判断是否是最新的
-                import os
-                from datetime import datetime, timedelta
-                
                 recent_files = 0
                 for xml_file in xml_files:
                     mtime = datetime.fromtimestamp(os.path.getmtime(xml_file))
                     if datetime.now() - mtime < timedelta(days=90):  # 90天内修改过
                         recent_files += 1
-                
                 if recent_files / len(xml_files) > 0.3:  # 30%以上的文件是最近修改的
                     return {
                         'recommended': 'definjected_only',
@@ -375,19 +355,19 @@ class InteractionManager:
                         'recommended': 'defs_only',
                         'reason': 'DefInjected文件可能过时，建议重新扫描'
                     }
-        except Exception as e:
+        except (OSError, ValueError) as e:
             logging.warning("分析DefInjected质量时出错: %s", e)
             return {
                 'recommended': 'definjected_only',
                 'reason': '无法分析，使用默认推荐'
             }
 
-    def _handle_output_conflicts(self, output_status: Dict[str, bool]) -> str:
+    def _handle_output_conflicts(self, output_status: Dict[str, Union[bool, Optional[str]]]) -> str:
         """
         处理输出冲突
 
         Args:
-            output_status (Dict[str, bool]): 输出目录状态
+            output_status (Dict[str, Union[bool, Optional[str]]]): 输出目录状态
 
         Returns:
             str: 冲突处理方式
@@ -424,7 +404,7 @@ class InteractionManager:
                 elif choice == '3':
                     print(f"   {Fore.RED}✅ 选择：重建{Style.RESET_ALL}")
                     return 'rebuild'
-                elif choice == '4' and analysis['recommended']:
+                elif choice == '4' and analysis['recommended'] and analysis['recommended_value']:
                     print(f"   {Fore.BLUE}✅ 采用智能推荐：{analysis['recommended']}{Style.RESET_ALL}")
                     return analysis['recommended_value']
                 else:
@@ -434,27 +414,24 @@ class InteractionManager:
             print(f"   {Fore.GREEN}✅ 自动选择：新建{Style.RESET_ALL}")
             return 'new'
 
-    def _analyze_existing_files(self, output_status: Dict[str, bool]) -> Dict[str, str]:
+    def _analyze_existing_files(self, output_status: Dict[str, Union[bool, Optional[str]]]) -> Dict[str, Optional[str]]:
         """
         分析现有输出文件的状态
         
         Args:
-            output_status (Dict[str, bool]): 输出目录状态
+            output_status (Dict[str, Union[bool, Optional[str]]]): 输出目录状态
             
         Returns:
-            Dict[str, str]: 分析结果和推荐
+            Dict[str, Optional[str]]: 分析结果和推荐
         """
         try:
             file_count = 0
             total_size = 0
             recent_files = 0
             
-            from datetime import datetime, timedelta
-            import os
-            
             # 统计DefInjected文件
-            if output_status['has_definjected']:
-                definjected_path = Path(output_status['definjected_path'])
+            if output_status['has_definjected'] and output_status['definjected_path']:
+                definjected_path = Path(str(output_status['definjected_path']))
                 for xml_file in definjected_path.rglob("*.xml"):
                     file_count += 1
                     total_size += xml_file.stat().st_size
@@ -463,8 +440,8 @@ class InteractionManager:
                         recent_files += 1
             
             # 统计Keyed文件
-            if output_status['has_keyed']:
-                keyed_path = Path(output_status['keyed_path'])
+            if output_status['has_keyed'] and output_status['keyed_path']:
+                keyed_path = Path(str(output_status['keyed_path']))
                 for xml_file in keyed_path.rglob("*.xml"):
                     file_count += 1
                     total_size += xml_file.stat().st_size
@@ -506,7 +483,7 @@ class InteractionManager:
                     'recommended_value': 'overwrite'
                 }
                 
-        except Exception as e:
+        except (OSError, ValueError) as e:
             logging.warning("分析现有文件时出错: %s", e)
             return {
                 'summary': '无法分析文件状态',
@@ -530,13 +507,12 @@ class InteractionManager:
             return str(en_keyed_dir)
         return None
 
-    def _choose_template_structure(self, data_source_choice: str, english_status: Dict[str, bool], conflict_resolution: str) -> str:
+    def _choose_template_structure(self, data_source_choice: str, conflict_resolution: str) -> str:
         """
         根据数据来源和冲突处理方式选择模板结构（实现你的决策树逻辑）
         
         Args:
             data_source_choice (str): 数据来源选择
-            english_status (Dict[str, bool]): 英文目录状态
             conflict_resolution (str): 冲突处理方式
             
         Returns:
@@ -558,11 +534,11 @@ class InteractionManager:
             print(f"{Fore.BLUE}检测到使用Defs文件扫描提取翻译{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}请选择DefInjected文件组织方式：{Style.RESET_ALL}")
             print(f"   {Fore.GREEN}1. 按定义类型分组（推荐）{Style.RESET_ALL}")
-            print(f"      └── ThingDefs.xml、PawnKindDefs.xml 等")
-            print(f"      └── 便于翻译工作分类管理")
+            print("      └── ThingDefs.xml、PawnKindDefs.xml 等")
+            print("      └── 便于翻译工作分类管理")
             print(f"   {Fore.CYAN}2. 按原始Defs文件结构组织{Style.RESET_ALL}")
-            print(f"      └── 保持与Defs目录相同的文件夹和文件结构")
-            print(f"      └── 便于对照原始定义文件")
+            print("      └── 保持与Defs目录相同的文件夹和文件结构")
+            print("      └── 便于对照原始定义文件")
             
             while True:
                 choice = input(f"\n{Fore.CYAN}请选择 (1/2): {Style.RESET_ALL}").strip()

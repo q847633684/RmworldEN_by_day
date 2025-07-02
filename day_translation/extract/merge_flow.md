@@ -87,39 +87,7 @@
   - 按 file 分组，批量写回
   - 替换时插入历史注释，新增时插入 EN 注释
 
-### 5. 伪代码
 
-```python
-# 1. 提取输入和输出目录数据
-input_data = _extract_all_translations(input_dir)  # key, test, tag, file
-output_data = _extract_all_translations(output_dir)  # key, test, tag, file, en_test
-
-# 2. 构建 key->数据 的映射
-input_map = {item['key']: item for item in input_data}
-output_map = {item['key']: item for item in output_data}
-
-merged = []
-for key, in_item in input_map.items():
-    out_item = output_map.get(key)
-    if out_item:
-        if in_item['test'] == out_item['en_test']:
-            # 不变，跳过
-            continue
-        else:
-            # 替换，保留历史注释
-            merged.append({
-                **in_item,
-                "en_test": out_item['en_test'],
-                "history": out_item['test']
-            })
-    else:
-        # 新增
-        merged.append({
-            **in_item,
-            "en_test": in_item['test']
-        })
-
-# 3. 按 file 分组，写回 XML，插入注释
 ```
 
 ---
@@ -154,31 +122,6 @@ for key, in_item in input_map.items():
    - 生成合并后的模板文件
    - 输出合并统计信息
 
-### 伪代码示例
-
-```python
-# 1. 获取参数
-# input_mod_dir, output_dir, data_source_choice, template_structure
-
-# 2. 提取输入目录翻译
-input_translations = _extract_all_translations(
-    data_source_choice=data_source_choice,
-    direct_dir=input_mod_dir
-)
-
-# 3. 提取输出目录翻译
-output_translations = _extract_all_translations(
-    data_source_choice=data_source_choice,
-    direct_dir=output_dir
-)
-
-# 4. 对比并合并
-merged_translations = _compare_translations(
-    input_translations, output_translations, source_language, target_language
-)
-
-# 5. 生成模板/输出统计
-```
 
 ---
 
@@ -249,23 +192,24 @@ graph TD
 
 ## 示例
 
-> 输出目录提取的 DefInjected
+> 输出目录提取的 DefInjected的参数
 > ```xml
 > <!--EN: Chatty Nymph-->
 > <rjw_chatty.title>健谈的仙女</rjw_chatty.title>
 > ```
-> eEN = Chatty Nymph
-> ekey = rjw_chatty.title
-> etest = 健谈的仙女
+> 
+> key = rjw_chatty.title
+> test = 健谈的仙女
+> EN = Chatty Nymph
+> 
+> 输入目录通过 DefInjected 或 defs 提取的参数
+> key = rjw_chatty.title
+> test = Chatty Nymph
 >
-> 输入目录通过 DefInjected 或 defs 提取
-> okey = rjw_chatty.title
-> otest = Chatty Nymph
-
 - 5.1 逻辑：
-    - ekey 和 okey 相同，otest 和 eEN 相同，不进行更改
-    - ekey 和 okey 相同，otest 和 eEN 不同，otest 替换 etest，并保留历史注释，EN注释同步
-    - ekey 没有，新增，带EN注释 
+    - key 和 key 相同，test 和 EN 相同，删除这个参数
+    - key 和 key 相同，test 和 EN 不同，test 替换 EN，并保留历史注释，EN注释同步
+    - key 没有，新增，带EN注释
 
 > **说明：本流程仅适用于 DefInjected 目录的合并与模板生成，Keyed 目录相关流程未在本文件覆盖。如需 Keyed 合并，请参考文档末尾建议。**
 

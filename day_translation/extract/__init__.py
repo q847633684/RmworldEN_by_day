@@ -6,7 +6,6 @@
 from .handler import handle_extract
 from .extractors import extract_keyed_translations, scan_defs_sync, extract_definjected_translations
 from .exporters import export_definjected_with_original_structure, export_definjected_with_defs_structure, export_definjected_with_file_structure, export_keyed_template
-from .generators import TemplateGenerator
 from .template_manager import TemplateManager
 from .interaction_manager import InteractionManager
 
@@ -19,7 +18,6 @@ __all__ = [
     'export_definjected_with_defs_structure',
     'export_definjected_with_file_structure',
     'export_keyed_template',
-    'TemplateGenerator',
     'TemplateManager',
     'InteractionManager'
 ] 

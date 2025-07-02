@@ -893,14 +893,3 @@ class UnifiedFilterRules:
         except Exception as e:
             logging.error("导入规则失败: %s", e)
             raise
-
-    @classmethod
-    def get_rules(cls) -> Dict[str, Any]:
-        """
-        返回当前过滤规则的字典表示，兼容旧代码调用。
-        """
-        return {
-            "default_fields": getattr(cls, "DEFAULT_FIELDS", []),
-            "ignore_fields": getattr(cls, "IGNORE_FIELDS", []),
-            "non_text_patterns": getattr(cls, "NON_TEXT_PATTERNS", [])
-        }

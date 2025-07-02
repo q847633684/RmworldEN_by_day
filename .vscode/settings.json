@@ -1,6 +1,7 @@
 {
-    "commentTranslate.targetLanguage": "en",
+    "commentTranslate.targetLanguage": "zh-CN",
     "cSpell.words": [
+        "defname",
         "getprevious"
     ],
     "pylint.args": [

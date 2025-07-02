@@ -6,7 +6,7 @@
 import os
 import logging
 from pathlib import Path
-from typing import List, Tuple, Optional, Dict, Any
+from typing import List, Tuple, Optional, Union, Dict, Any
 from colorama import Fore, Style
 
 from .exceptions import TranslationError, TranslationImportError, ExportError
@@ -19,11 +19,16 @@ from day_translation.java_translate.java_translator import JavaTranslator
 
 CONFIG = get_config()
 
+
 class TranslationFacade:
     """翻译操作的核心接口，管理模组翻译流程"""
-    
-    def __init__(self, mod_dir: str, language: str = CONFIG.default_language,
-                 template_location: str = "mod"):
+
+    def __init__(
+        self,
+        mod_dir: str,
+        language: str = CONFIG.default_language,
+        template_location: str = "mod",
+    ):
         """
         初始化 TranslationFacade
 
@@ -40,14 +45,19 @@ class TranslationFacade:
             self.mod_dir = str(Path(mod_dir).resolve())
             if not os.path.isdir(self.mod_dir):
                 raise TranslationImportError(f"无效的模组目录: {mod_dir}")
-            
+
             self.language = language
             self.template_location = template_location
             # 直接使用传入的目录初始化模板管理器
-            self.template_manager = TemplateManager(self.mod_dir, language, template_location)
+            self.template_manager = TemplateManager(
+                self.mod_dir, language, template_location
+            )
             self._validate_config()
-            logging.debug("初始化 TranslationFacade: mod_dir=%s, language=%s", 
-                         self.mod_dir, self.language)
+            logging.debug(
+                "初始化 TranslationFacade: mod_dir=%s, language=%s",
+                self.mod_dir,
+                self.language,
+            )
         except Exception as e:
             raise ConfigError(f"初始化失败: {str(e)}") from e
 
@@ -60,29 +70,46 @@ class TranslationFacade:
         if not os.path.exists(os.path.join(self.mod_dir, "Languages")):
             logging.warning("模组目录中未找到 Languages 文件夹: %s", self.mod_dir)
 
-    def extract_templates_and_generate_csv(self, output_dir: str, en_keyed_dir: Optional[str] = None, auto_choose_definjected: bool = False, data_source_choice: str = None, template_structure: str = None) -> List[Tuple[str, str, str, str]]:
+    def extract_templates_and_generate_csv(
+        self,
+        output_dir: str,
+        en_keyed_dir: Optional[str] = None,
+        auto_choose_definjected: bool = False,
+        data_source_choice: str = None,
+        template_structure: str = None,
+    ) -> List[Tuple[str, str, str, str]]:
         """
         提取翻译模板并生成 CSV 文件
         """
         try:
             # 记录提取操作的开始，包含所有关键参数用于调试和审计
-            logging.info("开始提取模板: output_dir=%s, en_keyed_dir=%s, auto_choose_definjected=%s, data_source_choice=%s", output_dir, en_keyed_dir, auto_choose_definjected, data_source_choice)
+            logging.info(
+                "开始提取模板: output_dir=%s, en_keyed_dir=%s, auto_choose_definjected=%s, data_source_choice=%s",
+                output_dir,
+                en_keyed_dir,
+                auto_choose_definjected,
+                data_source_choice,
+            )
 
             # 调用模板管理器执行核心提取操作
             # - output_dir: 输出目录，模板和CSV文件的保存位置
             # - en_keyed_dir: 英文Keyed目录，用于确保UI文本翻译完整性
             # - data_source_choice: 数据来源选择（'definjected_only', 'defs_only', 'both'）
             # 如果传入了data_source_choice，直接使用；否则根据auto_choose_definjected转换
-            translations = self.template_manager.extract_and_generate_templates(output_dir, en_keyed_dir, data_source_choice,template_structure)
+            translations = self.template_manager.extract_and_generate_templates(
+                output_dir, en_keyed_dir, data_source_choice, template_structure
+            )
             # 返回提取到的翻译数据列表，格式：[(key, text, group, file_info), ...]
             return translations
         except Exception as e:
             # 捕获并处理提取过程中的任何异常
-            error_msg = f"提取模板失败: {str(e)}"           # 构建详细错误信息
-            logging.error(error_msg)                        # 记录错误到日志文件
-            raise ExportError(error_msg) from e                    # 抛出自定义异常，便于上层处理
+            error_msg = f"提取模板失败: {str(e)}"  # 构建详细错误信息
+            logging.error(error_msg)  # 记录错误到日志文件
+            raise ExportError(error_msg) from e  # 抛出自定义异常，便于上层处理
 
-    def import_translations_to_templates(self, csv_path: str, merge: bool = True) -> None:
+    def import_translations_to_templates(
+        self, csv_path: str, merge: bool = True
+    ) -> None:
         """
         将翻译后的 CSV 导入翻译模板
 
@@ -134,7 +161,9 @@ class TranslationFacade:
             logging.error(error_msg)
             raise ExportError(error_msg) from e
 
-    def machine_translate(self, csv_path: str, output_csv: Optional[str] = None) -> None:
+    def machine_translate(
+        self, csv_path: str, output_csv: Optional[str] = None
+    ) -> None:
         """
         使用阿里云机器翻译 CSV 文件
 
@@ -152,13 +181,17 @@ class TranslationFacade:
             # 如果没有指定输出文件，则自动生成
             if output_csv is None:
                 input_path = Path(csv_path)
-                output_csv = str(input_path.parent / f"{input_path.stem}_translated.csv")
+                output_csv = str(
+                    input_path.parent / f"{input_path.stem}_translated.csv"
+                )
 
-            logging.info("开始机器翻译: csv_path=%s, output_csv=%s", csv_path, output_csv)
-            
+            logging.info(
+                "开始机器翻译: csv_path=%s, output_csv=%s", csv_path, output_csv
+            )
+
             # 调用机器翻译函数
             translate_csv(csv_path, output_csv)
-            
+
             print(f"{Fore.GREEN}✅ 翻译完成：{output_csv}{Style.RESET_ALL}")
         except Exception as e:
             error_msg = f"机器翻译失败: {str(e)}"
@@ -183,3 +216,32 @@ class TranslationFacade:
         if not api_key:
             raise ConfigError(f"未配置 {key_name}，请在配置管理中设置")
         return api_key
+
+    def extract_all_translations(
+        self,
+        data_source_choice: str = "defs",
+        direct_dir: Optional[str] = None,
+    ):
+        """
+        提取所有翻译数据的公共接口
+
+        Args:
+            data_source_choice (str): 数据来源选择 ('definjected_only', 'defs_only')
+            direct_dir (Optional[str]): 直接指定DefInjected目录路径，用于从输出目录提取现有翻译
+
+        Returns:
+            根据 direct_dir 自动判断返回格式：
+            - direct_dir=None: 返回四元组 (key, test, tag, rel_path) - 用于输入数据
+            - direct_dir=指定路径: 返回五元组 (key, test, tag, rel_path, en_test) - 用于输出数据
+
+        Raises:
+            TranslationError: 提取失败时抛出
+        """
+        try:
+            return self.template_manager.extract_all_translations(
+                data_source_choice, direct_dir
+            )
+        except (OSError, IOError, ValueError, RuntimeError) as e:
+            error_msg = f"提取翻译数据失败: {str(e)}"
+            logging.error(error_msg)
+            raise TranslationError(error_msg) from e
