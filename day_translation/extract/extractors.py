@@ -15,9 +15,12 @@ RimWorld 翻译提取器模块
 import logging
 from typing import List, Tuple, Dict, Optional
 from pathlib import Path
-from colorama import Fore, Style
-from day_translation.utils.utils import XMLProcessor, get_language_folder_path
-from day_translation.utils.config import get_config
+from colorama import Fore, Style  # type: ignore
+from day_translation.utils.utils import XMLProcessor
+from day_translation.utils.config import (
+    get_config,
+    get_language_subdir,
+)
 from day_translation.utils.filters import ContentFilter
 
 
@@ -25,21 +28,23 @@ CONFIG = get_config()
 
 
 def extract_keyed_translations(
-    mod_dir: str, language: str = CONFIG.source_language
+    import_dir: str, import_language
 ) -> List[Tuple[str, str, str, str]]:
     """提取 Keyed 翻译"""
     print(
-        f"{Fore.GREEN}正在扫描 Keyed 目录（模组目录：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}"
+        f"{Fore.GREEN}正在扫描 Keyed 目录（模组目录：{import_dir}, 语言：{import_language}）...{Style.RESET_ALL}"
     )
-    logging.info("正在扫描 Keyed 目录（模组目录：%s, 语言：%s）...", mod_dir, language)
+    logging.info(
+        "正在扫描 Keyed 目录（模组目录：%s, 语言：%s）...", import_dir, import_language
+    )
     processor = XMLProcessor()
     content_filter = ContentFilter(CONFIG)
     translations: List[Tuple[str, str, str, str]] = []
-    lang_path = get_language_folder_path(language, mod_dir)
-    keyed_dir = Path(lang_path) / CONFIG.keyed_dir
+    keyed_dir = get_language_subdir(
+        base_dir=import_dir, language=import_language, subdir_type="keyed"
+    )
     print(f"   ✅ 获取 Keyed 目录: {keyed_dir}")
     # 添加调试信息
-    logging.debug("语言路径: %s", lang_path)
     logging.debug("Keyed目录: %s", keyed_dir)
     logging.debug("目录是否存在: %s", keyed_dir.exists())
 
@@ -71,14 +76,16 @@ def extract_keyed_translations(
     return translations
 
 
-def scan_defs_sync(mod_dir: str) -> List[Tuple[str, str, str, str]]:
+def scan_defs_sync(import_dir) -> List[Tuple[str, str, str, str]]:
     """扫描 Defs 目录中的可翻译内容（参考 Day_EN 完整实现）"""
-    print(f"{Fore.GREEN}正在扫描 Defs 目录（模组目录：{mod_dir}）...{Style.RESET_ALL}")
-    logging.info("正在扫描 Defs 目录（模组目录：%s）...", mod_dir)
+    print(
+        f"{Fore.GREEN}正在扫描 Defs 目录（模组目录：{import_dir}）...{Style.RESET_ALL}"
+    )
+    logging.info("正在扫描 Defs 目录（模组目录：%s）...", import_dir)
     processor = XMLProcessor()
     content_filter = ContentFilter(CONFIG)
     translations: List[Tuple[str, str, str, str]] = []
-    defs_dir = Path(mod_dir) / "Defs"
+    defs_dir = Path(import_dir) / "Defs"
     print(f"   ✅ 获取 Defs 目录: {defs_dir}")
     logging.debug("Defs目录: %s", defs_dir)
     logging.debug("目录是否存在: %s", defs_dir.exists())
@@ -238,8 +245,8 @@ def _extract_translatable_fields_recursive(
 
 
 def extract_definjected_translations(
-    mod_dir: str,
-    language: str = CONFIG.source_language,
+    import_dir,
+    import_language,
 ) -> List[Tuple[str, str, str, str, str]]:
     """
     从 DefInjected 目录提取翻译结构，支持提取 EN 注释
@@ -252,16 +259,17 @@ def extract_definjected_translations(
         返回五元组 List[Tuple[key, test, tag, rel_path, en_test]]
     """
     print(
-        f"{Fore.GREEN}正在扫描 DefInjected 目录（模组目录：{mod_dir}, 语言：{language}）...{Style.RESET_ALL}"
+        f"{Fore.GREEN}正在扫描 DefInjected 目录（模组目录：{import_dir}, 语言：{import_language}）...{Style.RESET_ALL}"
     )
     logging.info(
         "正在扫描 DefInjected 目录（模组目录：%s, 语言：%s）...",
-        mod_dir,
-        language,
+        import_dir,
+        import_language,
     )
     translations = []
-    lang_path = get_language_folder_path(language, mod_dir)
-    definjected_dir = Path(lang_path) / CONFIG.def_injected_dir
+    definjected_dir = get_language_subdir(
+        base_dir=import_dir, language=import_language, subdir_type="DefInjected"
+    )
     print(f"   ✅ 获取 DefInjected 目录: {definjected_dir}")
     logging.debug("DefInjected目录: %s", definjected_dir)
     logging.debug("目录是否存在: %s", definjected_dir.exists())

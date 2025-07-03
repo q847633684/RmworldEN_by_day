@@ -9,5 +9,8 @@
         "--disable=C0103,C0301,R0902,R0912,R0914,R0915,C0415,W0603,E0402"
     ],
     "python.linting.pylintEnabled": true,
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "cmake.configureSettings": {
+        
+    }
 }

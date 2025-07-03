@@ -19,9 +19,11 @@ from day_translation.utils.filters import ContentFilter
 
 CONFIG = get_config()
 
+
 @dataclass
 class ModProcessResult:
     """模组处理结果"""
+
     mod_dir: str
     success: bool
     error: Optional[str] = None
@@ -31,8 +33,10 @@ class ModProcessResult:
     files_updated: int = 0
     processing_time: float = 0.0
 
+
 class BatchProcessor:
     """批量处理多个模组的翻译任务"""
+
     def __init__(self, max_workers: int = 10, timeout: int = 300):
         """
         初始化 BatchProcessor
@@ -45,9 +49,16 @@ class BatchProcessor:
         self.timeout = timeout
         self.processor = XMLProcessor()
         self._results: Dict[str, ModProcessResult] = {}
-        logging.debug("初始化 BatchProcessor: max_workers=%s, timeout=%s", max_workers, timeout)
+        logging.debug(
+            "初始化 BatchProcessor: max_workers=%s, timeout=%s", max_workers, timeout
+        )
 
-    def process_multiple_mods(self, mod_list: List[str], csv_path: str = None, language: str = CONFIG.default_language) -> Dict[str, ModProcessResult]:
+    def process_multiple_mods(
+        self,
+        mod_list: List[str],
+        csv_path: str = None,
+        language="en-us",
+    ) -> Dict[str, ModProcessResult]:
         """
         批量处理多个模组，生成配置并更新 XML
 
@@ -72,7 +83,9 @@ class BatchProcessor:
                     continue
                 valid_mods.append(str(mod_path))
             except Exception as e:
-                print(f"{Fore.RED}❌ 模组目录验证失败: {mod_dir}, 错误: {e}{Style.RESET_ALL}")
+                print(
+                    f"{Fore.RED}❌ 模组目录验证失败: {mod_dir}, 错误: {e}{Style.RESET_ALL}"
+                )
                 continue
 
         if not valid_mods:
@@ -87,14 +100,18 @@ class BatchProcessor:
                     print(f"{Fore.RED}❌ CSV文件不存在: {csv_path}{Style.RESET_ALL}")
                     return {}
             except Exception as e:
-                print(f"{Fore.RED}❌ CSV文件验证失败: {csv_path}, 错误: {e}{Style.RESET_ALL}")
+                print(
+                    f"{Fore.RED}❌ CSV文件验证失败: {csv_path}, 错误: {e}{Style.RESET_ALL}"
+                )
                 return {}
 
         # 使用线程池处理模组
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             futures: Dict[str, Future] = {}
             for mod_dir in valid_mods:
-                future = executor.submit(self._process_single_mod, mod_dir, csv_path, language)
+                future = executor.submit(
+                    self._process_single_mod, mod_dir, csv_path, language
+                )
                 futures[mod_dir] = future
 
             # 使用tqdm显示进度
@@ -103,22 +120,26 @@ class BatchProcessor:
                     try:
                         result = future.result(timeout=self.timeout)
                         self._results[mod_dir] = result
-                        status = f"{Fore.GREEN}✓{Style.RESET_ALL}" if result.success else f"{Fore.RED}✗{Style.RESET_ALL}"
+                        status = (
+                            f"{Fore.GREEN}✓{Style.RESET_ALL}"
+                            if result.success
+                            else f"{Fore.RED}✗{Style.RESET_ALL}"
+                        )
                         pbar.set_postfix_str(f"{status} {Path(mod_dir).name}")
                     except TimeoutError:
                         self._results[mod_dir] = ModProcessResult(
                             mod_dir=mod_dir,
                             success=False,
-                            error=f"处理超时（{self.timeout}秒）"
+                            error=f"处理超时（{self.timeout}秒）",
                         )
                         print(f"{Fore.RED}❌ 模组处理超时: {mod_dir}{Style.RESET_ALL}")
                     except Exception as e:
                         self._results[mod_dir] = ModProcessResult(
-                            mod_dir=mod_dir,
-                            success=False,
-                            error=str(e)
+                            mod_dir=mod_dir, success=False, error=str(e)
                         )
-                        print(f"{Fore.RED}❌ 模组处理失败: {mod_dir}, 错误: {e}{Style.RESET_ALL}")
+                        print(
+                            f"{Fore.RED}❌ 模组处理失败: {mod_dir}, 错误: {e}{Style.RESET_ALL}"
+                        )
                     finally:
                         pbar.update(1)
 
@@ -126,7 +147,9 @@ class BatchProcessor:
         self._show_processing_summary()
         return self._results
 
-    def _process_single_mod(self, mod_dir: str, csv_path: str, language: str) -> ModProcessResult:
+    def _process_single_mod(
+        self, mod_dir: str, csv_path: str, language: str
+    ) -> ModProcessResult:
         """
         处理单个模组，生成配置并更新 XML
 
@@ -156,7 +179,9 @@ class BatchProcessor:
             # 更新XML
             if csv_path:
                 try:
-                    files_processed, files_updated = self._update_mod_xml(mod_dir, csv_path, language)
+                    files_processed, files_updated = self._update_mod_xml(
+                        mod_dir, csv_path, language
+                    )
                     result.xml_updated = True
                     result.files_processed = files_processed
                     result.files_updated = files_updated
@@ -175,7 +200,9 @@ class BatchProcessor:
             result.processing_time = time.time() - start_time
             return result
 
-    def _update_mod_xml(self, mod_dir: str, csv_path: str, language: str) -> Tuple[int, int]:
+    def _update_mod_xml(
+        self, mod_dir: str, csv_path: str, language: str
+    ) -> Tuple[int, int]:
         """
         更新模组的 XML 文件以应用翻译
 
@@ -188,11 +215,11 @@ class BatchProcessor:
             Tuple[int, int]: (处理的文件数, 更新的文件数)
         """
         logging.debug("更新模组 XML: mod_dir=%s, csv_path=%s", mod_dir, csv_path)
-        
+
         # 使用 TemplateManager 加载翻译
         template_manager = TemplateManager(mod_dir, language)
         translations = template_manager._load_translations_from_csv(csv_path)
-        
+
         content_filter = ContentFilter(CONFIG)
         lang_path = get_language_folder_path(language, mod_dir)
 
@@ -210,7 +237,9 @@ class BatchProcessor:
                 try:
                     logging.debug("处理 XML 文件: %s", xml_file)
                     tree = self.processor.parse_xml(str(xml_file))
-                    if tree and self.processor.update_translations(tree, translations, generate_element_key):
+                    if tree and self.processor.update_translations(
+                        tree, translations, generate_element_key
+                    ):
                         self.processor.save_xml(tree, str(xml_file))
                         files_updated += 1
                         logging.debug("更新 XML 文件: %s", xml_file)

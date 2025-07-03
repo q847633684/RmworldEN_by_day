@@ -1,171 +1,203 @@
-# 智能合并流程决策树
+# 智能合并流程设计文档
 
-## 目录判定标准
-- 只有当目录存在且其中有至少一个 `.xml` 文件时，才认为"有 DefInjected"或"有 Keyed"。
-  - 代码建议：`os.path.isdir(path)` 且 `len(list(Path(path).rglob('*.xml'))) > 0`
+## 📋 文档概述
 
----
+本文档定义了 Day Translation 工具中智能合并功能的完整流程设计，包括决策树、数据结构、实现方案和待办事项。智能合并功能负责将新提取的翻译数据与现有翻译文件进行智能合并，保留历史记录和英文注释。
 
-## 1. 输入/输出目录状态
-- 1.1 输入是否有 DefInjected
-- 1.2 输出是否有 DefInjected
+## 🎯 核心概念
 
----
+### 目录状态判定标准
+- **有效目录**: 目录存在且包含至少一个 `.xml` 文件
+- **判定方法**: `os.path.isdir(path) && len(list(Path(path).rglob('*.xml'))) > 0`
 
-## 2. 选择数据来源（data_source_choice）
-- 2.1 definjected_only - 仅使用英文 DefInjected 目录
-- 2.2 defs_only - 扫描 Defs 文件夹提取
+### 数据格式规范
+- **输入数据**: `(key, text, tag, rel_path)` - 四元组格式
+- **输出数据**: `(key, text, tag, rel_path, en_text)` - 五元组格式，包含英文注释
+- **合并结果**: 统一使用五元组格式，支持历史记录
 
----
+## 🔧 决策参数定义
 
-## 3. 处理输出冲突（conflict_resolution）
-- 3.1 new - 新建
-- 3.2 merge - 合并现有文件
-- 3.3 overwrite - 覆盖现有文件
-- 3.4 rebuild - 清空重建
+### 1. 目录状态检测
+- **1.1 输入目录状态**: 检测输入模组是否包含 DefInjected/Keyed 目录
+- **1.2 输出目录状态**: 检测输出目录是否已存在翻译文件
 
----
+### 2. 数据来源选择 (data_source_choice)
+- **2.1 definjected_only**: 仅使用英文 DefInjected 目录作为数据源
+- **2.2 defs_only**: 扫描 Defs 文件夹提取可翻译内容
 
-## 4. 选择模板结构（template_structure）
-- 4.1 original_structure - 保持原英文 DefInjected 结构
-- 4.2 defs_by_type - 按定义类型分组（如 ThingDefs.xml、PawnKindDefs.xml 等）
-- 4.3 defs_by_file_structure - 按原始 Defs 文件结构组织
+### 3. 冲突处理策略 (conflict_resolution)
+- **3.1 new**: 新建 - 创建全新的翻译目录结构
+- **3.2 merge**: 合并 - 智能合并现有翻译文件
+- **3.3 overwrite**: 覆盖 - 覆盖现有翻译文件
+- **3.4 rebuild**: 重建 - 清空输出目录后重新生成
 
----
+### 4. 模板结构选择 (template_structure)
+- **4.1 original_structure**: 保持原英文 DefInjected 结构
+- **4.2 defs_by_type**: 按定义类型分组 (如 ThingDefs.xml、PawnKindDefs.xml)
+- **4.3 defs_by_file_structure**: 按原始 Defs 文件结构组织
 
-## 5.1 合并逻辑
-- ekey == okey 且 otest == eEN：不更改
-- ekey == okey 且 otest != eEN：otest 替换 etest，**保留历史注释**，EN注释始终保留且与最新英文同步
-- ekey 不存在：新增
+## 🔄 智能合并核心逻辑
 
-### 合并时注释格式示例
+### 5.1 合并算法规则
+智能合并基于 key 匹配和内容比对，遵循以下优先级规则：
+
+1. **内容无变化**: `input_key == output_key && input_text == output_en_text`
+   - **处理**: 保持原状，不做修改
+   
+2. **内容有更新**: `input_key == output_key && input_text != output_en_text`
+   - **处理**: 使用新内容替换原翻译，保留历史注释，更新 EN 注释
+   
+3. **新增内容**: `input_key` 在输出中不存在
+   - **处理**: 新增翻译条目，添加 EN 注释
+
+### 5.2 注释格式规范
+
 ```xml
-<!--HISTORY: 原翻译内容：旧内容，替换于2024-06-07-->
-<!--EN: 新英文原文-->
-<key>新内容</key>
+<!-- 完整示例 -->
+<!--HISTORY: 原翻译内容：旧的中文翻译，替换于2024-06-07-->
+<!--EN: Updated English Text-->
+<key>更新后的中文翻译</key>
 ```
-- EN注释（`<!--EN: ...-->`）始终要有，内容与最新 otest 保持同步。
-- 历史注释可放在 EN 注释之前。
 
----
+**注释规则**:
+- **EN 注释**: 必须存在，内容与最新英文原文同步
+- **历史注释**: 替换时添加，记录原翻译内容和替换时间
+- **注释顺序**: 历史注释在前，EN 注释在后
 
-## 智能合并数据结构与实现建议
+## 📊 智能合并数据结构与实现
 
 ### 1. 数据提取与结构
 
-- **输入目录**：通过 `_extract_all_translations` 获取  
-  - 返回：`key, test, tag, file`
-- **输出目录**：通过 `_extract_all_translations` 获取  
-  - 返回：`key, test, tag, file, en_test`  
-    - 其中 `en_test` 是该 key 对应的 EN 注释内容（如有）
+#### 输入目录数据提取
+- **方法**: 通过 `_extract_all_translations` 获取
+- **返回格式**: `(key, text, tag, file)`
+- **说明**: 从输入模组目录提取的原文翻译数据
 
-### 2. 合并逻辑（5.1 规则，结合实际需求）
+#### 输出目录数据提取
+- **方法**: 通过 `_extract_all_translations` 获取
+- **返回格式**: `(key, text, tag, file, en_text)`
+- **说明**: 从现有翻译目录提取，包含 EN 注释内容
 
-- 遍历输入目录的所有 key
+### 2. 合并逻辑实现
+
+基于 5.1 规则，结合实际需求的合并逻辑：
+
+- **遍历输入目录的所有 key**：
   - **如果 key 在输出目录也存在**：
-    - 如果 `test`（输入）和 `en_test`（输出的EN注释）相同：  
+    - 如果 `text`（输入）和 `en_text`（输出的EN注释）相同：
       → 删除这条数据（无需变更，保持原状）
-    - 如果 `test`（输入）和 `en_test` 不同：  
-      → 用输入的 `test` 替换输出的 `test`，并将原本的 `test` 作为历史注释插入
-  - **如果 key 在输出目录不存在**：  
+    - 如果 `text`（输入）和 `en_text` 不同：
+      → 用输入的 `text` 替换输出的 `text`，并将原本的 `text` 作为历史注释插入
+  - **如果 key 在输出目录不存在**：
     → 新增，带 EN 注释
 
 ### 3. 合并后数据结构
 
-- 新增：`{"key": ..., "test": ..., "tag": ..., "file": ..., "en_test": ...}`
-- 替换：`{"key": ..., "test": ..., "tag": ..., "file": ..., "en_test": ..., "history": ...}`
+- **新增**: `{"key": ..., "text": ..., "tag": ..., "file": ..., "en_text": ...}`
+- **替换**: `{"key": ..., "text": ..., "tag": ..., "file": ..., "en_text": ..., "history": ...}`
 
 ### 4. 实现建议
 
-- **扩展 extract_definjected_translations**  
-  - 支持提取 EN 注释（如 `<!--EN: ...-->`），并作为 `en_test` 字段返回
-  - 建议用 lxml 解析注释节点，关联到下一个 key
-- **合并算法**  
-  - 用 dict 结构加速 key 匹配
-  - 合并时按上述规则处理，生成最终 list
-- **写回 XML**  
-  - 按 file 分组，批量写回
-  - 替换时插入历史注释，新增时插入 EN 注释
+#### 扩展 extract_definjected_translations
+- 支持提取 EN 注释（如 `<!--EN: ...-->`），并作为 `en_text` 字段返回
+- 建议用 lxml 解析注释节点，关联到下一个 key
 
+#### 合并算法优化
+- 用 dict 结构加速 key 匹配
+- 合并时按上述规则处理，生成最终 list
 
-```
+#### XML 写回处理
+- 按 file 分组，批量写回
+- 替换时插入历史注释，新增时插入 EN 注释
 
----
+### 5. 注意事项
 
-**注意事项**：
-- EN注释的提取与关联需增强 XML 解析逻辑，确保能把注释和 key 关联起来。
-- 历史注释建议统一用 `<!--HISTORY: 原翻译内容：xxx，替换于YYYY-MM-DD-->`。
-- 大文件建议用 lxml，且用 dict 加速 key 匹配。
-- Keyed 目录如需同样处理，建议同步扩展。
+- **EN注释的提取与关联**: 需增强 XML 解析逻辑，确保能把注释和 key 关联起来
+- **历史注释格式**: 统一用 `<!--HISTORY: 原翻译内容：xxx，替换于YYYY-MM-DD-->`
+- **性能优化**: 大文件建议用 lxml，且用 dict 加速 key 匹配
+- **Keyed 目录扩展**: 如需同样处理，建议同步扩展
 
----
+## 🚀 智能合并主流程
 
-## 智能合并主流程（新版）
+### 流程步骤
 
-1. **参数获取**  
-   智能合并首先需要获取以下几个关键参数：  
+1. **参数获取**
    - 输入模组目录（input_mod_dir）
    - 输出目录（output_dir）
    - 数据源选择（data_source_choice）
    - 模板结构（template_structure）
 
-2. **提取输入目录翻译**  
-   通过 `_extract_all_translations` 方法，传入输入目录路径和相关参数，获取输入目录下所有可用的翻译数据。
+2. **提取输入目录翻译**
+   - 通过 `_extract_all_translations` 方法
+   - 传入输入目录路径和相关参数
+   - 获取输入目录下所有可用的翻译数据
 
-3. **提取输出目录翻译**  
-   通过 `_extract_all_translations` 方法，传入输出目录路径和相关参数，获取输出目录下所有现有的翻译数据。
+3. **提取输出目录翻译**
+   - 通过 `_extract_all_translations` 方法
+   - 传入输出目录路径和相关参数
+   - 获取输出目录下所有现有的翻译数据
 
-4. **翻译对比与合并**  
-   对比输入目录（源语言）和输出目录（目标语言）的翻译内容，按照5.1合并逻辑（key、EN注释、历史注释等）进行合并处理，生成最终的合并结果。
+4. **翻译对比与合并**
+   - 对比输入目录（源语言）和输出目录（目标语言）的翻译内容
+   - 按照 5.1 合并逻辑（key、EN注释、历史注释等）进行合并处理
+   - 生成最终的合并结果
 
-5. **后续处理**  
+5. **后续处理**
    - 生成合并后的模板文件
    - 输出合并统计信息
 
+### 6.1 合并提取逻辑详解
 
----
+- **合并原则**: 以输出目录为主，输入目录（新提取的数据）为增量/更新
+- **处理流程**: 遍历输出目录 DefInjected 的 key，和输入目录新提取的 key 进行比对，按 5.1 逻辑处理
+- **新增处理**: 新增的 key 也要插入到输出目录的 XML 文件中，并带上 EN 注释
 
-## 6.1 合并提取逻辑
-- 合并时**以输出目录为主**，输入目录（新提取的数据）为增量/更新。
-- 遍历输出目录 DefInjected 的 key，和输入目录新提取的 key 进行比对，按 5.1 逻辑处理。
-- 新增的 key 也要插入到输出目录的 XML 文件中，并带上 EN 注释。
+#### 数据来源处理策略
 
-- 如果选择 2.1：
-    - 使用 2.1 作为数据来源，提取输出目录 DefInjected 的 key 和 test，使用 5.1 合并逻辑
-- 如果选择 2.2：
-    - 使用 2.2 作为数据来源，提取输出目录 DefInjected 的 key 和 test，使用 5.1 合并逻辑
+- **选择 2.1 (definjected_only)**：
+  - 使用 2.1 作为数据来源
+  - 提取输出目录 DefInjected 的 key 和 text
+  - 使用 5.1 合并逻辑
 
----
+- **选择 2.2 (defs_only)**：
+  - 使用 2.2 作为数据来源
+  - 提取输出目录 DefInjected 的 key 和 text
+  - 使用 5.1 合并逻辑
 
-## 决策流程
+## 🔀 决策流程与情况分析
 
-### 情况一：输入有 DefInjected，输出有 DefInjected
-- 询问：2.1/2.2
-    - 选择 2.1：
-        - 询问：3.2/3.3/3.4
-            - 选择 3.2：使用 5.1
-            - 选择 3.3/3.4：使用 4.1
-    - 选择 2.2：
-        - 询问：3.2/3.3/3.4
-            - 选择 3.2：使用 5.1
-            - 选择 3.3/3.4：询问 4.2/4.3
+### 决策流程树
 
-### 情况二：输入有 DefInjected，输出无 DefInjected
-- 询问：2.1/2.2，默认 3.1
-    - 选择 2.1：使用模板 4.1
-    - 选择 2.2：询问 4.2/4.3
+#### 情况一：输入有 DefInjected，输出有 DefInjected
+- **询问**: 数据来源选择 2.1/2.2
+  - **选择 2.1 (definjected_only)**:
+    - **询问**: 冲突处理策略 3.2/3.3/3.4
+      - **选择 3.2 (merge)**: 使用智能合并逻辑 5.1
+      - **选择 3.3/3.4 (overwrite/rebuild)**: 使用模板结构 4.1
+  - **选择 2.2 (defs_only)**:
+    - **询问**: 冲突处理策略 3.2/3.3/3.4
+      - **选择 3.2 (merge)**: 使用智能合并逻辑 5.1
+      - **选择 3.3/3.4 (overwrite/rebuild)**: 询问模板结构 4.2/4.3
 
-### 情况三：输入无 DefInjected，输出有 DefInjected
-- 默认 2.2，询问 3.2/3.3/3.4
-    - 选择 3.2：使用 5.1（从 2.2 提取数据，检查输出目录 DefInjected 的 key 和 test）
-    - 选择 3.3/3.4：询问 4.2/4.3
+#### 情况二：输入有 DefInjected，输出无 DefInjected
+- **询问**: 数据来源选择 2.1/2.2，默认冲突处理策略 3.1 (new)
+  - **选择 2.1 (definjected_only)**: 使用模板结构 4.1
+  - **选择 2.2 (defs_only)**: 询问模板结构 4.2/4.3
 
-### 情况四：输入无 DefInjected，输出无 DefInjected
-- 默认 2.2，默认 3.1，询问 4.2/4.3
+#### 情况三：输入无 DefInjected，输出有 DefInjected
+- **默认**: 数据来源选择 2.2 (defs_only)
+- **询问**: 冲突处理策略 3.2/3.3/3.4
+  - **选择 3.2 (merge)**: 使用智能合并逻辑 5.1（从 2.2 提取数据，检查输出目录 DefInjected 的 key 和 text）
+  - **选择 3.3/3.4 (overwrite/rebuild)**: 询问模板结构 4.2/4.3
 
----
-
-## 流程图
+#### 情况四：输入无 DefInjected，输出无 DefInjected
+- **默认**: 数据来源选择 2.2 (defs_only)，冲突处理策略 3.1 (new)
+- **询问**: 模板结构 4.2/4.3
+输入目录有keyed目录
+默认提取keyed,默认进行提取。
+如果没有keyed，不进行keyed的提取。
+输出目录无keyed，看冲突处理策略，是合并还是新建还是新建和覆盖。
+### 流程图
 
 ```mermaid
 graph TD
@@ -188,54 +220,72 @@ graph TD
     E -->|2.2| J
 ```
 
----
+## 📝 智能合并示例
 
-## 示例
+### 场景示例
 
-> 输出目录提取的 DefInjected的参数
-> ```xml
-> <!--EN: Chatty Nymph-->
-> <rjw_chatty.title>健谈的仙女</rjw_chatty.title>
-> ```
-> 
-> key = rjw_chatty.title
-> test = 健谈的仙女
-> EN = Chatty Nymph
-> 
-> 输入目录通过 DefInjected 或 defs 提取的参数
-> key = rjw_chatty.title
-> test = Chatty Nymph
->
-- 5.1 逻辑：
-    - key 和 key 相同，test 和 EN 相同，删除这个参数
-    - key 和 key 相同，test 和 EN 不同，test 替换 EN，并保留历史注释，EN注释同步
-    - key 没有，新增，带EN注释
+#### 输出目录现有翻译（DefInjected）
+```xml
+<!--EN: Chatty Nymph-->
+<rjw_chatty.title>健谈的仙女</rjw_chatty.title>
+```
+- **key**: `rjw_chatty.title`
+- **text**: `健谈的仙女`
+- **EN**: `Chatty Nymph`
 
-> **说明：本流程仅适用于 DefInjected 目录的合并与模板生成，Keyed 目录相关流程未在本文件覆盖。如需 Keyed 合并，请参考文档末尾建议。**
+#### 输入目录新提取数据（DefInjected 或 Defs）
+- **key**: `rjw_chatty.title`
+- **text**: `Chatty Nymph`
 
----
+#### 合并逻辑处理 (5.1)
 
-## Keyed 合并流程建议
+1. **内容无变化**: `key` 相同，`text` 和 `EN` 相同
+   - **处理**: 删除这个参数（无需变更）
+
+2. **内容有更新**: `key` 相同，`text` 和 `EN` 不同
+   - **处理**: `text` 替换 `EN`，并保留历史注释，同步 EN 注释
+
+3. **新增内容**: `key` 不存在
+   - **处理**: 新增，带 EN 注释
+
+> **说明**: 本流程仅适用于 DefInjected 目录的合并与模板生成，Keyed 目录相关流程参见下文。
+
+## 🔑 Keyed 合并流程设计
 
 ### 1. 合并主从关系
-- 以**输出目录 Keyed** 为主，输入目录（新提取的数据）为增量/更新。
-- 遍历输出目录 Keyed 的 key，和输入目录新提取的 key 进行比对，按下述逻辑处理。
+- **主导**: 以输出目录 Keyed 为主
+- **增量**: 输入目录（新提取的数据）为增量/更新
+- **比对**: 遍历输出目录 Keyed 的 key，和输入目录新提取的 key 进行比对，按下述逻辑处理
 
-### 2. 合并逻辑
-- ekey == okey 且 otest == eEN：不更改
-- ekey == okey 且 otest != eEN：otest 替换 etest，**保留历史注释**
-- ekey 不存在：新增
+### 2. Keyed 合并逻辑
+- **内容无变化**: `input_key == output_key && output_text == input_EN`
+  - **处理**: 不更改
+- **内容有更新**: `input_key == output_key && output_text != input_EN`
+  - **处理**: `output_text` 替换 `input_text`，**保留历史注释**
+- **新增内容**: `input_key` 不存在
+  - **处理**: 新增
 
 ### 3. 注释与历史规范
-- 替换时建议在节点前加历史注释：
-  ```xml
-  <!--HISTORY: 原翻译内容：旧内容，替换于2024-06-07-->
-  <SomeKey>新内容</SomeKey>
-  ```
-- 历史注释可放在 key 节点前。
-- 如有英文原文需求，可加 EN 注释（如 `<!--EN: 英文原文-->`），保持与 DefInjected 一致。
+
+#### 历史注释格式
+```xml
+<!--HISTORY: 原翻译内容：旧内容，替换于2024-06-07-->
+<SomeKey>新内容</SomeKey>
+```
+
+#### 英文注释格式（可选）
+```xml
+<!--EN: 英文原文-->
+<SomeKey>中文翻译</SomeKey>
+```
+
+#### 注释规则
+- 历史注释可放在 key 节点前
+- 如有英文原文需求，可加 EN 注释，保持与 DefInjected 一致
+- 注释顺序：历史注释在前，EN 注释在后
 
 ### 4. Keyed 合并流程图
+
 ```mermaid
 graph TD
     A[Keyed: key已存在?] -->|是| B[内容相同?]
@@ -244,180 +294,189 @@ graph TD
     A -->|否| E[新增]
 ```
 
-> 如需自动化 Keyed 合并，建议与 DefInjected 合并流程保持一致的主从判定、注释、历史规范。 
+### 5. 实现建议
 
----
+- **自动化合并**: 建议与 DefInjected 合并流程保持一致的主从判定、注释、历史规范
+- **数据结构**: 使用与 DefInjected 相同的五元组格式 `(key, text, tag, rel_path, en_text)`
+- **性能优化**: 使用 dict 结构加速 key 匹配
+- **错误处理**: 增加对 Keyed 文件特有结构的异常处理
 
-## 智能合并核心实现伪代码
+## 💻 智能合并核心实现
+
+### 伪代码框架
 
 ```python
-# 智能合并主流程
-
 def perform_smart_merge(output_dir, new_translations, smart_merger):
     """
-    遍历输出目录下所有 DefInjected/Keyed 文件，提取现有翻译，与 new_translations 按 key 比对，按 5.1 逻辑合并，批量调用 smart_merger.merge_multiple_files。
+    智能合并主流程
+    遍历输出目录下所有 DefInjected/Keyed 文件，提取现有翻译，
+    与 new_translations 按 key 比对，按 5.1 逻辑合并，
+    批量调用 smart_merger.merge_multiple_files。
     返回合并结果统计。
     """
     # 1. 遍历输出目录 DefInjected/Keyed 下所有 xml 文件
+    xml_files = find_all_xml_files(output_dir)
+    
     # 2. 对每个文件，调用 extract_file_translations 提取属于该文件的翻译
+    file_mappings = {}
+    for xml_file in xml_files:
+        existing_translations = extract_file_translations(xml_file, existing_data)
+        new_file_translations = extract_file_translations(xml_file, new_translations)
+        merged_translations = merge_translations(existing_translations, new_file_translations)
+        file_mappings[xml_file] = merged_translations
+    
     # 3. 组装 file_mappings，批量合并
+    merge_results = smart_merger.merge_multiple_files(file_mappings)
+    
     # 4. 返回合并统计结果
-
-# 文件级翻译提取
+    return generate_merge_statistics(merge_results)
 
 def extract_file_translations(xml_file, translations):
     """
-    根据 xml_file 的文件名/路径，从 translations 中筛选出属于该文件的 key-text 对，返回 {key: text}
+    文件级翻译提取
+    根据 xml_file 的文件名/路径，从 translations 中筛选出
+    属于该文件的 key-text 对，返回 {key: text}
     """
     # 1. 获取 xml_file 的文件名/相对路径
+    file_identifier = get_file_identifier(xml_file)
+    
     # 2. 遍历 translations，筛选 file_info 匹配的 key-text
+    file_translations = {}
+    for translation in translations:
+        if translation.file_info == file_identifier:
+            file_translations[translation.key] = translation
+    
     # 3. 返回字典
+    return file_translations
+
+def merge_translations(existing, new):
+    """
+    按照 5.1 合并逻辑处理翻译数据
+    """
+    merged = {}
+    
+    # 处理现有翻译
+    for key, translation in existing.items():
+        if key in new:
+            # 比较内容决定是否更新
+            if translation.text != new[key].en_text:
+                # 需要更新，保留历史
+                updated_translation = create_updated_translation(
+                    translation, new[key], add_history=True
+                )
+                merged[key] = updated_translation
+            else:
+                # 内容相同，保持原状
+                merged[key] = translation
+        else:
+            # 新数据中不存在，保持原状
+            merged[key] = translation
+    
+    # 处理新增翻译
+    for key, translation in new.items():
+        if key not in existing:
+            # 新增翻译，添加 EN 注释
+            new_translation = create_new_translation(translation, add_en_comment=True)
+            merged[key] = new_translation
+    
+    return merged
 ```
 
 ---
 
 ## TODO 待办事项
 
-### 🔴 高优先级
+### 🔴 高优先级（核心功能完善）
 
-#### 1. interaction_manager.py Keyed 处理缺失问题
+#### 1. interaction_manager.py Keyed 处理逻辑完善
 **文件**: `day_translation/extract/interaction_manager.py`  
-**问题**: 智能交互流程中 Keyed 目录处理不完整
+**问题**: Keyed 目录质量分析和处理策略不完整
 
-**具体缺失点**:
-- [ ] **数据来源选择逻辑不完整**
-  - 当前只判断 `has_definjected`，没有判断 `has_keyed`
-  - 应该考虑 Keyed 目录的质量和完整性
-  - 需要增加 Keyed 目录存在性对数据来源选择的影响
+**待完成任务**:
+- [ ] **实现 Keyed 目录质量分析**
+  - 添加 `_analyze_keyed_quality()` 函数，分析 Keyed 文件数量、修改时间、完整性
+  - 在数据来源选择时考虑 Keyed 目录的质量因素
 
-- [ ] **Keyed 目录质量分析缺失**
-  - 有 `_analyze_definjected_quality()` 但没有 `_analyze_keyed_quality()`
-  - Keyed 目录的内容质量应该影响数据来源选择
-  - 需要实现 Keyed 文件数量、修改时间、完整性等分析
-
-- [ ] **模板结构选择不完整**
-  - Keyed 文件通常结构简单，不需要复杂的分组选择
-  - 但应该明确说明 Keyed 的处理方式
-  - 需要在 `_choose_template_structure()` 中增加 Keyed 的处理策略
-
-- [ ] **Keyed 翻译数据传递缺失**
+- [ ] **完善 Keyed 处理策略**
+  - 在 `_choose_template_structure()` 中明确 Keyed 的处理策略
   - 确保 Keyed 翻译数据能正确传递到后续处理流程
-  - 在 `handle_smart_extraction_workflow()` 中需要明确 Keyed 的处理路径
 
-**影响**: Keyed 翻译是 RimWorld 模组汉化的重要组成部分，缺失处理会影响翻译模板的完整性
+**影响**: Keyed 翻译是 RimWorld 模组汉化的重要组成部分，质量分析有助于提高翻译模板的准确性
 
-**建议修复方案**:
-1. 在 `_choose_data_source()` 中增加 Keyed 目录的检测和选择逻辑
-2. 添加 `_analyze_keyed_quality()` 函数分析 Keyed 目录质量
-3. 在 `_choose_template_structure()` 中明确 Keyed 的处理策略
-4. 确保 Keyed 翻译数据能正确传递到后续处理流程
-
-#### 2. extract 模块工具函数导入优化问题
-**文件**: `day_translation/extract/` 目录下的多个文件  
-**问题**: `XMLProcessor` 和 `get_language_folder_path` 的导入来源需要优化
-
-**具体问题**:
-- [ ] **XMLProcessor 导入来源问题**
-  - 当前从 `day_translation.utils.utils` 导入
-  - 但 `XMLProcessor` 是 XML 处理的核心工具，与 extract 流程紧密相关
-  - 建议评估是否应该迁移到 `day_translation.extract.xml_utils` 中
-
-- [ ] **get_language_folder_path 导入来源问题**
-  - 当前从 `day_translation.utils.utils` 导入
-  - 该函数主要用于路径拼接和目录定位，与 extract 流程相关
-  - 建议评估是否应该迁移到 `day_translation.extract.path_utils` 或类似模块中
-
-- [ ] **导入依赖关系复杂**
-  - extract 模块对 utils 模块的依赖过重
-  - 影响模块的独立性和可维护性
-  - 需要梳理和优化模块间的依赖关系
-
-**影响**: 
-- 模块间耦合度高，影响代码维护
-- 工具函数分散，不利于统一管理
-- 可能影响模块的独立性和可测试性
-
-**建议修复方案**:
-1. 评估 `XMLProcessor` 是否应该迁移到 `xml_utils.py` 中
-2. 评估 `get_language_folder_path` 是否应该迁移到专门的路径工具模块中
-3. 梳理 extract 模块的工具函数依赖，优化模块结构
-4. 考虑创建 `day_translation.extract.utils` 模块统一管理 extract 相关工具函数
-
-#### 3. smart_merger.py 代码质量问题
+#### 2. 智能合并功能实现
 **文件**: `day_translation/extract/smart_merger.py`  
-**问题**: 代码结构混乱，存在大量未使用的方法和逻辑问题
+**问题**: 当前智能合并器功能简单，需要完善核心合并逻辑
 
-**具体问题**:
-- [ ] **未使用的方法过多**
-  - `extract_translations_with_comments()` 标记为"未使用"
-  - `extract_with_lxml()` 标记为"未使用" 
-  - `extract_with_etree()` 标记为"未使用"
-  - `extract_basic_translations()` 标记为"未使用"
-  - 这些方法应该被清理或重构
+**待完成任务**:
+- [ ] **实现 5.1 合并逻辑**
+  - 根据 merge_flow.md 中的合并规则，实现完整的翻译合并算法
+  - 处理新增翻译、更新翻译、历史记录保持等场景
 
-- [ ] **注释提取逻辑不完整**
-  - 当前只实现了基础的翻译提取，没有正确处理 XML 注释
-  - 缺少对 `<!--EN: ...-->` 注释的完整解析
-  - 历史注释的处理逻辑需要完善
+- [ ] **完善 XML 注释处理**  
+  - 正确解析和保持 `<!--EN: ...-->` 注释
+  - 实现历史注释的智能管理
 
-- [ ] **文件结构分析逻辑简单**
-  - `analyze_file_structure()` 方法过于简单，可能误判文件结构类型
-  - 需要更智能的文件结构识别算法
+- [ ] **添加 Keyed 文件合并支持**
+  - 扩展合并器以支持 Keyed 目录的翻译文件
+  - 适配 Keyed 文件的特殊结构
 
-- [ ] **合并逻辑中的硬编码问题**
-  - 在 `merge_translation_into_file()` 中硬编码了 `"(需翻译)"` 前缀
-  - 应该通过配置或参数控制翻译标记格式
-
-- [ ] **错误处理不完善**
-  - 缺少对 XML 解析失败、文件写入失败等异常情况的处理
-  - 需要增加更详细的错误日志和恢复机制
-
-- [ ] **性能问题**
-  - 文件读取和解析没有缓存机制
-  - 大文件处理可能存在性能瓶颈
-
-- [ ] **代码重复**
-  - `_perform_smart_merge()` 和 `perform_smart_merge()` 功能重复
-  - 需要统一合并逻辑
-
-- [ ] **Keyed 目录处理缺失**
-  - 当前只处理 DefInjected 目录，没有处理 Keyed 目录的合并
-  - 需要实现 Keyed 文件的智能合并逻辑
-
-**影响**: 
-- 代码维护困难，存在大量无用代码
-- 合并功能不完整，可能影响翻译质量
-- 性能问题可能影响大模组的处理效率
-
-**建议修复方案**:
-1. 清理所有标记为"未使用"的方法
-2. 重构注释提取逻辑，完善 XML 注释处理
-3. 优化文件结构分析算法
-4. 将硬编码的翻译标记改为可配置参数
-5. 增加完善的错误处理和日志记录
-6. 实现 Keyed 目录的合并逻辑
-7. 统一合并接口，消除代码重复
-8. 添加性能优化和缓存机制
+**影响**: 智能合并是核心功能，直接影响翻译质量和用户体验
 
 ---
 
-### 🟡 中优先级
+### 🟡 中优先级（代码质量提升）
 
-#### 4. 错误处理和日志优化
-- [ ] 增加更详细的错误提示和恢复机制
-- [ ] 优化日志输出格式，便于调试和监控
-- [ ] 添加操作回滚功能
+#### 3. 模块依赖优化
+**文件**: `day_translation/extract/` 目录下多个文件  
+**问题**: 工具函数导入来源分散，模块间耦合度高
+
+**待完成任务**:
+- [ ] **评估和优化工具函数位置**
+  - 评估 `XMLProcessor` 和 `get_language_folder_path` 的最佳归属模块
+  - 考虑在 extract 模块内创建专门的工具模块
+
+- [ ] **梳理模块依赖关系**
+  - 减少 extract 模块对 utils 模块的过度依赖
+  - 提高模块的独立性和可测试性
+
+**影响**: 改善代码结构，提高维护性，但不影响核心功能
+
+#### 4. 错误处理完善
+**待完成任务**:
+- [ ] **增强异常处理机制**
+  - 添加 XML 解析失败、文件写入失败等异常的处理
+  - 完善错误日志和用户友好的错误提示
+
+- [ ] **添加操作可恢复性**
+  - 实现关键操作的回滚机制
+  - 保护用户数据安全
+
+**影响**: 提高程序稳定性和用户体验
 
 ---
 
-### 🟢 低优先级
+### � 低优先级（体验优化）
 
-#### 5. 用户体验优化
-- [ ] 增加进度条显示
-- [ ] 优化交互界面，提供更友好的提示
-- [ ] 添加操作历史记录功能
+#### 5. 用户体验改进
+**待完成任务**:
+- [ ] **进度显示优化**
+  - 为长时间操作添加进度条
+  - 优化交互界面提示信息
+
+- [ ] **操作历史记录**
+  - 添加操作历史追踪功能
+  - 便于用户了解处理过程
+
+**影响**: 提升用户体验，但不影响核心功能
 
 #### 6. 性能优化
-- [ ] 优化大文件处理性能
-- [ ] 增加并行处理支持
-- [ ] 优化内存使用 
+**待完成任务**:
+- [ ] **处理性能提升**
+  - 优化大文件处理性能
+  - 考虑添加并发处理支持
+
+- [ ] **内存使用优化**
+  - 优化内存使用模式
+  - 适配大型模组的处理需求
+
+**影响**: 在处理大型模组时提供更好的性能表现 

@@ -11,6 +11,7 @@
 
 import logging
 from typing import List, Tuple, Any, Dict
+import datetime
 
 
 class SmartMerger:
@@ -53,79 +54,66 @@ class SmartMerger:
         """去除 DefType/ 前缀，规范化 key"""
         return key.split("/", 1)[-1] if "/" in key else key
 
-    def smart_merge_definjected_translations(
-        self, include_unchanged: bool = False
-    ) -> List[Tuple[str, Any, Any, Any, Any, Any]]:
+    @staticmethod
+    def smart_merge_translations(
+        input_data: list,
+        output_data: list,
+        include_unchanged: bool = False,
+    ) -> list:
         """
-        智能合并 DefInjected 翻译：
+        通用智能合并方法，支持 DefInjected 和 Keyed。
         - 输入、输出均为五元组(key, test, tag, rel_path, en_test)
         - 返回六元组(key, test, tag, rel_path, en_test, history)
-        - 自动跳过非 DefInjected 数据（如 Keyed 四元组）
-
-        Args:
-            include_unchanged: 是否包含未变化的项目，默认 False（符合 5.1 增量合并逻辑）
         """
+        input_map = {item[0]: item for item in input_data}
+        output_map = {item[0]: item for item in output_data}
+        print(f"输入数据：{len(input_map)} 条")
+        print(f"输出数据：{len(output_map)} 条")
         merged = []
         unchanged_count = 0
         updated_count = 0
         new_count = 0
-
-        for key, in_item in self.input_map.items():
-            out_item = self.output_map.get(key)
+        today = datetime.date.today().isoformat()
+        for key, in_item in input_map.items():
+            out_item = output_map.get(key)
             if out_item:
-                # 5.1 逻辑：key 相同，test 和 EN 相同的情况
                 if in_item[1] == out_item[4]:  # 输入的 test == 输出的 en_test
                     unchanged_count += 1
                     if include_unchanged:
-                        # 如果需要包含未变化项，保持原有翻译
                         merged.append(
                             (
                                 key,
-                                out_item[1],  # 保持原有翻译
+                                out_item[1],
                                 in_item[2],
                                 in_item[3],
-                                in_item[1],  # 更新 en_test 为当前英文
-                                "",  # 无历史记录
+                                in_item[1],
+                                "",
                             )
                         )
                     else:
-                        continue  # 5.1 逻辑：删除这个参数（不输出）
+                        continue
                 else:
-                    # 5.1 逻辑：key 相同，test 和 EN 不同，需要更新
                     updated_count += 1
                     merged.append(
                         (
                             key,
-                            in_item[1],  # 新的英文文本
+                            in_item[1],
                             in_item[2],
                             in_item[3],
-                            in_item[1],  # 更新 en_test
-                            out_item[1],  # 保留原翻译作为历史记录
+                            in_item[1],
+                            f"HISTORY: 原翻译内容：{out_item[1]}，替换于{today}",
                         )
                     )
             else:
-                # 5.1 逻辑：key 没有，新增，带 EN 注释
                 new_count += 1
-                merged.append(
-                    (
-                        key,
-                        in_item[1],
-                        in_item[2],
-                        in_item[3],
-                        in_item[1],
-                        "",  # 新增，history为空
-                    )
-                )
-
-        # 记录合并统计信息
-        self._log_merge_stats(
-            len(merged), unchanged_count, updated_count, new_count, len(self.input_data)
+                merged.append((key, in_item[1], in_item[2], in_item[3], in_item[1], ""))
+        SmartMerger._log_merge_stats(
+            len(merged), unchanged_count, updated_count, new_count, len(input_data)
         )
-
         return merged
 
+    @staticmethod
     def _log_merge_stats(
-        self,
         merged_count: int,
         unchanged_count: int,
         updated_count: int,

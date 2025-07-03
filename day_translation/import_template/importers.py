@@ -9,12 +9,22 @@ from pathlib import Path
 from typing import List, Tuple, Optional, Dict
 from colorama import Fore, Style
 
-from day_translation.utils.config import get_config
+from day_translation.utils.config import (
+    get_config,
+    get_language_subdir,
+    get_language_dir,
+)
 from day_translation.utils.utils import XMLProcessor, get_language_folder_path
 
 CONFIG = get_config()
 
-def update_all_xml(mod_dir: str, translations: Dict[str, str], language: str = CONFIG.default_language, merge: bool = True) -> None:
+
+def update_all_xml(
+    mod_dir: str,
+    translations: Dict[str, str],
+    language: str = CONFIG.default_language,
+    merge: bool = True,
+) -> None:
     """
     更新所有 XML 文件中的翻译
 
@@ -49,7 +59,14 @@ def update_all_xml(mod_dir: str, translations: Dict[str, str], language: str = C
 
     print(f"{Fore.GREEN}更新了 {updated_count} 个文件{Style.RESET_ALL}")
 
-def import_translations(csv_path: str, mod_dir: str, merge: bool = True, auto_create_templates: bool = True, language: str = None) -> bool:
+
+def import_translations(
+    csv_path: str,
+    mod_dir: str,
+    merge: bool = True,
+    auto_create_templates: bool = True,
+    language: str = None,
+) -> bool:
     """
     将翻译CSV导入到翻译模板
 
@@ -70,7 +87,7 @@ def import_translations(csv_path: str, mod_dir: str, merge: bool = True, auto_cr
         # 步骤1：确保翻译模板存在
         if auto_create_templates:
             generator = TemplateGenerator(mod_dir, language)
-            if not (Path(mod_dir) / "Languages" / language).exists():
+            if not get_language_dir(mod_dir, language).exists():
                 translations = generator.extract_and_generate_templates()
                 if not translations:
                     logging.error("无法创建翻译模板")
@@ -99,6 +116,7 @@ def import_translations(csv_path: str, mod_dir: str, merge: bool = True, auto_cr
         print(f"{Fore.RED}❌ 导入失败: {e}{Style.RESET_ALL}")
         return False
 
+
 def _validate_csv_file(csv_path: str) -> bool:
     """验证CSV文件"""
     if not Path(csv_path).is_file():
@@ -117,6 +135,7 @@ def _validate_csv_file(csv_path: str) -> bool:
         logging.error("验证CSV文件时发生错误: %s", e)
         return False
 
+
 def _load_translations_from_csv(csv_path: str) -> Dict[str, str]:
     """从CSV文件加载翻译数据"""
     translations = {}
@@ -132,7 +151,10 @@ def _load_translations_from_csv(csv_path: str) -> Dict[str, str]:
         print(f"{Fore.RED}❌ 加载CSV文件失败: {e}{Style.RESET_ALL}")
         return {}
 
-def _update_all_xml_files(mod_dir: str, translations: Dict[str, str], language: str, merge: bool = True) -> int:
+
+def _update_all_xml_files(
+    mod_dir: str, translations: Dict[str, str], language: str, merge: bool = True
+) -> int:
     """更新所有XML文件中的翻译"""
     language_dir = get_language_folder_path(mod_dir, language)
     processor = XMLProcessor()
@@ -150,15 +172,32 @@ def _update_all_xml_files(mod_dir: str, translations: Dict[str, str], language: 
             print(f"{Fore.RED}处理文件失败: {xml_file}: {e}{Style.RESET_ALL}")
     return updated_count
 
+
 def _verify_import_results(mod_dir: str, language: str) -> bool:
     """验证导入结果"""
-    template_dir = Path(mod_dir) / "Languages" / language
+    template_dir = get_language_dir(mod_dir, language)
     if not template_dir.exists():
         logging.error("导入后模板目录不存在")
         return False
     # 检查是否有翻译文件
-    has_keyed = any((template_dir / "Keyed").glob("*.xml")) if (template_dir / "Keyed").exists() else False
-    has_definjected = any((template_dir / "DefInjected").glob("**/*.xml")) if (template_dir / "DefInjected").exists() else False
+    has_keyed = (
+        any(
+            (get_language_subdir(mod_dir, language, subdir_type="keyed").rglob("*.xml"))
+        )
+        if get_language_subdir(mod_dir, language, subdir_type="keyed").exists()
+        else False
+    )
+    has_definjected = (
+        any(
+            (
+                get_language_subdir(mod_dir, language, subdir_type="DefInjected").rglob(
+                    "*.xml"
+                )
+            )
+        )
+        if get_language_subdir(mod_dir, language, subdir_type="DefInjected").exists()
+        else False
+    )
     if not has_keyed and not has_definjected:
         logging.warning("导入后未找到翻译文件")
         return False

@@ -32,7 +32,7 @@ Day Translation - RimWorld 模组汉化工具
 import os
 import sys
 from pathlib import Path
-from colorama import init
+from colorama import init  # type: ignore
 
 # 添加当前模块的父目录到sys.path，以支持day_translation模块导入
 current_dir = Path(__file__).parent
@@ -58,6 +58,7 @@ from day_translation.utils.interaction import show_main_menu
 def main():
     """主程序入口"""
     while True:
+        os.system("cls" if os.name == "nt" else "clear")
         mode = show_main_menu()
         if mode == "1":
             handle_extract()
@@ -89,7 +90,6 @@ def main():
         else:
             print("❌ 无效选项，请重新输入。")
             input("\n按回车返回主菜单...")
-        os.system('cls' if os.name == 'nt' else 'clear')
 
 
 if __name__ == "__main__":

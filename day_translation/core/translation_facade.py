@@ -26,7 +26,7 @@ class TranslationFacade:
     def __init__(
         self,
         mod_dir: str,
-        language: str = CONFIG.default_language,
+        language: str,
         template_location: str = "mod",
     ):
         """

@@ -21,29 +21,30 @@ import os
 import re
 from pathlib import Path
 from typing import List, Tuple, Dict
-from day_translation.utils.config import get_config
+from day_translation.utils.config import (
+    get_config,
+    get_language_subdir,
+)
 from day_translation.utils.utils import sanitize_xml, XMLProcessor
 
 CONFIG = get_config()
 
 
 def export_definjected_with_original_structure(
-    mod_dir: str,
-    export_dir: str,
-    selected_translations: list,
-    _language: str = CONFIG.default_language,  # 未使用，保留接口兼容性
-    _source_language: str = CONFIG.source_language,  # 未使用，保留接口兼容性
+    output_dir,
+    output_language,
+    def_translations: list,
 ) -> None:
     """按 file_path 创建目录和文件结构导出 DefInjected 翻译，key 作为标签名，text 作为内容"""
     logging.info(
-        "按 file_path 结构导出 DefInjected: mod_dir=%s, translations_count=%s",
-        mod_dir,
-        len(selected_translations),
+        "按 file_path 结构导出 DefInjected: output_dir=%s, translations_count=%s",
+        output_dir,
+        len(def_translations),
     )
-    mod_dir = str(Path(mod_dir).resolve())
-    export_dir = str(Path(export_dir).resolve())
 
-    def_injected_path = os.path.join(export_dir, CONFIG.def_injected_dir)
+    def_injected_path = get_language_subdir(
+        base_dir=output_dir, language=output_language, subdir_type="DefInjected"
+    )
 
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
@@ -53,7 +54,7 @@ def export_definjected_with_original_structure(
         {}
     )  # {file_path: [(key, text, tag), ...]}
 
-    for item in selected_translations:
+    for item in def_translations:
         k, t, g, f = item[:4]
         if f not in file_groups:
             file_groups[f] = []
@@ -94,21 +95,20 @@ def export_definjected_with_original_structure(
 
 
 def export_definjected_with_defs_structure(
-    mod_dir: str,
-    export_dir: str,
-    selected_translations: list,
-    _language: str = CONFIG.default_language,  # 未使用，保留接口兼容性
+    output_dir: str,
+    output_language: str,
+    def_translations: list,
 ) -> None:
     """按照按DefType分组导出DefInjected翻译"""
     logging.info(
-        "按Defs结构导出 DefInjected: mod_dir=%s, translations_count=%s",
-        mod_dir,
-        len(selected_translations),
+        "按Defs结构导出 DefInjected: output_dir=%s, translations_count=%s",
+        output_dir,
+        len(def_translations),
     )
-    mod_dir = str(Path(mod_dir).resolve())
-    export_dir = str(Path(export_dir).resolve())
 
-    def_injected_path = os.path.join(export_dir, CONFIG.def_injected_dir)
+    def_injected_path = get_language_subdir(
+        base_dir=output_dir, language=output_language, subdir_type="DefInjected"
+    )
 
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
@@ -117,7 +117,7 @@ def export_definjected_with_defs_structure(
     # 按DefType分组翻译内容（基于 full_path 中的 def_type 信息）
     file_groups: Dict[str, List[Tuple[str, str, str]]] = {}
 
-    for item in selected_translations:
+    for item in def_translations:
         full_path, text, tag, _ = item[:4]  # rel_path 未使用
         # 从 full_path 生成键名和提取 def_type
         if "/" in full_path:
@@ -179,28 +179,27 @@ def export_definjected_with_defs_structure(
 
 
 def export_definjected_with_file_structure(
-    mod_dir: str,
-    export_dir: str,
-    selected_translations: list,
-    _language: str = CONFIG.default_language,  # 未使用，保留接口兼容性
+    output_dir: str,
+    output_language: str,
+    def_translations: list,
 ) -> None:
     """按原始Defs文件目录结构导出DefInjected翻译，key 结构为 DefType/defName.字段，导出时去除 DefType/ 只保留 defName.字段作为标签名，目录结构用 rel_path，内容用 text。"""
     logging.info(
-        "按文件结构导出 DefInjected: mod_dir=%s, translations_count=%s",
-        mod_dir,
-        len(selected_translations),
+        "按文件结构导出 DefInjected: output_dir=%s, translations_count=%s",
+        output_dir,
+        len(def_translations),
     )
-    mod_dir = str(Path(mod_dir).resolve())
-    export_dir = str(Path(export_dir).resolve())
 
-    def_injected_path = os.path.join(export_dir, CONFIG.def_injected_dir)
+    def_injected_path = get_language_subdir(
+        base_dir=output_dir, language=output_language, subdir_type="DefInjected"
+    )
 
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
         logging.info("创建文件夹：%s", def_injected_path)
 
     file_groups: Dict[str, List[Tuple[str, str, str]]] = {}
-    for item in selected_translations:
+    for item in def_translations:
         key, text, tag, rel_path = item[:4]
         if rel_path not in file_groups:
             file_groups[rel_path] = []
@@ -246,21 +245,20 @@ def export_definjected_with_file_structure(
 
 
 def export_keyed_template(
-    mod_dir: str,
-    export_dir: str,
-    selected_translations: list,
-    _language: str = CONFIG.default_language,  # 未使用，保留接口兼容性
+    output_dir: str,
+    output_language: str,
+    def_translations: list,
 ) -> None:
     """导出 Keyed 翻译模板，按文件分组生成 XML 文件"""
     logging.info(
-        "导出 Keyed 翻译模板: mod_dir=%s, translations_count=%s",
-        mod_dir,
-        len(selected_translations),
+        "导出 Keyed 翻译模板: output_dir=%s, translations_count=%s",
+        output_dir,
+        len(def_translations),
     )
-    mod_dir = str(Path(mod_dir).resolve())
-    export_dir = str(Path(export_dir).resolve())
 
-    keyed_path = os.path.join(export_dir, CONFIG.keyed_dir)
+    keyed_path = get_language_subdir(
+        base_dir=output_dir, language=output_language, subdir_type="keyed"
+    )
 
     if not os.path.exists(keyed_path):
         os.makedirs(keyed_path)
@@ -271,7 +269,7 @@ def export_keyed_template(
         {}
     )  # {file_path: [(key, text, tag), ...]}
 
-    for item in selected_translations:
+    for item in def_translations:
         key, text, tag, file_path = item[:4]
         if file_path not in file_groups:
             file_groups[file_path] = []
@@ -310,27 +308,25 @@ def export_keyed_template(
             logging.error("写入失败: %s", output_file)
 
 
-def write_merged_definjected_translations(
-    merged, export_dir, def_injected_dir="DefInjected"
-) -> None:
+def write_merged_translations(merged, output_dir, output_language, sub_dir) -> None:
     """
-    将合并后的六元组写回 XML 文件
+    通用写回 XML 方法，支持 DefInjected 和 Keyed。
     merged: List[(key, test, tag, rel_path, en_test, history)]
-    export_dir: 输出根目录
-    def_injected_dir: DefInjected 目录名
+    output_dir: 输出根目录
+    sub_dir: 子目录名（DefInjected 或 Keyed）
     """
+
+    base_dir = get_language_subdir(
+        base_dir=output_dir, language=output_language, subdir_type=f"{sub_dir}_dir"
+    )
     # 1. 按 rel_path 分组
-    file_groups: Dict[str, List[Tuple[str, str, str, str, str, str]]] = {}
+    file_groups: dict[str, list] = {}
     for item in merged:
         rel_path = item[3]
         file_groups.setdefault(rel_path, []).append(item)
-
-    base_dir = Path(export_dir) / def_injected_dir
     processor = XMLProcessor()
-
     for rel_path, items in file_groups.items():
         output_file = base_dir / rel_path
-
         # 检查文件是否已存在
         if output_file.exists():
             # 读取现有XML文件
@@ -348,25 +344,19 @@ def write_merged_definjected_translations(
             logging.info("创建新文件: %s", output_file)
             output_file.parent.mkdir(parents=True, exist_ok=True)
             root = processor.create_element("LanguageData")
-
         # 更新或添加翻译条目
         for key, test, _, _, en_test, history in sorted(items, key=lambda x: x[0]):
             # 查找现有元素
             existing_elem = root.find(key)
-
             if existing_elem is not None:
                 # 更新现有元素
                 original_text = existing_elem.text or ""
                 if original_text != test:
-                    # 如果内容有变化，添加历史注释
-                    history_comment = processor.create_comment(
-                        f"HISTORY: 原翻译内容：{original_text}，替换于YYYY-MM-DD"
-                    )
-                    # 在元素前插入历史注释
-                    elem_index = list(root).index(existing_elem)
-                    root.insert(elem_index, history_comment)
-
-                # 更新翻译文本
+                    # 添加历史注释
+                    if history and history.strip():
+                        history_comment = processor.create_comment(history)  # 创建注释
+                        elem_index = list(root).index(existing_elem)
+                        root.insert(elem_index, history_comment)
                 existing_elem.text = sanitize_xml(test)
             else:
                 # 添加新元素

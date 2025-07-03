@@ -1,18 +1,33 @@
 """
 配置管理模块 - 负责翻译配置的加载、保存、验证和管理
+
+支持的配置项及含义：
+- CN_language: 中文语言目录名（如 ChineseSimplified）
+- EN_language: 英文语言目录名（如 English）
+- DefInjected_dir: DefInjected 子目录名（如 DefInjected）
+- keyed_dir: Keyed 子目录名（如 Keyed）
+- output_csv: 默认输出 CSV 文件名
+- log_file: 日志文件路径（自动生成）
+- log_format: 日志格式
+- debug_mode: 是否开启调试模式（环境变量 DAY_TRANSLATION_DEBUG 控制）
+- preview_transatable_fields: 预览可翻译字段数量
+
+其它配置项可参考 TranslationConfig 数据类定义。
 """
 
-from dataclasses import dataclass, asdict
-import os
 import json
 import logging
-from pathlib import Path
-from typing import Set, List, Dict, Any
-from colorama import Fore, Style
+import os
+from dataclasses import asdict, dataclass
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set
+
+from colorama import Fore, Style  # type: ignore
 
 from .filter_config import UnifiedFilterRules
 
+_config_instance: Optional["TranslationConfig"] = None
 CONFIG_VERSION = "1.0.0"
 
 
@@ -25,9 +40,9 @@ class TranslationConfig:
     """翻译配置类，负责管理所有配置项"""
 
     version: str = CONFIG_VERSION
-    default_language: str = "ChineseSimplified"
-    source_language: str = "English"
-    def_injected_dir: str = "DefInjected"
+    CN_language: str = "ChineseSimplified"
+    EN_language: str = "English"
+    DefInjected_dir: str = "DefInjected"
     keyed_dir: str = "Keyed"
     output_csv: str = "extracted_translations.csv"
     log_file: str = ""  # 将在 __post_init__ 中动态生成
@@ -94,12 +109,12 @@ class TranslationConfig:
 
     def _validate_config(self) -> None:
         """验证配置项的有效性"""
-        if not isinstance(self.default_language, str) or not self.default_language:
-            raise ConfigError("default_language 必须是有效的语言代码")
-        if not isinstance(self.source_language, str) or not self.source_language:
-            raise ConfigError("source_language 必须是有效的语言代码")
-        if not isinstance(self.def_injected_dir, str) or not self.def_injected_dir:
-            raise ConfigError("def_injected_dir 不能为空")
+        if not isinstance(self.CN_language, str) or not self.CN_language:
+            raise ConfigError("CN_language 必须是有效的语言代码")
+        if not isinstance(self.EN_language, str) or not self.EN_language:
+            raise ConfigError("EN_language 必须是有效的语言代码")
+        if not isinstance(self.DefInjected_dir, str) or not self.DefInjected_dir:
+            raise ConfigError("DefInjected_dir 不能为空")
         if not isinstance(self.keyed_dir, str) or not self.keyed_dir:
             raise ConfigError("keyed_dir 不能为空")
         if not isinstance(self.output_csv, str) or not self.output_csv:
@@ -174,10 +189,12 @@ class TranslationConfig:
         """显示当前配置"""
         # 定义中文字段名映射
         field_names = {
-            "default_language": "默认语言",
-            "source_language": "源语言",
-            "output_csv_path": "输出CSV路径",
-            "debug_mode": "调试模式",
+            "version": "配置版本",
+            "CN_language": "中文语言目录",
+            "EN_language": "英文语言目录",
+            "DefInjected_dir": "DefInjected目录",
+            "keyed_dir": "Keyed目录",
+            "output_csv": "默认CSV文件名",
             "log_file": "日志文件路径",
             "preserve_comments": "保留注释",
             "preserve_original_structure": "保留原始结构",
@@ -191,8 +208,6 @@ class TranslationConfig:
             "backup_enabled": "备份启用",
             "backup_dir": "备份目录",
             "backup_count": "备份数量",
-            "keyed_dir": "Keyed目录",
-            "def_injected_dir": "DefInjected目录",
             "languages_dir": "Languages目录",
             "defs_dir": "Defs目录",
         }
@@ -279,8 +294,8 @@ class TranslationConfig:
     def _is_compatible_version(self, version: str) -> bool:
         """检查版本兼容性"""
         try:
-            current_major = int(self.version.split(".")[0])
-            config_major = int(version.split(".")[0])
+            current_major = int(self.version.split(".", maxsplit=1)[0])
+            config_major = int(version.split(".", maxsplit=1)[0])
             return current_major == config_major
         except (ValueError, IndexError):
             return False
@@ -343,18 +358,43 @@ class TranslationConfig:
             raise ConfigError("non_text_patterns 必须是列表")
 
 
-# 全局配置实例（单例）
-_global_config_instance = None
-# 全局用户配置缓存
-_global_user_config_cache = None
+# 全局配置实例管理
+# =================
 
 
-def get_config() -> TranslationConfig:
-    """获取全局配置实例（单例模式）"""
-    global _global_config_instance
-    if _global_config_instance is None:
-        _global_config_instance = TranslationConfig()
-    return _global_config_instance
+def get_config() -> "TranslationConfig":
+    """
+    获取全局唯一的配置实例（单例模式）。
+
+    如果实例不存在，则创建一个新的 TranslationConfig 实例。
+    这确保了整个应用程序共享同一个配置状态，避免了重复初始化。
+
+    Returns:
+        TranslationConfig: 全局配置实例。
+    """
+    global _config_instance
+    if _config_instance is None:
+        _config_instance = TranslationConfig()
+    return _config_instance
+
+
+def reload_config() -> "TranslationConfig":
+    """
+    重新加载配置，强制创建一个新的配置实例。
+
+    这在需要应用外部更改（例如，用户修改了配置文件）而无需重启整个应用时非常有用。
+
+    Returns:
+        TranslationConfig: 新的全局配置实例。
+    """
+    global _config_instance
+    _config_instance = TranslationConfig()
+    logging.info("配置已重新加载")
+    return _config_instance
+
+
+# 缓存的用户配置
+_user_config_cache: Optional[Dict[str, Any]] = None
 
 
 def get_config_path() -> str:
@@ -366,28 +406,28 @@ def get_config_path() -> str:
 
 def get_user_config() -> Dict[str, Any]:
     """获取缓存的用户配置"""
-    global _global_user_config_cache
-    if _global_user_config_cache is None:
+    global _user_config_cache
+    if _user_config_cache is None:
         # 直接实现配置加载，避免循环依赖
         config_path = get_config_path()
         if os.path.exists(config_path):
             try:
                 with open(config_path, "r", encoding="utf-8") as f:
-                    _global_user_config_cache = json.load(f)
+                    _user_config_cache = json.load(f)
                     logging.debug("加载用户配置成功: %s", config_path)
             except (OSError, IOError, json.JSONDecodeError) as e:
                 logging.error("加载用户配置文件失败: %s", e)
-                _global_user_config_cache = {}
+                _user_config_cache = {}
         else:
-            _global_user_config_cache = {}
+            _user_config_cache = {}
             logging.debug("用户配置文件不存在，使用空配置")
-    return _global_user_config_cache
+    return _user_config_cache
 
 
 def clear_user_config_cache():
     """清除用户配置缓存（用于配置更新后）"""
-    global _global_user_config_cache
-    _global_user_config_cache = None
+    global _user_config_cache
+    _user_config_cache = None
 
 
 def save_user_config_to_file(config: Dict) -> None:
@@ -408,3 +448,28 @@ def save_user_config_to_file(config: Dict) -> None:
     except (OSError, IOError, ValueError) as e:
         print(f"保存配置文件失败: {e}")
         logging.error("保存配置文件失败: %s", e)
+
+
+def get_language_dir(base_dir, language):
+    """
+    获取指定语言的 Languages 目录路径
+    """
+    return Path(base_dir) / "Languages" / language
+
+
+def get_language_subdir(base_dir, language, subdir_type):
+    """
+    获取指定语言的子目录路径，例如 DefInjected 或 Keyed
+    :param base_dir: 基础路径
+    :param language: 语言名称（如 "ChineseSimplified"）
+    :param subdir_type: 子目录类型，应为 'DefInjected' 或 'keyed'
+    :return: 对应子目录的完整路径
+    """
+    subdir_map = {
+        "DefInjected": get_config().DefInjected_dir,
+        "keyed": get_config().keyed_dir,
+    }
+    if subdir_type not in subdir_map:
+        raise ValueError(f"Unsupported subdir_type: {subdir_type}")
+
+    return get_language_dir(base_dir, language) / subdir_map[subdir_type]

@@ -1,102 +1,164 @@
-# Day Translation - RimWorld 模组汉化智能工具
+# Day Translation Core 模块架构文档
 
-## 📖 项目简介
+## 📋 概述
 
-Day Translation 是专为 RimWorld 模组开发者和汉化团队打造的智能化翻译工具，集成了**智能提取、智能合并、批量处理、交互优化**等现代化特性，极大提升了模组汉化的效率与质量。
+`day_translation` 工具是一个专为 RimWorld 模组设计的翻译工具包，采用模块化架构，包含翻译数据的提取、处理、生成、导出和导入功能。该工具支持多种翻译工作流程，提供智能合并、模板生成等高级功能。
 
----
-
-## 🏗️ 最新目录结构
+## 🏗️ 项目架构
 
 ```
 day_translation/
-├── batch/                # 批量处理与任务调度
-├── config_manage/        # 配置管理与交互
-├── core/                 # 核心业务逻辑（门面、异常等）
-├── corpus/               # 平行语料生成与管理
-├── extract/              # 智能提取、合并、模板管理
-├── full_pipeline/        # 一键全流程处理
-├── import_template/      # 翻译导入与模板处理
-├── interact/             # 交互相关
-├── java_translate/       # Java批量翻译工具集成
-├── python_translate/     # Python机器翻译
-├── utils/                # 工具库（路径、过滤、配置等）
-├── main.py               # 主入口
-└── README.md
+├── core/                    # 核心业务逻辑层
+│   ├── translation_facade.py   # 翻译门面 - 统一接口
+│   └── exceptions.py           # 异常定义
+├── extract/                 # 提取模块 - 数据提取和模板生成
+│   ├── extractors.py          # 提取器 - 从模组文件提取内容
+│   ├── exporters.py           # 导出器 - 导出翻译文件
+│   ├── template_manager.py    # 模板管理器 - 核心控制器
+│   ├── handler.py             # 处理器 - 主要业务流程
+│   ├── interaction_manager.py # 交互管理器 - 用户交互逻辑
+│   └── smart_merger.py        # 智能合并器 - 翻译合并逻辑
+├── import_template/         # 导入模块
+│   ├── importers.py           # 导入器 - CSV到XML转换
+│   └── handler.py             # 导入处理器
+├── utils/                   # 工具模块
+│   ├── config.py              # 配置管理
+│   ├── utils.py               # 工具函数和XMLProcessor
+│   ├── filters.py             # 内容过滤器
+│   └── interaction.py         # 交互工具
+└── main.py                  # 主入口
 ```
 
----
+## 📊 模块调用关系图
 
-## ✨ 核心功能
+```mermaid
+graph TD
+    A[main.py] -->|创建实例| B[TranslationFacade]
+    B -->|协调各模块| C[extract/handler.py]
+    C -->|创建管理器| D[extract/template_manager.py]
+    C -->|智能交互| E[extract/interaction_manager.py]
+    D -->|调用提取| F[extract/extractors.py]
+    D -->|调用导出| G[extract/exporters.py]
+    C -->|智能合并| H[extract/smart_merger.py]
+    B -->|导入功能| I[import_template/handler.py]
+    I -->|调用导入| J[import_template/importers.py]
+    
+    F -->|使用工具| K[utils/utils.XMLProcessor]
+    G -->|使用工具| K
+    J -->|使用工具| K
+    H -->|使用工具| K
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+    style D fill:#fff3e0
+    style E fill:#fce4ec
+    style F fill:#f1f8e9
+    style G fill:#e0f2f1
+    style H fill:#fff8e1
+    style I fill:#f3e5f5
+    style J fill:#e8f5e8
+    style K fill:#ffecb3
+```
 
-- **智能提取**：自动识别模组结构，支持 DefInjected/Defs/Keyed 多种提取模式，兼容主流 RimWorld 模组。
-- **智能合并**：支持增量合并新旧翻译，自动检测并处理冲突，避免重复劳动。
-- **交互优化**：历史路径、目录选择、参数记忆、命令行美化，极大提升用户体验。
-- **批量处理**：支持多模组批量提取、翻译、导入，适合团队协作。
-- **机器翻译集成**：支持阿里云等主流翻译 API，自动生成翻译草稿。
-- **平行语料生成**：一键导出英中对照语料，便于训练自定义模型。
-- **配置灵活**：支持自定义过滤、输出结构、合并策略等。
 
----
+**调用关系**:
+```python
+TemplateManager
+├── 调用 extractors.py 的提取函数
+│   ├── extract_keyed_translations(language=language)
+│   ├── scan_defs_sync()  # 不需要language参数
+│   └── extract_definjected_translations(language=language)
+├── 调用 exporters.py 的导出函数
+│   ├── export_definjected_with_original_structure()
+│   ├── export_definjected_with_defs_structure()
+│   └── export_definjected_with_file_structure()
+└── 统一返回五元组格式 (key, test, tag, rel_path, en_test)
+```
 
-## 🚀 主要工作流
+### 4. extract/extractors.py - 内容提取器
 
-### 1. 智能提取
-- 选择模组目录和输出目录
-- 智能检测并推荐提取模式（英文 DefInjected/全量 Defs/Keyed）
-- 生成标准化 XML 模板和 CSV 文件
+**职责**: 
+- 从模组文件中提取可翻译内容
+- 解析XML文件结构
+- 支持多种语言的内容提取
 
-### 2. 机器翻译（可选）
-- 支持 Python/Java 两种批量翻译方式
-- 机器翻译后可手动校对
+**主要函数**:
+- `extract_keyed_translations(mod_dir, language)`: 提取指定语言的Keyed翻译
+- `scan_defs_sync(mod_dir)`: 扫描Defs定义文件（语言无关）
+- `extract_definjected_translations(mod_dir, language)`: 提取指定语言的DefInjected翻译
 
-### 3. 智能合并
-- 支持"重建/覆盖/合并"三种冲突处理策略
-- 合并模式下自动对比新旧翻译，增量更新，保留人工校对内容
+**关键改进**:
+- 移除了 `direct_dir` 参数，统一使用 `language` 参数
+- 所有函数现在返回统一的五元组格式
+- 基于语言参数自动构建正确的路径
 
-### 4. 导入翻译
-- 一键将翻译 CSV 导入 XML 模板
-- 支持合并/覆盖导入
+### 5. extract/exporters.py - 翻译导出器
 
----
+**职责**: 
+- 导出翻译文件到指定结构
+- 支持多种导出格式和结构
+- XML文件的创建和更新
 
-## ⚙️ 主要配置项
+**主要函数**:
+- `export_definjected_with_original_structure()`: 按原始文件路径结构导出
+- `export_definjected_with_defs_structure()`: 按DefType分类导出
+- `export_definjected_with_file_structure()`: 按文件目录结构导出
+- `write_merged_definjected_translations()`: 智能合并并导出翻译
 
-- `default_language`：目标语言（默认 ChineseSimplified）
-- `source_language`：源语言（默认 English）
-- `keyed_dir`/`def_injected_dir`：目录名自定义
-- `debug_mode`：调试日志开关
-- 详见 `utils/config.py`
 
----
 
-## 🐛 常见问题与故障排除
+### 流程1: 提取模板并生成CSV
 
-- **合并后 Keyed 文件变成一行？**  
-  目前已统一用 XMLProcessor 格式化，若仍有问题请反馈 issue。
-- **合并功能未生效？**  
-  请确保输出目录下有现有翻译文件，且选择"合并"模式。
-- **导入后模组无法加载？**  
-  检查 XML 文件格式，建议用 Notepad++/VSCode 等工具校验。
-- **其他问题**  
-  详见 [AI_工作记忆/核心记忆/智能合并功能问题记录.md]，或提交 issue。
+```python
+# 用户操作: 模式1 - 生成模板和CSV
+main() 
+└── TranslationFacade.extract_templates_and_generate_csv()
+    └── TemplateManager.extract_and_generate_templates()
+        ├── _extract_all_translations()
+        │   ├── extract_keyed_translations()      # 提取Keyed翻译
+        │   ├── scan_defs_sync()                  # 扫描Defs文件
+        │   └── extract_definjected_translations() # 提取DefInjected翻译
+        ├── _generate_all_templates() 或 _generate_templates_to_output_dir()
+        │   ├── TemplateGenerator.generate_keyed_template() # 生成Keyed模板
+        │   ├── TemplateGenerator.generate_keyed_template_from_data() # 从数据生成Keyed模板
+        │   ├── TemplateGenerator.generate_definjected_template() # 生成DefInjected模板
+        │   └── TemplateGenerator.generate_definjected_template_from_data() # 从数据生成DefInjected模板
+        ├── _export_translations_to_csv()         # 导出翻译到CSV
+        │   └── _handle_definjected_structure_choice()        # 处理DefInjected结构选择
+        │       ├── export_definjected_with_original_structure()          # 按原始文件路径结构导出
+        │       ├── export_definjected_with_defs_structure()      # 按DefType分类导出 
+        │       └── TemplateGenerator.generate_definjected_template()             # 获取DefInjected模板
+        └── _save_translations_to_csv()         # 保存翻译到CSV
+```
 
----
+### 流程2: 导入翻译到模板
 
-## 🤝 参与开发
+```python
+# 用户操作: 模式3 - 导入翻译
+main()
+└── TranslationFacade.import_translations_to_templates()
+    └── TemplateManager.import_translations()
+        ├── _validate_csv_file()           # 验证CSV文件
+        ├── _load_translations_from_csv()  # 加载翻译数据
+        ├── _update_all_xml_files()        # 更新XML文件
+        │   └── XMLProcessor.update_translations()
+        └── _verify_import_results()       # 验证导入结果
+```
 
-1. 克隆仓库并安装依赖  
-   `pip install -r requirements.txt`
-2. 运行主程序  
-   `python day_translation/main.py`
-3. 贡献代码请提交 Pull Request，或通过 Issue 反馈问题
+### 流程3: DefInjected结构选择
 
----
+```python
+# 智能结构选择流程
+_handle_definjected_structure_choice()
+├── 检测英文DefInjected目录存在性
+├── 显示用户选择界面
+└── 根据选择执行不同导出策略:
+    ├── 选择1: export_definjected_with_original_structure()
+    ├── 选择2: export_definjected_with_defs_structure()
+    └── 选择3: TemplateGenerator.generate_definjected_template()
+```
 
-## 📄 许可证
+Day Translation Core 模块采用了清晰的分层架构和模块化设计，通过合理的职责分离和接口设计，实现了高内聚、低耦合的代码结构。这种设计不仅便于维护和扩展，还为用户提供了灵活、强大的翻译处理能力。
 
-MIT License
-
----
-
-**Happy Translating! 🌟**
+每个模块都有明确的职责和边界，通过 `TemplateManager` 作为核心控制器协调各个子模块的工作，形成了完整而高效的翻译处理流水线。
