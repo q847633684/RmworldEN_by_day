@@ -118,11 +118,11 @@ class SmartMerger:
         unchanged_count: int,
         updated_count: int,
         new_count: int,
-        total_input: int,
+        input_data: int,
     ) -> None:
         """记录合并统计信息"""
         logging.info("智能合并统计:")
-        logging.info("  总输入项目: %d", total_input)
+        logging.info("  总输入项目: %d", input_data)
         logging.info("  未变化项目: %d (跳过)", unchanged_count)
         logging.info("  需要更新项目: %d", updated_count)
         logging.info("  新增项目: %d", new_count)

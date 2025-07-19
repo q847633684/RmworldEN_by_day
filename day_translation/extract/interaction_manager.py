@@ -216,7 +216,7 @@ class InteractionManager:
             f"{Fore.BLUE}🔍 正在检测目录:{mod_dir} 语言:{language}... {Style.RESET_ALL}"
             f"\n{Fore.BLUE}🔍 正在检测 {language_dir} 目录状态...{Style.RESET_ALL}"
         )
-        def_dir = get_language_subdir(mod_dir, language, subdir_type="DefInjected")
+        def_dir = get_language_subdir(mod_dir, language, subdir_type="defInjected")
         keyed_dir = get_language_subdir(mod_dir, language, subdir_type="keyed")
         has_definjected = def_dir.exists() and any(def_dir.rglob("*.xml"))
         has_keyed = keyed_dir.exists() and any(keyed_dir.rglob("*.xml"))

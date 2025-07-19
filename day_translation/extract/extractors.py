@@ -268,7 +268,7 @@ def extract_definjected_translations(
     )
     translations = []
     definjected_dir = get_language_subdir(
-        base_dir=import_dir, language=import_language, subdir_type="DefInjected"
+        base_dir=import_dir, language=import_language, subdir_type="defInjected"
     )
     print(f"   ✅ 获取 DefInjected 目录: {definjected_dir}")
     logging.debug("DefInjected目录: %s", definjected_dir)

@@ -8,7 +8,7 @@ from pathlib import Path
 from day_translation.utils.config import (
     get_config,
     get_language_subdir,
-    ConfigError,
+    get_language_dir,
 )
 from day_translation.utils.interaction import (
     select_mod_path_with_version_detection,
@@ -18,7 +18,7 @@ from day_translation.utils.interaction import (
     show_warning,
 )
 from day_translation.utils.path_manager import PathManager
-
+from day_translation.utils.config import ConfigError
 
 CONFIG = get_config()
 path_manager = PathManager()
@@ -93,22 +93,26 @@ def handle_extract():
                 # 步骤 1: 根据模式处理文件系统
                 if conflict_resolution == "rebuild":
                     # 重建：清空输出目录
-                    if output_path.exists():
+                    language_dir = get_language_dir(
+                        base_dir=output_path,
+                        language=output_language,
+                    )
+                    if language_dir.exists():
                         try:
                             import shutil
 
-                            for item in output_path.iterdir():
+                            for item in language_dir.iterdir():
                                 if item.is_dir():
                                     shutil.rmtree(item)
                                 else:
                                     item.unlink()
-                            show_info(f"🗑️ 已清空输出目录：{output_path}")
+                            show_info(f"🗑️ 已清空输出目录：{language_dir}")
                         except PermissionError as e:
                             show_warning(
                                 f"⚠️ 无法删除某些文件（可能是系统文件），跳过：{e}"
                             )
                     else:
-                        show_info(f"📁 输出目录不存在，将创建：{output_path}")
+                        show_info(f"📁 输出目录不存在，将创建：{language_dir}")
 
                 elif conflict_resolution == "overwrite":
                     # 覆盖：删除现有的翻译文件
@@ -117,7 +121,7 @@ def handle_extract():
                     definjected_dir = get_language_subdir(
                         base_dir=output_path,
                         language=output_language,
-                        subdir_type="DefInjected",
+                        subdir_type="defInjected",
                     )
                     keyed_dir = get_language_subdir(
                         base_dir=output_path,

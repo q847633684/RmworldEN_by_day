@@ -43,7 +43,7 @@ def export_definjected_with_original_structure(
     )
 
     def_injected_path = get_language_subdir(
-        base_dir=output_dir, language=output_language, subdir_type="DefInjected"
+        base_dir=output_dir, language=output_language, subdir_type="defInjected"
     )
 
     if not os.path.exists(def_injected_path):
@@ -107,7 +107,7 @@ def export_definjected_with_defs_structure(
     )
 
     def_injected_path = get_language_subdir(
-        base_dir=output_dir, language=output_language, subdir_type="DefInjected"
+        base_dir=output_dir, language=output_language, subdir_type="defInjected"
     )
 
     if not os.path.exists(def_injected_path):
@@ -191,7 +191,7 @@ def export_definjected_with_file_structure(
     )
 
     def_injected_path = get_language_subdir(
-        base_dir=output_dir, language=output_language, subdir_type="DefInjected"
+        base_dir=output_dir, language=output_language, subdir_type="defInjected"
     )
 
     if not os.path.exists(def_injected_path):
@@ -317,7 +317,7 @@ def write_merged_translations(merged, output_dir, output_language, sub_dir) -> N
     """
 
     base_dir = get_language_subdir(
-        base_dir=output_dir, language=output_language, subdir_type=f"{sub_dir}_dir"
+        base_dir=output_dir, language=output_language, subdir_type=sub_dir
     )
     # 1. 按 rel_path 分组
     file_groups: dict[str, list] = {}

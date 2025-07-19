@@ -47,7 +47,7 @@ class TranslationConfig:
     output_csv: str = "extracted_translations.csv"
     log_file: str = ""  # 将在 __post_init__ 中动态生成
     log_format: str = "%(asctime)s - %(levelname)s - %(message)s"
-    debug_mode: bool = os.getenv("DAY_TRANSLATION_DEBUG", "").lower() == "true"
+    debug_mode: bool = True  # os.getenv("DAY_TRANSLATION_DEBUG", "").lower() =="true"
     preview_transatable_fields: int = 0
 
     def __post_init__(self):
@@ -462,11 +462,12 @@ def get_language_subdir(base_dir, language, subdir_type):
     获取指定语言的子目录路径，例如 DefInjected 或 Keyed
     :param base_dir: 基础路径
     :param language: 语言名称（如 "ChineseSimplified"）
-    :param subdir_type: 子目录类型，应为 'DefInjected' 或 'keyed'
+    :param subdir_type: 子目录类型，应为 'definjected' 或 'keyed'
     :return: 对应子目录的完整路径
     """
+    subdir_type = subdir_type.lower()
     subdir_map = {
-        "DefInjected": get_config().DefInjected_dir,
+        "definjected": get_config().DefInjected_dir,
         "keyed": get_config().keyed_dir,
     }
     if subdir_type not in subdir_map:

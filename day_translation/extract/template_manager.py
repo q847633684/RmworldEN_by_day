@@ -144,6 +144,10 @@ class TemplateManager:
             output_data=output_data,
             include_unchanged=False,
         )
+        for item in translations:
+            logging.debug(item)
+            # print(f"合并翻译数据: {item}")
+
         # 分离键值对和定射
         keyed_translations = []
         def_translations = []
@@ -151,8 +155,10 @@ class TemplateManager:
             k, _, _, f = item[:4]  # 兼容五元组和四元组
             if "." in k and (f.endswith(".xml") or "DefInjected" in str(f)):
                 def_translations.append(item)
+                print(f"DefInjected翻译: {item}")
             else:
                 keyed_translations.append(item)
+                print(f"Keyed翻译: {item}")
         # 写入合并结果
         if has_input_keyed and keyed_translations:
             print("📁 正在合并 Keyed ...")

@@ -190,12 +190,12 @@ def _verify_import_results(mod_dir: str, language: str) -> bool:
     has_definjected = (
         any(
             (
-                get_language_subdir(mod_dir, language, subdir_type="DefInjected").rglob(
+                get_language_subdir(mod_dir, language, subdir_type="defInjected").rglob(
                     "*.xml"
                 )
             )
         )
-        if get_language_subdir(mod_dir, language, subdir_type="DefInjected").exists()
+        if get_language_subdir(mod_dir, language, subdir_type="defInjected").exists()
         else False
     )
     if not has_keyed and not has_definjected:
