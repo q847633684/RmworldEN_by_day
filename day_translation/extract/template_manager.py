@@ -21,6 +21,7 @@ from day_translation.extract.exporters import (
     write_merged_translations,
 )
 from day_translation.utils.config import get_config, get_language_dir
+from day_translation.utils.path_manager import PathManager
 
 CONFIG = get_config()
 
@@ -396,3 +397,8 @@ class TemplateManager:
                 writer.writerow(item[:4])  # 只导出前四个字段，兼容五元组
         print(f"{Fore.GREEN}✅ CSV文件已生成: {csv_path}{Style.RESET_ALL}")
         logging.info("翻译数据已保存到CSV: %s", csv_path)
+        # 记入历史：让提取生成的 CSV 出现在后续“Python机翻/导入翻译”的历史列表
+        try:
+            PathManager().remember_path("import_csv", str(csv_path))
+        except Exception:
+            logging.warning("无法记录CSV历史路径: %s", csv_path)

@@ -7,17 +7,19 @@ import logging
 from colorama import Fore, Style
 
 from day_translation.utils.interaction import (
-    select_csv_path_with_history, 
+    select_csv_path_with_history,
     confirm_action,
     show_success,
     show_error,
     show_info,
-    show_warning
+    show_warning,
 )
 from day_translation.core.translation_facade import TranslationFacade
 from day_translation.utils.path_manager import PathManager
+from day_translation.utils.config import get_config
 
 path_manager = PathManager()
+
 
 def handle_import_template():
     """处理导入模板功能"""
@@ -30,13 +32,14 @@ def handle_import_template():
         # 选择模组目录
         mod_dir = path_manager.get_mod_path_with_version_detection(
             path_type="mod_dir",
-            prompt="请输入编号或模组目录路径（支持历史编号或直接输入路径）: "
+            prompt="请输入编号或模组目录路径（支持历史编号或直接输入路径）: ",
         )
         if not mod_dir:
             return
 
-        # 创建翻译门面实例
-        facade = TranslationFacade(mod_dir)
+        # 创建翻译门面实例（使用配置中的目标语言）
+        language = get_config().CN_language
+        facade = TranslationFacade(mod_dir, language)
 
         # 确认导入
         if confirm_action("确认导入翻译到模板？"):
@@ -51,4 +54,4 @@ def handle_import_template():
             show_warning("用户取消导入")
     except Exception as e:
         show_error(f"导入模板失败: {str(e)}")
-        logging.error("导入模板失败: %s", str(e), exc_info=True) 
+        logging.error("导入模板失败: %s", str(e), exc_info=True)

@@ -61,19 +61,19 @@ def main():
         os.system("cls" if os.name == "nt" else "clear")
         mode = show_main_menu()
         if mode == "1":
-            handle_extract()
+            handle_full_pipeline()
             input("\n按回车返回主菜单...")
         elif mode == "2":
-            handle_python_translate()
+            handle_extract()
             input("\n按回车返回主菜单...")
         elif mode == "3":
-            handle_import_template()
+            handle_java_translate()
             input("\n按回车返回主菜单...")
         elif mode == "4":
-            handle_corpus()
+            handle_import_template()
             input("\n按回车返回主菜单...")
         elif mode == "5":
-            handle_full_pipeline()
+            handle_python_translate()
             input("\n按回车返回主菜单...")
         elif mode == "6":
             handle_batch()
@@ -82,7 +82,7 @@ def main():
             handle_config_manage()
             input("\n按回车返回主菜单...")
         elif mode == "8":
-            handle_java_translate()
+            handle_corpus()
             input("\n按回车返回主菜单...")
         elif mode == "q":
             print("👋 感谢使用 Day Translation！")

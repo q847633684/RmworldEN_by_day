@@ -49,9 +49,8 @@ class TranslationFacade:
             self.language = language
             self.template_location = template_location
             # 直接使用传入的目录初始化模板管理器
-            self.template_manager = TemplateManager(
-                self.mod_dir, language, template_location
-            )
+            # TemplateManager 当前无构造参数，按需实例化
+            self.template_manager = TemplateManager()
             self._validate_config()
             logging.debug(
                 "初始化 TranslationFacade: mod_dir=%s, language=%s",
@@ -124,7 +123,16 @@ class TranslationFacade:
             if not os.path.isfile(csv_path):
                 raise TranslationImportError(f"CSV文件不存在: {csv_path}")
             logging.info("导入翻译到模板: csv_path=%s, merge=%s", csv_path, merge)
-            if not self.template_manager.import_translations(csv_path, merge):
+            # 使用导入模块执行导入逻辑
+            from day_translation.import_template.importers import import_translations
+
+            if not import_translations(
+                csv_path=csv_path,
+                mod_dir=self.mod_dir,
+                merge=merge,
+                auto_create_templates=True,
+                language=self.language,
+            ):
                 raise TranslationImportError("导入翻译失败")
 
         except Exception as e:

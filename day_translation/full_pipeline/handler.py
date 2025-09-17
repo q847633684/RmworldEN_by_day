@@ -12,13 +12,17 @@ from day_translation.utils.interaction import (
     show_success,
     show_error,
     show_info,
-    show_warning
+    show_warning,
 )
 from day_translation.core.translation_facade import TranslationFacade
 from day_translation.utils.path_manager import PathManager
 from day_translation.java_translate.java_translator import JavaTranslator
+from day_translation.utils.config import get_config
+from day_translation.utils.config import get_language_dir
+from day_translation.utils.config import get_user_config
 
 path_manager = PathManager()
+
 
 def handle_full_pipeline():
     """处理完整流程功能"""
@@ -28,37 +32,57 @@ def handle_full_pipeline():
         if not mod_dir:
             return
 
-        facade = TranslationFacade(mod_dir)
+        language = get_config().CN_language
+        facade = TranslationFacade(mod_dir, language)
 
-        # 提取模板并生成CSV
-        export_csv = path_manager.get_path(
-            path_type="export_csv",
-            prompt="请输入导出 CSV 路径（例如：output.csv）: ",
-            validator_type="csv",
-            default=path_manager.get_remembered_path("export_csv")
+        # 直接走“提取翻译”的智能流程，使用与提取模块相同的逻辑
+        from day_translation.extract.template_manager import TemplateManager
+        from day_translation.extract.interaction_manager import InteractionManager
+
+        template_manager = TemplateManager()
+        interaction_manager = InteractionManager()
+
+        show_info("=== 开始提取模板 ===")
+        smart_config = interaction_manager.handle_smart_extraction_workflow(mod_dir)
+        conflict_resolution = smart_config["output_config"]["conflict_resolution"]
+        data_source_choice = smart_config["data_sources"]["choice"]
+        template_structure = smart_config["template_structure"]
+        has_input_keyed = smart_config["data_sources"]["import_status"].get(
+            "has_keyed", False
         )
-        if not export_csv:
-            return
+        import_dir = smart_config["data_sources"]["import_status"]["mod_dir"]
+        import_language = smart_config["data_sources"]["import_status"]["language"]
+        output_dir = smart_config["output_config"]["output_status"]["mod_dir"]
+        output_language = smart_config["output_config"]["output_status"]["language"]
+        output_csv = get_config().output_csv
 
-        en_keyed_dir = None
-        if confirm_action("是否指定英文 Keyed 目录？"):
-            en_keyed_dir = path_manager.get_path(
-                path_type="en_keyed_dir",
-                prompt="请输入英文 Keyed 目录（例如：C:\\Mods\\Keyed）: ",
-                validator_type="dir",
-                default=path_manager.get_remembered_path("en_keyed_dir")
-            )
-            if not en_keyed_dir:
-                return
+        # 执行提取
+        translations = template_manager.extract_and_generate_templates(
+            import_dir=import_dir,
+            import_language=import_language,
+            output_dir=output_dir,
+            output_language=output_language,
+            data_source_choice=data_source_choice,
+            template_structure=template_structure,
+            has_input_keyed=has_input_keyed,
+            output_csv=output_csv,
+        )
 
-        translations = facade.extract_templates_and_generate_csv(export_csv, en_keyed_dir, data_source_choice='definjected_only')
+        # 提取生成的 CSV 路径（与提取流程一致）
+        export_csv_path = str(
+            get_language_dir(output_dir, output_language) / output_csv
+        )
 
-        if translations and confirm_action("确认翻译并导入？"):
+        if translations and confirm_action("是否立即进行机翻并导入？"):
             # 选择翻译方式
             show_info("=== 选择翻译方式 ===")
             print(f"{Fore.GREEN}1. Python翻译{Style.RESET_ALL} ── 使用Python阿里云翻译")
-            print(f"{Fore.GREEN}2. Java翻译{Style.RESET_ALL}  ── 使用Java工具翻译（高性能）")
-            translate_choice = input(f"{Fore.CYAN}请选择翻译方式 (1-2): {Style.RESET_ALL}").strip()
+            print(
+                f"{Fore.GREEN}2. Java翻译{Style.RESET_ALL}  ── 使用Java工具翻译（高性能）"
+            )
+            translate_choice = input(
+                f"{Fore.CYAN}请选择翻译方式 (1-2): {Style.RESET_ALL}"
+            ).strip()
             if translate_choice == "1":
                 # Python翻译
                 output_csv = None
@@ -67,23 +91,39 @@ def handle_full_pipeline():
                         path_type="output_csv",
                         prompt="请输入翻译后 CSV 路径（例如：translated.csv）: ",
                         validator_type="csv",
-                        default=path_manager.get_remembered_path("output_csv")
+                        default=path_manager.get_remembered_path("output_csv"),
                     )
                     if not output_csv:
                         return
-                facade.machine_translate(export_csv, output_csv)
-                final_csv = output_csv or export_csv.replace('.csv', '_translated.csv')
+                facade.machine_translate(export_csv_path, output_csv)
+                final_csv = output_csv or export_csv_path.replace(
+                    ".csv", "_translated.csv"
+                )
                 facade.import_translations_to_templates(final_csv)
             elif translate_choice == "2":
                 # Java翻译
                 try:
                     translator = JavaTranslator()
                     status = translator.get_status()
-                    if not status['java_available'] or not status['jar_exists']:
+                    if not status["java_available"] or not status["jar_exists"]:
                         show_error("Java环境或JAR文件未就绪")
                         return
-                    output_csv = export_csv.replace('.csv', '_zh.csv')
-                    translator.translate_csv_interactive(export_csv, output_csv)
+                    output_csv = export_csv_path.replace(".csv", "_zh.csv")
+                    # 优先使用配置中的密钥，缺失再交互输入
+                    cfg = get_user_config() or {}
+                    ak = (cfg.get("aliyun_access_key_id") or "").strip()
+                    sk = (cfg.get("aliyun_access_key_secret") or "").strip()
+                    if ak and sk:
+                        success = translator.translate_csv(
+                            export_csv_path, output_csv, ak, sk
+                        )
+                        if not success:
+                            show_error("Java翻译失败")
+                            return
+                    else:
+                        translator.translate_csv_interactive(
+                            export_csv_path, output_csv
+                        )
                     facade.import_translations_to_templates(output_csv)
                 except Exception as e:
                     show_error(f"Java翻译失败: {str(e)}")
@@ -94,4 +134,4 @@ def handle_full_pipeline():
             show_warning("用户取消完整流程")
     except Exception as e:
         show_error(f"完整流程失败: {str(e)}")
-        logging.error("完整流程失败: %s", str(e), exc_info=True) 
+        logging.error("完整流程失败: %s", str(e), exc_info=True)
