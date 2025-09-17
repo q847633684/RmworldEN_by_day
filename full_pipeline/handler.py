@@ -6,7 +6,7 @@
 import logging
 from colorama import Fore, Style
 
-from day_translation.utils.interaction import (
+from utils.interaction import (
     select_mod_path_with_version_detection,
     confirm_action,
     show_success,
@@ -14,12 +14,12 @@ from day_translation.utils.interaction import (
     show_info,
     show_warning,
 )
-from day_translation.core.translation_facade import TranslationFacade
-from day_translation.utils.path_manager import PathManager
-from day_translation.java_translate.java_translator import JavaTranslator
-from day_translation.utils.config import get_config
-from day_translation.utils.config import get_language_dir
-from day_translation.utils.config import get_user_config
+from core.translation_facade import TranslationFacade
+from utils.path_manager import PathManager
+from java_translate.java_translator import JavaTranslator
+from utils.config import get_config
+from utils.config import get_language_dir
+from utils.config import get_user_config
 
 path_manager = PathManager()
 
@@ -36,8 +36,8 @@ def handle_full_pipeline():
         facade = TranslationFacade(mod_dir, language)
 
         # 直接走“提取翻译”的智能流程，使用与提取模块相同的逻辑
-        from day_translation.extract.template_manager import TemplateManager
-        from day_translation.extract.interaction_manager import InteractionManager
+        from extract.template_manager import TemplateManager
+        from extract.interaction_manager import InteractionManager
 
         template_manager = TemplateManager()
         interaction_manager = InteractionManager()

@@ -34,25 +34,24 @@ import sys
 from pathlib import Path
 from colorama import init  # type: ignore
 
-# 添加当前模块的父目录到sys.path，以支持day_translation模块导入
-current_dir = Path(__file__).parent
-project_root = current_dir.parent
+# 确保项目根目录在 sys.path 中，以支持直接运行脚本时的包导入
+project_root = Path(__file__).parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
+# 统一导入项目内部模块（避免分散导入导致的分组问题）
+from batch.handler import handle_batch
+from config_manage.handler import handle_config_manage
+from corpus.handler import handle_corpus
+from extract.handler import handle_extract
+from full_pipeline.handler import handle_full_pipeline
+from import_template.handler import handle_import_template
+from java_translate.handler import handle_java_translate
+from python_translate.handler import handle_python_translate
+from utils.interaction import show_main_menu
+
 # 初始化 colorama 以支持 Windows 终端颜色
 init()
-
-# 导入功能模块
-from day_translation.extract.handler import handle_extract
-from day_translation.python_translate.handler import handle_python_translate
-from day_translation.java_translate.handler import handle_java_translate
-from day_translation.import_template.handler import handle_import_template
-from day_translation.batch.handler import handle_batch
-from day_translation.corpus.handler import handle_corpus
-from day_translation.full_pipeline.handler import handle_full_pipeline
-from day_translation.config_manage.handler import handle_config_manage
-from day_translation.utils.interaction import show_main_menu
 
 
 def main():

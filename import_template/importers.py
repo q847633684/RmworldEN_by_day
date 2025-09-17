@@ -8,12 +8,12 @@ from pathlib import Path
 from typing import Dict, Tuple
 from colorama import Fore, Style
 
-from day_translation.utils.config import (
+from utils.config import (
     get_config,
     get_language_subdir,
     get_language_dir,
 )
-from day_translation.utils.utils import XMLProcessor, get_language_folder_path
+from utils.utils import XMLProcessor, get_language_folder_path
 
 CONFIG = get_config()
 

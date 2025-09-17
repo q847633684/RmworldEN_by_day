@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 from colorama import Fore, Style
 
-from day_translation.utils.interaction import (
+from utils.interaction import (
     select_csv_path_with_history,
     confirm_action,
     auto_generate_output_path,
@@ -18,9 +18,9 @@ from day_translation.utils.interaction import (
     show_info,
     show_warning,
 )
-from day_translation.java_translate.java_translator import JavaTranslator
-from day_translation.utils.path_manager import PathManager
-from day_translation.utils.config import get_user_config
+from .java_translator import JavaTranslator
+from utils.path_manager import PathManager
+from utils.config import get_user_config
 
 
 def handle_java_translate():
@@ -128,7 +128,7 @@ def handle_java_translate():
 
     except ImportError as e:
         show_error(f"Java翻译模块导入失败: {str(e)}")
-        show_warning("请确保 day_translation.utils.java_translator 模块存在")
+        show_warning("请确保 java_translate.java_translator 模块存在")
     except Exception as e:
         show_error(f"Java翻译失败: {str(e)}")
         logging.error("Java翻译失败: %s", str(e), exc_info=True)

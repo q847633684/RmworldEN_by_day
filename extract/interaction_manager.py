@@ -9,8 +9,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, Any, Optional, Union
 from colorama import Fore, Style  # type: ignore
-from day_translation.utils.path_manager import PathManager
-from day_translation.utils.config import (
+from utils.path_manager import PathManager
+from utils.config import (
     get_config,
     get_language_dir,
     get_language_subdir,

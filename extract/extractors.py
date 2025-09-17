@@ -16,12 +16,12 @@ import logging
 from typing import List, Tuple, Dict, Optional
 from pathlib import Path
 from colorama import Fore, Style  # type: ignore
-from day_translation.utils.utils import XMLProcessor
-from day_translation.utils.config import (
+from utils.utils import XMLProcessor
+from utils.config import (
     get_config,
     get_language_subdir,
 )
-from day_translation.utils.filters import ContentFilter
+from utils.filters import ContentFilter
 
 
 CONFIG = get_config()

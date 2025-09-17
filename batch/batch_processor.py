@@ -8,14 +8,14 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
 from colorama import Fore, Style
 
-from day_translation.utils.config import get_config
-from day_translation.utils.path_manager import PathManager
+from utils.config import get_config
+from utils.path_manager import PathManager
 from concurrent.futures import ThreadPoolExecutor, Future
 import time
 from dataclasses import dataclass
 from tqdm import tqdm
-from day_translation.extract.template_manager import TemplateManager
-from day_translation.utils.filters import ContentFilter
+from extract.template_manager import TemplateManager
+from utils.filters import ContentFilter
 
 CONFIG = get_config()
 

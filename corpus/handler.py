@@ -6,16 +6,17 @@
 import logging
 from colorama import Fore, Style
 
-from day_translation.utils.interaction import (
+from utils.interaction import (
     select_mod_path_with_version_detection,
     show_success,
     show_error,
     show_info,
-    show_warning
+    show_warning,
 )
-from day_translation.utils.path_manager import PathManager
+from utils.path_manager import PathManager
 
 path_manager = PathManager()
+
 
 def handle_corpus():
     """处理生成语料功能"""
@@ -26,8 +27,8 @@ def handle_corpus():
             return
 
         # 延迟导入，避免循环导入
-        from day_translation.core.translation_facade import TranslationFacade
-        
+        from core.translation_facade import TranslationFacade
+
         # 创建翻译门面实例
         facade = TranslationFacade(mod_dir)
 
@@ -41,4 +42,4 @@ def handle_corpus():
             logging.error("语料生成失败: %s", str(e), exc_info=True)
     except Exception as e:
         show_error(f"语料功能失败: {str(e)}")
-        logging.error("语料功能失败: %s", str(e), exc_info=True) 
+        logging.error("语料功能失败: %s", str(e), exc_info=True)

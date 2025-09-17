@@ -6,7 +6,7 @@ Python机翻处理器
 import logging
 from colorama import Fore, Style
 
-from day_translation.utils.interaction import (
+from utils.interaction import (
     select_csv_path_with_history,
     confirm_action,
     auto_generate_output_path,
@@ -15,8 +15,8 @@ from day_translation.utils.interaction import (
     show_info,
     show_warning,
 )
-from day_translation.core.translation_facade import TranslationFacade
-from day_translation.utils.path_manager import PathManager
+from core.translation_facade import TranslationFacade
+from utils.path_manager import PathManager
 
 
 def handle_python_translate():

@@ -6,14 +6,14 @@
 import logging
 from colorama import Fore, Style
 
-from day_translation.utils.interaction import (
+from utils.interaction import (
     show_success,
     show_error,
     show_info,
     show_warning,
 )
-from day_translation.utils.path_manager import PathManager
-from day_translation.utils.config import (
+from utils.path_manager import PathManager
+from utils.config import (
     get_config,
     get_user_config,
     save_user_config_to_file,

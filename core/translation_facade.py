@@ -10,12 +10,12 @@ from typing import List, Tuple, Optional, Union, Dict, Any
 from colorama import Fore, Style
 
 from .exceptions import TranslationError, TranslationImportError, ExportError
-from day_translation.utils.config import get_config, ConfigError
-from day_translation.extract.template_manager import TemplateManager
-from day_translation.utils.machine_translate import translate_csv
-from day_translation.corpus.parallel_corpus import generate_parallel_corpus
-from day_translation.batch.batch_processor import BatchProcessor
-from day_translation.java_translate.java_translator import JavaTranslator
+from utils.config import get_config, ConfigError
+from extract.template_manager import TemplateManager
+from utils.machine_translate import translate_csv
+from corpus.parallel_corpus import generate_parallel_corpus
+from batch.batch_processor import BatchProcessor
+from java_translate.java_translator import JavaTranslator
 
 CONFIG = get_config()
 
@@ -124,7 +124,7 @@ class TranslationFacade:
                 raise TranslationImportError(f"CSV文件不存在: {csv_path}")
             logging.info("导入翻译到模板: csv_path=%s, merge=%s", csv_path, merge)
             # 使用导入模块执行导入逻辑
-            from day_translation.import_template.importers import import_translations
+            from import_template.importers import import_translations
 
             if not import_translations(
                 csv_path=csv_path,

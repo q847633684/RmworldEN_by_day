@@ -21,11 +21,11 @@ import os
 import re
 from pathlib import Path
 from typing import List, Tuple, Dict
-from day_translation.utils.config import (
+from utils.config import (
     get_config,
     get_language_subdir,
 )
-from day_translation.utils.utils import sanitize_xml, XMLProcessor
+from utils.utils import sanitize_xml, XMLProcessor
 
 CONFIG = get_config()
 

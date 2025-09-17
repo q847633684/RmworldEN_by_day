@@ -5,20 +5,20 @@
 
 import logging
 from pathlib import Path
-from day_translation.utils.config import (
+from utils.config import (
     get_config,
     get_language_subdir,
     get_language_dir,
 )
-from day_translation.utils.interaction import (
+from utils.interaction import (
     select_mod_path_with_version_detection,
     show_success,
     show_error,
     show_info,
     show_warning,
 )
-from day_translation.utils.path_manager import PathManager
-from day_translation.utils.config import ConfigError
+from utils.path_manager import PathManager
+from utils.config import ConfigError
 
 CONFIG = get_config()
 path_manager = PathManager()
@@ -37,8 +37,8 @@ def handle_extract():
             return
 
         # 延迟导入，避免循环导入
-        from day_translation.extract.template_manager import TemplateManager
-        from day_translation.extract.interaction_manager import InteractionManager
+        from extract.template_manager import TemplateManager
+        from extract.interaction_manager import InteractionManager
 
         template_manager = TemplateManager()
 

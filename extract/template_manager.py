@@ -7,21 +7,21 @@ import csv
 from pathlib import Path
 from typing import List, Tuple, Optional
 from colorama import Fore, Style  # type: ignore
-from day_translation.extract.smart_merger import SmartMerger
-from day_translation.extract.extractors import (
+from .smart_merger import SmartMerger
+from .extractors import (
     extract_keyed_translations,
     scan_defs_sync,
     extract_definjected_translations,
 )
-from day_translation.extract.exporters import (
+from .exporters import (
     export_definjected_with_original_structure,
     export_definjected_with_defs_structure,
     export_definjected_with_file_structure,
     export_keyed_template,
     write_merged_translations,
 )
-from day_translation.utils.config import get_config, get_language_dir
-from day_translation.utils.path_manager import PathManager
+from utils.config import get_config, get_language_dir
+from utils.path_manager import PathManager
 
 CONFIG = get_config()
 

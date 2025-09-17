@@ -8,7 +8,7 @@ import subprocess
 import logging
 from pathlib import Path
 from typing import Optional, Dict, Any
-from day_translation.utils.config import get_config
+from utils.config import get_config
 from glob import glob
 import shutil
 import time
@@ -52,7 +52,7 @@ class JavaTranslator:
             return jar_candidates[0]
         raise FileNotFoundError(
             "未找到Java翻译工具JAR文件。请先构建Java项目：\n"
-            "cd day_translation/java_translate/RimWorldBatchTranslate && mvn package\n"
+            "cd java_translate/RimWorldBatchTranslate && mvn package\n"
             f"查找路径：{[str(d / '*with-dependencies.jar') for d in search_dirs] + [str(d / '*.jar') for d in search_dirs]}"
         )
 

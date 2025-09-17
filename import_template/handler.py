@@ -6,7 +6,7 @@
 import logging
 from colorama import Fore, Style
 
-from day_translation.utils.interaction import (
+from utils.interaction import (
     select_csv_path_with_history,
     confirm_action,
     show_success,
@@ -14,9 +14,9 @@ from day_translation.utils.interaction import (
     show_info,
     show_warning,
 )
-from day_translation.core.translation_facade import TranslationFacade
-from day_translation.utils.path_manager import PathManager
-from day_translation.utils.config import get_config
+from core.translation_facade import TranslationFacade
+from utils.path_manager import PathManager
+from utils.config import get_config
 
 path_manager = PathManager()
 

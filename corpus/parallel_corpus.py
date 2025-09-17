@@ -2,26 +2,51 @@
 平行语料集生成模块 - 实现中英平行语料集的提取和生成
 """
 
+# pyright: reportMissingTypeStubs=false, reportMissingImports=false
+
 import logging
 import os
 import csv
 import re
 from pathlib import Path
 from typing import List, Tuple
-from day_translation.utils.config import get_config
-from day_translation.utils.utils import XMLProcessor, get_language_folder_path
-from colorama import Fore, Style
+from utils.config import get_config
+from utils.utils import XMLProcessor, get_language_folder_path
+
+try:
+    from colorama import Fore, Style, init as _colorama_init  # type: ignore
+
+    # 初始化 colorama，确保在 Windows 终端正确显示颜色
+    _colorama_init(autoreset=False)
+except (ImportError, ModuleNotFoundError):
+    # 本地降级：若未安装或导入失败，提供空实现以避免崩溃
+    class _DummyFore:
+        BLACK = ""
+        RED = ""
+        GREEN = ""
+        YELLOW = ""
+        BLUE = ""
+        MAGENTA = ""
+        CYAN = ""
+        WHITE = ""
+
+    class _DummyStyle:
+        RESET_ALL = ""
+
+    Fore = _DummyFore()  # type: ignore
+    Style = _DummyStyle()  # type: ignore
 
 CONFIG = get_config()
+
 
 def extract_pairs_from_file(filepath: str) -> List[Tuple[str, str]]:
     """
     提取单个 xml 文件中带 EN: 注释的中英文对。
     参考 Day_EN 的实现。
     """
-    pairs = []
+    pairs: List[Tuple[str, str]] = []
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, "r", encoding="utf-8") as f:
             lines = f.readlines()
     except (FileNotFoundError, UnicodeDecodeError) as e:
         logging.error("文件读取失败: %s，错误: %s", filepath, e)
@@ -29,8 +54,8 @@ def extract_pairs_from_file(filepath: str) -> List[Tuple[str, str]]:
 
     en = None
     for line in lines:
-        en_match = re.match(r'\s*<!--\s*EN:\s*(.*?)\s*-->', line)
-        zh_match = re.match(r'\s*<[^>]+>(.*?)</[^>]+>', line)
+        en_match = re.match(r"\s*<!--\s*EN:\s*(.*?)\s*-->", line)
+        zh_match = re.match(r"\s*<[^>]+>(.*?)</[^>]+>", line)
 
         if en_match:
             en = en_match.group(1).strip()
@@ -44,6 +69,7 @@ def extract_pairs_from_file(filepath: str) -> List[Tuple[str, str]]:
 
     return pairs
 
+
 def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
     """
     生成中英平行语料集，同时支持 CSV 和 TSV 格式。
@@ -55,14 +81,16 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
     Returns:
         生成的语料条数
     """
-    print(f"{Fore.BLUE}正在生成平行语料集: mode={mode}, mod_dir={mod_dir}...{Style.RESET_ALL}")
+    print(
+        f"{Fore.BLUE}正在生成平行语料集: mode={mode}, mod_dir={mod_dir}...{Style.RESET_ALL}"
+    )
     mod_dir = str(Path(mod_dir).resolve())
 
     output_csv = str(Path(mod_dir).parent / "parallel_corpus.csv")
     output_tsv = str(Path(mod_dir).parent / "parallel_corpus.tsv")
 
-    lang_path = get_language_folder_path(CONFIG.default_language, mod_dir)
-    src_lang_path = get_language_folder_path(CONFIG.source_language, mod_dir)
+    lang_path = get_language_folder_path(CONFIG.CN_language, mod_dir)
+    src_lang_path = get_language_folder_path(CONFIG.EN_language, mod_dir)
 
     corpus: List[Tuple[str, str]] = []
     seen = set()
@@ -80,9 +108,9 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
                     seen.add(key)
     elif mode == "2":
         # 从 DefInjected 和 Keyed 对比提取
-        def_injected_path = os.path.join(src_lang_path, CONFIG.def_injected_dir)
+        def_injected_path = os.path.join(src_lang_path, CONFIG.DefInjected_dir)
         keyed_path = os.path.join(src_lang_path, CONFIG.keyed_dir)
-        zh_def_injected_path = os.path.join(lang_path, CONFIG.def_injected_dir)
+        zh_def_injected_path = os.path.join(lang_path, CONFIG.DefInjected_dir)
         zh_keyed_path = os.path.join(lang_path, CONFIG.keyed_dir)
 
         # 检查 DefInjured 兼容性
@@ -91,7 +119,10 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
         if not os.path.exists(zh_def_injected_path):
             zh_def_injected_path = os.path.join(lang_path, "DefInjured")
 
-        for src_path, zh_path in [(def_injected_path, zh_def_injected_path), (keyed_path, zh_keyed_path)]:
+        for src_path, zh_path in [
+            (def_injected_path, zh_def_injected_path),
+            (keyed_path, zh_keyed_path),
+        ]:
             if not os.path.exists(src_path) or not os.path.exists(zh_path):
                 continue
             for src_file in Path(src_path).rglob("*.xml"):
@@ -109,7 +140,11 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
                     zh_root = zh_tree.getroot() if processor.use_lxml else zh_tree
 
                     for src_elem, zh_elem in zip(src_root.iter(), zh_root.iter()):
-                        if src_elem.tag == zh_elem.tag and src_elem.text and zh_elem.text:
+                        if (
+                            src_elem.tag == zh_elem.tag
+                            and src_elem.text
+                            and zh_elem.text
+                        ):
                             en_text = src_elem.text.strip()
                             zh_text = zh_elem.text.strip()
                             if en_text and zh_text:
@@ -129,15 +164,18 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
             writer.writerows(corpus)
 
         with open(output_tsv, "w", encoding="utf-8", newline="") as f:
-            writer = csv.writer(f, delimiter='\t')
+            writer = csv.writer(f, delimiter="\t")
             writer.writerow(["en", "zh"])
             writer.writerows(corpus)
 
-        print(f"{Fore.GREEN}生成平行语料集: {output_csv} 和 {output_tsv}，共 {len(corpus)} 条{Style.RESET_ALL}")
+        print(
+            f"{Fore.GREEN}生成平行语料集: {output_csv} 和 {output_tsv}，共 {len(corpus)} 条{Style.RESET_ALL}"
+        )
         return len(corpus)
     except (csv.Error, OSError) as e:
         print(f"{Fore.RED}写入语料集失败: {e}{Style.RESET_ALL}")
         return 0
+
 
 def check_parallel_tsv(file_path: str = "parallel_corpus.tsv") -> int:
     """检查平行语料集格式"""
@@ -147,7 +185,7 @@ def check_parallel_tsv(file_path: str = "parallel_corpus.tsv") -> int:
 
     errors = 0
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             lines = f.readlines()
 
         for i, line in enumerate(lines, 1):
@@ -155,9 +193,11 @@ def check_parallel_tsv(file_path: str = "parallel_corpus.tsv") -> int:
             if not line:
                 continue
 
-            parts = line.split('\t')
+            parts = line.split("\t")
             if len(parts) != 2:
-                print(f"{Fore.YELLOW}第 {i} 行格式错误: 应为2列，实际{len(parts)}列{Style.RESET_ALL}")
+                print(
+                    f"{Fore.YELLOW}第 {i} 行格式错误: 应为2列，实际{len(parts)}列{Style.RESET_ALL}"
+                )
                 errors += 1
             elif not parts[0].strip() or not parts[1].strip():
                 print(f"{Fore.YELLOW}第 {i} 行有空内容{Style.RESET_ALL}")
@@ -170,4 +210,4 @@ def check_parallel_tsv(file_path: str = "parallel_corpus.tsv") -> int:
         print(f"{Fore.RED}检查失败: {e}{Style.RESET_ALL}")
         errors += 1
 
-    return errors 
+    return errors
