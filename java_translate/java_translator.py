@@ -131,9 +131,7 @@ class JavaTranslator:
             print("=" * 60)
 
             # 准备输入数据
-            input_data = (
-                f"{input_csv}\n{output_csv}\n{access_key_id}\n{access_key_secret}\n"
-            )
+            input_data = f"{input_csv}\n{output_csv}\n{access_key_id}\n{access_key_secret}\n{model_id}\n"
 
             # 调用Java程序
             logging.info(f"开始调用Java翻译工具: {self.jar_path}")

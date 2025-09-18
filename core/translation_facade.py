@@ -206,25 +206,6 @@ class TranslationFacade:
             logging.error(error_msg)
             raise TranslationError(error_msg) from e
 
-    def _get_api_key(self, key_name: str, user_config: Dict[str, Any]) -> str:
-        """
-        获取API密钥
-
-        Args:
-            key_name (str): 密钥名称
-            user_config (Dict[str, Any]): 用户配置
-
-        Returns:
-            str: API密钥
-
-        Raises:
-            ConfigError: 如果密钥未配置
-        """
-        api_key = user_config.get(key_name)
-        if not api_key:
-            raise ConfigError(f"未配置 {key_name}，请在配置管理中设置")
-        return api_key
-
     def extract_all_translations(
         self,
         data_source_choice: str = "defs",

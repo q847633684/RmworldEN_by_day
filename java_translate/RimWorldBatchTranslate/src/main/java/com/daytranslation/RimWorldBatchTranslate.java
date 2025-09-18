@@ -30,6 +30,17 @@ public class RimWorldBatchTranslate {
         accessKeyId = scanner.nextLine().trim();
         System.out.print("请输入阿里云 AccessKeySecret: ");
         accessKeySecret = scanner.nextLine().trim();
+        
+        // 读取model_id参数（如果提供）
+        System.out.print("请输入翻译模型ID（直接回车使用默认27345）: ");
+        String modelIdInput = scanner.nextLine().trim();
+        if (!modelIdInput.isEmpty()) {
+            try {
+                modelId = Long.parseLong(modelIdInput);
+            } catch (NumberFormatException e) {
+                System.out.println("无效的模型ID，使用默认值27345");
+            }
+        }
         scanner.close();
 
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
