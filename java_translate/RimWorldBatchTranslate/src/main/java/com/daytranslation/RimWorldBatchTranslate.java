@@ -9,172 +9,222 @@ import com.aliyuncs.profile.DefaultProfile;
 import org.apache.commons.csv.*;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.*;
 import java.util.Scanner;
 
 public class RimWorldBatchTranslate {
-    // 阿里云认证信息（运行时输入）
     static String accessKeyId = null;
     static String accessKeySecret = null;
-    static Long modelId = 27345L; // 定制模型ID
-
-    // 占位符正则
-    static Pattern placeholderPattern = Pattern.compile("(\\[[^\\]]+\\])");
+    static Long modelId = 27345L;
 
     public static void main(String[] args) throws Exception {
-        // 使用Scanner处理输入，设置UTF-8编码
-        Scanner scanner = new Scanner(System.in, "UTF-8");
-        
+        Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
+
         System.out.print("请输入输入CSV文件名（如 translations.csv）: ");
         String inputCsv = scanner.nextLine().trim();
         System.out.print("请输入输出CSV文件名（如 translations_zh.csv）: ");
         String outputCsv = scanner.nextLine().trim();
 
-        // 交互式输入阿里云认证信息
         System.out.print("请输入阿里云 AccessKeyId: ");
         accessKeyId = scanner.nextLine().trim();
         System.out.print("请输入阿里云 AccessKeySecret: ");
         accessKeySecret = scanner.nextLine().trim();
-        
         scanner.close();
 
-        // 初始化阿里云 OpenAPI 通用 SDK
-        DefaultProfile profile = DefaultProfile.getProfile(
-            "cn-hangzhou", accessKeyId, accessKeySecret);
+        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
         IAcsClient client = new DefaultAcsClient(profile);
 
         try (
-            Reader in = new InputStreamReader(new FileInputStream(inputCsv), "UTF-8");
-            Writer out = new OutputStreamWriter(new FileOutputStream(outputCsv), "UTF-8");
+            Reader in = new InputStreamReader(new FileInputStream(inputCsv), StandardCharsets.UTF_8);
+            Writer out = new OutputStreamWriter(new FileOutputStream(outputCsv), StandardCharsets.UTF_8);
             CSVParser parser = new CSVParser(in, CSVFormat.DEFAULT.withFirstRecordAsHeader());
-            CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT
-                    .withHeader(appendHeader(parser.getHeaderMap(), "translated")))
+            CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.withHeader(appendHeader(parser.getHeaderMap(), "translated")));
         ) {
-            int lineNum = 1;
+            // 先统计总行数
+            java.util.List<CSVRecord> records = new java.util.ArrayList<>();
             for (CSVRecord record : parser) {
-                // 动态获取所有原有列的内容
+                records.add(record);
+            }
+            int totalLines = records.size();
+            
+            System.out.println("开始翻译，总计 " + totalLines + " 行...");
+            
+            for (CSVRecord record : records) {
                 java.util.List<String> originalCols = new java.util.ArrayList<>();
-                for (String col : record.getParser().getHeaderNames()) {
+                for (String col : parser.getHeaderNames()) {
                     originalCols.add(record.isMapped(col) ? record.get(col) : "");
                 }
-                // 获取 key 和 text 字段用于逻辑判断
+
                 String key = record.isMapped("key") ? record.get("key") : "";
                 String text = record.isMapped("text") ? record.get("text") : "";
                 String zh = "";
 
                 if (key.trim().isEmpty() || text.trim().isEmpty()) {
-                    // 原有列+空翻译
                     java.util.List<String> row = new java.util.ArrayList<>(originalCols);
                     row.add("");
                     printer.printRecord(row);
-                    System.out.println("[调试] 跳过第" + lineNum + "行：" + key + "," + text);
-                    lineNum++;
+                    System.out.println("跳过空行");
                     continue;
                 }
                 if (text.matches("(\\s*\\[[^\\]]+\\]\\s*)+")) {
-                    // 原有列+原文（全占位符不翻译）
                     java.util.List<String> row = new java.util.ArrayList<>(originalCols);
                     row.add(text);
                     printer.printRecord(row);
-                    System.out.println("[调试] 跳过第" + lineNum + "行（全占位符不翻译）：" + text);
-                    lineNum++;
+                    System.out.println("跳过占位符");
                     continue;
                 }
 
                 zh = aliyunTranslateCustom(client, text, modelId);
                 if (zh == null || zh.trim().isEmpty()) {
-                    System.out.println("[调试] 第" + lineNum + "行翻译失败，已暂停。原文：" + text + "  翻译：" + zh);
-                    break;
+                    zh = text;
+                    System.out.println("翻译失败，使用原文");
+                } else {
+                    System.out.println("翻译完成");
                 }
-                // 原有列+翻译
                 java.util.List<String> row = new java.util.ArrayList<>(originalCols);
                 row.add(zh);
                 printer.printRecord(row);
-                System.out.println("[调试] 第" + lineNum + "行翻译完成：原文：" + text + "  =>  翻译：" + zh);
-                lineNum++;
-                Thread.sleep(500); // 防止QPS超限
+                // 添加延迟以避免API限制，可以根据需要调整
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    System.out.println("[警告] 翻译过程被中断");
+                    break;
+                }
             }
         }
     }
 
-
-    // 占位符保护+调用阿里云定制模型（通用SDK实现）
     public static String aliyunTranslateCustom(IAcsClient client, String text, Long modelId) {
-        Matcher matcher = placeholderPattern.matcher(text);
-        StringBuffer sb = new StringBuffer();
-        int lastEnd = 0;
-        while (matcher.find()) {
-            // 翻译前面的正文
-            if (matcher.start() > lastEnd) {
-                String part = text.substring(lastEnd, matcher.start());
-                String zh = translatePart(client, part, modelId);
-                sb.append(zh);
+        String protectedText = text;
+        String prefix = null;
+
+        java.util.regex.Matcher prefixMatcher = java.util.regex.Pattern.compile("^([a-zA-Z0-9_]+->)").matcher(protectedText);
+        if (prefixMatcher.find()) {
+            prefix = prefixMatcher.group(1);
+            protectedText = protectedText.replaceFirst(java.util.regex.Pattern.quote(prefix), "{{PREFIX}}");
+        }
+
+        java.util.List<String> placeholders = new java.util.ArrayList<>();
+        int idx = 1;
+        // 首先将真实换行符转换为转义换行符
+        protectedText = protectedText.replace("\r\n", "\\n").replace("\n", "\\n");
+        
+        String[] patterns = {
+            "\\\\n",                             // \n 换行符（标准化后的格式）
+            "\\[[^\\]]+\\]",                    // [xxx]
+            "\\{\\d+\\}",                        // {0}, {1}
+            "%[sdif]",                            // %s, %d, %i, %f
+            "</?[^>]+>",                          // <color> 或 <br>
+            "[a-zA-Z_][a-zA-Z0-9_]*\\([^)]*\\)", // 函数调用，如 bad_opinion_rapist(...)
+            "->\\[[^\\]]+\\]",                    // ->[结果]
+            "\\bpawn\\b",                        // pawn 游戏术语
+        };
+        
+        for (String pat : patterns) {
+            java.util.regex.Matcher m = java.util.regex.Pattern.compile(pat).matcher(protectedText);
+            StringBuffer sb = new StringBuffer();
+            while (m.find()) {
+                String ph = m.group();
+                // 跳过已经保护的ALIMT标签
+                if (ph.contains("ALIMT")) {
+                    continue;
+                }
+                placeholders.add(ph);
+                String placeholder = "(PH_" + idx++ + ")"; // 加括号更保险
+                String alimtTag = "<ALIMT >" + placeholder + "</ALIMT>";
+                m.appendReplacement(sb, alimtTag);
             }
-            // 保留占位符
-            sb.append(matcher.group());
-            lastEnd = matcher.end();
+            m.appendTail(sb);
+            protectedText = sb.toString();
         }
-        // 处理最后一段正文
-        if (lastEnd < text.length()) {
-            String part = text.substring(lastEnd);
-            String zh = translatePart(client, part, modelId);
-            sb.append(zh);
+
+        String translatedText = translatePartWithRetry(client, protectedText, modelId, 2);
+        if (prefix != null) translatedText = translatedText.replace("{{PREFIX}}", prefix);
+        
+        // 根据占位符顺序恢复保护的内容
+        for (int i = 0; i < placeholders.size(); i++) {
+            String original = placeholders.get(i);
+            String placeholder = "(PH_" + (i + 1) + ")";
+            
+            if (translatedText.contains(placeholder)) {
+                translatedText = translatedText.replace(placeholder, original);
+            }
         }
-        return sb.toString();
+        return translatedText;
     }
 
-    // 单段正文调用阿里云定制模型（通用SDK实现）
-    public static String translatePart(IAcsClient client, String part, Long modelId) {
+    public static String translatePartWithRetry(IAcsClient client, String part, Long modelId, int maxRetry) {
         if (part.trim().isEmpty()) return part;
+        for (int attempt = 1; attempt <= maxRetry; attempt++) {
+            try {
+                String zh = translatePart(client, part, modelId);
+                if (zh != null && !zh.trim().isEmpty()) return zh;
+            } catch (Exception e) {
+                // 静默处理错误，避免干扰进度条显示
+            }
+            try { 
+                Thread.sleep(2000); 
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.out.println("[错误] 线程被中断");
+                return part;
+            }
+        }
+        return part;
+    }
+
+    public static String translatePart(IAcsClient client, String part, Long modelId) throws Exception {
+        CommonRequest request = new CommonRequest();
+        request.setDomain("automl.cn-hangzhou.aliyuncs.com");
+        request.setVersion("2019-07-01");
+        request.setAction("PredictMTModel");
+        request.setMethod(MethodType.POST);
+        request.putQueryParameter("ModelId", modelId.toString());
+        request.putQueryParameter("ModelVersion", "V1");
+        request.putBodyParameter("Content", part);
+
+        CommonResponse response = client.getCommonResponse(request);
+        String data = response.getData();
+
+        String zh = extractResultFromJson(data);
+        return zh != null ? zh : part;
+    }
+
+    private static String extractResultFromJson(String json) {
         try {
-            CommonRequest request = new CommonRequest();
-            // 以下方法已弃用，但为兼容阿里云API，保留使用
-            request.setDomain("automl.cn-hangzhou.aliyuncs.com"); // deprecated
-            request.setVersion("2019-07-01"); // deprecated
-            request.setAction("PredictMTModel"); // deprecated
-            request.setMethod(MethodType.POST); // deprecated
-            request.putQueryParameter("ModelId", modelId.toString());
-            request.putQueryParameter("ModelVersion", "V1"); // 如有需要可调整
-            request.putBodyParameter("Content", part);
-
-            CommonResponse response = client.getCommonResponse(request);
-            String data = response.getData();
-            System.out.println("[API返回] " + data); // 打印原始返回内容
-            // 解析返回的JSON，提取Result字段
-            String zh = extractResultFromJson(data);
-            if (zh == null || zh.trim().isEmpty()) {
-                System.out.println("[警告] 翻译结果为空，原文：" + part);
+            com.alibaba.fastjson.JSONObject obj = com.alibaba.fastjson.JSON.parseObject(json);
+            
+            // 尝试从Data字段提取
+            if (obj.containsKey("Data")) {
+                Object dataObj = obj.get("Data");
+                com.alibaba.fastjson.JSONArray arr = null;
+                
+                if (dataObj instanceof String) {
+                    arr = com.alibaba.fastjson.JSON.parseArray((String) dataObj);
+                } else if (dataObj instanceof com.alibaba.fastjson.JSONArray) {
+                    arr = (com.alibaba.fastjson.JSONArray) dataObj;
+                }
+                
+                if (arr != null && arr.size() > 0) {
+                    return arr.getString(0);
+                }
             }
-            return zh != null ? zh : part;
+            
+            // 尝试从Result字段提取
+            String result = obj.getString("Result");
+            if (result != null) {
+                return result;
+            }
+            
+            return null;
         } catch (Exception e) {
-            e.printStackTrace();
-            return part;
+            return null;
         }
     }
 
-    // 提取Result字段（需fastjson依赖）
-   private static String extractResultFromJson(String json) {
-    try {
-        com.alibaba.fastjson.JSONObject obj = com.alibaba.fastjson.JSON.parseObject(json);
-        // 兼容 {"Data":"[\"xxx\"]"} 或 {"Data":["xxx"]} 或 {"Result":"xxx"}
-        if (obj.containsKey("Data")) {
-            Object dataObj = obj.get("Data");
-            if (dataObj instanceof String) {
-                // Data 是字符串形式的数组
-                com.alibaba.fastjson.JSONArray arr = com.alibaba.fastjson.JSON.parseArray((String) dataObj);
-                if (arr.size() > 0) return arr.getString(0);
-            } else if (dataObj instanceof com.alibaba.fastjson.JSONArray) {
-                com.alibaba.fastjson.JSONArray arr = (com.alibaba.fastjson.JSONArray) dataObj;
-                if (arr.size() > 0) return arr.getString(0);
-            }
-        }
-        return obj.getString("Result");
-    } catch (Exception e) {
-        return null;
-    }
-}
-
-    // 工具：追加"翻译"列头
     private static String[] appendHeader(java.util.Map<String, Integer> headerMap, String newCol) {
         String[] arr = new String[headerMap.size() + 1];
         int i = 0;
@@ -182,4 +232,5 @@ public class RimWorldBatchTranslate {
         arr[i] = newCol;
         return arr;
     }
+    
 }

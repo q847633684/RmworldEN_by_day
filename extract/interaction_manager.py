@@ -248,40 +248,97 @@ class InteractionManager:
         default_dir = str(Path(mod_dir))
         default_dirs = get_language_dir(mod_dir, language)
         history = path_manager.get_history_list("output_dir")
-        print(f"{Fore.BLUE}📁 请选择输出目录：{Style.RESET_ALL}")
-        print(f"{Fore.GREEN}1. 使用默认目录：{default_dirs}{Style.RESET_ALL}")
+        # 美化输出目录选择界面
+        print(
+            f"\n{Fore.CYAN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
+        )
+        print(
+            f"{Fore.CYAN}║{Style.RESET_ALL}  {Fore.BLUE}📁 选择输出目录{Style.RESET_ALL}  {Fore.CYAN}║{Style.RESET_ALL}"
+        )
+        print(
+            f"{Fore.CYAN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
+        )
+
+        print(f"{Fore.GREEN}💡 推荐选择：{Style.RESET_ALL}")
+        print(
+            f"   {Fore.YELLOW}1{Style.RESET_ALL} - 使用默认目录（{Fore.CYAN}推荐{Style.RESET_ALL}）"
+        )
+        print(f"   {Fore.WHITE}   {default_dirs}{Style.RESET_ALL}")
+
         if history:
-            print(f"{Fore.YELLOW}历史记录：{Style.RESET_ALL}")
+            print(f"\n{Fore.YELLOW}📋 历史记录：{Style.RESET_ALL}")
             for i, hist_path in enumerate(history, 2):
-                print(f"   {i}. {hist_path}")
+                print(f"   {Fore.CYAN}{i}{Style.RESET_ALL}. {hist_path}")
         else:
-            print(f"{Fore.YELLOW}暂无历史记录{Style.RESET_ALL}")
+            print(f"\n{Fore.YELLOW}📋 暂无历史记录{Style.RESET_ALL}")
         max_choice = len(history) + 1
         while True:
             choice = input(
-                f"\n{Fore.CYAN}请选择 (1-{max_choice}) 或直接输入路径: {Style.RESET_ALL}"
+                f"\n{Fore.CYAN}🎯 请选择 (1-{max_choice}，回车默认1) 或直接输入路径: {Style.RESET_ALL}"
             ).strip()
+
+            # 处理回车默认选择
+            if not choice:
+                choice = "1"
+
             if choice == "1":
-                print(f"   {Fore.GREEN}✅ 选择：{default_dir}{Style.RESET_ALL}")
+                print(
+                    f"\n{Fore.GREEN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
+                )
+                print(
+                    f"{Fore.GREEN}║{Style.RESET_ALL}  {Fore.CYAN}✅ 输出目录选择成功{Style.RESET_ALL}  {Fore.GREEN}║{Style.RESET_ALL}"
+                )
+                print(
+                    f"{Fore.GREEN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
+                )
+                print(
+                    f"{Fore.CYAN}📁 选择目录: {Fore.WHITE}{default_dir}{Style.RESET_ALL}"
+                )
                 path_manager.remember_path("output_dir", default_dir)
                 return default_dir, language
             elif choice.isdigit() and 2 <= int(choice) <= max_choice:
                 selected_path = history[int(choice) - 2]
-                print(f"   {Fore.GREEN}✅ 选择：{selected_path}{Style.RESET_ALL}")
+                print(
+                    f"\n{Fore.GREEN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
+                )
+                print(
+                    f"{Fore.GREEN}║{Style.RESET_ALL}  {Fore.CYAN}✅ 输出目录选择成功{Style.RESET_ALL}  {Fore.GREEN}║{Style.RESET_ALL}"
+                )
+                print(
+                    f"{Fore.GREEN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
+                )
+                print(
+                    f"{Fore.CYAN}📁 选择目录: {Fore.WHITE}{selected_path}{Style.RESET_ALL}"
+                )
                 path_manager.remember_path("output_dir", selected_path)
                 # 判断是否为标准多语言目录
                 return selected_path, language
             elif choice:
                 if os.path.isdir(choice) or not os.path.exists(choice):
-                    print(f"   {Fore.GREEN}✅ 选择：{choice}{Style.RESET_ALL}")
+                    print(
+                        f"\n{Fore.GREEN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
+                    )
+                    print(
+                        f"{Fore.GREEN}║{Style.RESET_ALL}  {Fore.CYAN}✅ 输出目录选择成功{Style.RESET_ALL}  {Fore.GREEN}║{Style.RESET_ALL}"
+                    )
+                    print(
+                        f"{Fore.GREEN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
+                    )
+                    print(
+                        f"{Fore.CYAN}📁 选择目录: {Fore.WHITE}{choice}{Style.RESET_ALL}"
+                    )
                     path_manager.remember_path("output_dir", choice)
                     # 用户自定义目录，language 置空
                     return choice, language
                 else:
-                    print(f"   {Fore.RED}❌ 路径无效：{choice}{Style.RESET_ALL}")
+                    print(f"{Fore.RED}❌ 路径无效：{choice}{Style.RESET_ALL}")
+                    print(
+                        f"{Fore.YELLOW}💡 提示：请检查路径是否正确，或选择历史记录中的路径{Style.RESET_ALL}"
+                    )
                     continue
             else:
                 print(f"{Fore.RED}❌ 请输入选择或路径{Style.RESET_ALL}")
+                print(f"{Fore.YELLOW}💡 提示：直接回车选择默认目录{Style.RESET_ALL}")
 
     def _analyze_keyed_quality(self, keyed_dir: str) -> dict:
         """

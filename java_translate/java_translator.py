@@ -6,16 +6,44 @@ Java翻译工具包装器
 import os
 import subprocess
 import logging
+import csv
+import re
 from pathlib import Path
 from typing import Optional, Dict, Any
 from utils.config import get_config
 from glob import glob
 import shutil
-import time
-import csv
-from tqdm import tqdm
+
 
 CONFIG = get_config()
+
+
+def update_progress(current: int, total: int, status: str = ""):
+    """更新进度条显示"""
+    percentage = (current / total) * 100
+    bar_length = 40
+    filled_length = int(bar_length * current / total)
+
+    # 使用更美观的字符
+    bar = "[" + "█" * filled_length + "░" * (bar_length - filled_length) + "] "
+    progress_text = f"{bar}{percentage:.1f}% ({current}/{total}) {status}"
+
+    # 清除当前行并显示进度条
+    print(f"\r{' ' * 80}\r{progress_text}", end="", flush=True)
+
+    if current == total:
+        print()  # 换行
+        print("🎉 翻译完成！")
+
+
+def count_csv_lines(csv_path: str) -> int:
+    """统计CSV文件行数"""
+    try:
+        with open(csv_path, "r", encoding="utf-8") as f:
+            reader = csv.reader(f)
+            return sum(1 for row in reader)
+    except Exception:
+        return 0
 
 
 class JavaTranslator:
@@ -93,6 +121,15 @@ class JavaTranslator:
             if not os.path.exists(input_csv):
                 raise FileNotFoundError(f"输入CSV文件不存在: {input_csv}")
 
+            # 统计总行数用于进度条
+            total_lines = count_csv_lines(input_csv)
+            if total_lines == 0:
+                print("❌ CSV文件为空或无法读取")
+                return False
+
+            print(f"🚀 开始翻译，总计 {total_lines} 行...")
+            print("=" * 60)
+
             # 准备输入数据
             input_data = (
                 f"{input_csv}\n{output_csv}\n{access_key_id}\n{access_key_secret}\n"
@@ -103,68 +140,49 @@ class JavaTranslator:
             logging.info(f"输入文件: {input_csv}")
             logging.info(f"输出文件: {output_csv}")
 
-            # 计算输入总行数（不含表头）
-            try:
-                with open(input_csv, "r", encoding="utf-8") as f:
-                    reader = csv.reader(f)
-                    header = next(reader, None)
-                    total_rows = sum(1 for _ in reader)
-            except Exception:
-                total_rows = 0
-
-            # 启动子进程（可轮询）
             proc = subprocess.Popen(
                 ["java", "-jar", self.jar_path],
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                universal_newlines=True,
+                bufsize=1,
             )
             assert proc.stdin is not None
-            proc.stdin.write(input_data.encode("utf-8"))
+            proc.stdin.write(input_data)
             proc.stdin.flush()
             proc.stdin.close()
 
-            # 进度条：根据输出 CSV 的已写入行数估算（不含表头）
-            pbar = tqdm(total=total_rows or None, unit="row", desc="翻译进度")
-            last_count = 0
-            start_time = time.time()
-            try:
-                while True:
-                    ret = proc.poll()
-                    current_count = 0
-                    if os.path.exists(output_csv):
-                        try:
-                            with open(
-                                output_csv, "r", encoding="utf-8", errors="ignore"
-                            ) as of:
-                                # 读取行数（减去表头）
-                                oc_reader = csv.reader(of)
-                                header = next(oc_reader, None)
-                                current_count = sum(1 for _ in oc_reader)
-                        except Exception:
-                            current_count = last_count
+            # 解析Java输出并显示进度条
+            processed_lines = 0
+            for line in proc.stdout:
+                line = line.strip()
+                if line:
+                    # 检查是否是进度相关的输出
+                    if "翻译完成" in line or "跳过" in line or "翻译失败" in line:
+                        processed_lines += 1
+                        update_progress(processed_lines, total_lines, "处理中...")
+                    elif "开始翻译" in line and "总计" in line:
+                        # Java输出的开始信息，忽略
+                        continue
+                    elif "✅" in line:
+                        # Java输出的完成信息，忽略
+                        continue
+                    else:
+                        # 其他输出直接显示
+                        print(f"\n{line}")
 
-                    if current_count > last_count:
-                        pbar.update(current_count - last_count)
-                        last_count = current_count
+            proc.wait()
 
-                    if ret is not None:
-                        break
-                    time.sleep(0.3)
-            finally:
-                pbar.close()
-
-            stdout_bytes, stderr_bytes = proc.communicate(timeout=5)
             if proc.returncode == 0:
                 logging.info("Java翻译工具执行成功")
-                stdout = stdout_bytes.decode("utf-8", errors="ignore")
-                if stdout.strip():
-                    print(f"翻译完成: {output_csv}")
+                print("=" * 60)
+                print(f"✅ 翻译完成！输出文件: {output_csv}")
                 return True
             else:
-                stderr = stderr_bytes.decode("utf-8", errors="ignore")
-                logging.error(f"Java翻译工具执行失败: {stderr}")
-                print(f"翻译失败: {stderr}")
+                logging.error(f"Java翻译工具执行失败，返回码: {proc.returncode}")
+                print("=" * 60)
+                print(f"❌ 翻译失败，返回码: {proc.returncode}")
                 return False
 
         except subprocess.TimeoutExpired:
@@ -188,10 +206,11 @@ class JavaTranslator:
             bool: 翻译是否成功
         """
         print(f"📝 准备翻译文件: {input_csv} -> {output_csv}")
+        print("=" * 60)
 
         # 获取阿里云密钥
-        access_key_id = input("请输入阿里云 AccessKeyId: ").strip()
-        access_key_secret = input("请输入阿里云 AccessKeySecret: ").strip()
+        access_key_id = input("🔑 请输入阿里云 AccessKeyId: ").strip()
+        access_key_secret = input("🔐 请输入阿里云 AccessKeySecret: ").strip()
 
         if not access_key_id or not access_key_secret:
             print("❌ 阿里云密钥不能为空")

@@ -39,32 +39,45 @@ def handle_java_translate():
                 .lower()
             )
             if user_input == "y":
-                # 构建脚本现在在当前目录下的RimWorldBatchTranslate子目录
+                # 自动构建逻辑，优先用build.bat，否则用mvn package
                 current_dir = os.path.dirname(os.path.abspath(__file__))
-                build_script = os.path.join(
-                    current_dir, "RimWorldBatchTranslate", "build.bat"
+                java_proj_dir = os.path.join(current_dir, "RimWorldBatchTranslate")
+                build_bat = os.path.join(java_proj_dir, "build.bat")
+                show_info("正在自动构建Java工具...")
+                result = subprocess.run(
+                    "mvn package",
+                    shell=True,
+                    cwd=java_proj_dir,
+                    capture_output=True,
+                    text=True,
                 )
-                if os.path.exists(build_script):
-                    show_info("正在自动构建Java工具...")
-                    result = subprocess.run([build_script], shell=True)
-                    if result.returncode == 0:
-                        show_success("Java工具构建完成，正在重新检测...")
-                        # 构建后重新尝试创建翻译器
-                        try:
-                            translator = JavaTranslator()
-                            status = translator.get_status()
-                            show_success("Java翻译工具已就绪！")
-                        except FileNotFoundError:
-                            show_error("构建后仍未检测到JAR文件，请手动检查构建日志。")
-                            return
+                print("--- Maven 构建输出 ---")
+                print(result.stdout)
+                print(result.stderr)
+                if result.returncode == 0:
+                    # 构建成功后，列出 target 目录下所有 JAR 文件
+                    target_dir = os.path.join(java_proj_dir, "target")
+                    if os.path.exists(target_dir):
+                        jar_files = [
+                            f for f in os.listdir(target_dir) if f.endswith(".jar")
+                        ]
+                        if jar_files:
+                            show_info(f"target 目录下JAR文件: {jar_files}")
+                        else:
+                            show_warning("target 目录下未发现JAR文件！")
                     else:
-                        show_error("Java工具构建失败，请手动检查构建日志。")
+                        show_warning("未找到target目录！")
+                    show_success("Java工具构建完成，正在重新检测...")
+                    # 构建后重新尝试创建翻译器
+                    try:
+                        translator = JavaTranslator()
+                        status = translator.get_status()
+                        show_success("Java翻译工具已就绪！")
+                    except FileNotFoundError:
+                        show_error("构建后仍未检测到JAR文件，请手动检查构建日志。")
                         return
                 else:
-                    show_error(
-                        "未找到build.bat脚本，请手动进入RimWorldBatchTranslate目录构建。"
-                    )
-                    show_info(f"脚本路径: {build_script}")
+                    show_error("Java工具构建失败，请手动检查构建日志。")
                     return
             else:
                 show_warning("用户取消构建，返回主菜单")
@@ -104,6 +117,7 @@ def handle_java_translate():
         print(f"JAR路径: {status['jar_path']}")
 
         if confirm_action("确认开始翻译？"):
+            print()  # 添加空行，让进度条显示更清晰
             show_info("=== 开始Java翻译 ===")
             try:
                 # 优先使用已保存的配置中的密钥，缺失时退回交互输入

@@ -26,9 +26,13 @@ def handle_batch():
 
         # 延迟导入，避免循环导入
         from core.translation_facade import TranslationFacade
+        from utils.config import get_config
+
+        # 获取配置
+        config = get_config()
 
         # 创建翻译门面实例
-        facade = TranslationFacade(mod_dirs[0])  # 示例，实际可批量
+        facade = TranslationFacade(mod_dirs[0], config.CN_language)  # 示例，实际可批量
 
         # 这里可以扩展为批量处理逻辑
         show_info("=== 开始批量处理 ===")

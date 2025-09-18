@@ -28,9 +28,13 @@ def handle_corpus():
 
         # 延迟导入，避免循环导入
         from core.translation_facade import TranslationFacade
+        from utils.config import get_config
+
+        # 获取配置
+        config = get_config()
 
         # 创建翻译门面实例
-        facade = TranslationFacade(mod_dir)
+        facade = TranslationFacade(mod_dir, config.CN_language)
 
         # 生成语料
         show_info("=== 开始生成语料 ===")

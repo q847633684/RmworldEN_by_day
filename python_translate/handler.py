@@ -42,7 +42,7 @@ def handle_python_translate():
         import tempfile
 
         temp_dir = tempfile.mkdtemp()
-        facade = TranslationFacade(temp_dir)
+        facade = TranslationFacade(temp_dir, "ChineseSimplified")
 
         # 执行翻译
         show_info("=== 开始Python翻译 ===")

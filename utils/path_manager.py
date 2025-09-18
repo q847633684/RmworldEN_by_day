@@ -1,6 +1,7 @@
 """
 路径管理模块 - 提供统一的路径管理功能，包括路径验证、记忆、历史记录等
 """
+
 import os
 import re
 import json
@@ -15,20 +16,25 @@ from .config import get_config, get_user_config
 
 CONFIG = get_config()
 
+
 @dataclass
 class PathValidationResult:
     """路径验证结果"""
+
     is_valid: bool
     error_message: Optional[str] = None
     normalized_path: Optional[str] = None
     path_type: Optional[str] = None
 
+
 @dataclass
 class PathHistory:
     """路径历史记录"""
+
     paths: List[str] = field(default_factory=list)
     max_length: int = 10
     last_used: Optional[str] = None
+
 
 class PathManager:
     """统一的路径管理器，提供路径验证、记忆、历史记录等功能"""
@@ -36,32 +42,36 @@ class PathManager:
     def __init__(self):
         """初始化路径管理器"""
         self.user_config = get_user_config()
-        self._history_file = os.path.join(os.path.dirname(__file__), ".day_translation_history.json")
-        self._path_pattern = re.compile(r'^[a-zA-Z]:[\\/]|^[\\/]{2}|^[a-zA-Z0-9_\-\.]+[\\/]')
+        self._history_file = os.path.join(
+            os.path.dirname(__file__), ".day_translation_history.json"
+        )
+        self._path_pattern = re.compile(
+            r"^[a-zA-Z]:[\\/]|^[\\/]{2}|^[a-zA-Z0-9_\-\.]+[\\/]"
+        )
         self._history_cache: Dict[str, PathHistory] = {}
         self._load_history()
-          # 注册路径验证器
+        # 注册路径验证器
         self._validators: Dict[str, Callable[[str], PathValidationResult]] = {
-            'dir': self._validate_directory,
-            'file': self._validate_file,
-            'csv': self._validate_csv_file,
-            'xml': self._validate_xml_file,
-            'json': self._validate_json_file,
-            'mod': self._validate_mod_directory,
-            'language': self._validate_language_directory,
-            'output_dir': self._validate_output_directory
+            "dir": self._validate_directory,
+            "file": self._validate_file,
+            "csv": self._validate_csv_file,
+            "xml": self._validate_xml_file,
+            "json": self._validate_json_file,
+            "mod": self._validate_mod_directory,
+            "language": self._validate_language_directory,
+            "output_dir": self._validate_output_directory,
         }
 
     def _load_history(self) -> None:
         """加载历史记录"""
         try:
             if os.path.exists(self._history_file):
-                with open(self._history_file, 'r', encoding='utf-8') as f:
+                with open(self._history_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     for key, paths in data.items():
                         self._history_cache[key] = PathHistory(
                             paths=self._sanitize_history(paths),
-                            last_used=paths[0] if paths else None
+                            last_used=paths[0] if paths else None,
                         )
         except Exception as e:
             logging.error("加载历史记录失败: %s", e)
@@ -75,7 +85,7 @@ class PathManager:
                 for key, history in self._history_cache.items()
                 if history.paths
             }
-            with open(self._history_file, 'w', encoding='utf-8') as f:
+            with open(self._history_file, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
         except Exception as e:
             logging.error("保存历史记录失败: %s", e)
@@ -110,25 +120,22 @@ class PathManager:
             # 验证路径格式
             if not self._path_pattern.match(normalized):
                 return PathValidationResult(
-                    is_valid=False,
-                    error_message="无效的路径格式"
+                    is_valid=False, error_message="无效的路径格式"
                 )
-            return PathValidationResult(
-                is_valid=True,
-                normalized_path=normalized
-            )
+            return PathValidationResult(is_valid=True, normalized_path=normalized)
         except Exception as e:
             return PathValidationResult(
-                is_valid=False,
-                error_message=f"路径规范化失败: {str(e)}"
+                is_valid=False, error_message=f"路径规范化失败: {str(e)}"
             )
 
-    def get_path(self,
-                path_type: str,
-                prompt: str,
-                validator_type: str = 'file',
-                required: bool = True,
-                default: Optional[str] = None) -> Optional[str]:
+    def get_path(
+        self,
+        path_type: str,
+        prompt: str,
+        validator_type: str = "file",
+        required: bool = True,
+        default: Optional[str] = None,
+    ) -> Optional[str]:
         """
         获取路径输入，支持记忆和历史记录
 
@@ -147,8 +154,14 @@ class PathManager:
             if default:
                 result = self._normalize_path(default)
                 if result.is_valid and os.path.exists(result.normalized_path):
-                    use_default = input(f"{Fore.YELLOW}使用默认路径: {result.normalized_path} [y/n]: {Style.RESET_ALL}").strip().lower()
-                    if use_default == 'y':
+                    use_default = (
+                        input(
+                            f"{Fore.YELLOW}使用默认路径: {result.normalized_path} [y/n]: {Style.RESET_ALL}"
+                        )
+                        .strip()
+                        .lower()
+                    )
+                    if use_default == "y":
                         return result.normalized_path
 
             # 获取历史记录
@@ -164,11 +177,11 @@ class PathManager:
             while True:
                 choice = input(f"\n{Fore.CYAN}{prompt}{Style.RESET_ALL}").strip()
 
-                if choice.lower() == 'q':
+                if choice.lower() == "q":
                     return None
 
                 if choice.isdigit() and 1 <= int(choice) <= len(history.paths):
-                        path = history.paths[int(choice) - 1]
+                    path = history.paths[int(choice) - 1]
                 else:
                     path = choice
 
@@ -187,7 +200,7 @@ class PathManager:
                     if result.normalized_path in history.paths:
                         history.paths.remove(result.normalized_path)
                     history.paths.insert(0, result.normalized_path)
-                    history.paths = history.paths[:history.max_length]
+                    history.paths = history.paths[: history.max_length]
                     history.last_used = result.normalized_path
                     self._save_history()
 
@@ -227,7 +240,7 @@ class PathManager:
             if result.normalized_path in history.paths:
                 history.paths.remove(result.normalized_path)
             history.paths.insert(0, result.normalized_path)
-            history.paths = history.paths[:history.max_length]
+            history.paths = history.paths[: history.max_length]
             history.last_used = result.normalized_path
             self._save_history()
 
@@ -268,24 +281,22 @@ class PathManager:
                 return PathValidationResult(
                     is_valid=False,
                     error_message=f"目录不存在: {path}",
-                    normalized_path=result.normalized_path
+                    normalized_path=result.normalized_path,
                 )
             if not os.access(result.normalized_path, os.R_OK | os.W_OK):
                 return PathValidationResult(
                     is_valid=False,
                     error_message=f"目录无法访问: {path}",
-                    normalized_path=result.normalized_path
+                    normalized_path=result.normalized_path,
                 )
             return PathValidationResult(
-                is_valid=True,
-                normalized_path=result.normalized_path,
-                path_type='dir'
+                is_valid=True, normalized_path=result.normalized_path, path_type="dir"
             )
         except Exception as e:
             return PathValidationResult(
                 is_valid=False,
                 error_message=f"目录验证失败: {str(e)}",
-                normalized_path=result.normalized_path
+                normalized_path=result.normalized_path,
             )
 
     def _validate_file(self, path: str) -> PathValidationResult:
@@ -301,26 +312,24 @@ class PathManager:
                     return PathValidationResult(
                         is_valid=False,
                         error_message=f"文件无法访问: {path}",
-                        normalized_path=result.normalized_path
+                        normalized_path=result.normalized_path,
                     )
             else:
-                parent_dir = path_obj.parent or Path('.')
+                parent_dir = path_obj.parent or Path(".")
                 if not parent_dir.is_dir() or not os.access(str(parent_dir), os.W_OK):
                     return PathValidationResult(
                         is_valid=False,
                         error_message=f"父目录不存在或无法写入: {path}",
-                        normalized_path=result.normalized_path
+                        normalized_path=result.normalized_path,
                     )
             return PathValidationResult(
-                is_valid=True,
-                normalized_path=result.normalized_path,
-                path_type='file'
+                is_valid=True, normalized_path=result.normalized_path, path_type="file"
             )
         except Exception as e:
             return PathValidationResult(
                 is_valid=False,
                 error_message=f"文件验证失败: {str(e)}",
-                normalized_path=result.normalized_path
+                normalized_path=result.normalized_path,
             )
 
     def _validate_csv_file(self, path: str) -> PathValidationResult:
@@ -329,16 +338,14 @@ class PathManager:
         if not result.is_valid:
             return result
 
-        if not Path(result.normalized_path).suffix.lower() == '.csv':
+        if not Path(result.normalized_path).suffix.lower() == ".csv":
             return PathValidationResult(
                 is_valid=False,
                 error_message=f"文件必须是CSV格式: {path}",
-                normalized_path=result.normalized_path
+                normalized_path=result.normalized_path,
             )
         return PathValidationResult(
-            is_valid=True,
-            normalized_path=result.normalized_path,
-            path_type='csv'
+            is_valid=True, normalized_path=result.normalized_path, path_type="csv"
         )
 
     def _validate_xml_file(self, path: str) -> PathValidationResult:
@@ -347,16 +354,14 @@ class PathManager:
         if not result.is_valid:
             return result
 
-        if not Path(result.normalized_path).suffix.lower() == '.xml':
+        if not Path(result.normalized_path).suffix.lower() == ".xml":
             return PathValidationResult(
                 is_valid=False,
                 error_message=f"文件必须是XML格式: {path}",
-                normalized_path=result.normalized_path
+                normalized_path=result.normalized_path,
             )
         return PathValidationResult(
-            is_valid=True,
-            normalized_path=result.normalized_path,
-            path_type='xml'
+            is_valid=True, normalized_path=result.normalized_path, path_type="xml"
         )
 
     def _validate_json_file(self, path: str) -> PathValidationResult:
@@ -365,16 +370,14 @@ class PathManager:
         if not result.is_valid:
             return result
 
-        if not Path(result.normalized_path).suffix.lower() == '.json':
+        if not Path(result.normalized_path).suffix.lower() == ".json":
             return PathValidationResult(
                 is_valid=False,
                 error_message=f"文件必须是JSON格式: {path}",
-                normalized_path=result.normalized_path
+                normalized_path=result.normalized_path,
             )
         return PathValidationResult(
-            is_valid=True,
-            normalized_path=result.normalized_path,
-            path_type='json'
+            is_valid=True, normalized_path=result.normalized_path, path_type="json"
         )
 
     def _validate_mod_directory(self, path: str) -> PathValidationResult:
@@ -386,46 +389,43 @@ class PathManager:
         about_dir = os.path.join(result.normalized_path, "About")
         if os.path.isdir(about_dir):
             return PathValidationResult(
-                is_valid=True,
-                normalized_path=result.normalized_path,
-                path_type='mod'
+                is_valid=True, normalized_path=result.normalized_path, path_type="mod"
             )
         else:
             return PathValidationResult(
                 is_valid=False,
                 error_message=f"目录不是有效的模组目录（缺少 About 文件夹）: {path}",
-                normalized_path=result.normalized_path
+                normalized_path=result.normalized_path,
             )
 
-    def get_mod_path_with_version_detection(self, path_type: str, prompt: str) -> Optional[str]:
+    def detect_version_and_choose(self, mod_path: str) -> Optional[str]:
         """
-        获取模组路径，支持版本检测和智能选择。
-        用户选择版本号后，直接返回最终目录，后续流程只用这个目录。
+        对已确定的模组路径进行版本检测和选择
+        不显示历史记录，直接处理路径
         """
-        while True:
-            # 获取用户输入的路径
-            path = self.get_path(path_type, prompt, validator_type='mod', required=True)
-            if not path:
-                return None
-            
-            # 验证路径
-            result = self._validate_mod_directory(path)
-            
-            if result.is_valid:
-                # 检查是否为版本号结构
-                structure_type, mod_dir, content_dir = self._detect_mod_structure_type(result.normalized_path)
-                if structure_type == 'versioned':
-                    # 让用户选择版本号，直接返回最终目录
-                    final_dir = self._choose_versioned_content_dir(mod_dir)
-                    if final_dir:
-                        return final_dir
-                    else:
-                        continue
+        # 验证路径
+        result = self._validate_mod_directory(mod_path)
+
+        if result.is_valid:
+            # 检查是否为版本号结构
+            structure_type, mod_dir, content_dir = self._detect_mod_structure_type(
+                result.normalized_path
+            )
+            print(
+                f"{Fore.CYAN}🔍 检测模组结构: {structure_type} - {mod_dir}{Style.RESET_ALL}"
+            )
+            if structure_type == "versioned":
+                # 让用户选择版本号，直接返回最终目录
+                final_dir = self._choose_versioned_content_dir(mod_dir)
+                if final_dir:
+                    return final_dir
                 else:
-                    return result.normalized_path
+                    return None
             else:
-                print(f"{Fore.RED}{result.error_message}{Style.RESET_ALL}")
-                continue
+                return result.normalized_path
+        else:
+            print(f"{Fore.RED}{result.error_message}{Style.RESET_ALL}")
+            return None
 
     def _choose_versioned_content_dir(self, mod_dir: str) -> Optional[str]:
         """
@@ -437,45 +437,118 @@ class PathManager:
                 item_path = os.path.join(mod_dir, item)
                 if os.path.isdir(item_path):
                     if self._is_version_number(item):
-                        content_dirs = {'Defs', 'Languages', 'Textures', 'Sounds'}
-                        found_content_dirs = {d for d in os.listdir(item_path) 
-                                             if os.path.isdir(os.path.join(item_path, d))}
+                        content_dirs = {"Defs", "Languages", "Textures", "Sounds"}
+                        found_content_dirs = {
+                            d
+                            for d in os.listdir(item_path)
+                            if os.path.isdir(os.path.join(item_path, d))
+                        }
                         if content_dirs.intersection(found_content_dirs):
-                            version_dirs.append({
-                                'name': item,
-                                'path': item_path,
-                                'version': self._parse_version_number(item)
-                            })
+                            version_dirs.append(
+                                {
+                                    "name": item,
+                                    "path": item_path,
+                                    "version": self._parse_version_number(item),
+                                }
+                            )
         except Exception as e:
             logging.error(f"检测版本目录失败: {e}")
-        
+
         if version_dirs:
-            version_dirs.sort(key=lambda x: x['version'], reverse=True)
-            print(f"\n{Fore.CYAN}📁 检测到版本号结构模组{Style.RESET_ALL}")
-            print(f"   模组目录: {mod_dir}")
-            print(f"\n{Fore.BLUE}发现以下可用版本：{Style.RESET_ALL}")
-            for i, version_info in enumerate(version_dirs, 1):
-                status_icon = "✅" if i == 1 else "📋"
-                status_text = " (推荐)" if i == 1 else ""
-                print(f"{i}. {status_icon} {version_info['name']}{status_text}")
-            print(f"0. {Fore.YELLOW}使用默认选择（{version_dirs[0]['name']}）{Style.RESET_ALL}")
+            version_dirs.sort(key=lambda x: x["version"], reverse=True)
+
+            # 美化版本选择界面
+            print(
+                f"\n{Fore.CYAN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
+            )
+            print(
+                f"{Fore.CYAN}║{Style.RESET_ALL}  {Fore.BLUE}📦 检测到版本号结构模组{Style.RESET_ALL}  {Fore.CYAN}║{Style.RESET_ALL}"
+            )
+            print(
+                f"{Fore.CYAN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
+            )
+            print(f"{Fore.YELLOW}📁 模组目录: {mod_dir}{Style.RESET_ALL}")
+            print(f"{Fore.BLUE}🔍 发现以下可用版本：{Style.RESET_ALL}")
+
+            # 准备版本名称列表用于多行显示
+            version_names = [
+                f"{version_info['name']} (推荐)" if i == 0 else version_info["name"]
+                for i, version_info in enumerate(version_dirs)
+            ]
+
+            # 计算自适应布局
+            versions_per_line, item_width = self._calculate_version_layout(
+                version_names
+            )
+
+            # 多行显示版本
+            for i in range(0, len(version_dirs), versions_per_line):
+                row_versions = version_dirs[i : i + versions_per_line]
+                row_items = []
+                for j, version_info in enumerate(row_versions):
+                    global_index = i + j + 1
+                    status_icon = "✅" if global_index == 1 else "📋"
+                    status_text = " (推荐)" if global_index == 1 else ""
+                    item_text = f"{global_index}. {status_icon} {version_info['name']}{status_text}"
+                    row_items.append(item_text.ljust(item_width))
+                print("   " + "".join(row_items))
+
+            print(f"\n{Fore.GREEN}💡 快速选择：{Style.RESET_ALL}")
+            print(
+                f"   {Fore.YELLOW}0{Style.RESET_ALL} - 使用默认选择（{Fore.CYAN}{version_dirs[0]['name']}{Style.RESET_ALL}）"
+            )
+            print(f"   {Fore.RED}q{Style.RESET_ALL} - 退出版本选择")
             while True:
-                choice = input(f"\n{Fore.CYAN}请选择版本 (1-{len(version_dirs)}，回车默认0): {Style.RESET_ALL}").strip()
+                choice = input(
+                    f"\n{Fore.CYAN}🎯 请选择版本 (1-{len(version_dirs)}，回车默认0，q退出): {Style.RESET_ALL}"
+                ).strip()
                 if not choice:
                     choice = "0"
-                if choice == "0":
+                if choice.lower() == "q":
+                    print(f"{Fore.YELLOW}👋 已退出版本选择{Style.RESET_ALL}")
+                    return None
+                elif choice == "0":
                     selected_version = version_dirs[0]
                     break
                 elif choice.isdigit() and 1 <= int(choice) <= len(version_dirs):
                     selected_version = version_dirs[int(choice) - 1]
                     break
                 else:
-                    print(f"{Fore.RED}❌ 无效选择，请输入 1-{len(version_dirs)} 或 0{Style.RESET_ALL}")
-            print(f"{Fore.GREEN}✅ 选择版本: {selected_version['name']}{Style.RESET_ALL}")
-            print(f"   内容目录: {selected_version['path']}")
-            return selected_version['path']
+                    print(
+                        f"{Fore.RED}❌ 无效选择，请输入 1-{len(version_dirs)}、0 或 q{Style.RESET_ALL}"
+                    )
+                    print(
+                        f"{Fore.YELLOW}💡 提示：直接回车选择推荐版本，输入 q 退出{Style.RESET_ALL}"
+                    )
+            print(
+                f"\n{Fore.GREEN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
+            )
+            print(
+                f"{Fore.GREEN}║{Style.RESET_ALL}  {Fore.CYAN}✅ 版本选择成功{Style.RESET_ALL}  {Fore.GREEN}║{Style.RESET_ALL}"
+            )
+            print(
+                f"{Fore.GREEN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
+            )
+            print(
+                f"{Fore.CYAN}📦 选择版本: {Fore.WHITE}{selected_version['name']}{Style.RESET_ALL}"
+            )
+            print(
+                f"{Fore.CYAN}📁 内容目录: {Fore.WHITE}{selected_version['path']}{Style.RESET_ALL}"
+            )
+            return selected_version["path"]
         else:
-            print(f"{Fore.RED}未检测到有效的版本号内容目录{Style.RESET_ALL}")
+            print(
+                f"\n{Fore.RED}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
+            )
+            print(
+                f"{Fore.RED}║{Style.RESET_ALL}  {Fore.YELLOW}⚠️ 未检测到版本号结构{Style.RESET_ALL}  {Fore.RED}║{Style.RESET_ALL}"
+            )
+            print(
+                f"{Fore.RED}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
+            )
+            print(
+                f"{Fore.YELLOW}💡 该模组可能使用标准结构，将使用根目录内容{Style.RESET_ALL}"
+            )
             return None
 
     def _validate_language_directory(self, path: str) -> PathValidationResult:
@@ -486,18 +559,18 @@ class PathManager:
 
         # 检查语言目录结构
         required_dirs = {CONFIG.def_injected_dir, CONFIG.keyed_dir}
-        found_dirs = {d.name for d in Path(result.normalized_path).iterdir() if d.is_dir()}
+        found_dirs = {
+            d.name for d in Path(result.normalized_path).iterdir() if d.is_dir()
+        }
 
         if not required_dirs.intersection(found_dirs):
             return PathValidationResult(
                 is_valid=False,
                 error_message=f"目录不是有效的语言目录: {path}",
-                normalized_path=result.normalized_path
+                normalized_path=result.normalized_path,
             )
         return PathValidationResult(
-            is_valid=True,
-            normalized_path=result.normalized_path,
-            path_type='language'
+            is_valid=True, normalized_path=result.normalized_path, path_type="language"
         )
 
     def _validate_output_directory(self, path: str) -> PathValidationResult:
@@ -514,7 +587,7 @@ class PathManager:
                 return PathValidationResult(
                     is_valid=False,
                     error_message=f"路径不是目录: {path}",
-                    normalized_path=str(path_obj.resolve())
+                    normalized_path=str(path_obj.resolve()),
                 )
 
             # 检查写入权限
@@ -526,20 +599,20 @@ class PathManager:
                 return PathValidationResult(
                     is_valid=False,
                     error_message=f"目录没有写入权限: {path}",
-                    normalized_path=str(path_obj.resolve())
+                    normalized_path=str(path_obj.resolve()),
                 )
 
             return PathValidationResult(
                 is_valid=True,
                 normalized_path=str(path_obj.resolve()),
-                path_type='output_dir'
+                path_type="output_dir",
             )
 
         except Exception as e:
             return PathValidationResult(
                 is_valid=False,
                 error_message=f"验证输出目录失败: {str(e)}",
-                normalized_path=str(Path(path).resolve()) if path else ""
+                normalized_path=str(Path(path).resolve()) if path else "",
             )
 
     def get_language_folder_path(self, mod_dir: str, language: str) -> str:
@@ -594,19 +667,23 @@ class PathManager:
             if not path_result.is_valid or not base_result.is_valid:
                 return None
 
-            return os.path.relpath(path_result.normalized_path, base_result.normalized_path)
+            return os.path.relpath(
+                path_result.normalized_path, base_result.normalized_path
+            )
         except Exception as e:
             logging.error("获取相对路径失败: %s", e)
             return None
 
-    def get_path_with_smart_recommendations(self,
-                                          path_type: str,
-                                          prompt: str,
-                                          validator_type: str = 'file',
-                                          required: bool = True,
-                                          default: Optional[str] = None,
-                                          smart_recommendations: Optional[List[str]] = None,
-                                          recommendation_reasons: Optional[Dict[str, str]] = None) -> Optional[str]:
+    def get_path_with_smart_recommendations(
+        self,
+        path_type: str,
+        prompt: str,
+        validator_type: str = "file",
+        required: bool = True,
+        default: Optional[str] = None,
+        smart_recommendations: Optional[List[str]] = None,
+        recommendation_reasons: Optional[Dict[str, str]] = None,
+    ) -> Optional[str]:
         """
         获取路径输入，支持智能推荐（基于现有 get_path 的增强版本）
 
@@ -627,18 +704,28 @@ class PathManager:
             if smart_recommendations:
                 print(f"\n{Fore.CYAN}💡 智能推荐：{Style.RESET_ALL}")
                 for i, rec_path in enumerate(smart_recommendations, 1):
-                    reason = recommendation_reasons.get(rec_path, "") if recommendation_reasons else ""
-                    reason_text = f" ({Fore.GREEN}{reason}{Style.RESET_ALL})" if reason else ""
+                    reason = (
+                        recommendation_reasons.get(rec_path, "")
+                        if recommendation_reasons
+                        else ""
+                    )
+                    reason_text = (
+                        f" ({Fore.GREEN}{reason}{Style.RESET_ALL})" if reason else ""
+                    )
                     print(f"{i}. {rec_path}{reason_text}")
-                
+
                 print(f"0. {Fore.YELLOW}手动输入其他路径{Style.RESET_ALL}")
-                
-                choice = input(f"\n{Fore.CYAN}选择推荐项 (1-{len(smart_recommendations)}) 或 0 手动输入：{Style.RESET_ALL}").strip()
-                
+
+                choice = input(
+                    f"\n{Fore.CYAN}选择推荐项 (1-{len(smart_recommendations)}) 或 0 手动输入：{Style.RESET_ALL}"
+                ).strip()
+
                 if choice.isdigit() and 1 <= int(choice) <= len(smart_recommendations):
                     selected_path = smart_recommendations[int(choice) - 1]
                     # 验证选择的推荐路径
-                    validator = self._validators.get(validator_type, self._validate_file)
+                    validator = self._validators.get(
+                        validator_type, self._validate_file
+                    )
                     result = validator(selected_path)
                     if result.is_valid:
                         # 更新历史记录（复用现有逻辑）
@@ -648,13 +735,15 @@ class PathManager:
                         if result.normalized_path in history.paths:
                             history.paths.remove(result.normalized_path)
                         history.paths.insert(0, result.normalized_path)
-                        history.paths = history.paths[:history.max_length]
+                        history.paths = history.paths[: history.max_length]
                         history.last_used = result.normalized_path
                         self._save_history()
-                        
+
                         return result.normalized_path
                     else:
-                        print(f"{Fore.RED}❌ 推荐路径无效: {result.error_message}{Style.RESET_ALL}")
+                        print(
+                            f"{Fore.RED}❌ 推荐路径无效: {result.error_message}{Style.RESET_ALL}"
+                        )
                         # 继续到常规输入流程
                 elif choice == "0":
                     # 用户选择手动输入，继续到常规流程
@@ -673,10 +762,10 @@ class PathManager:
     def _detect_mod_structure_type(self, mod_dir: str) -> tuple[str, str, str]:
         """
         检测模组目录结构类型
-        
+
         Args:
             mod_dir (str): 模组目录路径
-            
+
         Returns:
             tuple[str, str, str]: (结构类型, 模组目录, 内容目录)
                 结构类型: 'standard' | 'versioned' | 'unknown'
@@ -686,27 +775,36 @@ class PathManager:
         # 检查根目录是否有About
         about_dir = os.path.join(mod_dir, "About")
         if os.path.isdir(about_dir):
+            # 首先检查是否有版本号子目录
+            version_result = self._find_version_content_dir(mod_dir)
+            if version_result[0] == "versioned":
+                # 如果找到版本号结构，优先使用版本号结构
+                return version_result
+
             # 检查根目录是否有模组内容
-            content_dirs = {'Defs', 'Languages', 'Textures', 'Sounds'}
-            found_content_dirs = {d for d in os.listdir(mod_dir) 
-                                 if os.path.isdir(os.path.join(mod_dir, d))}
-            
+            content_dirs = {"Defs", "Languages", "Textures", "Sounds"}
+            found_content_dirs = {
+                d
+                for d in os.listdir(mod_dir)
+                if os.path.isdir(os.path.join(mod_dir, d))
+            }
+
             if content_dirs.intersection(found_content_dirs):
                 # 标准结构：根目录既有About又有内容
-                return 'standard', mod_dir, mod_dir
+                return "standard", mod_dir, mod_dir
             else:
-                # 版本号结构：根目录有About但没有内容，需要找版本号子目录
-                return self._find_version_content_dir(mod_dir)
-        
-        return 'unknown', mod_dir, mod_dir
-    
+                # 根目录有About但没有内容
+                return "unknown", mod_dir, mod_dir
+
+        return "unknown", mod_dir, mod_dir
+
     def _find_version_content_dir(self, mod_dir: str) -> tuple[str, str, str]:
         """
         在版本号子目录中查找内容目录
-        
+
         Args:
             mod_dir (str): 模组根目录路径
-            
+
         Returns:
             tuple[str, str, str]: (结构类型, 模组目录, 内容目录)
         """
@@ -718,64 +816,99 @@ class PathManager:
                     # 检查是否为版本号格式（如 1.5, 1.4, 1.3 等）
                     if self._is_version_number(item):
                         # 检查该版本目录下是否有模组内容
-                        content_dirs = {'Defs', 'Languages', 'Textures', 'Sounds'}
-                        found_content_dirs = {d for d in os.listdir(item_path) 
-                                             if os.path.isdir(os.path.join(item_path, d))}
-                        
+                        content_dirs = {"Defs", "Languages", "Textures", "Sounds"}
+                        found_content_dirs = {
+                            d
+                            for d in os.listdir(item_path)
+                            if os.path.isdir(os.path.join(item_path, d))
+                        }
+
                         if content_dirs.intersection(found_content_dirs):
-                            version_dirs.append({
-                                'name': item,
-                                'path': item_path,
-                                'version': self._parse_version_number(item)
-                            })
+                            version_dirs.append(
+                                {
+                                    "name": item,
+                                    "path": item_path,
+                                    "version": self._parse_version_number(item),
+                                }
+                            )
         except Exception as e:
             logging.error(f"检测版本目录失败: {e}")
-        
+
         if version_dirs:
             # 按版本号排序，选择最新版本
-            version_dirs.sort(key=lambda x: x['version'], reverse=True)
+            version_dirs.sort(key=lambda x: x["version"], reverse=True)
             latest_version = version_dirs[0]
-            return 'versioned', mod_dir, latest_version['path']
-        
+            return "versioned", mod_dir, latest_version["path"]
+
         # 没有找到版本号内容目录
-        return 'unknown', mod_dir, mod_dir
-    
+        return "unknown", mod_dir, mod_dir
+
+    def _calculate_version_layout(self, version_names: List[str]) -> tuple:
+        """计算版本选择的自适应布局参数"""
+        try:
+            import shutil
+
+            terminal_width = shutil.get_terminal_size().columns
+        except:
+            terminal_width = 80  # 默认宽度
+
+        # 预留边框和边距空间
+        available_width = terminal_width - 10  # 边框 + 边距
+
+        # 计算每个版本名需要的最大宽度
+        max_name_length = (
+            max(len(name) for name in version_names) if version_names else 10
+        )
+        # 编号宽度 (如 "6.") + 图标 + 版本名 + 间距
+        item_width = (
+            len(str(len(version_names))) + 1 + 2 + max_name_length + 3
+        )  # 2 for emoji
+
+        # 计算每行能放多少个版本
+        versions_per_line = max(1, available_width // item_width)
+
+        # 限制最大列数，避免过于拥挤
+        versions_per_line = min(versions_per_line, 4)
+
+        return versions_per_line, item_width
+
     def _is_version_number(self, name: str) -> bool:
         """
         判断字符串是否为版本号格式
-        
+
         Args:
             name (str): 目录名
-            
+
         Returns:
             bool: 是否为版本号格式
         """
         # 匹配版本号格式：1.5, 1.4, 1.3, 1.5.0, v1.5 等
         import re
-        pattern = r'^v?(\d+\.)+\d+$'
+
+        pattern = r"^v?(\d+\.)+\d+$"
         return bool(re.match(pattern, name))
-    
+
     def _parse_version_number(self, version_str: str) -> tuple:
         """
         解析版本号字符串为可比较的元组
-        
+
         Args:
             version_str (str): 版本号字符串
-            
+
         Returns:
             tuple: 版本号元组
         """
         try:
             # 去掉可能的 'v' 前缀
             clean_version = version_str.strip().lower()
-            if clean_version.startswith('v'):
+            if clean_version.startswith("v"):
                 clean_version = clean_version[1:]
-            
+
             # 分割版本号并转换为整数
             parts = []
-            for part in clean_version.split('.'):
+            for part in clean_version.split("."):
                 parts.append(int(part))
-            
+
             return tuple(parts)
         except Exception:
             # 如果解析失败，返回 (0,) 表示最低版本
@@ -784,10 +917,10 @@ class PathManager:
     def get_history_list(self, path_type: str) -> List[str]:
         """
         获取指定类型的历史记录列表
-        
+
         Args:
             path_type (str): 路径类型
-            
+
         Returns:
             List[str]: 历史记录列表
         """

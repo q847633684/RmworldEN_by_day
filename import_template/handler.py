@@ -30,10 +30,16 @@ def handle_import_template():
             return
 
         # 选择模组目录
-        mod_dir = path_manager.get_mod_path_with_version_detection(
+        selected_path = path_manager.get_path(
             path_type="mod_dir",
             prompt="请输入编号或模组目录路径（支持历史编号或直接输入路径）: ",
+            validator_type="mod",
+            required=True,
         )
+        if not selected_path:
+            return
+
+        mod_dir = path_manager.detect_version_and_choose(selected_path)
         if not mod_dir:
             return
 
