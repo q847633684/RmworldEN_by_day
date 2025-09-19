@@ -21,36 +21,89 @@ public class RimWorldBatchTranslate {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
 
-        System.out.print("请输入输入CSV文件名（如 translations.csv）: ");
+        // 检查是否是交互模式（通过环境变量或参数判断）
+        boolean interactiveMode = System.getenv("INTERACTIVE_MODE") != null || 
+                                (args.length > 0 && "interactive".equals(args[0]));
+
+        if (interactiveMode) {
+            System.out.print("请输入输入CSV文件名（如 translations.csv）: ");
+        }
         String inputCsv = scanner.nextLine().trim();
-        System.out.print("请输入输出CSV文件名（如 translations_zh.csv）: ");
+        
+        if (interactiveMode) {
+            System.out.print("请输入输出CSV文件名（如 translations_zh.csv）: ");
+        }
         String outputCsv = scanner.nextLine().trim();
 
-        System.out.print("请输入阿里云 AccessKeyId: ");
+        if (interactiveMode) {
+            System.out.print("请输入阿里云 AccessKeyId: ");
+        }
         accessKeyId = scanner.nextLine().trim();
-        System.out.print("请输入阿里云 AccessKeySecret: ");
+        
+        if (interactiveMode) {
+            System.out.print("请输入阿里云 AccessKeySecret: ");
+        }
         accessKeySecret = scanner.nextLine().trim();
         
         // 读取model_id参数（如果提供）
-        System.out.print("请输入翻译模型ID（直接回车使用默认27345）: ");
+        if (interactiveMode) {
+            System.out.print("请输入翻译模型ID（直接回车使用默认27345）: ");
+        }
         String modelIdInput = scanner.nextLine().trim();
         if (!modelIdInput.isEmpty()) {
             try {
                 modelId = Long.parseLong(modelIdInput);
             } catch (NumberFormatException e) {
-                System.out.println("无效的模型ID，使用默认值27345");
+                if (interactiveMode) {
+                    System.out.println("无效的模型ID，使用默认值27345");
+                }
             }
         }
+        
+        // 读取起始行参数（如果提供）
+        if (interactiveMode) {
+            System.out.print("请输入起始行号（直接回车从第0行开始）: ");
+        }
+        String startLineInput = scanner.nextLine().trim();
+        int startLine = 0;
+        if (!startLineInput.isEmpty()) {
+            try {
+                startLine = Integer.parseInt(startLineInput);
+            } catch (NumberFormatException e) {
+                if (interactiveMode) {
+                    System.out.println("无效的起始行号，从第0行开始");
+                }
+                startLine = 0;
+            }
+        }
+        
+        // 调试输出
+        System.out.println("[调试] 接收到的起始行参数: " + startLineInput + " -> " + startLine);
         scanner.close();
 
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
         IAcsClient client = new DefaultAcsClient(profile);
 
+        // 统一文件处理：智能检测恢复模式
+        Writer out = null;
+        CSVPrinter printer = null;
+        boolean isResumeMode = false;
+        
+        // 检查输出文件是否存在
+        java.io.File outputFile = new java.io.File(outputCsv);
+        if (outputFile.exists()) {
+            isResumeMode = true;
+            System.out.println("检测到已存在的输出文件，将删除最后一行不完整的翻译...");
+            removeLastLine(outputCsv);
+            
+            // 打开文件用于追加
+            out = new OutputStreamWriter(new FileOutputStream(outputCsv, true), StandardCharsets.UTF_8);
+            printer = new CSVPrinter(out, CSVFormat.DEFAULT);
+        }
+        
         try (
             Reader in = new InputStreamReader(new FileInputStream(inputCsv), StandardCharsets.UTF_8);
-            Writer out = new OutputStreamWriter(new FileOutputStream(outputCsv), StandardCharsets.UTF_8);
             CSVParser parser = new CSVParser(in, CSVFormat.DEFAULT.withFirstRecordAsHeader());
-            CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.withHeader(appendHeader(parser.getHeaderMap(), "translated")));
         ) {
             // 先统计总行数
             java.util.List<CSVRecord> records = new java.util.ArrayList<>();
@@ -59,9 +112,29 @@ public class RimWorldBatchTranslate {
             }
             int totalLines = records.size();
             
-            System.out.println("开始翻译，总计 " + totalLines + " 行...");
+            // 智能恢复：通过key对比确定实际恢复位置
+            int actualStartLine = startLine;
+            if (isResumeMode) {
+                actualStartLine = findActualResumeLine(inputCsv, outputCsv, records);
+                if (actualStartLine != startLine) {
+                    System.out.println("智能检测：从第 " + actualStartLine + " 行开始恢复翻译（原计划第 " + startLine + " 行）");
+                } else {
+                    System.out.println("从第 " + startLine + " 行开始恢复翻译，总计 " + totalLines + " 行...");
+                }
+            } else {
+                System.out.println("开始翻译，总计 " + totalLines + " 行...");
+                // 创建新的输出文件
+                out = new OutputStreamWriter(new FileOutputStream(outputCsv), StandardCharsets.UTF_8);
+                printer = new CSVPrinter(out, CSVFormat.DEFAULT.withHeader(appendHeader(parser.getHeaderMap(), "translated")));
+            }
             
+            int currentLine = 0;
             for (CSVRecord record : records) {
+                // 跳过起始行之前的记录（actualStartLine是数据行号，不包括标题行）
+                if (currentLine < actualStartLine) {
+                    currentLine++;
+                    continue;
+                }
                 java.util.List<String> originalCols = new java.util.ArrayList<>();
                 for (String col : parser.getHeaderNames()) {
                     originalCols.add(record.isMapped(col) ? record.get(col) : "");
@@ -96,6 +169,12 @@ public class RimWorldBatchTranslate {
                 java.util.List<String> row = new java.util.ArrayList<>(originalCols);
                 row.add(zh);
                 printer.printRecord(row);
+                // 立即刷新缓冲区确保数据写入文件
+                try {
+                    printer.flush();
+                } catch (Exception e) {
+                    System.out.println("[警告] 刷新缓冲区失败: " + e.getMessage());
+                }
                 // 添加延迟以避免API限制，可以根据需要调整
                 try {
                     Thread.sleep(500);
@@ -104,7 +183,62 @@ public class RimWorldBatchTranslate {
                     System.out.println("[警告] 翻译过程被中断");
                     break;
                 }
+                currentLine++;
             }
+        } finally {
+            // 确保文件被正确关闭
+            if (printer != null) {
+                try {
+                    printer.flush();
+                } catch (Exception e) {
+                    System.out.println("[警告] 最终刷新缓冲区失败: " + e.getMessage());
+                }
+            }
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (Exception e) {
+                    System.out.println("[警告] 关闭文件失败: " + e.getMessage());
+                }
+            }
+        }
+    }
+    
+    /**
+     * 删除CSV文件的最后一行（用于清理不完整的翻译）
+     */
+    private static void removeLastLine(String filePath) {
+        try {
+            java.io.File file = new java.io.File(filePath);
+            if (!file.exists()) {
+                return;
+            }
+            
+            // 读取所有行
+            java.util.List<String> lines = new java.util.ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    lines.add(line);
+                }
+            }
+            
+            // 删除最后一行
+            if (!lines.isEmpty()) {
+                lines.remove(lines.size() - 1);
+                
+                // 写回文件
+                try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
+                    for (String line : lines) {
+                        writer.write(line);
+                        writer.newLine();
+                    }
+                }
+                
+                System.out.println("已删除最后一行不完整的翻译");
+            }
+        } catch (Exception e) {
+            System.out.println("[警告] 删除最后一行失败: " + e.getMessage());
         }
     }
 
@@ -233,6 +367,48 @@ public class RimWorldBatchTranslate {
             return null;
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    /**
+     * 通过key对比智能确定恢复翻译的起始行
+     */
+    private static int findActualResumeLine(String inputCsv, String outputCsv, java.util.List<CSVRecord> inputRecords) {
+        try {
+            // 读取输出文件中已翻译的key
+            java.util.Set<String> translatedKeys = new java.util.HashSet<>();
+            try (Reader reader = new InputStreamReader(new FileInputStream(outputCsv), StandardCharsets.UTF_8);
+                 CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+                
+                for (CSVRecord record : parser) {
+                    if (record.isMapped("key")) {
+                        String key = record.get("key");
+                        if (key != null && !key.trim().isEmpty()) {
+                            translatedKeys.add(key.trim());
+                        }
+                    }
+                }
+            }
+            
+            // 找到第一个未翻译的key对应的行号
+            for (int i = 0; i < inputRecords.size(); i++) {
+                CSVRecord record = inputRecords.get(i);
+                if (record.isMapped("key")) {
+                    String key = record.get("key");
+                    if (key != null && !key.trim().isEmpty() && !translatedKeys.contains(key.trim())) {
+                        System.out.println("智能检测：找到第一个未翻译的key: " + key + " (第 " + i + " 行)");
+                        return i;
+                    }
+                }
+            }
+            
+            // 如果所有key都已翻译，返回总行数（表示翻译完成）
+            System.out.println("智能检测：所有key都已翻译完成");
+            return inputRecords.size();
+            
+        } catch (Exception e) {
+            System.out.println("[警告] 智能检测失败，使用默认行号: " + e.getMessage());
+            return 0;
         }
     }
 

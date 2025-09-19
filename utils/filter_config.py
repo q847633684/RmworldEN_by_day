@@ -4,10 +4,13 @@
 提供 UnifiedFilterRules 类用于管理翻译字段的过滤规则，
 包括默认字段、忽略字段、非文本模式等配置。
 """
+
 import re
 import logging
+from utils.logging_config import get_logger, log_error_with_context
 import json
 from typing import Set, List, Dict, Any, Optional, Union, Callable
+
 
 class UnifiedFilterRules:
     """统一的过滤规则管理器"""
@@ -15,93 +18,195 @@ class UnifiedFilterRules:
     # 扩展默认字段
     DEFAULT_FIELDS = {
         # 基础字段
-        'label', 'description', 'labelShort', 'descriptionShort',
-        'title', 'text', 'message', 'tooltip', 'baseDesc',
-        'skillDescription', 'backstoryDesc', 'jobString',
-        'gerundLabel', 'verb', 'deathMessage', 'summary',
-        'note', 'flavor', 'quote', 'caption',
+        "label",
+        "description",
+        "labelShort",
+        "descriptionShort",
+        "title",
+        "text",
+        "message",
+        "tooltip",
+        "baseDesc",
+        "skillDescription",
+        "backstoryDesc",
+        "jobString",
+        "gerundLabel",
+        "verb",
+        "deathMessage",
+        "summary",
+        "note",
+        "flavor",
+        "quote",
+        "caption",
         # RimWorld 特有字段（参考 Day_EN）
-        'RMBLabel', 'rulesStrings', 'labelNoun', 'gerund',
-        'reportString', 'skillLabel', 'pawnLabel', 'titleShort',
+        "RMBLabel",
+        "rulesStrings",
+        "labelNoun",
+        "gerund",
+        "reportString",
+        "skillLabel",
+        "pawnLabel",
+        "titleShort",
         # 新增字段
-        'reportStringOverride', 'overrideReportString',
-        'overrideLabel', 'overrideDescription',
-        'overrideLabelShort', 'overrideDescriptionShort',
-        'overrideTitle', 'overrideText', 'overrideMessage',
-        'overrideTooltip', 'overrideBaseDesc', 'overrideSkillDescription',
-        'overrideBackstoryDesc', 'overrideJobString', 'overrideGerundLabel',
-        'overrideVerb', 'overrideDeathMessage', 'overrideSummary',
-        'overrideNote', 'overrideFlavor', 'overrideQuote', 'overrideCaption',
+        "reportStringOverride",
+        "overrideReportString",
+        "overrideLabel",
+        "overrideDescription",
+        "overrideLabelShort",
+        "overrideDescriptionShort",
+        "overrideTitle",
+        "overrideText",
+        "overrideMessage",
+        "overrideTooltip",
+        "overrideBaseDesc",
+        "overrideSkillDescription",
+        "overrideBackstoryDesc",
+        "overrideJobString",
+        "overrideGerundLabel",
+        "overrideVerb",
+        "overrideDeathMessage",
+        "overrideSummary",
+        "overrideNote",
+        "overrideFlavor",
+        "overrideQuote",
+        "overrideCaption",
         # 特殊字段
-        'customLabel', 'customDescription', 'customTooltip',
-        'customMessage', 'customText', 'customTitle',
-        'customBaseDesc', 'customSkillDescription', 'customBackstoryDesc',
-        'customJobString', 'customGerundLabel', 'customVerb',
-        'customDeathMessage', 'customSummary', 'customNote',
-        'customFlavor', 'customQuote', 'customCaption'
+        "customLabel",
+        "customDescription",
+        "customTooltip",
+        "customMessage",
+        "customText",
+        "customTitle",
+        "customBaseDesc",
+        "customSkillDescription",
+        "customBackstoryDesc",
+        "customJobString",
+        "customGerundLabel",
+        "customVerb",
+        "customDeathMessage",
+        "customSummary",
+        "customNote",
+        "customFlavor",
+        "customQuote",
+        "customCaption",
     }
 
     # 扩展忽略字段
     IGNORE_FIELDS = {
         # 基础字段
-        'defName', 'id', 'cost', 'damage', 'x', 'y', 'z',
-        'width', 'height', 'priority', 'count', 'index',
-        'version', 'url', 'path', 'file', 'key',
+        "defName",
+        "id",
+        "cost",
+        "damage",
+        "x",
+        "y",
+        "z",
+        "width",
+        "height",
+        "priority",
+        "count",
+        "index",
+        "version",
+        "url",
+        "path",
+        "file",
+        "key",
         # 新增字段
-        'order', 'weight', 'value', 'amount', 'quantity',
-        'duration', 'cooldown', 'range', 'radius', 'angle',
-        'speed', 'force', 'power', 'energy', 'health',
-        'armor', 'shield', 'resistance', 'penetration',
-        'accuracy', 'evasion', 'critChance', 'critDamage',
-        'dodgeChance', 'blockChance', 'parryChance',
+        "order",
+        "weight",
+        "value",
+        "amount",
+        "quantity",
+        "duration",
+        "cooldown",
+        "range",
+        "radius",
+        "angle",
+        "speed",
+        "force",
+        "power",
+        "energy",
+        "health",
+        "armor",
+        "shield",
+        "resistance",
+        "penetration",
+        "accuracy",
+        "evasion",
+        "critChance",
+        "critDamage",
+        "dodgeChance",
+        "blockChance",
+        "parryChance",
         # 特殊字段
-        'guid', 'uuid', 'timestamp', 'date', 'time',
-        'checksum', 'signature', 'token', 'secret',
-        'password', 'salt', 'hash', 'encryption',
-        'compression', 'encoding', 'format', 'type',
-        'category', 'tag', 'group', 'class', 'style'
+        "guid",
+        "uuid",
+        "timestamp",
+        "date",
+        "time",
+        "checksum",
+        "signature",
+        "token",
+        "secret",
+        "password",
+        "salt",
+        "hash",
+        "encryption",
+        "compression",
+        "encoding",
+        "format",
+        "type",
+        "category",
+        "tag",
+        "group",
+        "class",
+        "style",
     }
 
     # 改进非文本模式
     NON_TEXT_PATTERNS = [
         # 数字模式
-        r'^\d+$',  # 整数
-        r'^-?\d+\.\d+$',  # 浮点数
-        r'^[0-9a-fA-F]+$',  # 十六进制
-        r'^[+-]?(\d+\.?\d*|\.\d+)$',  # 科学计数法
-        r'^\d+[kKmMgGtT]?$',  # 带单位的数字
+        r"^\d+$",  # 整数
+        r"^-?\d+\.\d+$",  # 浮点数
+        r"^[0-9a-fA-F]+$",  # 十六进制
+        r"^[+-]?(\d+\.?\d*|\.\d+)$",  # 科学计数法
+        r"^\d+[kKmMgGtT]?$",  # 带单位的数字
         # 空白模式
-        r'^\s*$',  # 纯空白
-        r'^[\s\-_]+$',  # 分隔符
+        r"^\s*$",  # 纯空白
+        r"^[\s\-_]+$",  # 分隔符
         # 布尔值
-        r'^true$|^false$',  # 布尔值
-        r'^yes$|^no$',  # 是/否
-        r'^on$|^off$',  # 开/关
+        r"^true$|^false$",  # 布尔值
+        r"^yes$|^no$",  # 是/否
+        r"^on$|^off$",  # 开/关
         # 路径模式
-        r'^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$',  # 文件名
-        r'^[A-Za-z0-9_-]+/[A-Za-z0-9_-]+$',  # 路径
-        r'^[A-Za-z0-9_-]+\\[A-Za-z0-9_-]+$',  # Windows路径
+        r"^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$",  # 文件名
+        r"^[A-Za-z0-9_-]+/[A-Za-z0-9_-]+$",  # 路径
+        r"^[A-Za-z0-9_-]+\\[A-Za-z0-9_-]+$",  # Windows路径
         # URL模式
         r'https?://[^\s<>"]+|www\.[^\s<>"]+',  # URL
         # 域名模式
-        (r'^[A-Za-z0-9_-]+\.(com|org|net|edu|gov|io|co|uk|cn|jp|ru|de|fr|it|es|nl|'
-         r'be|ch|at|dk|se|no|fi|pl|cz|hu|ro|bg|gr|tr|il|sa|ae|in|br|mx|ar|cl|co|'
-         r'pe|ve|za|au|nz|sg|my|id|ph|vn|th|kr|tw|hk|mo)$'),  # 域名
+        (
+            r"^[A-Za-z0-9_-]+\.(com|org|net|edu|gov|io|co|uk|cn|jp|ru|de|fr|it|es|nl|"
+            r"be|ch|at|dk|se|no|fi|pl|cz|hu|ro|bg|gr|tr|il|sa|ae|in|br|mx|ar|cl|co|"
+            r"pe|ve|za|au|nz|sg|my|id|ph|vn|th|kr|tw|hk|mo)$"
+        ),  # 域名
         # 文件模式
         # 文件扩展名模式
-        (r'^[A-Za-z0-9_-]+\.(xml|json|txt|csv|ini|cfg|conf|config|yaml|yml|toml|'
-         r'md|markdown|rst|log|dat|bin|exe|dll|so|dylib|py|pyc|pyo|pyd|java|'
-         r'class|jar|war|ear|zip|rar|7z|tar|gz|bz2|xz|iso|img|vhd|vmdk|ova|ovf|'
-         r'qcow2|raw|vdi|vbox|vmx|vhd|vhdx|vmdk|vmsd|vmsn|vmss|vmtm|vmx|vmxf|'
-         r'nvram|vmem|vswp|vmtx|vmtm|vmsd|vmsn|vmss|vmtm|vmx|vmxf|nvram|vmem|'
-         r'vswp|vmtx)$'),  # 文件扩展名
+        (
+            r"^[A-Za-z0-9_-]+\.(xml|json|txt|csv|ini|cfg|conf|config|yaml|yml|toml|"
+            r"md|markdown|rst|log|dat|bin|exe|dll|so|dylib|py|pyc|pyo|pyd|java|"
+            r"class|jar|war|ear|zip|rar|7z|tar|gz|bz2|xz|iso|img|vhd|vmdk|ova|ovf|"
+            r"qcow2|raw|vdi|vbox|vmx|vhd|vhdx|vmdk|vmsd|vmsn|vmss|vmtm|vmx|vmxf|"
+            r"nvram|vmem|vswp|vmtx|vmtm|vmsd|vmsn|vmss|vmtm|vmx|vmxf|nvram|vmem|"
+            r"vswp|vmtx)$"
+        ),  # 文件扩展名
         # 特殊模式
-        r'^[A-Za-z0-9_-]+#[A-Za-z0-9_-]+$',  # 带#的标识符
-        r'^[A-Za-z0-9_-]+@[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$',  # 邮箱
-        r'^[A-Za-z0-9_-]+:[A-Za-z0-9_-]+$',  # 带:的标识符
-        r'^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$',  # 带.的标识符
-        r'^[A-Za-z0-9_-]+\-[A-Za-z0-9_-]+\-[A-Za-z0-9_-]+$',  # 带-的标识符
-        r'^[A-Za-z0-9_-]+\_[A-Za-z0-9_-]+\_[A-Za-z0-9_-]+$'  # 带_的标识符
+        r"^[A-Za-z0-9_-]+#[A-Za-z0-9_-]+$",  # 带#的标识符
+        r"^[A-Za-z0-9_-]+@[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$",  # 邮箱
+        r"^[A-Za-z0-9_-]+:[A-Za-z0-9_-]+$",  # 带:的标识符
+        r"^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$",  # 带.的标识符
+        r"^[A-Za-z0-9_-]+\-[A-Za-z0-9_-]+\-[A-Za-z0-9_-]+$",  # 带-的标识符
+        r"^[A-Za-z0-9_-]+\_[A-Za-z0-9_-]+\_[A-Za-z0-9_-]+$",  # 带_的标识符
     ]
 
     # 字段类型定义
@@ -113,7 +218,7 @@ class UnifiedFilterRules:
         "format": "格式化字符串字段",
         "plural": "复数形式字段",
         "gender": "性别相关字段",
-        "context": "上下文相关字段"
+        "context": "上下文相关字段",
     }
 
     # 字段分组定义
@@ -121,43 +226,51 @@ class UnifiedFilterRules:
         "basic": {
             "name": "基础字段",
             "description": "基本的文本字段",
-            "fields": {'label', 'description', 'text', 'message'}
+            "fields": {"label", "description", "text", "message"},
         },
         "ui": {
             "name": "界面字段",
             "description": "用户界面相关字段",
-            "fields": {'tooltip', 'title', 'caption', 'button', 'menu'}
+            "fields": {"tooltip", "title", "caption", "button", "menu"},
         },
         "game": {
             "name": "游戏字段",
             "description": "游戏内容相关字段",
-            "fields": {'skillDescription', 'backstoryDesc', 'jobString', 'deathMessage'}
+            "fields": {
+                "skillDescription",
+                "backstoryDesc",
+                "jobString",
+                "deathMessage",
+            },
         },
         "override": {
             "name": "覆盖字段",
             "description": "覆盖默认值的字段",
-            "fields": {f for f in DEFAULT_FIELDS if f.startswith('override')}
+            "fields": {f for f in DEFAULT_FIELDS if f.startswith("override")},
         },
         "custom": {
             "name": "自定义字段",
             "description": "用户自定义字段",
-            "fields": {f for f in DEFAULT_FIELDS if f.startswith('custom')}
-        }
+            "fields": {f for f in DEFAULT_FIELDS if f.startswith("custom")},
+        },
     }
 
     # 规则优先级定义
     PRIORITY_LEVELS = {
         "highest": 100,  # 最高优先级
-        "high": 75,      # 高优先级
-        "normal": 50,    # 普通优先级
-        "low": 25,       # 低优先级
-        "lowest": 0      # 最低优先级
+        "high": 75,  # 高优先级
+        "normal": 50,  # 普通优先级
+        "low": 25,  # 低优先级
+        "lowest": 0,  # 最低优先级
     }
 
-    def __init__(self, default_fields: Optional[Set[str]] = None,
-                 ignore_fields: Optional[Set[str]] = None,
-                 non_text_patterns: Optional[List[str]] = None,
-                 parent_rules: Optional['UnifiedFilterRules'] = None):
+    def __init__(
+        self,
+        default_fields: Optional[Set[str]] = None,
+        ignore_fields: Optional[Set[str]] = None,
+        non_text_patterns: Optional[List[str]] = None,
+        parent_rules: Optional["UnifiedFilterRules"] = None,
+    ):
         """
         初始化过滤规则
 
@@ -167,6 +280,7 @@ class UnifiedFilterRules:
             non_text_patterns (Optional[List[str]]): 非文本模式列表
             parent_rules (Optional[UnifiedFilterRules]): 父规则集
         """
+        self.logger = get_logger(f"{__name__}.UnifiedFilterRules")
         self.parent_rules = parent_rules
         self.default_fields = default_fields or self.DEFAULT_FIELDS
         self.ignore_fields = ignore_fields or self.IGNORE_FIELDS
@@ -185,25 +299,29 @@ class UnifiedFilterRules:
         # 设置默认字段类型 - 添加安全检查
         try:
             default_fields = self.default_fields
-            if hasattr(default_fields, '__iter__') and not isinstance(default_fields, str):
+            if hasattr(default_fields, "__iter__") and not isinstance(
+                default_fields, str
+            ):
                 for field in default_fields:
                     if isinstance(field, str):
                         self.field_types[field] = "translatable"
             else:
-                logging.warning("default_fields 不可迭代: %s", type(default_fields))
+                logger.warning("default_fields 不可迭代: %s", type(default_fields))
         except Exception as e:
-            logging.error("初始化默认字段类型时出错: %s", e)
+            logger.error("初始化默认字段类型时出错: %s", e)
 
         try:
             ignore_fields = self.ignore_fields
-            if hasattr(ignore_fields, '__iter__') and not isinstance(ignore_fields, str):
+            if hasattr(ignore_fields, "__iter__") and not isinstance(
+                ignore_fields, str
+            ):
                 for field in ignore_fields:
                     if isinstance(field, str):
                         self.field_types[field] = "ignored"
             else:
-                logging.warning("ignore_fields 不可迭代: %s", type(ignore_fields))
+                logger.warning("ignore_fields 不可迭代: %s", type(ignore_fields))
         except Exception as e:
-            logging.error("初始化忽略字段类型时出错: %s", e)
+            logger.error("初始化忽略字段类型时出错: %s", e)
 
     def _initialize_field_groups(self) -> None:
         """初始化字段分组"""
@@ -211,7 +329,7 @@ class UnifiedFilterRules:
             self.field_groups[group_id] = {
                 "name": group_info["name"],
                 "description": group_info["description"],
-                "fields": set(group_info["fields"])
+                "fields": set(group_info["fields"]),
             }
 
     def _initialize_field_priorities(self) -> None:
@@ -219,21 +337,25 @@ class UnifiedFilterRules:
         # 设置默认优先级 - 添加安全检查
         try:
             default_fields = self.default_fields
-            if hasattr(default_fields, '__iter__') and not isinstance(default_fields, str):
+            if hasattr(default_fields, "__iter__") and not isinstance(
+                default_fields, str
+            ):
                 for field in default_fields:
                     if isinstance(field, str):
                         self.field_priorities[field] = self.PRIORITY_LEVELS["normal"]
         except Exception as e:
-            logging.error("初始化默认字段优先级时出错: %s", e)
+            logger.error("初始化默认字段优先级时出错: %s", e)
 
         try:
             ignore_fields = self.ignore_fields
-            if hasattr(ignore_fields, '__iter__') and not isinstance(ignore_fields, str):
+            if hasattr(ignore_fields, "__iter__") and not isinstance(
+                ignore_fields, str
+            ):
                 for field in ignore_fields:
                     if isinstance(field, str):
                         self.field_priorities[field] = self.PRIORITY_LEVELS["lowest"]
         except Exception as e:
-            logging.error("初始化忽略字段优先级时出错: %s", e)
+            logger.error("初始化忽略字段优先级时出错: %s", e)
 
     def _validate_rules(self) -> None:
         """验证规则的有效性"""
@@ -250,7 +372,7 @@ class UnifiedFilterRules:
                 raise ValueError(f"字段名必须是字符串类型: {field}")
             if not field.strip():
                 raise ValueError("字段名不能为空")
-            if not re.match(r'^[A-Za-z][A-Za-z0-9_]*$', field):
+            if not re.match(r"^[A-Za-z][A-Za-z0-9_]*$", field):
                 raise ValueError(f"无效的字段名格式: {field}")
 
         # 验证正则表达式
@@ -333,7 +455,7 @@ class UnifiedFilterRules:
             self.field_groups[group_id] = {
                 "name": self.FIELD_GROUPS[group_id]["name"],
                 "description": self.FIELD_GROUPS[group_id]["description"],
-                "fields": set()
+                "fields": set(),
             }
         self.field_groups[group_id]["fields"].add(field)
 
@@ -380,7 +502,9 @@ class UnifiedFilterRules:
             raise ValueError("优先级必须是 0-100 之间的整数")
         self.field_priorities[field] = priority
 
-    def add_conditional_rule(self, field: str, condition: Callable[[str], bool]) -> None:
+    def add_conditional_rule(
+        self, field: str, condition: Callable[[str], bool]
+    ) -> None:
         """
         添加条件规则
 
@@ -442,27 +566,31 @@ class UnifiedFilterRules:
             Dict[str, Any]: 规则字典
         """
         return {
-            'version': '1.1.0',
-            'default_fields': list(self.default_fields),
-            'ignore_fields': list(self.ignore_fields),
-            'non_text_patterns': self.non_text_patterns,
-            'field_types': self.field_types,
-            'field_groups': {
+            "version": "1.1.0",
+            "default_fields": list(self.default_fields),
+            "ignore_fields": list(self.ignore_fields),
+            "non_text_patterns": self.non_text_patterns,
+            "field_types": self.field_types,
+            "field_groups": {
                 group_id: {
-                    'name': info['name'],
-                    'description': info['description'],
-                    'fields': list(info['fields'])
+                    "name": info["name"],
+                    "description": info["description"],
+                    "fields": list(info["fields"]),
                 }
                 for group_id, info in self.field_groups.items()
             },
-            'field_priorities': self.field_priorities,
-            'conditional_rules': {
-                field: condition.__name__ if hasattr(condition, '__name__') else str(condition)
+            "field_priorities": self.field_priorities,
+            "conditional_rules": {
+                field: (
+                    condition.__name__
+                    if hasattr(condition, "__name__")
+                    else str(condition)
+                )
                 for field, condition in self.conditional_rules.items()
-            }
+            },
         }
 
-    def save_to_file(self, file_path: str, file_format: str = 'json') -> None:
+    def save_to_file(self, file_path: str, file_format: str = "json") -> None:
         """
         保存规则到文件
 
@@ -472,22 +600,25 @@ class UnifiedFilterRules:
         """
         try:
             data = self.to_dict()
-            if file_format.lower() == 'json':
-                with open(file_path, 'w', encoding='utf-8') as f:
+            if file_format.lower() == "json":
+                with open(file_path, "w", encoding="utf-8") as f:
                     json.dump(data, f, indent=4, ensure_ascii=False)
-            elif file_format.lower() == 'yaml':
+            elif file_format.lower() == "yaml":
                 import yaml
-                with open(file_path, 'w', encoding='utf-8') as f:
+
+                with open(file_path, "w", encoding="utf-8") as f:
                     yaml.safe_dump(data, f, allow_unicode=True)
             else:
                 raise ValueError(f"不支持的文件格式: {file_format}")
-            logging.info("规则已保存到: %s", file_path)
+            logger.info("规则已保存到: %s", file_path)
         except Exception as e:
-            logging.error("保存规则失败: %s", e)
+            logger.error("保存规则失败: %s", e)
             raise
 
     @classmethod
-    def load_from_file(cls, file_path: str, format: str = 'json') -> 'UnifiedFilterRules':
+    def load_from_file(
+        cls, file_path: str, format: str = "json"
+    ) -> "UnifiedFilterRules":
         """
         从文件加载规则
 
@@ -499,47 +630,50 @@ class UnifiedFilterRules:
             UnifiedFilterRules: 规则对象
         """
         try:
-            if format.lower() == 'json':
-                with open(file_path, 'r', encoding='utf-8') as f:
+            if format.lower() == "json":
+                with open(file_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
-            elif format.lower() == 'yaml':
+            elif format.lower() == "yaml":
                 import yaml
-                with open(file_path, 'r', encoding='utf-8') as f:
+
+                with open(file_path, "r", encoding="utf-8") as f:
                     data = yaml.safe_load(f)
             else:
                 raise ValueError(f"不支持的文件格式: {format}")
 
             rules = cls(
-                default_fields=set(data.get('default_fields', [])),
-                ignore_fields=set(data.get('ignore_fields', [])),
-                non_text_patterns=data.get('non_text_patterns', [])
+                default_fields=set(data.get("default_fields", [])),
+                ignore_fields=set(data.get("ignore_fields", [])),
+                non_text_patterns=data.get("non_text_patterns", []),
             )
 
             # 加载字段类型
-            rules.field_types = data.get('field_types', {})
+            rules.field_types = data.get("field_types", {})
 
             # 加载字段分组
             rules.field_groups = {
                 group_id: {
-                    'name': info['name'],
-                    'description': info['description'],
-                    'fields': set(info['fields'])
+                    "name": info["name"],
+                    "description": info["description"],
+                    "fields": set(info["fields"]),
                 }
-                for group_id, info in data.get('field_groups', {}).items()
+                for group_id, info in data.get("field_groups", {}).items()
             }
 
             # 加载字段优先级
-            rules.field_priorities = data.get('field_priorities', {})
+            rules.field_priorities = data.get("field_priorities", {})
 
             # 加载条件规则（注意：条件函数需要重新定义）
             rules.conditional_rules = {}
 
             return rules
         except Exception as e:
-            logging.error("加载规则失败: %s", e)
+            logger.error("加载规则失败: %s", e)
             return cls()
 
-    def merge(self, other: 'UnifiedFilterRules', priority: str = 'normal') -> 'UnifiedFilterRules':
+    def merge(
+        self, other: "UnifiedFilterRules", priority: str = "normal"
+    ) -> "UnifiedFilterRules":
         """
         合并两个规则集
 
@@ -554,7 +688,9 @@ class UnifiedFilterRules:
             raise ValueError("other 必须是 UnifiedFilterRules 类型")
 
         # 根据优先级合并字段
-        priority_value = self.PRIORITY_LEVELS.get(priority, self.PRIORITY_LEVELS["normal"])
+        priority_value = self.PRIORITY_LEVELS.get(
+            priority, self.PRIORITY_LEVELS["normal"]
+        )
         default_fields = set()
         ignore_fields = set()
 
@@ -583,7 +719,7 @@ class UnifiedFilterRules:
         merged_rules = UnifiedFilterRules(
             default_fields=default_fields,
             ignore_fields=ignore_fields,
-            non_text_patterns=non_text_patterns
+            non_text_patterns=non_text_patterns,
         )
 
         # 合并字段类型
@@ -592,18 +728,24 @@ class UnifiedFilterRules:
         # 合并字段分组
         merged_rules.field_groups = {
             group_id: {
-                'name': info['name'],
-                'description': info['description'],
-                'fields': set(info['fields'])
+                "name": info["name"],
+                "description": info["description"],
+                "fields": set(info["fields"]),
             }
             for group_id, info in {**self.field_groups, **other.field_groups}.items()
         }
 
         # 合并字段优先级
-        merged_rules.field_priorities = {**self.field_priorities, **other.field_priorities}
+        merged_rules.field_priorities = {
+            **self.field_priorities,
+            **other.field_priorities,
+        }
 
         # 合并条件规则
-        merged_rules.conditional_rules = {**self.conditional_rules, **other.conditional_rules}
+        merged_rules.conditional_rules = {
+            **self.conditional_rules,
+            **other.conditional_rules,
+        }
 
         return merged_rules
 
@@ -615,49 +757,60 @@ class UnifiedFilterRules:
             Dict[str, Any]: 统计信息
         """
         stats = {
-            'default_fields': len(self.default_fields),
-            'ignore_fields': len(self.ignore_fields),
-            'non_text_patterns': len(self.non_text_patterns),
-            'field_types': {
-                type_name: len([f for f, t in self.field_types.items() if t == type_name])
+            "default_fields": len(self.default_fields),
+            "ignore_fields": len(self.ignore_fields),
+            "non_text_patterns": len(self.non_text_patterns),
+            "field_types": {
+                type_name: len(
+                    [f for f, t in self.field_types.items() if t == type_name]
+                )
                 for type_name in self.FIELD_TYPES
             },
-            'field_groups': {
-                group_id: len(info['fields'])
+            "field_groups": {
+                group_id: len(info["fields"])
                 for group_id, info in self.field_groups.items()
             },
-            'field_priorities': {
+            "field_priorities": {
                 level: len([f for f, p in self.field_priorities.items() if p == value])
                 for level, value in self.PRIORITY_LEVELS.items()
             },
-            'conditional_rules': len(self.conditional_rules)
+            "conditional_rules": len(self.conditional_rules),
         }
 
         if self.parent_rules:
-            stats['parent_rules'] = self.parent_rules.get_stats()
+            stats["parent_rules"] = self.parent_rules.get_stats()
 
         return stats
 
     def __str__(self) -> str:
         """返回规则的字符串表示"""
         stats = self.get_stats()
-        return (f"UnifiedFilterRules(默认字段: {stats['default_fields']}, "
-                f"忽略字段: {stats['ignore_fields']}, "
-                f"非文本模式: {stats['non_text_patterns']})")
+        return (
+            f"UnifiedFilterRules(默认字段: {stats['default_fields']}, "
+            f"忽略字段: {stats['ignore_fields']}, "
+            f"非文本模式: {stats['non_text_patterns']})"
+        )
 
     def __repr__(self) -> str:
         """返回规则的详细表示"""
-        return (f"UnifiedFilterRules(\n  default_fields={self.default_fields},"
-                f"\n  ignore_fields={self.ignore_fields},"
-                f"\n  non_text_patterns={self.non_text_patterns},"
-                f"\n  field_types={self.field_types},"
-                f"\n  field_groups={self.field_groups},"
-                f"\n  field_priorities={self.field_priorities},"
-                f"\n  conditional_rules={self.conditional_rules}\n)")
+        return (
+            f"UnifiedFilterRules(\n  default_fields={self.default_fields},"
+            f"\n  ignore_fields={self.ignore_fields},"
+            f"\n  non_text_patterns={self.non_text_patterns},"
+            f"\n  field_types={self.field_types},"
+            f"\n  field_groups={self.field_groups},"
+            f"\n  field_priorities={self.field_priorities},"
+            f"\n  conditional_rules={self.conditional_rules}\n)"
+        )
 
-    def inherit_from(self, parent_rules: 'UnifiedFilterRules', inherit_types: bool = True,
-                    inherit_groups: bool = True, inherit_priorities: bool = True,
-                    inherit_conditionals: bool = True) -> None:
+    def inherit_from(
+        self,
+        parent_rules: "UnifiedFilterRules",
+        inherit_types: bool = True,
+        inherit_groups: bool = True,
+        inherit_priorities: bool = True,
+        inherit_conditionals: bool = True,
+    ) -> None:
         """
         从父规则继承规则
 
@@ -684,7 +837,7 @@ class UnifiedFilterRules:
                     self.field_groups[group_id] = {
                         "name": group_info["name"],
                         "description": group_info["description"],
-                        "fields": set(group_info["fields"])
+                        "fields": set(group_info["fields"]),
                     }
                 else:
                     self.field_groups[group_id]["fields"].update(group_info["fields"])
@@ -742,22 +895,24 @@ class UnifiedFilterRules:
 
         # 检查引用类型
         if field_type == "reference":
-            if not re.match(r'^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z][A-Za-z0-9_]*)*$', value):
+            if not re.match(
+                r"^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z][A-Za-z0-9_]*)*$", value
+            ):
                 return False
 
         # 检查复数形式
         if field_type == "plural":
-            if not re.match(r'^[^{}]*{[^{}]*}[^{}]*$', value):
+            if not re.match(r"^[^{}]*{[^{}]*}[^{}]*$", value):
                 return False
 
         # 检查性别相关
         if field_type == "gender":
-            if not re.match(r'^[^{}]*{[^{}]*}[^{}]*$', value):
+            if not re.match(r"^[^{}]*{[^{}]*}[^{}]*$", value):
                 return False
 
         # 检查上下文相关
         if field_type == "context":
-            if not re.match(r'^[^{}]*{[^{}]*}[^{}]*$', value):
+            if not re.match(r"^[^{}]*{[^{}]*}[^{}]*$", value):
                 return False
 
         return True
@@ -769,11 +924,7 @@ class UnifiedFilterRules:
         Returns:
             Dict[str, List[str]]: 验证结果
         """
-        results = {
-            "errors": [],
-            "warnings": [],
-            "info": []
-        }
+        results = {"errors": [], "warnings": [], "info": []}
 
         # 检查字段类型
         for field, field_type in self.field_types.items():
@@ -786,7 +937,9 @@ class UnifiedFilterRules:
                 results["warnings"].append(f"未知的分组ID: {group_id}")
             for field in group_info["fields"]:
                 if field not in self.field_types:
-                    results["warnings"].append(f"分组中的未知字段: {group_id} -> {field}")
+                    results["warnings"].append(
+                        f"分组中的未知字段: {group_id} -> {field}"
+                    )
 
         # 检查字段优先级
         for field, priority in self.field_priorities.items():
@@ -825,7 +978,7 @@ class UnifiedFilterRules:
 
         return results
 
-    def export_rules(self, format: str = 'json', include_stats: bool = True) -> str:
+    def export_rules(self, format: str = "json", include_stats: bool = True) -> str:
         """
         导出规则为字符串
 
@@ -838,17 +991,18 @@ class UnifiedFilterRules:
         """
         data = self.to_dict()
         if include_stats:
-            data['stats'] = self.get_stats()
+            data["stats"] = self.get_stats()
 
-        if format.lower() == 'json':
+        if format.lower() == "json":
             return json.dumps(data, indent=4, ensure_ascii=False)
-        elif format.lower() == 'yaml':
+        elif format.lower() == "yaml":
             import yaml
+
             return yaml.safe_dump(data, allow_unicode=True)
         else:
             raise ValueError(f"不支持的导出格式: {format}")
 
-    def import_rules(self, rules_str: str, format: str = 'json') -> None:
+    def import_rules(self, rules_str: str, format: str = "json") -> None:
         """
         从字符串导入规则
 
@@ -857,39 +1011,40 @@ class UnifiedFilterRules:
             format (str): 导入格式（'json' 或 'yaml'）
         """
         try:
-            if format.lower() == 'json':
+            if format.lower() == "json":
                 data = json.loads(rules_str)
-            elif format.lower() == 'yaml':
+            elif format.lower() == "yaml":
                 import yaml
+
                 data = yaml.safe_load(rules_str)
             else:
                 raise ValueError(f"不支持的导入格式: {format}")
 
             # 更新规则
-            if 'default_fields' in data:
-                self.default_fields = set(data['default_fields'])
-            if 'ignore_fields' in data:
-                self.ignore_fields = set(data['ignore_fields'])
-            if 'non_text_patterns' in data:
-                self.non_text_patterns = data['non_text_patterns']
-            if 'field_types' in data:
-                self.field_types = data['field_types']
-            if 'field_groups' in data:
+            if "default_fields" in data:
+                self.default_fields = set(data["default_fields"])
+            if "ignore_fields" in data:
+                self.ignore_fields = set(data["ignore_fields"])
+            if "non_text_patterns" in data:
+                self.non_text_patterns = data["non_text_patterns"]
+            if "field_types" in data:
+                self.field_types = data["field_types"]
+            if "field_groups" in data:
                 self.field_groups = {
                     group_id: {
-                        'name': info['name'],
-                        'description': info['description'],
-                        'fields': set(info['fields'])
+                        "name": info["name"],
+                        "description": info["description"],
+                        "fields": set(info["fields"]),
                     }
-                    for group_id, info in data['field_groups'].items()
+                    for group_id, info in data["field_groups"].items()
                 }
-            if 'field_priorities' in data:
-                self.field_priorities = data['field_priorities']
-            if 'conditional_rules' in data:
+            if "field_priorities" in data:
+                self.field_priorities = data["field_priorities"]
+            if "conditional_rules" in data:
                 # 注意：条件规则需要重新定义
                 self.conditional_rules = {}
 
             self._validate_rules()
         except Exception as e:
-            logging.error("导入规则失败: %s", e)
+            logger.error("导入规则失败: %s", e)
             raise

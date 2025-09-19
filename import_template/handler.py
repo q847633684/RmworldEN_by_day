@@ -4,6 +4,7 @@
 """
 
 import logging
+from utils.logging_config import get_logger, log_error_with_context
 from colorama import Fore, Style
 
 from utils.interaction import (
@@ -22,6 +23,8 @@ path_manager = PathManager()
 
 
 def handle_import_template():
+    logger = get_logger(f"{__name__}.handle_import_template")
+
     """处理导入模板功能"""
     try:
         # 获取输入CSV文件
@@ -55,9 +58,9 @@ def handle_import_template():
                 show_success("导入完成！")
             except Exception as e:
                 show_error(f"导入失败: {str(e)}")
-                logging.error("导入失败: %s", str(e), exc_info=True)
+                logger.error("导入失败: %s", str(e), exc_info=True)
         else:
             show_warning("用户取消导入")
     except Exception as e:
         show_error(f"导入模板失败: {str(e)}")
-        logging.error("导入模板失败: %s", str(e), exc_info=True)
+        logger.error("导入模板失败: %s", str(e), exc_info=True)

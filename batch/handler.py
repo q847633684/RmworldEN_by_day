@@ -3,6 +3,7 @@
 """
 
 import logging
+from utils.logging_config import get_logger, log_error_with_context
 from colorama import Fore, Style
 from utils.interaction import (
     select_mod_path_with_version_detection,
@@ -17,6 +18,8 @@ path_manager = PathManager()
 
 
 def handle_batch():
+    logger = get_logger(f"{__name__}.handle_batch")
+
     """批量处理主入口"""
     try:
         # 选择模组目录
@@ -42,7 +45,7 @@ def handle_batch():
             show_success(f"批量处理完成！共处理 {len(result)} 个模组")
         except Exception as e:
             show_error(f"批量处理失败: {str(e)}")
-            logging.error("批量处理失败: %s", str(e), exc_info=True)
+            logger.error("批量处理失败: %s", str(e), exc_info=True)
     except Exception as e:
         show_error(f"批量功能失败: {str(e)}")
-        logging.error("批量功能失败: %s", str(e), exc_info=True)
+        logger.error("批量功能失败: %s", str(e), exc_info=True)

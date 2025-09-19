@@ -4,6 +4,7 @@
 """
 
 import logging
+from utils.logging_config import get_logger, log_error_with_context
 from colorama import Fore, Style
 
 from utils.interaction import (
@@ -19,6 +20,8 @@ path_manager = PathManager()
 
 
 def handle_corpus():
+    logger = get_logger(f"{__name__}.handle_corpus")
+
     """处理生成语料功能"""
     try:
         # 选择模组目录
@@ -43,7 +46,7 @@ def handle_corpus():
             show_success("语料生成完成！")
         except Exception as e:
             show_error(f"语料生成失败: {str(e)}")
-            logging.error("语料生成失败: %s", str(e), exc_info=True)
+            logger.error("语料生成失败: %s", str(e), exc_info=True)
     except Exception as e:
         show_error(f"语料功能失败: {str(e)}")
-        logging.error("语料功能失败: %s", str(e), exc_info=True)
+        logger.error("语料功能失败: %s", str(e), exc_info=True)

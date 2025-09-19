@@ -10,6 +10,7 @@ from utils.config import (
     get_language_subdir,
     get_language_dir,
 )
+from utils.logging_config import get_logger, log_user_action, log_error_with_context
 from utils.interaction import (
     select_mod_path_with_version_detection,
     show_success,
@@ -26,15 +27,23 @@ path_manager = PathManager()
 
 def handle_extract():
     """处理提取模板功能"""
+    logger = get_logger(f"{__name__}.handle_extract")
 
     print(f"日志文件路径：{CONFIG.log_file}")
     if CONFIG.debug_mode:
         print("调试模式已开启，详细日志见日志文件。")
+
+    logger.info("开始处理提取模板功能")
+
     try:
         # 选择模组目录  已检查
         mod_dir = select_mod_path_with_version_detection()
         if not mod_dir:
+            logger.info("用户取消了模组目录选择")
             return
+
+        # 记录用户操作
+        log_user_action("选择模组目录", mod_dir=mod_dir)
 
         # 延迟导入，避免循环导入
         from extract.template_manager import TemplateManager
@@ -160,7 +169,7 @@ def handle_extract():
 
         except (OSError, IOError, ValueError, RuntimeError) as e:
             show_error(f"智能提取失败: {str(e)}")
-            logging.error("智能提取失败: %s", str(e), exc_info=True)
+            log_error_with_context(e, "智能提取失败", mod_dir=mod_dir)
             if CONFIG.debug_mode:
                 import traceback
 
@@ -169,14 +178,14 @@ def handle_extract():
             show_error(
                 f"❌ 配置错误：{e}\n请检查 config.py 或用户配置文件，或尝试重新加载配置。"
             )
-            logging.error("配置错误：%s", e, exc_info=True)
+            log_error_with_context(e, "配置错误", mod_dir=mod_dir)
             if CONFIG.debug_mode:
                 import traceback
 
                 traceback.print_exc()
     except (OSError, IOError, ValueError, ImportError, AttributeError) as e:
         show_error(f"提取模板功能失败: {str(e)}")
-        logging.error("提取模板功能失败: %s", str(e), exc_info=True)
+        log_error_with_context(e, "提取模板功能失败")
         if CONFIG.debug_mode:
             import traceback
 
@@ -185,7 +194,7 @@ def handle_extract():
         show_error(
             f"❌ 配置错误：{e}\n请检查 config.py 或用户配置文件，或尝试重新加载配置。"
         )
-        logging.error("配置错误：%s", e, exc_info=True)
+        log_error_with_context(e, "配置错误")
         if CONFIG.debug_mode:
             import traceback
 

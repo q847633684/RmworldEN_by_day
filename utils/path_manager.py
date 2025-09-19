@@ -8,6 +8,7 @@ import json
 import logging
 from pathlib import Path
 from typing import Dict, Optional, Callable, List, Set, Union, Any
+from utils.logging_config import get_logger, log_error_with_context
 from dataclasses import dataclass, field
 from colorama import Fore, Style
 
@@ -41,6 +42,7 @@ class PathManager:
 
     def __init__(self):
         """初始化路径管理器"""
+        self.logger = get_logger(f"{__name__}.PathManager")
         self.user_config = get_user_config()
         self._history_file = os.path.join(
             os.path.dirname(__file__), ".day_translation_history.json"
@@ -74,7 +76,7 @@ class PathManager:
                             last_used=paths[0] if paths else None,
                         )
         except Exception as e:
-            logging.error("加载历史记录失败: %s", e)
+            self.logger.error("加载历史记录失败: %s", e)
             self._history_cache = {}
 
     def _save_history(self) -> None:
@@ -88,7 +90,7 @@ class PathManager:
             with open(self._history_file, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
         except Exception as e:
-            logging.error("保存历史记录失败: %s", e)
+            self.logger.error("保存历史记录失败: %s", e)
 
     def _sanitize_history(self, paths: List[str]) -> List[str]:
         """清理历史记录"""
@@ -209,7 +211,7 @@ class PathManager:
                     print(f"{Fore.RED}{result.error_message}{Style.RESET_ALL}")
 
         except Exception as e:
-            logging.error("获取路径失败: %s", e)
+            self.logger.error("获取路径失败: %s", e)
             print(f"{Fore.RED}获取路径时发生错误: {e}{Style.RESET_ALL}")
             return None
 
@@ -246,7 +248,7 @@ class PathManager:
 
             return True
         except Exception as e:
-            logging.error("记住路径失败: %s", e)
+            self.logger.error("记住路径失败: %s", e)
             return False
 
     def get_remembered_path(self, path_type: str) -> Optional[str]:
@@ -266,7 +268,7 @@ class PathManager:
                 if result.is_valid and os.path.exists(result.normalized_path):
                     return result.normalized_path
         except Exception as e:
-            logging.error("获取记忆路径失败: %s", e)
+            self.logger.error("获取记忆路径失败: %s", e)
         return None
 
     def _validate_directory(self, path: str) -> PathValidationResult:
@@ -452,7 +454,7 @@ class PathManager:
                                 }
                             )
         except Exception as e:
-            logging.error(f"检测版本目录失败: {e}")
+            self.logger.error("检测版本目录失败: %s", e)
 
         if version_dirs:
             version_dirs.sort(key=lambda x: x["version"], reverse=True)
@@ -646,7 +648,7 @@ class PathManager:
             os.makedirs(result.normalized_path, exist_ok=True)
             return True
         except Exception as e:
-            logging.error("创建目录失败: %s", e)
+            self.logger.error("创建目录失败: %s", e)
             return False
 
     def get_relative_path(self, path: str, base: str) -> Optional[str]:
@@ -671,7 +673,7 @@ class PathManager:
                 path_result.normalized_path, base_result.normalized_path
             )
         except Exception as e:
-            logging.error("获取相对路径失败: %s", e)
+            self.logger.error("获取相对路径失败: %s", e)
             return None
 
     def get_path_with_smart_recommendations(
@@ -755,7 +757,7 @@ class PathManager:
             return self.get_path(path_type, prompt, validator_type, required, default)
 
         except Exception as e:
-            logging.error(f"智能推荐路径输入失败: {e}")
+            self.logger.error("智能推荐路径输入失败: %s", e)
             # 降级到常规方法
             return self.get_path(path_type, prompt, validator_type, required, default)
 
@@ -832,7 +834,7 @@ class PathManager:
                                 }
                             )
         except Exception as e:
-            logging.error(f"检测版本目录失败: {e}")
+            self.logger.error("检测版本目录失败: %s", e)
 
         if version_dirs:
             # 按版本号排序，选择最新版本
@@ -930,5 +932,5 @@ class PathManager:
             history = self._history_cache[path_type]
             return history.paths[:]  # 返回副本
         except Exception as e:
-            logging.error("获取历史记录失败: %s", e)
+            self.logger.error("获取历史记录失败: %s", e)
             return []

@@ -1,6 +1,7 @@
 import os
 import xml.etree.ElementTree as ET
 import logging
+from utils.logging_config import get_logger, log_error_with_context
 from typing import Optional, Dict, List, Tuple, Any, Callable
 import re
 import csv
@@ -13,7 +14,7 @@ try:
     LXML_AVAILABLE = True
 except ImportError:
     LXML_AVAILABLE = False
-    logging.warning("lxml 未安装，将使用 ElementTree")
+    logger.warning("lxml 未安装，将使用 ElementTree")
 
 from .config import get_config
 
@@ -46,6 +47,7 @@ class XMLProcessor:
         Args:
             config (Optional[XMLProcessorConfig]): 处理器配置
         """
+        self.logger = get_logger(f"{__name__}.XMLProcessor")
         self.config = config or XMLProcessorConfig()
         self.use_lxml = self.config.use_lxml and LXML_AVAILABLE
         if self.use_lxml:
@@ -74,7 +76,7 @@ class XMLProcessor:
                     self._schema_cache.pop(next(iter(self._schema_cache)))
                 self._schema_cache[schema_path] = schema
             except (etree.XMLSyntaxError, OSError, IOError) as e:
-                logging.error("加载 Schema 失败: %s: %s", schema_path, e)
+                logger.error("加载 Schema 失败: %s: %s", schema_path, e)
                 if self.config.error_on_invalid:
                     raise
                 return None
@@ -92,7 +94,7 @@ class XMLProcessor:
         try:
             return schema.validate(tree)
         except (etree.XMLSyntaxError, ValueError) as e:
-            logging.error("Schema 验证失败: %s", e)
+            logger.error("Schema 验证失败: %s", e)
             if self.config.error_on_invalid:
                 raise
             return False
@@ -112,7 +114,7 @@ class XMLProcessor:
         """
         file_path = str(Path(file_path).resolve())
         if not os.path.exists(file_path):
-            logging.error("文件不存在: %s", file_path)
+            logger.error("文件不存在: %s", file_path)
             if self.config.error_on_invalid:
                 raise FileNotFoundError(f"文件不存在: {file_path}")
             return None
@@ -121,7 +123,7 @@ class XMLProcessor:
         file_size = os.path.getsize(file_path)
         if file_size > self.config.max_file_size:
             msg = f"文件过大: {file_path} ({file_size / 1024 / 1024:.1f}MB)"
-            logging.warning(msg)
+            logger.warning(msg)
             if self.config.error_on_invalid:
                 raise ValueError(msg)
             return None
@@ -131,7 +133,7 @@ class XMLProcessor:
                 tree = etree.parse(file_path, self.parser)
                 if schema_path and not self.validate_against_schema(tree, schema_path):
                     msg = f"XML 不符合 Schema: {file_path}"
-                    logging.error(msg)
+                    logger.error(msg)
                     if self.config.error_on_invalid:
                         raise ValueError(msg)
                     return None
@@ -139,15 +141,15 @@ class XMLProcessor:
             else:
                 tree = ET.parse(file_path)
                 if schema_path:
-                    logging.warning("ElementTree 不支持 Schema 验证")
+                    logger.warning("ElementTree 不支持 Schema 验证")
                 return tree
         except (etree.XMLSyntaxError, ET.ParseError) as e:
-            logging.error("XML 解析失败: %s: %s", file_path, e)
+            logger.error("XML 解析失败: %s: %s", file_path, e)
             if self.config.error_on_invalid:
                 raise
             return None
         except (OSError, IOError) as e:
-            logging.error("处理文件失败: %s: %s", file_path, e)
+            logger.error("处理文件失败: %s: %s", file_path, e)
             if self.config.error_on_invalid:
                 raise
             return None
@@ -241,10 +243,10 @@ class XMLProcessor:
                     element_tree.write(
                         file_path, encoding=encoding, xml_declaration=True
                     )
-            logging.info("保存 XML 文件: %s", file_path)
+            self.logger.debug("保存 XML 文件: %s", file_path)
             return True
         except (OSError, IOError, ET.ParseError) as e:
-            logging.error("保存 XML 失败: %s: %s", file_path, e)
+            self.logger.error("保存 XML 失败: %s: %s", file_path, e)
             if self.config.error_on_invalid:
                 raise
             return False
@@ -382,7 +384,7 @@ class XMLProcessor:
             comment_func (Optional[Callable]): 自定义注释生成函数
         """
         if not self.config.preserve_comments:
-            logging.warning("注释功能已禁用")
+            logger.warning("注释功能已禁用")
             return
 
         root = tree.getroot() if self.use_lxml else tree
@@ -583,7 +585,7 @@ def update_history_list(key: str, value: str) -> None:
         with open(history_file, "w", encoding="utf-8") as f:
             json.dump({key: history}, f, indent=2)
     except (OSError, IOError, ValueError) as e:
-        logging.error("更新历史记录失败: %s", e)
+        logger.error("更新历史记录失败: %s", e)
 
 
 def get_history_list(key: str) -> List[str]:
@@ -599,7 +601,7 @@ def get_history_list(key: str) -> List[str]:
                 data = json.load(f)
                 return data.get(key, [])
     except (OSError, IOError, ValueError) as e:
-        logging.error("读取历史记录失败: %s", e)
+        logger.error("读取历史记录失败: %s", e)
     return []
 
 
@@ -615,5 +617,5 @@ def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
                 if key and translated:
                     translations[key] = translated
     except (OSError, IOError, csv.Error) as e:
-        logging.error("CSV 解析失败: %s: %s", csv_path, e)
+        logger.error("CSV 解析失败: %s: %s", csv_path, e)
     return translations

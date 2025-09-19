@@ -4,6 +4,7 @@
 
 import csv
 import logging
+from utils.logging_config import get_logger, log_error_with_context
 from pathlib import Path
 from typing import Dict, Tuple
 from colorama import Fore, Style
@@ -49,7 +50,7 @@ def update_all_xml(
                 updated_count += 1
                 print(f"{Fore.GREEN}更新文件: {xml_file}{Style.RESET_ALL}")
         except Exception as e:
-            logging.error("处理文件失败: %s: %s", xml_file, e)
+            logger.error("处理文件失败: %s: %s", xml_file, e)
 
     print(f"{Fore.GREEN}更新了 {updated_count} 个文件{Style.RESET_ALL}")
 
@@ -74,13 +75,13 @@ def import_translations(
     Returns:
         bool: 导入是否成功
     """
-    logging.info("开始导入翻译到模板: %s", csv_path)
+    logger.info("开始导入翻译到模板: %s", csv_path)
     try:
         # 步骤1：确保翻译模板存在
         if auto_create_templates:
             # 检查模板目录是否存在，如果不存在则提示用户先创建模板
             if not get_language_dir(mod_dir, language).exists():
-                logging.error("翻译模板目录不存在，请先使用提取功能创建翻译模板")
+                logger.error("翻译模板目录不存在，请先使用提取功能创建翻译模板")
                 print(
                     f"{Fore.RED}❌ 翻译模板目录不存在，请先使用提取功能创建翻译模板{Style.RESET_ALL}"
                 )
@@ -106,22 +107,22 @@ def import_translations(
         # 步骤5：验证导入结果
         success = _verify_import_results(mod_dir, language)
         if success:
-            logging.info("翻译导入到模板完成，更新了 %s 个文件", updated_count)
+            logger.info("翻译导入到模板完成，更新了 %s 个文件", updated_count)
             print(f"{Fore.GREEN}✅ 翻译已成功导入到模板{Style.RESET_ALL}")
         else:
-            logging.warning("翻译导入可能存在问题")
+            logger.warning("翻译导入可能存在问题")
             print(f"{Fore.YELLOW}⚠️ 翻译导入完成，但可能存在问题{Style.RESET_ALL}")
         return success
     except FileNotFoundError as e:
-        logging.error("文件未找到: %s", e)
+        logger.error("文件未找到: %s", e)
         print(f"{Fore.RED}❌ 文件未找到: {e}{Style.RESET_ALL}")
         return False
     except PermissionError as e:
-        logging.error("权限错误: %s", e)
+        logger.error("权限错误: %s", e)
         print(f"{Fore.RED}❌ 权限错误: {e}{Style.RESET_ALL}")
         return False
     except Exception as e:
-        logging.error("导入翻译时发生错误: %s", e, exc_info=True)
+        logger.error("导入翻译时发生错误: %s", e, exc_info=True)
         print(f"{Fore.RED}❌ 导入失败: {e}{Style.RESET_ALL}")
         return False
 
@@ -129,7 +130,7 @@ def import_translations(
 def _validate_csv_file(csv_path: str) -> bool:
     """验证CSV文件"""
     if not Path(csv_path).is_file():
-        logging.error("CSV文件不存在: %s", csv_path)
+        logger.error("CSV文件不存在: %s", csv_path)
         return False
 
     try:
@@ -137,20 +138,20 @@ def _validate_csv_file(csv_path: str) -> bool:
             reader = csv.reader(f)
             header = next(reader, None)
             if not header or not all(col in header for col in ["key", "text"]):
-                logging.error("CSV文件格式无效：缺少必要的列")
+                logger.error("CSV文件格式无效：缺少必要的列")
                 return False
             return True
     except FileNotFoundError:
-        logging.error("CSV文件不存在: %s", csv_path)
+        logger.error("CSV文件不存在: %s", csv_path)
         return False
     except PermissionError:
-        logging.error("无权限访问CSV文件: %s", csv_path)
+        logger.error("无权限访问CSV文件: %s", csv_path)
         return False
     except UnicodeDecodeError:
-        logging.error("CSV文件编码错误: %s", csv_path)
+        logger.error("CSV文件编码错误: %s", csv_path)
         return False
     except Exception as e:
-        logging.error("验证CSV文件时发生错误: %s", e)
+        logger.error("验证CSV文件时发生错误: %s", e)
         return False
 
 
@@ -168,15 +169,15 @@ def _load_translations_from_csv(csv_path: str) -> Dict[str, str]:
                     translations[key] = value
         return translations
     except FileNotFoundError:
-        logging.error("CSV文件不存在: %s", csv_path)
+        logger.error("CSV文件不存在: %s", csv_path)
         print(f"{Fore.RED}❌ CSV文件不存在: {csv_path}{Style.RESET_ALL}")
         return {}
     except PermissionError:
-        logging.error("无权限访问CSV文件: %s", csv_path)
+        logger.error("无权限访问CSV文件: %s", csv_path)
         print(f"{Fore.RED}❌ 无权限访问CSV文件: {csv_path}{Style.RESET_ALL}")
         return {}
     except Exception as e:
-        logging.error("加载CSV文件时发生错误: %s", e)
+        logger.error("加载CSV文件时发生错误: %s", e)
         print(f"{Fore.RED}❌ 加载CSV文件失败: {e}{Style.RESET_ALL}")
         return {}
 
@@ -193,7 +194,7 @@ def _update_xml_in_subdir(
         return 0
     subdir = get_language_subdir(mod_dir, language, subdir_type=subdir_type)
     if not subdir.exists():
-        logging.warning("语言子目录不存在: %s", subdir)
+        logger.warning("语言子目录不存在: %s", subdir)
         return 0
     processor = XMLProcessor()
     updated_count = 0
@@ -218,11 +219,11 @@ def _update_xml_in_subdir(
                 updated_count += 1
                 print(f"{Fore.GREEN}更新文件: {xml_file}{Style.RESET_ALL}")
         except FileNotFoundError:
-            logging.error("XML文件不存在: %s", xml_file)
+            logger.error("XML文件不存在: %s", xml_file)
         except PermissionError:
-            logging.error("无权限访问XML文件: %s", xml_file)
+            logger.error("无权限访问XML文件: %s", xml_file)
         except Exception as e:
-            logging.error("处理XML文件失败: %s: %s", xml_file, e)
+            logger.error("处理XML文件失败: %s: %s", xml_file, e)
             print(f"{Fore.RED}处理文件失败: {xml_file}: {e}{Style.RESET_ALL}")
     return updated_count
 
@@ -250,7 +251,7 @@ def _verify_import_results(mod_dir: str, language: str) -> bool:
     """验证导入结果"""
     template_dir = get_language_dir(mod_dir, language)
     if not template_dir.exists():
-        logging.error("导入后模板目录不存在")
+        logger.error("导入后模板目录不存在")
         return False
     # 检查是否有翻译文件
     has_keyed = (
@@ -272,7 +273,7 @@ def _verify_import_results(mod_dir: str, language: str) -> bool:
         else False
     )
     if not has_keyed and not has_definjected:
-        logging.warning("导入后未找到翻译文件")
+        logger.warning("导入后未找到翻译文件")
         return False
-    logging.info("导入结果验证通过")
+    logger.info("导入结果验证通过")
     return True

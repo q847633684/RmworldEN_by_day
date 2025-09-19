@@ -3,6 +3,7 @@
 """
 
 import logging
+from utils.logging_config import get_logger, log_error_with_context
 import os
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
@@ -34,8 +35,9 @@ class BatchProcessor:
 
     def __init__(self):
         """初始化 BatchProcessor"""
+        self.logger = get_logger(f"{__name__}.BatchProcessor")
         self._results: Dict[str, ModProcessResult] = {}
-        logging.debug("初始化 BatchProcessor")
+        self.logger.debug("初始化 BatchProcessor")
 
     def _show_processing_summary(self) -> None:
         """显示处理结果统计"""

@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, Any, Optional, Union
 from colorama import Fore, Style  # type: ignore
+from utils.logging_config import get_logger, log_user_action, log_data_processing
 from utils.path_manager import PathManager
 from utils.config import (
     get_config,
@@ -31,7 +32,8 @@ class InteractionManager:
     def __init__(self):
         """初始化交互管理器"""
         self.path_manager = PathManager()
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logger(f"{__name__}.InteractionManager")
+        self.logger.debug("初始化InteractionManager")
 
     def _print_separator(self, title: str = "", char: str = "=", length: int = 60):
         """
@@ -123,6 +125,16 @@ class InteractionManager:
         # 配置确认和验证
         if self._confirm_configuration(smart_config):
             self._print_separator("✅ 智能流程决策完成", "=", 60)
+
+            # 记录用户操作
+            log_user_action(
+                "智能提取配置完成",
+                mod_dir=mod_dir,
+                data_source=data_source_choice,
+                conflict_resolution=conflict_resolution,
+                template_structure=template_structure,
+            )
+
             return smart_config
         else:
             print(f"{Fore.YELLOW}🔄 重新开始配置流程...{Style.RESET_ALL}")
@@ -460,7 +472,7 @@ class InteractionManager:
                         "reason": "DefInjected文件可能过时，建议重新扫描",
                     }
         except (OSError, ValueError) as e:
-            logging.warning("分析DefInjected质量时出错: %s", e)
+            self.logger.warning("分析DefInjected质量时出错: %s", e)
             return {
                 "recommended": "definjected_only",
                 "reason": "无法分析，使用默认推荐",
@@ -603,7 +615,7 @@ class InteractionManager:
                 }
 
         except (OSError, ValueError) as e:
-            logging.warning("分析现有文件时出错: %s", e)
+            self.logger.warning("分析现有文件时出错: %s", e)
             return {
                 "summary": "无法分析文件状态",
                 "recommended": None,
@@ -658,23 +670,25 @@ class InteractionManager:
         elif data_source_choice == "defs_only":
             print(f"{Fore.BLUE}检测到使用Defs文件扫描提取翻译{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}请选择DefInjected文件组织方式：{Style.RESET_ALL}")
-            print(f"   {Fore.GREEN}1. 按定义类型分组（推荐）{Style.RESET_ALL}")
-            print("      └── ThingDefs.xml、PawnKindDefs.xml 等")
-            print("      └── 便于翻译工作分类管理")
-            print(f"   {Fore.CYAN}2. 按原始Defs文件结构组织{Style.RESET_ALL}")
+            print(f"   {Fore.GREEN}1. 按原始Defs文件结构组织（推荐）{Style.RESET_ALL}")
             print("      └── 保持与Defs目录相同的文件夹和文件结构")
             print("      └── 便于对照原始定义文件")
+            print(f"   {Fore.CYAN}2. 按定义类型分组{Style.RESET_ALL}")
+            print("      └── ThingDefs.xml、PawnKindDefs.xml 等")
+            print("      └── 便于翻译工作分类管理")
 
             while True:
-                choice = input(f"\n{Fore.CYAN}请选择 (1/2): {Style.RESET_ALL}").strip()
-                if choice == "1":
-                    print(f"   {Fore.GREEN}✅ 选择：按定义类型分组{Style.RESET_ALL}")
-                    return "defs_by_type"
-                elif choice == "2":
+                choice = input(
+                    f"\n{Fore.CYAN}请选择 (1/2, 回车默认选择1): {Style.RESET_ALL}"
+                ).strip()
+                if choice == "1" or choice == "":
                     print(
-                        f"   {Fore.CYAN}✅ 选择：按原始Defs文件结构组织{Style.RESET_ALL}"
+                        f"   {Fore.GREEN}✅ 选择：按原始Defs文件结构组织{Style.RESET_ALL}"
                     )
                     return "defs_by_file_structure"
+                elif choice == "2":
+                    print(f"   {Fore.CYAN}✅ 选择：按定义类型分组{Style.RESET_ALL}")
+                    return "defs_by_type"
                 else:
                     print(f"   {Fore.RED}❌ 请输入 1 或 2{Style.RESET_ALL}")
 

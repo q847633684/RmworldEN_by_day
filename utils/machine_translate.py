@@ -1,5 +1,6 @@
 import csv
 import logging
+from utils.logging_config import get_logger, log_error_with_context
 import os
 import re
 import time
@@ -12,7 +13,7 @@ try:
     from aliyunsdkcore.client import AcsClient
     from aliyunsdkalimt.request.v20181012 import TranslateGeneralRequest
 except ImportError:
-    logging.warning("阿里云 SDK 未安装，机器翻译功能不可用。请运行：pip install aliyun-python-sdk-core aliyun-python-sdk-alimt")
+    logger.warning("阿里云 SDK 未安装，机器翻译功能不可用。请运行：pip install aliyun-python-sdk-core aliyun-python-sdk-alimt")
     AcsClient = None
     TranslateGeneralRequest = None
 

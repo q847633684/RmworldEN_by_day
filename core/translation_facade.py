@@ -6,16 +6,17 @@
 import os
 import logging
 from pathlib import Path
-from typing import List, Tuple, Optional, Union, Dict, Any
+from typing import List, Tuple, Optional
 from colorama import Fore, Style
+from utils.logging_config import (
+    get_logger,
+)
 
 from .exceptions import TranslationError, TranslationImportError, ExportError
 from utils.config import get_config, ConfigError
 from extract.template_manager import TemplateManager
 from utils.machine_translate import translate_csv
 from corpus.parallel_corpus import generate_parallel_corpus
-from batch.batch_processor import BatchProcessor
-from java_translate.java_translator import JavaTranslator
 
 CONFIG = get_config()
 
@@ -42,6 +43,8 @@ class TranslationFacade:
             ImportError: 如果模组目录无效
         """
         try:
+            self.logger = get_logger(f"{__name__}.TranslationFacade")
+
             self.mod_dir = str(Path(mod_dir).resolve())
             if not os.path.isdir(self.mod_dir):
                 raise TranslationImportError(f"无效的模组目录: {mod_dir}")
@@ -52,8 +55,9 @@ class TranslationFacade:
             # TemplateManager 当前无构造参数，按需实例化
             self.template_manager = TemplateManager()
             self._validate_config()
-            logging.debug(
-                "初始化 TranslationFacade: mod_dir=%s, language=%s",
+
+            self.logger.debug(
+                "初始化TranslationFacade: mod_dir=%s, language=%s",
                 self.mod_dir,
                 self.language,
             )
@@ -67,7 +71,7 @@ class TranslationFacade:
         if not os.path.isdir(self.mod_dir):
             raise ConfigError(f"模组目录不存在: {self.mod_dir}")
         if not os.path.exists(os.path.join(self.mod_dir, "Languages")):
-            logging.warning("模组目录中未找到 Languages 文件夹: %s", self.mod_dir)
+            self.logger.warning("模组目录中未找到 Languages 文件夹: %s", self.mod_dir)
 
     def extract_templates_and_generate_csv(
         self,
@@ -82,7 +86,7 @@ class TranslationFacade:
         """
         try:
             # 记录提取操作的开始，包含所有关键参数用于调试和审计
-            logging.info(
+            self.logger.info(
                 "开始提取模板: output_dir=%s, en_keyed_dir=%s, auto_choose_definjected=%s, data_source_choice=%s",
                 output_dir,
                 en_keyed_dir,
@@ -103,7 +107,7 @@ class TranslationFacade:
         except Exception as e:
             # 捕获并处理提取过程中的任何异常
             error_msg = f"提取模板失败: {str(e)}"  # 构建详细错误信息
-            logging.error(error_msg)  # 记录错误到日志文件
+            self.logger.error(error_msg)  # 记录错误到日志文件
             raise ExportError(error_msg) from e  # 抛出自定义异常，便于上层处理
 
     def import_translations_to_templates(
@@ -122,7 +126,7 @@ class TranslationFacade:
         try:
             if not os.path.isfile(csv_path):
                 raise TranslationImportError(f"CSV文件不存在: {csv_path}")
-            logging.info("导入翻译到模板: csv_path=%s, merge=%s", csv_path, merge)
+            self.logger.info("导入翻译到模板: csv_path=%s, merge=%s", csv_path, merge)
             # 使用导入模块执行导入逻辑
             from import_template.importers import import_translations
 
@@ -137,7 +141,7 @@ class TranslationFacade:
 
         except Exception as e:
             error_msg = f"导入翻译失败: {str(e)}"
-            logging.error(error_msg)
+            self.logger.error(error_msg)
             raise TranslationImportError(error_msg) from e
 
     def generate_corpus(self) -> List[Tuple[str, str]]:
@@ -151,13 +155,13 @@ class TranslationFacade:
             ExportError: 如果生成失败
         """
         try:
-            logging.info("开始生成平行语料")
+            self.logger.info("开始生成平行语料")
             # generate_parallel_corpus 函数签名：(mode: str, mod_dir: str) -> int
             # 使用模式 "2" 表示从 DefInjected 和 Keyed 提取
             corpus_count = generate_parallel_corpus("2", self.mod_dir)
 
             if not corpus_count:
-                logging.warning("未找到任何平行语料")
+                self.logger.warning("未找到任何平行语料")
                 print(f"{Fore.YELLOW}⚠️ 未找到任何平行语料{Style.RESET_ALL}")
                 return []
             else:
@@ -166,7 +170,7 @@ class TranslationFacade:
             return []  # 这里可以返回实际的语料数据
         except Exception as e:
             error_msg = f"生成语料失败: {str(e)}"
-            logging.error(error_msg)
+            self.logger.error(error_msg)
             raise ExportError(error_msg) from e
 
     def machine_translate(
@@ -193,7 +197,7 @@ class TranslationFacade:
                     input_path.parent / f"{input_path.stem}_translated.csv"
                 )
 
-            logging.info(
+            self.logger.info(
                 "开始机器翻译: csv_path=%s, output_csv=%s", csv_path, output_csv
             )
 
@@ -203,7 +207,7 @@ class TranslationFacade:
             print(f"{Fore.GREEN}✅ 翻译完成：{output_csv}{Style.RESET_ALL}")
         except Exception as e:
             error_msg = f"机器翻译失败: {str(e)}"
-            logging.error(error_msg)
+            self.logger.error(error_msg)
             raise TranslationError(error_msg) from e
 
     def extract_all_translations(
@@ -232,5 +236,5 @@ class TranslationFacade:
             )
         except (OSError, IOError, ValueError, RuntimeError) as e:
             error_msg = f"提取翻译数据失败: {str(e)}"
-            logging.error(error_msg)
+            self.logger.error(error_msg)
             raise TranslationError(error_msg) from e

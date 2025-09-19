@@ -4,6 +4,7 @@
 """
 
 import logging
+from utils.logging_config import get_logger, log_error_with_context
 from colorama import Fore, Style
 
 from utils.interaction import (
@@ -26,6 +27,8 @@ CONFIG = get_config()
 
 
 def handle_config_manage():
+    logger = get_logger(f"{__name__}.handle_config_manage")
+
     """处理配置管理功能"""
     try:
         print(
@@ -132,4 +135,4 @@ def handle_config_manage():
         show_error(str(e))
     except Exception as e:
         show_error(f"配置管理失败: {str(e)}")
-        logging.error("配置管理失败: %s", str(e), exc_info=True)
+        logger.error("配置管理失败: %s", str(e), exc_info=True)

@@ -19,6 +19,7 @@ import json
 import logging
 import os
 from dataclasses import asdict, dataclass
+from utils.logging_config import get_logger, log_error_with_context
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
@@ -52,6 +53,9 @@ class TranslationConfig:
 
     def __post_init__(self):
         """初始化后处理"""
+        # 初始化日志器
+        self.logger = get_logger(f"{__name__}.TranslationConfig")
+
         # 动态生成带时间戳的日志文件名
         if not self.log_file:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -92,7 +96,7 @@ class TranslationConfig:
             root_logger.setLevel(logging.DEBUG if self.debug_mode else logging.INFO)
             root_logger.addHandler(file_handler)
             root_logger.addHandler(console_handler)
-            logging.info("日志系统初始化完成: %s", self.log_file)
+            self.logger.info("日志系统初始化完成: %s", self.log_file)
         except Exception as e:
             print(f"{Fore.RED}日志系统初始化失败: {e}{Style.RESET_ALL}")
             raise ConfigError(f"日志系统初始化失败: {str(e)}") from e
@@ -103,9 +107,9 @@ class TranslationConfig:
             user_config = get_user_config()  # 使用缓存版本
             if user_config:
                 self._update_from_dict(user_config)
-                logging.info("已加载用户配置")
+                self.logger.info("已加载用户配置")
         except (OSError, IOError, ValueError, KeyError) as e:
-            logging.warning("加载用户配置失败: %s", e)
+            self.logger.warning("加载用户配置失败: %s", e)
 
     def _validate_config(self) -> None:
         """验证配置项的有效性"""
@@ -180,7 +184,7 @@ class TranslationConfig:
         try:
             setattr(self, key, value)
             self._validate_config()
-            logging.info("更新配置: %s = %s", key, value)
+            self.logger.info("更新配置: %s = %s", key, value)
         except Exception as e:
             setattr(self, key, old_value)
             raise ConfigError(f"更新配置失败: {str(e)}") from e
@@ -246,7 +250,7 @@ class TranslationConfig:
             os.makedirs(os.path.dirname(config_file), exist_ok=True)
             with open(config_file, "w", encoding="utf-8") as f:
                 json.dump(config_dict, f, indent=4, ensure_ascii=False)
-            logging.info("配置已导出到: %s", config_file)
+            self.logger.info("配置已导出到: %s", config_file)
         except Exception as e:
             raise ConfigError(f"导出配置失败: {str(e)}") from e
 
@@ -267,7 +271,7 @@ class TranslationConfig:
             # 验证配置文件版本
             config_version = config_dict.get("version", "0.0.0")
             if config_version != self.version:
-                logging.warning(
+                self.logger.warning(
                     "配置文件版本不匹配: 当前版本 %s, 配置文件版本 %s",
                     self.version,
                     config_version,
@@ -276,7 +280,7 @@ class TranslationConfig:
                     raise ConfigError(f"不兼容的配置文件版本: {config_version}")
 
             self._update_from_dict(config_dict)
-            logging.info("配置已从 %s 导入", config_file)
+            self.logger.info("配置已从 %s 导入", config_file)
         except Exception as e:
             raise ConfigError(f"导入配置失败: {str(e)}") from e
 
@@ -287,9 +291,9 @@ class TranslationConfig:
             # 移除内部属性
             user_config.pop("_rules", None)
             save_user_config_to_file(user_config)
-            logging.info("用户配置已保存")
+            self.logger.info("用户配置已保存")
         except (OSError, IOError, ValueError, KeyError) as e:
-            logging.error("保存用户配置失败: %s", e)
+            self.logger.error("保存用户配置失败: %s", e)
 
     def _is_compatible_version(self, version: str) -> bool:
         """检查版本兼容性"""
@@ -317,7 +321,7 @@ class TranslationConfig:
             # 验证配置文件版本
             config_version = config.get("version", "0.0.0")
             if config_version != self.version:
-                logging.warning(
+                self.logger.warning(
                     "规则配置文件版本不匹配: 当前版本 %s, 配置文件版本 %s",
                     self.version,
                     config_version,
@@ -333,9 +337,9 @@ class TranslationConfig:
                 "ignore_fields": UnifiedFilterRules.IGNORE_FIELDS,
                 "non_text_patterns": UnifiedFilterRules.NON_TEXT_PATTERNS,
             }
-            logging.info("加载自定义规则配置: %s", config_file)
+            self.logger.info("加载自定义规则配置: %s", config_file)
         except Exception as e:
-            logging.warning("加载自定义规则配置失败，使用默认规则: %s", e)
+            self.logger.warning("加载自定义规则配置失败，使用默认规则: %s", e)
             raise ConfigError(f"加载自定义规则配置失败: {str(e)}") from e
 
     def _validate_rules_config(self, config: Dict[str, Any]) -> None:
@@ -389,7 +393,7 @@ def reload_config() -> "TranslationConfig":
     """
     global _config_instance
     _config_instance = TranslationConfig()
-    logging.info("配置已重新加载")
+    # 配置已重新加载
     return _config_instance
 
 
@@ -400,7 +404,7 @@ _user_config_cache: Optional[Dict[str, Any]] = None
 def get_config_path() -> str:
     """获取用户配置文件路径"""
     config_path = os.path.join(Path.home(), ".day_translation", "config.json")
-    logging.debug("获取配置文件路径: %s", config_path)
+    # 获取配置文件路径: config_path
     return config_path
 
 
@@ -414,13 +418,15 @@ def get_user_config() -> Dict[str, Any]:
             try:
                 with open(config_path, "r", encoding="utf-8") as f:
                     _user_config_cache = json.load(f)
-                    logging.debug("加载用户配置成功: %s", config_path)
+                    # 加载用户配置成功: config_path
             except (OSError, IOError, json.JSONDecodeError) as e:
-                logging.error("加载用户配置文件失败: %s", e)
+                log_error_with_context(
+                    e, "加载用户配置文件失败", config_path=config_path
+                )
                 _user_config_cache = {}
         else:
             _user_config_cache = {}
-            logging.debug("用户配置文件不存在，使用空配置")
+            # 用户配置文件不存在，使用空配置
     return _user_config_cache
 
 
@@ -442,12 +448,12 @@ def save_user_config_to_file(config: Dict) -> None:
         os.makedirs(os.path.dirname(config_path), exist_ok=True)
         with open(config_path, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=4, ensure_ascii=False)
-        logging.debug("配置文件保存成功: %s", config_path)
+        # 配置文件保存成功: config_path
         # 清除缓存，以便下次读取时获取最新配置
         clear_user_config_cache()
     except (OSError, IOError, ValueError) as e:
         print(f"保存配置文件失败: {e}")
-        logging.error("保存配置文件失败: %s", e)
+        log_error_with_context(e, "保存配置文件失败", config_path=config_path)
 
 
 def get_language_dir(base_dir, language):

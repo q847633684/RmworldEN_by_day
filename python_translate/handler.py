@@ -4,6 +4,7 @@ Python机翻处理器
 """
 
 import logging
+from utils.logging_config import get_logger, log_error_with_context
 from colorama import Fore, Style
 
 from utils.interaction import (
@@ -20,6 +21,8 @@ from utils.path_manager import PathManager
 
 
 def handle_python_translate():
+    logger = get_logger(f"{__name__}.handle_python_translate")
+
     """处理Python机翻功能"""
     try:
         # 获取输入CSV文件
@@ -65,4 +68,4 @@ def handle_python_translate():
 
     except Exception as e:
         show_error(f"Python翻译失败: {str(e)}")
-        logging.error("Python翻译失败: %s", str(e), exc_info=True)
+        logger.error("Python翻译失败: %s", str(e), exc_info=True)

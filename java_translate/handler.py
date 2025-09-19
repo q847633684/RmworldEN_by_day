@@ -3,28 +3,28 @@ Java翻译处理器
 处理Java翻译工具的交互流程
 """
 
-import logging
-import subprocess
 import os
-from pathlib import Path
+import subprocess
 from colorama import Fore, Style
 
 from utils.interaction import (
     select_csv_path_with_history,
-    confirm_action,
     auto_generate_output_path,
     show_success,
     show_error,
     show_info,
     show_warning,
+    confirm_action,
 )
-from .java_translator import JavaTranslator
+from utils.logging_config import get_logger
+from .java_translator_simple import JavaTranslator
 from utils.path_manager import PathManager
 from utils.config import get_user_config
 
 
 def handle_java_translate():
     """处理Java机翻功能"""
+    logger = get_logger(f"{__name__}.handle_java_translate")
     try:
         # 尝试创建Java翻译器实例
         try:
@@ -39,10 +39,9 @@ def handle_java_translate():
                 .lower()
             )
             if user_input == "y":
-                # 自动构建逻辑，优先用build.bat，否则用mvn package
+                # 自动构建逻辑
                 current_dir = os.path.dirname(os.path.abspath(__file__))
                 java_proj_dir = os.path.join(current_dir, "RimWorldBatchTranslate")
-                build_bat = os.path.join(java_proj_dir, "build.bat")
                 show_info("正在自动构建Java工具...")
                 result = subprocess.run(
                     "mvn package",
@@ -102,9 +101,21 @@ def handle_java_translate():
         if not csv_path:
             return
 
+        # 检查是否可以恢复暂停的翻译
+        output_csv = translator.can_resume_translation(csv_path)
+        if output_csv:
+            print(f"\n🔄 检测到可恢复的翻译文件，自动恢复翻译...")
+            success = translator.resume_translation(csv_path, output_csv)
+            if success:
+                show_success("恢复翻译完成！")
+            else:
+                # 用户中断翻译是正常操作，不显示为失败
+                print("💡 翻译已暂停，可以随时恢复")
+            return
+
         # 自动生成输出CSV文件路径
         output_csv = auto_generate_output_path(csv_path)
-        # 将输出CSV加入“导入翻译”的历史，便于后续直接选择
+        # 将输出CSV加入"导入翻译"的历史，便于后续直接选择
         try:
             PathManager().remember_path("import_csv", output_csv)
         except Exception:
@@ -115,6 +126,10 @@ def handle_java_translate():
         print(f"输入文件: {csv_path}")
         print(f"输出文件: {output_csv}")
         print(f"JAR路径: {status['jar_path']}")
+        print("\n💡 新功能:")
+        print("  - 支持中断翻译 (Ctrl+C)")
+        print("  - 支持恢复翻译")
+        print("  - 自动保存翻译进度")
 
         if confirm_action("确认开始翻译？"):
             print()  # 添加空行，让进度条显示更清晰
@@ -127,16 +142,29 @@ def handle_java_translate():
                 if ak and sk:
                     success = translator.translate_csv(csv_path, output_csv, ak, sk)
                 else:
-                    success = translator.translate_csv_interactive(csv_path, output_csv)
+                    # 如果没有配置密钥，提示用户配置
+                    show_error("未找到阿里云翻译密钥配置")
+                    show_info("请先配置翻译密钥：")
+                    show_info(
+                        "1. 在配置文件中设置 aliyun_access_key_id 和 aliyun_access_key_secret"
+                    )
+                    show_info("2. 或使用其他功能进行配置")
+                    return
 
-                if success:
+                if success is True:
                     show_success("Java翻译完成！")
                     print(f"翻译结果已保存到: {output_csv}")
+                elif success is None:
+                    # 用户中断，不是失败
+                    print("💡 翻译已暂停，可以随时恢复")
                 else:
                     show_error("Java翻译失败")
+            except KeyboardInterrupt:
+                show_warning("翻译被用户中断")
+                print("💡 提示: 可以使用恢复功能继续翻译")
             except Exception as e:
                 show_error(f"Java翻译执行异常: {str(e)}")
-                logging.error("Java翻译执行异常: %s", str(e), exc_info=True)
+                logger.error("Java翻译执行异常: %s", str(e), exc_info=True)
         else:
             show_warning("用户取消翻译")
 
@@ -145,4 +173,4 @@ def handle_java_translate():
         show_warning("请确保 java_translate.java_translator 模块存在")
     except Exception as e:
         show_error(f"Java翻译失败: {str(e)}")
-        logging.error("Java翻译失败: %s", str(e), exc_info=True)
+        logger.error("Java翻译失败: %s", str(e), exc_info=True)

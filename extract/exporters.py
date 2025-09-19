@@ -21,6 +21,7 @@ import os
 import re
 from pathlib import Path
 from typing import List, Tuple, Dict
+from utils.logging_config import get_logger
 from utils.config import (
     get_config,
     get_language_subdir,
@@ -36,7 +37,9 @@ def export_definjected_with_original_structure(
     def_translations: list,
 ) -> None:
     """按 file_path 创建目录和文件结构导出 DefInjected 翻译，key 作为标签名，text 作为内容"""
-    logging.info(
+    logger = get_logger(f"{__name__}.export_definjected_with_original_structure")
+
+    logger.debug(
         "按 file_path 结构导出 DefInjected: output_dir=%s, translations_count=%s",
         output_dir,
         len(def_translations),
@@ -48,7 +51,7 @@ def export_definjected_with_original_structure(
 
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
-        logging.info("创建文件夹：%s", def_injected_path)
+        logger.debug("创建文件夹：%s", def_injected_path)
     # 按 file_path 分组翻译数据
     file_groups: Dict[str, List[Tuple[str, str, str]]] = (
         {}
@@ -60,7 +63,7 @@ def export_definjected_with_original_structure(
             file_groups[f] = []
         file_groups[f].append((k, t, g))
 
-    logging.info("按 file_path 分组完成: %s 个文件", len(file_groups))
+    logger.debug("按 file_path 分组完成: %s 个文件", len(file_groups))
 
     # 为每个 file_path 生成翻译文件
     for file_path, translations in file_groups.items():
@@ -87,11 +90,11 @@ def export_definjected_with_original_structure(
         # 保存文件
         ok = processor.save_xml(root, output_file, pretty_print=True)
         if ok:
-            logging.info(
+            logger.debug(
                 "生成 DefInjected 文件: %s (%s 条翻译)", output_file, len(translations)
             )
         else:
-            logging.error("写入失败: %s", output_file)
+            logger.error("写入失败: %s", output_file)
 
 
 def export_definjected_with_defs_structure(
@@ -100,7 +103,8 @@ def export_definjected_with_defs_structure(
     def_translations: list,
 ) -> None:
     """按照按DefType分组导出DefInjected翻译"""
-    logging.info(
+    logger = get_logger(f"{__name__}.export_definjected_with_defs_structure")
+    logger.debug(
         "按Defs结构导出 DefInjected: output_dir=%s, translations_count=%s",
         output_dir,
         len(def_translations),
@@ -112,7 +116,7 @@ def export_definjected_with_defs_structure(
 
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
-        logging.info("创建文件夹：%s", def_injected_path)
+        logger.debug("创建文件夹：%s", def_injected_path)
 
     # 按DefType分组翻译内容（基于 full_path 中的 def_type 信息）
     file_groups: Dict[str, List[Tuple[str, str, str]]] = {}
@@ -142,7 +146,7 @@ def export_definjected_with_defs_structure(
             file_groups[def_type] = []
         file_groups[def_type].append((full_key, text, tag))
 
-    logging.info("按DefType分组完成: %s 个类型", len(file_groups))
+    logger.debug("按DefType分组完成: %s 个类型", len(file_groups))
 
     # 为每个 DefType 生成 XML 文件
     for def_type, translations in file_groups.items():
@@ -171,11 +175,11 @@ def export_definjected_with_defs_structure(
         # 保存文件
         ok = processor.save_xml(root, output_file, pretty_print=True)
         if ok:
-            logging.info(
+            logger.debug(
                 "生成 DefInjected 文件: %s (%s 条翻译)", output_file, len(translations)
             )
         else:
-            logging.error("写入失败: %s", output_file)
+            logger.error("写入失败: %s", output_file)
 
 
 def export_definjected_with_file_structure(
@@ -184,7 +188,8 @@ def export_definjected_with_file_structure(
     def_translations: list,
 ) -> None:
     """按原始Defs文件目录结构导出DefInjected翻译，key 结构为 DefType/defName.字段，导出时去除 DefType/ 只保留 defName.字段作为标签名，目录结构用 rel_path，内容用 text。"""
-    logging.info(
+    logger = get_logger(f"{__name__}.export_definjected_with_file_structure")
+    logger.debug(
         "按文件结构导出 DefInjected: output_dir=%s, translations_count=%s",
         output_dir,
         len(def_translations),
@@ -196,7 +201,7 @@ def export_definjected_with_file_structure(
 
     if not os.path.exists(def_injected_path):
         os.makedirs(def_injected_path)
-        logging.info("创建文件夹：%s", def_injected_path)
+        logger.debug("创建文件夹：%s", def_injected_path)
 
     file_groups: Dict[str, List[Tuple[str, str, str]]] = {}
     for item in def_translations:
@@ -205,7 +210,7 @@ def export_definjected_with_file_structure(
             file_groups[rel_path] = []
         file_groups[rel_path].append((key, text, tag))
 
-    logging.info("按文件结构分组完成: %s 个文件", len(file_groups))
+    logger.debug("按文件结构分组完成: %s 个文件", len(file_groups))
 
     for rel_path, translations in file_groups.items():
         if not translations:
@@ -237,11 +242,11 @@ def export_definjected_with_file_structure(
 
         ok = processor.save_xml(root, output_file, pretty_print=True)
         if ok:
-            logging.info(
+            logger.debug(
                 "生成 DefInjected 文件: %s (%s 条翻译)", output_file, len(translations)
             )
         else:
-            logging.error("写入失败: %s", output_file)
+            logger.error("写入失败: %s", output_file)
 
 
 def export_keyed_template(
@@ -250,7 +255,8 @@ def export_keyed_template(
     def_translations: list,
 ) -> None:
     """导出 Keyed 翻译模板，按文件分组生成 XML 文件"""
-    logging.info(
+    logger = get_logger(f"{__name__}.export_keyed_template")
+    logger.debug(
         "导出 Keyed 翻译模板: output_dir=%s, translations_count=%s",
         output_dir,
         len(def_translations),
@@ -262,7 +268,7 @@ def export_keyed_template(
 
     if not os.path.exists(keyed_path):
         os.makedirs(keyed_path)
-        logging.info("创建文件夹：%s", keyed_path)
+        logger.info("创建文件夹：%s", keyed_path)
 
     # 按 file_path 分组翻译数据
     file_groups: Dict[str, List[Tuple[str, str, str]]] = (
@@ -275,7 +281,7 @@ def export_keyed_template(
             file_groups[file_path] = []
         file_groups[file_path].append((key, text, tag))
 
-    logging.info("按文件分组完成: %s 个文件", len(file_groups))
+    logger.debug("按文件分组完成: %s 个文件", len(file_groups))
 
     # 为每个 file_path 生成翻译文件
     for file_path, translations in file_groups.items():
@@ -301,11 +307,11 @@ def export_keyed_template(
         # 保存文件
         ok = processor.save_xml(root, output_file, pretty_print=True)
         if ok:
-            logging.info(
+            logger.debug(
                 "生成 Keyed 文件: %s (%s 条翻译)", output_file, len(translations)
             )
         else:
-            logging.error("写入失败: %s", output_file)
+            logger.error("写入失败: %s", output_file)
 
 
 def write_merged_translations(merged, output_dir, output_language, sub_dir) -> None:
@@ -315,6 +321,7 @@ def write_merged_translations(merged, output_dir, output_language, sub_dir) -> N
     output_dir: 输出根目录
     sub_dir: 子目录名（DefInjected 或 Keyed）
     """
+    logger = get_logger(f"{__name__}.write_merged_translations")
 
     base_dir = get_language_subdir(
         base_dir=output_dir, language=output_language, subdir_type=sub_dir
@@ -333,15 +340,15 @@ def write_merged_translations(merged, output_dir, output_language, sub_dir) -> N
             existing_tree = processor.parse_xml(str(output_file))
             if existing_tree is not None:
                 root = existing_tree.getroot()
-                logging.info("更新现有文件: %s", output_file)
+                logger.info("更新现有文件: %s", output_file)
             else:
                 # 文件存在但解析失败，创建新的
-                logging.warning("无法解析现有文件，将重新创建: %s", output_file)
+                logger.warning("无法解析现有文件，将重新创建: %s", output_file)
                 root = processor.create_element("LanguageData")
                 output_file.parent.mkdir(parents=True, exist_ok=True)
         else:
             # 文件不存在，创建新文件和目录
-            logging.info("创建新文件: %s", output_file)
+            logger.info("创建新文件: %s", output_file)
             output_file.parent.mkdir(parents=True, exist_ok=True)
             root = processor.create_element("LanguageData")
         # 更新或添加翻译条目
@@ -378,6 +385,6 @@ def write_merged_translations(merged, output_dir, output_language, sub_dir) -> N
         # 保存更新后的文件
         success = processor.save_xml(root, output_file, pretty_print=True)
         if success:
-            logging.info("成功保存文件: %s (%s 条翻译)", output_file, len(items))
+            logger.info("成功保存文件: %s (%s 条翻译)", output_file, len(items))
         else:
-            logging.error("保存文件失败: %s", output_file)
+            logger.error("保存文件失败: %s", output_file)

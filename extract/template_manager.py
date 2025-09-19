@@ -7,6 +7,11 @@ import csv
 from pathlib import Path
 from typing import List, Tuple, Optional
 from colorama import Fore, Style  # type: ignore
+from utils.logging_config import (
+    get_logger,
+    log_data_processing,
+    log_user_action,
+)
 from .smart_merger import SmartMerger
 from .extractors import (
     extract_keyed_translations,
@@ -28,6 +33,11 @@ CONFIG = get_config()
 
 class TemplateManager:
     """翻译模板管理器，负责模板的完整生命周期管理"""
+
+    def __init__(self):
+        """初始化模板管理器"""
+        self.logger = get_logger(f"{__name__}.TemplateManager")
+        self.logger.debug("初始化TemplateManager")
 
     def extract_and_generate_templates(
         self,
@@ -51,7 +61,18 @@ class TemplateManager:
             List[Tuple[str, str, str, str]]: 提取的翻译数据
         """
         # 记录操作开始，便于调试和跟踪处理流程
-        logging.info("开始提取翻译数据并生成模板")
+        self.logger.debug(
+            "开始提取翻译数据并生成模板: import_dir=%s, output_dir=%s",
+            import_dir,
+            output_dir,
+        )
+        log_user_action(
+            "提取翻译模板",
+            import_dir=import_dir,
+            output_dir=output_dir,
+            data_source=data_source_choice,
+            template_structure=template_structure,
+        )
 
         # 步骤1：智能选择DefInjected提取方式
         #
@@ -78,7 +99,7 @@ class TemplateManager:
         )
 
         if not translations:
-            logging.warning("未找到任何翻译数据")
+            self.logger.warning("未找到任何翻译数据")
             print(f"{Fore.YELLOW}⚠️ 未找到任何翻译数据{Style.RESET_ALL}")
             return []
 
@@ -96,7 +117,15 @@ class TemplateManager:
         self._save_translations_to_csv(
             translations, output_dir, output_language, output_csv
         )
-        logging.info("模板生成完成，总计 %s 条翻译", len(translations))
+        # 记录数据处理统计
+        log_data_processing(
+            "提取翻译模板",
+            len(translations),
+            data_source=data_source_choice,
+            template_structure=template_structure,
+        )
+
+        self.logger.debug("模板生成完成，总计 %s 条翻译", len(translations))
         print(f"{Fore.GREEN}✅ 提取完成：{len(translations)} 条{Style.RESET_ALL}")
         return translations
 
@@ -146,7 +175,7 @@ class TemplateManager:
             include_unchanged=False,
         )
         for item in translations:
-            logging.debug(item)
+            self.logger.debug(item)
             # print(f"合并翻译数据: {item}")
 
         # 分离键值对和定射
@@ -210,7 +239,9 @@ class TemplateManager:
                 import_dir=import_dir, import_language=import_language
             )
             print(f"   ✅ 从Keyed 目录提取到 {len(keyed_translations)} 条 Keyed 翻译")
-            logging.info("从Keyed 目录提取到 %s 条 Keyed 翻译", len(keyed_translations))
+            self.logger.debug(
+                "从Keyed 目录提取到 %s 条 Keyed 翻译", len(keyed_translations)
+            )
         else:
             keyed_translations = []
             print(
@@ -218,7 +249,7 @@ class TemplateManager:
             )
 
         if data_source_choice == "definjected_only":
-            logging.info("正在扫描 DefInjected 目录...")
+            self.logger.debug("正在扫描 DefInjected 目录...")
             print(f"{Fore.GREEN}📊 正在扫描 DefInjected 目录...{Style.RESET_ALL}")
             # 从DefInjected目录提取翻译数据
             definjected_translations = extract_definjected_translations(
@@ -234,14 +265,14 @@ class TemplateManager:
             print(
                 f"   ✅ 从DefInjected 目录提取到 {len(definjected_translations)} 条 DefInjected 翻译"
             )
-            logging.info(
+            self.logger.info(
                 "从DefInjected 目录提取到 %s 条 DefInjected 翻译",
                 len(definjected_translations),
             )
             return keyed_as_five + definjected_translations  # type: ignore
 
         elif data_source_choice == "defs_only":
-            logging.info("正在扫描 Defs 目录...")
+            self.logger.debug("正在扫描 Defs 目录...")
             print(f"{Fore.GREEN}📊 正在扫描 Defs 目录...{Style.RESET_ALL}")
             defs_translations = scan_defs_sync(import_dir)
             # defs_translations 总是四元组，需要转换为五元组
@@ -253,11 +284,13 @@ class TemplateManager:
                 (k, t, g, f, t) for k, t, g, f in defs_translations  # en_test用test填充
             ]
             print(f"   ✅ 从Defs目录提取到 {len(defs_translations)} 条 Defs 翻译")
-            logging.info("从Defs目录提取到 %s 条 Defs 翻译", len(defs_translations))
+            self.logger.debug(
+                "从Defs目录提取到 %s 条 Defs 翻译", len(defs_translations)
+            )
             return keyed_as_five + defs_as_five
 
         # 如果到了这里，说明没有匹配的data_source_choice
-        logging.warning("未知的data_source_choice: %s", data_source_choice)
+        self.logger.warning("未知的data_source_choice: %s", data_source_choice)
         return []
 
     def _generate_templates_to_output_dir_with_structure(
@@ -297,7 +330,7 @@ class TemplateManager:
                 output_language,
                 keyed_translations,
             )
-            logging.info(
+            self.logger.info(
                 "生成 %s 条 Keyed 模板到 %s", len(keyed_translations), output_path
             )
             print("   ✅ Keyed 模板已生成")
@@ -341,7 +374,7 @@ class TemplateManager:
                 output_language,
                 def_translations,
             )
-            logging.info(
+            self.logger.debug(
                 "生成 %s 条 DefInjected 模板（保持原结构）", len(def_translations)
             )
             print("   ✅ DefInjected 模板已生成（保持原结构）")
@@ -352,7 +385,7 @@ class TemplateManager:
                 output_language,
                 def_translations,
             )
-            logging.info(
+            self.logger.debug(
                 "生成 %s 条 DefInjected 模板（按DefType分组）", len(def_translations)
             )
             print("   ✅ DefInjected 模板已生成（按DefType分组）")
@@ -363,7 +396,7 @@ class TemplateManager:
                 output_language,
                 def_translations,
             )
-            logging.info(
+            self.logger.debug(
                 "生成 %s 条 DefInjected 模板（按文件结构）", len(def_translations)
             )
             print("   ✅ DefInjected 模板已生成（按文件结构）")
@@ -374,7 +407,7 @@ class TemplateManager:
                 output_language,
                 def_translations,
             )
-            logging.info(
+            self.logger.debug(
                 "生成 %s 条 DefInjected 模板（默认分组）", len(def_translations)
             )
             print("   ✅ DefInjected 模板已生成（默认分组）")
@@ -396,9 +429,9 @@ class TemplateManager:
             for item in translations:
                 writer.writerow(item[:4])  # 只导出前四个字段，兼容五元组
         print(f"{Fore.GREEN}✅ CSV文件已生成: {csv_path}{Style.RESET_ALL}")
-        logging.info("翻译数据已保存到CSV: %s", csv_path)
+        self.logger.debug("翻译数据已保存到CSV: %s", csv_path)
         # 记入历史：让提取生成的 CSV 出现在后续“Python机翻/导入翻译”的历史列表
         try:
             PathManager().remember_path("import_csv", str(csv_path))
         except Exception:
-            logging.warning("无法记录CSV历史路径: %s", csv_path)
+            self.logger.warning("无法记录CSV历史路径: %s", csv_path)
