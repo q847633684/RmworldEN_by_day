@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Optional, List
 from colorama import Fore, Style
 from .path_manager import PathManager
+from .ui_style import ui
 
 # 全局路径管理器实例
 path_manager = PathManager()
@@ -15,54 +16,74 @@ path_manager = PathManager()
 
 def show_main_menu() -> str:
     """显示主菜单并返回用户选择"""
-    print(
-        f"\n{Fore.CYAN}╔══════════════════════════════════════════════════════════════╗"
+    ui.print_header("Day Translation 主菜单")
+
+    # 核心功能 - 使用紧凑模式
+    ui.print_section_header("核心功能", ui.Icons.CORE)
+    ui.print_menu_item(
+        "1",
+        "完整流程",
+        "提取→Java机翻→导入 一键完成",
+        ui.Icons.RUNNING,
+        is_recommended=True,
+        compact=True,
     )
-    print("║                    Day Translation 主菜单                    ║")
-    print(
-        f"╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
+    ui.print_menu_item(
+        "2", "提取模板", "提取翻译模板并生成 CSV 文件", ui.Icons.TEMPLATE, compact=True
     )
-
-    print(f"\n{Fore.GREEN}🔧 核心功能：{Style.RESET_ALL}")
-    print("  1. 🔄 完整流程  ── 提取→Java机翻→导入 一键完成")
-    print("  2. 📤 提取模板  ── 提取翻译模板并生成 CSV 文件")
-    print("  3. 🚀 Java机翻  ── 使用Java工具进行高性能翻译")
-    print("  4. 📥 导入模板  ── 将翻译后的 CSV 导入翻译模板")
-
-    print(f"\n{Fore.YELLOW}🛠️ 高级功能：{Style.RESET_ALL}")
-    print("  5. 🤖 Python机翻 ── 使用Python阿里云翻译 CSV 文件")
-    print("  6. 📦 批量处理  ── 处理多个模组")
-    print("  7. ⚙️ 配置管理  ── 管理翻译配置")
-    print("  8. 📚 语料生成  ── 生成英-中平行语料")
-
-    print(f"\n{Fore.RED}❌ 退出程序：{Style.RESET_ALL}")
-    print("  q. 🚪 退出     ── 退出程序")
-
-    print(
-        f"\n{Fore.CYAN}────────────────────────────────────────────────────────────────{Style.RESET_ALL}"
+    ui.print_menu_item(
+        "3", "Java机翻", "使用Java工具进行高性能翻译", ui.Icons.TRANSLATE, compact=True
+    )
+    ui.print_menu_item(
+        "4", "导入模板", "将翻译后的 CSV 导入翻译模板", ui.Icons.IMPORT, compact=True
     )
 
-    return input(f"{Fore.GREEN}请选择模式 (1-8, q): {Style.RESET_ALL}").strip()
+    # 高级功能 - 使用紧凑模式
+    ui.print_section_header("高级功能", ui.Icons.ADVANCED)
+    ui.print_menu_item(
+        "5",
+        "Python机翻",
+        "使用Python阿里云翻译 CSV 文件",
+        ui.Icons.TRANSLATE,
+        compact=True,
+    )
+    ui.print_menu_item("6", "批量处理", "处理多个模组", ui.Icons.BATCH, compact=True)
+    ui.print_menu_item("7", "配置管理", "管理翻译配置", ui.Icons.SETTINGS, compact=True)
+    ui.print_menu_item(
+        "8", "语料生成", "生成英-中平行语料", ui.Icons.CORPUS, compact=True
+    )
+
+    # 退出选项
+    ui.print_section_header("退出程序", ui.Icons.EXIT)
+    ui.print_menu_item("q", "退出", "退出程序", ui.Icons.EXIT, compact=True)
+
+    ui.print_separator()
+
+    return input(ui.get_input_prompt("请选择模式", options="1-8, q")).strip()
 
 
 def select_csv_path_with_history() -> Optional[str]:
     """选择CSV文件路径，支持历史记录"""
-    print(f"\n{Fore.CYAN}请输入要翻译的 CSV 文件路径:{Style.RESET_ALL}")
+    ui.print_info("请输入要翻译的 CSV 文件路径:")
 
     # 显示CSV文件历史记录
     csv_history = path_manager.get_history_list("import_csv")
     if csv_history:
-        print(f"{Fore.BLUE}CSV文件历史记录：{Style.RESET_ALL}")
+        ui.print_section_header("CSV文件历史记录", ui.Icons.HISTORY)
         for i, path in enumerate(csv_history, 1):
-            print(f"{i}. {path}")
-        print("0. 输入新路径（或直接粘贴完整CSV路径）")
+            ui.print_menu_item(str(i), os.path.basename(path), path, ui.Icons.FILE)
+        ui.print_menu_item("0", "输入新路径", "或直接粘贴完整CSV路径", ui.Icons.FILE)
 
     csv_path: Optional[str] = None
     while True:
         prompt_text = (
-            f"{Fore.CYAN}请选择 (0-{len(csv_history)}) 或直接输入CSV路径 (q退出): {Style.RESET_ALL}"
+            ui.get_input_prompt(
+                "请选择",
+                options=f"0-{len(csv_history)}",
+                icon="或直接输入CSV路径 (q退出)",
+            )
             if csv_history
-            else f"{Fore.CYAN}请输入CSV文件路径 (q退出): {Style.RESET_ALL}"
+            else ui.get_input_prompt("请输入CSV文件路径", options="q退出")
         )
         choice = input(prompt_text).strip()
 
@@ -70,45 +91,37 @@ def select_csv_path_with_history() -> Optional[str]:
             return None
 
         if csv_history and choice == "0":
-            csv_path = input(f"{Fore.CYAN}请输入CSV文件路径: {Style.RESET_ALL}").strip()
+            csv_path = input(ui.get_input_prompt("请输入CSV文件路径")).strip()
         elif csv_history and choice.isdigit() and 1 <= int(choice) <= len(csv_history):
             csv_path = csv_history[int(choice) - 1]
 
         elif choice:  # 非空输入，当作路径使用
             csv_path = choice
         else:
-            print(f"   {Fore.RED}❌ 请输入选择或路径{Style.RESET_ALL}")
+            ui.print_error("请输入选择或路径")
 
         if not csv_path:
-            print(f"{Fore.RED}❌ 路径不能为空{Style.RESET_ALL}")
+            ui.print_error("路径不能为空")
             continue
 
         # 验证CSV文件
         if not os.path.exists(csv_path):
-            print(f"{Fore.RED}❌ 文件不存在: {csv_path}{Style.RESET_ALL}")
+            ui.print_error(f"文件不存在: {csv_path}")
             continue
 
         if not csv_path.lower().endswith(".csv"):
-            print(f"{Fore.RED}❌ 文件必须是CSV格式{Style.RESET_ALL}")
+            ui.print_error("文件必须是CSV格式")
             continue
 
         # 记住路径
         path_manager.remember_path("import_csv", csv_path)
-        print(f"   {Fore.GREEN}✅ 选择：{csv_path}{Style.RESET_ALL}")
+        ui.print_success(f"选择：{csv_path}")
         return csv_path
 
 
 def select_mod_path_with_version_detection() -> Optional[str]:
     """选择模组目录，支持版本检测和自动扫描"""
-    print(
-        f"\n{Fore.CYAN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
-    )
-    print(
-        f"{Fore.CYAN}║{Style.RESET_ALL}                    {Fore.GREEN}📁 模组目录选择{Style.RESET_ALL}                    {Fore.CYAN}║{Style.RESET_ALL}"
-    )
-    print(
-        f"{Fore.CYAN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
-    )
+    ui.print_header("模组目录选择", ui.Icons.FOLDER)
 
     # 扫描常见的RimWorld模组目录
     common_mod_paths = [
@@ -125,39 +138,43 @@ def select_mod_path_with_version_detection() -> Optional[str]:
             available_mod_dirs.append(mod_path)
 
     # 显示选项
-    print(f"\n{Fore.GREEN}🔧 自动扫描选项：{Style.RESET_ALL}")
-    print(f"   {Fore.CYAN}1.{Style.RESET_ALL} 🔍 扫描Steam Workshop模组")
+    ui.print_section_header("自动扫描选项", ui.Icons.SETTINGS)
+    ui.print_menu_item(
+        "1", "扫描Steam Workshop模组", "自动扫描Steam Workshop模组目录", ui.Icons.SCAN
+    )
     if available_mod_dirs:
-        print(f"   {Fore.CYAN}2.{Style.RESET_ALL} 📦 扫描第三方模组目录")
+        ui.print_menu_item(
+            "2", "扫描第三方模组目录", "扫描本地第三方模组目录", ui.Icons.SCAN
+        )
 
     # 显示历史记录
     history = path_manager.get_history_list("mod_dir")
     if history:
-        print(f"\n{Fore.YELLOW}📋 历史记录：{Style.RESET_ALL}")
+        ui.print_section_header("历史记录", ui.Icons.HISTORY)
         start_idx = 3 if available_mod_dirs else 2
         for i, hist_path in enumerate(history, start_idx):
             mod_name = os.path.basename(hist_path)
-            print(
-                f"   {Fore.CYAN}{i:2d}.{Style.RESET_ALL} {Fore.WHITE}{mod_name}{Style.RESET_ALL}"
-            )
-            print(f"       {Fore.BLACK}└─ {hist_path}{Style.RESET_ALL}")
+            ui.print_menu_item(str(i), mod_name, hist_path, ui.Icons.FOLDER)
     else:
-        print(f"\n{Fore.YELLOW}📋 暂无历史记录{Style.RESET_ALL}")
+        ui.print_section_header("历史记录", ui.Icons.HISTORY)
+        ui.print_info("暂无历史记录")
 
     # 添加返回选项
-    print(f"\n{Fore.RED}🚪 其他选项：{Style.RESET_ALL}")
-    print(f"   {Fore.CYAN}b.{Style.RESET_ALL} 🔙 返回主菜单")
+    ui.print_section_header("其他选项", ui.Icons.EXIT)
+    ui.print_menu_item("b", "返回主菜单", "返回主菜单", ui.Icons.BACK)
 
     max_choice = (2 if available_mod_dirs else 1) + len(history)
 
     while True:
         choice = input(
-            f"\n{Fore.CYAN}请选择 (1-{max_choice}, b) 或直接输入路径: {Style.RESET_ALL}"
+            ui.get_input_prompt(
+                "请选择", options=f"1-{max_choice}, b", icon="或直接输入路径"
+            )
         ).strip()
 
         if choice.lower() == "b":
             # 返回主菜单
-            print(f"   {Fore.YELLOW}🔙 返回主菜单{Style.RESET_ALL}")
+            ui.print_info("返回主菜单")
             return None
         elif choice == "1":
             # 扫描Steam Workshop模组
@@ -170,7 +187,7 @@ def select_mod_path_with_version_detection() -> Optional[str]:
             start_idx = 3 if available_mod_dirs else 2
             if start_idx <= choice_num <= max_choice:
                 selected_path = history[choice_num - start_idx]
-                print(f"   {Fore.GREEN}✅ 选择：{selected_path}{Style.RESET_ALL}")
+                ui.print_success(f"选择：{selected_path}")
                 # 对历史记录路径也进行版本检测
                 return path_manager.detect_version_and_choose(selected_path)
         elif choice:
@@ -185,20 +202,12 @@ def select_mod_path_with_version_detection() -> Optional[str]:
                 return path_manager.detect_version_and_choose(selected_path)
             return None
         else:
-            print(f"{Fore.RED}❌ 请输入选择或路径{Style.RESET_ALL}")
+            ui.print_error("请输入选择或路径")
 
 
 def _scan_game_mods() -> Optional[str]:
     """扫描游戏内置模组"""
-    print(
-        f"\n{Fore.CYAN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
-    )
-    print(
-        f"{Fore.CYAN}║{Style.RESET_ALL}                {Fore.BLUE}🔍 扫描Steam Workshop模组{Style.RESET_ALL}                {Fore.CYAN}║{Style.RESET_ALL}"
-    )
-    print(
-        f"{Fore.CYAN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
-    )
+    ui.print_header("扫描Steam Workshop模组", ui.Icons.SCAN)
 
     # Steam Workshop模组路径
     steam_workshop_paths = [
@@ -208,7 +217,7 @@ def _scan_game_mods() -> Optional[str]:
         r"E:\Steam\steamapps\workshop\content\294100",
     ]
 
-    print(f"\n{Fore.BLUE}🔍 正在扫描Steam Workshop目录...{Style.RESET_ALL}")
+    ui.print_info("正在扫描Steam Workshop目录...")
 
     found_mods = []
     for workshop_path in steam_workshop_paths:
@@ -228,18 +237,18 @@ def _scan_game_mods() -> Optional[str]:
                 continue
 
     if not found_mods:
-        print(f"\n   {Fore.YELLOW}⚠️ 未找到Steam Workshop模组{Style.RESET_ALL}")
-        print(f"   {Fore.BLACK}请确保RimWorld已通过Steam安装{Style.RESET_ALL}")
+        ui.print_warning("未找到Steam Workshop模组")
+        ui.print_info("请确保RimWorld已通过Steam安装")
         return None
 
     # 使用自适应列宽显示Steam Workshop模组列表
     _display_mods_with_adaptive_width(found_mods)
 
-    print(f"{Fore.RED}b. 🔙 返回{Style.RESET_ALL}")
+    ui.print_menu_item("b", "返回", "返回主菜单", ui.Icons.BACK)
 
     while True:
         choice = input(
-            f"\n{Fore.CYAN}请选择模组编号 (1-{len(found_mods)}, b返回): {Style.RESET_ALL}"
+            ui.get_input_prompt("请选择模组编号", options=f"1-{len(found_mods)}, b返回")
         ).strip()
 
         if choice.lower() == "b":
@@ -355,7 +364,7 @@ def _scan_third_party_mods(available_mod_dirs: List[str]) -> Optional[str]:
                 return path_manager.detect_version_and_choose(selected_path)
             return None
         else:
-            print(f"{Fore.RED}❌ 请输入选择或路径{Style.RESET_ALL}")
+            ui.print_error("请输入选择或路径")
 
 
 def confirm_action(message: str) -> bool:
@@ -371,22 +380,22 @@ def auto_generate_output_path(input_path: str) -> str:
 
 def show_success(message: str):
     """显示成功信息"""
-    print(f"{Fore.GREEN}✅ {message}{Style.RESET_ALL}")
+    ui.print_success(message)
 
 
 def show_error(message: str):
     """显示错误信息"""
-    print(f"{Fore.RED}❌ {message}{Style.RESET_ALL}")
+    ui.print_error(message)
 
 
 def show_warning(message: str):
     """显示警告信息"""
-    print(f"{Fore.YELLOW}⚠️ {message}{Style.RESET_ALL}")
+    ui.print_warning(message)
 
 
 def show_info(message: str):
     """显示信息"""
-    print(f"{Fore.CYAN}{message}{Style.RESET_ALL}")
+    ui.print_info(message)
 
 
 def _get_terminal_width() -> int:

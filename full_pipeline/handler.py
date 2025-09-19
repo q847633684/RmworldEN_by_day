@@ -102,8 +102,13 @@ def handle_full_pipeline():
                         success = translator.translate_csv(
                             export_csv_path, output_csv, ak, sk
                         )
-                        if not success:
+                        if success is False:
                             show_error("Java翻译失败")
+                            return
+                        elif success is None:
+                            # 用户中断，不是失败
+                            show_warning("翻译被用户中断")
+                            print("💡 提示: 可以使用恢复功能继续翻译")
                             return
                     else:
                         # 如果没有配置密钥，提示用户配置

@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, Any, Optional, Union
 from colorama import Fore, Style  # type: ignore
+from utils.ui_style import ui
 from utils.logging_config import get_logger, log_user_action, log_data_processing
 from utils.path_manager import PathManager
 from utils.config import (
@@ -45,12 +46,9 @@ class InteractionManager:
             length (int): 分隔线长度
         """
         if title:
-            padding = (length - len(title) - 2) // 2
-            print(
-                f"\n{Fore.CYAN}{char * padding} {title} {char * padding}{Style.RESET_ALL}"
-            )
+            ui.print_section_header(title)
         else:
-            print(f"\n{Fore.CYAN}{char * length}{Style.RESET_ALL}")
+            ui.print_separator(char, length)
 
     def _print_step_header(self, step_num: int, total_steps: int, title: str):
         """
@@ -61,10 +59,7 @@ class InteractionManager:
             total_steps (int): 总步骤数
             title (str): 步骤标题
         """
-        print(
-            f"\n{Fore.YELLOW}【步骤 {step_num}/{total_steps}】{title}{Style.RESET_ALL}"
-        )
-        print(f"{Fore.YELLOW}{'─' * 50}{Style.RESET_ALL}")
+        ui.print_step_header(step_num, total_steps, title)
 
     def handle_smart_extraction_workflow(
         self,
@@ -99,10 +94,8 @@ class InteractionManager:
         self._print_step_header(5, 5, "选择模板结构")
         # 根据你的决策树，如果选择了merge，则使用5.1合并逻辑，不需要选择模板结构
         if conflict_resolution == "merge":
-            print(f"{Fore.BLUE}检测到选择合并模式{Style.RESET_ALL}")
-            print(
-                f"   {Fore.GREEN}✅ 将使用5.1智能合并逻辑，无需选择模板结构{Style.RESET_ALL}"
-            )
+            ui.print_info("检测到选择合并模式")
+            ui.print_success("将使用5.1智能合并逻辑，无需选择模板结构")
             template_structure = "merge_logic"  # 特殊标识
         else:
             template_structure = self._choose_template_structure(
@@ -137,7 +130,7 @@ class InteractionManager:
 
             return smart_config
         else:
-            print(f"{Fore.YELLOW}🔄 重新开始配置流程...{Style.RESET_ALL}")
+            ui.print_info("重新开始配置流程...")
             return self.handle_smart_extraction_workflow(mod_dir)
 
     def _confirm_configuration(self, config: Dict[str, Any]) -> bool:
@@ -150,24 +143,34 @@ class InteractionManager:
         Returns:
             bool: 用户是否确认配置
         """
-        print(f"\n{Fore.CYAN}📋 配置摘要确认：{Style.RESET_ALL}")
-        print("   y = 确认，继续执行")
-        print("   n = 取消，退出流程")
-        print("   r = 重新配置，回到第一步")
-        print(
-            f"   📊 数据来源：{self._format_choice_description(config['data_sources']['choice'])}"
+        ui.print_section_header("配置摘要确认", ui.Icons.SETTINGS)
+        ui.print_key_value("y", "确认，继续执行", ui.Icons.CONFIRM)
+        ui.print_key_value("n", "取消，退出流程", ui.Icons.CANCEL)
+        ui.print_key_value("r", "重新配置，回到第一步", ui.Icons.BACK)
+        ui.print_key_value(
+            "数据来源",
+            self._format_choice_description(config["data_sources"]["choice"]),
+            ui.Icons.DATA,
         )
-        print(f"   📁 输出目录：{config['output_config']['output_dir']}")
-        print(
-            f"   ⚙️ 冲突处理：{self._format_conflict_description(config['output_config']['conflict_resolution'])}"
+        ui.print_key_value(
+            "输出目录", config["output_config"]["output_dir"], ui.Icons.FOLDER
         )
-        print(
-            f"   🗂️ 文件结构：{self._format_structure_description(config['template_structure'])}"
+        ui.print_key_value(
+            "冲突处理",
+            self._format_conflict_description(
+                config["output_config"]["conflict_resolution"]
+            ),
+            ui.Icons.SETTINGS,
+        )
+        ui.print_key_value(
+            "文件结构",
+            self._format_structure_description(config["template_structure"]),
+            ui.Icons.FOLDER,
         )
 
         while True:
             choice = (
-                input(f"\n{Fore.CYAN}确认以上配置？(y/n/r): {Style.RESET_ALL}")
+                input(ui.get_input_prompt("确认以上配置", options="y/n/r"))
                 .strip()
                 .lower()
             )
@@ -178,9 +181,7 @@ class InteractionManager:
             elif choice in ["r", "restart"]:
                 return False
             else:
-                print(
-                    f"   {Fore.RED}❌ 请输入 y(确认)/n(取消)/r(重新配置){Style.RESET_ALL}"
-                )
+                ui.print_error("请输入 y(确认)/n(取消)/r(重新配置)")
 
     def _format_choice_description(self, choice: str) -> str:
         """格式化数据来源描述"""
@@ -271,22 +272,29 @@ class InteractionManager:
             f"{Fore.CYAN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
         )
 
-        print(f"{Fore.GREEN}💡 推荐选择：{Style.RESET_ALL}")
-        print(
-            f"   {Fore.YELLOW}1{Style.RESET_ALL} - 使用默认目录（{Fore.CYAN}推荐{Style.RESET_ALL}）"
+        ui.print_section_header("推荐选择", ui.Icons.SETTINGS)
+        ui.print_menu_item(
+            "1", "使用默认目录", str(default_dirs), ui.Icons.FOLDER, is_recommended=True
         )
-        print(f"   {Fore.WHITE}   {default_dirs}{Style.RESET_ALL}")
 
         if history:
-            print(f"\n{Fore.YELLOW}📋 历史记录：{Style.RESET_ALL}")
+            ui.print_section_header("历史记录", ui.Icons.HISTORY)
             for i, hist_path in enumerate(history, 2):
-                print(f"   {Fore.CYAN}{i}{Style.RESET_ALL}. {hist_path}")
+                ui.print_menu_item(
+                    str(i), os.path.basename(hist_path), hist_path, ui.Icons.FOLDER
+                )
         else:
-            print(f"\n{Fore.YELLOW}📋 暂无历史记录{Style.RESET_ALL}")
+            ui.print_section_header("历史记录", ui.Icons.HISTORY)
+            ui.print_info("暂无历史记录")
         max_choice = len(history) + 1
         while True:
             choice = input(
-                f"\n{Fore.CYAN}🎯 请选择 (1-{max_choice}，回车默认1) 或直接输入路径: {Style.RESET_ALL}"
+                ui.get_input_prompt(
+                    "请选择",
+                    options=f"1-{max_choice}",
+                    default="1",
+                    icon="或直接输入路径",
+                )
             ).strip()
 
             # 处理回车默认选择
@@ -343,14 +351,12 @@ class InteractionManager:
                     # 用户自定义目录，language 置空
                     return choice, language
                 else:
-                    print(f"{Fore.RED}❌ 路径无效：{choice}{Style.RESET_ALL}")
-                    print(
-                        f"{Fore.YELLOW}💡 提示：请检查路径是否正确，或选择历史记录中的路径{Style.RESET_ALL}"
-                    )
+                    ui.print_error(f"路径无效：{choice}")
+                    ui.print_tip("请检查路径是否正确，或选择历史记录中的路径")
                     continue
             else:
-                print(f"{Fore.RED}❌ 请输入选择或路径{Style.RESET_ALL}")
-                print(f"{Fore.YELLOW}💡 提示：直接回车选择默认目录{Style.RESET_ALL}")
+                ui.print_error("请输入选择或路径")
+                ui.print_tip("直接回车选择默认目录")
 
     def _analyze_keyed_quality(self, keyed_dir: str) -> dict:
         """
@@ -392,46 +398,42 @@ class InteractionManager:
             if definjected_path is None:
                 return "defs_only"
             recommendation = self._analyze_definjected_quality(str(definjected_path))
-            print(f"{Fore.BLUE}检测DefInjected目录：{Fore.GREEN}✅ 有{Style.RESET_ALL}")
+            ui.print_success("检测DefInjected目录：有")
             # 显示智能推荐
             if recommendation["recommended"] == "definjected_only":
-                print(
-                    f"{Fore.GREEN}🤖 智能推荐：使用DefInjected目录提取 (理由: {recommendation['reason']}){Style.RESET_ALL}"
+                ui.print_tip(
+                    f"智能推荐：使用DefInjected目录提取 (理由: {recommendation['reason']})"
                 )
             else:
-                print(
-                    f"{Fore.YELLOW}🤖 智能推荐：扫描Defs文件重新提取 (理由: {recommendation['reason']}){Style.RESET_ALL}"
+                ui.print_tip(
+                    f"智能推荐：扫描Defs文件重新提取 (理由: {recommendation['reason']})"
                 )
-            print(f"{Fore.YELLOW}请选择数据来源：{Style.RESET_ALL}")
-            print(
-                f"   {Fore.GREEN}1. 使用DefInjected目录提取翻译（更快）{Style.RESET_ALL}"
+            ui.print_section_header("请选择数据来源", ui.Icons.DATA)
+            ui.print_menu_item(
+                "1", "使用DefInjected目录提取翻译", "更快", ui.Icons.SCAN
             )
-            print(f"   {Fore.CYAN}2. 扫描Defs文件重新提取（完整扫描）{Style.RESET_ALL}")
-            print(f"   {Fore.BLUE}3. 采用智能推荐{Style.RESET_ALL}")
+            ui.print_menu_item("2", "扫描Defs文件重新提取", "完整扫描", ui.Icons.SCAN)
+            ui.print_menu_item(
+                "3", "采用智能推荐", "自动选择最佳方案", ui.Icons.SETTINGS
+            )
             while True:
                 choice = input(
-                    f"\n{Fore.CYAN}请选择 (1/2/3，回车默认采用推荐): {Style.RESET_ALL}"
+                    ui.get_input_prompt("请选择", options="1/2/3", default="采用推荐")
                 ).strip()
                 if choice == "1":
-                    print(
-                        f"   {Fore.GREEN}✅ 选择：使用DefInjected目录提取翻译{Style.RESET_ALL}"
-                    )
+                    ui.print_success("选择：使用DefInjected目录提取翻译")
                     return "definjected_only"
                 elif choice == "2":
-                    print(
-                        f"   {Fore.GREEN}✅ 选择：扫描Defs文件重新提取{Style.RESET_ALL}"
-                    )
+                    ui.print_success("选择：扫描Defs文件重新提取")
                     return "defs_only"
                 elif choice == "3" or choice == "":
-                    print(
-                        f"   {Fore.BLUE}✅ 采用智能推荐：{recommendation['recommended']}{Style.RESET_ALL}"
-                    )
+                    ui.print_success(f"采用智能推荐：{recommendation['recommended']}")
                     return recommendation["recommended"]
                 else:
-                    print(f"   {Fore.RED}❌ 请输入 1、2、3 或直接回车{Style.RESET_ALL}")
+                    ui.print_error("请输入 1、2、3 或直接回车")
         else:
-            print(f"{Fore.BLUE}检测DefInjected目录：{Fore.RED}❌ 没有{Style.RESET_ALL}")
-            print(f"   {Fore.GREEN}✅ 自动选择：扫描Defs文件重新提取{Style.RESET_ALL}")
+            ui.print_warning("检测DefInjected目录：没有")
+            ui.print_success("自动选择：扫描Defs文件重新提取")
             return "defs_only"
 
     def _analyze_definjected_quality(self, definjected_path: str) -> Dict[str, str]:
@@ -494,53 +496,53 @@ class InteractionManager:
         if has_output_files:
             # 分析现有文件状态
             analysis = self._analyze_existing_files(output_status)  # type: ignore
-            print(f"{Fore.YELLOW}⚠️  检测到输出目录中已有翻译文件{Style.RESET_ALL}")
-            print(f"   📊 分析结果：{analysis['summary']}")
+            ui.print_warning("检测到输出目录中已有翻译文件")
+            ui.print_info(f"分析结果：{analysis['summary']}")
             # 智能推荐
             if analysis["recommended"]:
-                print(
-                    f"{Fore.GREEN}🤖 智能推荐：{analysis['recommended']} (理由: {analysis['reason']}){Style.RESET_ALL}"
+                ui.print_tip(
+                    f"智能推荐：{analysis['recommended']} (理由: {analysis['reason']})"
                 )
-            print(f"{Fore.YELLOW}请选择处理方式：{Style.RESET_ALL}")
-            print(
-                f"   {Fore.GREEN}1. 合并 - 保留现有翻译文件，仅添加新内容{Style.RESET_ALL}"
+            ui.print_section_header("请选择处理方式", ui.Icons.SETTINGS)
+            ui.print_menu_item(
+                "1", "合并", "保留现有翻译文件，仅添加新内容", ui.Icons.SETTINGS
             )
-            print(
-                f"   {Fore.YELLOW}2. 覆盖 - 删除并重新生成本次要导出的翻译文件{Style.RESET_ALL}"
+            ui.print_menu_item(
+                "2", "覆盖", "删除并重新生成本次要导出的翻译文件", ui.Icons.SETTINGS
             )
-            print(
-                f"   {Fore.RED}3. 重建 - 清空整个输出目录，所有内容全部重建{Style.RESET_ALL}"
+            ui.print_menu_item(
+                "3", "重建", "清空整个输出目录，所有内容全部重建", ui.Icons.SETTINGS
             )
             if analysis["recommended"]:
-                print(f"   {Fore.BLUE}4. 采用智能推荐{Style.RESET_ALL}")
+                ui.print_menu_item(
+                    "4", "采用智能推荐", "使用系统推荐的处理方式", ui.Icons.SETTINGS
+                )
             while True:
                 max_choice = 4 if analysis["recommended"] else 3
                 choice = input(
-                    f"\n{Fore.CYAN}请选择 (1-{max_choice}): {Style.RESET_ALL}"
+                    ui.get_input_prompt("请选择", options=f"1-{max_choice}")
                 ).strip()
                 if choice == "1":
-                    print(f"   {Fore.GREEN}✅ 选择：合并{Style.RESET_ALL}")
+                    ui.print_success("选择：合并")
                     return "merge"
                 elif choice == "2":
-                    print(f"   {Fore.YELLOW}✅ 选择：覆盖{Style.RESET_ALL}")
+                    ui.print_success("选择：覆盖")
                     return "overwrite"
                 elif choice == "3":
-                    print(f"   {Fore.RED}✅ 选择：重建{Style.RESET_ALL}")
+                    ui.print_success("选择：重建")
                     return "rebuild"
                 elif (
                     choice == "4"
                     and analysis["recommended"]
                     and analysis["recommended_value"]
                 ):
-                    print(
-                        f"   {Fore.BLUE}✅ 采用智能推荐：{analysis['recommended']}{Style.RESET_ALL}"
-                    )
+                    ui.print_success(f"采用智能推荐：{analysis['recommended']}")
                     return analysis["recommended_value"]
                 else:
-                    print(f"   {Fore.RED}❌ 请输入 1-{max_choice}{Style.RESET_ALL}")
+                    ui.print_error(f"请输入 1-{max_choice}")
         else:
-            print(f"{Fore.BLUE}输出目录中没有现有翻译文件{Style.RESET_ALL}")
-            print(f"   {Fore.GREEN}✅ 自动选择：新建{Style.RESET_ALL}")
+            ui.print_info("输出目录中没有现有翻译文件")
+            ui.print_success("自动选择：新建")
             return "new"
 
     def _analyze_existing_files(
@@ -660,37 +662,40 @@ class InteractionManager:
 
         # 2. 如果选择definjected_only且非merge，使用4.1(original_structure)
         if data_source_choice == "definjected_only":
-            print(f"{Fore.BLUE}检测到使用DefInjected目录提取翻译{Style.RESET_ALL}")
-            print(
-                f"   {Fore.GREEN}✅ 自动选择：保持原英文DefInjected结构{Style.RESET_ALL}"
-            )
+            ui.print_info("检测到使用DefInjected目录提取翻译")
+            ui.print_success("自动选择：保持原英文DefInjected结构")
             return "original_structure"
 
         # 3. 如果选择defs_only且非merge，询问用户选择4.2或4.3
         elif data_source_choice == "defs_only":
-            print(f"{Fore.BLUE}检测到使用Defs文件扫描提取翻译{Style.RESET_ALL}")
-            print(f"{Fore.YELLOW}请选择DefInjected文件组织方式：{Style.RESET_ALL}")
-            print(f"   {Fore.GREEN}1. 按原始Defs文件结构组织（推荐）{Style.RESET_ALL}")
-            print("      └── 保持与Defs目录相同的文件夹和文件结构")
-            print("      └── 便于对照原始定义文件")
-            print(f"   {Fore.CYAN}2. 按定义类型分组{Style.RESET_ALL}")
-            print("      └── ThingDefs.xml、PawnKindDefs.xml 等")
-            print("      └── 便于翻译工作分类管理")
+            ui.print_info("检测到使用Defs文件扫描提取翻译")
+            ui.print_section_header("请选择DefInjected文件组织方式", ui.Icons.FOLDER)
+            ui.print_menu_item(
+                "1",
+                "按原始Defs文件结构组织",
+                "保持与Defs目录相同的文件夹和文件结构，便于对照原始定义文件",
+                ui.Icons.FOLDER,
+                is_recommended=True,
+            )
+            ui.print_menu_item(
+                "2",
+                "按定义类型分组",
+                "ThingDefs.xml、PawnKindDefs.xml 等，便于翻译工作分类管理",
+                ui.Icons.FOLDER,
+            )
 
             while True:
                 choice = input(
-                    f"\n{Fore.CYAN}请选择 (1/2, 回车默认选择1): {Style.RESET_ALL}"
+                    ui.get_input_prompt("请选择", options="1/2", default="1")
                 ).strip()
                 if choice == "1" or choice == "":
-                    print(
-                        f"   {Fore.GREEN}✅ 选择：按原始Defs文件结构组织{Style.RESET_ALL}"
-                    )
+                    ui.print_success("选择：按原始Defs文件结构组织")
                     return "defs_by_file_structure"
                 elif choice == "2":
-                    print(f"   {Fore.CYAN}✅ 选择：按定义类型分组{Style.RESET_ALL}")
+                    ui.print_success("选择：按定义类型分组")
                     return "defs_by_type"
                 else:
-                    print(f"   {Fore.RED}❌ 请输入 1 或 2{Style.RESET_ALL}")
+                    ui.print_error("请输入 1 或 2")
 
         # 默认选择
         return "defs_by_type"

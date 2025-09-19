@@ -7,6 +7,7 @@ import csv
 from pathlib import Path
 from typing import List, Tuple, Optional
 from colorama import Fore, Style  # type: ignore
+from utils.ui_style import ui
 from utils.logging_config import (
     get_logger,
     log_data_processing,
@@ -100,7 +101,7 @@ class TemplateManager:
 
         if not translations:
             self.logger.warning("未找到任何翻译数据")
-            print(f"{Fore.YELLOW}⚠️ 未找到任何翻译数据{Style.RESET_ALL}")
+            ui.print_warning("未找到任何翻译数据")
             return []
 
         # 步骤3：根据用户选择的输出模式生成翻译模板
@@ -113,7 +114,7 @@ class TemplateManager:
         )
 
         # 步骤4：导出CSV到输出目录
-        print("📁 正在导出 CSV 到输出目录 ...")
+        ui.print_info("正在导出 CSV 到输出目录 ...")
         self._save_translations_to_csv(
             translations, output_dir, output_language, output_csv
         )
@@ -126,7 +127,7 @@ class TemplateManager:
         )
 
         self.logger.debug("模板生成完成，总计 %s 条翻译", len(translations))
-        print(f"{Fore.GREEN}✅ 提取完成：{len(translations)} 条{Style.RESET_ALL}")
+        ui.print_success(f"提取完成：{len(translations)} 条")
         return translations
 
     # 合并模式
@@ -191,19 +192,19 @@ class TemplateManager:
                 print(f"Keyed翻译: {item}")
         # 写入合并结果
         if has_input_keyed and keyed_translations:
-            print("📁 正在合并 Keyed ...")
+            ui.print_info("正在合并 Keyed ...")
             write_merged_translations(
                 keyed_translations, output_dir, output_language, sub_dir="Keyed"
             )
-            print("   ✅ Keyed 模板已合并")
+            ui.print_success("Keyed 模板已合并")
         if def_translations:
-            print("📁 正在合并 DefInjected ...")
+            ui.print_info("正在合并 DefInjected ...")
             write_merged_translations(
                 def_translations, output_dir, output_language, sub_dir="DefInjected"
             )
-            print("   ✅ DefInjected 模板已合并")
+            ui.print_success("DefInjected 模板已合并")
         # 步骤4：导出CSV到输出目录
-        print("📁 正在导出 CSV 到输出目录 ...")
+        ui.print_info("正在导出 CSV 到输出目录 ...")
         self._save_translations_to_csv(
             translations, output_dir, output_language, output_csv
         )
@@ -234,23 +235,23 @@ class TemplateManager:
 
         # 提取Keyed翻译（总是提取）
         if has_input_keyed:
-            print(f"{Fore.GREEN}📊 正在扫描 Keyed 目录...{Style.RESET_ALL}")
+            ui.print_info("正在扫描 Keyed 目录...")
             keyed_translations = extract_keyed_translations(
                 import_dir=import_dir, import_language=import_language
             )
-            print(f"   ✅ 从Keyed 目录提取到 {len(keyed_translations)} 条 Keyed 翻译")
+            ui.print_success(
+                f"从Keyed 目录提取到 {len(keyed_translations)} 条 Keyed 翻译"
+            )
             self.logger.debug(
                 "从Keyed 目录提取到 %s 条 Keyed 翻译", len(keyed_translations)
             )
         else:
             keyed_translations = []
-            print(
-                f"{Fore.YELLOW}未检测到输入 Keyed 目录，已跳过 Keyed 提取。{Style.RESET_ALL}"
-            )
+            ui.print_warning("未检测到输入 Keyed 目录，已跳过 Keyed 提取。")
 
         if data_source_choice == "definjected_only":
             self.logger.debug("正在扫描 DefInjected 目录...")
-            print(f"{Fore.GREEN}📊 正在扫描 DefInjected 目录...{Style.RESET_ALL}")
+            ui.print_info("正在扫描 DefInjected 目录...")
             # 从DefInjected目录提取翻译数据
             definjected_translations = extract_definjected_translations(
                 import_dir,
@@ -262,8 +263,8 @@ class TemplateManager:
                 (k, t, g, f, t)  # en_test用test填充
                 for k, t, g, f in keyed_translations
             ]
-            print(
-                f"   ✅ 从DefInjected 目录提取到 {len(definjected_translations)} 条 DefInjected 翻译"
+            ui.print_success(
+                f"从DefInjected 目录提取到 {len(definjected_translations)} 条 DefInjected 翻译"
             )
             self.logger.info(
                 "从DefInjected 目录提取到 %s 条 DefInjected 翻译",
@@ -273,7 +274,7 @@ class TemplateManager:
 
         elif data_source_choice == "defs_only":
             self.logger.debug("正在扫描 Defs 目录...")
-            print(f"{Fore.GREEN}📊 正在扫描 Defs 目录...{Style.RESET_ALL}")
+            ui.print_info("正在扫描 Defs 目录...")
             defs_translations = scan_defs_sync(import_dir)
             # defs_translations 总是四元组，需要转换为五元组
             keyed_as_five = [
@@ -283,7 +284,7 @@ class TemplateManager:
             defs_as_five = [
                 (k, t, g, f, t) for k, t, g, f in defs_translations  # en_test用test填充
             ]
-            print(f"   ✅ 从Defs目录提取到 {len(defs_translations)} 条 Defs 翻译")
+            ui.print_success(f"从Defs目录提取到 {len(defs_translations)} 条 Defs 翻译")
             self.logger.debug(
                 "从Defs目录提取到 %s 条 Defs 翻译", len(defs_translations)
             )
@@ -324,24 +325,22 @@ class TemplateManager:
 
         # 生成Keyed模板 - 使用exporters.py中的函数
         if has_input_keyed and keyed_translations:
-            print("📁 正在生成 Keyed 模板...")
+            ui.print_info("正在生成 Keyed 模板...")
             export_keyed_template(
                 output_dir,
                 output_language,
                 keyed_translations,
             )
-            self.logger.info(
+            self.logger.debug(
                 "生成 %s 条 Keyed 模板到 %s", len(keyed_translations), output_path
             )
-            print("   ✅ Keyed 模板已生成")
+            ui.print_success("Keyed 模板已生成")
         elif not has_input_keyed:
-            print(
-                f"{Fore.YELLOW}未检测到输入 Keyed 目录，已跳过 Keyed 模板生成。{Style.RESET_ALL}"
-            )
+            ui.print_warning("未检测到输入 Keyed 目录，已跳过 Keyed 模板生成。")
 
         # 生成DefInjected模板 - 完全复用exporters.py中的函数
         if def_translations:
-            print("📁 正在生成 DefInjected 模板...")
+            ui.print_info("正在生成 DefInjected 模板...")
             self._generate_definjected_with_structure(
                 def_translations,
                 output_dir,
@@ -377,7 +376,7 @@ class TemplateManager:
             self.logger.debug(
                 "生成 %s 条 DefInjected 模板（保持原结构）", len(def_translations)
             )
-            print("   ✅ DefInjected 模板已生成（保持原结构）")
+            ui.print_success("DefInjected 模板已生成（保持原结构）")
         elif template_structure == "defs_by_type":
             # 需要实现按DefType分组的导出函数
             export_definjected_with_defs_structure(
@@ -388,7 +387,7 @@ class TemplateManager:
             self.logger.debug(
                 "生成 %s 条 DefInjected 模板（按DefType分组）", len(def_translations)
             )
-            print("   ✅ DefInjected 模板已生成（按DefType分组）")
+            ui.print_success("DefInjected 模板已生成（按DefType分组）")
         elif template_structure == "defs_by_file_structure":
             # 需要实现按文件结构的导出函数
             export_definjected_with_file_structure(
@@ -399,7 +398,7 @@ class TemplateManager:
             self.logger.debug(
                 "生成 %s 条 DefInjected 模板（按文件结构）", len(def_translations)
             )
-            print("   ✅ DefInjected 模板已生成（按文件结构）")
+            ui.print_success("DefInjected 模板已生成（按文件结构）")
         else:
             # 默认使用按DefType分组
             export_definjected_with_defs_structure(
@@ -410,7 +409,7 @@ class TemplateManager:
             self.logger.debug(
                 "生成 %s 条 DefInjected 模板（默认分组）", len(def_translations)
             )
-            print("   ✅ DefInjected 模板已生成（默认分组）")
+            ui.print_success("DefInjected 模板已生成（默认分组）")
 
     def _save_translations_to_csv(
         self,
@@ -428,7 +427,7 @@ class TemplateManager:
             writer.writerow(["key", "text", "tag", "file"])
             for item in translations:
                 writer.writerow(item[:4])  # 只导出前四个字段，兼容五元组
-        print(f"{Fore.GREEN}✅ CSV文件已生成: {csv_path}{Style.RESET_ALL}")
+        ui.print_success(f"CSV文件已生成: {csv_path}")
         self.logger.debug("翻译数据已保存到CSV: %s", csv_path)
         # 记入历史：让提取生成的 CSV 出现在后续“Python机翻/导入翻译”的历史列表
         try:

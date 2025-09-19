@@ -33,10 +33,6 @@ def extract_keyed_translations(
 ) -> List[Tuple[str, str, str, str]]:
     """提取 Keyed 翻译"""
     logger = get_logger(f"{__name__}.extract_keyed_translations")
-
-    print(
-        f"{Fore.GREEN}正在扫描 Keyed 目录（模组目录：{import_dir}, 语言：{import_language}）...{Style.RESET_ALL}"
-    )
     logger.debug(
         "正在扫描 Keyed 目录（模组目录：%s, 语言：%s）...", import_dir, import_language
     )
@@ -91,9 +87,6 @@ def extract_keyed_translations(
 def scan_defs_sync(import_dir) -> List[Tuple[str, str, str, str]]:
     """扫描 Defs 目录中的可翻译内容（参考 Day_EN 完整实现）"""
     logger = get_logger(f"{__name__}.scan_defs_sync")
-    print(
-        f"{Fore.GREEN}正在扫描 Defs 目录（模组目录：{import_dir}）...{Style.RESET_ALL}"
-    )
     logger.debug("正在扫描 Defs 目录（模组目录：%s）...", import_dir)
     processor = XMLProcessor()
     content_filter = ContentFilter(CONFIG)

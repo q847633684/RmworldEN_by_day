@@ -9,6 +9,7 @@ import signal
 import threading
 import shutil
 from utils.logging_config import get_logger
+from utils.ui_style import ui
 from typing import Optional, Dict, Any
 from pathlib import Path
 from glob import glob
@@ -29,7 +30,7 @@ def update_progress(current: int, total: int, status: str = ""):
 
     if current == total:
         print()  # 换行
-        print("🎉 翻译完成！")
+        ui.print_success("翻译完成！")
 
 
 def count_csv_lines(csv_path: str) -> int:
@@ -141,13 +142,13 @@ class JavaTranslator:
             # 统计总行数用于进度条
             total_lines = count_csv_lines(input_csv)
             if total_lines == 0:
-                print("❌ CSV文件为空或无法读取")
+                ui.print_error("CSV文件为空或无法读取")
                 return False
 
-            print(f"🚀 开始翻译，总计 {total_lines} 行...")
+            ui.print_info(f"开始翻译，总计 {total_lines} 行...")
             if enable_interrupt:
-                print("💡 提示: 按 Ctrl+C 可以安全中断翻译")
-            print("=" * 60)
+                ui.print_tip("按 Ctrl+C 可以安全中断翻译")
+            ui.print_separator()
 
             # 准备输入数据（包含起始行参数）
             # 优先使用传入的resume_line参数
@@ -226,7 +227,7 @@ class JavaTranslator:
                         continue
                     elif "[警告]" in line:
                         # Java输出的警告信息，显示但不计入进度
-                        print(f"\n⚠️ {line}")
+                        ui.print_warning(line)
                         continue
                     else:
                         # 其他输出忽略，避免干扰进度条
@@ -240,8 +241,8 @@ class JavaTranslator:
 
             if return_code == 0:
                 self.logger.debug("Java翻译工具执行成功")
-                print("=" * 60)
-                print(f"✅ 翻译完成！输出文件: {output_csv}")
+                ui.print_separator()
+                ui.print_success(f"翻译完成！输出文件: {output_csv}")
 
                 return True
             else:
@@ -249,26 +250,26 @@ class JavaTranslator:
                 if return_code == 130:  # SIGINT (Ctrl+C)
                     self.logger.debug("用户中断翻译")
                     print()  # 换行
-                    print("=" * 60)
-                    print("⚠️ 翻译被用户中断")
+                    ui.print_separator()
+                    ui.print_warning("翻译被用户中断")
 
                     return None  # 用户中断，不是失败
                 else:
                     self.logger.error(f"Java翻译工具执行失败，返回码: {return_code}")
                     print()  # 换行
-                    print("=" * 60)
-                    print(f"❌ 翻译失败，返回码: {return_code}")
+                    ui.print_separator()
+                    ui.print_error(f"翻译失败，返回码: {return_code}")
 
                     return False
 
         except subprocess.TimeoutExpired:
             self.logger.error("Java翻译工具执行超时")
-            print("❌ 翻译超时")
+            ui.print_error("翻译超时")
 
             return False
         except Exception as e:
             self.logger.error(f"调用Java翻译工具时发生错误: {e}")
-            print(f"❌ 翻译错误: {e}")
+            ui.print_error(f"翻译错误: {e}")
 
             return False
         finally:
@@ -419,7 +420,7 @@ class JavaTranslator:
         # 通过文件对比获取实际的恢复行号
         resume_line = self.get_resume_line_from_files(input_csv, output_csv)
 
-        print(f"📍 从第 {resume_line} 行开始恢复翻译")
+        ui.print_info(f"从第 {resume_line} 行开始恢复翻译")
 
         # 从用户配置中获取必要的参数
         from utils.config import get_user_config
@@ -438,7 +439,7 @@ class JavaTranslator:
         )
 
         if success:
-            print(f"✅ 恢复翻译完成！结果已保存到: {output_csv}")
+            ui.print_success(f"恢复翻译完成！结果已保存到: {output_csv}")
             return True
         else:
             self.logger.debug("恢复翻译被中断或未完成")

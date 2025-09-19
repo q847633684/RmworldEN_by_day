@@ -198,7 +198,7 @@ def log_user_action(action: str, **kwargs):
     """
     logger = get_logger("user_actions")
     params = ", ".join(f"{k}={v}" for k, v in kwargs.items())
-    logger.info("用户操作: %s - %s", action, params)
+    logger.debug("用户操作: %s - %s", action, params)
 
 
 def log_data_processing(operation: str, count: int, **kwargs):
@@ -212,7 +212,7 @@ def log_data_processing(operation: str, count: int, **kwargs):
     """
     logger = get_logger("data_processing")
     extra_info = ", ".join(f"{k}={v}" for k, v in kwargs.items())
-    logger.info("数据处理: %s - 处理了 %d 条记录 %s", operation, count, extra_info)
+    logger.debug("数据处理: %s - 处理了 %d 条记录 %s", operation, count, extra_info)
 
 
 def log_error_with_context(error: Exception, context: str = "", **kwargs):
@@ -268,7 +268,7 @@ if not LoggingConfig._initialized:
     log_level = os.getenv("DAY_TRANSLATION_LOG_LEVEL", "INFO")
     log_to_file = os.getenv("DAY_TRANSLATION_LOG_TO_FILE", "true").lower() == "true"
     log_to_console = (
-        os.getenv("DAY_TRANSLATION_LOG_TO_CONSOLE", "true").lower() == "true"
+        os.getenv("DAY_TRANSLATION_LOG_TO_CONSOLE", "false").lower() == "true"
     )
 
     LoggingConfig.setup_logging(
