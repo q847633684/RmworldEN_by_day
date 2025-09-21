@@ -48,6 +48,7 @@ from full_pipeline.handler import handle_full_pipeline
 from import_template.handler import handle_import_template
 from translate.handler import handle_unified_translate
 from utils.interaction import show_main_menu, wait_for_user_input
+from utils.ui_style import confirm_action
 
 # 初始化 colorama 以支持 Windows 终端颜色
 init()
@@ -91,7 +92,8 @@ def main():
                 wait_for_user_input("按回车返回主菜单...")
         except KeyboardInterrupt:
             ui.print_warning("\n⚠️ 用户中断操作")
-            if ui.confirm_action("是否退出程序？"):
+
+            if confirm_action("是否退出程序？"):
                 ui.print_success("👋 感谢使用 Day Translation！")
                 break
             continue
