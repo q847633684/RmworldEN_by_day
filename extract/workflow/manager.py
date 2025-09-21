@@ -1,79 +1,44 @@
 """
-RimWorld 翻译模板管理器
+模板管理器
 
-负责翻译模板的完整生命周期管理，协调各个组件完成复杂的翻译提取和生成流程：
-
-核心职责：
-- 协调翻译数据提取（Defs/DefInjected/Keyed）
-- 管理多种模板结构生成
-- 处理智能合并和冲突解决
-- 提供 CSV 格式数据导出
-
-主要功能：
-1. 数据提取管理
-   - extract_all_translations(): 统一的数据提取入口
-   - 支持多种数据源选择（definjected_only/defs_only）
-   - 自动处理 Keyed 和 DefInjected 数据
-
-2. 模板生成管理
-   - extract_and_generate_templates(): 完整的提取和生成流程
-   - _generate_templates_to_output_dir_with_structure(): 结构化模板生成
-   - 支持多种输出结构（原始结构/按类型分组/按文件结构）
-
-3. 智能合并管理
-   - merge_mode(): 智能合并模式处理
-   - 集成 SmartMerger 进行数据合并
-   - 支持增量更新和历史记录
-
-4. 数据导出管理
-   - _save_translations_to_csv(): CSV 格式数据导出
-   - 支持多种数据格式的统一导出
-
-特性：
-- 完整的错误处理和日志记录
-- 用户友好的进度提示和反馈
-- 灵活的数据源和输出结构选择
-- 与配置系统深度集成
-- 支持大型模组的高效处理
+负责翻译模板的完整生命周期管理，协调各个组件完成复杂的翻译提取和生成流程
 """
 
-import logging
 import csv
 from pathlib import Path
 from typing import List, Tuple, Optional
-from colorama import Fore, Style  # type: ignore
 from utils.ui_style import ui
 from utils.logging_config import (
     get_logger,
     log_data_processing,
     log_user_action,
 )
-from .smart_merger import SmartMerger
-from .extractors import (
-    extract_keyed_translations,
-    scan_defs_sync,
-    extract_definjected_translations,
-)
-from .exporters import (
-    export_definjected_with_original_structure,
-    export_definjected_with_defs_structure,
-    export_definjected_with_file_structure,
-    export_keyed_template,
-    write_merged_translations,
-)
+from ..core.extractors import DefInjectedExtractor, KeyedExtractor, DefsScanner
+from ..core.exporters import DefInjectedExporter, KeyedExporter
+from ..utils import SmartMerger
 from utils.config import get_config, get_language_dir
 from utils.path_manager import PathManager
 
-CONFIG = get_config()
-
 
 class TemplateManager:
-    """翻译模板管理器，负责模板的完整生命周期管理"""
+    """
+    翻译模板管理器
+
+    负责翻译模板的完整生命周期管理，协调各个组件完成复杂的翻译提取和生成流程
+    """
 
     def __init__(self):
         """初始化模板管理器"""
         self.logger = get_logger(f"{__name__}.TemplateManager")
         self.logger.debug("初始化TemplateManager")
+
+        # 初始化组件
+        self.config = get_config()
+        self.definjected_extractor = DefInjectedExtractor(self.config)
+        self.keyed_extractor = KeyedExtractor(self.config)
+        self.defs_scanner = DefsScanner(self.config)
+        self.definjected_exporter = DefInjectedExporter(self.config)
+        self.keyed_exporter = KeyedExporter(self.config)
 
     def extract_and_generate_templates(
         self,
@@ -90,13 +55,18 @@ class TemplateManager:
         提取翻译数据并生成模板，同时导出CSV
 
         Args:
-            output_dir (str): 输出目录路径
-            data_source_choice (str): 数据来源选择 ('definjected_only' 或 'defs_only')
+            import_dir: 输入目录路径
+            import_language: 输入语言代码
+            output_dir: 输出目录路径
+            output_language: 输出语言代码
+            data_source_choice: 数据来源选择 ('definjected_only' 或 'defs_only')
+            template_structure: 模板结构选择
+            has_input_keyed: 是否包含Keyed输入
+            output_csv: CSV输出文件名
 
         Returns:
             List[Tuple[str, str, str, str]]: 提取的翻译数据
         """
-        # 记录操作开始，便于调试和跟踪处理流程
         self.logger.debug(
             "开始提取翻译数据并生成模板: import_dir=%s, output_dir=%s",
             import_dir,
@@ -110,23 +80,7 @@ class TemplateManager:
             template_structure=template_structure,
         )
 
-        # 步骤1：智能选择DefInjected提取方式
-        #
-        # 【背景说明】
-        # RimWorld模组有两种DefInjected数据来源：
-        # 1. 英文DefInjected目录：ModDir/Languages/English/DefInjected/
-        #    - 这是模组作者手工整理的翻译结构，通常更精确
-        #    - 适合已有翻译基础的情况，保持结构一致性
-        #
-        # 2. Defs目录：ModDir/Defs/
-        #    - 这是模组的原始定义文件，包含所有可翻译字段
-        #    - 适合首次翻译或结构有变动的情况，确保完整性
-        #
-        # 【智能选择逻辑】
-        # - data_source_choice: 数据来源选择（'definjected_only', 'defs_only'
-        # - data_source_choice='definjected_only': 使用"definjected"模式（从英文DefInjected目录提取）
-        # - data_source_choice='defs_only': 使用"defs"模式（从Defs目录扫描提取）
-        # 步骤2：提取翻译数据
+        # 步骤1：提取翻译数据
         translations = self.extract_all_translations(
             import_dir,
             import_language,
@@ -139,7 +93,7 @@ class TemplateManager:
             ui.print_warning("未找到任何翻译数据")
             return []
 
-        # 步骤3：根据用户选择的输出模式生成翻译模板
+        # 步骤2：根据用户选择的输出模式生成翻译模板
         self._generate_templates_to_output_dir_with_structure(
             output_dir=output_dir,
             output_language=output_language,
@@ -148,11 +102,12 @@ class TemplateManager:
             has_input_keyed=has_input_keyed,
         )
 
-        # 步骤4：导出CSV到输出目录
+        # 步骤3：导出CSV到输出目录
         ui.print_info("正在导出 CSV 到输出目录 ...")
         self._save_translations_to_csv(
             translations, output_dir, output_language, output_csv
         )
+
         # 记录数据处理统计
         log_data_processing(
             "提取翻译模板",
@@ -165,7 +120,6 @@ class TemplateManager:
         ui.print_success(f"提取完成：{len(translations)} 条")
         return translations
 
-    # 合并模式
     def merge_mode(
         self,
         import_dir: str,
@@ -180,12 +134,13 @@ class TemplateManager:
         执行智能合并模式处理翻译数据
 
         Args:
-            import_dir (str): 输入目录路径
-            import_language (str): 输入语言代码
-            output_dir (str): 输出目录路径
-            output_language (str): 输出语言代码
-            data_source_choice (str): 数据来源选择 ('definjected_only', 'defs_only')
-            has_input_keyed (bool): 是否包含Keyed输入
+            import_dir: 输入目录路径
+            import_language: 输入语言代码
+            output_dir: 输出目录路径
+            output_language: 输出语言代码
+            data_source_choice: 数据来源选择
+            has_input_keyed: 是否包含Keyed输入
+            output_csv: CSV输出文件名
 
         Returns:
             List[Tuple[str, str, str, str]]: 合并后的翻译数据列表
@@ -197,6 +152,7 @@ class TemplateManager:
             data_source_choice=data_source_choice,
             has_input_keyed=has_input_keyed,
         )
+
         # 步骤2：提取输出数据
         output_data = self.extract_all_translations(
             output_dir,
@@ -204,15 +160,16 @@ class TemplateManager:
             data_source_choice="definjected_only",
             has_input_keyed=has_input_keyed,
         )
+
         # 步骤3：智能合并翻译数据
         translations = SmartMerger.smart_merge_translations(
             input_data=input_data,
             output_data=output_data,
             include_unchanged=False,
         )
+
         for item in translations:
             self.logger.debug(item)
-            # print(f"合并翻译数据: {item}")
 
         # 分离键值对和定射
         keyed_translations = []
@@ -225,19 +182,22 @@ class TemplateManager:
             else:
                 keyed_translations.append(item)
                 print(f"Keyed翻译: {item}")
+
         # 写入合并结果
         if has_input_keyed and keyed_translations:
             ui.print_info("正在合并 Keyed ...")
-            write_merged_translations(
-                keyed_translations, output_dir, output_language, sub_dir="Keyed"
+            self._write_merged_translations(
+                keyed_translations, output_dir, output_language, "keyed"
             )
             ui.print_success("Keyed 模板已合并")
+
         if def_translations:
             ui.print_info("正在合并 DefInjected ...")
-            write_merged_translations(
-                def_translations, output_dir, output_language, sub_dir="DefInjected"
+            self._write_merged_translations(
+                def_translations, output_dir, output_language, "defInjected"
             )
             ui.print_success("DefInjected 模板已合并")
+
         # 步骤4：导出CSV到输出目录
         ui.print_info("正在导出 CSV 到输出目录 ...")
         self._save_translations_to_csv(
@@ -247,32 +207,30 @@ class TemplateManager:
 
     def extract_all_translations(
         self,
-        import_dir,
-        import_language,
+        import_dir: str,
+        import_language: str,
         data_source_choice: Optional[str] = None,
         has_input_keyed: bool = True,
-    ):
+    ) -> List[Tuple[str, str, str, str]]:
         """
         提取所有翻译数据
+
         Args:
-            data_source_choice (str): 数据来源选择 ('definjected_only', 'defs_only')
-            language (str): 目标语言代码
+            import_dir: 输入目录路径
+            import_language: 输入语言代码
+            data_source_choice: 数据来源选择 ('definjected_only', 'defs_only')
+            has_input_keyed: 是否包含Keyed输入
 
         Returns:
-            返回五元组 (key, test, tag, rel_path, en_test)
-
-            提取参数说明：
-                extract_keyed_translations: 提取 Keyed 翻译
-                scan_defs_sync: 扫描 Defs 目录中的可翻译内容
-                extract_definjected_translations: 从 DefInjected 目录提取翻译结构
+            List[Tuple[str, str, str, str]]: 四元组列表 (key, text, tag, rel_path)
         """
         data_source_choice = data_source_choice or "defs_only"
 
         # 提取Keyed翻译（总是提取）
         if has_input_keyed:
             ui.print_info("正在扫描 Keyed 目录...")
-            keyed_translations = extract_keyed_translations(
-                import_dir=import_dir, import_language=import_language
+            keyed_translations = self.keyed_extractor.extract(
+                import_dir, import_language
             )
             ui.print_success(
                 f"从Keyed 目录提取到 {len(keyed_translations)} 条 Keyed 翻译"
@@ -288,16 +246,10 @@ class TemplateManager:
             self.logger.debug("正在扫描 DefInjected 目录...")
             ui.print_info("正在扫描 DefInjected 目录...")
             # 从DefInjected目录提取翻译数据
-            definjected_translations = extract_definjected_translations(
-                import_dir,
-                import_language,
+            definjected_translations = self.definjected_extractor.extract(
+                import_dir, import_language
             )
 
-            # 现在总是返回五元组，需要将Keyed也转换为五元组保持一致性
-            keyed_as_five = [
-                (k, t, g, f, t)  # en_test用test填充
-                for k, t, g, f in keyed_translations
-            ]
             ui.print_success(
                 f"从DefInjected 目录提取到 {len(definjected_translations)} 条 DefInjected 翻译"
             )
@@ -305,25 +257,18 @@ class TemplateManager:
                 "从DefInjected 目录提取到 %s 条 DefInjected 翻译",
                 len(definjected_translations),
             )
-            return keyed_as_five + definjected_translations  # type: ignore
+            return keyed_translations + definjected_translations
 
         elif data_source_choice == "defs_only":
             self.logger.debug("正在扫描 Defs 目录...")
             ui.print_info("正在扫描 Defs 目录...")
-            defs_translations = scan_defs_sync(import_dir)
-            # defs_translations 总是四元组，需要转换为五元组
-            keyed_as_five = [
-                (k, t, g, f, t)
-                for k, t, g, f in keyed_translations  # en_test用test填充
-            ]
-            defs_as_five = [
-                (k, t, g, f, t) for k, t, g, f in defs_translations  # en_test用test填充
-            ]
+            defs_translations = self.defs_scanner.extract(import_dir)
+
             ui.print_success(f"从Defs目录提取到 {len(defs_translations)} 条 Defs 翻译")
             self.logger.debug(
                 "从Defs目录提取到 %s 条 Defs 翻译", len(defs_translations)
             )
-            return keyed_as_five + defs_as_five
+            return keyed_translations + defs_translations
 
         # 如果到了这里，说明没有匹配的data_source_choice
         self.logger.warning("未知的data_source_choice: %s", data_source_choice)
@@ -333,16 +278,15 @@ class TemplateManager:
         self,
         output_dir: str,
         output_language: str,
-        translations: list,
+        translations: List[Tuple],
         template_structure: Optional[str],
         has_input_keyed: bool = True,
     ):
-        """在指定输出目录生成翻译模板结构（完全复用原有逻辑）"""
+        """在指定输出目录生成翻译模板结构"""
         template_structure = template_structure or "defs_by_type"
         output_path = Path(output_dir)
 
         # 分离Keyed和DefInjected翻译
-        # 改进分离逻辑：同时支持两种数据格式
         keyed_translations = []
         def_translations = []
         for item in translations:
@@ -350,7 +294,6 @@ class TemplateManager:
             # 判断是否为DefInjected翻译的规则：
             # 1. key包含'/'（scan_defs_sync格式）：如 "ThingDef/Apparel_Pants.label"
             # 2. key包含'.'且file_path是DefInjected相关（extract_definjected_translations格式）：如 "Apparel_Pants.label"
-            # 3. 或者根据tag和file_path判断
             if "/" in k:
                 def_translations.append(item)
             elif "." in k and (f.endswith(".xml") or "DefInjected" in str(f)):
@@ -358,13 +301,11 @@ class TemplateManager:
             else:
                 keyed_translations.append(item)
 
-        # 生成Keyed模板 - 使用exporters.py中的函数
+        # 生成Keyed模板
         if has_input_keyed and keyed_translations:
             ui.print_info("正在生成 Keyed 模板...")
-            export_keyed_template(
-                output_dir,
-                output_language,
-                keyed_translations,
+            self.keyed_exporter.export_keyed_template(
+                output_dir, output_language, keyed_translations
             )
             self.logger.debug(
                 "生成 %s 条 Keyed 模板到 %s", len(keyed_translations), output_path
@@ -373,7 +314,7 @@ class TemplateManager:
         elif not has_input_keyed:
             ui.print_warning("未检测到输入 Keyed 目录，已跳过 Keyed 模板生成。")
 
-        # 生成DefInjected模板 - 完全复用exporters.py中的函数
+        # 生成DefInjected模板
         if def_translations:
             ui.print_info("正在生成 DefInjected 模板...")
             self._generate_definjected_with_structure(
@@ -386,49 +327,33 @@ class TemplateManager:
     def _generate_definjected_with_structure(
         self,
         def_translations: List[Tuple[str, str, str, str]],
-        output_dir,
-        output_language,
+        output_dir: str,
+        output_language: str,
         template_structure: str,
     ):
-        """根据智能配置的结构选择生成DefInjected模板，直接调用对应的export函数
-        1. original_structure: 使用原有结构的导出函数
-        2. defs_by_type: 需要实现按DefType分组的导出函数
-        3. file_by_type: 需要实现按文件分组的导出函数
-        导出参数
-            export_definjected_with_original_structure  按 file_path 创建目录和文件结构导出 DefInjected 翻译
-            export_definjected_with_defs_structure  按照按DefType分组导出DefInjected翻译
-            export_definjected_with_file_structure  按原始Defs文件目录结构导出DefInjected翻译
-            export_keyed_template   导出 Keyed 翻译模板
-            export_keyed    导出 Keyed 翻译，添加 EN 注释
-        """
+        """根据智能配置的结构选择生成DefInjected模板"""
         if template_structure == "original_structure":
             # 使用原有结构的导出函数
-            export_definjected_with_original_structure(
-                output_dir,
-                output_language,
-                def_translations,
+            self.definjected_exporter.export_with_original_structure(
+                output_dir, output_language, def_translations
             )
             self.logger.debug(
                 "生成 %s 条 DefInjected 模板（保持原结构）", len(def_translations)
             )
             ui.print_success("DefInjected 模板已生成（保持原结构）")
         elif template_structure == "defs_by_type":
-            # 需要实现按DefType分组的导出函数
-            export_definjected_with_defs_structure(
-                output_dir,
-                output_language,
-                def_translations,
+            # 按DefType分组的导出函数
+            self.definjected_exporter.export_with_defs_structure(
+                output_dir, output_language, def_translations
             )
             self.logger.debug(
                 "生成 %s 条 DefInjected 模板（按DefType分组）", len(def_translations)
             )
             ui.print_success("DefInjected 模板已生成（按DefType分组）")
         elif template_structure == "defs_by_file_structure":
-            # 需要实现按文件结构的导出函数
-            export_definjected_with_file_structure(
-                output_dir,
-                output_language,
-                def_translations,
+            # 按文件结构的导出函数
+            self.definjected_exporter.export_with_file_structure(
+                output_dir, output_language, def_translations
             )
             self.logger.debug(
                 "生成 %s 条 DefInjected 模板（按文件结构）", len(def_translations)
@@ -436,19 +361,98 @@ class TemplateManager:
             ui.print_success("DefInjected 模板已生成（按文件结构）")
         else:
             # 默认使用按DefType分组
-            export_definjected_with_defs_structure(
-                output_dir,
-                output_language,
-                def_translations,
+            self.definjected_exporter.export_with_defs_structure(
+                output_dir, output_language, def_translations
             )
             self.logger.debug(
                 "生成 %s 条 DefInjected 模板（默认分组）", len(def_translations)
             )
             ui.print_success("DefInjected 模板已生成（默认分组）")
 
+    def _write_merged_translations(
+        self, merged: List[Tuple], output_dir: str, output_language: str, sub_dir: str
+    ) -> None:
+        """
+        通用写回 XML 方法，支持 DefInjected 和 Keyed
+
+        Args:
+            merged: List[(key, test, tag, rel_path, en_test, history)]
+            output_dir: 输出根目录
+            sub_dir: 子目录名（defInjected 或 keyed）
+        """
+        logger = get_logger(f"{__name__}.write_merged_translations")
+
+        base_dir = get_language_dir(output_dir, output_language) / sub_dir
+
+        # 按 rel_path 分组
+        file_groups = {}
+        for item in merged:
+            rel_path = item[3]
+            file_groups.setdefault(rel_path, []).append(item)
+
+        processor = self.definjected_exporter.processor
+        for rel_path, items in file_groups.items():
+            output_file = base_dir / rel_path
+
+            # 检查文件是否已存在
+            if output_file.exists():
+                # 读取现有XML文件
+                existing_tree = processor.parse_xml(str(output_file))
+                if existing_tree is not None:
+                    root = existing_tree.getroot()
+                    logger.info("更新现有文件: %s", output_file)
+                else:
+                    # 文件存在但解析失败，创建新的
+                    logger.warning("无法解析现有文件，将重新创建: %s", output_file)
+                    root = processor.create_element("LanguageData")
+                    output_file.parent.mkdir(parents=True, exist_ok=True)
+            else:
+                # 文件不存在，创建新文件和目录
+                logger.info("创建新文件: %s", output_file)
+                output_file.parent.mkdir(parents=True, exist_ok=True)
+                root = processor.create_element("LanguageData")
+
+            # 更新或添加翻译条目
+            for key, test, _, _, en_test, history in sorted(items, key=lambda x: x[0]):
+                # 查找现有元素
+                existing_elem = root.find(key)
+                if existing_elem is not None:
+                    # 更新现有元素
+                    original_text = existing_elem.text or ""
+                    if original_text != test:
+                        # 添加历史注释
+                        if history and history.strip():
+                            history_comment = processor.create_comment(history)
+                            elem_index = list(root).index(existing_elem)
+                            root.insert(elem_index, history_comment)
+                    existing_elem.text = test
+                else:
+                    # 添加新元素
+                    # 先添加历史注释（如果有，且不为空）
+                    if history and history.strip():
+                        history_comment = processor.create_comment(
+                            f"HISTORY: 原翻译内容：{history}，替换于YYYY-MM-DD"
+                        )
+                        root.append(history_comment)
+
+                    # 添加英文注释（如果有）
+                    if en_test:
+                        en_comment = processor.create_comment(f"EN: {en_test}")
+                        root.append(en_comment)
+
+                    # 创建新的翻译元素
+                    processor.create_subelement(root, key, test)
+
+            # 保存更新后的文件
+            success = processor.save_xml(root, output_file, pretty_print=True)
+            if success:
+                logger.info("成功保存文件: %s (%s 条翻译)", output_file, len(items))
+            else:
+                logger.error("保存文件失败: %s", output_file)
+
     def _save_translations_to_csv(
         self,
-        translations: list,
+        translations: List[Tuple],
         output_dir: str,
         output_language: str,
         output_csv: Optional[str] = None,
@@ -462,9 +466,11 @@ class TemplateManager:
             writer.writerow(["key", "text", "tag", "file"])
             for item in translations:
                 writer.writerow(item[:4])  # 只导出前四个字段，兼容五元组
+
         ui.print_success(f"CSV文件已生成: {csv_path}")
         self.logger.debug("翻译数据已保存到CSV: %s", csv_path)
-        # 记入历史：让提取生成的 CSV 出现在后续“Python机翻/导入翻译”的历史列表
+
+        # 记入历史：让提取生成的 CSV 出现在后续"Python机翻/导入翻译"的历史列表
         try:
             PathManager().remember_path("import_csv", str(csv_path))
         except Exception:

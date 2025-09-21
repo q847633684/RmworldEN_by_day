@@ -1,72 +1,28 @@
 """
-RimWorld 智能交互管理器
+智能交互管理器
 
-实现用户友好的四步智能工作流程，自动检测和分析模组状态，提供智能化的决策建议：
-
-核心流程：
-1. 检测英文目录状态（DefInjected/Keyed）
-2. 检测输出目录状态（DefInjected/Keyed）
-3. 选择数据来源（DefInjected提取 vs Defs扫描）
-4. 处理输出冲突（合并/覆盖/重建/新建）
-5. 选择模板结构（根据决策树逻辑）
-
-主要功能：
-- InteractionManager 类：核心交互管理器
-- handle_smart_extraction_workflow(): 执行完整的智能工作流程
-- 智能分析和推荐系统
-- 用户友好的交互界面
-
-智能分析功能：
-1. 目录状态检测
-   - _detect_language_directories(): 检测指定语言目录状态
-   - 自动识别 DefInjected 和 Keyed 目录的有效性
-
-2. 数据源质量分析
-   - _analyze_definjected_quality(): 分析 DefInjected 目录质量
-   - _analyze_keyed_quality(): 分析 Keyed 目录质量
-   - 基于文件数量、修改时间等因素提供智能建议
-
-3. 冲突处理分析
-   - _analyze_existing_files(): 分析现有输出文件状态
-   - 智能推荐最佳的处理策略
-
-4. 输出目录管理
-   - _get_output_directory(): 获取用户指定的输出目录
-   - 支持历史记录和路径记忆功能
-
-特性：
-- 美观的命令行交互界面
-- 智能的决策建议系统
-- 完整的配置确认和验证
-- 详细的用户操作日志记录
-- 支持多语言目录结构
+实现用户友好的四步智能工作流程，自动检测和分析模组状态，提供智能化的决策建议
 """
 
-import logging
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, Any, Optional, Union
 from colorama import Fore, Style  # type: ignore
 from utils.ui_style import ui
-from utils.logging_config import get_logger, log_user_action, log_data_processing
+from utils.logging_config import get_logger, log_user_action
 from utils.path_manager import PathManager
 from utils.config import (
-    get_config,
     get_language_dir,
     get_language_subdir,
 )
 
-CONFIG = get_config()
-
 
 class InteractionManager:
     """
-    智能交互管理器 - 实现用户设计的四步智能流程
-    1. 检测英文目录状态（DefInjected/Keyed）
-    2. 检测输出目录状态（DefInjected/Keyed）
-    3. 选择数据来源（DefInjected提取 vs Defs扫描）
-    4. 处理输出冲突（合并/覆盖/重建）
+    智能交互管理器
+
+    实现用户友好的四步智能工作流程，自动检测和分析模组状态，提供智能化的决策建议
     """
 
     def __init__(self):
@@ -80,9 +36,9 @@ class InteractionManager:
         打印分隔线
 
         Args:
-            title (str): 分隔线标题
-            char (str): 分隔线字符
-            length (int): 分隔线长度
+            title: 分隔线标题
+            char: 分隔线字符
+            length: 分隔线长度
         """
         if title:
             ui.print_section_header(title)
@@ -94,27 +50,28 @@ class InteractionManager:
         打印步骤标题
 
         Args:
-            step_num (int): 当前步骤号
-            total_steps (int): 总步骤数
-            title (str): 步骤标题
+            step_num: 当前步骤号
+            total_steps: 总步骤数
+            title: 步骤标题
         """
         ui.print_step_header(step_num, total_steps, title)
 
-    def handle_smart_extraction_workflow(
-        self,
-        mod_dir: str,
-    ) -> Dict[str, Any]:
+    def handle_smart_extraction_workflow(self, mod_dir: str) -> Dict[str, Any]:
         """
         执行用户设计的四步智能流程
+
         Args:
-            mod_dir (str): 模组目录路径
+            mod_dir: 模组目录路径
+
         Returns:
             Dict[str, Any]: 智能流程决策结果
         """
         self._print_separator("智能提取翻译模板工作流", "=", 60)
+
         # 第一步：检测英文目录状态
         self._print_step_header(1, 5, "检测mod英文目录状态")
         import_status = self._detect_language_directories(mod_dir, language="English")
+
         # 第二步：检测输出目录状态
         self._print_step_header(2, 5, "检测输出目录状态")
         output_dir, output_language = self._get_output_directory(
@@ -123,12 +80,15 @@ class InteractionManager:
         output_status = self._detect_language_directories(
             output_dir, language=output_language
         )
+
         # 第三步：选择数据来源
         self._print_step_header(3, 5, "选择数据来源")
         data_source_choice = self._choose_data_source(import_status)
+
         # 第四步：处理输出冲突
         self._print_step_header(4, 5, "处理输出冲突")
         conflict_resolution = self._handle_output_conflicts(output_status)
+
         # 第五步：选择模板结构（根据决策树逻辑）
         self._print_step_header(5, 5, "选择模板结构")
         # 根据你的决策树，如果选择了merge，则使用5.1合并逻辑，不需要选择模板结构
@@ -140,6 +100,7 @@ class InteractionManager:
             template_structure = self._choose_template_structure(
                 data_source_choice, conflict_resolution
             )
+
         # 构建智能配置
         smart_config = {
             "data_sources": {
@@ -154,6 +115,7 @@ class InteractionManager:
             },
             "template_structure": template_structure,  # 模板结构
         }
+
         # 配置确认和验证
         if self._confirm_configuration(smart_config):
             self._print_separator("✅ 智能流程决策完成", "=", 60)
@@ -177,7 +139,7 @@ class InteractionManager:
         确认配置信息
 
         Args:
-            config (Dict[str, Any]): 智能配置
+            config: 智能配置
 
         Returns:
             bool: 用户是否确认配置
@@ -251,15 +213,15 @@ class InteractionManager:
         return descriptions.get(structure, structure)
 
     def _detect_language_directories(
-        self,
-        mod_dir: str,
-        language: str,  # 语言
+        self, mod_dir: str, language: str
     ) -> Dict[str, Union[bool, str]]:
         """
         检测指定语言目录状态（DefInjected/Keyed）
+
         Args:
-            mod_dir (str): 模组目录路径
-            language (str): 语言目录名（如 'English', 'ChineseSimplified'）
+            mod_dir: 模组目录路径
+            language: 语言目录名（如 'English', 'ChineseSimplified'）
+
         Returns:
             Dict[str, Union[bool, str]]: 目录状态
         """
@@ -268,16 +230,20 @@ class InteractionManager:
             f"{Fore.BLUE}🔍 正在检测目录:{mod_dir} 语言:{language}... {Style.RESET_ALL}"
             f"\n{Fore.BLUE}🔍 正在检测 {language_dir} 目录状态...{Style.RESET_ALL}"
         )
+
         def_dir = get_language_subdir(mod_dir, language, subdir_type="defInjected")
         keyed_dir = get_language_subdir(mod_dir, language, subdir_type="keyed")
+
         has_definjected = def_dir.exists() and any(def_dir.rglob("*.xml"))
         has_keyed = keyed_dir.exists() and any(keyed_dir.rglob("*.xml"))
+
         print(
             f"   {Fore.CYAN}检测到{def_dir}目录: {Fore.GREEN if has_definjected else Fore.RED}{'✅ 有' if has_definjected else '❌ 否'}{Style.RESET_ALL}"
         )
         print(
             f"   {Fore.CYAN}检测到{keyed_dir}目录: {Fore.GREEN if has_keyed else Fore.RED}{'✅ 有' if has_keyed else '❌ 否'}{Style.RESET_ALL}"
         )
+
         return {
             "has_definjected": has_definjected,
             "has_keyed": has_keyed,
@@ -290,9 +256,11 @@ class InteractionManager:
     def _get_output_directory(self, mod_dir: str, language: str) -> tuple:
         """
         获取用户指定的输出目录（支持多语言）
+
         Args:
-            mod_dir (str): 模组目录路径
-            language (str): 目标语言目录名
+            mod_dir: 模组目录路径
+            language: 目标语言目录名
+
         Returns:
             (str, str): 输出目录路径和语言名（自定义目录时 language 为空字符串）
         """
@@ -300,6 +268,7 @@ class InteractionManager:
         default_dir = str(Path(mod_dir))
         default_dirs = get_language_dir(mod_dir, language)
         history = path_manager.get_history_list("output_dir")
+
         # 美化输出目录选择界面
         print(
             f"\n{Fore.CYAN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
@@ -325,6 +294,7 @@ class InteractionManager:
         else:
             ui.print_section_header("历史记录", ui.Icons.HISTORY)
             ui.print_info("暂无历史记录")
+
         max_choice = len(history) + 1
         while True:
             choice = input(
@@ -405,16 +375,19 @@ class InteractionManager:
         xml_files = list(dir_path.rglob("*.xml"))
         file_count = len(xml_files)
         recent_files = 0
+
         for xml_file in xml_files:
             mtime = datetime.fromtimestamp(os.path.getmtime(xml_file))
             if (datetime.now() - mtime).days < 30:
                 recent_files += 1
+
         suggestion = "合并" if recent_files > file_count * 0.5 else "覆盖"
         reason = (
             "大部分文件近期有更新"
             if recent_files > file_count * 0.5
             else "文件较旧或较少，建议覆盖"
         )
+
         return {
             "file_count": file_count,
             "recent_files": recent_files,
@@ -425,8 +398,10 @@ class InteractionManager:
     def _choose_data_source(self, import_status: Dict[str, Union[bool, str]]) -> str:
         """
         选择数据来源
+
         Args:
-            import_status (Dict[str, Union[bool, str]]): 英文目录状态
+            import_status: 英文目录状态
+
         Returns:
             str: 数据来源选择
         """
@@ -436,8 +411,10 @@ class InteractionManager:
             definjected_path = import_status.get("definjected_path")
             if definjected_path is None:
                 return "defs_only"
+
             recommendation = self._analyze_definjected_quality(str(definjected_path))
             ui.print_success("检测DefInjected目录：有")
+
             # 显示智能推荐
             if recommendation["recommended"] == "definjected_only":
                 ui.print_tip(
@@ -447,6 +424,7 @@ class InteractionManager:
                 ui.print_tip(
                     f"智能推荐：扫描Defs文件重新提取 (理由: {recommendation['reason']})"
                 )
+
             ui.print_section_header("请选择数据来源", ui.Icons.DATA)
             ui.print_menu_item(
                 "1", "使用DefInjected目录提取翻译", "更快", ui.Icons.SCAN
@@ -455,6 +433,7 @@ class InteractionManager:
             ui.print_menu_item(
                 "3", "采用智能推荐", "自动选择最佳方案", ui.Icons.SETTINGS
             )
+
             while True:
                 choice = input(
                     ui.get_input_prompt("请选择", options="1/2/3", default="采用推荐")
@@ -480,7 +459,7 @@ class InteractionManager:
         分析英文DefInjected目录的内容质量
 
         Args:
-            definjected_path (str): DefInjected目录路径
+            definjected_path: DefInjected目录路径
 
         Returns:
             Dict[str, str]: 包含推荐选择和理由
@@ -488,6 +467,7 @@ class InteractionManager:
         try:
             definjected_dir = Path(definjected_path)
             xml_files = list(definjected_dir.rglob("*.xml"))
+
             if len(xml_files) == 0:
                 return {"recommended": "defs_only", "reason": "DefInjected目录为空"}
             elif len(xml_files) < 5:
@@ -502,6 +482,7 @@ class InteractionManager:
                     mtime = datetime.fromtimestamp(os.path.getmtime(xml_file))
                     if datetime.now() - mtime < timedelta(days=90):  # 90天内修改过
                         recent_files += 1
+
                 if recent_files / len(xml_files) > 0.3:  # 30%以上的文件是最近修改的
                     return {
                         "recommended": "definjected_only",
@@ -524,24 +505,29 @@ class InteractionManager:
     ) -> str:
         """
         处理输出冲突
+
         Args:
-            output_status (Dict[str, Union[bool, str]]): 输出目录状态
+            output_status: 输出目录状态
+
         Returns:
             str: 冲突处理方式
         """
         has_output_files = output_status.get("has_definjected") or output_status.get(
             "has_keyed"
         )
+
         if has_output_files:
             # 分析现有文件状态
-            analysis = self._analyze_existing_files(output_status)  # type: ignore
+            analysis = self._analyze_existing_files(output_status)
             ui.print_warning("检测到输出目录中已有翻译文件")
             ui.print_info(f"分析结果：{analysis['summary']}")
+
             # 智能推荐
             if analysis["recommended"]:
                 ui.print_tip(
                     f"智能推荐：{analysis['recommended']} (理由: {analysis['reason']})"
                 )
+
             ui.print_section_header("请选择处理方式", ui.Icons.SETTINGS)
             ui.print_menu_item(
                 "1", "合并", "保留现有翻译文件，仅添加新内容", ui.Icons.SETTINGS
@@ -552,15 +538,18 @@ class InteractionManager:
             ui.print_menu_item(
                 "3", "重建", "清空整个输出目录，所有内容全部重建", ui.Icons.SETTINGS
             )
+
             if analysis["recommended"]:
                 ui.print_menu_item(
                     "4", "采用智能推荐", "使用系统推荐的处理方式", ui.Icons.SETTINGS
                 )
+
             while True:
                 max_choice = 4 if analysis["recommended"] else 3
                 choice = input(
                     ui.get_input_prompt("请选择", options=f"1-{max_choice}")
                 ).strip()
+
                 if choice == "1":
                     ui.print_success("选择：合并")
                     return "merge"
@@ -591,7 +580,7 @@ class InteractionManager:
         分析现有输出文件的状态
 
         Args:
-            output_status (Dict[str, Union[bool, Optional[str]]]): 输出目录状态
+            output_status: 输出目录状态
 
         Returns:
             Dict[str, Optional[str]]: 分析结果和推荐
@@ -669,7 +658,7 @@ class InteractionManager:
         获取英文 Keyed 目录路径
 
         Args:
-            mod_dir (str): 模组目录路径
+            mod_dir: 模组目录路径
 
         Returns:
             Optional[str]: Keyed 目录路径，如果不存在则返回 None
@@ -688,8 +677,8 @@ class InteractionManager:
         根据数据来源和冲突处理方式选择模板结构（实现你的决策树逻辑）
 
         Args:
-            data_source_choice (str): 数据来源选择
-            conflict_resolution (str): 冲突处理方式
+            data_source_choice: 数据来源选择
+            conflict_resolution: 冲突处理方式
 
         Returns:
             str: 模板结构选择

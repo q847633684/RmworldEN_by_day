@@ -17,6 +17,7 @@ from utils.config import (
 from utils.utils import XMLProcessor, get_language_folder_path
 
 CONFIG = get_config()
+logger = get_logger(__name__)
 
 
 def update_all_xml(

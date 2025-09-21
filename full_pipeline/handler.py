@@ -38,8 +38,7 @@ def handle_full_pipeline():
         facade = TranslationFacade(mod_dir, language)
 
         # 直接走“提取翻译”的智能流程，使用与提取模块相同的逻辑
-        from extract.template_manager import TemplateManager
-        from extract.interaction_manager import InteractionManager
+        from extract.workflow import TemplateManager, InteractionManager
 
         template_manager = TemplateManager()
         interaction_manager = InteractionManager()

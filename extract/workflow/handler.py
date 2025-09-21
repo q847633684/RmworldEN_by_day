@@ -6,12 +6,6 @@ RimWorld 翻译提取主处理器
 - 智能工作流程管理
 - 冲突处理和模式选择
 - 错误处理和日志记录
-
-主要功能：
-- handle_extract(): 主提取流程入口
-- 支持多种冲突处理模式（合并/覆盖/重建/新建）
-- 集成智能交互管理器
-- 提供完整的错误处理和用户反馈
 """
 
 from pathlib import Path
@@ -30,23 +24,23 @@ from utils.interaction import (
 )
 from utils.path_manager import PathManager
 from utils.config import ConfigError
-
-CONFIG = get_config()
-path_manager = PathManager()
+from .manager import TemplateManager
+from .interaction import InteractionManager
 
 
 def handle_extract():
     """处理提取模板功能"""
     logger = get_logger(f"{__name__}.handle_extract")
+    config = get_config()
 
-    print(f"日志文件路径：{CONFIG.log_file}")
-    if CONFIG.debug_mode:
+    print(f"日志文件路径：{config.log_file}")
+    if config.debug_mode:
         print("调试模式已开启，详细日志见日志文件。")
 
     logger.info("开始处理提取模板功能")
 
     try:
-        # 选择模组目录  已检查
+        # 选择模组目录
         mod_dir = select_mod_path_with_version_detection()
         if not mod_dir:
             logger.info("用户取消了模组目录选择")
@@ -55,42 +49,31 @@ def handle_extract():
         # 记录用户操作
         log_user_action("选择模组目录", mod_dir=mod_dir)
 
-        # 延迟导入，避免循环导入
-        from extract.template_manager import TemplateManager
-        from extract.interaction_manager import InteractionManager
-
+        # 创建模板管理器和交互管理器
         template_manager = TemplateManager()
-
-        # 创建智能交互管理器
         interaction_manager = InteractionManager()
 
         show_info("=== 开始智能提取模板 ===")
         try:
             # 执行四步智能流程
-            # 正在检查
             smart_config = interaction_manager.handle_smart_extraction_workflow(mod_dir)
 
-            conflict_resolution = smart_config["output_config"][
-                "conflict_resolution"
-            ]  # 冲突处理
-            data_source_choice = smart_config["data_sources"]["choice"]  # 数据来源
-            template_structure = smart_config["template_structure"]  # 模板结构
+            conflict_resolution = smart_config["output_config"]["conflict_resolution"]
+            data_source_choice = smart_config["data_sources"]["choice"]
+            template_structure = smart_config["template_structure"]
             has_input_keyed = smart_config["data_sources"]["import_status"].get(
                 "has_keyed", False
-            )  #  输入是否已键化
-            # has_output_keyed = smart_config["output_config"]["output_status"].get(
-            #    "has_keyed", False
-            # )  # 输出是否已键化
-            import_dir = smart_config["data_sources"]["import_status"][
-                "mod_dir"
-            ]  # 导入路径
+            )
+            import_dir = smart_config["data_sources"]["import_status"]["mod_dir"]
             import_language = smart_config["data_sources"]["import_status"]["language"]
             output_dir = smart_config["output_config"]["output_status"]["mod_dir"]
             output_language = smart_config["output_config"]["output_status"]["language"]
+
             show_info(
                 f"智能配置：数据来源={data_source_choice}, 模板结构={template_structure}, 冲突处理={conflict_resolution}"
             )
-            output_csv = CONFIG.output_csv
+
+            output_csv = config.output_csv
             output_path = Path(output_dir)
 
             # 根据冲突处理方式执行相应操作
@@ -180,7 +163,7 @@ def handle_extract():
         except (OSError, IOError, ValueError, RuntimeError) as e:
             show_error(f"智能提取失败: {str(e)}")
             log_error_with_context(e, "智能提取失败", mod_dir=mod_dir)
-            if CONFIG.debug_mode:
+            if config.debug_mode:
                 import traceback
 
                 traceback.print_exc()
@@ -189,14 +172,15 @@ def handle_extract():
                 f"❌ 配置错误：{e}\n请检查 config.py 或用户配置文件，或尝试重新加载配置。"
             )
             log_error_with_context(e, "配置错误", mod_dir=mod_dir)
-            if CONFIG.debug_mode:
+            if config.debug_mode:
                 import traceback
 
                 traceback.print_exc()
+
     except (OSError, IOError, ValueError, ImportError, AttributeError) as e:
         show_error(f"提取模板功能失败: {str(e)}")
         log_error_with_context(e, "提取模板功能失败")
-        if CONFIG.debug_mode:
+        if config.debug_mode:
             import traceback
 
             traceback.print_exc()
@@ -205,7 +189,7 @@ def handle_extract():
             f"❌ 配置错误：{e}\n请检查 config.py 或用户配置文件，或尝试重新加载配置。"
         )
         log_error_with_context(e, "配置错误")
-        if CONFIG.debug_mode:
+        if config.debug_mode:
             import traceback
 
             traceback.print_exc()

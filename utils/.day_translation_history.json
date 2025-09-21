@@ -1,12 +1,12 @@
 {
   "mod_dir": [
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cumpilation",
     "C:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\294100\\2329126791",
     "C:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\294100\\1201382956",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw-std",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\dirty-talk",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw",
-    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Data\\Core",
-    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cumpilation"
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Data\\Core"
   ],
   "output_dir": [
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cumpilation\\1.6",

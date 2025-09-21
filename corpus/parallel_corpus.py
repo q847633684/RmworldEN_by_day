@@ -38,6 +38,7 @@ except (ImportError, ModuleNotFoundError):
     Style = _DummyStyle()  # type: ignore
 
 CONFIG = get_config()
+logger = get_logger(__name__)
 
 
 def extract_pairs_from_file(filepath: str) -> List[Tuple[str, str]]:

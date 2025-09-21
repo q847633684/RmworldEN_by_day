@@ -8,6 +8,8 @@ import csv
 from pathlib import Path
 from dataclasses import dataclass
 
+logger = get_logger(__name__)
+
 try:
     import lxml.etree as etree
 

@@ -34,7 +34,11 @@ def handle_java_translate():
         except FileNotFoundError as e:
             show_error(str(e))
             # 自动构建逻辑
-            user_input = input(ui.get_input_prompt("是否自动构建Java工具", options="y/n")).strip().lower()
+            user_input = (
+                input(ui.get_input_prompt("是否自动构建Java工具", options="y/n"))
+                .strip()
+                .lower()
+            )
             if user_input == "y":
                 # 自动构建逻辑
                 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -123,8 +127,8 @@ def handle_java_translate():
         ui.print_section_header("Java翻译工具配置", ui.Icons.SETTINGS)
         ui.print_key_value("输入文件", csv_path, ui.Icons.FILE)
         ui.print_key_value("输出文件", output_csv, ui.Icons.FILE)
-        ui.print_key_value("JAR路径", status['jar_path'], ui.Icons.SETTINGS)
-        
+        ui.print_key_value("JAR路径", status["jar_path"], ui.Icons.SETTINGS)
+
         ui.print_section_header("新功能", ui.Icons.INFO)
         ui.print_info("• 支持中断翻译 (Ctrl+C)")
         ui.print_info("• 支持恢复翻译")
@@ -144,7 +148,9 @@ def handle_java_translate():
                     # 如果没有配置密钥，提示用户配置
                     ui.print_error("未找到阿里云翻译密钥配置")
                     ui.print_info("请先配置翻译密钥：")
-                    ui.print_info("1. 在配置文件中设置 aliyun_access_key_id 和 aliyun_access_key_secret")
+                    ui.print_info(
+                        "1. 在配置文件中设置 aliyun_access_key_id 和 aliyun_access_key_secret"
+                    )
                     ui.print_info("2. 或使用其他功能进行配置")
                     return
 

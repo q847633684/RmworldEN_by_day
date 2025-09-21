@@ -1,39 +1,13 @@
 """
-RimWorld 智能翻译合并器
+智能合并器
 
-提供高级的翻译数据合并功能，支持多种合并策略和历史记录管理：
-
-核心功能：
-- SmartMerger 类：主要的合并器实现
-- 自动数据格式规范化（四元组/五元组统一处理）
-- 智能合并策略（输入优先/输出优先/智能选择）
-- 翻译历史记录和变更追踪
-
-合并策略：
-1. 内容无变化：保持原状，跳过处理
-2. 内容有更新：替换翻译，保留历史记录
-3. 新增内容：添加新翻译，包含英文注释
-
-数据格式：
-- 输入：四元组 (key, text, tag, rel_path) 或五元组 (key, text, tag, rel_path, en_text)
-- 输出：六元组 (key, text, tag, rel_path, en_text, history)
-
-主要方法：
-- smart_merge_translations(): 静态方法，执行智能合并
-- create_for_definjected(): 为 DefInjected 数据创建专用合并器
-- create_for_keyed(): 为 Keyed 数据创建专用合并器
-- get_quality_report(): 生成数据质量报告
-
-特性：
-- 支持 DefInjected 和 Keyed 两种数据类型
-- 自动生成变更历史和时间戳
-- 提供详细的合并统计和性能监控
-- 支持元数据保留和策略选择
+提供高级的翻译数据合并功能，支持多种合并策略和历史记录管理
 """
 
 import logging
 from typing import List, Tuple, Any, Dict
 import datetime
+import time
 from utils.logging_config import get_logger, log_data_processing, log_performance
 
 
@@ -50,9 +24,11 @@ class SmartMerger:
 
     def __init__(self, input_data: List[tuple], output_data: List[tuple]) -> None:
         """
-        初始化时：
-        - 自动补齐为五元组 (key, test, tag, rel_path, en_test)
-        - 统一规范化 key（去除 DefType/ 前缀）
+        初始化智能合并器
+
+        Args:
+            input_data: 输入数据列表
+            output_data: 输出数据列表
         """
         self.logger = get_logger(f"{__name__}.SmartMerger")
 
@@ -127,9 +103,7 @@ class SmartMerger:
         preserve_metadata: bool = True,
     ) -> list:
         """
-        通用智能合并方法，支持 DefInjected 和 Keyed。
-        - 输入、输出均为五元组(key, test, tag, rel_path, en_test)
-        - 返回六元组(key, test, tag, rel_path, en_test, history)
+        通用智能合并方法，支持 DefInjected 和 Keyed
 
         Args:
             input_data: 输入数据列表
@@ -137,9 +111,10 @@ class SmartMerger:
             include_unchanged: 是否包含未变化的项目
             merge_strategy: 合并策略 ("input_priority", "output_priority", "smart")
             preserve_metadata: 是否保留输出数据的元数据（tag, rel_path）
-        """
-        import time
 
+        Returns:
+            六元组列表：(key, test, tag, rel_path, en_test, history)
+        """
         start_time = time.time()
         logger = get_logger(f"{__name__}.smart_merge_translations")
 
@@ -174,7 +149,7 @@ class SmartMerger:
             out_item = output_map.get(key)
 
             if out_item:
-                # 修复：比较翻译内容是否相同，而不是比较翻译和英文原文
+                # 比较翻译内容是否相同
                 if in_item[1] == out_item[1]:  # 输入的翻译 == 输出的翻译
                     unchanged_count += 1
                     if include_unchanged:
@@ -257,13 +232,7 @@ class SmartMerger:
             new=new_count,
         )
 
-        SmartMerger._log_merge_stats(
-            stats.get("merged_count", 0),
-            stats.get("unchanged_count", 0),
-            stats.get("updated_count", 0),
-            stats.get("new_count", 0),
-            stats.get("total_input", 0),
-        )
+        SmartMerger._log_merge_stats(**stats)
         logger.info("智能合并完成: 耗时 %.3f秒, 输出 %d 条记录", duration, len(merged))
         return merged
 
@@ -298,22 +267,6 @@ class SmartMerger:
         logger.info("  最终输出项目: %d", stats.get("merged_count", 0))
         logger.info("  合并策略: %s", stats.get("merge_strategy", "unknown"))
         logger.info("  保留元数据: %s", stats.get("preserve_metadata", False))
-
-    @classmethod
-    def create_for_definjected(
-        cls, input_data: list, output_data: list
-    ) -> "SmartMerger":
-        """
-        为DefInjected数据创建专门的合并器
-
-        Args:
-            input_data: 输入数据（通常是提取的翻译）
-            output_data: 输出数据（通常是现有的翻译）
-
-        Returns:
-            SmartMerger实例
-        """
-        return cls(input_data, output_data)
 
     def get_quality_report(self) -> Dict[str, Any]:
         """
@@ -353,6 +306,22 @@ class SmartMerger:
                 (len(data) - empty_keys - empty_translations) / len(data) if data else 0
             ),
         }
+
+    @classmethod
+    def create_for_definjected(
+        cls, input_data: list, output_data: list
+    ) -> "SmartMerger":
+        """
+        为DefInjected数据创建专门的合并器
+
+        Args:
+            input_data: 输入数据（通常是提取的翻译）
+            output_data: 输出数据（通常是现有的翻译）
+
+        Returns:
+            SmartMerger实例
+        """
+        return cls(input_data, output_data)
 
     @classmethod
     def create_for_keyed(cls, input_data: list, output_data: list) -> "SmartMerger":

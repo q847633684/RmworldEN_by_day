@@ -43,7 +43,7 @@ if str(project_root) not in sys.path:
 from batch.handler import handle_batch
 from config_manage.handler import handle_config_manage
 from corpus.handler import handle_corpus
-from extract.handler import handle_extract
+from extract import handle_extract
 from full_pipeline.handler import handle_full_pipeline
 from import_template.handler import handle_import_template
 from java_translate.handler import handle_java_translate

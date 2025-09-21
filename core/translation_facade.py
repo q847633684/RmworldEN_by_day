@@ -14,7 +14,7 @@ from utils.logging_config import (
 
 from .exceptions import TranslationError, TranslationImportError, ExportError
 from utils.config import get_config, ConfigError
-from extract.template_manager import TemplateManager
+from extract.workflow import TemplateManager
 from utils.machine_translate import translate_csv
 from corpus.parallel_corpus import generate_parallel_corpus
 
