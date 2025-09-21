@@ -7,15 +7,15 @@ import os
 import logging
 from pathlib import Path
 from typing import List, Tuple, Optional
-from colorama import Fore, Style
 from utils.logging_config import (
     get_logger,
 )
+from utils.ui_style import ui
 
 from .exceptions import TranslationError, TranslationImportError, ExportError
 from utils.config import get_config, ConfigError
 from extract.workflow import TemplateManager
-from utils.machine_translate import translate_csv
+from translate import UnifiedTranslator
 from corpus.parallel_corpus import generate_parallel_corpus
 
 CONFIG = get_config()
@@ -162,10 +162,10 @@ class TranslationFacade:
 
             if not corpus_count:
                 self.logger.warning("未找到任何平行语料")
-                print(f"{Fore.YELLOW}⚠️ 未找到任何平行语料{Style.RESET_ALL}")
+                ui.print_warning("未找到任何平行语料")
                 return []
             else:
-                print(f"{Fore.GREEN}✅ 生成语料：{corpus_count} 条{Style.RESET_ALL}")
+                ui.print_success(f"生成语料：{corpus_count} 条")
 
             return []  # 这里可以返回实际的语料数据
         except Exception as e:
@@ -174,14 +174,18 @@ class TranslationFacade:
             raise ExportError(error_msg) from e
 
     def machine_translate(
-        self, csv_path: str, output_csv: Optional[str] = None
+        self,
+        csv_path: str,
+        output_csv: Optional[str] = None,
+        translator_type: str = "auto",
     ) -> None:
         """
-        使用阿里云机器翻译 CSV 文件
+        使用统一翻译接口翻译 CSV 文件
 
         Args:
             csv_path (str): 输入 CSV 文件路径
             output_csv (Optional[str]): 输出 CSV 文件路径，如果为 None 则自动生成
+            translator_type (str): 翻译器类型 ("auto", "java", "python")
 
         Raises:
             TranslationError: 如果翻译失败
@@ -198,17 +202,174 @@ class TranslationFacade:
                 )
 
             self.logger.info(
-                "开始机器翻译: csv_path=%s, output_csv=%s", csv_path, output_csv
+                "开始统一机器翻译: csv_path=%s, output_csv=%s, type=%s",
+                csv_path,
+                output_csv,
+                translator_type,
             )
 
-            # 调用机器翻译函数
-            translate_csv(csv_path, output_csv)
+            # 使用统一翻译器
+            translator = UnifiedTranslator()
 
-            print(f"{Fore.GREEN}✅ 翻译完成：{output_csv}{Style.RESET_ALL}")
+            # 显示翻译方式信息
+            available_translators = translator.get_available_translators()
+            if translator_type == "auto":
+                if available_translators.get("java", {}).get("available", False):
+                    translator_name = "Java翻译器"
+                    translator_features = "高性能，支持中断和恢复"
+                else:
+                    translator_name = "Python翻译器"
+                    translator_features = "简单部署，稳定可靠"
+            elif translator_type == "java":
+                translator_name = "Java翻译器"
+                translator_features = "高性能，支持中断和恢复"
+            else:
+                translator_name = "Python翻译器"
+                translator_features = "简单部署，稳定可靠"
+
+            ui.print_info(f"🚀 使用翻译方式: {translator_name}")
+            ui.print_info(f"💡 特性: {translator_features}")
+
+            success = translator.translate_csv(csv_path, output_csv, translator_type)
+
+            if not success:
+                # 检查是否是用户中断（通过检查是否有恢复文件）
+                resume_file = translator.can_resume_translation(csv_path)
+                if resume_file:
+                    ui.print_warning("翻译已暂停，可以随时恢复")
+                    ui.print_info(f"💡 恢复文件: {resume_file}")
+                    return  # 用户中断是正常操作，不抛出异常
+                else:
+                    raise TranslationError("翻译失败")
+
+            # 验证翻译是否真正完成
+            if self._verify_translation_completion(csv_path, output_csv):
+                ui.print_success(f"翻译完成：{output_csv}")
+            else:
+                ui.print_warning(f"翻译部分完成：{output_csv}")
+                ui.print_info("可能因API限制或网络问题未完全翻译")
         except Exception as e:
             error_msg = f"机器翻译失败: {str(e)}"
             self.logger.error(error_msg)
             raise TranslationError(error_msg) from e
+
+    def _verify_translation_completion(self, input_csv: str, output_csv: str) -> bool:
+        """
+        验证翻译是否真正完成
+
+        Args:
+            input_csv: 输入CSV文件路径
+            output_csv: 输出CSV文件路径
+
+        Returns:
+            bool: 翻译是否真正完成
+        """
+        try:
+            import csv
+
+            # 检查输出文件是否存在
+            if not os.path.exists(output_csv):
+                return False
+
+            # 统计输入和输出的行数
+            input_rows = 0
+            output_rows = 0
+            translated_rows = 0
+
+            # 统计输入行数
+            with open(input_csv, "r", encoding="utf-8") as f:
+                reader = csv.reader(f)
+                input_rows = sum(1 for _ in reader) - 1  # 减去表头
+
+            # 统计输出行数和翻译行数
+            with open(output_csv, "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    output_rows += 1
+                    # 检查是否有翻译内容（translated列不为空且不等于原文）
+                    if "translated" in row and row["translated"].strip():
+                        if "text" in row and row["translated"] != row["text"]:
+                            translated_rows += 1
+
+            # 如果输出行数少于输入行数，说明翻译未完成
+            if output_rows < input_rows:
+                self.logger.warning(
+                    f"翻译未完成: 输入{input_rows}行，输出{output_rows}行"
+                )
+                return False
+
+            # 如果翻译行数太少，可能有问题
+            translation_ratio = translated_rows / input_rows if input_rows > 0 else 0
+            if translation_ratio < 0.1:  # 翻译率低于10%
+                self.logger.warning(f"翻译率过低: {translation_ratio:.1%}")
+                return False
+
+            self.logger.info(
+                f"翻译验证通过: 输入{input_rows}行，输出{output_rows}行，翻译{translated_rows}行 ({translation_ratio:.1%})"
+            )
+            return True
+
+        except Exception as e:
+            self.logger.error(f"验证翻译完成状态失败: {e}")
+            return False  # 验证失败时保守处理
+
+    def can_resume_translation(self, csv_path: str) -> Optional[str]:
+        """
+        检查是否可以恢复翻译
+
+        Args:
+            csv_path (str): 输入 CSV 文件路径
+
+        Returns:
+            Optional[str]: 可恢复的输出文件路径，如果没有则返回None
+        """
+        try:
+            translator = UnifiedTranslator()
+            return translator.can_resume_translation(csv_path)
+        except Exception as e:
+            self.logger.debug("检查恢复状态失败: %s", e)
+            return None
+
+    def resume_translation(self, csv_path: str, output_csv: str) -> bool:
+        """
+        恢复翻译任务
+
+        Args:
+            csv_path (str): 输入 CSV 文件路径
+            output_csv (str): 输出 CSV 文件路径
+
+        Returns:
+            bool: 是否成功恢复
+        """
+        try:
+            translator = UnifiedTranslator()
+            success = translator.resume_translation(csv_path, output_csv)
+
+            if success:
+                ui.print_success(f"恢复翻译完成：{output_csv}")
+            else:
+                ui.print_warning("恢复翻译失败或被中断")
+
+            return success
+        except Exception as e:
+            error_msg = f"恢复翻译失败: {str(e)}"
+            self.logger.error(error_msg)
+            ui.print_error(error_msg)
+            return False
+
+    def get_translator_status(self) -> dict:
+        """
+        获取翻译器状态信息
+
+        Returns:
+            dict: 翻译器状态信息
+        """
+        try:
+            translator = UnifiedTranslator()
+            return translator.get_available_translators()
+        except Exception as e:
+            self.logger.error("获取翻译器状态失败: %s", e)
+            return {"error": str(e)}
 
     def extract_all_translations(
         self,

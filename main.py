@@ -46,8 +46,7 @@ from corpus.handler import handle_corpus
 from extract import handle_extract
 from full_pipeline.handler import handle_full_pipeline
 from import_template.handler import handle_import_template
-from java_translate.handler import handle_java_translate
-from python_translate.handler import handle_python_translate
+from translate.handler import handle_unified_translate
 from utils.interaction import show_main_menu
 
 # 初始化 colorama 以支持 Windows 终端颜色
@@ -66,21 +65,18 @@ def main():
             handle_extract()
             input("\n按回车返回主菜单...")
         elif mode == "3":
-            handle_java_translate()
+            handle_unified_translate()
             input("\n按回车返回主菜单...")
         elif mode == "4":
             handle_import_template()
             input("\n按回车返回主菜单...")
         elif mode == "5":
-            handle_python_translate()
-            input("\n按回车返回主菜单...")
-        elif mode == "6":
             handle_batch()
             input("\n按回车返回主菜单...")
-        elif mode == "7":
+        elif mode == "6":
             handle_config_manage()
             input("\n按回车返回主菜单...")
-        elif mode == "8":
+        elif mode == "7":
             handle_corpus()
             input("\n按回车返回主菜单...")
         elif mode == "q":

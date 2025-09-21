@@ -459,3 +459,105 @@ class UIStyle:
 
 # 创建全局实例
 ui = UIStyle()
+
+
+def _get_terminal_width() -> int:
+    """获取终端宽度"""
+    try:
+        import shutil
+
+        return shutil.get_terminal_size().columns
+    except:
+        return 80  # 默认宽度
+
+
+def _calculate_adaptive_layout(
+    mod_names: List[str], terminal_width: int = None
+) -> tuple:
+    """计算自适应布局参数"""
+    if terminal_width is None:
+        terminal_width = _get_terminal_width()
+
+    # 预留边框和边距空间
+    available_width = terminal_width - 10  # 边框 + 边距
+
+    # 计算每个模组名需要的最大宽度
+    max_name_length = max(len(name) for name in mod_names) if mod_names else 10
+    # 编号宽度 (如 "81.") + 模组名 + 间距
+    item_width = len(str(len(mod_names))) + 1 + max_name_length + 3
+
+    # 计算每行能放多少个模组
+    mods_per_line = max(1, available_width // item_width)
+
+    # 限制最大列数，避免过于拥挤
+    mods_per_line = min(mods_per_line, 6)
+
+    return mods_per_line, item_width
+
+
+def _get_mod_display_name(mod_path: str) -> str:
+    """获取模组的显示名称"""
+    import os
+
+    # 首先尝试从About/About.xml读取模组名称
+    about_xml_path = os.path.join(mod_path, "About", "About.xml")
+    if os.path.exists(about_xml_path):
+        try:
+            import xml.etree.ElementTree as ET
+
+            tree = ET.parse(about_xml_path)
+            root = tree.getroot()
+            # 查找name标签
+            name_elem = root.find("name")
+            if name_elem is not None and name_elem.text:
+                return name_elem.text.strip()
+        except:
+            pass
+
+    # 如果无法读取XML，使用目录名
+    return os.path.basename(mod_path)
+
+
+def display_mods_with_adaptive_width(all_mods: List[str]) -> None:
+    """使用自适应列宽显示模组列表"""
+    mod_names = [_get_mod_display_name(mod_path) for mod_path in all_mods]
+    mods_per_line, item_width = _calculate_adaptive_layout(mod_names)
+
+    # 计算边框宽度
+    border_width = mods_per_line * item_width + 4  # 4 = 左右边框 + 间距
+    border_line = "═" * (border_width - 2)
+
+    # 显示标题
+    ui.print_header(f"📦 找到 {len(all_mods)} 个第三方模组")
+
+    # 计算需要的行数
+    total_lines = (len(all_mods) + mods_per_line - 1) // mods_per_line
+
+    for line in range(total_lines):
+        start_idx = line * mods_per_line
+        end_idx = min(start_idx + mods_per_line, len(all_mods))
+
+        # 构建当前行的显示内容
+        line_content = f"   │ "
+        for i in range(start_idx, end_idx):
+            mod_name = mod_names[i]
+            # 动态截断模组名
+            max_name_len = item_width - len(str(i + 1)) - 4  # 预留编号和间距空间
+            display_name = (
+                mod_name[: max_name_len - 3] + "..."
+                if len(mod_name) > max_name_len
+                else mod_name
+            )
+            line_content += f"{i+1:2d}. {display_name:<{max_name_len}} "
+
+        # 填充剩余空间
+        remaining_slots = mods_per_line - (end_idx - start_idx)
+        if remaining_slots > 0:
+            line_content += " " * (remaining_slots * item_width)
+
+        line_content += "│"
+        print(line_content)
+
+    # 底部边框
+    bottom_line = "─" * (border_width - 2)
+    print(f"   └{bottom_line}┘")

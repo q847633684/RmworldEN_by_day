@@ -6,9 +6,8 @@
 import os
 from pathlib import Path
 from typing import Optional, List
-from colorama import Fore, Style
 from .path_manager import PathManager
-from .ui_style import ui
+from .ui_style import ui, display_mods_with_adaptive_width, _get_mod_display_name
 
 # 全局路径管理器实例
 path_manager = PathManager()
@@ -32,7 +31,11 @@ def show_main_menu() -> str:
         "2", "提取模板", "提取翻译模板并生成 CSV 文件", ui.Icons.TEMPLATE, compact=True
     )
     ui.print_menu_item(
-        "3", "Java机翻", "使用Java工具进行高性能翻译", ui.Icons.TRANSLATE, compact=True
+        "3",
+        "智能翻译",
+        "自动选择最佳翻译器（Java/Python）",
+        ui.Icons.TRANSLATE,
+        compact=True,
     )
     ui.print_menu_item(
         "4", "导入模板", "将翻译后的 CSV 导入翻译模板", ui.Icons.IMPORT, compact=True
@@ -40,17 +43,10 @@ def show_main_menu() -> str:
 
     # 高级功能 - 使用紧凑模式
     ui.print_section_header("高级功能", ui.Icons.ADVANCED)
+    ui.print_menu_item("5", "批量处理", "处理多个模组", ui.Icons.BATCH, compact=True)
+    ui.print_menu_item("6", "配置管理", "管理翻译配置", ui.Icons.SETTINGS, compact=True)
     ui.print_menu_item(
-        "5",
-        "Python机翻",
-        "使用Python阿里云翻译 CSV 文件",
-        ui.Icons.TRANSLATE,
-        compact=True,
-    )
-    ui.print_menu_item("6", "批量处理", "处理多个模组", ui.Icons.BATCH, compact=True)
-    ui.print_menu_item("7", "配置管理", "管理翻译配置", ui.Icons.SETTINGS, compact=True)
-    ui.print_menu_item(
-        "8", "语料生成", "生成英-中平行语料", ui.Icons.CORPUS, compact=True
+        "7", "语料生成", "生成英-中平行语料", ui.Icons.CORPUS, compact=True
     )
 
     # 退出选项
@@ -59,7 +55,7 @@ def show_main_menu() -> str:
 
     ui.print_separator()
 
-    return input(ui.get_input_prompt("请选择模式", options="1-8, q")).strip()
+    return input(ui.get_input_prompt("请选择模式", options="1-7, q")).strip()
 
 
 def select_csv_path_with_history() -> Optional[str]:
@@ -261,38 +257,22 @@ def _scan_game_mods() -> Optional[str]:
                 mod_display_name = _get_mod_display_name(selected_mod)
                 mod_id = os.path.basename(selected_mod)
 
-                print(
-                    f"\n   {Fore.CYAN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
-                )
-                print(
-                    f"   {Fore.CYAN}║{Style.RESET_ALL}  {Fore.GREEN}🎮 选择Steam Workshop模组{Style.RESET_ALL}  {Fore.CYAN}║{Style.RESET_ALL}"
-                )
-                print(
-                    f"   {Fore.CYAN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
-                )
-                print(
-                    f"   {Fore.CYAN}📁 路径：{Style.RESET_ALL}{Fore.WHITE}{selected_mod}{Style.RESET_ALL}"
-                )
-                print(
-                    f"   {Fore.CYAN}📦 模组名称：{Style.RESET_ALL}{Fore.WHITE}{mod_display_name}{Style.RESET_ALL}"
-                )
-                print(
-                    f"   {Fore.CYAN}🆔 模组ID：{Style.RESET_ALL}{Fore.WHITE}{mod_id}{Style.RESET_ALL}"
-                )
+                ui.print_success("🎮 选择Steam Workshop模组")
+                ui.print_info(f"📁 路径：{selected_mod}")
+                ui.print_info(f"📦 模组名称：{mod_display_name}")
+                ui.print_info(f"🆔 模组ID：{mod_id}")
                 path_manager.remember_path("mod_dir", selected_mod)
                 # 对选择的模组进行版本检测
                 return path_manager.detect_version_and_choose(selected_mod)
             else:
-                print(
-                    f"   {Fore.RED}❌ 无效选择，请输入 1-{len(found_mods)} 或 b{Style.RESET_ALL}"
-                )
+                ui.print_error(f"无效选择，请输入 1-{len(found_mods)} 或 b")
         except ValueError:
-            print(f"   {Fore.RED}❌ 无效输入，请输入数字或 b{Style.RESET_ALL}")
+            ui.print_error("无效输入，请输入数字或 b")
 
 
 def _scan_third_party_mods(available_mod_dirs: List[str]) -> Optional[str]:
     """扫描第三方模组"""
-    print(f"\n{Fore.BLUE}📦 正在扫描第三方模组...{Style.RESET_ALL}")
+    ui.print_info("📦 正在扫描第三方模组...")
 
     all_mods = []
     for mod_dir in available_mod_dirs:
@@ -311,22 +291,20 @@ def _scan_third_party_mods(available_mod_dirs: List[str]) -> Optional[str]:
             continue
 
     if not all_mods:
-        print(f"   {Fore.YELLOW}⚠️ 未找到任何第三方模组{Style.RESET_ALL}")
+        ui.print_warning("⚠️ 未找到任何第三方模组")
         return None
 
     # 使用自适应列宽显示模组列表
-    _display_mods_with_adaptive_width(all_mods)
+    display_mods_with_adaptive_width(all_mods)
 
-    print(f"{Fore.RED}b. 🔙 返回{Style.RESET_ALL}")
+    ui.print_menu_item("b", "🔙 返回")
 
     while True:
-        choice = input(
-            f"\n{Fore.CYAN}请选择模组 (1-{len(all_mods)}, b) 或直接输入路径: {Style.RESET_ALL}"
-        ).strip()
+        choice = input(f"\n请选择模组 (1-{len(all_mods)}, b) 或直接输入路径: ").strip()
 
         if choice.lower() == "b":
             # 返回上级菜单
-            print(f"   {Fore.YELLOW}🔙 返回{Style.RESET_ALL}")
+            ui.print_info("🔙 返回")
             return None
         elif choice.isdigit():
             choice_num = int(choice)
@@ -334,21 +312,9 @@ def _scan_third_party_mods(available_mod_dirs: List[str]) -> Optional[str]:
                 selected_path = all_mods[choice_num - 1]
                 mod_display_name = _get_mod_display_name(selected_path)
 
-                print(
-                    f"\n   {Fore.CYAN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
-                )
-                print(
-                    f"   {Fore.CYAN}║{Style.RESET_ALL}  {Fore.GREEN}📦 选择第三方模组{Style.RESET_ALL}  {Fore.CYAN}║{Style.RESET_ALL}"
-                )
-                print(
-                    f"   {Fore.CYAN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
-                )
-                print(
-                    f"   {Fore.CYAN}📁 路径：{Style.RESET_ALL}{Fore.WHITE}{selected_path}{Style.RESET_ALL}"
-                )
-                print(
-                    f"   {Fore.CYAN}📦 模组名称：{Style.RESET_ALL}{Fore.WHITE}{mod_display_name}{Style.RESET_ALL}"
-                )
+                ui.print_success("📦 选择第三方模组")
+                ui.print_info(f"📁 路径：{selected_path}")
+                ui.print_info(f"📦 模组名称：{mod_display_name}")
                 path_manager.remember_path("mod_dir", selected_path)
                 # 对选择的模组进行版本检测
                 return path_manager.detect_version_and_choose(selected_path)
@@ -369,7 +335,7 @@ def _scan_third_party_mods(available_mod_dirs: List[str]) -> Optional[str]:
 
 def confirm_action(message: str) -> bool:
     """确认操作"""
-    return input(f"{Fore.YELLOW}{message} [y/n]:{Style.RESET_ALL} ").lower() == "y"
+    return input(f"{message} [y/n]: ").lower() == "y"
 
 
 def auto_generate_output_path(input_path: str) -> str:
@@ -396,109 +362,3 @@ def show_warning(message: str):
 def show_info(message: str):
     """显示信息"""
     ui.print_info(message)
-
-
-def _get_terminal_width() -> int:
-    """获取终端宽度"""
-    try:
-        import shutil
-
-        return shutil.get_terminal_size().columns
-    except:
-        return 80  # 默认宽度
-
-
-def _calculate_adaptive_layout(
-    mod_names: List[str], terminal_width: int = None
-) -> tuple:
-    """计算自适应布局参数"""
-    if terminal_width is None:
-        terminal_width = _get_terminal_width()
-
-    # 预留边框和边距空间
-    available_width = terminal_width - 10  # 边框 + 边距
-
-    # 计算每个模组名需要的最大宽度
-    max_name_length = max(len(name) for name in mod_names) if mod_names else 10
-    # 编号宽度 (如 "81.") + 模组名 + 间距
-    item_width = len(str(len(mod_names))) + 1 + max_name_length + 3
-
-    # 计算每行能放多少个模组
-    mods_per_line = max(1, available_width // item_width)
-
-    # 限制最大列数，避免过于拥挤
-    mods_per_line = min(mods_per_line, 6)
-
-    return mods_per_line, item_width
-
-
-def _get_mod_display_name(mod_path: str) -> str:
-    """获取模组的显示名称"""
-    # 首先尝试从About/About.xml读取模组名称
-    about_xml_path = os.path.join(mod_path, "About", "About.xml")
-    if os.path.exists(about_xml_path):
-        try:
-            import xml.etree.ElementTree as ET
-
-            tree = ET.parse(about_xml_path)
-            root = tree.getroot()
-            # 查找name标签
-            name_elem = root.find("name")
-            if name_elem is not None and name_elem.text:
-                return name_elem.text.strip()
-        except:
-            pass
-
-    # 如果无法读取XML，使用目录名
-    return os.path.basename(mod_path)
-
-
-def _display_mods_with_adaptive_width(all_mods: List[str]) -> None:
-    """使用自适应列宽显示模组列表"""
-    mod_names = [_get_mod_display_name(mod_path) for mod_path in all_mods]
-    mods_per_line, item_width = _calculate_adaptive_layout(mod_names)
-
-    # 计算边框宽度
-    border_width = mods_per_line * item_width + 4  # 4 = 左右边框 + 间距
-    border_line = "═" * (border_width - 2)
-
-    # 显示标题
-    print(f"\n   {Fore.CYAN}╔{border_line}╗{Style.RESET_ALL}")
-    title = f"📦 找到 {len(all_mods)} 个第三方模组"
-    title_padding = (border_width - 2 - len(title)) // 2
-    print(
-        f"   {Fore.CYAN}║{Style.RESET_ALL}{' ' * title_padding}{Fore.GREEN}{title}{Style.RESET_ALL}{' ' * (border_width - 2 - len(title) - title_padding)}{Fore.CYAN}║{Style.RESET_ALL}"
-    )
-    print(f"   {Fore.CYAN}╚{border_line}╝{Style.RESET_ALL}")
-
-    # 计算需要的行数
-    total_lines = (len(all_mods) + mods_per_line - 1) // mods_per_line
-
-    for line in range(total_lines):
-        start_idx = line * mods_per_line
-        end_idx = min(start_idx + mods_per_line, len(all_mods))
-
-        # 构建当前行的显示内容
-        line_content = f"   {Fore.YELLOW}│{Style.RESET_ALL} "
-        for i in range(start_idx, end_idx):
-            mod_name = mod_names[i]
-            # 动态截断模组名
-            max_name_len = item_width - len(str(i + 1)) - 4  # 预留编号和间距空间
-            display_name = (
-                mod_name[: max_name_len - 3] + "..."
-                if len(mod_name) > max_name_len
-                else mod_name
-            )
-            line_content += f"{Fore.CYAN}{i+1:2d}.{Style.RESET_ALL} {Fore.WHITE}{display_name:<{max_name_len}}{Style.RESET_ALL} "
-
-        # 填充剩余空间
-        remaining_slots = mods_per_line - (end_idx - start_idx)
-        if remaining_slots > 0:
-            line_content += " " * (remaining_slots * item_width)
-
-        line_content += f"{Fore.YELLOW}│{Style.RESET_ALL}"
-        print(line_content)
-
-    # 底部边框
-    bottom_line = "─" * (border_width - 2)
-    print(f"   {Fore.YELLOW}└{bottom_line}┘{Style.RESET_ALL}")

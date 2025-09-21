@@ -8,7 +8,6 @@ import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, Any, Optional, Union
-from colorama import Fore, Style  # type: ignore
 from utils.ui_style import ui
 from utils.logging_config import get_logger, log_user_action
 from utils.path_manager import PathManager
@@ -187,28 +186,28 @@ class InteractionManager:
     def _format_choice_description(self, choice: str) -> str:
         """格式化数据来源描述"""
         descriptions = {
-            "definjected_only": f"{Fore.GREEN}使用英文DefInjected{Style.RESET_ALL}",
-            "defs_only": f"{Fore.CYAN}扫描Defs文件{Style.RESET_ALL}",
+            "definjected_only": "使用英文DefInjected",
+            "defs_only": "扫描Defs文件",
         }
         return descriptions.get(choice, choice)
 
     def _format_conflict_description(self, resolution: str) -> str:
         """格式化冲突处理描述"""
         descriptions = {
-            "merge": f"{Fore.GREEN}合并现有文件{Style.RESET_ALL}",
-            "overwrite": f"{Fore.YELLOW}覆盖相关文件{Style.RESET_ALL}",
-            "rebuild": f"{Fore.RED}重建所有文件{Style.RESET_ALL}",
-            "new": f"{Fore.BLUE}新建目录{Style.RESET_ALL}",
+            "merge": "合并现有文件",
+            "overwrite": "覆盖相关文件",
+            "rebuild": "重建所有文件",
+            "new": "新建目录",
         }
         return descriptions.get(resolution, resolution)
 
     def _format_structure_description(self, structure: str) -> str:
         """格式化文件结构描述"""
         descriptions = {
-            "original_structure": f"{Fore.GREEN}保持原英文结构{Style.RESET_ALL}",
-            "defs_by_type": f"{Fore.CYAN}按定义类型分组{Style.RESET_ALL}",
-            "defs_by_file_structure": f"{Fore.YELLOW}按Defs文件结构{Style.RESET_ALL}",
-            "merge_logic": f"{Fore.BLUE}5.1智能合并逻辑{Style.RESET_ALL}",
+            "original_structure": "保持原英文结构",
+            "defs_by_type": "按定义类型分组",
+            "defs_by_file_structure": "按Defs文件结构",
+            "merge_logic": "5.1智能合并逻辑",
         }
         return descriptions.get(structure, structure)
 
@@ -226,10 +225,8 @@ class InteractionManager:
             Dict[str, Union[bool, str]]: 目录状态
         """
         language_dir = get_language_dir(mod_dir, language)
-        print(
-            f"{Fore.BLUE}🔍 正在检测目录:{mod_dir} 语言:{language}... {Style.RESET_ALL}"
-            f"\n{Fore.BLUE}🔍 正在检测 {language_dir} 目录状态...{Style.RESET_ALL}"
-        )
+        ui.print_info(f"🔍 正在检测目录:{mod_dir} 语言:{language}...")
+        ui.print_info(f"🔍 正在检测 {language_dir} 目录状态...")
 
         def_dir = get_language_subdir(mod_dir, language, subdir_type="defInjected")
         keyed_dir = get_language_subdir(mod_dir, language, subdir_type="keyed")
@@ -237,12 +234,15 @@ class InteractionManager:
         has_definjected = def_dir.exists() and any(def_dir.rglob("*.xml"))
         has_keyed = keyed_dir.exists() and any(keyed_dir.rglob("*.xml"))
 
-        print(
-            f"   {Fore.CYAN}检测到{def_dir}目录: {Fore.GREEN if has_definjected else Fore.RED}{'✅ 有' if has_definjected else '❌ 否'}{Style.RESET_ALL}"
-        )
-        print(
-            f"   {Fore.CYAN}检测到{keyed_dir}目录: {Fore.GREEN if has_keyed else Fore.RED}{'✅ 有' if has_keyed else '❌ 否'}{Style.RESET_ALL}"
-        )
+        if has_definjected:
+            ui.print_success(f"   检测到{def_dir}目录: ✅ 有")
+        else:
+            ui.print_warning(f"   检测到{def_dir}目录: ❌ 否")
+
+        if has_keyed:
+            ui.print_success(f"   检测到{keyed_dir}目录: ✅ 有")
+        else:
+            ui.print_warning(f"   检测到{keyed_dir}目录: ❌ 否")
 
         return {
             "has_definjected": has_definjected,
@@ -270,15 +270,7 @@ class InteractionManager:
         history = path_manager.get_history_list("output_dir")
 
         # 美化输出目录选择界面
-        print(
-            f"\n{Fore.CYAN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
-        )
-        print(
-            f"{Fore.CYAN}║{Style.RESET_ALL}  {Fore.BLUE}📁 选择输出目录{Style.RESET_ALL}  {Fore.CYAN}║{Style.RESET_ALL}"
-        )
-        print(
-            f"{Fore.CYAN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
-        )
+        ui.print_header("📁 选择输出目录")
 
         ui.print_section_header("推荐选择", ui.Icons.SETTINGS)
         ui.print_menu_item(
@@ -311,51 +303,21 @@ class InteractionManager:
                 choice = "1"
 
             if choice == "1":
-                print(
-                    f"\n{Fore.GREEN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
-                )
-                print(
-                    f"{Fore.GREEN}║{Style.RESET_ALL}  {Fore.CYAN}✅ 输出目录选择成功{Style.RESET_ALL}  {Fore.GREEN}║{Style.RESET_ALL}"
-                )
-                print(
-                    f"{Fore.GREEN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
-                )
-                print(
-                    f"{Fore.CYAN}📁 选择目录: {Fore.WHITE}{default_dir}{Style.RESET_ALL}"
-                )
+                ui.print_success("输出目录选择成功")
+                ui.print_info(f"📁 选择目录: {default_dir}")
                 path_manager.remember_path("output_dir", default_dir)
                 return default_dir, language
             elif choice.isdigit() and 2 <= int(choice) <= max_choice:
                 selected_path = history[int(choice) - 2]
-                print(
-                    f"\n{Fore.GREEN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
-                )
-                print(
-                    f"{Fore.GREEN}║{Style.RESET_ALL}  {Fore.CYAN}✅ 输出目录选择成功{Style.RESET_ALL}  {Fore.GREEN}║{Style.RESET_ALL}"
-                )
-                print(
-                    f"{Fore.GREEN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
-                )
-                print(
-                    f"{Fore.CYAN}📁 选择目录: {Fore.WHITE}{selected_path}{Style.RESET_ALL}"
-                )
+                ui.print_success("输出目录选择成功")
+                ui.print_info(f"📁 选择目录: {selected_path}")
                 path_manager.remember_path("output_dir", selected_path)
                 # 判断是否为标准多语言目录
                 return selected_path, language
             elif choice:
                 if os.path.isdir(choice) or not os.path.exists(choice):
-                    print(
-                        f"\n{Fore.GREEN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
-                    )
-                    print(
-                        f"{Fore.GREEN}║{Style.RESET_ALL}  {Fore.CYAN}✅ 输出目录选择成功{Style.RESET_ALL}  {Fore.GREEN}║{Style.RESET_ALL}"
-                    )
-                    print(
-                        f"{Fore.GREEN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
-                    )
-                    print(
-                        f"{Fore.CYAN}📁 选择目录: {Fore.WHITE}{choice}{Style.RESET_ALL}"
-                    )
+                    ui.print_success("输出目录选择成功")
+                    ui.print_info(f"📁 选择目录: {choice}")
                     path_manager.remember_path("output_dir", choice)
                     # 用户自定义目录，language 置空
                     return choice, language
