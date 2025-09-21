@@ -9,8 +9,8 @@ import logging
 from pathlib import Path
 from typing import Dict, Optional, Callable, List, Set, Union, Any
 from utils.logging_config import get_logger, log_error_with_context
+from utils.ui_style import ui
 from dataclasses import dataclass, field
-from colorama import Fore, Style
 
 from .config import get_user_config, save_user_config_to_file
 from .config import get_config, get_user_config
@@ -158,7 +158,7 @@ class PathManager:
                 if result.is_valid and os.path.exists(result.normalized_path):
                     use_default = (
                         input(
-                            f"{Fore.YELLOW}使用默认路径: {result.normalized_path} [y/n]: {Style.RESET_ALL}"
+                            f"{ui.Colors.WARNING}使用默认路径: {result.normalized_path} [y/n]: {ui.Colors.RESET}"
                         )
                         .strip()
                         .lower()
@@ -171,13 +171,13 @@ class PathManager:
 
             # 显示历史记录
             if history.paths:
-                print(f"\n{Fore.BLUE}历史记录：{Style.RESET_ALL}")
+                ui.print_info("\n历史记录：")
                 for i, path in enumerate(history.paths, 1):
                     print(f"{i}. {path}")
 
             # 获取用户输入
             while True:
-                choice = input(f"\n{Fore.CYAN}{prompt}{Style.RESET_ALL}").strip()
+                choice = input(f"\n{ui.Colors.INFO}{prompt}{ui.Colors.RESET}").strip()
 
                 if choice.lower() == "q":
                     return None
@@ -208,11 +208,11 @@ class PathManager:
 
                     return result.normalized_path
                 else:
-                    print(f"{Fore.RED}{result.error_message}{Style.RESET_ALL}")
+                    ui.print_error(result.error_message)
 
         except Exception as e:
             self.logger.error("获取路径失败: %s", e)
-            print(f"{Fore.RED}获取路径时发生错误: {e}{Style.RESET_ALL}")
+            ui.print_error(f"获取路径时发生错误: {e}")
             return None
 
     def remember_path(self, path_type: str, path: str) -> bool:
@@ -413,9 +413,7 @@ class PathManager:
             structure_type, mod_dir, content_dir = self._detect_mod_structure_type(
                 result.normalized_path
             )
-            print(
-                f"{Fore.CYAN}🔍 检测模组结构: {structure_type} - {mod_dir}{Style.RESET_ALL}"
-            )
+            ui.print_info(f"🔍 检测模组结构: {structure_type} - {mod_dir}")
             if structure_type == "versioned":
                 # 让用户选择版本号，直接返回最终目录
                 final_dir = self._choose_versioned_content_dir(mod_dir)
@@ -426,7 +424,7 @@ class PathManager:
             else:
                 return result.normalized_path
         else:
-            print(f"{Fore.RED}{result.error_message}{Style.RESET_ALL}")
+            ui.print_error(result.error_message)
             return None
 
     def _choose_versioned_content_dir(self, mod_dir: str) -> Optional[str]:
@@ -460,17 +458,9 @@ class PathManager:
             version_dirs.sort(key=lambda x: x["version"], reverse=True)
 
             # 美化版本选择界面
-            print(
-                f"\n{Fore.CYAN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
-            )
-            print(
-                f"{Fore.CYAN}║{Style.RESET_ALL}  {Fore.BLUE}📦 检测到版本号结构模组{Style.RESET_ALL}  {Fore.CYAN}║{Style.RESET_ALL}"
-            )
-            print(
-                f"{Fore.CYAN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
-            )
-            print(f"{Fore.YELLOW}📁 模组目录: {mod_dir}{Style.RESET_ALL}")
-            print(f"{Fore.BLUE}🔍 发现以下可用版本：{Style.RESET_ALL}")
+            ui.print_section_header("📦 检测到版本号结构模组", ui.Icons.INFO)
+            ui.print_info(f"📁 模组目录: {mod_dir}")
+            ui.print_info(f"🔍 发现以下可用版本：")
 
             # 准备版本名称列表用于多行显示
             version_names = [
@@ -495,19 +485,17 @@ class PathManager:
                     row_items.append(item_text.ljust(item_width))
                 print("   " + "".join(row_items))
 
-            print(f"\n{Fore.GREEN}💡 快速选择：{Style.RESET_ALL}")
-            print(
-                f"   {Fore.YELLOW}0{Style.RESET_ALL} - 使用默认选择（{Fore.CYAN}{version_dirs[0]['name']}{Style.RESET_ALL}）"
-            )
-            print(f"   {Fore.RED}q{Style.RESET_ALL} - 退出版本选择")
+            ui.print_info(f"\n💡 快速选择：")
+            ui.print_info(f"   0 - 使用默认选择（{version_dirs[0]['name']}）")
+            ui.print_info(f"   q - 退出版本选择")
             while True:
                 choice = input(
-                    f"\n{Fore.CYAN}🎯 请选择版本 (1-{len(version_dirs)}，回车默认0，q退出): {Style.RESET_ALL}"
+                    f"\n{ui.Colors.INFO}🎯 请选择版本 (1-{len(version_dirs)}，回车默认0，q退出): {ui.Colors.RESET}"
                 ).strip()
                 if not choice:
                     choice = "0"
                 if choice.lower() == "q":
-                    print(f"{Fore.YELLOW}👋 已退出版本选择{Style.RESET_ALL}")
+                    ui.print_warning("👋 已退出版本选择")
                     return None
                 elif choice == "0":
                     selected_version = version_dirs[0]
@@ -516,41 +504,15 @@ class PathManager:
                     selected_version = version_dirs[int(choice) - 1]
                     break
                 else:
-                    print(
-                        f"{Fore.RED}❌ 无效选择，请输入 1-{len(version_dirs)}、0 或 q{Style.RESET_ALL}"
-                    )
-                    print(
-                        f"{Fore.YELLOW}💡 提示：直接回车选择推荐版本，输入 q 退出{Style.RESET_ALL}"
-                    )
-            print(
-                f"\n{Fore.GREEN}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
-            )
-            print(
-                f"{Fore.GREEN}║{Style.RESET_ALL}  {Fore.CYAN}✅ 版本选择成功{Style.RESET_ALL}  {Fore.GREEN}║{Style.RESET_ALL}"
-            )
-            print(
-                f"{Fore.GREEN}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
-            )
-            print(
-                f"{Fore.CYAN}📦 选择版本: {Fore.WHITE}{selected_version['name']}{Style.RESET_ALL}"
-            )
-            print(
-                f"{Fore.CYAN}📁 内容目录: {Fore.WHITE}{selected_version['path']}{Style.RESET_ALL}"
-            )
+                    ui.print_error(f"❌ 无效选择，请输入 1-{len(version_dirs)}、0 或 q")
+                    ui.print_warning("💡 提示：直接回车选择推荐版本，输入 q 退出")
+            ui.print_success("✅ 版本选择成功")
+            ui.print_info(f"📦 选择版本: {selected_version['name']}")
+            ui.print_info(f"📁 内容目录: {selected_version['path']}")
             return selected_version["path"]
         else:
-            print(
-                f"\n{Fore.RED}╔══════════════════════════════════════════════════════════════╗{Style.RESET_ALL}"
-            )
-            print(
-                f"{Fore.RED}║{Style.RESET_ALL}  {Fore.YELLOW}⚠️ 未检测到版本号结构{Style.RESET_ALL}  {Fore.RED}║{Style.RESET_ALL}"
-            )
-            print(
-                f"{Fore.RED}╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}"
-            )
-            print(
-                f"{Fore.YELLOW}💡 该模组可能使用标准结构，将使用根目录内容{Style.RESET_ALL}"
-            )
+            ui.print_warning("⚠️ 未检测到版本号结构")
+            ui.print_info("💡 该模组可能使用标准结构，将使用根目录内容")
             return None
 
     def _validate_language_directory(self, path: str) -> PathValidationResult:
@@ -704,22 +666,20 @@ class PathManager:
         try:
             # 如果有智能推荐，优先显示
             if smart_recommendations:
-                print(f"\n{Fore.CYAN}💡 智能推荐：{Style.RESET_ALL}")
+                ui.print_info(f"\n💡 智能推荐：")
                 for i, rec_path in enumerate(smart_recommendations, 1):
                     reason = (
                         recommendation_reasons.get(rec_path, "")
                         if recommendation_reasons
                         else ""
                     )
-                    reason_text = (
-                        f" ({Fore.GREEN}{reason}{Style.RESET_ALL})" if reason else ""
-                    )
+                    reason_text = f" ({reason})" if reason else ""
                     print(f"{i}. {rec_path}{reason_text}")
 
-                print(f"0. {Fore.YELLOW}手动输入其他路径{Style.RESET_ALL}")
+                ui.print_info(f"0. 手动输入其他路径")
 
                 choice = input(
-                    f"\n{Fore.CYAN}选择推荐项 (1-{len(smart_recommendations)}) 或 0 手动输入：{Style.RESET_ALL}"
+                    f"\n{ui.Colors.INFO}选择推荐项 (1-{len(smart_recommendations)}) 或 0 手动输入：{ui.Colors.RESET}"
                 ).strip()
 
                 if choice.isdigit() and 1 <= int(choice) <= len(smart_recommendations):
@@ -743,15 +703,13 @@ class PathManager:
 
                         return result.normalized_path
                     else:
-                        print(
-                            f"{Fore.RED}❌ 推荐路径无效: {result.error_message}{Style.RESET_ALL}"
-                        )
+                        ui.print_error(f"❌ 推荐路径无效: {result.error_message}")
                         # 继续到常规输入流程
                 elif choice == "0":
                     # 用户选择手动输入，继续到常规流程
                     pass
                 else:
-                    print(f"{Fore.RED}❌ 无效选择，使用常规输入方式{Style.RESET_ALL}")
+                    ui.print_error("❌ 无效选择，使用常规输入方式")
 
             # 调用现有的 get_path 方法处理常规流程
             return self.get_path(path_type, prompt, validator_type, required, default)

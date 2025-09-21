@@ -55,12 +55,15 @@ class InteractionManager:
         """
         ui.print_step_header(step_num, total_steps, title)
 
-    def handle_smart_extraction_workflow(self, mod_dir: str) -> Dict[str, Any]:
+    def handle_smart_extraction_workflow(
+        self, mod_dir: str, skip_output_selection: bool = False
+    ) -> Dict[str, Any]:
         """
         执行用户设计的四步智能流程
 
         Args:
             mod_dir: 模组目录路径
+            skip_output_selection: 是否跳过输出目录选择，直接使用默认目录
 
         Returns:
             Dict[str, Any]: 智能流程决策结果
@@ -74,7 +77,9 @@ class InteractionManager:
         # 第二步：检测输出目录状态
         self._print_step_header(2, 5, "检测输出目录状态")
         output_dir, output_language = self._get_output_directory(
-            mod_dir, language="ChineseSimplified"
+            mod_dir,
+            language="ChineseSimplified",
+            skip_user_selection=skip_output_selection,
         )
         output_status = self._detect_language_directories(
             output_dir, language=output_language
@@ -253,13 +258,16 @@ class InteractionManager:
             "language": str(language),
         }
 
-    def _get_output_directory(self, mod_dir: str, language: str) -> tuple:
+    def _get_output_directory(
+        self, mod_dir: str, language: str, skip_user_selection: bool = False
+    ) -> tuple:
         """
         获取用户指定的输出目录（支持多语言）
 
         Args:
             mod_dir: 模组目录路径
             language: 目标语言目录名
+            skip_user_selection: 是否跳过用户选择，直接使用默认目录
 
         Returns:
             (str, str): 输出目录路径和语言名（自定义目录时 language 为空字符串）
@@ -269,12 +277,19 @@ class InteractionManager:
         default_dirs = get_language_dir(mod_dir, language)
         history = path_manager.get_history_list("output_dir")
 
+        # 如果跳过用户选择，直接使用模组根目录
+        if skip_user_selection:
+            ui.print_info("📁 使用默认输出目录")
+            ui.print_info(f"📁 输出目录: {default_dir}")
+            path_manager.remember_path("output_dir", str(default_dir))
+            return str(default_dir), language
+
         # 美化输出目录选择界面
         ui.print_header("📁 选择输出目录")
 
         ui.print_section_header("推荐选择", ui.Icons.SETTINGS)
         ui.print_menu_item(
-            "1", "使用默认目录", str(default_dirs), ui.Icons.FOLDER, is_recommended=True
+            "1", "使用默认目录", str(default_dir), ui.Icons.FOLDER, is_recommended=True
         )
 
         if history:
@@ -305,8 +320,8 @@ class InteractionManager:
             if choice == "1":
                 ui.print_success("输出目录选择成功")
                 ui.print_info(f"📁 选择目录: {default_dir}")
-                path_manager.remember_path("output_dir", default_dir)
-                return default_dir, language
+                path_manager.remember_path("output_dir", str(default_dir))
+                return str(default_dir), language
             elif choice.isdigit() and 2 <= int(choice) <= max_choice:
                 selected_path = history[int(choice) - 2]
                 ui.print_success("输出目录选择成功")

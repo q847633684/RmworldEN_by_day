@@ -1,13 +1,13 @@
 import csv
 import logging
 from utils.logging_config import get_logger, log_error_with_context
+from utils.ui_style import ui
 import os
 import re
 import time
 from typing import List, Dict
 from pathlib import Path
 from tqdm import tqdm
-from colorama import Fore, Style
 
 logger = get_logger(__name__)
 
@@ -44,14 +44,14 @@ def translate_text(
         RuntimeError: 如果阿里云 SDK 未安装
         Exception: 如果翻译 API 调用失败
     """
-    print(f"{Fore.BLUE}翻译文本: {text[:50]}...{Style.RESET_ALL}")
+    ui.print_info(f"翻译文本: {text[:50]}...")
     if AcsClient is None or TranslateGeneralRequest is None:
-        print(f"{Fore.RED}阿里云 SDK 未安装{Style.RESET_ALL}")
+        ui.print_error("阿里云 SDK 未安装")
         raise RuntimeError("阿里云 SDK 未安装，无法进行机器翻译")
 
     # 检查是否只包含占位符
     if re.fullmatch(r"(\s*\[[^\]]+\]\s*)+", text):
-        print(f"{Fore.BLUE}文本仅含占位符，跳过翻译: {text}{Style.RESET_ALL}")
+        ui.print_info(f"文本仅含占位符，跳过翻译: {text}")
         return text
 
     try:
@@ -65,7 +65,7 @@ def translate_text(
             if re.fullmatch(r"\[[^\]]+\]", part):
                 # 占位符，直接保留
                 translated_parts.append(part)
-                print(f"{Fore.BLUE}保留占位符: {part}{Style.RESET_ALL}")
+                ui.print_info(f"保留占位符: {part}")
             elif part.strip():
                 # 需要翻译的文本
                 request = TranslateGeneralRequest()
@@ -79,21 +79,17 @@ def translate_text(
                 result = json.loads(response)
                 translated_text = result.get("Data", {}).get("Translated", part)
                 translated_parts.append(translated_text)
-                print(
-                    f"{Fore.BLUE}翻译部分: {part[:30]}... -> {translated_text[:30]}...{Style.RESET_ALL}"
-                )
+                ui.print_info(f"翻译部分: {part[:30]}... -> {translated_text[:30]}...")
             else:
                 # 空白部分
                 translated_parts.append(part)
 
         translated = "".join(translated_parts)
-        print(
-            f"{Fore.GREEN}翻译完成: {text[:30]}... -> {translated[:30]}...{Style.RESET_ALL}"
-        )
+        ui.print_success(f"翻译完成: {text[:30]}... -> {translated[:30]}...")
         return translated
 
     except Exception as e:
-        print(f"{Fore.RED}翻译失败: {text[:50]}..., 错误: {e}{Style.RESET_ALL}")
+        ui.print_error(f"翻译失败: {text[:50]}..., 错误: {e}")
         return text
 
 
@@ -123,23 +119,21 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
     )
 
     if not access_key_id or not access_key_secret:
-        print(
-            f"{Fore.RED}❌ 缺少阿里云 API 密钥，请设置环境变量或传入参数{Style.RESET_ALL}"
-        )
-        print("设置方法：")
-        print("  export ALIYUN_ACCESS_KEY_ID='your_key'")
-        print("  export ALIYUN_ACCESS_SECRET='your_secret'")
+        ui.print_error("❌ 缺少阿里云 API 密钥，请设置环境变量或传入参数")
+        ui.print_info("设置方法：")
+        ui.print_info("  export ALIYUN_ACCESS_KEY_ID='your_key'")
+        ui.print_info("  export ALIYUN_ACCESS_SECRET='your_secret'")
         return
 
     region_id = kwargs.get("region_id", "cn-hangzhou")
     sleep_sec = kwargs.get("sleep_sec", 0.5)
 
-    print(
-        f"{Fore.BLUE}翻译 CSV: input={input_path}, output={output_path}, region_id={region_id}"
+    ui.print_info(
+        f"翻译 CSV: input={input_path}, output={output_path}, region_id={region_id}"
     )
 
     if not os.path.exists(input_path):
-        print(f"{Fore.RED}❌ 文件不存在: {input_path}{Style.RESET_ALL}")
+        ui.print_error(f"❌ 文件不存在: {input_path}")
         return
 
     try:
@@ -148,9 +142,7 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
         with open(input_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             if "text" not in reader.fieldnames:
-                print(
-                    f"{Fore.RED}❌ CSV 文件缺少 'text' 列: {input_path}{Style.RESET_ALL}"
-                )
+                ui.print_error(f"❌ CSV 文件缺少 'text' 列: {input_path}")
                 return
 
             total_rows = sum(1 for _ in reader)
@@ -158,22 +150,18 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
             reader = csv.DictReader(f)
             next(reader)  # 跳过表头
 
-            print(f"{Fore.BLUE}开始翻译 {total_rows} 条记录...{Style.RESET_ALL}")
+            ui.print_info(f"开始翻译 {total_rows} 条记录...")
 
             for line_num, row in enumerate(
                 tqdm(reader, total=total_rows, desc="翻译进度", unit="行"), 2
             ):
                 text = row["text"].strip()
-                print(
-                    f"{Fore.BLUE}处理第 {line_num} 行: {text[:50]}...{Style.RESET_ALL}"
-                )
+                ui.print_info(f"处理第 {line_num} 行: {text[:50]}...")
                 if not text:
                     row["translated"] = ""
                 elif re.fullmatch(r"(\s*\[[^\]]+\]\s*)+", text):
                     row["translated"] = text
-                    print(
-                        f"{Fore.BLUE}第 {line_num} 行仅含占位符，跳过{Style.RESET_ALL}"
-                    )
+                    ui.print_info(f"第 {line_num} 行仅含占位符，跳过")
                 else:
                     try:
                         translated = translate_text(
@@ -181,20 +169,18 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
                         )
                         row["translated"] = translated
                         if translated and translated.strip():
-                            print(
-                                f"{Fore.GREEN}✅ 第{line_num}行: {text[:30]}... => {translated[:30]}...{Style.RESET_ALL}"
+                            ui.print_success(
+                                f"✅ 第{line_num}行: {text[:30]}... => {translated[:30]}..."
                             )
                         else:
-                            print(
-                                f"{Fore.YELLOW}⚠️ 第{line_num}行翻译为空: {text[:50]}...{Style.RESET_ALL}"
+                            ui.print_warning(
+                                f"⚠️ 第{line_num}行翻译为空: {text[:50]}..."
                             )
-                            print(
-                                f"{Fore.YELLOW}第{line_num}行翻译失败。原文：{text[:50]}...{Style.RESET_ALL}"
+                            ui.print_warning(
+                                f"第{line_num}行翻译失败。原文：{text[:50]}..."
                             )
                     except Exception as e:
-                        print(
-                            f"{Fore.RED}❌ 第{line_num}行翻译失败: {text[:50]}...{Style.RESET_ALL}"
-                        )
+                        ui.print_error(f"❌ 第{line_num}行翻译失败: {text[:50]}...")
                         row["translated"] = text
 
                 rows.append(row)
@@ -210,7 +196,7 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
                 writer.writeheader()
                 writer.writerows(rows)
 
-        print(f"{Fore.GREEN}🎉 翻译完成，保存到: {output_path}{Style.RESET_ALL}")
+        ui.print_success(f"🎉 翻译完成，保存到: {output_path}")
 
     except Exception as e:
-        print(f"{Fore.RED}❌ 翻译失败: {e}{Style.RESET_ALL}")
+        ui.print_error(f"❌ 翻译失败: {e}")

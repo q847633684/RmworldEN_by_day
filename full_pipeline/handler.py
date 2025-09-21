@@ -44,7 +44,9 @@ def handle_full_pipeline():
         interaction_manager = InteractionManager()
 
         show_info("=== 开始提取模板 ===")
-        smart_config = interaction_manager.handle_smart_extraction_workflow(mod_dir)
+        smart_config = interaction_manager.handle_smart_extraction_workflow(
+            mod_dir, skip_output_selection=True
+        )
         conflict_resolution = smart_config["output_config"]["conflict_resolution"]
         data_source_choice = smart_config["data_sources"]["choice"]
         template_structure = smart_config["template_structure"]
