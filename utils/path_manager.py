@@ -484,10 +484,6 @@ class PathManager:
                     item_text = f"{global_index}. {status_icon} {version_info['name']}{status_text}"
                     row_items.append(item_text.ljust(item_width))
                 print("   " + "".join(row_items))
-
-            ui.print_info(f"\n💡 快速选择：")
-            ui.print_info(f"   0 - 使用默认选择（{version_dirs[0]['name']}）")
-            ui.print_info(f"   q - 退出版本选择")
             while True:
                 choice = input(
                     f"\n{ui.Colors.INFO}🎯 请选择版本 (1-{len(version_dirs)}，回车默认0，q退出): {ui.Colors.RESET}"

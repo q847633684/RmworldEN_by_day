@@ -80,13 +80,11 @@ def handle_full_pipeline():
             # 使用统一翻译处理器，它会自动处理恢复翻译
             from translate.handler import handle_unified_translate
 
-            translation_completed = handle_unified_translate(export_csv_path)
+            output_csv = handle_unified_translate(export_csv_path)
 
-            if translation_completed:
+            if output_csv:
                 # 翻译完成，进行导入
-                output_csv = export_csv_path.replace(".csv", "_translated.csv")
-                final_csv = output_csv
-                facade.import_translations_to_templates(final_csv)
+                facade.import_translations_to_templates(output_csv)
             else:
                 # 翻译未完成（用户中断或失败），不进行导入
                 show_info("翻译未完成，跳过导入")

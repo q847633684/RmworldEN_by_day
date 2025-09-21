@@ -10,7 +10,6 @@ from utils.ui_style import ui
 from utils.interaction import (
     select_csv_path_with_history,
     auto_generate_output_path,
-    confirm_action,
 )
 from utils.path_manager import PathManager
 from utils.config import get_user_config, ConfigError
@@ -18,12 +17,12 @@ from core.translation_facade import TranslationFacade
 from core.exceptions import TranslationError
 
 
-def handle_unified_translate(csv_path: Optional[str] = None) -> bool:
+def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
     """
     处理统一翻译功能
 
     Returns:
-        bool: 翻译是否完成（True=完成，False=未完成或中断）
+        Optional[str]: 翻译完成时返回输出文件路径，失败或中断时返回None
     """
     logger = get_logger(f"{__name__}.handle_unified_translate")
 
@@ -78,7 +77,7 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> bool:
         if csv_path is None:
             csv_path = select_csv_path_with_history()
             if not csv_path:
-                return False
+                return None
         else:
             # 使用提供的CSV路径
             ui.print_info(f"📄 使用指定CSV文件: {os.path.basename(csv_path)}")
@@ -93,9 +92,9 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> bool:
                 ui.print_success("恢复翻译完成！")
                 # 将输出CSV加入"导入翻译"的历史
                 PathManager().remember_path("import_csv", resume_file)
-                return True  # 翻译完成
+                return resume_file  # 翻译完成，返回输出文件路径
             else:
-                return False  # 翻译未完成（用户中断）
+                return None  # 翻译未完成（用户中断）
 
         # 自动生成输出CSV文件路径
         output_csv = auto_generate_output_path(csv_path)
@@ -133,25 +132,25 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> bool:
                 "1. 在配置文件中设置 aliyun_access_key_id 和 aliyun_access_key_secret"
             )
             ui.print_info("2. 或使用配置管理功能进行配置")
-            return False
+            return None
 
         # 执行翻译
         try:
             facade.machine_translate(csv_path, output_csv, translator_type)
-            return True  # 翻译完成
+            return output_csv  # 翻译完成，返回输出文件路径
         except TranslationError as e:
             ui.print_error(f"翻译失败: {str(e)}")
-            return False  # 翻译失败
+            return None  # 翻译失败
         except (OSError, IOError, ValueError) as e:
             ui.print_error(f"翻译过程中发生错误: {str(e)}")
-            return False  # 翻译失败
+            return None  # 翻译失败
 
     except (TranslationError, ConfigError, OSError, IOError, ValueError) as e:
         ui.print_error(f"统一翻译失败: {str(e)}")
         logger.error("统一翻译失败: %s", str(e), exc_info=True)
-        return False
+        return None
     except Exception as e:
         # 保留一个通用的Exception捕获作为最后的兜底，但记录更详细的信息
         ui.print_error(f"统一翻译发生未知错误: {str(e)}")
         logger.error("统一翻译发生未知错误: %s", str(e), exc_info=True)
-        return False
+        return None

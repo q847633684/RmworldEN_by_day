@@ -3,8 +3,7 @@
 """
 
 import csv
-import logging
-from utils.logging_config import get_logger, log_error_with_context
+from utils.logging_config import get_logger
 from utils.ui_style import ui
 from pathlib import Path
 from typing import Dict, Tuple
@@ -40,7 +39,18 @@ def update_all_xml(
     language_dir = get_language_folder_path(language, mod_dir)
     updated_count = 0
 
-    for xml_file in Path(language_dir).rglob("*.xml"):
+    # 获取所有XML文件列表
+    xml_files = list(Path(language_dir).rglob("*.xml"))
+    total_files = len(xml_files)
+
+    if total_files == 0:
+        ui.print_info("没有找到需要更新的XML文件")
+        return
+
+    # 显示进度条
+    ui.print_info(f"正在更新 {total_files} 个文件...")
+
+    for i, xml_file in enumerate(xml_files, 1):
         try:
             tree = processor.parse_xml(str(xml_file))
             if tree is None:
@@ -49,10 +59,15 @@ def update_all_xml(
             if processor.update_translations(tree, translations, merge=merge):
                 processor.save_xml(tree, str(xml_file))
                 updated_count += 1
-                ui.print_success(f"更新文件: {xml_file}")
+
+            # 显示进度条
+            ui.print_progress_bar(i, total_files, prefix="更新文件")
+
         except Exception as e:
             logger.error("处理文件失败: %s: %s", xml_file, e)
 
+    # 完成进度条
+    ui.print_info("")  # 换行
     ui.print_success(f"更新了 {updated_count} 个文件")
 
 
@@ -208,7 +223,17 @@ def _update_xml_in_subdir(
                 normalized[key] = value
         translations = normalized
 
-    for xml_file in Path(subdir).rglob("*.xml"):
+    # 获取所有XML文件列表
+    xml_files = list(Path(subdir).rglob("*.xml"))
+    total_files = len(xml_files)
+
+    if total_files == 0:
+        return 0
+
+    # 显示进度条
+    ui.print_info(f"正在更新 {subdir_type} 目录中的 {total_files} 个文件...")
+
+    for i, xml_file in enumerate(xml_files, 1):
         try:
             tree = processor.parse_xml(str(xml_file))
             if tree is None:
@@ -216,14 +241,19 @@ def _update_xml_in_subdir(
             if processor.update_translations(tree, translations, merge=merge):
                 processor.save_xml(tree, str(xml_file))
                 updated_count += 1
-                ui.print_success(f"更新文件: {xml_file}")
+
+            # 显示进度条
+            ui.print_progress_bar(i, total_files, prefix="更新文件")
+
         except FileNotFoundError:
             logger.error("XML文件不存在: %s", xml_file)
         except PermissionError:
             logger.error("无权限访问XML文件: %s", xml_file)
         except Exception as e:
             logger.error("处理XML文件失败: %s: %s", xml_file, e)
-            ui.print_error(f"处理文件失败: {xml_file}: {e}")
+
+    # 完成进度条
+    ui.print_info("")  # 换行
     return updated_count
 
 

@@ -10,7 +10,6 @@
   ],
   "output_dir": [
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cumpilation\\1.6",
-    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cumpilation\\1.6\\Languages\\ChineseSimplified",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw\\1.6",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\dirty-talk",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw\\1.5",
@@ -18,6 +17,7 @@
   ],
   "import_csv": [
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cumpilation\\1.6\\Languages\\ChineseSimplified\\extracted_translations.csv",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cumpilation\\1.6\\Languages\\ChineseSimplified\\extracted_translations_zh.csv",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw\\1.6\\Languages\\ChineseSimplified\\extracted_translations.csv",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw\\1.6\\Languages\\ChineseSimplified\\extracted_translations_zh.csv",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\dirty-talk\\Languages\\ChineseSimplified\\extracted_translations_zh.csv",

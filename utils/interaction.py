@@ -13,6 +13,27 @@ from .ui_style import ui, display_mods_with_adaptive_width, _get_mod_display_nam
 path_manager = PathManager()
 
 
+def safe_input(prompt: str, default: str = None) -> Optional[str]:
+    """
+    安全的输入函数，处理EOFError和KeyboardInterrupt
+
+    Args:
+        prompt: 输入提示
+        default: 默认返回值（当发生异常时）
+
+    Returns:
+        用户输入或默认值
+    """
+    try:
+        return input(prompt).strip()
+    except EOFError:
+        ui.print_error("输入流异常")
+        return default
+    except KeyboardInterrupt:
+        ui.print_info("\n用户中断")
+        return default
+
+
 def show_main_menu() -> str:
     """显示主菜单并返回用户选择"""
     ui.print_header("Day Translation 主菜单")
@@ -55,7 +76,8 @@ def show_main_menu() -> str:
 
     ui.print_separator()
 
-    return input(ui.get_input_prompt("请选择模式", options="1-7, q")).strip()
+    result = safe_input(ui.get_input_prompt("请选择模式", options="1-7, q"), "q")
+    return result if result is not None else "q"
 
 
 def select_csv_path_with_history() -> Optional[str]:
@@ -81,13 +103,17 @@ def select_csv_path_with_history() -> Optional[str]:
             if csv_history
             else ui.get_input_prompt("请输入CSV文件路径", options="q退出")
         )
-        choice = input(prompt_text).strip()
+        choice = safe_input(prompt_text)
+        if choice is None:
+            return None
 
         if choice.lower() == "q":
             return None
 
         if csv_history and choice == "0":
-            csv_path = input(ui.get_input_prompt("请输入CSV文件路径")).strip()
+            csv_path = safe_input(ui.get_input_prompt("请输入CSV文件路径"))
+            if csv_path is None:
+                return None
         elif csv_history and choice.isdigit() and 1 <= int(choice) <= len(csv_history):
             csv_path = csv_history[int(choice) - 1]
 
@@ -162,11 +188,13 @@ def select_mod_path_with_version_detection() -> Optional[str]:
     max_choice = (2 if available_mod_dirs else 1) + len(history)
 
     while True:
-        choice = input(
+        choice = safe_input(
             ui.get_input_prompt(
                 "请选择", options=f"1-{max_choice}, b", icon="或直接输入路径"
             )
-        ).strip()
+        )
+        if choice is None:
+            return None
 
         if choice.lower() == "b":
             # 返回主菜单
@@ -293,12 +321,8 @@ def _scan_third_party_mods(available_mod_dirs: List[str]) -> Optional[str]:
 
 def confirm_action(message: str) -> bool:
     """确认操作"""
-    return input(f"{ui.Colors.WARNING}{message} [y/n]: {ui.Colors.RESET}").lower() in [
-        "y",
-        "yes",
-        "是",
-        "确认",
-    ]
+    result = safe_input(f"{ui.Colors.WARNING}{message} [y/n]: {ui.Colors.RESET}", "n")
+    return result and result.lower() in ["y", "yes", "是", "确认"]
 
 
 def auto_generate_output_path(input_path: str) -> str:
@@ -330,7 +354,8 @@ def show_info(message: str):
 def wait_for_user_input(prompt: str = "按回车继续..."):
     """等待用户输入"""
     from utils.ui_style import UIStyle
-    input(f"{UIStyle.Colors.INFO}{prompt}{UIStyle.Colors.RESET}")
+
+    safe_input(f"{UIStyle.Colors.INFO}{prompt}{UIStyle.Colors.RESET}")
 
 
 def show_progress(message: str):

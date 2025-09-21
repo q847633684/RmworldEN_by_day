@@ -247,6 +247,127 @@ class UIStyle:
             flush=True,
         )
 
+    # ==================== 统一进度条工具 ====================
+
+    class ProgressBar:
+        """进度条上下文管理器"""
+
+        def __init__(self, total: int, prefix: str = "进度", description: str = ""):
+            """
+            初始化进度条
+
+            Args:
+                total: 总数量
+                prefix: 进度条前缀
+                description: 描述信息
+            """
+            self.total = total
+            self.prefix = prefix
+            self.description = description
+            self.current = 0
+
+        def __enter__(self):
+            """进入上下文"""
+            if self.total > 0:
+                ui.print_info(f"{self.description}...")
+            return self
+
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            """退出上下文"""
+            if self.total > 0:
+                ui.print_info("")  # 换行
+            return False  # 不抑制异常
+
+        def update(self, increment: int = 1):
+            """更新进度"""
+            self.current += increment
+            if self.total > 0:
+                ui.print_progress_bar(self.current, self.total, prefix=self.prefix)
+
+    @classmethod
+    def progress_bar(cls, total: int, prefix: str = "进度", description: str = ""):
+        """
+        进度条装饰器
+
+        Args:
+            total: 总数量
+            prefix: 进度条前缀
+            description: 描述信息
+
+        Returns:
+            装饰器函数
+        """
+        from functools import wraps
+
+        def decorator(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                with cls.ProgressBar(total, prefix, description) as progress:
+                    # 将progress对象传递给原函数
+                    return func(*args, progress=progress, **kwargs)
+
+            return wrapper
+
+        return decorator
+
+    @classmethod
+    def iter_with_progress(
+        cls, items: list, prefix: str = "处理", description: str = ""
+    ):
+        """
+        带进度条的迭代器
+
+        Args:
+            items: 要迭代的项目列表
+            prefix: 进度条前缀
+            description: 描述信息
+
+        Yields:
+            项目及其索引
+        """
+        total = len(items)
+        if total == 0:
+            return
+
+        with cls.ProgressBar(total, prefix, description) as progress:
+            for i, item in enumerate(items, 1):
+                yield i, item
+                progress.update()
+
+    @classmethod
+    def file_processing_progress(
+        cls, files: list, prefix: str = "处理文件", description: str = ""
+    ):
+        """
+        文件处理进度条装饰器
+
+        Args:
+            files: 文件列表
+            prefix: 进度条前缀
+            description: 描述信息
+
+        Returns:
+            装饰器函数
+        """
+        return cls.progress_bar(len(files), prefix, description)
+
+    @classmethod
+    def data_processing_progress(
+        cls, data: list, prefix: str = "处理数据", description: str = ""
+    ):
+        """
+        数据处理进度条装饰器
+
+        Args:
+            data: 数据列表
+            prefix: 进度条前缀
+            description: 描述信息
+
+        Returns:
+            装饰器函数
+        """
+        return cls.progress_bar(len(data), prefix, description)
+
     @classmethod
     def print_table(
         cls,

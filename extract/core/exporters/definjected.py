@@ -64,8 +64,6 @@ class DefInjectedExporter(BaseExporter):
 
         # 为每个 file_path 生成翻译文件
         for file_path, translations in file_groups.items():
-            if not translations:
-                continue
 
             output_file = def_injected_path / file_path
             output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -111,8 +109,6 @@ class DefInjectedExporter(BaseExporter):
 
         # 为每个 DefType 生成 XML 文件
         for def_type, translations in file_groups.items():
-            if not translations:
-                continue
 
             # 创建对应的目录结构
             type_dir = def_injected_path / def_type
@@ -160,8 +156,6 @@ class DefInjectedExporter(BaseExporter):
         file_groups = self._group_by_rel_path(def_translations)
 
         for rel_path, translations in file_groups.items():
-            if not translations:
-                continue
 
             output_file = def_injected_path / rel_path
             output_file.parent.mkdir(parents=True, exist_ok=True)
