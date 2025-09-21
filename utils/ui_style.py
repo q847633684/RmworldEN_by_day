@@ -3,10 +3,11 @@
 提供一致的界面风格和交互体验
 """
 
+import os
 import shutil
 import sys
 from typing import Optional, List, Dict, Any
-from colorama import Fore, Style, init
+from colorama import Fore, Style, init  # type: ignore
 
 # 初始化colorama，确保输出到控制台
 init(autoreset=True, strip=False)
@@ -518,46 +519,172 @@ def _get_mod_display_name(mod_path: str) -> str:
     return os.path.basename(mod_path)
 
 
-def display_mods_with_adaptive_width(all_mods: List[str]) -> None:
-    """使用自适应列宽显示模组列表"""
+def display_mods_with_adaptive_width(
+    all_mods: List[str], items_per_page: int = 20
+) -> Optional[str]:
+    """使用自适应列宽显示模组列表，支持多页显示"""
+    if not all_mods:
+        ui.print_warning("📦 未找到任何模组")
+        return
+
     mod_names = [_get_mod_display_name(mod_path) for mod_path in all_mods]
     mods_per_line, item_width = _calculate_adaptive_layout(mod_names)
 
-    # 计算边框宽度
-    border_width = mods_per_line * item_width + 4  # 4 = 左右边框 + 间距
-    border_line = "═" * (border_width - 2)
+    # 计算每页显示的项目数（按行计算）
+    items_per_line = mods_per_line
+    lines_per_page = max(1, items_per_page // items_per_line)
+    items_per_page = lines_per_page * items_per_line
 
-    # 显示标题
-    ui.print_header(f"📦 找到 {len(all_mods)} 个第三方模组")
+    # 计算总页数
+    total_pages = (len(all_mods) + items_per_page - 1) // items_per_page
+
+    current_page = 1
+
+    while True:
+        # 清屏并显示当前页
+        os.system("cls" if os.name == "nt" else "clear")
+
+        # 计算当前页的起始和结束索引
+        start_idx = (current_page - 1) * items_per_page
+        end_idx = min(start_idx + items_per_page, len(all_mods))
+        current_page_mods = all_mods[start_idx:end_idx]
+        current_page_names = mod_names[start_idx:end_idx]
+
+        # 计算边框宽度
+        border_width = mods_per_line * item_width + 4  # 4 = 左右边框 + 间距
+
+        # 显示标题和分页信息
+        ui.print_header(f"📦 模组列表 (第 {current_page}/{total_pages} 页)")
+        ui.print_info(f"显示 {len(current_page_mods)} 个模组 (共 {len(all_mods)} 个)")
+
+        # 显示当前页的模组
+        _display_mods_page(
+            current_page_mods, current_page_names, mods_per_line, item_width, start_idx
+        )
+
+        # 显示分页导航
+        _display_pagination_navigation(current_page, total_pages, len(all_mods))
+
+        # 获取用户输入
+        choice = (
+            input(
+                ui.get_input_prompt(
+                    "请选择操作", options="n下一页, p上一页, 数字选择模组, q退出"
+                )
+            )
+            .strip()
+            .lower()
+        )
+
+        if choice == "q":
+            break
+        elif choice == "n" and current_page < total_pages:
+            current_page += 1
+        elif choice == "p" and current_page > 1:
+            current_page -= 1
+        elif choice.isdigit():
+            mod_index = int(choice) - 1
+            if 0 <= mod_index < len(current_page_mods):
+                # 返回选中的模组路径
+                return current_page_mods[mod_index]
+            else:
+                ui.print_warning(
+                    f"无效选择，请输入 1-{len(current_page_mods)} 之间的数字"
+                )
+        else:
+            ui.print_warning("无效选择，请重新输入")
+
+    return None
+
+
+def _display_mods_page(
+    mods: List[str],
+    mod_names: List[str],
+    mods_per_line: int,
+    item_width: int,
+    start_index: int,
+) -> None:
+    """显示单页模组列表"""
+    if not mods:
+        return
 
     # 计算需要的行数
-    total_lines = (len(all_mods) + mods_per_line - 1) // mods_per_line
+    total_lines = (len(mods) + mods_per_line - 1) // mods_per_line
+
+    # 计算每列的实际宽度（减少间距）
+    column_width = item_width + 2  # 编号(2) + ". " + 模组名 + 1个空格
+    total_width = mods_per_line * column_width
+
+    # 顶部边框
+    top_line = "═" * total_width
+    print(f"   ┌{top_line}┐")
 
     for line in range(total_lines):
         start_idx = line * mods_per_line
-        end_idx = min(start_idx + mods_per_line, len(all_mods))
+        end_idx = min(start_idx + mods_per_line, len(mods))
 
         # 构建当前行的显示内容
-        line_content = f"   │ "
+        line_content = f"   │"
         for i in range(start_idx, end_idx):
+            global_index = start_index + i
             mod_name = mod_names[i]
-            # 动态截断模组名
-            max_name_len = item_width - len(str(i + 1)) - 4  # 预留编号和间距空间
+
+            # 计算可用的模组名长度
+            available_width = item_width - 3  # 预留3个字符给编号和点
             display_name = (
-                mod_name[: max_name_len - 3] + "..."
-                if len(mod_name) > max_name_len
+                mod_name[: available_width - 3] + "..."
+                if len(mod_name) > available_width
                 else mod_name
             )
-            line_content += f"{i+1:2d}. {display_name:<{max_name_len}} "
+
+            # 格式化每个项目
+            item_text = f"{global_index+1:2d}. {display_name}"
+            # 使用固定宽度格式化
+            line_content += f"{item_text:<{column_width}}"
 
         # 填充剩余空间
         remaining_slots = mods_per_line - (end_idx - start_idx)
         if remaining_slots > 0:
-            line_content += " " * (remaining_slots * item_width)
+            line_content += " " * (remaining_slots * column_width)
 
         line_content += "│"
         print(line_content)
 
     # 底部边框
-    bottom_line = "─" * (border_width - 2)
+    bottom_line = "─" * total_width
     print(f"   └{bottom_line}┘")
+
+
+def _display_pagination_navigation(
+    current_page: int, total_pages: int, total_items: int
+) -> None:
+    """显示分页导航"""
+    ui.print_separator("-", 40)
+
+    # 分页信息
+    ui.print_info(f"📄 第 {current_page} 页，共 {total_pages} 页")
+
+    # 导航选项
+    nav_options = []
+    if current_page > 1:
+        nav_options.append("p - 上一页")
+    if current_page < total_pages:
+        nav_options.append("n - 下一页")
+    nav_options.append("q - 退出")
+
+    if nav_options:
+        ui.print_info("导航: " + " | ".join(nav_options))
+
+    ui.print_info(f"💡 直接输入数字选择模组 (1-{total_items})")
+
+
+def confirm_action(message: str) -> bool:
+    """确认操作"""
+    return input(
+        f"{UIStyle.Colors.WARNING}{message} [y/n]: {UIStyle.Colors.RESET}"
+    ).lower() in [
+        "y",
+        "yes",
+        "是",
+        "确认",
+    ]

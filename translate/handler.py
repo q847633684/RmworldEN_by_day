@@ -128,34 +128,29 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> bool:
         else:
             ui.print_info("🐍 Python翻译器: 简单部署，稳定可靠")
 
-        if confirm_action("确认开始翻译？"):
-            ui.print_section_header("开始翻译", ui.Icons.TRANSLATE)
+        ui.print_section_header("开始翻译", ui.Icons.TRANSLATE)
 
-            # 检查API密钥配置
-            user_config = get_user_config() or {}
-            ak = user_config.get("aliyun_access_key_id", "").strip()
-            sk = user_config.get("aliyun_access_key_secret", "").strip()
+        # 检查API密钥配置
+        user_config = get_user_config() or {}
+        ak = user_config.get("aliyun_access_key_id", "").strip()
+        sk = user_config.get("aliyun_access_key_secret", "").strip()
 
-            if not ak or not sk:
-                ui.print_error("未找到阿里云翻译密钥配置")
-                ui.print_info("请先配置翻译密钥：")
-                ui.print_info(
-                    "1. 在配置文件中设置 aliyun_access_key_id 和 aliyun_access_key_secret"
-                )
-                ui.print_info("2. 或使用配置管理功能进行配置")
-                return False
+        if not ak or not sk:
+            ui.print_error("未找到阿里云翻译密钥配置")
+            ui.print_info("请先配置翻译密钥：")
+            ui.print_info(
+                "1. 在配置文件中设置 aliyun_access_key_id 和 aliyun_access_key_secret"
+            )
+            ui.print_info("2. 或使用配置管理功能进行配置")
+            return False
 
-            # 执行翻译
-            try:
-                facade.machine_translate(csv_path, output_csv, translator_type)
-                return True  # 翻译完成
-            except Exception as e:
-                ui.print_error(f"翻译失败: {str(e)}")
-                return False  # 翻译失败
-
-        else:
-            ui.print_warning("用户取消翻译")
-            return False  # 用户取消
+        # 执行翻译
+        try:
+            facade.machine_translate(csv_path, output_csv, translator_type)
+            return True  # 翻译完成
+        except Exception as e:
+            ui.print_error(f"翻译失败: {str(e)}")
+            return False  # 翻译失败
 
     except Exception as e:
         ui.print_error(f"统一翻译失败: {str(e)}")

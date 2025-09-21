@@ -238,36 +238,19 @@ def _scan_game_mods() -> Optional[str]:
         return None
 
     # 使用自适应列宽显示Steam Workshop模组列表
-    _display_mods_with_adaptive_width(found_mods)
+    selected_mod = display_mods_with_adaptive_width(found_mods)
+    if selected_mod:
+        mod_display_name = _get_mod_display_name(selected_mod)
+        mod_id = os.path.basename(selected_mod)
 
-    ui.print_menu_item("b", "返回", "返回主菜单", ui.Icons.BACK)
-
-    while True:
-        choice = input(
-            ui.get_input_prompt("请选择模组编号", options=f"1-{len(found_mods)}, b返回")
-        ).strip()
-
-        if choice.lower() == "b":
-            return None
-
-        try:
-            mod_index = int(choice) - 1
-            if 0 <= mod_index < len(found_mods):
-                selected_mod = found_mods[mod_index]
-                mod_display_name = _get_mod_display_name(selected_mod)
-                mod_id = os.path.basename(selected_mod)
-
-                ui.print_success("🎮 选择Steam Workshop模组")
-                ui.print_info(f"📁 路径：{selected_mod}")
-                ui.print_info(f"📦 模组名称：{mod_display_name}")
-                ui.print_info(f"🆔 模组ID：{mod_id}")
-                path_manager.remember_path("mod_dir", selected_mod)
-                # 对选择的模组进行版本检测
-                return path_manager.detect_version_and_choose(selected_mod)
-            else:
-                ui.print_error(f"无效选择，请输入 1-{len(found_mods)} 或 b")
-        except ValueError:
-            ui.print_error("无效输入，请输入数字或 b")
+        ui.print_success("🎮 选择Steam Workshop模组")
+        ui.print_info(f"📁 路径：{selected_mod}")
+        ui.print_info(f"📦 模组名称：{mod_display_name}")
+        ui.print_info(f"🆔 模组ID：{mod_id}")
+        path_manager.remember_path("mod_dir", selected_mod)
+        # 对选择的模组进行版本检测
+        return path_manager.detect_version_and_choose(selected_mod)
+    return None
 
 
 def _scan_third_party_mods(available_mod_dirs: List[str]) -> Optional[str]:
@@ -295,47 +278,27 @@ def _scan_third_party_mods(available_mod_dirs: List[str]) -> Optional[str]:
         return None
 
     # 使用自适应列宽显示模组列表
-    display_mods_with_adaptive_width(all_mods)
+    selected_mod = display_mods_with_adaptive_width(all_mods)
+    if selected_mod:
+        mod_display_name = _get_mod_display_name(selected_mod)
 
-    ui.print_menu_item("b", "🔙 返回")
-
-    while True:
-        choice = input(f"\n请选择模组 (1-{len(all_mods)}, b) 或直接输入路径: ").strip()
-
-        if choice.lower() == "b":
-            # 返回上级菜单
-            ui.print_info("🔙 返回")
-            return None
-        elif choice.isdigit():
-            choice_num = int(choice)
-            if 1 <= choice_num <= len(all_mods):
-                selected_path = all_mods[choice_num - 1]
-                mod_display_name = _get_mod_display_name(selected_path)
-
-                ui.print_success("📦 选择第三方模组")
-                ui.print_info(f"📁 路径：{selected_path}")
-                ui.print_info(f"📦 模组名称：{mod_display_name}")
-                path_manager.remember_path("mod_dir", selected_path)
-                # 对选择的模组进行版本检测
-                return path_manager.detect_version_and_choose(selected_path)
-        elif choice:
-            # 直接输入路径 - 先获取路径，然后进行版本检测
-            selected_path = path_manager.get_path(
-                path_type="mod_dir",
-                prompt="请输入编号或模组目录路径（支持历史编号或直接输入路径）: ",
-                validator_type="mod",
-                required=True,
-            )
-            if selected_path:
-                return path_manager.detect_version_and_choose(selected_path)
-            return None
-        else:
-            ui.print_error("请输入选择或路径")
+        ui.print_success("📦 选择第三方模组")
+        ui.print_info(f"📁 路径：{selected_mod}")
+        ui.print_info(f"📦 模组名称：{mod_display_name}")
+        path_manager.remember_path("mod_dir", selected_mod)
+        # 对选择的模组进行版本检测
+        return path_manager.detect_version_and_choose(selected_mod)
+    return None
 
 
 def confirm_action(message: str) -> bool:
     """确认操作"""
-    return input(f"{message} [y/n]: ").lower() == "y"
+    return input(f"{ui.Colors.WARNING}{message} [y/n]: {ui.Colors.RESET}").lower() in [
+        "y",
+        "yes",
+        "是",
+        "确认",
+    ]
 
 
 def auto_generate_output_path(input_path: str) -> str:
@@ -362,3 +325,19 @@ def show_warning(message: str):
 def show_info(message: str):
     """显示信息"""
     ui.print_info(message)
+
+
+def wait_for_user_input(prompt: str = "按回车继续..."):
+    """等待用户输入"""
+    from utils.ui_style import UIStyle
+    input(f"{UIStyle.Colors.INFO}{prompt}{UIStyle.Colors.RESET}")
+
+
+def show_progress(message: str):
+    """显示进度信息"""
+    ui.print_info(f"{ui.Icons.PROCESSING} {message}")
+
+
+def show_completion(message: str):
+    """显示完成信息"""
+    ui.print_success(f"{ui.Icons.COMPLETED} {message}")

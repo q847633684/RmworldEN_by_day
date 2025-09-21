@@ -47,7 +47,7 @@ from extract import handle_extract
 from full_pipeline.handler import handle_full_pipeline
 from import_template.handler import handle_import_template
 from translate.handler import handle_unified_translate
-from utils.interaction import show_main_menu
+from utils.interaction import show_main_menu, wait_for_user_input
 
 # 初始化 colorama 以支持 Windows 终端颜色
 init()
@@ -55,36 +55,49 @@ init()
 
 def main():
     """主程序入口"""
+    from utils.ui_style import ui
+
     while True:
         os.system("cls" if os.name == "nt" else "clear")
         mode = show_main_menu()
-        if mode == "1":
-            handle_full_pipeline()
-            input("\n按回车返回主菜单...")
-        elif mode == "2":
-            handle_extract()
-            input("\n按回车返回主菜单...")
-        elif mode == "3":
-            handle_unified_translate()
-            input("\n按回车返回主菜单...")
-        elif mode == "4":
-            handle_import_template()
-            input("\n按回车返回主菜单...")
-        elif mode == "5":
-            handle_batch()
-            input("\n按回车返回主菜单...")
-        elif mode == "6":
-            handle_config_manage()
-            input("\n按回车返回主菜单...")
-        elif mode == "7":
-            handle_corpus()
-            input("\n按回车返回主菜单...")
-        elif mode == "q":
-            print("👋 感谢使用 Day Translation！")
-            break
-        else:
-            print("❌ 无效选项，请重新输入。")
-            input("\n按回车返回主菜单...")
+
+        try:
+            if mode == "1":
+                handle_full_pipeline()
+                wait_for_user_input("按回车返回主菜单...")
+            elif mode == "2":
+                handle_extract()
+                wait_for_user_input("按回车返回主菜单...")
+            elif mode == "3":
+                handle_unified_translate()
+                wait_for_user_input("按回车返回主菜单...")
+            elif mode == "4":
+                handle_import_template()
+                wait_for_user_input("按回车返回主菜单...")
+            elif mode == "5":
+                handle_batch()
+                wait_for_user_input("按回车返回主菜单...")
+            elif mode == "6":
+                handle_config_manage()
+                wait_for_user_input("按回车返回主菜单...")
+            elif mode == "7":
+                handle_corpus()
+                wait_for_user_input("按回车返回主菜单...")
+            elif mode == "q":
+                ui.print_success("👋 感谢使用 Day Translation！")
+                break
+            else:
+                ui.print_error("❌ 无效选项，请重新输入。")
+                wait_for_user_input("按回车返回主菜单...")
+        except KeyboardInterrupt:
+            ui.print_warning("\n⚠️ 用户中断操作")
+            if ui.confirm_action("是否退出程序？"):
+                ui.print_success("👋 感谢使用 Day Translation！")
+                break
+            continue
+        except Exception as e:
+            ui.print_error(f"❌ 程序执行出错: {str(e)}")
+            wait_for_user_input("按回车返回主菜单...")
 
 
 if __name__ == "__main__":
