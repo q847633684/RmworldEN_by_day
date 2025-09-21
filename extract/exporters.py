@@ -1,22 +1,32 @@
 """
-翻译导出模块 - RimWorld 模组翻译文件生成与更新
+RimWorld 翻译文件导出器
 
-主要功能：
+负责将提取的翻译数据导出为各种格式的翻译文件：
+
+导出模式：
 1. DefInjected 翻译文件导出
-   - 按原始文件路径结构导出
-   - 按 DefType 分类导出
-   - 按文件目录结构导出
-2. Keyed 翻译模板导出
-3. 合并翻译文件的智能更新
-   - 保留现有翻译内容
-   - 记录翻译变更历史
-   - 自动添加英文注释
+   - export_definjected_with_original_structure(): 按原始文件路径结构导出
+   - export_definjected_with_defs_structure(): 按 DefType 分类导出
+   - export_definjected_with_file_structure(): 按文件目录结构导出
 
-支持的文件格式：XML（DefInjected）
-支持的注释类型：英文原文注释、历史变更注释
+2. Keyed 翻译模板导出
+   - export_keyed_template(): 导出 Keyed 翻译模板
+
+3. 智能合并更新
+   - write_merged_translations(): 合并翻译文件的智能更新
+
+主要特性：
+- 支持多种文件组织结构
+- 自动添加英文原文注释（<!--EN: ...-->）
+- 记录翻译变更历史（<!--HISTORY: ...-->）
+- 保持 XML 格式的完整性和可读性
+- 支持增量更新和冲突处理
+- 提供详细的导出日志和统计信息
+
+支持格式：XML（DefInjected/Keyed）
+注释类型：英文原文注释、历史变更注释
 """
 
-import logging
 import os
 import re
 from pathlib import Path
@@ -26,7 +36,7 @@ from utils.config import (
     get_config,
     get_language_subdir,
 )
-from utils.utils import sanitize_xml, XMLProcessor
+from utils.utils import XMLProcessor
 
 CONFIG = get_config()
 
@@ -364,7 +374,7 @@ def write_merged_translations(merged, output_dir, output_language, sub_dir) -> N
                         history_comment = processor.create_comment(history)  # 创建注释
                         elem_index = list(root).index(existing_elem)
                         root.insert(elem_index, history_comment)
-                existing_elem.text = sanitize_xml(test)
+                existing_elem.text = test
             else:
                 # 添加新元素
                 # 先添加历史注释（如果有，且不为空）

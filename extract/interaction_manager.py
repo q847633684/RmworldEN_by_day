@@ -1,6 +1,45 @@
 """
-智能交互管理器 - 实现用户设计的四步智能流程
-负责协调用户交互决策，复用现有功能完成实际工作
+RimWorld 智能交互管理器
+
+实现用户友好的四步智能工作流程，自动检测和分析模组状态，提供智能化的决策建议：
+
+核心流程：
+1. 检测英文目录状态（DefInjected/Keyed）
+2. 检测输出目录状态（DefInjected/Keyed）
+3. 选择数据来源（DefInjected提取 vs Defs扫描）
+4. 处理输出冲突（合并/覆盖/重建/新建）
+5. 选择模板结构（根据决策树逻辑）
+
+主要功能：
+- InteractionManager 类：核心交互管理器
+- handle_smart_extraction_workflow(): 执行完整的智能工作流程
+- 智能分析和推荐系统
+- 用户友好的交互界面
+
+智能分析功能：
+1. 目录状态检测
+   - _detect_language_directories(): 检测指定语言目录状态
+   - 自动识别 DefInjected 和 Keyed 目录的有效性
+
+2. 数据源质量分析
+   - _analyze_definjected_quality(): 分析 DefInjected 目录质量
+   - _analyze_keyed_quality(): 分析 Keyed 目录质量
+   - 基于文件数量、修改时间等因素提供智能建议
+
+3. 冲突处理分析
+   - _analyze_existing_files(): 分析现有输出文件状态
+   - 智能推荐最佳的处理策略
+
+4. 输出目录管理
+   - _get_output_directory(): 获取用户指定的输出目录
+   - 支持历史记录和路径记忆功能
+
+特性：
+- 美观的命令行交互界面
+- 智能的决策建议系统
+- 完整的配置确认和验证
+- 详细的用户操作日志记录
+- 支持多语言目录结构
 """
 
 import logging

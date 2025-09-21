@@ -1,15 +1,24 @@
 """
-RimWorld 翻译提取器模块
+RimWorld 翻译内容提取器
 
-本模块提供从 RimWorld 模组中提取可翻译内容的功能，包括：
-- 从 Keyed 目录提取键值对翻译
-- 从 Defs 目录扫描定义文件中的可翻译字段
-- 从 DefInjected 目录提取已注入的翻译结构
+本模块提供从 RimWorld 模组中提取可翻译内容的核心功能：
+
+数据源支持：
+- Defs 目录：扫描原始定义文件，提取可翻译字段
+- DefInjected 目录：提取已结构化的翻译数据
+- Keyed 目录：提取键值对形式的翻译
 
 主要功能：
-- extract_keyed_translations: 提取 Keyed 翻译
-- scan_defs_sync: 扫描 Defs 目录中的可翻译内容
-- extract_definjected_translations: 提取 DefInjected 翻译结构
+- extract_keyed_translations(): 从 Keyed 目录提取翻译
+- scan_defs_sync(): 同步扫描 Defs 目录中的可翻译内容
+- extract_definjected_translations(): 从 DefInjected 目录提取翻译结构
+- _extract_translatable_fields_recursive(): 递归提取可翻译字段
+
+特性：
+- 支持 XML 文件解析和内容过滤
+- 智能识别可翻译字段（基于配置的默认字段列表）
+- 处理复杂的嵌套结构和列表项
+- 提供详细的处理日志和统计信息
 """
 
 import logging
@@ -22,7 +31,7 @@ from utils.config import (
     get_config,
     get_language_subdir,
 )
-from utils.filters import ContentFilter
+from extract.filters import ContentFilter
 
 
 CONFIG = get_config()

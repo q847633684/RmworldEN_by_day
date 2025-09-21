@@ -26,7 +26,8 @@ from typing import Any, Dict, List, Optional, Set
 
 from colorama import Fore, Style  # type: ignore
 
-from .filter_config import UnifiedFilterRules
+# 移除对 extract 的依赖，避免循环导入
+# from extract.filter_config import UnifiedFilterRules
 
 _config_instance: Optional["TranslationConfig"] = None
 CONFIG_VERSION = "1.0.0"
@@ -65,12 +66,208 @@ class TranslationConfig:
             self.log_file = os.path.join(log_dir, f"day_translation_{timestamp}.log")
         self._validate_config()
         self._rules = {
-            "default_fields": UnifiedFilterRules.DEFAULT_FIELDS,
-            "ignore_fields": UnifiedFilterRules.IGNORE_FIELDS,
-            "non_text_patterns": UnifiedFilterRules.NON_TEXT_PATTERNS,
+            "default_fields": self._get_default_fields(),
+            "ignore_fields": self._get_ignore_fields(),
+            "non_text_patterns": self._get_non_text_patterns(),
         }
         self._setup_logging()
         self._load_user_config()
+
+    def _get_default_fields(self) -> Set[str]:
+        """获取默认需要翻译的字段"""
+        return {
+            # 基础字段
+            "label",
+            "description",
+            "labelShort",
+            "descriptionShort",
+            "title",
+            "text",
+            "message",
+            "tooltip",
+            "baseDesc",
+            "skillDescription",
+            "backstoryDesc",
+            "jobString",
+            "gerundLabel",
+            "verb",
+            "deathMessage",
+            "summary",
+            "note",
+            "flavor",
+            "quote",
+            "caption",
+            # RimWorld 特有字段
+            "RMBLabel",
+            "rulesStrings",
+            "labelNoun",
+            "gerund",
+            "reportString",
+            "skillLabel",
+            "pawnLabel",
+            "titleShort",
+            # 覆盖字段
+            "reportStringOverride",
+            "overrideReportString",
+            "overrideLabel",
+            "overrideDescription",
+            "overrideLabelShort",
+            "overrideDescriptionShort",
+            "overrideTitle",
+            "overrideText",
+            "overrideMessage",
+            "overrideTooltip",
+            "overrideBaseDesc",
+            "overrideSkillDescription",
+            "overrideBackstoryDesc",
+            "overrideJobString",
+            "overrideGerundLabel",
+            "overrideVerb",
+            "overrideDeathMessage",
+            "overrideSummary",
+            "overrideNote",
+            "overrideFlavor",
+            "overrideQuote",
+            "overrideCaption",
+            # 自定义字段
+            "customLabel",
+            "customDescription",
+            "customTooltip",
+            "customMessage",
+            "customText",
+            "customTitle",
+            "customBaseDesc",
+            "customSkillDescription",
+            "customBackstoryDesc",
+            "customJobString",
+            "customGerundLabel",
+            "customVerb",
+            "customDeathMessage",
+            "customSummary",
+            "customNote",
+            "customFlavor",
+            "customQuote",
+            "customCaption",
+        }
+
+    def _get_ignore_fields(self) -> Set[str]:
+        """获取需要忽略的字段"""
+        return {
+            # 基础字段
+            "defName",
+            "id",
+            "cost",
+            "damage",
+            "x",
+            "y",
+            "z",
+            "width",
+            "height",
+            "priority",
+            "count",
+            "index",
+            "version",
+            "url",
+            "path",
+            "file",
+            "key",
+            # 数值字段
+            "order",
+            "weight",
+            "value",
+            "amount",
+            "quantity",
+            "duration",
+            "cooldown",
+            "range",
+            "radius",
+            "angle",
+            "speed",
+            "force",
+            "power",
+            "energy",
+            "health",
+            "armor",
+            "shield",
+            "resistance",
+            "penetration",
+            "accuracy",
+            "evasion",
+            "critChance",
+            "critDamage",
+            "dodgeChance",
+            "blockChance",
+            "parryChance",
+            # 特殊字段
+            "guid",
+            "uuid",
+            "timestamp",
+            "date",
+            "time",
+            "checksum",
+            "signature",
+            "token",
+            "secret",
+            "password",
+            "salt",
+            "hash",
+            "encryption",
+            "compression",
+            "encoding",
+            "format",
+            "type",
+            "category",
+            "tag",
+            "group",
+            "class",
+            "style",
+        }
+
+    def _get_non_text_patterns(self) -> List[str]:
+        """获取非文本模式"""
+        return [
+            # 数字模式
+            r"^\d+$",  # 整数
+            r"^-?\d+\.\d+$",  # 浮点数
+            r"^[0-9a-fA-F]+$",  # 十六进制
+            r"^[+-]?(\d+\.?\d*|\.\d+)$",  # 科学计数法
+            r"^\d+[kKmMgGtT]?$",  # 带单位的数字
+            # 空白模式
+            r"^\s*$",  # 纯空白
+            r"^[\s\-_]+$",  # 分隔符
+            # 布尔值
+            r"^true$|^false$",  # 布尔值
+            r"^yes$|^no$",  # 是/否
+            r"^on$|^off$",  # 开/关
+            # 路径模式
+            r"^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$",  # 文件名
+            r"^[A-Za-z0-9_-]+/[A-Za-z0-9_-]+$",  # 路径
+            r"^[A-Za-z0-9_-]+\\[A-Za-z0-9_-]+$",  # Windows路径
+            # URL模式
+            r'https?://[^\s<>"]+|www\.[^\s<>"]+',  # URL
+            # 域名模式
+            (
+                r"^[A-Za-z0-9_-]+\.(com|org|net|edu|gov|io|co|uk|cn|jp|ru|de|fr|it|es|nl|"
+                r"be|ch|at|dk|se|no|fi|pl|cz|hu|ro|bg|gr|tr|il|sa|ae|in|br|mx|ar|cl|co|"
+                r"pe|ve|za|au|nz|sg|my|id|ph|vn|th|kr|tw|hk|mo)$"
+            ),  # 域名
+            # 文件扩展名模式
+            (
+                r"^[A-Za-z0-9_-]+\.(xml|json|txt|csv|ini|cfg|conf|config|yaml|yml|toml|"
+                r"md|markdown|rst|log|dat|bin|exe|dll|so|dylib|py|pyc|pyo|pyd|java|"
+                r"class|jar|war|ear|zip|rar|7z|tar|gz|bz2|xz|iso|img|vhd|vmdk|ova|ovf|"
+                r"qcow2|raw|vdi|vbox|vmx|vhd|vhdx|vmdk|vmsd|vmsn|vmss|vmtm|vmx|vmxf|"
+                r"nvram|vmem|vswp|vmtx|vmtm|vmsd|vmsn|vmss|vmtm|vmx|vmxf|nvram|vmem|"
+                r"vswp|vmtx)$"
+            ),  # 文件扩展名
+            # 特殊模式
+            r"^[A-Za-z0-9_-]+#[A-Za-z0-9_-]+$",  # 带#的标识符
+            r"^[A-Za-z0-9_-]+@[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$",  # 邮箱
+            r"^[A-Za-z0-9_-]+:[A-Za-z0-9_-]+$",  # 带:的标识符
+            r"^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$",  # 带.的标识符
+            r"^[A-Za-z0-9_-]+\-[A-Za-z0-9_-]+\-[A-Za-z0-9_-]+$",  # 带-的标识符
+            r"^[A-Za-z0-9_-]+\_[A-Za-z0-9_-]+\_[A-Za-z0-9_-]+$",  # 带_的标识符
+        ]
 
     def _setup_logging(self) -> None:
         """设置日志系统"""
@@ -333,9 +530,9 @@ class TranslationConfig:
             self._validate_rules_config(config)
 
             self._rules = {
-                "default_fields": UnifiedFilterRules.DEFAULT_FIELDS,
-                "ignore_fields": UnifiedFilterRules.IGNORE_FIELDS,
-                "non_text_patterns": UnifiedFilterRules.NON_TEXT_PATTERNS,
+                "default_fields": self._get_default_fields(),
+                "ignore_fields": self._get_ignore_fields(),
+                "non_text_patterns": self._get_non_text_patterns(),
             }
             self.logger.info("加载自定义规则配置: %s", config_file)
         except Exception as e:

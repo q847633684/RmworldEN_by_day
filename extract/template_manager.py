@@ -1,5 +1,40 @@
 """
-模板管理器 - 负责翻译模板的完整生命周期管理，包括提取、生成、导入和验证
+RimWorld 翻译模板管理器
+
+负责翻译模板的完整生命周期管理，协调各个组件完成复杂的翻译提取和生成流程：
+
+核心职责：
+- 协调翻译数据提取（Defs/DefInjected/Keyed）
+- 管理多种模板结构生成
+- 处理智能合并和冲突解决
+- 提供 CSV 格式数据导出
+
+主要功能：
+1. 数据提取管理
+   - extract_all_translations(): 统一的数据提取入口
+   - 支持多种数据源选择（definjected_only/defs_only）
+   - 自动处理 Keyed 和 DefInjected 数据
+
+2. 模板生成管理
+   - extract_and_generate_templates(): 完整的提取和生成流程
+   - _generate_templates_to_output_dir_with_structure(): 结构化模板生成
+   - 支持多种输出结构（原始结构/按类型分组/按文件结构）
+
+3. 智能合并管理
+   - merge_mode(): 智能合并模式处理
+   - 集成 SmartMerger 进行数据合并
+   - 支持增量更新和历史记录
+
+4. 数据导出管理
+   - _save_translations_to_csv(): CSV 格式数据导出
+   - 支持多种数据格式的统一导出
+
+特性：
+- 完整的错误处理和日志记录
+- 用户友好的进度提示和反馈
+- 灵活的数据源和输出结构选择
+- 与配置系统深度集成
+- 支持大型模组的高效处理
 """
 
 import logging

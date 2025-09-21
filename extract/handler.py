@@ -1,9 +1,19 @@
 """
-提取模板处理器
-处理提取模板的交互流程
+RimWorld 翻译提取主处理器
+
+负责协调整个翻译提取流程，包括：
+- 用户交互和配置选择
+- 智能工作流程管理
+- 冲突处理和模式选择
+- 错误处理和日志记录
+
+主要功能：
+- handle_extract(): 主提取流程入口
+- 支持多种冲突处理模式（合并/覆盖/重建/新建）
+- 集成智能交互管理器
+- 提供完整的错误处理和用户反馈
 """
 
-import logging
 from pathlib import Path
 from utils.config import (
     get_config,

@@ -1,12 +1,34 @@
 """
-智能合并器模块
+RimWorld 智能翻译合并器
 
-该模块提供 SmartMerger 类，用于智能合并翻译数据，特别是处理 DefInjected 翻译的合并逻辑。
+提供高级的翻译数据合并功能，支持多种合并策略和历史记录管理：
 
-主要功能：
-- 自动规范化翻译数据格式（补齐为五元组）
-- 智能合并输入和输出翻译数据
-- 处理翻译历史记录和变更追踪
+核心功能：
+- SmartMerger 类：主要的合并器实现
+- 自动数据格式规范化（四元组/五元组统一处理）
+- 智能合并策略（输入优先/输出优先/智能选择）
+- 翻译历史记录和变更追踪
+
+合并策略：
+1. 内容无变化：保持原状，跳过处理
+2. 内容有更新：替换翻译，保留历史记录
+3. 新增内容：添加新翻译，包含英文注释
+
+数据格式：
+- 输入：四元组 (key, text, tag, rel_path) 或五元组 (key, text, tag, rel_path, en_text)
+- 输出：六元组 (key, text, tag, rel_path, en_text, history)
+
+主要方法：
+- smart_merge_translations(): 静态方法，执行智能合并
+- create_for_definjected(): 为 DefInjected 数据创建专用合并器
+- create_for_keyed(): 为 Keyed 数据创建专用合并器
+- get_quality_report(): 生成数据质量报告
+
+特性：
+- 支持 DefInjected 和 Keyed 两种数据类型
+- 自动生成变更历史和时间戳
+- 提供详细的合并统计和性能监控
+- 支持元数据保留和策略选择
 """
 
 import logging

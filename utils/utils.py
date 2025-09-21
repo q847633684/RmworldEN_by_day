@@ -18,7 +18,15 @@ except ImportError:
 
 from .config import get_config
 
-CONFIG = get_config()
+# 延迟初始化配置，避免循环导入
+CONFIG = None
+
+
+def _get_config():
+    global CONFIG
+    if CONFIG is None:
+        CONFIG = get_config()
+    return CONFIG
 
 
 @dataclass
