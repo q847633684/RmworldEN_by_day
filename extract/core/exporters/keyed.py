@@ -7,8 +7,6 @@ Keyed 导出器
 from typing import List, Tuple, Dict
 from pathlib import Path
 from utils.logging_config import get_logger
-from utils.config import get_config, get_language_subdir
-from utils.utils import XMLProcessor
 from .base import BaseExporter
 
 

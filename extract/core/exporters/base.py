@@ -46,7 +46,7 @@ class BaseExporter(ABC):
         Returns:
             bool: 是否成功
         """
-        pass
+        raise NotImplementedError("子类必须实现 export 方法")
 
     def _create_output_directory(
         self, output_dir: str, language: str, subdir_type: str
@@ -92,7 +92,7 @@ class BaseExporter(ABC):
 
         # 按键名排序，保持一致性
         for item in sorted(translations, key=lambda x: x[0]):
-            key, text, tag, rel_path = item[:4]
+            key, text, _, _ = item[:4]  # tag 和 rel_path 暂时未使用
 
             # 添加英文注释
             comment = processor.create_comment(f"EN: {text}")

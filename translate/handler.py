@@ -10,15 +10,12 @@ from utils.ui_style import ui
 from utils.interaction import (
     select_csv_path_with_history,
     auto_generate_output_path,
-    show_success,
-    show_error,
-    show_info,
-    show_warning,
     confirm_action,
 )
 from utils.path_manager import PathManager
-from utils.config import get_user_config
+from utils.config import get_user_config, ConfigError
 from core.translation_facade import TranslationFacade
+from core.exceptions import TranslationError
 
 
 def handle_unified_translate(csv_path: Optional[str] = None) -> bool:
@@ -95,10 +92,7 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> bool:
             if success:
                 ui.print_success("恢复翻译完成！")
                 # 将输出CSV加入"导入翻译"的历史
-                try:
-                    PathManager().remember_path("import_csv", resume_file)
-                except Exception:
-                    pass
+                PathManager().remember_path("import_csv", resume_file)
                 return True  # 翻译完成
             else:
                 return False  # 翻译未完成（用户中断）
@@ -107,10 +101,7 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> bool:
         output_csv = auto_generate_output_path(csv_path)
 
         # 将输出CSV加入"导入翻译"的历史
-        try:
-            PathManager().remember_path("import_csv", output_csv)
-        except Exception:
-            pass
+        PathManager().remember_path("import_csv", output_csv)
 
         # 显示翻译配置（简化版）
         ui.print_section_header("翻译配置", ui.Icons.SETTINGS)
@@ -148,11 +139,19 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> bool:
         try:
             facade.machine_translate(csv_path, output_csv, translator_type)
             return True  # 翻译完成
-        except Exception as e:
+        except TranslationError as e:
             ui.print_error(f"翻译失败: {str(e)}")
             return False  # 翻译失败
+        except (OSError, IOError, ValueError) as e:
+            ui.print_error(f"翻译过程中发生错误: {str(e)}")
+            return False  # 翻译失败
 
-    except Exception as e:
+    except (TranslationError, ConfigError, OSError, IOError, ValueError) as e:
         ui.print_error(f"统一翻译失败: {str(e)}")
         logger.error("统一翻译失败: %s", str(e), exc_info=True)
+        return False
+    except Exception as e:
+        # 保留一个通用的Exception捕获作为最后的兜底，但记录更详细的信息
+        ui.print_error(f"统一翻译发生未知错误: {str(e)}")
+        logger.error("统一翻译发生未知错误: %s", str(e), exc_info=True)
         return False

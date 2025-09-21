@@ -4,7 +4,6 @@
 """
 
 import os
-import logging
 from pathlib import Path
 from typing import List, Tuple, Optional
 from utils.logging_config import (
@@ -294,23 +293,27 @@ class TranslationFacade:
             # 如果输出行数少于输入行数，说明翻译未完成
             if output_rows < input_rows:
                 self.logger.warning(
-                    f"翻译未完成: 输入{input_rows}行，输出{output_rows}行"
+                    "翻译未完成: 输入%d行，输出%d行", input_rows, output_rows
                 )
                 return False
 
             # 如果翻译行数太少，可能有问题
             translation_ratio = translated_rows / input_rows if input_rows > 0 else 0
             if translation_ratio < 0.1:  # 翻译率低于10%
-                self.logger.warning(f"翻译率过低: {translation_ratio:.1%}")
+                self.logger.warning("翻译率过低: %.1f%%", translation_ratio * 100)
                 return False
 
             self.logger.info(
-                f"翻译验证通过: 输入{input_rows}行，输出{output_rows}行，翻译{translated_rows}行 ({translation_ratio:.1%})"
+                "翻译验证通过: 输入%d行，输出%d行，翻译%d行 (%.1f%%)",
+                input_rows,
+                output_rows,
+                translated_rows,
+                translation_ratio * 100,
             )
             return True
 
-        except Exception as e:
-            self.logger.error(f"验证翻译完成状态失败: {e}")
+        except (OSError, IOError, csv.Error, UnicodeDecodeError) as e:
+            self.logger.error("验证翻译完成状态失败: %s", e)
             return False  # 验证失败时保守处理
 
     def can_resume_translation(self, csv_path: str) -> Optional[str]:
@@ -326,7 +329,7 @@ class TranslationFacade:
         try:
             translator = UnifiedTranslator()
             return translator.can_resume_translation(csv_path)
-        except Exception as e:
+        except (OSError, IOError, RuntimeError) as e:
             self.logger.debug("检查恢复状态失败: %s", e)
             return None
 
@@ -351,7 +354,7 @@ class TranslationFacade:
                 ui.print_warning("恢复翻译失败或被中断")
 
             return success
-        except Exception as e:
+        except (OSError, IOError, RuntimeError, ValueError) as e:
             error_msg = f"恢复翻译失败: {str(e)}"
             self.logger.error(error_msg)
             ui.print_error(error_msg)
@@ -367,7 +370,7 @@ class TranslationFacade:
         try:
             translator = UnifiedTranslator()
             return translator.get_available_translators()
-        except Exception as e:
+        except (OSError, IOError, RuntimeError, AttributeError) as e:
             self.logger.error("获取翻译器状态失败: %s", e)
             return {"error": str(e)}
 

@@ -7,9 +7,18 @@
 from abc import ABC, abstractmethod
 from typing import List, Tuple, Optional
 from pathlib import Path
+import xml.etree.ElementTree as ET
 from utils.logging_config import get_logger
 from utils.config import get_config
 from utils.utils import XMLProcessor
+
+try:
+    import lxml.etree as etree  # type: ignore
+
+    LXML_AVAILABLE = True
+except ImportError:
+    LXML_AVAILABLE = False
+    etree = None  # type: ignore
 
 
 class BaseExtractor(ABC):
@@ -46,7 +55,7 @@ class BaseExtractor(ABC):
         Returns:
             List[Tuple[str, str, str, str]]: 四元组列表 (key, text, tag, rel_path)
         """
-        pass
+        raise NotImplementedError("子类必须实现extract方法")
 
     def _validate_source(self, source_path: str) -> bool:
         """
@@ -82,8 +91,15 @@ class BaseExtractor(ABC):
             if tree is None:
                 self.logger.error("无法解析XML文件: %s", file_path)
             return tree
-        except Exception as e:
+        except (FileNotFoundError, ValueError, OSError, IOError, ET.ParseError) as e:
             self.logger.error("解析XML文件时发生错误: %s, %s", file_path, e)
+            return None
+        except Exception as e:
+            # 处理lxml异常（如果可用）
+            if LXML_AVAILABLE and isinstance(e, etree.XMLSyntaxError):
+                self.logger.error("XML语法错误: %s, %s", file_path, e)
+            else:
+                self.logger.error("解析XML文件时发生未知错误: %s, %s", file_path, e)
             return None
 
     def _log_extraction_stats(self, source: str, count: int, file_type: str = ""):

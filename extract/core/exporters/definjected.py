@@ -4,13 +4,9 @@ DefInjected 导出器
 专门用于导出 DefInjected 格式的翻译文件
 """
 
-import os
 import re
 from typing import List, Tuple, Dict
-from pathlib import Path
 from utils.logging_config import get_logger
-from utils.config import get_config, get_language_subdir
-from utils.utils import XMLProcessor
 from .base import BaseExporter
 
 
@@ -119,10 +115,10 @@ class DefInjectedExporter(BaseExporter):
                 continue
 
             # 创建对应的目录结构
-            type_dir = def_injected_path / f"{def_type}Defs"
+            type_dir = def_injected_path / def_type
             type_dir.mkdir(parents=True, exist_ok=True)
 
-            output_file = type_dir / f"{def_type}Defs.xml"
+            output_file = type_dir / f"{def_type}.xml"
 
             # 生成 XML 内容
             root = self.processor.create_element("LanguageData")

@@ -7,8 +7,6 @@ Defs 扫描器
 from typing import List, Tuple, Dict, Optional
 from pathlib import Path
 from utils.logging_config import get_logger
-from utils.config import get_config
-from utils.utils import XMLProcessor
 from .base import BaseExtractor
 from ..filters import ContentFilter
 
@@ -121,7 +119,7 @@ class DefsScanner(BaseExtractor):
                     "从 %s 提取到 %d 条翻译", def_name, len(field_translations)
                 )
 
-        except Exception as e:
+        except (OSError, IOError, ValueError, TypeError, AttributeError) as e:
             self.logger.error("处理Defs文件时发生错误: %s, %s", xml_file, e)
 
         return translations
