@@ -7,8 +7,8 @@ Keyed 提取器
 from typing import List, Tuple
 from pathlib import Path
 from utils.logging_config import get_logger
-from utils.config import get_config, get_language_subdir
-from utils.utils import XMLProcessor
+from utils.config import get_language_subdir
+from utils.ui_style import ui
 from .base import BaseExtractor
 from ..filters import ContentFilter
 
@@ -60,7 +60,12 @@ class KeyedExtractor(BaseExtractor):
         translations = []
         xml_files = list(keyed_dir.rglob("*.xml"))
 
-        for xml_file in xml_files:
+        # 使用进度条进行提取
+        for i, xml_file in ui.iter_with_progress(
+            xml_files,
+            prefix="扫描Keyed",
+            description=f"正在扫描 Keyed 目录中的 {len(xml_files)} 个文件",
+        ):
             file_translations = self._extract_from_xml_file(xml_file, keyed_dir)
             translations.extend(file_translations)
 

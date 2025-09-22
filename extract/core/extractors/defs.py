@@ -7,6 +7,7 @@ Defs 扫描器
 from typing import List, Tuple, Dict, Optional
 from pathlib import Path
 from utils.logging_config import get_logger
+from utils.ui_style import ui
 from .base import BaseExtractor
 from ..filters import ContentFilter
 
@@ -56,7 +57,12 @@ class DefsScanner(BaseExtractor):
         translations = []
         xml_files = list(defs_dir.rglob("*.xml"))
 
-        for xml_file in xml_files:
+        # 使用进度条进行提取
+        for i, xml_file in ui.iter_with_progress(
+            xml_files,
+            prefix="扫描Defs",
+            description=f"正在扫描 Defs 目录中的 {len(xml_files)} 个文件",
+        ):
             file_translations = self._extract_from_xml_file(xml_file, defs_dir)
             translations.extend(file_translations)
 

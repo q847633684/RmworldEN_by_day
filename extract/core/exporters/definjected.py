@@ -7,6 +7,7 @@ DefInjected 导出器
 import re
 from typing import List, Tuple, Dict
 from utils.logging_config import get_logger
+from utils.ui_style import ui
 from .base import BaseExporter
 
 
@@ -62,8 +63,12 @@ class DefInjectedExporter(BaseExporter):
         # 按 file_path 分组翻译数据
         file_groups = self._group_by_file_path(def_translations)
 
-        # 为每个 file_path 生成翻译文件
-        for file_path, translations in file_groups.items():
+        # 使用进度条进行导出
+        for _, (file_path, translations) in ui.iter_with_progress(
+            file_groups.items(),
+            prefix="生成DefInjected",
+            description=f"正在生成 DefInjected 模板中的 {len(file_groups)} 个文件",
+        ):
 
             output_file = def_injected_path / file_path
             output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -107,8 +112,12 @@ class DefInjectedExporter(BaseExporter):
         # 按 DefType 分组翻译内容
         file_groups = self._group_by_def_type(def_translations)
 
-        # 为每个 DefType 生成 XML 文件
-        for def_type, translations in file_groups.items():
+        # 使用进度条进行导出
+        for _, (def_type, translations) in ui.iter_with_progress(
+            file_groups.items(),
+            prefix="生成DefInjected",
+            description=f"正在生成 DefInjected 模板中的 {len(file_groups)} 个文件",
+        ):
 
             # 创建对应的目录结构
             type_dir = def_injected_path / def_type
@@ -155,7 +164,12 @@ class DefInjectedExporter(BaseExporter):
         # 按 rel_path 分组翻译数据
         file_groups = self._group_by_rel_path(def_translations)
 
-        for rel_path, translations in file_groups.items():
+        # 使用进度条进行导出
+        for _, (rel_path, translations) in ui.iter_with_progress(
+            file_groups.items(),
+            prefix="生成DefInjected",
+            description=f"正在生成 DefInjected 模板中的 {len(file_groups)} 个文件",
+        ):
 
             output_file = def_injected_path / rel_path
             output_file.parent.mkdir(parents=True, exist_ok=True)

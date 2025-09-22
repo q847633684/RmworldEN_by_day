@@ -63,7 +63,7 @@ def update_all_xml(
             # 显示进度条
             ui.print_progress_bar(i, total_files, prefix="更新文件")
 
-        except Exception as e:
+        except (OSError, ValueError, TypeError) as e:
             logger.error("处理文件失败: %s: %s", xml_file, e)
 
     # 完成进度条
@@ -122,7 +122,7 @@ def import_translations(
         success = _verify_import_results(mod_dir, language)
         if success:
             logger.info("翻译导入到模板完成，更新了 %s 个文件", updated_count)
-            ui.print_success("✅ 翻译已成功导入到模板")
+            ui.print_success("翻译已成功导入到模板")
         else:
             logger.warning("翻译导入可能存在问题")
             ui.print_warning("⚠️ 翻译导入完成，但可能存在问题")
@@ -135,7 +135,7 @@ def import_translations(
         logger.error("权限错误: %s", e)
         ui.print_error(f"❌ 权限错误: {e}")
         return False
-    except Exception as e:
+    except (OSError, ValueError, TypeError, RuntimeError) as e:
         logger.error("导入翻译时发生错误: %s", e, exc_info=True)
         ui.print_error(f"❌ 导入失败: {e}")
         return False
@@ -164,7 +164,7 @@ def _validate_csv_file(csv_path: str) -> bool:
     except UnicodeDecodeError:
         logger.error("CSV文件编码错误: %s", csv_path)
         return False
-    except Exception as e:
+    except (OSError, ValueError, TypeError) as e:
         logger.error("验证CSV文件时发生错误: %s", e)
         return False
 
@@ -190,7 +190,7 @@ def _load_translations_from_csv(csv_path: str) -> Dict[str, str]:
         logger.error("无权限访问CSV文件: %s", csv_path)
         ui.print_error(f"❌ 无权限访问CSV文件: {csv_path}")
         return {}
-    except Exception as e:
+    except (OSError, ValueError, TypeError) as e:
         logger.error("加载CSV文件时发生错误: %s", e)
         ui.print_error(f"❌ 加载CSV文件失败: {e}")
         return {}
@@ -249,7 +249,7 @@ def _update_xml_in_subdir(
             logger.error("XML文件不存在: %s", xml_file)
         except PermissionError:
             logger.error("无权限访问XML文件: %s", xml_file)
-        except Exception as e:
+        except (OSError, ValueError, TypeError) as e:
             logger.error("处理XML文件失败: %s: %s", xml_file, e)
 
     # 完成进度条

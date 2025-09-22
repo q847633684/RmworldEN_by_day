@@ -200,7 +200,6 @@ class InteractionManager:
         """格式化冲突处理描述"""
         descriptions = {
             "merge": "合并现有文件",
-            "overwrite": "覆盖相关文件",
             "rebuild": "重建所有文件",
             "new": "新建目录",
         }
@@ -510,41 +509,40 @@ class InteractionManager:
                 "1", "合并", "保留现有翻译文件，仅添加新内容", ui.Icons.SETTINGS
             )
             ui.print_menu_item(
-                "2", "覆盖", "删除并重新生成本次要导出的翻译文件", ui.Icons.SETTINGS
-            )
-            ui.print_menu_item(
-                "3", "重建", "清空整个输出目录，所有内容全部重建", ui.Icons.SETTINGS
+                "2", "重建", "清空整个输出目录，所有内容全部重建", ui.Icons.SETTINGS
             )
 
             if analysis["recommended"]:
-                ui.print_menu_item(
-                    "4", "采用智能推荐", "使用系统推荐的处理方式", ui.Icons.SETTINGS
+                ui.print_info("💡 直接按回车键使用智能推荐")
+                ui.print_info(f"   📊 {analysis['summary']}")
+                ui.print_info(
+                    f"   🎯 推荐：{analysis['recommended']} - {analysis['reason']}"
                 )
 
             while True:
-                max_choice = 4 if analysis["recommended"] else 3
+                prompt_options = "1-2"
+                if analysis["recommended"]:
+                    prompt_options += " 或直接回车使用智能推荐"
+
                 choice = input(
-                    ui.get_input_prompt("请选择", options=f"1-{max_choice}")
+                    ui.get_input_prompt("请选择", options=prompt_options)
                 ).strip()
 
                 if choice == "1":
                     ui.print_success("选择：合并")
                     return "merge"
                 elif choice == "2":
-                    ui.print_success("选择：覆盖")
-                    return "overwrite"
-                elif choice == "3":
                     ui.print_success("选择：重建")
                     return "rebuild"
                 elif (
-                    choice == "4"
+                    choice == ""
                     and analysis["recommended"]
                     and analysis["recommended_value"]
                 ):
                     ui.print_success(f"采用智能推荐：{analysis['recommended']}")
                     return analysis["recommended_value"]
                 else:
-                    ui.print_error(f"请输入 1-{max_choice}")
+                    ui.print_error("请输入 1 或 2，或直接按回车使用智能推荐")
         else:
             ui.print_info("输出目录中没有现有翻译文件")
             ui.print_success("自动选择：新建")
@@ -591,7 +589,7 @@ class InteractionManager:
             size_mb = total_size / (1024 * 1024)
             summary = f"共{file_count}个文件, {size_mb:.1f}MB, {recent_files}个最近修改"
 
-            # 智能推荐
+            # 智能推荐 - 简化为合并或重建
             if recent_files > file_count * 0.5:  # 超过50%是最近修改的
                 return {
                     "summary": summary,
@@ -599,26 +597,12 @@ class InteractionManager:
                     "reason": "多数文件是最近修改的，建议保留",
                     "recommended_value": "merge",
                 }
-            elif file_count < 10:  # 文件较少
-                return {
-                    "summary": summary,
-                    "recommended": "覆盖",
-                    "reason": "文件较少，重新生成更干净",
-                    "recommended_value": "overwrite",
-                }
-            elif recent_files == 0:  # 没有最近修改的文件
+            else:  # 文件较旧或较少
                 return {
                     "summary": summary,
                     "recommended": "重建",
-                    "reason": "文件较旧，建议重新开始",
+                    "reason": "文件较旧或较少，建议重新开始",
                     "recommended_value": "rebuild",
-                }
-            else:
-                return {
-                    "summary": summary,
-                    "recommended": "覆盖",
-                    "reason": "平衡选择，更新相关文件",
-                    "recommended_value": "overwrite",
                 }
 
         except (OSError, ValueError) as e:

@@ -91,7 +91,7 @@ def handle_extract():
                 show_success(
                     f"DefInjected 智能合并完成！共处理 {len(translations)} 条翻译。"
                 )
-            else:  # 包括 'rebuild', 'overwrite', 和 'new'
+            else:  # 包括 'rebuild' 和 'new'
                 # 步骤 1: 根据模式处理文件系统
                 if conflict_resolution == "rebuild":
                     # 重建：清空输出目录
@@ -116,28 +116,6 @@ def handle_extract():
                     else:
                         show_info(f"📁 输出目录不存在，将创建：{language_dir}")
 
-                elif conflict_resolution == "overwrite":
-                    # 覆盖：删除现有的翻译文件
-                    import shutil
-
-                    definjected_dir = get_language_subdir(
-                        base_dir=output_path,
-                        language=output_language,
-                        subdir_type="defInjected",
-                    )
-                    keyed_dir = get_language_subdir(
-                        base_dir=output_path,
-                        language=output_language,
-                        subdir_type="keyed",
-                    )
-
-                    if definjected_dir.exists():
-                        shutil.rmtree(definjected_dir)
-                        show_info(f"🗑️ 已删除DefInjected目录：{definjected_dir}")
-                    if keyed_dir.exists():
-                        shutil.rmtree(keyed_dir)
-                        show_info(f"🗑️ 已删除Keyed目录：{keyed_dir}")
-
                 # 步骤 2: 统一执行提取
                 translations = template_manager.extract_and_generate_templates(
                     import_dir=import_dir,
@@ -153,8 +131,6 @@ def handle_extract():
                 # 步骤 3: 根据模式显示不同的成功消息
                 if conflict_resolution == "rebuild":
                     show_success(f"重建完成！共提取 {len(translations)} 条翻译")
-                elif conflict_resolution == "overwrite":
-                    show_success(f"覆盖完成！共提取 {len(translations)} 条翻译")
                 else:  # 'new'
                     show_success(f"智能提取完成！共提取 {len(translations)} 条翻译")
 

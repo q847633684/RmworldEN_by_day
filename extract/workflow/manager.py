@@ -5,6 +5,7 @@
 """
 
 import csv
+import re
 from pathlib import Path
 from typing import List, Tuple, Optional
 from utils.ui_style import ui
@@ -103,7 +104,6 @@ class TemplateManager:
         )
 
         # 步骤3：导出CSV到输出目录
-        ui.print_info("正在导出 CSV 到输出目录 ...")
         self._save_translations_to_csv(
             translations, output_dir, output_language, output_csv
         )
@@ -199,7 +199,6 @@ class TemplateManager:
             ui.print_success("DefInjected 模板已合并")
 
         # 步骤4：导出CSV到输出目录
-        ui.print_info("正在导出 CSV 到输出目录 ...")
         self._save_translations_to_csv(
             translations, output_dir, output_language, output_csv
         )
@@ -228,7 +227,7 @@ class TemplateManager:
 
         # 提取Keyed翻译（总是提取）
         if has_input_keyed:
-            ui.print_info("正在扫描 Keyed 目录...")
+            self.logger.debug("正在扫描 Keyed 目录...")
             keyed_translations = self.keyed_extractor.extract(
                 import_dir, import_language
             )
@@ -244,7 +243,6 @@ class TemplateManager:
 
         if data_source_choice == "definjected_only":
             self.logger.debug("正在扫描 DefInjected 目录...")
-            ui.print_info("正在扫描 DefInjected 目录...")
             # 从DefInjected目录提取翻译数据
             definjected_translations = self.definjected_extractor.extract(
                 import_dir, import_language
@@ -257,11 +255,15 @@ class TemplateManager:
                 "从DefInjected 目录提取到 %s 条 DefInjected 翻译",
                 len(definjected_translations),
             )
-            return keyed_translations + definjected_translations
+            # 将DefInjected五元组转换为四元组，以保持数据一致性
+            definjected_translations_normalized = [
+                (key, text, tag, rel_path)
+                for key, text, tag, rel_path, _ in definjected_translations
+            ]
+            return keyed_translations + definjected_translations_normalized
 
         elif data_source_choice == "defs_only":
             self.logger.debug("正在扫描 Defs 目录...")
-            ui.print_info("正在扫描 Defs 目录...")
             defs_translations = self.defs_scanner.extract(import_dir)
 
             ui.print_success(f"从Defs目录提取到 {len(defs_translations)} 条 Defs 翻译")
@@ -303,7 +305,6 @@ class TemplateManager:
 
         # 生成Keyed模板
         if has_input_keyed and keyed_translations:
-            ui.print_info("正在生成 Keyed 模板...")
             self.keyed_exporter.export_keyed_template(
                 output_dir, output_language, keyed_translations
             )
@@ -316,7 +317,6 @@ class TemplateManager:
 
         # 生成DefInjected模板
         if def_translations:
-            ui.print_info("正在生成 DefInjected 模板...")
             self._generate_definjected_with_structure(
                 def_translations,
                 output_dir,
@@ -414,18 +414,25 @@ class TemplateManager:
 
             # 更新或添加翻译条目
             for key, test, _, _, en_test, history in sorted(items, key=lambda x: x[0]):
+                # 清理标签名：去除斜杠，只保留字母、数字、下划线、点号
+                clean_key = re.sub(r"[^A-Za-z0-9_.]", ".", key)
+                if not re.match(r"^[A-Za-z_]", clean_key):
+                    clean_key = "_" + clean_key
+
                 # 查找现有元素
-                existing_elem = root.find(key)
+                existing_elem = root.find(clean_key)
                 if existing_elem is not None:
                     # 更新现有元素
                     original_text = existing_elem.text or ""
-                    if original_text != test:
-                        # 添加历史注释
+                    # 根据设计文档5.1规则：比较input_text和output_en_text
+                    if en_test != test:
+                        # 内容有更新：用新内容替换原翻译，保留历史注释
                         if history and history.strip():
                             history_comment = processor.create_comment(history)
                             elem_index = list(root).index(existing_elem)
                             root.insert(elem_index, history_comment)
-                    existing_elem.text = test
+                        existing_elem.text = test
+                    # 如果en_test == test，则保持原状，不做修改
                 else:
                     # 添加新元素
                     # 先添加历史注释（如果有，且不为空）
@@ -441,7 +448,7 @@ class TemplateManager:
                         root.append(en_comment)
 
                     # 创建新的翻译元素
-                    processor.create_subelement(root, key, test)
+                    processor.create_subelement(root, clean_key, test)
 
             # 保存更新后的文件
             success = processor.save_xml(root, output_file, pretty_print=True)
@@ -464,8 +471,18 @@ class TemplateManager:
         with open(csv_path, "w", encoding="utf-8", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(["key", "text", "tag", "file"])
-            for item in translations:
-                writer.writerow(item[:4])  # 只导出前四个字段，兼容五元组
+
+            # 使用进度条进行导出
+            for _, item in ui.iter_with_progress(
+                translations,
+                prefix="导出CSV",
+                description=f"正在导出 {len(translations)} 条翻译到CSV",
+            ):
+                # 只导出前四个字段，兼容不同长度的元组
+                if len(item) >= 4:
+                    writer.writerow(item[:4])
+                else:
+                    self.logger.warning("数据格式错误，跳过导出: %s", item)
 
         ui.print_success(f"CSV文件已生成: {csv_path}")
         self.logger.debug("翻译数据已保存到CSV: %s", csv_path)
@@ -473,5 +490,5 @@ class TemplateManager:
         # 记入历史：让提取生成的 CSV 出现在后续"Python机翻/导入翻译"的历史列表
         try:
             PathManager().remember_path("import_csv", str(csv_path))
-        except Exception:
-            self.logger.warning("无法记录CSV历史路径: %s", csv_path)
+        except (OSError, IOError, PermissionError) as e:
+            self.logger.warning("无法记录CSV历史路径: %s, 错误: %s", csv_path, e)

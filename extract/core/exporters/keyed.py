@@ -7,6 +7,7 @@ Keyed 导出器
 from typing import List, Tuple, Dict
 from pathlib import Path
 from utils.logging_config import get_logger
+from utils.ui_style import ui
 from .base import BaseExporter
 
 
@@ -59,8 +60,12 @@ class KeyedExporter(BaseExporter):
         # 按 file_path 分组翻译数据
         file_groups = self._group_by_file_path(def_translations)
 
-        # 为每个 file_path 生成翻译文件
-        for file_path, translations in file_groups.items():
+        # 使用进度条进行导出
+        for _, (file_path, translations) in ui.iter_with_progress(
+            file_groups.items(),
+            prefix="生成Keyed",
+            description=f"正在生成 Keyed 模板中的 {len(file_groups)} 个文件",
+        ):
             if not translations:
                 continue
 
