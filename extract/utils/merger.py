@@ -31,7 +31,6 @@ RimWorld 智能翻译合并器
 - 支持元数据保留和策略选择
 """
 
-import logging
 from typing import List, Tuple, Any, Dict
 import datetime
 from utils.logging_config import get_logger, log_data_processing, log_performance
@@ -174,8 +173,8 @@ class SmartMerger:
             out_item = output_map.get(key)
 
             if out_item:
-                # 修复：比较翻译内容是否相同，而不是比较翻译和英文原文
-                if in_item[1] == out_item[1]:  # 输入的翻译 == 输出的翻译
+                # 根据设计文档5.1规则：比较input_text和output_en_text
+                if in_item[1] == out_item[4]:  # 输入的翻译 == 输出的英文注释
                     unchanged_count += 1
                     if include_unchanged:
                         merged.append(
@@ -184,9 +183,7 @@ class SmartMerger:
                                 out_item[1],  # 保持现有翻译
                                 out_item[2],  # 保持现有tag
                                 out_item[3],  # 保持现有rel_path
-                                (
-                                    out_item[4] if len(out_item) > 4 else ""
-                                ),  # 保持现有en_test
+                                out_item[4],  # 保持现有en_test
                                 "",  # 无历史记录
                             )
                         )
@@ -210,8 +207,8 @@ class SmartMerger:
                             in_item[1],  # 使用新的翻译
                             tag,  # 根据策略选择tag
                             rel_path,  # 根据策略选择rel_path
-                            in_item[4],  # 保持英文原文
-                            f"更新于{today}: '{out_item[1]}' -> '{in_item[1]}'",
+                            out_item[4],  # 使用输出数据的英文原文
+                            f"原中文: '{out_item[1]}', 原英文: '{out_item[4]}' -> 新英文: '{in_item[1]}',更新于{today}",
                         )
                     )
             else:
@@ -224,7 +221,7 @@ class SmartMerger:
                         in_item[2],  # 新tag
                         in_item[3],  # 新rel_path
                         in_item[4],  # 英文原文
-                        f"新增于{today}",
+                        f"翻译内容: '{in_item[1]}',新增于{today}",
                     )
                 )
 

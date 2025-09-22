@@ -64,7 +64,7 @@ class KeyedExtractor(BaseExtractor):
         for i, xml_file in ui.iter_with_progress(
             xml_files,
             prefix="扫描Keyed",
-            description=f"正在扫描 Keyed 目录中的 {len(xml_files)} 个文件",
+            description=f"正在扫描 {language} Keyed 目录中的 {len(xml_files)} 个文件",
         ):
             file_translations = self._extract_from_xml_file(xml_file, keyed_dir)
             translations.extend(file_translations)

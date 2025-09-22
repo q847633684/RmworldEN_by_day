@@ -147,6 +147,71 @@ class LoggingConfig:
         if log_to_file:
             logger.info("日志目录: %s", cls._log_dir)
 
+        # 自动清理旧日志文件
+        cls._cleanup_old_logs()
+
+    @classmethod
+    def reset_logging(cls, level: str = "DEBUG", log_to_console: bool = True) -> None:
+        """
+        重新设置日志配置（用于测试或调试）
+        
+        Args:
+            level: 日志级别
+            log_to_console: 是否输出到控制台
+        """
+        # 重置初始化状态
+        cls._initialized = False
+        
+        # 重新设置日志
+        cls.setup_logging(
+            level=level,
+            log_to_file=True,
+            log_to_console=log_to_console
+        )
+
+    @classmethod
+    def _cleanup_old_logs(cls, days_to_keep: int = 1) -> None:
+        """
+        清理指定天数前的日志文件
+
+        Args:
+            days_to_keep: 保留最近几天的日志文件，默认1天
+        """
+        if cls._log_dir is None or not cls._log_dir.exists():
+            return
+
+        try:
+            from datetime import timedelta
+
+            # 计算截止时间
+            cutoff_time = datetime.now() - timedelta(days=days_to_keep)
+
+            # 查找所有日志文件
+            log_files = list(cls._log_dir.glob("day_translation*.log"))
+
+            deleted_count = 0
+            for log_file in log_files:
+                try:
+                    # 获取文件修改时间
+                    file_mtime = datetime.fromtimestamp(log_file.stat().st_mtime)
+
+                    # 如果文件超过指定天数，则删除
+                    if file_mtime < cutoff_time:
+                        log_file.unlink()
+                        deleted_count += 1
+
+                except (OSError, IOError):
+                    # 忽略删除失败的文件，避免影响程序运行
+                    pass
+
+            # 只在有删除操作时才输出信息
+            if deleted_count > 0:
+                print(f"🗑️ 自动清理完成，删除了 {deleted_count} 个旧日志文件")
+
+        except Exception:
+            # 忽略清理过程中的错误，避免影响程序运行
+            pass
+
 
 def get_logger(name: str) -> logging.Logger:
     """

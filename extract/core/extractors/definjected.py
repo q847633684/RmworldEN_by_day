@@ -7,8 +7,8 @@ DefInjected 提取器
 from typing import List, Tuple
 from pathlib import Path
 from utils.logging_config import get_logger
-from utils.config import get_config, get_language_subdir
-from utils.utils import XMLProcessor
+from utils.config import get_language_subdir
+from utils.ui_style import ui
 from .base import BaseExtractor
 
 
@@ -60,7 +60,12 @@ class DefInjectedExtractor(BaseExtractor):
         translations = []
         xml_files = list(definjected_dir.rglob("*.xml"))
 
-        for xml_file in xml_files:
+        # 使用进度条进行提取
+        for i, xml_file in ui.iter_with_progress(
+            xml_files,
+            prefix="扫描DefInjected",
+            description=f"正在扫描 {language} DefInjected 目录中的 {len(xml_files)} 个文件",
+        ):
             file_translations = self._extract_from_xml_file(xml_file, definjected_dir)
             translations.extend(file_translations)
 
@@ -95,7 +100,7 @@ class DefInjectedExtractor(BaseExtractor):
                 if elem is root:
                     continue  # 跳过根节点
 
-                if type(elem).__name__ == "Comment":
+                if type(elem).__name__ == "_Comment":
                     # 处理注释节点
                     text = elem.text or ""
                     if text.strip().startswith("EN:"):
@@ -106,7 +111,7 @@ class DefInjectedExtractor(BaseExtractor):
                         elem, last_en_comment
                     )
                     translations.append((key, text, tag, rel_path, en_text))
-                    last_en_comment = ""  # 清空注释
+                    # 注意：不清空last_en_comment，因为可能有多个元素共享同一个EN注释
 
         except (OSError, ValueError, AttributeError) as e:
             self.logger.error("处理DefInjected文件时发生错误: %s, %s", xml_file, e)

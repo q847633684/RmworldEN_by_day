@@ -88,9 +88,6 @@ def handle_extract():
                     has_input_keyed=has_input_keyed,
                     output_csv=output_csv,
                 )
-                show_success(
-                    f"DefInjected 智能合并完成！共处理 {len(translations)} 条翻译。"
-                )
             else:  # 包括 'rebuild' 和 'new'
                 # 步骤 1: 根据模式处理文件系统
                 if conflict_resolution == "rebuild":

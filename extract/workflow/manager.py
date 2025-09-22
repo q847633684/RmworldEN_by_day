@@ -6,9 +6,11 @@
 
 import csv
 import re
+import datetime
 from pathlib import Path
 from typing import List, Tuple, Optional
 from utils.ui_style import ui
+from utils.utils import sanitize_xml
 from utils.logging_config import (
     get_logger,
     log_data_processing,
@@ -117,7 +119,6 @@ class TemplateManager:
         )
 
         self.logger.debug("模板生成完成，总计 %s 条翻译", len(translations))
-        ui.print_success(f"提取完成：{len(translations)} 条")
         return translations
 
     def merge_mode(
@@ -168,9 +169,6 @@ class TemplateManager:
             include_unchanged=False,
         )
 
-        for item in translations:
-            self.logger.debug(item)
-
         # 分离键值对和定射
         keyed_translations = []
         def_translations = []
@@ -178,25 +176,23 @@ class TemplateManager:
             k, _, _, f = item[:4]  # 兼容五元组和四元组
             if "." in k and (f.endswith(".xml") or "DefInjected" in str(f)):
                 def_translations.append(item)
-                print(f"DefInjected翻译: {item}")
+                self.logger.debug("DefInjected翻译: %s", item)
             else:
                 keyed_translations.append(item)
-                print(f"Keyed翻译: {item}")
+                self.logger.debug("Keyed翻译: %s", item)
 
         # 写入合并结果
-        if has_input_keyed and keyed_translations:
+        if keyed_translations:
             ui.print_info("正在合并 Keyed ...")
             self._write_merged_translations(
-                keyed_translations, output_dir, output_language, "keyed"
+                keyed_translations, output_dir, output_language, "Keyed"
             )
-            ui.print_success("Keyed 模板已合并")
 
         if def_translations:
             ui.print_info("正在合并 DefInjected ...")
             self._write_merged_translations(
-                def_translations, output_dir, output_language, "defInjected"
+                def_translations, output_dir, output_language, "DefInjected"
             )
-            ui.print_success("DefInjected 模板已合并")
 
         # 步骤4：导出CSV到输出目录
         self._save_translations_to_csv(
@@ -210,7 +206,7 @@ class TemplateManager:
         import_language: str,
         data_source_choice: Optional[str] = None,
         has_input_keyed: bool = True,
-    ) -> List[Tuple[str, str, str, str]]:
+    ) -> List[Tuple[str, str, str, str, str]]:
         """
         提取所有翻译数据
 
@@ -221,7 +217,7 @@ class TemplateManager:
             has_input_keyed: 是否包含Keyed输入
 
         Returns:
-            List[Tuple[str, str, str, str]]: 四元组列表 (key, text, tag, rel_path)
+            List[Tuple[str, str, str, str, str]]: 五元组列表 (key, text, tag, rel_path, en_text)
         """
         data_source_choice = data_source_choice or "defs_only"
 
@@ -255,12 +251,12 @@ class TemplateManager:
                 "从DefInjected 目录提取到 %s 条 DefInjected 翻译",
                 len(definjected_translations),
             )
-            # 将DefInjected五元组转换为四元组，以保持数据一致性
-            definjected_translations_normalized = [
-                (key, text, tag, rel_path)
-                for key, text, tag, rel_path, _ in definjected_translations
+            # 将Keyed四元组转换为五元组，保持数据一致性
+            keyed_as_five = [
+                (k, t, g, f, t)  # en_text用text填充
+                for k, t, g, f in keyed_translations
             ]
-            return keyed_translations + definjected_translations_normalized
+            return keyed_as_five + definjected_translations
 
         elif data_source_choice == "defs_only":
             self.logger.debug("正在扫描 Defs 目录...")
@@ -270,7 +266,15 @@ class TemplateManager:
             self.logger.debug(
                 "从Defs目录提取到 %s 条 Defs 翻译", len(defs_translations)
             )
-            return keyed_translations + defs_translations
+            # 将Keyed和Defs四元组都转换为五元组，保持数据一致性
+            keyed_as_five = [
+                (k, t, g, f, t)  # en_text用text填充
+                for k, t, g, f in keyed_translations
+            ]
+            defs_as_five = [
+                (k, t, g, f, t) for k, t, g, f in defs_translations  # en_text用text填充
+            ]
+            return keyed_as_five + defs_as_five
 
         # 如果到了这里，说明没有匹配的data_source_choice
         self.logger.warning("未知的data_source_choice: %s", data_source_choice)
@@ -304,7 +308,7 @@ class TemplateManager:
                 keyed_translations.append(item)
 
         # 生成Keyed模板
-        if has_input_keyed and keyed_translations:
+        if keyed_translations:
             self.keyed_exporter.export_keyed_template(
                 output_dir, output_language, keyed_translations
             )
@@ -314,6 +318,8 @@ class TemplateManager:
             ui.print_success("Keyed 模板已生成")
         elif not has_input_keyed:
             ui.print_warning("未检测到输入 Keyed 目录，已跳过 Keyed 模板生成。")
+        else:
+            ui.print_warning("未找到 Keyed 翻译数据，已跳过 Keyed 模板生成。")
 
         # 生成DefInjected模板
         if def_translations:
@@ -422,33 +428,54 @@ class TemplateManager:
                 # 查找现有元素
                 existing_elem = root.find(clean_key)
                 if existing_elem is not None:
-                    # 更新现有元素
+                    # 更新现有元素 - 采用旧代码的简单逻辑
                     original_text = existing_elem.text or ""
-                    # 根据设计文档5.1规则：比较input_text和output_en_text
-                    if en_test != test:
-                        # 内容有更新：用新内容替换原翻译，保留历史注释
+                    if original_text != test:
+                        elem_index = list(root).index(existing_elem)
+
+                        # 删除紧挨着元素的前一个EN注释（匹配具体内容）
+                        if elem_index > 0 and en_test:
+                            prev_child = root[elem_index - 1]
+                            expected_en_text = f"EN: {en_test}"
+                            if (
+                                type(prev_child).__name__ == "_Comment"
+                                and hasattr(prev_child, "text")
+                                and prev_child.text
+                                and prev_child.text.strip() == expected_en_text
+                            ):
+                                root.remove(prev_child)
+                                elem_index -= 1  # 调整索引
+
+                        # 添加历史注释
                         if history and history.strip():
                             history_comment = processor.create_comment(history)
-                            elem_index = list(root).index(existing_elem)
                             root.insert(elem_index, history_comment)
-                        existing_elem.text = test
-                    # 如果en_test == test，则保持原状，不做修改
+                            elem_index += 1  # 调整索引
+
+                        # 添加新的英文注释
+                        if test:
+                            en_comment = processor.create_comment(f"EN: {test}")
+                            root.insert(elem_index, en_comment)
+                            elem_index += 1  # 调整索引
+
+                    existing_elem.text = sanitize_xml(test)
                 else:
                     # 添加新元素
                     # 先添加历史注释（如果有，且不为空）
                     if history and history.strip():
-                        history_comment = processor.create_comment(
-                            f"HISTORY: 原翻译内容：{history}，替换于YYYY-MM-DD"
-                        )
+                        history_comment = processor.create_comment(history)
                         root.append(history_comment)
 
                     # 添加英文注释（如果有）
-                    if en_test:
+                    if test:
+                        en_comment = processor.create_comment(f"EN: {test}")
+                        root.append(en_comment)
+                    else:
                         en_comment = processor.create_comment(f"EN: {en_test}")
                         root.append(en_comment)
 
                     # 创建新的翻译元素
-                    processor.create_subelement(root, clean_key, test)
+                    processor.create_subelement(root, clean_key, sanitize_xml(test))
 
             # 保存更新后的文件
             success = processor.save_xml(root, output_file, pretty_print=True)
@@ -456,6 +483,13 @@ class TemplateManager:
                 logger.info("成功保存文件: %s (%s 条翻译)", output_file, len(items))
             else:
                 logger.error("保存文件失败: %s", output_file)
+
+        # 统计合并结果
+        updated_count = sum(1 for item in merged if len(item) > 5 and item[5])
+        new_count = sum(1 for item in merged if len(item) > 5 and "新增于" in item[5])
+        ui.print_success(
+            f"{sub_dir} 智能合并完成！共处理 {len(merged)} 条翻译（更新: {updated_count} 条，新增: {new_count} 条）"
+        )
 
     def _save_translations_to_csv(
         self,
