@@ -145,12 +145,20 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
             ui.print_error(f"翻译过程中发生错误: {str(e)}")
             return None  # 翻译失败
 
-    except (TranslationError, ConfigError, OSError, IOError, ValueError) as e:
+    except (
+        TranslationError,
+        ConfigError,
+        OSError,
+        IOError,
+        ValueError,
+        RuntimeError,
+        ImportError,
+    ) as e:
         ui.print_error(f"统一翻译失败: {str(e)}")
         logger.error("统一翻译失败: %s", str(e), exc_info=True)
         return None
-    except Exception as e:
-        # 保留一个通用的Exception捕获作为最后的兜底，但记录更详细的信息
-        ui.print_error(f"统一翻译发生未知错误: {str(e)}")
+    except (ConnectionError, TimeoutError, KeyboardInterrupt) as e:
+        # 保留网络和用户中断异常的捕获，但记录更详细的信息
+        ui.print_error(f"统一翻译发生网络或中断错误: {str(e)}")
         logger.error("统一翻译发生未知错误: %s", str(e), exc_info=True)
         return None

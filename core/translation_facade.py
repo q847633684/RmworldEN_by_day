@@ -3,6 +3,7 @@
 提供翻译操作的核心接口，管理模组翻译流程
 """
 
+import csv
 import os
 from pathlib import Path
 from typing import List, Tuple, Optional
@@ -16,6 +17,7 @@ from utils.config import get_config, ConfigError
 from extract.workflow import TemplateManager
 from translate import UnifiedTranslator
 from corpus.parallel_corpus import generate_parallel_corpus
+from import_template.importers import import_translations
 
 CONFIG = get_config()
 
@@ -60,7 +62,7 @@ class TranslationFacade:
                 self.mod_dir,
                 self.language,
             )
-        except Exception as e:
+        except (OSError, IOError, ValueError, ImportError) as e:
             raise ConfigError(f"初始化失败: {str(e)}") from e
 
     def _validate_config(self) -> None:
@@ -103,7 +105,7 @@ class TranslationFacade:
             )
             # 返回提取到的翻译数据列表，格式：[(key, text, group, file_info), ...]
             return translations
-        except Exception as e:
+        except (OSError, IOError, ValueError, RuntimeError, ImportError) as e:
             # 捕获并处理提取过程中的任何异常
             error_msg = f"提取模板失败: {str(e)}"  # 构建详细错误信息
             self.logger.error(error_msg)  # 记录错误到日志文件
@@ -127,8 +129,6 @@ class TranslationFacade:
                 raise TranslationImportError(f"CSV文件不存在: {csv_path}")
             self.logger.info("导入翻译到模板: csv_path=%s, merge=%s", csv_path, merge)
             # 使用导入模块执行导入逻辑
-            from import_template.importers import import_translations
-
             if not import_translations(
                 csv_path=csv_path,
                 mod_dir=self.mod_dir,
@@ -138,14 +138,17 @@ class TranslationFacade:
             ):
                 raise TranslationImportError("导入翻译失败")
 
-        except Exception as e:
+        except (OSError, IOError, ValueError, RuntimeError, csv.Error) as e:
             error_msg = f"导入翻译失败: {str(e)}"
             self.logger.error(error_msg)
             raise TranslationImportError(error_msg) from e
 
-    def generate_corpus(self) -> List[Tuple[str, str]]:
+    def generate_corpus(self, mode: str = "2") -> List[Tuple[str, str]]:
         """
         生成英-中平行语料
+
+        Args:
+            mode: 生成模式 ("1"=从XML注释提取, "2"=从DefInjected和Keyed提取)
 
         Returns:
             List[Tuple[str, str]]: 平行语料（英文, 中文）
@@ -154,10 +157,9 @@ class TranslationFacade:
             ExportError: 如果生成失败
         """
         try:
-            self.logger.info("开始生成平行语料")
+            self.logger.info("开始生成平行语料，模式: %s", mode)
             # generate_parallel_corpus 函数签名：(mode: str, mod_dir: str) -> int
-            # 使用模式 "2" 表示从 DefInjected 和 Keyed 提取
-            corpus_count = generate_parallel_corpus("2", self.mod_dir)
+            corpus_count = generate_parallel_corpus(mode, self.mod_dir)
 
             if not corpus_count:
                 self.logger.warning("未找到任何平行语料")
@@ -167,7 +169,7 @@ class TranslationFacade:
                 ui.print_success(f"生成语料：{corpus_count} 条")
 
             return []  # 这里可以返回实际的语料数据
-        except Exception as e:
+        except (OSError, IOError, ValueError, RuntimeError) as e:
             error_msg = f"生成语料失败: {str(e)}"
             self.logger.error(error_msg)
             raise ExportError(error_msg) from e
@@ -247,7 +249,14 @@ class TranslationFacade:
             else:
                 ui.print_warning(f"翻译部分完成：{output_csv}")
                 ui.print_info("可能因API限制或网络问题未完全翻译")
-        except Exception as e:
+        except (
+            OSError,
+            IOError,
+            ValueError,
+            RuntimeError,
+            ConnectionError,
+            TimeoutError,
+        ) as e:
             error_msg = f"机器翻译失败: {str(e)}"
             self.logger.error(error_msg)
             raise TranslationError(error_msg) from e

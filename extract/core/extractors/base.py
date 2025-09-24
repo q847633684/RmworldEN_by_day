@@ -96,7 +96,7 @@ class BaseExtractor(ABC):
         except (FileNotFoundError, ValueError, OSError, IOError, ET.ParseError) as e:
             self.logger.error("解析XML文件时发生错误: %s, %s", file_path, e)
             return None
-        except Exception as e:
+        except (OSError, IOError, ValueError) as e:
             # 处理lxml异常（如果可用）
             if LXML_AVAILABLE and isinstance(e, etree.XMLSyntaxError):
                 self.logger.error("XML语法错误: %s, %s", file_path, e)

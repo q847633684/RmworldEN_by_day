@@ -7,7 +7,12 @@ import os
 from pathlib import Path
 from typing import Optional, List
 from .path_manager import PathManager
-from .ui_style import ui, display_mods_with_adaptive_width, _get_mod_display_name
+from .ui_style import (
+    ui,
+    display_mods_with_adaptive_width,
+    _get_mod_display_name,
+    UIStyle,
+)
 
 # 全局路径管理器实例
 path_manager = PathManager()
@@ -141,7 +146,9 @@ def select_csv_path_with_history() -> Optional[str]:
         return csv_path
 
 
-def select_mod_path_with_version_detection() -> Optional[str]:
+def select_mod_path_with_version_detection(
+    allow_multidlc: bool = False,
+) -> Optional[str]:
     """选择模组目录，支持版本检测和自动扫描"""
     ui.print_header("模组目录选择", ui.Icons.FOLDER)
 
@@ -213,18 +220,18 @@ def select_mod_path_with_version_detection() -> Optional[str]:
                 selected_path = history[choice_num - start_idx]
                 ui.print_success(f"选择：{selected_path}")
                 # 对历史记录路径也进行版本检测
-                return path_manager.detect_version_and_choose(selected_path)
+                return path_manager.detect_version_and_choose(
+                    selected_path, allow_multidlc
+                )
         elif choice:
-            # 直接输入路径 - 先获取路径，然后进行版本检测
-            selected_path = path_manager.get_path(
-                path_type="mod_dir",
-                prompt="请输入编号或模组目录路径（支持历史编号或直接输入路径）: ",
-                validator_type="mod",
-                required=True,
-            )
-            if selected_path:
-                return path_manager.detect_version_and_choose(selected_path)
-            return None
+            # 直接输入路径 - 用户已经输入了路径，直接使用
+            if os.path.exists(choice):
+                # 对直接输入的路径进行版本检测
+                return path_manager.detect_version_and_choose(choice, allow_multidlc)
+            else:
+                ui.print_error(f"路径不存在: {choice}")
+                ui.print_info("请重新选择或输入正确的路径")
+                continue
         else:
             ui.print_error("请输入选择或路径")
 
@@ -353,8 +360,6 @@ def show_info(message: str):
 
 def wait_for_user_input(prompt: str = "按回车继续..."):
     """等待用户输入"""
-    from utils.ui_style import UIStyle
-
     safe_input(f"{UIStyle.Colors.INFO}{prompt}{UIStyle.Colors.RESET}")
 
 

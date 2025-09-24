@@ -294,7 +294,7 @@ class TranslationConfig:
             root_logger.addHandler(file_handler)
             root_logger.addHandler(console_handler)
             self.logger.info("日志系统初始化完成: %s", self.log_file)
-        except Exception as e:
+        except (OSError, IOError, PermissionError, ValueError) as e:
             print(f"{Fore.RED}日志系统初始化失败: {e}{Style.RESET_ALL}")
             raise ConfigError(f"日志系统初始化失败: {str(e)}") from e
 
@@ -382,7 +382,7 @@ class TranslationConfig:
             setattr(self, key, value)
             self._validate_config()
             self.logger.info("更新配置: %s = %s", key, value)
-        except Exception as e:
+        except (ValueError, TypeError, AttributeError) as e:
             setattr(self, key, old_value)
             raise ConfigError(f"更新配置失败: {str(e)}") from e
 
@@ -448,7 +448,7 @@ class TranslationConfig:
             with open(config_file, "w", encoding="utf-8") as f:
                 json.dump(config_dict, f, indent=4, ensure_ascii=False)
             self.logger.info("配置已导出到: %s", config_file)
-        except Exception as e:
+        except (OSError, IOError, PermissionError, json.JSONEncodeError) as e:
             raise ConfigError(f"导出配置失败: {str(e)}") from e
 
     def import_config(self, config_file: str) -> None:
@@ -478,7 +478,7 @@ class TranslationConfig:
 
             self._update_from_dict(config_dict)
             self.logger.info("配置已从 %s 导入", config_file)
-        except Exception as e:
+        except (OSError, IOError, json.JSONDecodeError, ValueError) as e:
             raise ConfigError(f"导入配置失败: {str(e)}") from e
 
     def save_user_config(self) -> None:
@@ -535,7 +535,7 @@ class TranslationConfig:
                 "non_text_patterns": self._get_non_text_patterns(),
             }
             self.logger.info("加载自定义规则配置: %s", config_file)
-        except Exception as e:
+        except (OSError, IOError, json.JSONDecodeError, ValueError) as e:
             self.logger.warning("加载自定义规则配置失败，使用默认规则: %s", e)
             raise ConfigError(f"加载自定义规则配置失败: {str(e)}") from e
 

@@ -48,7 +48,7 @@ from full_pipeline.handler import handle_full_pipeline
 from import_template.handler import handle_import_template
 from translate.handler import handle_unified_translate
 from utils.interaction import show_main_menu, wait_for_user_input
-from utils.ui_style import confirm_action
+from utils.ui_style import confirm_action, ui
 
 # 初始化 colorama 以支持 Windows 终端颜色
 init()
@@ -56,7 +56,6 @@ init()
 
 def main():
     """主程序入口"""
-    from utils.ui_style import ui
 
     while True:
         os.system("cls" if os.name == "nt" else "clear")
@@ -97,7 +96,7 @@ def main():
                 ui.print_success("👋 感谢使用 Day Translation！")
                 break
             continue
-        except Exception as e:
+        except (ValueError, RuntimeError, ImportError) as e:
             ui.print_error(f"❌ 程序执行出错: {str(e)}")
             wait_for_user_input("按回车返回主菜单...")
 

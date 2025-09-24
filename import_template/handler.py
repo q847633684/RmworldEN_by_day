@@ -3,8 +3,8 @@
 处理导入CSV到翻译模板的交互流程
 """
 
-import logging
-from utils.logging_config import get_logger, log_error_with_context
+import csv
+from utils.logging_config import get_logger, log_error_with_conte
 from colorama import Fore, Style
 
 from utils.interaction import (
@@ -42,9 +42,16 @@ def handle_import_template():
         if not selected_path:
             return
 
-        mod_dir = path_manager.detect_version_and_choose(selected_path)
-        if not mod_dir:
+        result = path_manager.detect_version_and_choose(selected_path)
+        if not result:
             return
+
+        # 解包结果：mod_dir, project_type
+        if isinstance(result, tuple):
+            mod_dir, project_type = result
+        else:
+            # 兼容旧格式
+            mod_dir = result
 
         # 创建翻译门面实例（使用配置中的目标语言）
         language = get_config().CN_language
@@ -56,11 +63,11 @@ def handle_import_template():
             try:
                 facade.import_translations_to_templates(csv_path)
                 show_success("导入完成！")
-            except Exception as e:
+            except (OSError, IOError, ValueError, RuntimeError, csv.Error) as e:
                 show_error(f"导入失败: {str(e)}")
                 logger.error("导入失败: %s", str(e), exc_info=True)
         else:
             show_warning("用户取消导入")
-    except Exception as e:
+    except (OSError, IOError, ValueError, RuntimeError, ImportError) as e:
         show_error(f"导入模板失败: {str(e)}")
         logger.error("导入模板失败: %s", str(e), exc_info=True)

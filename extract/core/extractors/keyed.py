@@ -61,7 +61,7 @@ class KeyedExtractor(BaseExtractor):
         xml_files = list(keyed_dir.rglob("*.xml"))
 
         # 使用进度条进行提取
-        for i, xml_file in ui.iter_with_progress(
+        for _, xml_file in ui.iter_with_progress(
             xml_files,
             prefix="扫描Keyed",
             description=f"正在扫描 {language} Keyed 目录中的 {len(xml_files)} 个文件",
@@ -104,7 +104,7 @@ class KeyedExtractor(BaseExtractor):
                 "从 %s 提取到 %d 条翻译", xml_file.name, len(translations)
             )
 
-        except Exception as e:
+        except (OSError, IOError, ValueError, AttributeError, ImportError) as e:
             self.logger.error("处理Keyed文件时发生错误: %s, %s", xml_file, e)
 
         return translations

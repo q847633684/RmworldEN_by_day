@@ -11,6 +11,7 @@ from utils.ui_style import ui
 
 from .translator_factory import TranslatorFactory
 from .translation_config import TranslationConfig
+from .python_translator import AcsClient, TranslateGeneralRequest
 
 
 class UnifiedTranslator:
@@ -225,8 +226,6 @@ class UnifiedTranslator:
         """获取Python翻译器状态"""
         try:
             # 检查Python翻译依赖
-            from .python_translator import AcsClient, TranslateGeneralRequest
-
             return {
                 "available": AcsClient is not None
                 and TranslateGeneralRequest is not None,

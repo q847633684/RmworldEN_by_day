@@ -88,7 +88,7 @@ def translate_text(
         ui.print_success(f"翻译完成: {text[:30]}... -> {translated[:30]}...")
         return translated
 
-    except Exception as e:
+    except (ConnectionError, TimeoutError, ValueError, RuntimeError) as e:
         ui.print_error(f"翻译失败: {text[:50]}..., 错误: {e}")
         return text
 
@@ -179,7 +179,12 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
                             ui.print_warning(
                                 f"第{line_num}行翻译失败。原文：{text[:50]}..."
                             )
-                    except Exception as e:
+                    except (
+                        ConnectionError,
+                        TimeoutError,
+                        ValueError,
+                        RuntimeError,
+                    ) as e:
                         ui.print_error(f"❌ 第{line_num}行翻译失败: {text[:50]}...")
                         row["translated"] = text
 
@@ -198,5 +203,5 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
 
         ui.print_success(f"🎉 翻译完成，保存到: {output_path}")
 
-    except Exception as e:
+    except (OSError, IOError, csv.Error, ValueError, RuntimeError) as e:
         ui.print_error(f"❌ 翻译失败: {e}")

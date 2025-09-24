@@ -3,24 +3,20 @@
 处理提取、翻译、导入一体化流程
 """
 
-import logging
-from utils.logging_config import get_logger, log_error_with_context
-from colorama import Fore, Style
-
+from utils.logging_config import get_logger
 from utils.interaction import (
     select_mod_path_with_version_detection,
     confirm_action,
-    show_success,
     show_error,
     show_info,
     show_warning,
 )
 from core.translation_facade import TranslationFacade
 from utils.path_manager import PathManager
-from translate import UnifiedTranslator
 from utils.config import get_config
 from utils.config import get_language_dir
-from utils.config import get_user_config
+from extract.workflow import TemplateManager, InteractionManager
+from translate.handler import handle_unified_translate
 
 path_manager = PathManager()
 
@@ -37,9 +33,7 @@ def handle_full_pipeline():
         language = get_config().CN_language
         facade = TranslationFacade(mod_dir, language)
 
-        # 直接走“提取翻译”的智能流程，使用与提取模块相同的逻辑
-        from extract.workflow import TemplateManager, InteractionManager
-
+        # 直接走"提取翻译"的智能流程，使用与提取模块相同的逻辑
         template_manager = TemplateManager()
         interaction_manager = InteractionManager()
 
@@ -47,7 +41,6 @@ def handle_full_pipeline():
         smart_config = interaction_manager.handle_smart_extraction_workflow(
             mod_dir, skip_output_selection=True
         )
-        conflict_resolution = smart_config["output_config"]["conflict_resolution"]
         data_source_choice = smart_config["data_sources"]["choice"]
         template_structure = smart_config["template_structure"]
         has_input_keyed = smart_config["data_sources"]["import_status"].get(
@@ -78,8 +71,6 @@ def handle_full_pipeline():
 
         if translations and confirm_action("是否立即进行机翻并导入？"):
             # 使用统一翻译处理器，它会自动处理恢复翻译
-            from translate.handler import handle_unified_translate
-
             output_csv = handle_unified_translate(export_csv_path)
 
             if output_csv:
@@ -90,6 +81,6 @@ def handle_full_pipeline():
                 show_info("翻译未完成，跳过导入")
         else:
             show_warning("用户取消完整流程")
-    except Exception as e:
+    except (OSError, IOError, ValueError, RuntimeError, ImportError) as e:
         show_error(f"完整流程失败: {str(e)}")
         logger.error("完整流程失败: %s", str(e), exc_info=True)

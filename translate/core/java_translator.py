@@ -10,6 +10,7 @@ import threading
 import shutil
 from utils.logging_config import get_logger
 from utils.ui_style import ui
+from utils.config import get_user_config
 from typing import Optional, Dict, Any
 from pathlib import Path
 from glob import glob
@@ -421,8 +422,6 @@ class JavaTranslator:
         Returns:
             str: 输出CSV文件路径
         """
-        from pathlib import Path
-
         input_path = Path(input_csv)
         # 在文件名后添加 _zh
         output_name = input_path.stem + "_zh" + input_path.suffix
@@ -511,8 +510,6 @@ class JavaTranslator:
         ui.print_info(f"从第 {resume_line} 行开始恢复翻译")
 
         # 从用户配置中获取必要的参数
-        from utils.config import get_user_config
-
         cfg = get_user_config() or {}
 
         # 直接使用原始文件进行恢复翻译

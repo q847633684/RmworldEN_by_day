@@ -5,7 +5,7 @@
 
 import os
 import shutil
-import sys
+from functools import wraps
 from typing import Optional, List, Dict, Any
 from colorama import Fore, Style, init  # type: ignore
 
@@ -77,7 +77,7 @@ class UIStyle:
             """获取终端宽度"""
             try:
                 return shutil.get_terminal_size().columns
-            except:
+            except (OSError, AttributeError):
                 return cls.TERMINAL_WIDTH
 
     @classmethod
@@ -297,7 +297,6 @@ class UIStyle:
         Returns:
             装饰器函数
         """
-        from functools import wraps
 
         def decorator(func):
             @wraps(func)
@@ -586,10 +585,8 @@ ui = UIStyle()
 def _get_terminal_width() -> int:
     """获取终端宽度"""
     try:
-        import shutil
-
         return shutil.get_terminal_size().columns
-    except:
+    except (OSError, AttributeError):
         return 80  # 默认宽度
 
 
@@ -619,8 +616,6 @@ def _calculate_adaptive_layout(
 
 def _get_mod_display_name(mod_path: str) -> str:
     """获取模组的显示名称"""
-    import os
-
     # 首先尝试从About/About.xml读取模组名称
     about_xml_path = os.path.join(mod_path, "About", "About.xml")
     if os.path.exists(about_xml_path):
@@ -633,7 +628,7 @@ def _get_mod_display_name(mod_path: str) -> str:
             name_elem = root.find("name")
             if name_elem is not None and name_elem.text:
                 return name_elem.text.strip()
-        except:
+        except (ET.ParseError, FileNotFoundError, PermissionError, AttributeError):
             pass
 
     # 如果无法读取XML，使用目录名
@@ -670,9 +665,6 @@ def display_mods_with_adaptive_width(
         end_idx = min(start_idx + items_per_page, len(all_mods))
         current_page_mods = all_mods[start_idx:end_idx]
         current_page_names = mod_names[start_idx:end_idx]
-
-        # 计算边框宽度
-        border_width = mods_per_line * item_width + 4  # 4 = 左右边框 + 间距
 
         # 显示标题和分页信息
         ui.print_header(f"📦 模组列表 (第 {current_page}/{total_pages} 页)")
@@ -745,7 +737,7 @@ def _display_mods_page(
         end_idx = min(start_idx + mods_per_line, len(mods))
 
         # 构建当前行的显示内容
-        line_content = f"   │"
+        line_content = "   │"
         for i in range(start_idx, end_idx):
             global_index = start_index + i
             mod_name = mod_names[i]

@@ -144,6 +144,6 @@ def handle_config_manage():
 
     except ConfigError as e:
         show_error(str(e))
-    except Exception as e:
+    except (OSError, IOError, ValueError, RuntimeError) as e:
         show_error(f"配置管理失败: {str(e)}")
         logger.error("配置管理失败: %s", str(e), exc_info=True)

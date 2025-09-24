@@ -1,51 +1,13 @@
 """
-批量处理器交互入口
+批量处理处理器
+处理多个模组的批量操作
 """
 
-import logging
-from utils.logging_config import get_logger, log_error_with_context
-from colorama import Fore, Style
-from utils.interaction import (
-    select_mod_path_with_version_detection,
-    show_success,
-    show_error,
-    show_info,
-    show_warning,
-)
-from utils.path_manager import PathManager
-
-path_manager = PathManager()
+from utils.ui_style import ui
 
 
 def handle_batch():
-    logger = get_logger(f"{__name__}.handle_batch")
-
-    """批量处理主入口"""
-    try:
-        # 选择模组目录
-        mod_dirs = select_mod_path_with_version_detection(multi=True)
-        if not mod_dirs:
-            return
-
-        # 延迟导入，避免循环导入
-        from core.translation_facade import TranslationFacade
-        from utils.config import get_config
-
-        # 获取配置
-        config = get_config()
-
-        # 创建翻译门面实例
-        facade = TranslationFacade(mod_dirs[0], config.CN_language)  # 示例，实际可批量
-
-        # 这里可以扩展为批量处理逻辑
-        show_info("=== 开始批量处理 ===")
-        try:
-            # 示例：批量处理
-            result = facade.batch_process(mod_dirs)
-            show_success(f"批量处理完成！共处理 {len(result)} 个模组")
-        except Exception as e:
-            show_error(f"批量处理失败: {str(e)}")
-            logger.error("批量处理失败: %s", str(e), exc_info=True)
-    except Exception as e:
-        show_error(f"批量功能失败: {str(e)}")
-        logger.error("批量功能失败: %s", str(e), exc_info=True)
+    """处理批量操作功能"""
+    ui.print_section_header("批量处理", ui.Icons.BATCH)
+    ui.print_info("批量处理功能正在开发中...")
+    ui.print_warning("此功能暂未实现")

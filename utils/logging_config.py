@@ -49,8 +49,8 @@ class LoggingConfig:
     def setup_logging(
         cls,
         level: str = "DEBUG",
-        log_to_file: bool = True,
-        log_to_console: bool = True,
+        enable_file_logging: bool = True,
+        enable_console_logging: bool = True,
         log_dir: Optional[str] = None,
         max_file_size: int = 10 * 1024 * 1024,  # 10MB
         backup_count: int = 5,
@@ -60,8 +60,8 @@ class LoggingConfig:
 
         Args:
             level: 日志级别 (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-            log_to_file: 是否记录到文件
-            log_to_console: 是否输出到控制台
+            enable_file_logging: 是否记录到文件
+            enable_console_logging: 是否输出到控制台
             log_dir: 日志目录，默认为项目根目录下的logs
             max_file_size: 单个日志文件最大大小（字节）
             backup_count: 保留的日志文件数量
@@ -86,7 +86,7 @@ class LoggingConfig:
         )
 
         # 控制台处理器
-        if log_to_console:
+        if enable_console_logging:
             console_handler = logging.StreamHandler(sys.stdout)
             console_handler.setLevel(numeric_level)
 
@@ -99,7 +99,7 @@ class LoggingConfig:
             root_logger.addHandler(console_handler)
 
         # 文件处理器
-        if log_to_file:
+        if enable_file_logging:
             if log_dir is None:
                 log_dir = Path(__file__).parent.parent / "logs"
             else:
@@ -142,31 +142,43 @@ class LoggingConfig:
         logger = logging.getLogger(__name__)
         logger.info("日志系统初始化完成")
         logger.info("日志级别: %s", level)
-        logger.info("控制台输出: %s", log_to_console)
-        logger.info("文件记录: %s", log_to_file)
-        if log_to_file:
+        logger.info("控制台输出: %s", enable_console_logging)
+        logger.info("文件记录: %s", enable_file_logging)
+        if enable_file_logging:
             logger.info("日志目录: %s", cls._log_dir)
 
         # 自动清理旧日志文件
         cls._cleanup_old_logs()
 
     @classmethod
-    def reset_logging(cls, level: str = "DEBUG", log_to_console: bool = True) -> None:
+    def is_initialized(cls) -> bool:
+        """
+        检查日志系统是否已初始化
+
+        Returns:
+            bool: 如果已初始化返回True，否则返回False
+        """
+        return cls._initialized
+
+    @classmethod
+    def reset_logging(
+        cls, level: str = "DEBUG", enable_console_logging: bool = True
+    ) -> None:
         """
         重新设置日志配置（用于测试或调试）
-        
+
         Args:
             level: 日志级别
-            log_to_console: 是否输出到控制台
+            enable_console_logging: 是否输出到控制台
         """
         # 重置初始化状态
         cls._initialized = False
-        
+
         # 重新设置日志
         cls.setup_logging(
             level=level,
-            log_to_file=True,
-            log_to_console=log_to_console
+            enable_file_logging=True,
+            enable_console_logging=enable_console_logging,
         )
 
     @classmethod
@@ -208,7 +220,7 @@ class LoggingConfig:
             if deleted_count > 0:
                 print(f"🗑️ 自动清理完成，删除了 {deleted_count} 个旧日志文件")
 
-        except Exception:
+        except (OSError, IOError, PermissionError):
             # 忽略清理过程中的错误，避免影响程序运行
             pass
 
@@ -280,19 +292,19 @@ def log_data_processing(operation: str, count: int, **kwargs):
     logger.debug("数据处理: %s - 处理了 %d 条记录 %s", operation, count, extra_info)
 
 
-def log_error_with_context(error: Exception, context: str = "", **kwargs):
+def log_error_with_context(exception: Exception, context: str = "", **kwargs):
     """
     记录带上下文的错误信息
 
     Args:
-        error: 异常对象
+        exception: 异常对象
         context: 错误上下文
         **kwargs: 额外信息
     """
     logger = get_logger("errors")
     extra_info = ", ".join(f"{k}={v}" for k, v in kwargs.items())
     logger.error(
-        "错误发生: %s - %s - %s", context, str(error), extra_info, exc_info=True
+        "错误发生: %s - %s - %s", context, str(exception), extra_info, exc_info=True
     )
 
 
@@ -328,14 +340,18 @@ def critical(msg: str, *args, **kwargs):
 
 
 # 自动初始化
-if not LoggingConfig._initialized:
+if not LoggingConfig.is_initialized():
     # 从环境变量读取配置
     log_level = os.getenv("DAY_TRANSLATION_LOG_LEVEL", "INFO")
-    log_to_file = os.getenv("DAY_TRANSLATION_LOG_TO_FILE", "true").lower() == "true"
-    log_to_console = (
+    enable_file_logging_env = (
+        os.getenv("DAY_TRANSLATION_LOG_TO_FILE", "true").lower() == "true"
+    )
+    enable_console_logging_env = (
         os.getenv("DAY_TRANSLATION_LOG_TO_CONSOLE", "false").lower() == "true"
     )
 
     LoggingConfig.setup_logging(
-        level=log_level, log_to_file=log_to_file, log_to_console=log_to_console
+        level=log_level,
+        enable_file_logging=enable_file_logging_env,
+        enable_console_logging=enable_console_logging_env,
     )

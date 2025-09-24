@@ -6,6 +6,8 @@
 from typing import Optional
 from utils.logging_config import get_logger
 from .translation_config import TranslationConfig
+from .java_translator import JavaTranslator
+from .python_translator import translate_csv, AcsClient, TranslateGeneralRequest
 
 
 class TranslatorFactory:
@@ -24,8 +26,6 @@ class TranslatorFactory:
     def create_java_translator(self):
         """创建Java翻译器实例"""
         try:
-            from .java_translator import JavaTranslator
-
             return JavaTranslatorAdapter(JavaTranslator(), self.config)
         except ImportError as e:
             self.logger.debug("Java翻译器导入失败: %s", e)
@@ -37,8 +37,6 @@ class TranslatorFactory:
     def create_python_translator(self):
         """创建Python翻译器实例"""
         try:
-            from .python_translator import translate_csv
-
             return PythonTranslatorAdapter(translate_csv, self.config)
         except ImportError as e:
             self.logger.debug("Python翻译器导入失败: %s", e)
@@ -195,8 +193,6 @@ class PythonTranslatorAdapter:
     def get_status(self) -> dict:
         """获取翻译器状态"""
         try:
-            from .python_translator import AcsClient, TranslateGeneralRequest
-
             return {
                 "available": AcsClient is not None
                 and TranslateGeneralRequest is not None,

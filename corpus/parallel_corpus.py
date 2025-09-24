@@ -79,6 +79,7 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
     Args:
         mode: 模式（1=从 XML 注释提取，2=从 DefInjected 和 Keyed 提取）
         mod_dir: 模组根目录
+        project_type: 项目类型（"standard", "multidlc", "unknown"），如果为None则自动检测
 
     Returns:
         生成的语料条数
@@ -88,11 +89,8 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
     )
     mod_dir = str(Path(mod_dir).resolve())
 
-    output_csv = str(Path(mod_dir).parent / "parallel_corpus.csv")
-    output_tsv = str(Path(mod_dir).parent / "parallel_corpus.tsv")
-
-    lang_path = get_language_folder_path(CONFIG.CN_language, mod_dir)
-    src_lang_path = get_language_folder_path(CONFIG.EN_language, mod_dir)
+    output_csv = str(Path(mod_dir) / "parallel_corpus.csv")
+    output_tsv = str(Path(mod_dir) / "parallel_corpus.tsv")
 
     corpus: List[Tuple[str, str]] = []
     seen = set()
@@ -100,8 +98,8 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
     processor = XMLProcessor()
 
     if mode == "1":
-        # 从带 EN: 注释的文件提取
-        for xml_file in Path(lang_path).rglob("*.xml"):
+        # 模式1：从XML注释提取
+        for xml_file in Path(mod_dir).rglob("*.xml"):
             pairs = extract_pairs_from_file(str(xml_file))
             for en, zh in pairs:
                 key = (en, zh)
@@ -109,7 +107,10 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
                     corpus.append((en, zh))
                     seen.add(key)
     elif mode == "2":
-        # 从 DefInjected 和 Keyed 对比提取
+        # 模式2：从中文和英文目录提取DefInjected和Keyed
+        lang_path = get_language_folder_path(CONFIG.CN_language, mod_dir)
+        src_lang_path = get_language_folder_path(CONFIG.EN_language, mod_dir)
+
         def_injected_path = os.path.join(src_lang_path, CONFIG.DefInjected_dir)
         keyed_path = os.path.join(src_lang_path, CONFIG.keyed_dir)
         zh_def_injected_path = os.path.join(lang_path, CONFIG.DefInjected_dir)
@@ -151,7 +152,7 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
                             zh_text = zh_elem.text.strip()
                             if en_text and zh_text:
                                 corpus.append((en_text, zh_text))
-                except Exception as e:
+                except (OSError, IOError, ValueError, AttributeError) as e:
                     logger.error("处理文件失败: %s 或 %s: %s", src_file, zh_file, e)
 
     if not corpus:
@@ -208,7 +209,7 @@ def check_parallel_tsv(file_path: str = "parallel_corpus.tsv") -> int:
         if errors == 0:
             print(f"{Fore.GREEN}格式检查通过{Style.RESET_ALL}")
 
-    except Exception as e:
+    except (OSError, IOError, ValueError, csv.Error) as e:
         print(f"{Fore.RED}检查失败: {e}{Style.RESET_ALL}")
         errors += 1
 
