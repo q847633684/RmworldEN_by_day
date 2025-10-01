@@ -1,23 +1,34 @@
 {
   "mod_dir": [
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\abscon-apparel-settings-for-rjw",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\294100\\1201382956",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cumpilation",
     "C:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\294100\\2329126791",
-    "C:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\294100\\1201382956",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw-std",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\dirty-talk",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Data\\Core"
   ],
   "output_dir": [
-    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw\\1.6",
-    "D:\\Download\\IDM\\压缩\\rjw-master\\1.6",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\abscon-apparel-settings-for-rjw",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw-brothel-colony\\1.6",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\nudity-matters-more-master",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\RJWPE-main\\1.6",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw-menstruation-fluids",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw-menstruation-resources\\1.6",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\romance-tweaks-more-options",
     "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cumpilation\\1.6",
-    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\dirty-talk",
-    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw\\1.5",
-    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw\\1.5\\Languages\\ChineseSimplified"
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw\\1.6",
+    "D:\\Download\\IDM\\压缩\\rjw-master\\1.6"
   ],
   "import_csv": [
-    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cumpilation\\1.6\\Languages\\ChineseSimplified\\extracted_translations.csv",
-    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\dirty-talk\\Languages\\ChineseSimplified\\extracted_translations_zh.csv"
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\nudity-matters-more-master\\Languages\\ChineseSimplified\\extracted_translations_zh.csv",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\nudity-matters-more-master\\Languages\\ChineseSimplified\\extracted_translations.csv",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\RJWPE-main\\1.6\\Languages\\ChineseSimplified\\extracted_translations_zh.csv",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\RJWPE-main\\1.6\\Languages\\ChineseSimplified\\extracted_translations.csv",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw-menstruation-resources\\1.6\\Languages\\ChineseSimplified\\extracted_translations_zh.csv",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\rjw-menstruation-resources\\1.6\\Languages\\ChineseSimplified\\extracted_translations.csv",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\romance-tweaks-more-options\\Languages\\ChineseSimplified\\extracted_translations_zh.csv",
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\romance-tweaks-more-options\\Languages\\ChineseSimplified\\extracted_translations.csv"
   ]
 }

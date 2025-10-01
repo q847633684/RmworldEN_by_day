@@ -4,7 +4,7 @@
 """
 
 import csv
-from utils.logging_config import get_logger, log_error_with_conte
+from utils.logging_config import get_logger
 from colorama import Fore, Style
 
 from utils.interaction import (

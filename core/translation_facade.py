@@ -17,7 +17,6 @@ from utils.config import get_config, ConfigError
 from extract.workflow import TemplateManager
 from translate import UnifiedTranslator
 from corpus.parallel_corpus import generate_parallel_corpus
-from import_template.importers import import_translations
 
 CONFIG = get_config()
 
@@ -129,6 +128,8 @@ class TranslationFacade:
                 raise TranslationImportError(f"CSV文件不存在: {csv_path}")
             self.logger.info("导入翻译到模板: csv_path=%s, merge=%s", csv_path, merge)
             # 使用导入模块执行导入逻辑
+            from import_template.importers import import_translations
+
             if not import_translations(
                 csv_path=csv_path,
                 mod_dir=self.mod_dir,

@@ -6,7 +6,6 @@
 
 import csv
 import re
-import datetime
 from pathlib import Path
 from typing import List, Tuple, Optional
 from utils.ui_style import ui
@@ -84,14 +83,14 @@ class TemplateManager:
         )
 
         # 步骤1：提取翻译数据
-        translations = self.extract_all_translations(
+        keyed_translations, def_translations = self.extract_all_translations(
             import_dir,
             import_language,
             data_source_choice=data_source_choice,
             has_input_keyed=has_input_keyed,
         )
 
-        if not translations:
+        if not keyed_translations and not def_translations:
             self.logger.warning("未找到任何翻译数据")
             ui.print_warning("未找到任何翻译数据")
             return []
@@ -100,26 +99,29 @@ class TemplateManager:
         self._generate_templates_to_output_dir_with_structure(
             output_dir=output_dir,
             output_language=output_language,
-            translations=translations,
+            keyed_translations=keyed_translations,
+            def_translations=def_translations,
             template_structure=template_structure,
             has_input_keyed=has_input_keyed,
         )
 
         # 步骤3：导出CSV到输出目录
+        # 合并所有翻译数据用于CSV导出
+        all_translations = keyed_translations + def_translations
         self._save_translations_to_csv(
-            translations, output_dir, output_language, output_csv
+            all_translations, output_dir, output_language, output_csv
         )
 
         # 记录数据处理统计
         log_data_processing(
             "提取翻译模板",
-            len(translations),
+            len(all_translations),
             data_source=data_source_choice,
             template_structure=template_structure,
         )
 
-        self.logger.debug("模板生成完成，总计 %s 条翻译", len(translations))
-        return translations
+        self.logger.debug("模板生成完成，总计 %s 条翻译", len(all_translations))
+        return all_translations
 
     def merge_mode(
         self,
@@ -147,7 +149,7 @@ class TemplateManager:
             List[Tuple[str, str, str, str]]: 合并后的翻译数据列表
         """
         # 步骤1：提取输入数据
-        input_data = self.extract_all_translations(
+        input_keyed, input_def = self.extract_all_translations(
             import_dir,
             import_language,
             data_source_choice=data_source_choice,
@@ -155,7 +157,7 @@ class TemplateManager:
         )
 
         # 步骤2：提取输出数据
-        output_data = self.extract_all_translations(
+        output_keyed, output_def = self.extract_all_translations(
             output_dir,
             output_language,
             data_source_choice="definjected_only",
@@ -163,24 +165,16 @@ class TemplateManager:
         )
 
         # 步骤3：智能合并翻译数据
-        translations = SmartMerger.smart_merge_translations(
-            input_data=input_data,
-            output_data=output_data,
+        keyed_translations = SmartMerger.smart_merge_translations(
+            input_data=input_keyed,
+            output_data=output_keyed,
             include_unchanged=False,
         )
-
-        # 分离键值对和定射
-        keyed_translations = []
-        def_translations = []
-        for item in translations:
-            k, _, _, f = item[:4]  # 兼容五元组和四元组
-            if "." in k and (f.endswith(".xml") or "DefInjected" in str(f)):
-                def_translations.append(item)
-                self.logger.debug("DefInjected翻译: %s", item)
-            else:
-                keyed_translations.append(item)
-                self.logger.debug("Keyed翻译: %s", item)
-
+        def_translations = SmartMerger.smart_merge_translations(
+            input_data=input_def,
+            output_data=output_def,
+            include_unchanged=False,
+        )
         # 写入合并结果
         if keyed_translations:
             ui.print_info("正在合并 Keyed ...")
@@ -193,7 +187,7 @@ class TemplateManager:
             self._write_merged_translations(
                 def_translations, output_dir, output_language, "DefInjected"
             )
-
+        translations = keyed_translations + def_translations
         # 步骤4：导出CSV到输出目录
         self._save_translations_to_csv(
             translations, output_dir, output_language, output_csv
@@ -221,7 +215,7 @@ class TemplateManager:
         """
         data_source_choice = data_source_choice or "defs_only"
 
-        # 提取Keyed翻译（总是提取）
+        # 提取Keyed翻译
         if has_input_keyed:
             self.logger.debug("正在扫描 Keyed 目录...")
             keyed_translations = self.keyed_extractor.extract(
@@ -233,9 +227,13 @@ class TemplateManager:
             self.logger.debug(
                 "从Keyed 目录提取到 %s 条 Keyed 翻译", len(keyed_translations)
             )
+            # 将Keyed四元组转换为五元组，保持数据一致性
+            keyed_translations = [
+                (key, text, tag, rel_path, text)  # en_text用text填充
+                for key, text, tag, rel_path in keyed_translations
+            ]
         else:
             keyed_translations = []
-            ui.print_warning("未检测到输入 Keyed 目录，已跳过 Keyed 提取。")
 
         if data_source_choice == "definjected_only":
             self.logger.debug("正在扫描 DefInjected 目录...")
@@ -251,12 +249,7 @@ class TemplateManager:
                 "从DefInjected 目录提取到 %s 条 DefInjected 翻译",
                 len(definjected_translations),
             )
-            # 将Keyed四元组转换为五元组，保持数据一致性
-            keyed_as_five = [
-                (k, t, g, f, t)  # en_text用text填充
-                for k, t, g, f in keyed_translations
-            ]
-            return keyed_as_five + definjected_translations
+            return (keyed_translations, definjected_translations)
 
         elif data_source_choice == "defs_only":
             self.logger.debug("正在扫描 Defs 目录...")
@@ -266,15 +259,12 @@ class TemplateManager:
             self.logger.debug(
                 "从Defs目录提取到 %s 条 Defs 翻译", len(defs_translations)
             )
-            # 将Keyed和Defs四元组都转换为五元组，保持数据一致性
-            keyed_as_five = [
-                (k, t, g, f, t)  # en_text用text填充
-                for k, t, g, f in keyed_translations
+            # 将Defs四元组转换为五元组，保持数据一致性
+            defs_translations = [
+                (key, text, tag, rel_path, text)
+                for key, text, tag, rel_path in defs_translations  # en_text用text填充
             ]
-            defs_as_five = [
-                (k, t, g, f, t) for k, t, g, f in defs_translations  # en_text用text填充
-            ]
-            return keyed_as_five + defs_as_five
+            return (keyed_translations, defs_translations)
 
         # 如果到了这里，说明没有匹配的data_source_choice
         self.logger.warning("未知的data_source_choice: %s", data_source_choice)
@@ -284,7 +274,8 @@ class TemplateManager:
         self,
         output_dir: str,
         output_language: str,
-        translations: List[Tuple],
+        keyed_translations: List[Tuple],
+        def_translations: List[Tuple],
         template_structure: Optional[str],
         has_input_keyed: bool = True,
     ):
@@ -292,37 +283,29 @@ class TemplateManager:
         template_structure = template_structure or "defs_by_type"
         output_path = Path(output_dir)
 
-        # 分离Keyed和DefInjected翻译
-        keyed_translations = []
-        def_translations = []
-        for item in translations:
-            k, _, _, f = item[:4]  # 兼容五元组和四元组
-            # 判断是否为DefInjected翻译的规则：
-            # 1. key包含'/'（scan_defs_sync格式）：如 "ThingDef/Apparel_Pants.label"
-            # 2. key包含'.'且file_path是DefInjected相关（extract_definjected_translations格式）：如 "Apparel_Pants.label"
-            if "/" in k:
-                def_translations.append(item)
-            elif "." in k and (f.endswith(".xml") or "DefInjected" in str(f)):
-                def_translations.append(item)
-            else:
-                keyed_translations.append(item)
+        if not keyed_translations and not def_translations:
+            ui.print_warning("没有翻译数据需要生成模板")
+            return
 
         # 生成Keyed模板
-        if keyed_translations:
-            self.keyed_exporter.export_keyed_template(
-                output_dir, output_language, keyed_translations
-            )
-            self.logger.debug(
-                "生成 %s 条 Keyed 模板到 %s", len(keyed_translations), output_path
-            )
-            ui.print_success("Keyed 模板已生成")
-        elif not has_input_keyed:
-            ui.print_warning("未检测到输入 Keyed 目录，已跳过 Keyed 模板生成。")
+        if has_input_keyed:
+            if keyed_translations:
+                ui.print_info(f"生成 {len(keyed_translations)} 条 Keyed 模板...")
+                self.keyed_exporter.export_keyed_template(
+                    output_dir, output_language, keyed_translations
+                )
+                self.logger.debug(
+                    "生成 %s 条 Keyed 模板到 %s", len(keyed_translations), output_path
+                )
+                ui.print_success("Keyed 模板已生成")
+            else:
+                ui.print_warning("未找到 Keyed 翻译数据，已跳过 Keyed 模板生成。")
         else:
-            ui.print_warning("未找到 Keyed 翻译数据，已跳过 Keyed 模板生成。")
+            ui.print_warning("未检测到输入 Keyed 目录，已跳过 Keyed 模板生成。")
 
         # 生成DefInjected模板
         if def_translations:
+            ui.print_info(f"生成 {len(def_translations)} 条 DefInjected 模板...")
             self._generate_definjected_with_structure(
                 def_translations,
                 output_dir,
@@ -366,14 +349,9 @@ class TemplateManager:
             )
             ui.print_success("DefInjected 模板已生成（按文件结构）")
         else:
-            # 默认使用按DefType分组
-            self.definjected_exporter.export_with_defs_structure(
-                output_dir, output_language, def_translations
-            )
-            self.logger.debug(
-                "生成 %s 条 DefInjected 模板（默认分组）", len(def_translations)
-            )
-            ui.print_success("DefInjected 模板已生成（默认分组）")
+            ui.print_success("未知结构 请检查配置")
+            self.logger.warning("未知结构 请检查配置")
+            raise ValueError("未知结构 请检查配置")
 
     def _write_merged_translations(
         self, merged: List[Tuple], output_dir: str, output_language: str, sub_dir: str
