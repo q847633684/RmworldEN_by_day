@@ -11,9 +11,9 @@ from utils.interaction import (
     select_csv_path_with_history,
     auto_generate_output_path,
 )
-from utils.path_manager import PathManager
-from utils.config import get_user_config, ConfigError
-from core.translation_facade import TranslationFacade
+from user_config.path_manager import PathManager
+
+# 延迟导入避免循环依赖
 from core.exceptions import TranslationError
 
 
@@ -29,9 +29,17 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
     try:
         # 创建翻译门面实例（需要模组目录，这里使用临时目录）
         import tempfile
+        from core.translation_facade import TranslationFacade
+        from user_config import UserConfigManager
+
+        # 获取配置中的中文语言设置
+        config = UserConfigManager()
+        cn_language = config.language_config.get_value(
+            "cn_language", "ChineseSimplified"
+        )
 
         temp_dir = tempfile.mkdtemp()
-        facade = TranslationFacade(temp_dir, "ChineseSimplified")
+        facade = TranslationFacade(temp_dir, cn_language)
 
         # 显示翻译器状态
         ui.print_section_header("翻译器状态", ui.Icons.SETTINGS)
@@ -120,18 +128,35 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
 
         ui.print_section_header("开始翻译", ui.Icons.TRANSLATE)
 
-        # 检查API密钥配置
-        user_config = get_user_config() or {}
-        ak = user_config.get("aliyun_access_key_id", "").strip()
-        sk = user_config.get("aliyun_access_key_secret", "").strip()
+        # 检查API密钥配置（使用新配置系统）
+        try:
+            from user_config import UserConfigManager
 
-        if not ak or not sk:
-            ui.print_error("未找到阿里云翻译密钥配置")
-            ui.print_info("请先配置翻译密钥：")
-            ui.print_info(
-                "1. 在配置文件中设置 aliyun_access_key_id 和 aliyun_access_key_secret"
-            )
-            ui.print_info("2. 或使用配置管理功能进行配置")
+            config_manager = UserConfigManager()
+            api_manager = config_manager.api_manager
+
+            # 获取主要API配置
+            primary_api = api_manager.get_primary_api()
+
+            if not primary_api or not primary_api.is_enabled():
+                ui.print_error("未找到启用的翻译API配置")
+                ui.print_info("请先配置翻译API：")
+                ui.print_info("1. 运行主程序选择'配置管理'")
+                ui.print_info("2. 选择'API配置'进行设置")
+                ui.print_info("3. 配置并启用至少一个翻译API")
+                return None
+
+            # 验证API配置
+            if not primary_api.validate():
+                ui.print_error(f"{primary_api.name}配置不完整或无效")
+                ui.print_info("请检查API配置中的必需字段")
+                return None
+
+            ui.print_info(f"🌐 使用翻译API: {primary_api.name}")
+
+        except Exception as e:
+            ui.print_error(f"加载翻译API配置失败: {str(e)}")
+            ui.print_info("请检查配置系统是否正常工作")
             return None
 
         # 执行翻译
@@ -145,11 +170,18 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
             ui.print_error(f"翻译过程中发生错误: {str(e)}")
             return None  # 翻译失败
 
+    except (KeyboardInterrupt,) as e:
+        # 用户中断异常
+        ui.print_error(f"用户中断翻译: {str(e)}")
+        logger.error("用户中断翻译: %s", str(e), exc_info=True)
+        return None
+    except (ConnectionError, TimeoutError) as e:
+        # 网络相关异常（在OSError之前，因为它们是OSError的子类）
+        ui.print_error(f"统一翻译发生网络错误: {str(e)}")
+        logger.error("统一翻译发生网络错误: %s", str(e), exc_info=True)
+        return None
     except (
         TranslationError,
-        ConfigError,
-        OSError,
-        IOError,
         ValueError,
         RuntimeError,
         ImportError,
@@ -157,8 +189,8 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
         ui.print_error(f"统一翻译失败: {str(e)}")
         logger.error("统一翻译失败: %s", str(e), exc_info=True)
         return None
-    except (ConnectionError, TimeoutError, KeyboardInterrupt) as e:
-        # 保留网络和用户中断异常的捕获，但记录更详细的信息
-        ui.print_error(f"统一翻译发生网络或中断错误: {str(e)}")
-        logger.error("统一翻译发生未知错误: %s", str(e), exc_info=True)
+    except (OSError, IOError) as e:
+        # 系统IO相关异常（放在最后，因为它是其他异常的父类）
+        ui.print_error(f"统一翻译发生系统错误: {str(e)}")
+        logger.error("统一翻译发生系统错误: %s", str(e), exc_info=True)
         return None

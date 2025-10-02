@@ -5,7 +5,8 @@
 
 from typing import Optional
 from utils.logging_config import get_logger
-from .translation_config import TranslationConfig
+
+# 翻译配置已迁移到新配置系统
 from .java_translator import JavaTranslator
 from .python_translator import translate_csv, AcsClient, TranslateGeneralRequest
 
@@ -13,7 +14,7 @@ from .python_translator import translate_csv, AcsClient, TranslateGeneralRequest
 class TranslatorFactory:
     """翻译器工厂类"""
 
-    def __init__(self, config: TranslationConfig):
+    def __init__(self, config: dict):
         """
         初始化翻译器工厂
 
@@ -49,7 +50,7 @@ class TranslatorFactory:
 class JavaTranslatorAdapter:
     """Java翻译器适配器"""
 
-    def __init__(self, java_translator, config: TranslationConfig):
+    def __init__(self, java_translator, config: dict):
         """
         初始化Java翻译器适配器
 
@@ -75,9 +76,11 @@ class JavaTranslatorAdapter:
         """
         try:
             # 从配置或kwargs中获取API密钥
-            access_key_id = kwargs.get("access_key_id") or self.config.access_key_id
-            access_key_secret = (
-                kwargs.get("access_key_secret") or self.config.access_key_secret
+            access_key_id = kwargs.get("access_key_id") or self.config.get(
+                "access_key_id"
+            )
+            access_key_secret = kwargs.get("access_key_secret") or self.config.get(
+                "access_key_secret"
             )
 
             if not access_key_id or not access_key_secret:
@@ -90,9 +93,9 @@ class JavaTranslatorAdapter:
                 output_csv,
                 access_key_id=access_key_id,
                 access_key_secret=access_key_secret,
-                model_id=kwargs.get("model_id", self.config.model_id),
+                model_id=kwargs.get("model_id", self.config.get("model_id", 27345)),
                 enable_interrupt=kwargs.get(
-                    "enable_interrupt", self.config.enable_interrupt
+                    "enable_interrupt", self.config.get("enable_interrupt", True)
                 ),
                 resume_line=kwargs.get("resume_line"),
             )
@@ -131,7 +134,7 @@ class JavaTranslatorAdapter:
 class PythonTranslatorAdapter:
     """Python翻译器适配器"""
 
-    def __init__(self, translate_func, config: TranslationConfig):
+    def __init__(self, translate_func, config: dict):
         """
         初始化Python翻译器适配器
 
@@ -157,9 +160,11 @@ class PythonTranslatorAdapter:
         """
         try:
             # 从配置或kwargs中获取API密钥
-            access_key_id = kwargs.get("access_key_id") or self.config.access_key_id
-            access_key_secret = (
-                kwargs.get("access_key_secret") or self.config.access_key_secret
+            access_key_id = kwargs.get("access_key_id") or self.config.get(
+                "access_key_id"
+            )
+            access_key_secret = kwargs.get("access_key_secret") or self.config.get(
+                "access_key_secret"
             )
 
             if not access_key_id or not access_key_secret:

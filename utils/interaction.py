@@ -6,7 +6,7 @@
 import os
 from pathlib import Path
 from typing import Optional, List
-from .path_manager import PathManager
+from user_config.path_manager import PathManager
 from .ui_style import (
     ui,
     display_mods_with_adaptive_width,

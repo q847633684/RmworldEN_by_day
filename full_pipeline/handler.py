@@ -12,9 +12,9 @@ from utils.interaction import (
     show_warning,
 )
 from core.translation_facade import TranslationFacade
-from utils.path_manager import PathManager
-from utils.config import get_config
-from utils.config import get_language_dir
+from user_config.path_manager import PathManager
+from user_config import UserConfigManager
+from user_config import UserConfigManager
 from extract.workflow import TemplateManager, InteractionManager
 from translate.handler import handle_unified_translate
 
@@ -30,7 +30,7 @@ def handle_full_pipeline():
         if not mod_dir:
             return
 
-        language = get_config().CN_language
+        language = UserConfigManager().language_config.get_value("cn_language")
         facade = TranslationFacade(mod_dir, language)
 
         # 直接走"提取翻译"的智能流程，使用与提取模块相同的逻辑
@@ -50,7 +50,7 @@ def handle_full_pipeline():
         import_language = smart_config["data_sources"]["import_status"]["language"]
         output_dir = smart_config["output_config"]["output_status"]["mod_dir"]
         output_language = smart_config["output_config"]["output_status"]["language"]
-        output_csv = get_config().output_csv
+        output_csv = UserConfigManager().language_config.get_value("output_csv")
 
         # 执行提取
         translations = template_manager.extract_and_generate_templates(
@@ -66,7 +66,10 @@ def handle_full_pipeline():
 
         # 提取生成的 CSV 路径（与提取流程一致）
         export_csv_path = str(
-            get_language_dir(output_dir, output_language) / output_csv
+            UserConfigManager().language_config.get_language_dir(
+                output_dir, output_language
+            )
+            / output_csv
         )
 
         if translations and confirm_action("是否立即进行机翻并导入？"):

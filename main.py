@@ -41,7 +41,8 @@ if str(project_root) not in sys.path:
 
 # 统一导入项目内部模块（避免分散导入导致的分组问题）
 from batch.handler import handle_batch
-from config_manage.handler import handle_config_manage
+
+# 配置管理功能直接集成
 from corpus.handler import handle_corpus
 from extract import handle_extract
 from full_pipeline.handler import handle_full_pipeline
@@ -52,6 +53,26 @@ from utils.ui_style import confirm_action, ui
 
 # 初始化 colorama 以支持 Windows 终端颜色
 init()
+
+
+def handle_config_manage():
+    """处理配置管理功能"""
+    from utils.logging_config import get_logger
+    from utils.interaction import show_error
+    from user_config import UserConfigManager
+    from user_config.ui import MainConfigUI
+
+    logger = get_logger(__name__)
+
+    try:
+        # 直接启动新的配置系统
+        config_manager = UserConfigManager()
+        config_ui = MainConfigUI(config_manager)
+        config_ui.show_main_menu()
+
+    except Exception as e:
+        show_error(f"启动配置系统失败: {str(e)}")
+        logger.error("启动配置系统失败: %s", str(e), exc_info=True)
 
 
 def main():

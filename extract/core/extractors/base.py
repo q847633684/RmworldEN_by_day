@@ -9,7 +9,7 @@ from typing import List, Tuple, Optional, Union
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from utils.logging_config import get_logger
-from utils.config import get_config
+from user_config import UserConfigManager
 from utils.utils import XMLProcessor
 
 try:
@@ -37,7 +37,7 @@ class BaseExtractor(ABC):
         """
         self.logger = get_logger(f"{__name__}.{self.__class__.__name__}")
         if config is None:
-            config = get_config()
+            config = UserConfigManager()
         self.config = config
         self.processor = XMLProcessor()
 

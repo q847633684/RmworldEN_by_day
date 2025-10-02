@@ -9,11 +9,8 @@ RimWorld 翻译提取主处理器
 """
 
 from pathlib import Path
-from utils.config import (
-    get_config,
-    get_language_subdir,
-    get_language_dir,
-)
+from user_config import UserConfigManager
+from core.exceptions import ConfigurationError
 from utils.logging_config import get_logger, log_user_action, log_error_with_context
 from utils.interaction import (
     select_mod_path_with_version_detection,
@@ -22,8 +19,8 @@ from utils.interaction import (
     show_info,
     show_warning,
 )
-from utils.path_manager import PathManager
-from utils.config import ConfigError
+from user_config.path_manager import PathManager
+from user_config.core.base_config import BaseConfig
 from .manager import TemplateManager
 from .interaction import InteractionManager
 
@@ -31,10 +28,10 @@ from .interaction import InteractionManager
 def handle_extract():
     """处理提取模板功能"""
     logger = get_logger(f"{__name__}.handle_extract")
-    config = get_config()
+    config = UserConfigManager()
 
-    print(f"日志文件路径：{config.log_file}")
-    if config.debug_mode:
+    print(f"日志文件路径：{config.system_config.get_value('log_file')}")
+    if config.system_config.get_value("debug_mode"):
         print("调试模式已开启，详细日志见日志文件。")
 
     logger.info("开始处理提取模板功能")
@@ -73,7 +70,9 @@ def handle_extract():
                 f"智能配置：数据来源={data_source_choice}, 模板结构={template_structure}, 冲突处理={conflict_resolution}"
             )
 
-            output_csv = config.output_csv
+            output_csv = config.language_config.get_value(
+                "output_csv", "translations.csv"
+            )
             output_path = Path(output_dir)
 
             # 根据冲突处理方式执行相应操作
@@ -88,13 +87,13 @@ def handle_extract():
                     has_input_keyed=has_input_keyed,
                     output_csv=output_csv,
                 )
+                show_success(f"智能提取完成！共提取 {len(translations)} 条翻译")
             else:  # 包括 'rebuild' 和 'new'
                 # 步骤 1: 根据模式处理文件系统
                 if conflict_resolution == "rebuild":
                     # 重建：清空输出目录
-                    language_dir = get_language_dir(
-                        base_dir=output_path,
-                        language=output_language,
+                    language_dir = config.language_config.get_language_dir(
+                        output_path, output_language
                     )
                     if language_dir.exists():
                         try:
@@ -124,28 +123,22 @@ def handle_extract():
                     has_input_keyed=has_input_keyed,
                     output_csv=output_csv,
                 )
-
-                # 步骤 3: 根据模式显示不同的成功消息
-                if conflict_resolution == "rebuild":
-                    show_success(f"重建完成！共提取 {len(translations)} 条翻译")
-                else:  # 'new'
-                    show_success(f"智能提取完成！共提取 {len(translations)} 条翻译")
-
+                show_success(f"重建完成！共提取 {len(translations)} 条翻译")
             show_info(f"输出目录：{output_dir}")
 
         except (OSError, IOError, ValueError, RuntimeError) as e:
             show_error(f"智能提取失败: {str(e)}")
             log_error_with_context(e, "智能提取失败", mod_dir=mod_dir)
-            if config.debug_mode:
+            if config.system_config.get_value("debug_mode", False):
                 import traceback
 
                 traceback.print_exc()
-        except ConfigError as e:
+        except ConfigurationError as e:
             show_error(
                 f"❌ 配置错误：{e}\n请检查 config.py 或用户配置文件，或尝试重新加载配置。"
             )
             log_error_with_context(e, "配置错误", mod_dir=mod_dir)
-            if config.debug_mode:
+            if config.system_config.get_value("debug_mode", False):
                 import traceback
 
                 traceback.print_exc()
@@ -153,16 +146,16 @@ def handle_extract():
     except (OSError, IOError, ValueError, ImportError, AttributeError) as e:
         show_error(f"提取模板功能失败: {str(e)}")
         log_error_with_context(e, "提取模板功能失败")
-        if config.debug_mode:
+        if config.system_config.get_value("debug_mode", False):
             import traceback
 
             traceback.print_exc()
-    except ConfigError as e:
+    except ConfigurationError as e:
         show_error(
             f"❌ 配置错误：{e}\n请检查 config.py 或用户配置文件，或尝试重新加载配置。"
         )
         log_error_with_context(e, "配置错误")
-        if config.debug_mode:
+        if config.system_config.get_value("debug_mode", False):
             import traceback
 
             traceback.print_exc()

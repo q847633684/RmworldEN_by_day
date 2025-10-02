@@ -7,22 +7,21 @@ from utils.logging_config import get_logger
 from utils.ui_style import ui
 from pathlib import Path
 from typing import Dict, Tuple
-
-from utils.config import (
-    get_config,
-    get_language_subdir,
-    get_language_dir,
-)
 from utils.utils import XMLProcessor, get_language_folder_path
 
-CONFIG = get_config()
+# 使用新配置系统
+from user_config import UserConfigManager
+
+CONFIG = UserConfigManager()
 logger = get_logger(__name__)
 
 
 def update_all_xml(
     mod_dir: str,
     translations: Dict[str, str],
-    language: str = CONFIG.CN_language,
+    language: str = CONFIG.language_config.get_value(
+        "cn_language", "ChineseSimplified"
+    ),
     merge: bool = True,
 ) -> None:
     """
@@ -76,7 +75,9 @@ def import_translations(
     mod_dir: str,
     merge: bool = True,
     auto_create_templates: bool = True,
-    language: str = CONFIG.CN_language,
+    language: str = CONFIG.language_config.get_value(
+        "cn_language", "ChineseSimplified"
+    ),
 ) -> bool:
     """
     将翻译CSV导入到翻译模板
@@ -96,7 +97,7 @@ def import_translations(
         # 步骤1：确保翻译模板存在
         if auto_create_templates:
             # 检查模板目录是否存在，如果不存在则提示用户先创建模板
-            if not get_language_dir(mod_dir, language).exists():
+            if not CONFIG.language_config.get_language_dir(mod_dir, language).exists():
                 logger.error("翻译模板目录不存在，请先使用提取功能创建翻译模板")
                 ui.print_error("❌ 翻译模板目录不存在，请先使用提取功能创建翻译模板")
                 return False
@@ -206,7 +207,7 @@ def _update_xml_in_subdir(
     """仅在指定子目录(Keyed/DefInjected)内更新翻译"""
     if not translations:
         return 0
-    subdir = get_language_subdir(mod_dir, language, subdir_type=subdir_type)
+    subdir = CONFIG.language_config.get_language_subdir(mod_dir, language, subdir_type)
     if not subdir.exists():
         logger.warning("语言子目录不存在: %s", subdir)
         return 0
@@ -278,27 +279,35 @@ def _split_translations(
 
 def _verify_import_results(mod_dir: str, language: str) -> bool:
     """验证导入结果"""
-    template_dir = get_language_dir(mod_dir, language)
+    template_dir = CONFIG.language_config.get_language_dir(mod_dir, language)
     if not template_dir.exists():
         logger.error("导入后模板目录不存在")
         return False
     # 检查是否有翻译文件
     has_keyed = (
         any(
-            (get_language_subdir(mod_dir, language, subdir_type="keyed").rglob("*.xml"))
+            (
+                CONFIG.language_config.get_language_subdir(
+                    mod_dir, language, "keyed"
+                ).rglob("*.xml")
+            )
         )
-        if get_language_subdir(mod_dir, language, subdir_type="keyed").exists()
+        if CONFIG.language_config.get_language_subdir(
+            mod_dir, language, "keyed"
+        ).exists()
         else False
     )
     has_definjected = (
         any(
             (
-                get_language_subdir(mod_dir, language, subdir_type="defInjected").rglob(
-                    "*.xml"
-                )
+                CONFIG.language_config.get_language_subdir(
+                    mod_dir, language, "definjected"
+                ).rglob("*.xml")
             )
         )
-        if get_language_subdir(mod_dir, language, subdir_type="defInjected").exists()
+        if CONFIG.language_config.get_language_subdir(
+            mod_dir, language, "definjected"
+        ).exists()
         else False
     )
     if not has_keyed and not has_definjected:

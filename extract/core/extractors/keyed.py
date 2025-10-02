@@ -7,7 +7,7 @@ Keyed 提取器
 from typing import List, Tuple
 from pathlib import Path
 from utils.logging_config import get_logger
-from utils.config import get_language_subdir
+from user_config import UserConfigManager
 from utils.ui_style import ui
 from .base import BaseExtractor
 from ..filters import ContentFilter
@@ -49,8 +49,8 @@ class KeyedExtractor(BaseExtractor):
         if not self._validate_source(source_path):
             return []
 
-        keyed_dir = get_language_subdir(
-            base_dir=source_path, language=language, subdir_type="keyed"
+        keyed_dir = self.config.language_config.get_language_subdir(
+            source_path, language, "keyed"
         )
 
         if not keyed_dir.exists():

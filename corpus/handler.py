@@ -11,10 +11,10 @@ from utils.interaction import (
     show_error,
     show_info,
 )
-from utils.path_manager import PathManager
+from user_config.path_manager import PathManager
 from utils.ui_style import ui
 from core.translation_facade import TranslationFacade
-from utils.config import get_config
+from user_config import UserConfigManager
 
 path_manager = PathManager()
 
@@ -90,10 +90,13 @@ def handle_corpus():
             return
 
         # 获取配置
-        config = get_config()
+        config_manager = UserConfigManager()
+        cn_language = config_manager.language_config.get_value(
+            "cn_language", "ChineseSimplified"
+        )
 
         # 创建翻译门面实例
-        facade = TranslationFacade(mod_dir, config.CN_language)
+        facade = TranslationFacade(mod_dir, cn_language)
 
         # 生成语料
         show_info("=== 开始生成语料 ===")

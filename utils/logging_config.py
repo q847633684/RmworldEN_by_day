@@ -182,6 +182,41 @@ class LoggingConfig:
         )
 
     @classmethod
+    def reload_from_user_config(cls) -> None:
+        """
+        从用户配置重新加载日志设置
+
+        当用户在配置界面修改日志设置后，可以调用此方法应用新设置
+        """
+        try:
+            from user_config import UserConfigManager
+
+            config_manager = UserConfigManager()
+            log_config = config_manager.log_config
+
+            # 重置初始化状态
+            cls._initialized = False
+
+            # 从用户配置重新设置
+            cls.setup_logging(
+                level=log_config.get_value("log_level", "INFO"),
+                enable_file_logging=log_config.get_value("log_to_file", True),
+                enable_console_logging=log_config.get_value("log_to_console", False),
+                max_file_size=log_config.get_value("log_file_size", 10) * 1024 * 1024,
+                backup_count=log_config.get_value("log_backup_count", 5),
+            )
+
+            logger = logging.getLogger(__name__)
+            logger.info("日志配置已从用户设置重新加载")
+
+        except Exception as e:
+            # 如果重新加载失败，使用默认配置
+            cls.reset_logging()
+            logger = logging.getLogger(__name__)
+            logger.error(f"从用户配置重新加载日志设置失败: {e}")
+            logger.info("已回退到默认日志配置")
+
+    @classmethod
     def _cleanup_old_logs(cls, days_to_keep: int = 1) -> None:
         """
         清理指定天数前的日志文件
@@ -341,17 +376,42 @@ def critical(msg: str, *args, **kwargs):
 
 # 自动初始化
 if not LoggingConfig.is_initialized():
-    # 从环境变量读取配置
-    log_level = os.getenv("DAY_TRANSLATION_LOG_LEVEL", "INFO")
-    enable_file_logging_env = (
-        os.getenv("DAY_TRANSLATION_LOG_TO_FILE", "true").lower() == "true"
-    )
-    enable_console_logging_env = (
-        os.getenv("DAY_TRANSLATION_LOG_TO_CONSOLE", "false").lower() == "true"
-    )
+    # 优先从用户配置读取，然后是环境变量，最后是默认值
+    log_level = "INFO"
+    enable_file_logging = True
+    enable_console_logging = False
+    max_file_size = 10 * 1024 * 1024  # 10MB
+    backup_count = 5
+
+    try:
+        # 尝试从用户配置系统读取
+        from user_config import UserConfigManager
+
+        config_manager = UserConfigManager()
+        log_config = config_manager.log_config
+
+        log_level = log_config.get_value("log_level", "INFO")
+        enable_file_logging = log_config.get_value("log_to_file", True)
+        enable_console_logging = log_config.get_value("log_to_console", False)
+        max_file_size = (
+            log_config.get_value("log_file_size", 10) * 1024 * 1024
+        )  # MB to bytes
+        backup_count = log_config.get_value("log_backup_count", 5)
+
+    except ImportError:
+        # 如果用户配置系统不可用，使用环境变量
+        log_level = os.getenv("DAY_TRANSLATION_LOG_LEVEL", "INFO")
+        enable_file_logging = (
+            os.getenv("DAY_TRANSLATION_LOG_TO_FILE", "true").lower() == "true"
+        )
+        enable_console_logging = (
+            os.getenv("DAY_TRANSLATION_LOG_TO_CONSOLE", "false").lower() == "true"
+        )
 
     LoggingConfig.setup_logging(
         level=log_level,
-        enable_file_logging=enable_file_logging_env,
-        enable_console_logging=enable_console_logging_env,
+        enable_file_logging=enable_file_logging,
+        enable_console_logging=enable_console_logging,
+        max_file_size=max_file_size,
+        backup_count=backup_count,
     )

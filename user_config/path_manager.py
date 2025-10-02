@@ -1,20 +1,19 @@
 """
 路径管理模块 - 提供统一的路径管理功能，包括路径验证、记忆、历史记录等
+
+已整合到 user_config 系统中，支持配置化的路径管理
 """
 
 import os
 import re
-import json
 from pathlib import Path
-from typing import Dict, Optional, Callable, List
+from typing import Dict, Optional, Callable, List, TYPE_CHECKING
 from utils.logging_config import get_logger
 from utils.ui_style import ui
 from dataclasses import dataclass, field
 
-from .config import get_user_config, save_user_config_to_file
-from .config import get_config
-
-CONFIG = get_config()
+if TYPE_CHECKING:
+    from .core.user_config import UserConfigManager
 
 
 @dataclass
@@ -37,20 +36,28 @@ class PathHistory:
 
 
 class PathManager:
-    """统一的路径管理器，提供路径验证、记忆、历史记录等功能"""
+    """统一的路径管理器，提供路径验证、记忆、历史记录等功能
 
-    def __init__(self):
+    已整合到 user_config 系统中，使用 PathConfig 管理路径设置和历史记录
+    """
+
+    def __init__(self, config_manager: Optional["UserConfigManager"] = None):
         """初始化路径管理器"""
         self.logger = get_logger(f"{__name__}.PathManager")
-        self.user_config = get_user_config()
-        self._history_file = os.path.join(
-            os.path.dirname(__file__), ".day_translation_history.json"
-        )
+
+        # 延迟导入避免循环依赖
+        if config_manager is None:
+            from .core.user_config import UserConfigManager
+
+            config_manager = UserConfigManager()
+
+        self.config_manager = config_manager
+        self.path_config = config_manager.path_config
+
         self._path_pattern = re.compile(
             r"^[a-zA-Z]:[\\/]|^[\\/]{2}|^[a-zA-Z0-9_\-\.]+[\\/]"
         )
-        self._history_cache: Dict[str, PathHistory] = {}
-        self._load_history()
+
         # 注册路径验证器
         self._validators: Dict[str, Callable[[str], PathValidationResult]] = {
             "dir": self._validate_directory,
@@ -63,33 +70,59 @@ class PathManager:
             "output_dir": self._validate_output_directory,
         }
 
-    def _load_history(self) -> None:
-        """加载历史记录"""
-        try:
-            if os.path.exists(self._history_file):
-                with open(self._history_file, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-                    for key, paths in data.items():
-                        self._history_cache[key] = PathHistory(
-                            paths=self._sanitize_history(paths),
-                            last_used=paths[0] if paths else None,
-                        )
-        except (OSError, IOError, json.JSONDecodeError, UnicodeDecodeError) as e:
-            self.logger.error("加载历史记录失败: %s", e)
-            self._history_cache = {}
+        # 迁移旧的历史记录文件（如果存在）
+        self._migrate_old_history()
+
+    def _migrate_old_history(self) -> None:
+        """迁移旧的历史记录文件到新配置系统"""
+        old_history_file = os.path.join(
+            os.path.dirname(__file__), ".day_translation_history.json"
+        )
+
+        if os.path.exists(old_history_file):
+            try:
+                import json
+
+                with open(old_history_file, "r", encoding="utf-8") as f:
+                    old_data = json.load(f)
+
+                # 迁移到新配置系统
+                current_history = self.path_config.get_value("path_history", {})
+                for path_type, paths in old_data.items():
+                    if path_type not in current_history:
+                        # 清理和验证路径
+                        clean_paths = self._sanitize_history(paths)
+                        if clean_paths:
+                            current_history[path_type] = clean_paths
+
+                self.path_config.set_value("path_history", current_history)
+                self.config_manager.save_config()
+
+                # 删除旧文件
+                os.remove(old_history_file)
+                self.logger.info("成功迁移旧历史记录到新配置系统")
+
+            except Exception as e:
+                self.logger.error(f"迁移旧历史记录失败: {e}")
 
     def _save_history(self) -> None:
-        """保存历史记录"""
-        try:
-            data = {
-                key: history.paths
-                for key, history in self._history_cache.items()
-                if history.paths
-            }
-            with open(self._history_file, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2, ensure_ascii=False)
-        except (OSError, IOError, PermissionError) as e:
-            self.logger.error("保存历史记录失败: %s", e)
+        """保存历史记录到配置系统"""
+        # 历史记录现在自动保存到配置文件中
+        self.config_manager.save_config()
+
+    def _get_default_from_config(self, path_type: str) -> Optional[str]:
+        """从配置中获取默认路径"""
+        path_mapping = {
+            "import_csv": "default_import_csv",
+            "export_csv": "default_export_csv",
+            "mod_dir": "default_mod_dir",
+            "output_dir": "default_output_dir",
+        }
+
+        config_key = path_mapping.get(path_type)
+        if config_key:
+            return self.path_config.get_value(config_key)
+        return None
 
     def _sanitize_history(self, paths: List[str]) -> List[str]:
         """清理历史记录"""
@@ -151,6 +184,11 @@ class PathManager:
             Optional[str]: 验证后的路径
         """
         try:
+            # 检查配置中的默认路径
+            config_default = self._get_default_from_config(path_type)
+            if config_default and not default:
+                default = config_default
+
             # 检查默认路径
             if default:
                 result = self._normalize_path(default)
@@ -165,13 +203,15 @@ class PathManager:
                     if use_default == "y":
                         return result.normalized_path
 
-            # 获取历史记录
-            history = self._history_cache.get(path_type, PathHistory())
+            # 获取历史记录（从配置系统）
+            history_paths = []
+            if self.path_config.get_value("remember_paths", True):
+                history_paths = self.path_config.get_history(path_type)
 
             # 显示历史记录
-            if history.paths:
+            if history_paths:
                 ui.print_info("\n历史记录：")
-                for i, path in enumerate(history.paths, 1):
+                for i, path in enumerate(history_paths, 1):
                     print(f"{i}. {path}")
 
             # 获取用户输入
@@ -181,8 +221,8 @@ class PathManager:
                 if choice.lower() == "q":
                     return None
 
-                if choice.isdigit() and 1 <= int(choice) <= len(history.paths):
-                    path = history.paths[int(choice) - 1]
+                if choice.isdigit() and 1 <= int(choice) <= len(history_paths):
+                    path = history_paths[int(choice) - 1]
                 else:
                     path = choice
 
@@ -194,16 +234,12 @@ class PathManager:
                 result = validator(path)
 
                 if result.is_valid:
-                    # 更新历史记录
-                    if path_type not in self._history_cache:
-                        self._history_cache[path_type] = PathHistory()
-                    history = self._history_cache[path_type]
-                    if result.normalized_path in history.paths:
-                        history.paths.remove(result.normalized_path)
-                    history.paths.insert(0, result.normalized_path)
-                    history.paths = history.paths[: history.max_length]
-                    history.last_used = result.normalized_path
-                    self._save_history()
+                    # 更新历史记录（使用新配置系统）
+                    if self.path_config.get_value("remember_paths", True):
+                        self.path_config.add_to_history(
+                            path_type, result.normalized_path
+                        )
+                        self._save_history()
 
                     return result.normalized_path
                 else:
@@ -230,20 +266,10 @@ class PathManager:
             if not result.is_valid:
                 return False
 
-            # 更新用户配置
-            self.user_config[f"default_{path_type}"] = result.normalized_path
-            save_user_config_to_file(self.user_config)
-
-            # 更新历史记录
-            if path_type not in self._history_cache:
-                self._history_cache[path_type] = PathHistory()
-            history = self._history_cache[path_type]
-            if result.normalized_path in history.paths:
-                history.paths.remove(result.normalized_path)
-            history.paths.insert(0, result.normalized_path)
-            history.paths = history.paths[: history.max_length]
-            history.last_used = result.normalized_path
-            self._save_history()
+            # 更新历史记录（使用新配置系统）
+            if self.path_config.get_value("remember_paths", True):
+                self.path_config.add_to_history(path_type, result.normalized_path)
+                self._save_history()
 
             return True
         except (OSError, IOError, ValueError) as e:
@@ -261,11 +287,18 @@ class PathManager:
             Optional[str]: 记忆的路径
         """
         try:
-            path = self.user_config.get(f"default_{path_type}")
-            if path:
-                result = self._normalize_path(path)
-                if result.is_valid and os.path.exists(result.normalized_path):
-                    return result.normalized_path
+            # 首先检查配置中的默认路径
+            default_path = self._get_default_from_config(path_type)
+            if default_path and os.path.exists(default_path):
+                return default_path
+
+            # 然后检查历史记录
+            if self.path_config.get_value("remember_paths", True):
+                history_paths = self.path_config.get_history(path_type)
+                for path in history_paths:
+                    result = self._normalize_path(path)
+                    if result.is_valid and os.path.exists(result.normalized_path):
+                        return result.normalized_path
         except (OSError, IOError, ValueError) as e:
             self.logger.error("获取记忆路径失败: %s", e)
         return None
@@ -459,7 +492,7 @@ class PathManager:
             structure_type, mod_dir, content_dir = self._detect_mod_structure_type(
                 result.normalized_path
             )
-            ui.print_info(f"🔍 检测模组结构: {structure_type} - {mod_dir}")
+            ui.print_info(f"{ui.Icons.SCAN} 检测模组结构: {structure_type} - {mod_dir}")
             if structure_type == "versioned":
                 # 让用户选择版本号，直接返回最终目录
                 final_dir = self._choose_versioned_content_dir(mod_dir)
@@ -510,9 +543,11 @@ class PathManager:
             version_dirs.sort(key=lambda x: x["version"], reverse=True)
 
             # 美化版本选择界面
-            ui.print_section_header("📦 检测到版本号结构模组", ui.Icons.INFO)
-            ui.print_info("📁 模组目录: {mod_dir}")
-            ui.print_info("🔍 发现以下可用版本：")
+            ui.print_section_header(
+                f"{ui.Icons.MODULE} 检测到版本号结构模组", ui.Icons.INFO
+            )
+            ui.print_info(f"{ui.Icons.FOLDER} 模组目录: {mod_dir}")
+            ui.print_info(f"{ui.Icons.SCAN} 发现以下可用版本：")
 
             # 准备版本名称列表用于多行显示
             version_names = [
@@ -531,14 +566,16 @@ class PathManager:
                 row_items = []
                 for j, version_info in enumerate(row_versions):
                     global_index = i + j + 1
-                    status_icon = "✅" if global_index == 1 else "📋"
+                    status_icon = (
+                        ui.Icons.SUCCESS if global_index == 1 else ui.Icons.HISTORY
+                    )
                     status_text = " (推荐)" if global_index == 1 else ""
                     item_text = f"{global_index}. {status_icon} {version_info['name']}{status_text}"
                     row_items.append(item_text.ljust(item_width))
                 print("   " + "".join(row_items))
             while True:
                 choice = input(
-                    f"\n{ui.Colors.INFO}🎯 请选择版本 (1-{len(version_dirs)}，回车默认0，q退出): {ui.Colors.RESET}"
+                    f"\n{ui.Colors.INFO}{ui.Icons.CONFIRM} 请选择版本 (1-{len(version_dirs)}，回车默认0，q退出): {ui.Colors.RESET}"
                 ).strip()
                 if not choice:
                     choice = "0"
@@ -552,15 +589,19 @@ class PathManager:
                     selected_version = version_dirs[int(choice) - 1]
                     break
                 else:
-                    ui.print_error(f"❌ 无效选择，请输入 1-{len(version_dirs)}、0 或 q")
-                    ui.print_warning("💡 提示：直接回车选择推荐版本，输入 q 退出")
-            ui.print_success("✅ 版本选择成功")
-            ui.print_info(f"📦 选择版本: {selected_version['name']}")
-            ui.print_info(f"📁 内容目录: {selected_version['path']}")
+                    ui.print_error(
+                        f"{ui.Icons.ERROR} 无效选择，请输入 1-{len(version_dirs)}、0 或 q"
+                    )
+                    ui.print_warning(
+                        f"{ui.Icons.INFO} 提示：直接回车选择推荐版本，输入 q 退出"
+                    )
+            ui.print_success(f"{ui.Icons.SUCCESS} 版本选择成功")
+            ui.print_info(f"{ui.Icons.MODULE} 选择版本: {selected_version['name']}")
+            ui.print_info(f"{ui.Icons.FOLDER} 内容目录: {selected_version['path']}")
             return selected_version["path"]
         else:
-            ui.print_warning("⚠️ 未检测到版本号结构")
-            ui.print_info("💡 该模组可能使用标准结构，将使用根目录内容")
+            ui.print_warning(f"{ui.Icons.WARNING} 未检测到版本号结构")
+            ui.print_info(f"{ui.Icons.INFO} 该模组可能使用标准结构，将使用根目录内容")
             return None
 
     def _validate_language_directory(self, path: str) -> PathValidationResult:
@@ -570,7 +611,7 @@ class PathManager:
             return result
 
         # 检查语言目录结构
-        required_dirs = {CONFIG.def_injected_dir, CONFIG.keyed_dir}
+        required_dirs = {"DefInjected", "Keyed"}  # 使用默认目录名
         found_dirs = {
             d.name for d in Path(result.normalized_path).iterdir() if d.is_dir()
         }
@@ -714,7 +755,7 @@ class PathManager:
         try:
             # 如果有智能推荐，优先显示
             if smart_recommendations:
-                ui.print_info("\n💡 智能推荐：")
+                ui.print_info(f"\n{ui.Icons.INFO} 智能推荐：")
                 for i, rec_path in enumerate(smart_recommendations, 1):
                     reason = (
                         recommendation_reasons.get(rec_path, "")
@@ -751,13 +792,15 @@ class PathManager:
 
                         return result.normalized_path
                     else:
-                        ui.print_error(f"❌ 推荐路径无效: {result.error_message}")
+                        ui.print_error(
+                            f"{ui.Icons.ERROR} 推荐路径无效: {result.error_message}"
+                        )
                         # 继续到常规输入流程
                 elif choice == "0":
                     # 用户选择手动输入，继续到常规流程
                     pass
                 else:
-                    ui.print_error("❌ 无效选择，使用常规输入方式")
+                    ui.print_error(f"{ui.Icons.ERROR} 无效选择，使用常规输入方式")
 
             # 调用现有的 get_path 方法处理常规流程
             return self.get_path(path_type, prompt, validator_type, required, default)
@@ -933,10 +976,7 @@ class PathManager:
             List[str]: 历史记录列表
         """
         try:
-            if path_type not in self._history_cache:
-                return []
-            history = self._history_cache[path_type]
-            return history.paths[:]  # 返回副本
-        except (KeyError, AttributeError) as e:
+            return self.path_config.get_history(path_type)
+        except Exception as e:
             self.logger.error("获取历史记录失败: %s", e)
             return []

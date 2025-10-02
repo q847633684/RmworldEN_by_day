@@ -10,14 +10,15 @@ from utils.logging_config import get_logger
 from utils.ui_style import ui
 
 from .translator_factory import TranslatorFactory
-from .translation_config import TranslationConfig
+
+# 翻译配置已迁移到新配置系统
 from .python_translator import AcsClient, TranslateGeneralRequest
 
 
 class UnifiedTranslator:
     """统一翻译器，自动选择最佳翻译方式"""
 
-    def __init__(self, config: Optional[TranslationConfig] = None):
+    def __init__(self, config: Optional[dict] = None):
         """
         初始化统一翻译器
 
@@ -25,7 +26,36 @@ class UnifiedTranslator:
             config: 翻译配置，如果为None则使用默认配置
         """
         self.logger = get_logger(f"{__name__}.UnifiedTranslator")
-        self.config = config or TranslationConfig()
+        # 从新配置系统获取配置
+        if config is None:
+            try:
+                from user_config import UserConfigManager
+
+                config_manager = UserConfigManager()
+                api_manager = config_manager.api_manager
+                primary_api = api_manager.get_primary_api()
+
+                if primary_api and primary_api.api_type == "aliyun":
+                    config = {
+                        "access_key_id": primary_api.get_value("access_key_id", ""),
+                        "access_key_secret": primary_api.get_value(
+                            "access_key_secret", ""
+                        ),
+                        "region_id": primary_api.get_value("region", "cn-hangzhou"),
+                        "model_id": primary_api.get_value("model_id", 27345),
+                        "sleep_sec": primary_api.get_value("sleep_sec", 0.5),
+                        "enable_interrupt": primary_api.get_value(
+                            "enable_interrupt", True
+                        ),
+                        "default_translator": "aliyun",
+                    }
+                else:
+                    config = {}
+            except Exception as e:
+                self.logger.warning(f"从新配置系统获取配置失败: {e}")
+                config = {}
+
+        self.config = config
         self.factory = TranslatorFactory(self.config)
 
         # 缓存翻译器实例

@@ -57,7 +57,7 @@ class DefInjectedExporter(BaseExporter):
         self.logger.info("按原始文件路径结构导出 DefInjected 翻译")
 
         def_injected_path = self._create_output_directory(
-            output_dir, output_language, "defInjected"
+            output_dir, output_language, "definjected"
         )
 
         # 按 file_path 分组翻译数据
@@ -106,7 +106,7 @@ class DefInjectedExporter(BaseExporter):
         self.logger.info("按 DefType 分组导出 DefInjected 翻译")
 
         def_injected_path = self._create_output_directory(
-            output_dir, output_language, "defInjected"
+            output_dir, output_language, "definjected"
         )
 
         # 按 DefType 分组翻译内容
@@ -158,7 +158,7 @@ class DefInjectedExporter(BaseExporter):
         self.logger.info("按原始 Defs 文件目录结构导出 DefInjected 翻译")
 
         def_injected_path = self._create_output_directory(
-            output_dir, output_language, "defInjected"
+            output_dir, output_language, "definjected"
         )
 
         # 按 rel_path 分组翻译数据

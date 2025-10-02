@@ -10,11 +10,8 @@ from pathlib import Path
 from typing import Dict, Any, Optional, Union
 from utils.ui_style import ui
 from utils.logging_config import get_logger, log_user_action
-from utils.path_manager import PathManager
-from utils.config import (
-    get_language_dir,
-    get_language_subdir,
-)
+from user_config.path_manager import PathManager
+from user_config import UserConfigManager
 
 
 class InteractionManager:
@@ -70,15 +67,22 @@ class InteractionManager:
         """
         self._print_separator("智能提取翻译模板工作流", "=", 60)
 
+        # 获取配置中的语言设置
+        config = UserConfigManager()
+        en_language = config.language_config.get_value("en_language", "English")
+        cn_language = config.language_config.get_value(
+            "cn_language", "ChineseSimplified"
+        )
+
         # 第一步：检测英文目录状态
         self._print_step_header(1, 5, "检测mod英文目录状态")
-        import_status = self._detect_language_directories(mod_dir, language="English")
+        import_status = self._detect_language_directories(mod_dir, language=en_language)
 
         # 第二步：检测输出目录状态
         self._print_step_header(2, 5, "检测输出目录状态")
         output_dir, output_language = self._get_output_directory(
             mod_dir,
-            language="ChineseSimplified",
+            language=cn_language,
             skip_user_selection=skip_output_selection,
         )
         output_status = self._detect_language_directories(
@@ -228,12 +232,17 @@ class InteractionManager:
         Returns:
             Dict[str, Union[bool, str]]: 目录状态
         """
-        language_dir = get_language_dir(mod_dir, language)
+        config = UserConfigManager()
+        language_dir = config.language_config.get_language_dir(mod_dir, language)
         ui.print_info(f"🔍 正在检测目录:{mod_dir} 语言:{language}...")
         ui.print_info(f"🔍 正在检测 {language_dir} 目录状态...")
 
-        def_dir = get_language_subdir(mod_dir, language, subdir_type="defInjected")
-        keyed_dir = get_language_subdir(mod_dir, language, subdir_type="keyed")
+        def_dir = config.language_config.get_language_subdir(
+            mod_dir, language, "definjected"
+        )
+        keyed_dir = config.language_config.get_language_subdir(
+            mod_dir, language, "keyed"
+        )
 
         has_definjected = def_dir.exists() and any(def_dir.rglob("*.xml"))
         has_keyed = keyed_dir.exists() and any(keyed_dir.rglob("*.xml"))
@@ -273,7 +282,8 @@ class InteractionManager:
         """
         path_manager = PathManager()
         default_dir = str(Path(mod_dir))
-        default_dirs = get_language_dir(mod_dir, language)
+        config = UserConfigManager()
+        default_dirs = config.language_config.get_language_dir(mod_dir, language)
         history = path_manager.get_history_list("output_dir")
 
         # 如果跳过用户选择，直接使用模组根目录
@@ -624,8 +634,10 @@ class InteractionManager:
         Returns:
             Optional[str]: Keyed 目录路径，如果不存在则返回 None
         """
-        en_keyed_dir = get_language_subdir(
-            base_dir=mod_dir, language="English", subdir_type="keyed"
+        config = UserConfigManager()
+        en_language = config.language_config.get_value("en_language", "English")
+        en_keyed_dir = config.language_config.get_language_subdir(
+            mod_dir, en_language, "keyed"
         )
         if en_keyed_dir.exists() and any(en_keyed_dir.rglob("*.xml")):
             return str(en_keyed_dir)

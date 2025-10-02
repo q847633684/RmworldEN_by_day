@@ -6,7 +6,7 @@
 
 import re
 from utils.logging_config import get_logger
-from utils.config import get_config
+from user_config import UserConfigManager
 from .text_validator import is_non_text
 
 
@@ -30,11 +30,12 @@ class ContentFilter:
         """
         self.logger = get_logger(f"{__name__}.ContentFilter")
         if config is None:
-            config = get_config()
+            config = UserConfigManager()
         self.config = config
-        self.default_fields = config.default_fields
-        self.ignore_fields = config.ignore_fields
-        self.non_text_patterns = config.non_text_patterns
+        # 直接使用新配置系统
+        self.default_fields = config.system_config.get_translation_fields()
+        self.ignore_fields = config.system_config.get_ignore_fields()
+        self.non_text_patterns = config.system_config.get_non_text_patterns()
 
     def filter_content(self, key: str, text: str, context: str = "") -> bool:
         """

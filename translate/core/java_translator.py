@@ -10,7 +10,8 @@ import threading
 import shutil
 from utils.logging_config import get_logger
 from utils.ui_style import ui
-from utils.config import get_user_config
+
+# 移除旧配置系统依赖
 from typing import Optional, Dict, Any
 from pathlib import Path
 from glob import glob
@@ -509,8 +510,40 @@ class JavaTranslator:
 
         ui.print_info(f"从第 {resume_line} 行开始恢复翻译")
 
-        # 从用户配置中获取必要的参数
-        cfg = get_user_config() or {}
+        # 从新配置系统获取必要的参数
+        try:
+            from user_config import UserConfigManager
+
+            config_manager = UserConfigManager()
+            api_manager = config_manager.api_manager
+            primary_api = api_manager.get_primary_api()
+
+            if primary_api and primary_api.is_enabled():
+                # 根据API类型构建配置
+                if primary_api.api_type == "aliyun":
+                    cfg = {
+                        "aliyun_access_key_id": primary_api.get_value(
+                            "access_key_id", ""
+                        ),
+                        "aliyun_access_key_secret": primary_api.get_value(
+                            "access_key_secret", ""
+                        ),
+                        "aliyun_region_id": primary_api.get_value(
+                            "region", "cn-hangzhou"
+                        ),
+                        "model_id": primary_api.get_value("model_id", 27345),
+                        "sleep_sec": primary_api.get_value("sleep_sec", 0.5),
+                        "enable_interrupt": primary_api.get_value(
+                            "enable_interrupt", True
+                        ),
+                    }
+                else:
+                    cfg = {}
+            else:
+                cfg = {}
+        except Exception as e:
+            self.logger.warning(f"从新配置系统获取配置失败: {e}")
+            cfg = {}
 
         # 直接使用原始文件进行恢复翻译
         success = self.translate_csv(

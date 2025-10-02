@@ -9,7 +9,7 @@ from typing import List, Tuple
 from pathlib import Path
 import os
 from utils.logging_config import get_logger
-from utils.config import get_config, get_language_subdir
+from user_config import UserConfigManager
 from utils.utils import XMLProcessor
 
 
@@ -29,7 +29,7 @@ class BaseExporter(ABC):
         """
         self.logger = get_logger(f"{__name__}.{self.__class__.__name__}")
         if config is None:
-            config = get_config()
+            config = UserConfigManager()
         self.config = config
         self.processor = XMLProcessor()
 
@@ -62,8 +62,10 @@ class BaseExporter(ABC):
         Returns:
             Path: 创建的输出目录路径
         """
-        output_path = get_language_subdir(
-            base_dir=output_dir, language=language, subdir_type=subdir_type
+        # 使用新配置系统获取语言子目录
+        config_manager = UserConfigManager()
+        output_path = config_manager.language_config.get_language_subdir(
+            output_dir, language, subdir_type
         )
 
         if not output_path.exists():

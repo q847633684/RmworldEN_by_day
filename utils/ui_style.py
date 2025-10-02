@@ -65,6 +65,48 @@ class UIStyle:
         BATCH = "📦"  # 批量
         CORPUS = "📚"  # 语料
 
+        # 配置系统图标
+        API = "🌐"  # API
+        MODULE = "📦"  # 模块
+        TOOLS = "🛠️"  # 工具
+        DEFAULT = "⭐"  # 默认
+        BALANCE = "⚖️"  # 负载均衡
+        TEST = "🧪"  # 测试
+        PRIORITY = "🔢"  # 优先级
+        FAILOVER = "🛡️"  # 故障切换
+        STATS = "📊"  # 统计
+        EDIT = "✏️"  # 编辑
+        TOGGLE = "🔄"  # 切换
+        RESET = "🔄"  # 重置
+        SAVE = "💾"  # 保存
+        TYPE = "🏷️"  # 类型
+        STATUS = "📊"  # 状态
+        CONFIG = "⚙️"  # 配置
+        VALID = "✅"  # 验证
+        FIELD = "📝"  # 字段
+        DEBUG = "🐛"  # 调试
+        RULES = "📋"  # 规则
+        PATTERN = "🔍"  # 模式
+        MENU = "📋"  # 菜单
+        EDIT_ALL = "📝"  # 编辑全部
+        RESULT = "📋"  # 结果
+        LANGUAGE = "🌐"  # 语言
+        LOG = "📝"  # 日志
+        UI = "🖥️"  # 界面
+        CHECK = "✅"  # 检查
+        BACKUP = "💾"  # 备份
+        RESTORE = "🔄"  # 恢复
+        CONSOLE = "💻"  # 控制台
+        SIZE = "📏"  # 大小
+        THEME = "🎨"  # 主题
+        PROGRESS = "📊"  # 进度
+        CLEAR = "🧹"  # 清理
+        NEW = "🆕"  # 新的
+        OLD = "📜"  # 旧的
+        VERSION = "🔖"  # 版本
+        RECOMMEND = "💡"  # 推荐
+        TIME = "🕐"  # 时间
+
     # 布局常量
     class Layout:
         TERMINAL_WIDTH = 80
@@ -696,13 +738,19 @@ def display_mods_with_adaptive_width(
         elif choice == "p" and current_page > 1:
             current_page -= 1
         elif choice.isdigit():
-            mod_index = int(choice) - 1
-            if 0 <= mod_index < len(current_page_mods):
+            global_mod_number = int(choice)
+            # 计算当前页面显示的模组编号范围
+            page_start_number = start_idx + 1
+            page_end_number = end_idx
+
+            if page_start_number <= global_mod_number <= page_end_number:
+                # 计算在当前页面中的相对索引
+                relative_index = global_mod_number - page_start_number
                 # 返回选中的模组路径
-                return current_page_mods[mod_index]
+                return current_page_mods[relative_index]
             else:
                 ui.print_warning(
-                    f"无效选择，请输入 1-{len(current_page_mods)} 之间的数字"
+                    f"无效选择，请输入 {page_start_number}-{page_end_number} 之间的数字"
                 )
         else:
             ui.print_warning("无效选择，请重新输入")

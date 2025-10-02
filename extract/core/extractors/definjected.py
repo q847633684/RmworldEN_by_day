@@ -7,7 +7,6 @@ DefInjected 提取器
 from typing import List, Tuple
 from pathlib import Path
 from utils.logging_config import get_logger
-from utils.config import get_language_subdir
 from utils.ui_style import ui
 from .base import BaseExtractor
 
@@ -49,8 +48,8 @@ class DefInjectedExtractor(BaseExtractor):
         if not self._validate_source(source_path):
             return []
 
-        definjected_dir = get_language_subdir(
-            base_dir=source_path, language=language, subdir_type="defInjected"
+        definjected_dir = self.config.language_config.get_language_subdir(
+            source_path, language, "definjected"
         )
 
         if not definjected_dir.exists():

@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-10-03 00:37:12",
+  "config_file_exists": true,
+  "config_file_size": 6060,
+  "aliyun_enabled": true,
+  "aliyun_complete": true,
+  "aliyun_valid": false,
+  "access_key_id_length": 0,
+  "access_key_secret_length": 0,
+  "file_enabled": true,
+  "file_access_key_id": "",
+  "file_access_key_secret": ""
+}

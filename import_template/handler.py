@@ -16,8 +16,8 @@ from utils.interaction import (
     show_warning,
 )
 from core.translation_facade import TranslationFacade
-from utils.path_manager import PathManager
-from utils.config import get_config
+from user_config.path_manager import PathManager
+from user_config import UserConfigManager
 
 path_manager = PathManager()
 
@@ -54,7 +54,7 @@ def handle_import_template():
             mod_dir = result
 
         # 创建翻译门面实例（使用配置中的目标语言）
-        language = get_config().CN_language
+        language = UserConfigManager().language_config.get_value("cn_language")
         facade = TranslationFacade(mod_dir, language)
 
         # 确认导入

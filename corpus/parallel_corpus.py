@@ -11,7 +11,7 @@ import csv
 import re
 from pathlib import Path
 from typing import List, Tuple
-from utils.config import get_config
+from user_config import UserConfigManager
 from utils.utils import XMLProcessor, get_language_folder_path
 
 try:
@@ -37,7 +37,9 @@ except (ImportError, ModuleNotFoundError):
     Fore = _DummyFore()  # type: ignore
     Style = _DummyStyle()  # type: ignore
 
-CONFIG = get_config()
+# 使用新配置系统
+from user_config import UserConfigManager
+CONFIG = UserConfigManager()
 logger = get_logger(__name__)
 
 

@@ -2,9 +2,8 @@
 Day Translation 包初始化
 """
 
-from .utils.config import TranslationConfig
-
-# UnifiedFilterRules 已整合到 utils.config 中
+# 直接使用新配置系统
+from .user_config import UserConfigManager
 from .core.translation_facade import TranslationFacade
 
-__all__ = ["TranslationConfig", "TranslationFacade"]
+__all__ = ["UserConfigManager", "TranslationFacade"]

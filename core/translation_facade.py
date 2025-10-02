@@ -13,12 +13,28 @@ from utils.logging_config import (
 from utils.ui_style import ui
 
 from .exceptions import TranslationError, TranslationImportError, ExportError
-from utils.config import get_config, ConfigError
+from user_config import UserConfigManager
+
+
+class ConfigError(Exception):
+    """配置相关错误"""
+
+    pass
+
+
 from extract.workflow import TemplateManager
 from translate import UnifiedTranslator
 from corpus.parallel_corpus import generate_parallel_corpus
 
-CONFIG = get_config()
+# 使用新配置系统
+_config_manager = None
+
+
+def get_config_manager():
+    global _config_manager
+    if _config_manager is None:
+        _config_manager = UserConfigManager()
+    return _config_manager
 
 
 class TranslationFacade:

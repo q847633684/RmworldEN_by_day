@@ -9,11 +9,12 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
 from colorama import Fore, Style
 
-from utils.config import get_config
-from utils.path_manager import PathManager
+from user_config import UserConfigManager
+from user_config.path_manager import PathManager
 from dataclasses import dataclass
 
-CONFIG = get_config()
+# 使用新配置系统
+CONFIG = UserConfigManager()
 
 
 @dataclass

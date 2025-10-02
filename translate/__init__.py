@@ -5,10 +5,10 @@
 
 from .core.unified_translator import UnifiedTranslator
 from .core.translator_factory import TranslatorFactory
-from .core.translation_config import TranslationConfig
+
+# 翻译配置已迁移到新配置系统
 
 __all__ = [
     "UnifiedTranslator",
     "TranslatorFactory",
-    "TranslationConfig",
 ]

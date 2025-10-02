@@ -6,7 +6,7 @@
 
 import re
 from utils.logging_config import get_logger
-from utils.config import get_config
+from user_config import UserConfigManager
 
 
 def is_non_text(text: str) -> bool:
@@ -30,8 +30,8 @@ def is_non_text(text: str) -> bool:
 
     # 从配置中获取非文本模式进行检查 - 添加安全检查
     try:
-        config = get_config()
-        patterns = config.non_text_patterns
+        config_manager = UserConfigManager()
+        patterns = config_manager.system_config.get_non_text_patterns()
         if patterns and hasattr(patterns, "__iter__"):
             for pattern in patterns:
                 if isinstance(pattern, str) and re.match(pattern, text):

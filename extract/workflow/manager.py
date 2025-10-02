@@ -18,8 +18,8 @@ from utils.logging_config import (
 from ..core.extractors import DefInjectedExtractor, KeyedExtractor, DefsScanner
 from ..core.exporters import DefInjectedExporter, KeyedExporter
 from ..utils import SmartMerger
-from utils.config import get_config, get_language_dir
-from utils.path_manager import PathManager
+from user_config import UserConfigManager
+from user_config.path_manager import PathManager
 
 
 class TemplateManager:
@@ -35,7 +35,7 @@ class TemplateManager:
         self.logger.debug("初始化TemplateManager")
 
         # 初始化组件
-        self.config = get_config()
+        self.config = UserConfigManager()
         self.definjected_extractor = DefInjectedExtractor(self.config)
         self.keyed_extractor = KeyedExtractor(self.config)
         self.defs_scanner = DefsScanner(self.config)
@@ -366,7 +366,12 @@ class TemplateManager:
         """
         logger = get_logger(f"{__name__}.write_merged_translations")
 
-        base_dir = get_language_dir(output_dir, output_language) / sub_dir
+        # 使用新配置系统获取语言目录
+        config_manager = UserConfigManager()
+        base_dir = (
+            config_manager.language_config.get_language_dir(output_dir, output_language)
+            / sub_dir
+        )
 
         # 按 rel_path 分组
         file_groups = {}
@@ -477,7 +482,11 @@ class TemplateManager:
         output_csv: Optional[str] = None,
     ):
         """保存翻译数据到CSV文件"""
-        csv_path = get_language_dir(output_dir, output_language) / output_csv
+        config_manager = UserConfigManager()
+        csv_path = (
+            config_manager.language_config.get_language_dir(output_dir, output_language)
+            / output_csv
+        )
         Path(csv_path).parent.mkdir(parents=True, exist_ok=True)
 
         with open(csv_path, "w", encoding="utf-8", newline="") as f:
