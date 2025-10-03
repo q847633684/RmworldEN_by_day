@@ -39,7 +39,7 @@ except (ImportError, ModuleNotFoundError):
 
 # 使用新配置系统
 from user_config import UserConfigManager
-CONFIG = UserConfigManager()
+
 logger = get_logger(__name__)
 
 
@@ -110,13 +110,23 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
                     seen.add(key)
     elif mode == "2":
         # 模式2：从中文和英文目录提取DefInjected和Keyed
-        lang_path = get_language_folder_path(CONFIG.CN_language, mod_dir)
-        src_lang_path = get_language_folder_path(CONFIG.EN_language, mod_dir)
+        config = UserConfigManager.get_instance()
+        cn_language = config.language_config.get_value(
+            "cn_language", "ChineseSimplified"
+        )
+        en_language = config.language_config.get_value("en_language", "English")
+        definjected_dir = config.language_config.get_value(
+            "definjected_dir", "DefInjected"
+        )
+        keyed_dir = config.language_config.get_value("keyed_dir", "Keyed")
 
-        def_injected_path = os.path.join(src_lang_path, CONFIG.DefInjected_dir)
-        keyed_path = os.path.join(src_lang_path, CONFIG.keyed_dir)
-        zh_def_injected_path = os.path.join(lang_path, CONFIG.DefInjected_dir)
-        zh_keyed_path = os.path.join(lang_path, CONFIG.keyed_dir)
+        lang_path = get_language_folder_path(cn_language, mod_dir)
+        src_lang_path = get_language_folder_path(en_language, mod_dir)
+
+        def_injected_path = os.path.join(src_lang_path, definjected_dir)
+        keyed_path = os.path.join(src_lang_path, keyed_dir)
+        zh_def_injected_path = os.path.join(lang_path, definjected_dir)
+        zh_keyed_path = os.path.join(lang_path, keyed_dir)
 
         # 检查 DefInjured 兼容性
         if not os.path.exists(def_injected_path):

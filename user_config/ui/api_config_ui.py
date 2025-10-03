@@ -267,15 +267,8 @@ class APIConfigUI:
 
         ui.print_header(f"编辑{api_config.name}配置", ui.Icons.EDIT)
 
-        # 显示可编辑字段（过滤掉属于组的子字段）
-        all_fields = list(schema.keys())
-        # 只显示组字段和不属于任何组的字段
-        fields = [
-            field_name
-            for field_name in all_fields
-            if schema[field_name].get("type") == "group"
-            or "group" not in schema[field_name]
-        ]
+        # 显示可编辑字段
+        fields = list(schema.keys())
 
         ui.print_section_header("可编辑字段", ui.Icons.FIELD)
 
@@ -322,12 +315,6 @@ class APIConfigUI:
     ) -> None:
         """编辑单个字段"""
         field_type = field_info.get("type", "text")
-
-        # 处理组类型字段
-        if field_type == "group":
-            self._edit_group_field(api_config, field_name, field_info)
-            return
-
         label = field_info.get("label", field_name)
         description = field_info.get("description", "")
         current_value = api_config.get_value(field_name)
@@ -351,54 +338,6 @@ class APIConfigUI:
             self._edit_number_field(api_config, field_name, field_info)
         else:
             self._edit_text_field(api_config, field_name, field_info)
-
-    def _edit_group_field(
-        self, api_config: BaseAPIConfig, group_name: str, group_info: Dict[str, Any]
-    ) -> None:
-        """编辑组字段（如AccessKey组合）"""
-        label = group_info.get("label", group_name)
-        description = group_info.get("description", "")
-        fields = group_info.get("fields", [])
-
-        ui.print_header(f"编辑{label}", ui.Icons.EDIT)
-
-        if description:
-            ui.print_info(f"说明: {description}")
-
-        # 获取完整的schema来访问子字段信息
-        schema = api_config.get_schema()
-
-        # 逐个编辑组内的字段
-        for field_name in fields:
-            if field_name in schema:
-                field_info = schema[field_name]
-                field_label = field_info.get("label", field_name)
-                field_type = field_info.get("type", "text")
-                current_value = api_config.get_value(field_name)
-
-                print(f"\n📝 {field_label}")
-                if field_info.get("description"):
-                    print(f"   说明: {field_info['description']}")
-
-                # 显示当前值
-                if field_type == "password" and current_value:
-                    print(f"   当前值: ****")
-                else:
-                    print(
-                        f"   当前值: {current_value if current_value is not None else '未设置'}"
-                    )
-
-                # 编辑字段
-                if field_type == "password":
-                    self._edit_text_field(api_config, field_name, field_info)
-                elif field_type == "select":
-                    self._edit_select_field(api_config, field_name, field_info)
-                elif field_type == "boolean":
-                    self._edit_boolean_field(api_config, field_name, field_info)
-                elif field_type == "number":
-                    self._edit_number_field(api_config, field_name, field_info)
-                else:
-                    self._edit_text_field(api_config, field_name, field_info)
 
     def _edit_text_field(
         self, api_config: BaseAPIConfig, field_name: str, field_info: Dict[str, Any]

@@ -7,9 +7,9 @@ from utils.logging_config import get_logger
 from utils.interaction import confirm_action
 from utils.ui_style import ui
 from user_config.path_manager import PathManager
-from user_config import UserConfigManager
 from extract.workflow.handler import handle_extract
 from translate.handler import handle_unified_translate
+from import_template.handler import handle_import_template
 
 path_manager = PathManager()
 
@@ -23,11 +23,14 @@ def handle_full_pipeline():
 
         # 第一步：执行提取流程
         ui.print_info("步骤 1/3: 提取翻译模板...")
-        csv_path = handle_extract()
+        result = handle_extract()
 
-        if not csv_path:
+        if not result:
             ui.print_error("提取失败，无法继续完整流程")
             return
+
+        # 解包结果：csv_path, mod_dir
+        csv_path, mod_dir = result
 
         if confirm_action("是否立即进行机翻并导入？"):
             # 第二步：执行翻译
@@ -37,7 +40,7 @@ def handle_full_pipeline():
             if translated_csv:
                 # 第三步：执行导入
                 ui.print_info("步骤 3/3: 导入翻译结果...")
-                
+                handle_import_template(translated_csv, mod_dir)
                 ui.print_success("完整流程完成！")
             else:
                 ui.print_warning("翻译未完成，跳过导入")

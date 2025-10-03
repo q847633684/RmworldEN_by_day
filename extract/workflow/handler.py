@@ -11,7 +11,6 @@ RimWorld 翻译提取主处理器
 from pathlib import Path
 from typing import Optional
 from user_config import UserConfigManager
-from core.exceptions import ConfigurationError
 from utils.logging_config import get_logger, log_user_action, log_error_with_context
 from utils.interaction import (
     select_mod_path_with_version_detection,
@@ -21,11 +20,11 @@ from .manager import TemplateManager
 from .interaction import InteractionManager
 
 
-def handle_extract() -> Optional[str]:
+def handle_extract() -> Optional[tuple]:
     """处理提取模板功能
 
     Returns:
-        Optional[str]: CSV文件路径，如果失败则返回None
+        Optional[tuple]: (csv_path, mod_dir) 元组，如果失败则返回None
     """
     logger = get_logger(f"{__name__}.handle_extract")
     config = UserConfigManager()
@@ -91,7 +90,7 @@ def handle_extract() -> Optional[str]:
                 ui.print_success(f"智能提取完成！共提取 {len(translations)} 条翻译")
                 ui.print_info(f"CSV文件：{csv_path}")
                 ui.print_info(f"输出目录：{output_dir}")
-                return csv_path
+                return (csv_path, mod_dir)
             elif conflict_resolution == "rebuild":  # 包括 'rebuild' 和 'new'
                 ui.print_info("重建模式")
                 language_dir = config.language_config.get_language_dir(
@@ -127,7 +126,7 @@ def handle_extract() -> Optional[str]:
                 ui.print_success(f"重建完成！共提取 {len(translations)} 条翻译")
                 ui.print_info(f"CSV文件：{csv_path}")
                 ui.print_info(f"输出目录：{output_dir}")
-                return csv_path
+                return (csv_path, mod_dir)
             else:
                 ui.print_info(f"无效的冲突处理方式: {conflict_resolution}")
                 return None
@@ -140,7 +139,7 @@ def handle_extract() -> Optional[str]:
 
                 traceback.print_exc()
             return None
-        except ConfigurationError as e:
+        except ValueError as e:
             ui.print_error(
                 f"❌ 配置错误：{e}\n请检查 config.py 或用户配置文件，或尝试重新加载配置。"
             )
@@ -159,7 +158,7 @@ def handle_extract() -> Optional[str]:
 
             traceback.print_exc()
         return None
-    except ConfigurationError as e:
+    except ValueError as e:
         ui.print_error(
             f"❌ 配置错误：{e}\n请检查 config.py 或用户配置文件，或尝试重新加载配置。"
         )

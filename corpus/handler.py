@@ -10,8 +10,8 @@ from utils.interaction import (
 )
 from utils.ui_style import ui
 from user_config.path_manager import PathManager
-from core.translation_facade import TranslationFacade
 from user_config import UserConfigManager
+from .parallel_corpus import generate_parallel_corpus
 
 path_manager = PathManager()
 
@@ -64,9 +64,8 @@ def select_corpus_mode(project_type: str = None):
 
 
 def handle_corpus():
-    logger = get_logger(f"{__name__}.handle_corpus")
-
     """处理生成语料功能"""
+    logger = get_logger(f"{__name__}.handle_corpus")
     try:
         # 选择模组目录
         result = select_mod_path_with_version_detection(allow_multidlc=True)
@@ -86,20 +85,14 @@ def handle_corpus():
         if not mode:
             return
 
-        # 获取配置
-        config_manager = UserConfigManager()
-        cn_language = config_manager.language_config.get_value(
-            "cn_language", "ChineseSimplified"
-        )
-
-        # 创建翻译门面实例
-        facade = TranslationFacade(mod_dir, cn_language)
-
         # 生成语料
         ui.print_info("=== 开始生成语料 ===")
         try:
-            facade.generate_corpus(mode)
-            ui.print_success("语料生成完成！")
+            corpus_count = generate_parallel_corpus(mode, mod_dir)
+            if corpus_count > 0:
+                ui.print_success(f"语料生成完成！共生成 {corpus_count} 条语料")
+            else:
+                ui.print_warning("未找到任何平行语料")
         except (OSError, IOError, ValueError, RuntimeError) as e:
             ui.print_error(f"语料生成失败: {str(e)}")
             logger.error("语料生成失败: %s", str(e), exc_info=True)

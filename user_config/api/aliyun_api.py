@@ -42,20 +42,12 @@ class AliyunAPIConfig(BaseAPIConfig):
     def get_schema(self) -> Dict[str, Any]:
         """获取配置模式"""
         return {
-            "access_keys": {
-                "type": "group",
-                "label": "访问密钥",
-                "description": "阿里云AccessKey配置",
-                "required": True,
-                "fields": ["access_key_id", "access_key_secret"],
-            },
             "access_key_id": {
                 "type": "password",
                 "label": "AccessKeyId",
                 "description": "阿里云访问密钥ID",
                 "required": True,
                 "placeholder": "请输入AccessKeyId",
-                "group": "access_keys",
             },
             "access_key_secret": {
                 "type": "password",
@@ -63,7 +55,6 @@ class AliyunAPIConfig(BaseAPIConfig):
                 "description": "阿里云访问密钥Secret",
                 "required": True,
                 "placeholder": "请输入AccessKeySecret",
-                "group": "access_keys",
             },
             "region": {
                 "type": "select",

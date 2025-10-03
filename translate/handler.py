@@ -14,7 +14,6 @@ from utils.interaction import (
 from user_config.path_manager import PathManager
 
 # 延迟导入避免循环依赖
-from core.exceptions import TranslationError
 
 
 def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
@@ -27,29 +26,17 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
     logger = get_logger(f"{__name__}.handle_unified_translate")
 
     try:
-        # 创建翻译门面实例（需要模组目录，这里使用临时目录）
-        import tempfile
-        from core.translation_facade import TranslationFacade
-        from user_config import UserConfigManager
+        # 直接使用统一翻译器
+        from translate.core.unified_translator import UnifiedTranslator
 
-        # 获取配置中的中文语言设置
-        config = UserConfigManager()
-        cn_language = config.language_config.get_value(
-            "cn_language", "ChineseSimplified"
-        )
-
-        temp_dir = tempfile.mkdtemp()
-        facade = TranslationFacade(temp_dir, cn_language)
+        # 创建统一翻译器实例
+        translator = UnifiedTranslator()
 
         # 显示翻译器状态
         ui.print_section_header("翻译器状态", ui.Icons.SETTINGS)
-        translator_status = facade.get_translator_status()
+        translator_status = translator.get_available_translators()
 
         for name, status in translator_status.items():
-            if name == "error":
-                ui.print_error(f"获取状态失败: {status}")
-                continue
-
             if status.get("available", False):
                 ui.print_success(f"✅ {name.upper()}翻译器: 可用")
                 if "jar_path" in status:
@@ -91,11 +78,11 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
             ui.print_info(f"📄 使用指定CSV文件: {os.path.basename(csv_path)}")
 
         # 检查是否可以恢复翻译
-        resume_file = facade.can_resume_translation(csv_path)
+        resume_file = translator.can_resume_translation(csv_path)
         if resume_file:
             ui.print_info(f"检测到可恢复的翻译文件: {resume_file}")
             ui.print_info("自动恢复翻译...")
-            success = facade.resume_translation(csv_path, resume_file)
+            success = translator.resume_translation(csv_path, resume_file)
             if success:
                 ui.print_success("恢复翻译完成！")
                 # 将输出CSV加入"导入翻译"的历史
@@ -161,13 +148,15 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
 
         # 执行翻译
         try:
-            facade.machine_translate(csv_path, output_csv, translator_type)
-            return output_csv  # 翻译完成，返回输出文件路径
-        except TranslationError as e:
+            success = translator.translate_csv(csv_path, output_csv, translator_type)
+            if success:
+                ui.print_success(f"翻译完成：{output_csv}")
+                return output_csv  # 翻译完成，返回输出文件路径
+            else:
+                ui.print_warning("翻译未完成或被中断")
+                return None  # 翻译未完成
+        except Exception as e:
             ui.print_error(f"翻译失败: {str(e)}")
-            return None  # 翻译失败
-        except (OSError, IOError, ValueError) as e:
-            ui.print_error(f"翻译过程中发生错误: {str(e)}")
             return None  # 翻译失败
 
     except (KeyboardInterrupt,) as e:
@@ -181,7 +170,6 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
         logger.error("统一翻译发生网络错误: %s", str(e), exc_info=True)
         return None
     except (
-        TranslationError,
         ValueError,
         RuntimeError,
         ImportError,
