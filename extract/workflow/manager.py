@@ -35,7 +35,7 @@ class TemplateManager:
         self.logger.debug("初始化TemplateManager")
 
         # 初始化组件
-        self.config = UserConfigManager()
+        self.config = UserConfigManager.get_instance()
         self.definjected_extractor = DefInjectedExtractor(self.config)
         self.keyed_extractor = KeyedExtractor(self.config)
         self.defs_scanner = DefsScanner(self.config)
@@ -52,7 +52,7 @@ class TemplateManager:
         template_structure: Optional[str] = None,
         has_input_keyed: bool = True,
         output_csv: Optional[str] = None,
-    ) -> List[Tuple[str, str, str, str]]:
+    ) -> tuple[List[Tuple[str, str, str, str]], str]:
         """
         提取翻译数据并生成模板，同时导出CSV
 
@@ -67,7 +67,7 @@ class TemplateManager:
             output_csv: CSV输出文件名
 
         Returns:
-            List[Tuple[str, str, str, str]]: 提取的翻译数据
+            tuple[List[Tuple[str, str, str, str]], str]: (提取的翻译数据, CSV文件路径)
         """
         self.logger.debug(
             "开始提取翻译数据并生成模板: import_dir=%s, output_dir=%s",
@@ -106,12 +106,14 @@ class TemplateManager:
         )
 
         # 步骤3：导出CSV到输出目录
-        # 合并所有翻译数据用于CSV导出
-        all_translations = keyed_translations + def_translations
-        self._save_translations_to_csv(
-            all_translations, output_dir, output_language, output_csv
+        csv_path = self._save_translations_to_csv(
+            keyed_translations,
+            def_translations,
+            output_dir,
+            output_language,
+            output_csv,
         )
-
+        all_translations = keyed_translations + def_translations
         # 记录数据处理统计
         log_data_processing(
             "提取翻译模板",
@@ -121,7 +123,7 @@ class TemplateManager:
         )
 
         self.logger.debug("模板生成完成，总计 %s 条翻译", len(all_translations))
-        return all_translations
+        return all_translations, csv_path
 
     def merge_mode(
         self,
@@ -132,7 +134,7 @@ class TemplateManager:
         data_source_choice: str = "defs_only",
         has_input_keyed: bool = True,
         output_csv: Optional[str] = None,
-    ) -> List[Tuple[str, str, str, str]]:
+    ) -> tuple[List[Tuple[str, str, str, str]], str]:
         """
         执行智能合并模式处理翻译数据
 
@@ -146,7 +148,7 @@ class TemplateManager:
             output_csv: CSV输出文件名
 
         Returns:
-            List[Tuple[str, str, str, str]]: 合并后的翻译数据列表
+            tuple[List[Tuple[str, str, str, str]], str]: (合并后的翻译数据列表, CSV文件路径)
         """
         # 步骤1：提取输入数据
         input_keyed, input_def = self.extract_all_translations(
@@ -187,12 +189,17 @@ class TemplateManager:
             self._write_merged_translations(
                 def_translations, output_dir, output_language, "DefInjected"
             )
-        translations = keyed_translations + def_translations
+
         # 步骤4：导出CSV到输出目录
-        self._save_translations_to_csv(
-            translations, output_dir, output_language, output_csv
+        csv_path = self._save_translations_to_csv(
+            keyed_translations,
+            def_translations,
+            output_dir,
+            output_language,
+            output_csv,
         )
-        return translations
+        translations = keyed_translations + def_translations
+        return translations, csv_path
 
     def extract_all_translations(
         self,
@@ -367,7 +374,7 @@ class TemplateManager:
         logger = get_logger(f"{__name__}.write_merged_translations")
 
         # 使用新配置系统获取语言目录
-        config_manager = UserConfigManager()
+        config_manager = UserConfigManager.get_instance()
         base_dir = (
             config_manager.language_config.get_language_dir(output_dir, output_language)
             / sub_dir
@@ -476,13 +483,25 @@ class TemplateManager:
 
     def _save_translations_to_csv(
         self,
-        translations: List[Tuple],
+        keyed_translations: List[Tuple],
+        def_translations: List[Tuple],
         output_dir: str,
         output_language: str,
         output_csv: Optional[str] = None,
-    ):
-        """保存翻译数据到CSV文件"""
-        config_manager = UserConfigManager()
+    ) -> str:
+        """保存翻译数据到CSV文件
+
+        Args:
+            keyed_translations: Keyed翻译数据列表
+            def_translations: DefInjected翻译数据列表
+            output_dir: 输出目录
+            output_language: 输出语言
+            output_csv: CSV文件名，默认为"translations.csv"
+
+        Returns:
+            str: CSV文件路径
+        """
+        config_manager = UserConfigManager.get_instance()
         csv_path = (
             config_manager.language_config.get_language_dir(output_dir, output_language)
             / output_csv
@@ -491,19 +510,28 @@ class TemplateManager:
 
         with open(csv_path, "w", encoding="utf-8", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["key", "text", "tag", "file"])
+            writer.writerow(["key", "text", "tag", "file", "type"])
+
+            # 合并所有翻译数据
+            all_translations = []
+
+            # 添加Keyed翻译数据
+            for item in keyed_translations:
+                if len(item) >= 4:
+                    all_translations.append((*item[:4], "keyed"))
+
+            # 添加DefInjected翻译数据
+            for item in def_translations:
+                if len(item) >= 4:
+                    all_translations.append((*item[:4], "def"))
 
             # 使用进度条进行导出
             for _, item in ui.iter_with_progress(
-                translations,
+                all_translations,
                 prefix="导出CSV",
-                description=f"正在导出 {len(translations)} 条翻译到CSV",
+                description=f"正在导出 {len(all_translations)} 条翻译到CSV",
             ):
-                # 只导出前四个字段，兼容不同长度的元组
-                if len(item) >= 4:
-                    writer.writerow(item[:4])
-                else:
-                    self.logger.warning("数据格式错误，跳过导出: %s", item)
+                writer.writerow(item)
 
         ui.print_success(f"CSV文件已生成: {csv_path}")
         self.logger.debug("翻译数据已保存到CSV: %s", csv_path)
@@ -513,3 +541,5 @@ class TemplateManager:
             PathManager().remember_path("import_csv", str(csv_path))
         except (OSError, IOError, PermissionError) as e:
             self.logger.warning("无法记录CSV历史路径: %s, 错误: %s", csv_path, e)
+
+        return str(csv_path)

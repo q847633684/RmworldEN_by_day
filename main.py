@@ -58,7 +58,7 @@ init()
 def handle_config_manage():
     """处理配置管理功能"""
     from utils.logging_config import get_logger
-    from utils.interaction import show_error
+    from utils.ui_style import ui
     from user_config import UserConfigManager
     from user_config.ui import MainConfigUI
 
@@ -71,7 +71,7 @@ def handle_config_manage():
         config_ui.show_main_menu()
 
     except Exception as e:
-        show_error(f"启动配置系统失败: {str(e)}")
+        ui.print_error(f"启动配置系统失败: {str(e)}")
         logger.error("启动配置系统失败: %s", str(e), exc_info=True)
 
 

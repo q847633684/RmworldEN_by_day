@@ -19,8 +19,6 @@ from user_config import UserConfigManager
 class ConfigError(Exception):
     """配置相关错误"""
 
-    pass
-
 
 from extract.workflow import TemplateManager
 from translate import UnifiedTranslator
@@ -33,7 +31,7 @@ _config_manager = None
 def get_config_manager():
     global _config_manager
     if _config_manager is None:
-        _config_manager = UserConfigManager()
+        _config_manager = UserConfigManager.get_instance()
     return _config_manager
 
 
@@ -290,7 +288,6 @@ class TranslationFacade:
             bool: 翻译是否真正完成
         """
         try:
-            import csv
 
             # 检查输出文件是否存在
             if not os.path.exists(output_csv):
@@ -399,32 +396,3 @@ class TranslationFacade:
         except (OSError, IOError, RuntimeError, AttributeError) as e:
             self.logger.error("获取翻译器状态失败: %s", e)
             return {"error": str(e)}
-
-    def extract_all_translations(
-        self,
-        data_source_choice: str = "defs",
-        direct_dir: Optional[str] = None,
-    ):
-        """
-        提取所有翻译数据的公共接口
-
-        Args:
-            data_source_choice (str): 数据来源选择 ('definjected_only', 'defs_only')
-            direct_dir (Optional[str]): 直接指定DefInjected目录路径，用于从输出目录提取现有翻译
-
-        Returns:
-            根据 direct_dir 自动判断返回格式：
-            - direct_dir=None: 返回四元组 (key, test, tag, rel_path) - 用于输入数据
-            - direct_dir=指定路径: 返回五元组 (key, test, tag, rel_path, en_test) - 用于输出数据
-
-        Raises:
-            TranslationError: 提取失败时抛出
-        """
-        try:
-            return self.template_manager.extract_all_translations(
-                data_source_choice, direct_dir
-            )
-        except (OSError, IOError, ValueError, RuntimeError) as e:
-            error_msg = f"提取翻译数据失败: {str(e)}"
-            self.logger.error(error_msg)
-            raise TranslationError(error_msg) from e

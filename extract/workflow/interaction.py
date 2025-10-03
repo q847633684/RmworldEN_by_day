@@ -282,8 +282,8 @@ class InteractionManager:
         """
         path_manager = PathManager()
         default_dir = str(Path(mod_dir))
-        config = UserConfigManager()
-        default_dirs = config.language_config.get_language_dir(mod_dir, language)
+        # config = UserConfigManager()
+        # default_dirs = config.language_config.get_language_dir(mod_dir, language)
         history = path_manager.get_history_list("output_dir")
 
         # 如果跳过用户选择，直接使用模组根目录

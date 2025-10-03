@@ -5,7 +5,7 @@ DefInjected 导出器
 """
 
 import re
-from typing import List, Tuple, Dict
+from typing import List, Tuple
 from utils.logging_config import get_logger
 from utils.ui_style import ui
 from .base import BaseExporter
@@ -61,7 +61,12 @@ class DefInjectedExporter(BaseExporter):
         )
 
         # 按 file_path 分组翻译数据
-        file_groups = self._group_by_file_path(def_translations)
+        file_groups = {}
+        for item in def_translations:
+            key, text, tag, file_path = item[:4]
+            if file_path not in file_groups:
+                file_groups[file_path] = []
+            file_groups[file_path].append((key, text, tag))
 
         # 使用进度条进行导出
         for _, (file_path, translations) in ui.iter_with_progress(
@@ -110,7 +115,31 @@ class DefInjectedExporter(BaseExporter):
         )
 
         # 按 DefType 分组翻译内容
-        file_groups = self._group_by_def_type(def_translations)
+        file_groups = {}
+        for item in def_translations:
+            full_path, text, tag, _ = item[:4]
+            # 从 full_path 生成键名和提取 def_type
+            if "/" in full_path:
+                def_type_part, field_part = full_path.split("/", 1)
+                if "." in field_part:
+                    def_name, field_path = field_part.split(".", 1)
+                    full_key = f"{def_name}.{field_path}"
+                else:
+                    full_key = field_part
+
+                # 清理 def_type 名称
+                if "." in def_type_part:
+                    def_type = def_type_part.split(".")[-1]
+                else:
+                    def_type = def_type_part
+            else:
+                full_key = full_path
+                def_type = "UnknownDef"
+
+            # 使用 def_type 作为分组依据
+            if def_type not in file_groups:
+                file_groups[def_type] = []
+            file_groups[def_type].append((full_key, text, tag))
 
         # 使用进度条进行导出
         for _, (def_type, translations) in ui.iter_with_progress(
@@ -162,7 +191,12 @@ class DefInjectedExporter(BaseExporter):
         )
 
         # 按 rel_path 分组翻译数据
-        file_groups = self._group_by_rel_path(def_translations)
+        file_groups = {}
+        for item in def_translations:
+            key, text, tag, rel_path = item[:4]
+            if rel_path not in file_groups:
+                file_groups[rel_path] = []
+            file_groups[rel_path].append((key, text, tag))
 
         # 使用进度条进行导出
         for _, (rel_path, translations) in ui.iter_with_progress(
@@ -204,59 +238,3 @@ class DefInjectedExporter(BaseExporter):
                 self._log_export_stats(
                     str(output_file), len(translations), "DefInjected"
                 )
-
-    def _group_by_file_path(
-        self, def_translations: List[Tuple]
-    ) -> Dict[str, List[Tuple]]:
-        """按 file_path 分组翻译数据"""
-        file_groups = {}
-        for item in def_translations:
-            k, t, g, f = item[:4]
-            if f not in file_groups:
-                file_groups[f] = []
-            file_groups[f].append((k, t, g))
-        return file_groups
-
-    def _group_by_def_type(
-        self, def_translations: List[Tuple]
-    ) -> Dict[str, List[Tuple]]:
-        """按 DefType 分组翻译内容"""
-        file_groups = {}
-        for item in def_translations:
-            full_path, text, tag, _ = item[:4]
-            # 从 full_path 生成键名和提取 def_type
-            if "/" in full_path:
-                def_type_part, field_part = full_path.split("/", 1)
-                if "." in field_part:
-                    def_name, field_path = field_part.split(".", 1)
-                    full_key = f"{def_name}.{field_path}"
-                else:
-                    full_key = field_part
-
-                # 清理 def_type 名称
-                if "." in def_type_part:
-                    def_type = def_type_part.split(".")[-1]
-                else:
-                    def_type = def_type_part
-            else:
-                full_key = full_path
-                def_type = "UnknownDef"
-
-            # 使用 def_type 作为分组依据
-            if def_type not in file_groups:
-                file_groups[def_type] = []
-            file_groups[def_type].append((full_key, text, tag))
-
-        return file_groups
-
-    def _group_by_rel_path(
-        self, def_translations: List[Tuple]
-    ) -> Dict[str, List[Tuple]]:
-        """按 rel_path 分组翻译数据"""
-        file_groups = {}
-        for item in def_translations:
-            key, text, tag, rel_path = item[:4]
-            if rel_path not in file_groups:
-                file_groups[rel_path] = []
-            file_groups[rel_path].append((key, text, tag))
-        return file_groups

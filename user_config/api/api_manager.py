@@ -325,3 +325,16 @@ class APIManager:
                 self.apis[api_type].from_dict(api_data)
 
         self.logger.info("从字典加载API配置完成")
+
+    def reset_to_defaults(self) -> None:
+        """重置所有API配置为默认值"""
+        for api in self.apis.values():
+            api.reset_to_defaults()
+
+        # 重置管理器设置
+        self.default_api = "aliyun"
+        self.failover_enabled = True
+        self.load_balancing = "priority"
+        self.current_api_index = 0
+
+        self.logger.info("所有API配置已重置为默认值")

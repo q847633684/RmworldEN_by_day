@@ -7,7 +7,6 @@ API配置界面
 from typing import Dict, Any
 from utils.logging_config import get_logger
 from utils.ui_style import ui
-from utils.interaction import show_success, show_error, show_info, show_warning
 from ..api.base_api import BaseAPIConfig
 
 
@@ -134,7 +133,7 @@ class APIConfigUI:
             elif choice.lower() == "x":
                 break
             else:
-                show_warning("无效选择，请重新输入")
+                ui.print_warning("无效选择，请重新输入")
 
     def _show_api_summary(self) -> None:
         """显示API状态摘要"""
@@ -184,7 +183,7 @@ class APIConfigUI:
         """显示特定API的配置"""
         api_config = self.api_manager.get_api(api_type)
         if not api_config:
-            show_error(f"未找到API: {api_type}")
+            ui.print_error(f"未找到API: {api_type}")
             return
 
         while True:
@@ -222,7 +221,7 @@ class APIConfigUI:
             elif choice.lower() == "b":
                 break
             else:
-                show_warning("无效选择，请重新输入")
+                ui.print_warning("无效选择，请重新输入")
 
     def _show_api_info(self, api_config: BaseAPIConfig) -> None:
         """显示API基本信息"""
@@ -314,9 +313,9 @@ class APIConfigUI:
                     field_name = fields[field_index - 1]
                     self._edit_field(api_config, field_name, schema[field_name])
                 else:
-                    show_error("无效选择")
+                    ui.print_error("无效选择")
             except ValueError:
-                show_error("请输入有效的数字")
+                ui.print_error("请输入有效的数字")
 
     def _edit_field(
         self, api_config: BaseAPIConfig, field_name: str, field_info: Dict[str, Any]
@@ -414,11 +413,11 @@ class APIConfigUI:
         new_value = input(prompt).strip()
         if new_value:
             api_config.set_value(field_name, new_value)
-            show_success(f"{field_info.get('label', field_name)}已更新")
+            ui.print_success(f"{field_info.get('label', field_name)}已更新")
             # 自动保存和测试
             self._auto_save_and_test(api_config)
         else:
-            show_info("保持当前值不变")
+            ui.print_info("保持当前值不变")
 
     def _edit_select_field(
         self, api_config: BaseAPIConfig, field_name: str, field_info: Dict[str, Any]
@@ -426,7 +425,7 @@ class APIConfigUI:
         """编辑选择字段"""
         options = field_info.get("options", [])
         if not options:
-            show_error("没有可选选项")
+            ui.print_error("没有可选选项")
             return
 
         print("可选值:")
@@ -450,17 +449,17 @@ class APIConfigUI:
                         new_value = option
 
                     api_config.set_value(field_name, new_value)
-                    show_success(
+                    ui.print_success(
                         f"{field_info.get('label', field_name)}已更新为: {new_value}"
                     )
                     # 自动保存和测试
                     self._auto_save_and_test(api_config)
                 else:
-                    show_error("无效选择")
+                    ui.print_error("无效选择")
             else:
-                show_info("保持当前值不变")
+                ui.print_info("保持当前值不变")
         except ValueError:
-            show_error("请输入有效的数字")
+            ui.print_error("请输入有效的数字")
 
     def _edit_boolean_field(
         self, api_config: BaseAPIConfig, field_name: str, field_info: Dict[str, Any]
@@ -475,18 +474,18 @@ class APIConfigUI:
         )
         if choice in ["y", "yes", "true", "1", "是"]:
             api_config.set_value(field_name, True)
-            show_success(f"{field_info.get('label', field_name)}已设置为: 是")
+            ui.print_success(f"{field_info.get('label', field_name)}已设置为: 是")
             # 自动保存和测试
             self._auto_save_and_test(api_config)
         elif choice in ["n", "no", "false", "0", "否"]:
             api_config.set_value(field_name, False)
-            show_success(f"{field_info.get('label', field_name)}已设置为: 否")
+            ui.print_success(f"{field_info.get('label', field_name)}已设置为: 否")
             # 自动保存和测试
             self._auto_save_and_test(api_config)
         elif choice == "":
-            show_info("保持当前值不变")
+            ui.print_info("保持当前值不变")
         else:
-            show_error("无效输入，请输入 y/n")
+            ui.print_error("无效输入，请输入 y/n")
 
     def _edit_number_field(
         self, api_config: BaseAPIConfig, field_name: str, field_info: Dict[str, Any]
@@ -515,35 +514,35 @@ class APIConfigUI:
 
                 # 验证范围
                 if min_val is not None and new_value < min_val:
-                    show_error(f"值不能小于 {min_val}")
+                    ui.print_error(f"值不能小于 {min_val}")
                     return
                 if max_val is not None and new_value > max_val:
-                    show_error(f"值不能大于 {max_val}")
+                    ui.print_error(f"值不能大于 {max_val}")
                     return
 
                 api_config.set_value(field_name, new_value)
-                show_success(
+                ui.print_success(
                     f"{field_info.get('label', field_name)}已更新为: {new_value}"
                 )
                 # 自动保存和测试
                 self._auto_save_and_test(api_config)
             else:
-                show_info("保持当前值不变")
+                ui.print_info("保持当前值不变")
         except ValueError:
-            show_error("请输入有效的数字")
+            ui.print_error("请输入有效的数字")
 
     def _test_api_connection(self, api_type: str) -> None:
         """测试API连接"""
         ui.print_header(f"测试{api_type}连接", ui.Icons.TEST)
 
-        show_info("正在测试API连接...")
+        ui.print_info("正在测试API连接...")
 
         success, message = self.api_manager.test_api(api_type)
 
         if success:
-            show_success(f"连接测试成功: {message}")
+            ui.print_success(f"连接测试成功: {message}")
         else:
-            show_error(f"连接测试失败: {message}")
+            ui.print_error(f"连接测试失败: {message}")
 
         input("\n按回车键继续...")
 
@@ -555,7 +554,7 @@ class APIConfigUI:
         api_config.set_enabled(new_status)
 
         status_text = "启用" if new_status else "禁用"
-        show_success(f"{api_config.name}已{status_text}")
+        ui.print_success(f"{api_config.name}已{status_text}")
 
     def _set_api_priority(self, api_config: BaseAPIConfig) -> None:
         """设置API优先级"""
@@ -569,13 +568,13 @@ class APIConfigUI:
                 new_priority = int(new_priority)
                 if 0 <= new_priority <= 100:
                     api_config.set_priority(new_priority)
-                    show_success(f"{api_config.name}优先级已设置为: {new_priority}")
+                    ui.print_success(f"{api_config.name}优先级已设置为: {new_priority}")
                 else:
-                    show_error("优先级必须在 0-100 范围内")
+                    ui.print_error("优先级必须在 0-100 范围内")
             else:
-                show_info("优先级保持不变")
+                ui.print_info("优先级保持不变")
         except ValueError:
-            show_error("请输入有效的数字")
+            ui.print_error("请输入有效的数字")
 
     def _reset_api_config(self, api_config: BaseAPIConfig) -> None:
         """重置API配置"""
@@ -588,11 +587,11 @@ class APIConfigUI:
         print()
         if ui.confirm(f"确定要重置{api_config.name}的所有配置吗？"):
             api_config.reset_to_defaults()
-            show_success(f"{api_config.name}配置已重置为默认值")
+            ui.print_success(f"{api_config.name}配置已重置为默认值")
             # 自动保存重置后的配置
             self._auto_save_and_test(api_config)
         else:
-            show_info("取消重置操作")
+            ui.print_info("取消重置操作")
 
     def _set_default_api(self) -> None:
         """设置默认API"""
@@ -615,15 +614,15 @@ class APIConfigUI:
                 if 1 <= choice <= len(apis):
                     api_type = list(apis.keys())[choice - 1]
                     if self.api_manager.set_default_api(api_type):
-                        show_success(f"默认API已设置为: {apis[api_type].name}")
+                        ui.print_success(f"默认API已设置为: {apis[api_type].name}")
                     else:
-                        show_error("设置默认API失败")
+                        ui.print_error("设置默认API失败")
                 else:
-                    show_error("无效选择")
+                    ui.print_error("无效选择")
             else:
-                show_info("默认API保持不变")
+                ui.print_info("默认API保持不变")
         except ValueError:
-            show_error("请输入有效的数字")
+            ui.print_error("请输入有效的数字")
 
         input("\n按回车键继续...")
 
@@ -653,13 +652,15 @@ class APIConfigUI:
                 if 1 <= choice <= len(strategies):
                     new_strategy = strategies[choice - 1][0]
                     self.api_manager.load_balancing = new_strategy
-                    show_success(f"负载均衡策略已设置为: {strategies[choice - 1][1]}")
+                    ui.print_success(
+                        f"负载均衡策略已设置为: {strategies[choice - 1][1]}"
+                    )
                 else:
-                    show_error("无效选择")
+                    ui.print_error("无效选择")
             else:
-                show_info("负载均衡策略保持不变")
+                ui.print_info("负载均衡策略保持不变")
         except ValueError:
-            show_error("请输入有效的数字")
+            ui.print_error("请输入有效的数字")
 
         # 设置故障切换
         current_failover = self.api_manager.failover_enabled
@@ -673,12 +674,12 @@ class APIConfigUI:
 
         if failover_choice in ["y", "yes", "true", "1", "是"]:
             self.api_manager.failover_enabled = True
-            show_success("故障切换已启用")
+            ui.print_success("故障切换已启用")
         elif failover_choice in ["n", "no", "false", "0", "否"]:
             self.api_manager.failover_enabled = False
-            show_success("故障切换已禁用")
+            ui.print_success("故障切换已禁用")
         elif failover_choice == "":
-            show_info("故障切换设置保持不变")
+            ui.print_info("故障切换设置保持不变")
 
         input("\n按回车键继续...")
 
@@ -686,7 +687,7 @@ class APIConfigUI:
         """测试所有API连接"""
         ui.print_header("测试所有API", ui.Icons.TEST)
 
-        show_info("正在测试所有已启用的API连接...")
+        ui.print_info("正在测试所有已启用的API连接...")
 
         results = self.api_manager.test_all_apis()
 
@@ -726,10 +727,12 @@ class APIConfigUI:
                     new_priority = int(new_priority)
                     if 0 <= new_priority <= 100:
                         api_config.set_priority(new_priority)
-                        show_success(f"{api_config.name}优先级已设置为: {new_priority}")
+                        ui.print_success(
+                            f"{api_config.name}优先级已设置为: {new_priority}"
+                        )
                     else:
-                        show_error(f"{api_config.name}优先级必须在 0-100 范围内")
+                        ui.print_error(f"{api_config.name}优先级必须在 0-100 范围内")
             except ValueError:
-                show_error(f"{api_config.name}请输入有效的数字")
+                ui.print_error(f"{api_config.name}请输入有效的数字")
 
         input("\n按回车键继续...")

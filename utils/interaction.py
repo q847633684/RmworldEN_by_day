@@ -338,24 +338,7 @@ def auto_generate_output_path(input_path: str) -> str:
     return str(input_path_obj.parent / f"{input_path_obj.stem}_zh.csv")
 
 
-def show_success(message: str):
-    """显示成功信息"""
-    ui.print_success(message)
-
-
-def show_error(message: str):
-    """显示错误信息"""
-    ui.print_error(message)
-
-
-def show_warning(message: str):
-    """显示警告信息"""
-    ui.print_warning(message)
-
-
-def show_info(message: str):
-    """显示信息"""
-    ui.print_info(message)
+# 这些函数已被移除，请直接使用 ui.print_success, ui.print_error, ui.print_warning, ui.print_info
 
 
 def wait_for_user_input(prompt: str = "按回车继续..."):
@@ -363,11 +346,4 @@ def wait_for_user_input(prompt: str = "按回车继续..."):
     safe_input(f"{UIStyle.Colors.INFO}{prompt}{UIStyle.Colors.RESET}")
 
 
-def show_progress(message: str):
-    """显示进度信息"""
-    ui.print_info(f"{ui.Icons.PROCESSING} {message}")
-
-
-def show_completion(message: str):
-    """显示完成信息"""
-    ui.print_success(f"{ui.Icons.COMPLETED} {message}")
+# 这些函数已被移除，请直接使用 ui.print_info 和 ui.print_success

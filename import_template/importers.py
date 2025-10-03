@@ -12,7 +12,8 @@ from utils.utils import XMLProcessor, get_language_folder_path
 # 使用新配置系统
 from user_config import UserConfigManager
 
-CONFIG = UserConfigManager()
+# 使用全局配置实例，避免重复初始化
+CONFIG = UserConfigManager.get_instance()
 logger = get_logger(__name__)
 
 
@@ -104,12 +105,12 @@ def import_translations(
         # 步骤2：验证CSV文件
         if not _validate_csv_file(csv_path):
             return False
-        # 步骤3：加载翻译数据
-        translations = _load_translations_from_csv(csv_path)
-        if not translations:
+        # 步骤3：加载翻译数据并按类型分组
+        keyed_translations, definjected_translations = _load_translations_from_csv(
+            csv_path
+        )
+        if not keyed_translations and not definjected_translations:
             return False
-        # 步骤3.1：按 Keyed/DefInjected 分流
-        keyed_translations, definjected_translations = _split_translations(translations)
 
         # 步骤4：分别更新 Keyed 与 DefInjected 目录下的 XML 文件
         updated_count = 0
@@ -150,11 +151,19 @@ def _validate_csv_file(csv_path: str) -> bool:
 
     try:
         with open(csv_path, "r", encoding="utf-8") as f:
-            reader = csv.reader(f)
-            header = next(reader, None)
+            reader = csv.DictReader(f)
+            header = reader.fieldnames
             if not header or not all(col in header for col in ["key", "text"]):
-                logger.error("CSV文件格式无效：缺少必要的列")
+                logger.error("CSV文件格式无效：缺少必要的列 (key, text)")
                 return False
+
+            # 检查是否有type列，如果没有则使用兼容模式
+            has_type_column = "type" in header
+            if has_type_column:
+                logger.info("检测到新格式CSV文件（包含type列）")
+            else:
+                logger.info("检测到旧格式CSV文件（无type列），将使用兼容模式")
+
             return True
     except FileNotFoundError:
         logger.error("CSV文件不存在: %s", csv_path)
@@ -170,9 +179,15 @@ def _validate_csv_file(csv_path: str) -> bool:
         return False
 
 
-def _load_translations_from_csv(csv_path: str) -> Dict[str, str]:
-    """从CSV文件加载翻译数据"""
-    translations = {}
+def _load_translations_from_csv(csv_path: str) -> Tuple[Dict[str, str], Dict[str, str]]:
+    """从CSV文件加载翻译数据，按类型分组
+
+    Returns:
+        Tuple[Dict[str, str], Dict[str, str]]: (keyed_translations, definjected_translations)
+    """
+    keyed_translations = {}
+    definjected_translations = {}
+
     try:
         with open(csv_path, "r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
@@ -180,21 +195,33 @@ def _load_translations_from_csv(csv_path: str) -> Dict[str, str]:
                 key = (row.get("key") or "").strip()
                 # 优先使用 translated 列，其次回退到 text 列
                 value = (row.get("translated") or row.get("text") or "").strip()
+                translation_type = (row.get("type") or "").strip().lower()
+
                 if key and value:
-                    translations[key] = value
-        return translations
+                    if translation_type == "keyed":
+                        keyed_translations[key] = value
+                    elif translation_type == "def":
+                        definjected_translations[key] = value
+                    else:
+                        # 兼容旧格式：如果没有type列或type为空，使用原来的规则
+                        if "/" in key:
+                            definjected_translations[key] = value
+                        else:
+                            keyed_translations[key] = value
+
+        return keyed_translations, definjected_translations
     except FileNotFoundError:
         logger.error("CSV文件不存在: %s", csv_path)
         ui.print_error(f"❌ CSV文件不存在: {csv_path}")
-        return {}
+        return {}, {}
     except PermissionError:
         logger.error("无权限访问CSV文件: %s", csv_path)
         ui.print_error(f"❌ 无权限访问CSV文件: {csv_path}")
-        return {}
+        return {}, {}
     except (OSError, ValueError, TypeError) as e:
         logger.error("加载CSV文件时发生错误: %s", e)
         ui.print_error(f"❌ 加载CSV文件失败: {e}")
-        return {}
+        return {}, {}
 
 
 def _update_xml_in_subdir(
@@ -256,25 +283,6 @@ def _update_xml_in_subdir(
     # 完成进度条
     ui.print_info("")  # 换行
     return updated_count
-
-
-def _split_translations(
-    translations: Dict[str, str],
-) -> Tuple[Dict[str, str], Dict[str, str]]:
-    """将翻译按 Keyed 与 DefInjected 分组。
-
-    规则：
-    - 含有 '/' 的 key 归类为 DefInjected（例如 ThingDef/...）。
-    - 否则归类为 Keyed。
-    """
-    keyed: Dict[str, str] = {}
-    definjected: Dict[str, str] = {}
-    for k, v in translations.items():
-        if "/" in k:
-            definjected[k] = v
-        else:
-            keyed[k] = v
-    return keyed, definjected
 
 
 def _verify_import_results(mod_dir: str, language: str) -> bool:

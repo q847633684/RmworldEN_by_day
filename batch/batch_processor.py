@@ -2,15 +2,12 @@
 批量处理器 - 处理多个模组的批量操作
 """
 
-import logging
-from utils.logging_config import get_logger, log_error_with_context
-import os
+from utils.logging_config import get_logger
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Tuple
+from typing import Dict, Optional
 from colorama import Fore, Style
 
 from user_config import UserConfigManager
-from user_config.path_manager import PathManager
 from dataclasses import dataclass
 
 # 使用新配置系统

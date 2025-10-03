@@ -9,24 +9,24 @@ RimWorld 翻译提取主处理器
 """
 
 from pathlib import Path
+from typing import Optional
 from user_config import UserConfigManager
 from core.exceptions import ConfigurationError
 from utils.logging_config import get_logger, log_user_action, log_error_with_context
 from utils.interaction import (
     select_mod_path_with_version_detection,
-    show_success,
-    show_error,
-    show_info,
-    show_warning,
 )
-from user_config.path_manager import PathManager
-from user_config.core.base_config import BaseConfig
+from utils.ui_style import ui
 from .manager import TemplateManager
 from .interaction import InteractionManager
 
 
-def handle_extract():
-    """处理提取模板功能"""
+def handle_extract() -> Optional[str]:
+    """处理提取模板功能
+
+    Returns:
+        Optional[str]: CSV文件路径，如果失败则返回None
+    """
     logger = get_logger(f"{__name__}.handle_extract")
     config = UserConfigManager()
 
@@ -41,7 +41,7 @@ def handle_extract():
         mod_dir = select_mod_path_with_version_detection()
         if not mod_dir:
             logger.info("用户取消了模组目录选择")
-            return
+            return None
 
         # 记录用户操作
         log_user_action("选择模组目录", mod_dir=mod_dir)
@@ -50,7 +50,7 @@ def handle_extract():
         template_manager = TemplateManager()
         interaction_manager = InteractionManager()
 
-        show_info("=== 开始智能提取模板 ===")
+        ui.print_info("=== 开始智能提取模板 ===")
         try:
             # 执行四步智能流程
             smart_config = interaction_manager.handle_smart_extraction_workflow(mod_dir)
@@ -66,7 +66,7 @@ def handle_extract():
             output_dir = smart_config["output_config"]["output_status"]["mod_dir"]
             output_language = smart_config["output_config"]["output_status"]["language"]
 
-            show_info(
+            ui.print_info(
                 f"智能配置：数据来源={data_source_choice}, 模板结构={template_structure}, 冲突处理={conflict_resolution}"
             )
 
@@ -77,8 +77,9 @@ def handle_extract():
 
             # 根据冲突处理方式执行相应操作
             if conflict_resolution == "merge":
+                ui.print_info("合并模式")
                 # 合并模式
-                translations = template_manager.merge_mode(
+                translations, csv_path = template_manager.merge_mode(
                     import_dir=import_dir,
                     import_language=import_language,
                     output_dir=output_dir,
@@ -87,54 +88,60 @@ def handle_extract():
                     has_input_keyed=has_input_keyed,
                     output_csv=output_csv,
                 )
-                show_success(f"智能提取完成！共提取 {len(translations)} 条翻译")
-            else:  # 包括 'rebuild' 和 'new'
-                # 步骤 1: 根据模式处理文件系统
-                if conflict_resolution == "rebuild":
-                    # 重建：清空输出目录
-                    language_dir = config.language_config.get_language_dir(
-                        output_path, output_language
+                ui.print_success(f"智能提取完成！共提取 {len(translations)} 条翻译")
+                ui.print_info(f"CSV文件：{csv_path}")
+                ui.print_info(f"输出目录：{output_dir}")
+                return csv_path
+            elif conflict_resolution == "rebuild":  # 包括 'rebuild' 和 'new'
+                ui.print_info("重建模式")
+                language_dir = config.language_config.get_language_dir(
+                    output_path, output_language
+                )
+                if language_dir.exists():
+                    try:
+                        import shutil
+
+                        for item in language_dir.iterdir():
+                            if item.is_dir():
+                                shutil.rmtree(item)
+                            else:
+                                item.unlink()
+                        ui.print_info(f"🗑️ 已清空输出目录：{language_dir}")
+                    except PermissionError as e:
+                        ui.print_warning(
+                            f"⚠️ 无法删除某些文件（可能是系统文件），跳过：{e}"
+                        )
+                        # 步骤 2: 统一执行提取
+                translations, csv_path = (
+                    template_manager.extract_and_generate_templates(
+                        import_dir=import_dir,
+                        import_language=import_language,
+                        output_dir=output_dir,
+                        output_language=output_language,
+                        data_source_choice=data_source_choice,
+                        template_structure=template_structure,
+                        has_input_keyed=has_input_keyed,
+                        output_csv=output_csv,
                     )
-                    if language_dir.exists():
-                        try:
-                            import shutil
-
-                            for item in language_dir.iterdir():
-                                if item.is_dir():
-                                    shutil.rmtree(item)
-                                else:
-                                    item.unlink()
-                            show_info(f"🗑️ 已清空输出目录：{language_dir}")
-                        except PermissionError as e:
-                            show_warning(
-                                f"⚠️ 无法删除某些文件（可能是系统文件），跳过：{e}"
-                            )
-                    else:
-                        show_info(f"📁 输出目录不存在，将创建：{language_dir}")
-
-                # 步骤 2: 统一执行提取
-                translations = template_manager.extract_and_generate_templates(
-                    import_dir=import_dir,
-                    import_language=import_language,
-                    output_dir=output_dir,
-                    output_language=output_language,
-                    data_source_choice=data_source_choice,
-                    template_structure=template_structure,
-                    has_input_keyed=has_input_keyed,
-                    output_csv=output_csv,
                 )
-                show_success(f"重建完成！共提取 {len(translations)} 条翻译")
-            show_info(f"输出目录：{output_dir}")
+                ui.print_success(f"重建完成！共提取 {len(translations)} 条翻译")
+                ui.print_info(f"CSV文件：{csv_path}")
+                ui.print_info(f"输出目录：{output_dir}")
+                return csv_path
+            else:
+                ui.print_info(f"无效的冲突处理方式: {conflict_resolution}")
+                return None
 
         except (OSError, IOError, ValueError, RuntimeError) as e:
-            show_error(f"智能提取失败: {str(e)}")
+            ui.print_error(f"智能提取失败: {str(e)}")
             log_error_with_context(e, "智能提取失败", mod_dir=mod_dir)
             if config.system_config.get_value("debug_mode", False):
                 import traceback
 
                 traceback.print_exc()
+            return None
         except ConfigurationError as e:
-            show_error(
+            ui.print_error(
                 f"❌ 配置错误：{e}\n请检查 config.py 或用户配置文件，或尝试重新加载配置。"
             )
             log_error_with_context(e, "配置错误", mod_dir=mod_dir)
@@ -142,16 +149,18 @@ def handle_extract():
                 import traceback
 
                 traceback.print_exc()
+            return None
 
     except (OSError, IOError, ValueError, ImportError, AttributeError) as e:
-        show_error(f"提取模板功能失败: {str(e)}")
+        ui.print_error(f"提取模板功能失败: {str(e)}")
         log_error_with_context(e, "提取模板功能失败")
         if config.system_config.get_value("debug_mode", False):
             import traceback
 
             traceback.print_exc()
+        return None
     except ConfigurationError as e:
-        show_error(
+        ui.print_error(
             f"❌ 配置错误：{e}\n请检查 config.py 或用户配置文件，或尝试重新加载配置。"
         )
         log_error_with_context(e, "配置错误")
@@ -159,3 +168,4 @@ def handle_extract():
             import traceback
 
             traceback.print_exc()
+        return None

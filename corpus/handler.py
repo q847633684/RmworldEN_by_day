@@ -7,12 +7,9 @@ from utils.logging_config import get_logger
 
 from utils.interaction import (
     select_mod_path_with_version_detection,
-    show_success,
-    show_error,
-    show_info,
 )
-from user_config.path_manager import PathManager
 from utils.ui_style import ui
+from user_config.path_manager import PathManager
 from core.translation_facade import TranslationFacade
 from user_config import UserConfigManager
 
@@ -99,13 +96,13 @@ def handle_corpus():
         facade = TranslationFacade(mod_dir, cn_language)
 
         # 生成语料
-        show_info("=== 开始生成语料 ===")
+        ui.print_info("=== 开始生成语料 ===")
         try:
             facade.generate_corpus(mode)
-            show_success("语料生成完成！")
+            ui.print_success("语料生成完成！")
         except (OSError, IOError, ValueError, RuntimeError) as e:
-            show_error(f"语料生成失败: {str(e)}")
+            ui.print_error(f"语料生成失败: {str(e)}")
             logger.error("语料生成失败: %s", str(e), exc_info=True)
     except (OSError, IOError, ValueError, RuntimeError, ImportError) as e:
-        show_error(f"语料功能失败: {str(e)}")
+        ui.print_error(f"语料功能失败: {str(e)}")
         logger.error("语料功能失败: %s", str(e), exc_info=True)

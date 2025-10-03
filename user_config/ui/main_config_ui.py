@@ -7,7 +7,6 @@
 from typing import Dict, Any, Optional
 from utils.logging_config import get_logger
 from utils.ui_style import ui
-from utils.interaction import show_success, show_error, show_info, show_warning
 from ..core.user_config import UserConfigManager
 from ..core.config_validator import ConfigValidator
 from .api_config_ui import APIConfigUI
@@ -78,7 +77,7 @@ class MainConfigUI:
             elif choice.lower() == "b":
                 break
             else:
-                show_warning("无效选择，请重新输入")
+                ui.print_warning("无效选择，请重新输入")
 
     def _show_config_summary(self) -> None:
         """显示配置摘要"""
@@ -169,7 +168,7 @@ class MainConfigUI:
             elif choice == "2":
                 current = system_config.get_value("debug_mode", True)
                 system_config.set_value("debug_mode", not current)
-                show_success(f"调试模式已{'关闭' if current else '开启'}")
+                ui.print_success(f"调试模式已{'关闭' if current else '开启'}")
             elif choice == "3":
                 self._edit_system_field(
                     "preview_translatable_fields", "预览字段数", field_type="int"
@@ -177,7 +176,7 @@ class MainConfigUI:
             elif choice.lower() == "b":
                 break
             else:
-                show_warning("无效选择，请重新输入")
+                ui.print_warning("无效选择，请重新输入")
 
     def _edit_system_field(self, key: str, label: str, field_type: str = "str") -> None:
         """编辑系统配置字段"""
@@ -191,17 +190,17 @@ class MainConfigUI:
                 if field_type == "int":
                     new_value = int(new_value)
                     if new_value < 0:
-                        show_warning("数值不能为负数")
+                        ui.print_warning("数值不能为负数")
                         return
                 elif field_type == "bool":
                     new_value = new_value.lower() in ("true", "1", "yes", "on", "开启")
 
                 self.config_manager.system_config.set_value(key, new_value)
-                show_success(f"{label}已更新")
+                ui.print_success(f"{label}已更新")
             except ValueError:
-                show_warning("输入的数值格式不正确")
+                ui.print_warning("输入的数值格式不正确")
         else:
-            show_info("操作已取消")
+            ui.print_info("操作已取消")
 
     def _show_path_config(self) -> None:
         """显示路径配置"""
@@ -256,11 +255,11 @@ class MainConfigUI:
             elif choice == "3":
                 current = path_config.get_value("remember_paths", True)
                 path_config.set_value("remember_paths", not current)
-                show_success(f"路径记忆功能已{'关闭' if current else '开启'}")
+                ui.print_success(f"路径记忆功能已{'关闭' if current else '开启'}")
             elif choice.lower() == "b":
                 break
             else:
-                show_warning("无效选择，请重新输入")
+                ui.print_warning("无效选择，请重新输入")
 
     def _set_path_config(
         self, key: str, label: str, is_file: bool = False, is_directory: bool = False
@@ -281,15 +280,15 @@ class MainConfigUI:
                 # 检查父目录
                 parent_dir = os.path.dirname(new_value)
                 if parent_dir and not os.path.exists(parent_dir):
-                    show_warning(f"父目录不存在: {parent_dir}")
+                    ui.print_warning(f"父目录不存在: {parent_dir}")
             elif is_directory and new_value:
                 if not os.path.exists(new_value):
-                    show_warning(f"目录不存在: {new_value}")
+                    ui.print_warning(f"目录不存在: {new_value}")
 
             self.config_manager.path_config.set_value(key, new_value)
-            show_success(f"{label}已更新")
+            ui.print_success(f"{label}已更新")
         else:
-            show_info(f"{label}保持不变")
+            ui.print_info(f"{label}保持不变")
 
     def _show_language_config(self) -> None:
         """显示语言配置 - 界面语言和CSV格式"""
@@ -412,7 +411,7 @@ class MainConfigUI:
             elif choice.lower() == "b":
                 break
             else:
-                show_warning("无效选择，请重新输入")
+                ui.print_warning("无效选择，请重新输入")
 
     def _show_log_config(self) -> None:
         """显示日志配置"""
@@ -471,11 +470,11 @@ class MainConfigUI:
             elif choice == "2":
                 current = log_config.get_value("log_to_file", True)
                 log_config.set_value("log_to_file", not current)
-                show_success(f"文件记录已{'关闭' if current else '开启'}")
+                ui.print_success(f"文件记录已{'关闭' if current else '开启'}")
             elif choice == "3":
                 current = log_config.get_value("log_to_console", False)
                 log_config.set_value("log_to_console", not current)
-                show_success(f"控制台输出已{'关闭' if current else '开启'}")
+                ui.print_success(f"控制台输出已{'关闭' if current else '开启'}")
             elif choice == "4":
                 self._set_number_config(
                     log_config, "log_file_size", "日志文件大小(MB)", 1, 100, 10
@@ -487,7 +486,7 @@ class MainConfigUI:
             elif choice.lower() == "b":
                 break
             else:
-                show_warning("无效选择，请重新输入")
+                ui.print_warning("无效选择，请重新输入")
 
     def _show_ui_config(self) -> None:
         """显示界面配置"""
@@ -548,19 +547,19 @@ class MainConfigUI:
             elif choice == "3":
                 current = ui_config.get_value("show_progress", True)
                 ui_config.set_value("show_progress", not current)
-                show_success(f"进度条显示已{'关闭' if current else '开启'}")
+                ui.print_success(f"进度条显示已{'关闭' if current else '开启'}")
             elif choice == "4":
                 current = ui_config.get_value("confirm_actions", True)
                 ui_config.set_value("confirm_actions", not current)
-                show_success(f"操作确认已{'关闭' if current else '开启'}")
+                ui.print_success(f"操作确认已{'关闭' if current else '开启'}")
             elif choice == "5":
                 current = ui_config.get_value("auto_save", True)
                 ui_config.set_value("auto_save", not current)
-                show_success(f"自动保存已{'关闭' if current else '开启'}")
+                ui.print_success(f"自动保存已{'关闭' if current else '开启'}")
             elif choice.lower() == "b":
                 break
             else:
-                show_warning("无效选择，请重新输入")
+                ui.print_warning("无效选择，请重新输入")
 
     def _set_string_config(
         self, config_obj, key: str, label: str, default: str
@@ -572,9 +571,9 @@ class MainConfigUI:
         new_value = input(f"请输入{label} (留空保持当前值): ").strip()
         if new_value:
             config_obj.set_value(key, new_value)
-            show_success(f"{label}已更新为: {new_value}")
+            ui.print_success(f"{label}已更新为: {new_value}")
         else:
-            show_info(f"{label}保持不变")
+            ui.print_info(f"{label}保持不变")
 
     def _set_number_config(
         self, config_obj, key: str, label: str, min_val: int, max_val: int, default: int
@@ -590,13 +589,13 @@ class MainConfigUI:
                 new_value = int(new_value)
                 if min_val <= new_value <= max_val:
                     config_obj.set_value(key, new_value)
-                    show_success(f"{label}已更新为: {new_value}")
+                    ui.print_success(f"{label}已更新为: {new_value}")
                 else:
-                    show_error(f"值必须在 {min_val}-{max_val} 范围内")
+                    ui.print_error(f"值必须在 {min_val}-{max_val} 范围内")
             else:
-                show_info(f"{label}保持不变")
+                ui.print_info(f"{label}保持不变")
         except ValueError:
-            show_error("请输入有效的数字")
+            ui.print_error("请输入有效的数字")
 
     def _set_log_level(self, log_config) -> None:
         """设置日志级别"""
@@ -615,13 +614,13 @@ class MainConfigUI:
                 if 1 <= choice <= len(levels):
                     new_level = levels[choice - 1]
                     log_config.set_value("log_level", new_level)
-                    show_success(f"日志级别已更新为: {new_level}")
+                    ui.print_success(f"日志级别已更新为: {new_level}")
                 else:
-                    show_error("无效选择")
+                    ui.print_error("无效选择")
             else:
-                show_info("日志级别保持不变")
+                ui.print_info("日志级别保持不变")
         except ValueError:
-            show_error("请输入有效的数字")
+            ui.print_error("请输入有效的数字")
 
     def _set_theme_config(self, ui_config) -> None:
         """设置主题配置"""
@@ -640,13 +639,13 @@ class MainConfigUI:
                 if 1 <= choice <= len(themes):
                     new_theme = themes[choice - 1]
                     ui_config.set_value("theme", new_theme)
-                    show_success(f"界面主题已更新为: {new_theme}")
+                    ui.print_success(f"界面主题已更新为: {new_theme}")
                 else:
-                    show_error("无效选择")
+                    ui.print_error("无效选择")
             else:
-                show_info("界面主题保持不变")
+                ui.print_info("界面主题保持不变")
         except ValueError:
-            show_error("请输入有效的数字")
+            ui.print_error("请输入有效的数字")
 
     def _set_language_config(self, ui_config) -> None:
         """设置语言配置"""
@@ -665,19 +664,19 @@ class MainConfigUI:
                 if 1 <= choice <= len(languages):
                     new_lang = languages[choice - 1][0]
                     ui_config.set_value("language", new_lang)
-                    show_success(f"界面语言已更新为: {languages[choice - 1][1]}")
+                    ui.print_success(f"界面语言已更新为: {languages[choice - 1][1]}")
                 else:
-                    show_error("无效选择")
+                    ui.print_error("无效选择")
             else:
-                show_info("界面语言保持不变")
+                ui.print_info("界面语言保持不变")
         except ValueError:
-            show_error("请输入有效的数字")
+            ui.print_error("请输入有效的数字")
 
     def _validate_all_configs(self) -> None:
         """验证所有配置"""
         ui.print_header("配置验证", ui.Icons.CHECK)
 
-        show_info("正在验证所有配置...")
+        ui.print_info("正在验证所有配置...")
 
         results = self.validator.validate_all_configs(self.config_manager)
 
@@ -695,15 +694,15 @@ class MainConfigUI:
             if not result.is_valid:
                 all_valid = False
                 for error in result.errors:
-                    show_error(f"  - {error}")
+                    ui.print_error(f"  - {error}")
 
             for warning in result.warnings:
-                show_warning(f"  - {warning}")
+                ui.print_warning(f"  - {warning}")
 
         if all_valid:
-            show_success("所有配置验证通过！")
+            ui.print_success("所有配置验证通过！")
         else:
-            show_error("部分配置存在问题，请检查并修正")
+            ui.print_error("部分配置存在问题，请检查并修正")
 
         input("\n按回车键继续...")
 
@@ -712,9 +711,9 @@ class MainConfigUI:
         ui.print_header("备份配置", ui.Icons.BACKUP)
 
         if self.config_manager.backup_config():
-            show_success("配置备份成功")
+            ui.print_success("配置备份成功")
         else:
-            show_error("配置备份失败")
+            ui.print_error("配置备份失败")
 
         input("\n按回车键继续...")
 
@@ -725,11 +724,11 @@ class MainConfigUI:
         backup_path = input("请输入备份文件路径: ").strip()
         if backup_path:
             if self.config_manager.restore_config(backup_path):
-                show_success("配置恢复成功")
+                ui.print_success("配置恢复成功")
             else:
-                show_error("配置恢复失败")
+                ui.print_error("配置恢复失败")
         else:
-            show_info("取消恢复操作")
+            ui.print_info("取消恢复操作")
 
         input("\n按回车键继续...")
 
@@ -740,10 +739,10 @@ class MainConfigUI:
         if ui.confirm("确定要重置所有配置为默认值吗？此操作不可撤销！"):
             self.config_manager.reset_to_defaults()
             if self.config_manager.save_config():
-                show_success("配置已重置为默认值")
+                ui.print_success("配置已重置为默认值")
             else:
-                show_error("保存重置后的配置失败")
+                ui.print_error("保存重置后的配置失败")
         else:
-            show_info("取消重置操作")
+            ui.print_info("取消重置操作")
 
         input("\n按回车键继续...")

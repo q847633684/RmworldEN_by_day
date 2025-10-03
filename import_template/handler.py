@@ -5,16 +5,12 @@
 
 import csv
 from utils.logging_config import get_logger
-from colorama import Fore, Style
 
 from utils.interaction import (
     select_csv_path_with_history,
     confirm_action,
-    show_success,
-    show_error,
-    show_info,
-    show_warning,
 )
+from utils.ui_style import ui
 from core.translation_facade import TranslationFacade
 from user_config.path_manager import PathManager
 from user_config import UserConfigManager
@@ -23,9 +19,8 @@ path_manager = PathManager()
 
 
 def handle_import_template():
-    logger = get_logger(f"{__name__}.handle_import_template")
-
     """处理导入模板功能"""
+    logger = get_logger(f"{__name__}.handle_import_template")
     try:
         # 获取输入CSV文件
         csv_path = select_csv_path_with_history()
@@ -48,7 +43,7 @@ def handle_import_template():
 
         # 解包结果：mod_dir, project_type
         if isinstance(result, tuple):
-            mod_dir, project_type = result
+            mod_dir, _ = result  # project_type 暂时不使用
         else:
             # 兼容旧格式
             mod_dir = result
@@ -59,15 +54,15 @@ def handle_import_template():
 
         # 确认导入
         if confirm_action("确认导入翻译到模板？"):
-            show_info("=== 开始导入 ===")
+            ui.print_info("=== 开始导入 ===")
             try:
                 facade.import_translations_to_templates(csv_path)
-                show_success("导入完成！")
+                ui.print_success("导入完成！")
             except (OSError, IOError, ValueError, RuntimeError, csv.Error) as e:
-                show_error(f"导入失败: {str(e)}")
+                ui.print_error(f"导入失败: {str(e)}")
                 logger.error("导入失败: %s", str(e), exc_info=True)
         else:
-            show_warning("用户取消导入")
+            ui.print_warning("用户取消导入")
     except (OSError, IOError, ValueError, RuntimeError, ImportError) as e:
-        show_error(f"导入模板失败: {str(e)}")
+        ui.print_error(f"导入模板失败: {str(e)}")
         logger.error("导入模板失败: %s", str(e), exc_info=True)

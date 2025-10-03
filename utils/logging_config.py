@@ -17,6 +17,36 @@ from typing import Optional
 from datetime import datetime
 
 
+class DelayedFileHandler(logging.handlers.RotatingFileHandler):
+    """延迟创建文件的文件处理器，只有在有内容写入时才创建文件"""
+
+    def __init__(
+        self, filename, mode="a", maxBytes=0, backupCount=0, encoding=None, delay=False
+    ):
+        # 设置delay=True，这样文件只有在第一次写入时才会被创建
+        super().__init__(filename, mode, maxBytes, backupCount, encoding, delay=True)
+        self._file_created = False
+
+    def emit(self, record):
+        """只有在有实际内容时才创建文件"""
+        if not self._file_created:
+            # 检查文件是否已经存在且不为空
+            if self.baseFilename and Path(self.baseFilename).exists():
+                file_size = Path(self.baseFilename).stat().st_size
+                if file_size > 0:
+                    self._file_created = True
+            else:
+                # 文件不存在，延迟创建
+                pass
+
+        # 调用父类的emit方法
+        super().emit(record)
+
+        # 标记文件已创建
+        if not self._file_created:
+            self._file_created = True
+
+
 class ColoredFormatter(logging.Formatter):
     """彩色日志格式化器"""
 
@@ -124,9 +154,9 @@ class LoggingConfig:
             file_handler.setFormatter(formatter)
             root_logger.addHandler(file_handler)
 
-            # 错误日志单独记录
+            # 错误日志单独记录 - 使用延迟创建
             error_log_file = log_dir / f"day_translation_error_{timestamp}.log"
-            error_handler = logging.handlers.RotatingFileHandler(
+            error_handler = DelayedFileHandler(
                 error_log_file,
                 maxBytes=max_file_size,
                 backupCount=backup_count,

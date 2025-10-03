@@ -71,12 +71,12 @@ class PathConfig(BaseConfig):
         for key in ["default_import_csv", "default_export_csv"]:
             path = self.get_value(key)
             if path and not os.path.exists(os.path.dirname(path)):
-                self.logger.warning(f"路径不存在: {path}")
+                self.logger.warning("路径不存在: %s", path)
 
         for key in ["default_mod_dir", "default_output_dir"]:
             path = self.get_value(key)
             if path and not os.path.exists(path):
-                self.logger.warning(f"目录不存在: {path}")
+                self.logger.warning("目录不存在: %s", path)
 
         return True
 
@@ -267,7 +267,7 @@ class LanguageConfig(BaseConfig):
         for field in required_fields:
             value = self.get_value(field, "")
             if not value or not isinstance(value, str) or not value.strip():
-                self.logger.error(f"语言配置字段 {field} 不能为空")
+                self.logger.error("语言配置字段 %s 不能为空", field)
                 return False
 
         # 验证界面语言
@@ -292,13 +292,10 @@ class LanguageConfig(BaseConfig):
 
     def get_language_dir(self, base_dir, language: str):
         """获取指定语言的Languages目录路径"""
-        from pathlib import Path
-
         return Path(base_dir) / "Languages" / language
 
     def get_language_subdir(self, base_dir, language: str, subdir_type: str):
         """获取指定语言的子目录路径"""
-        from pathlib import Path
 
         subdir_type = subdir_type.lower()
         subdir_map = {
@@ -391,12 +388,12 @@ class LogConfig(BaseConfig):
         """验证日志配置"""
         log_level = self.get_value("log_level")
         if log_level not in ["DEBUG", "INFO", "WARNING", "ERROR"]:
-            self.logger.error(f"无效的日志级别: {log_level}")
+            self.logger.error("无效的日志级别: %s", log_level)
             return False
 
         log_file_size = self.get_value("log_file_size", 10)
         if log_file_size < 1 or log_file_size > 100:
-            self.logger.error(f"日志文件大小无效: {log_file_size}")
+            self.logger.error("日志文件大小无效: %s", log_file_size)
             return False
 
         return True
@@ -482,7 +479,26 @@ class UIConfig(BaseConfig):
 class UserConfigManager:
     """用户配置管理器"""
 
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(UserConfigManager, cls).__new__(cls)
+        return cls._instance
+
+    @classmethod
+    def get_instance(cls):
+        """获取单例实例"""
+        if cls._instance is None:
+            cls._instance = cls()
+        return cls._instance
+
     def __init__(self):
+        # 如果已经初始化过，跳过重复初始化
+        if hasattr(self, "_initialized"):
+            return
+
+        self._initialized = True
         """初始化用户配置管理器"""
         self.logger = get_logger(f"{__name__}.UserConfigManager")
 
@@ -531,7 +547,7 @@ class UserConfigManager:
             try:
                 results[name] = module.validate()
             except Exception as e:
-                self.logger.error(f"验证配置模块失败: {name}, 错误: {e}")
+                self.logger.error("验证配置模块失败: %s, 错误: %s", name, e)
                 results[name] = False
 
         return results
@@ -551,7 +567,7 @@ class UserConfigManager:
     def from_dict(self, data: Dict[str, Any]) -> None:
         """从字典加载配置"""
         version = data.get("version", "1.0.0")
-        self.logger.info(f"加载配置版本: {version}")
+        self.logger.info("加载配置版本: %s", version)
 
         # 加载各模块配置
         if "system" in data:
@@ -582,11 +598,11 @@ class UserConfigManager:
             with open(self.config_file, "w", encoding="utf-8") as f:
                 json.dump(config_data, f, indent=2, ensure_ascii=False)
 
-            self.logger.info(f"配置已保存到: {self.config_file}")
+            self.logger.info("配置已保存到: %s", self.config_file)
             return True
 
         except Exception as e:
-            self.logger.error(f"保存配置失败: {e}")
+            self.logger.error("保存配置失败: %s", e)
             return False
 
     def load_config(self) -> bool:
@@ -602,16 +618,17 @@ class UserConfigManager:
                 config_data = json.load(f)
 
             self.from_dict(config_data)
-            self.logger.info(f"配置已从 {self.config_file} 加载")
+            self.logger.info("配置已从 %s 加载", self.config_file)
             return True
 
         except Exception as e:
-            self.logger.error(f"加载配置失败: {e}")
+            self.logger.error("加载配置失败: %s", e)
             return False
 
     def reset_to_defaults(self) -> None:
         """重置所有配置为默认值"""
-        self.api_manager = APIManager()
+        # 只重置现有实例，避免重新创建
+        self.api_manager.reset_to_defaults()
         self.path_config.reset_to_defaults()
         self.language_config.reset_to_defaults()
         self.log_config.reset_to_defaults()
@@ -632,11 +649,11 @@ class UserConfigManager:
 
             shutil.copy2(self.config_file, backup_path)
 
-            self.logger.info(f"配置已备份到: {backup_path}")
+            self.logger.info("配置已备份到: %s", backup_path)
             return True
 
         except Exception as e:
-            self.logger.error(f"备份配置失败: {e}")
+            self.logger.error("备份配置失败: %s", e)
             return False
 
     def restore_config(self, backup_path: str) -> bool:
@@ -649,11 +666,11 @@ class UserConfigManager:
             # 重新加载配置
             self.load_config()
 
-            self.logger.info(f"配置已从 {backup_path} 恢复")
+            self.logger.info("配置已从 %s 恢复", backup_path)
             return True
 
         except Exception as e:
-            self.logger.error(f"恢复配置失败: {e}")
+            self.logger.error("恢复配置失败: %s", e)
             return False
 
     def get_config_summary(self) -> Dict[str, Any]:
