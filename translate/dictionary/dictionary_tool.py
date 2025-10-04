@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-游戏内容翻译工具
-独立工具，用于处理游戏相关词汇的翻译
+词典翻译工具
+独立工具，用于处理翻译API无法处理的敏感内容
+支持成人内容和游戏内容两种词典类型
 """
 
 import sys
@@ -13,23 +14,30 @@ project_root = Path(__file__).parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-from .game_content_translator import (
-    GameContentTranslator,
-    translate_game_content_in_csv,
+from .dictionary_translator import (
+    DictionaryTranslator,
+    translate_content_in_csv,
 )
 from ...utils.ui_style import ui
 
 
 def main():
     """主函数"""
-    parser = argparse.ArgumentParser(description="游戏内容翻译工具")
+    parser = argparse.ArgumentParser(description="词典翻译工具")
     parser.add_argument("input_csv", nargs="?", help="输入CSV文件路径")
     parser.add_argument("-o", "--output", help="输出CSV文件路径（默认自动生成）")
+    parser.add_argument(
+        "-t",
+        "--type",
+        choices=["adult", "game"],
+        default="adult",
+        help="词典类型：adult（成人内容）或 game（游戏内容），默认为 adult",
+    )
     parser.add_argument(
         "--add",
         nargs=2,
         metavar=("ENGLISH", "CHINESE"),
-        help="添加自定义翻译：--add 'colonist' '殖民者'",
+        help="添加自定义翻译：--add 'cum' '精液'",
     )
     parser.add_argument("--stats", action="store_true", help="显示词典统计信息")
     parser.add_argument("--reload", action="store_true", help="重新加载词典")
@@ -37,12 +45,12 @@ def main():
     args = parser.parse_args()
 
     # 创建翻译器
-    translator = GameContentTranslator()
+    translator = DictionaryTranslator(args.type)
 
     # 处理参数
     if args.stats:
         stats = translator.get_dictionary_stats()
-        ui.print_info("📊 游戏词典统计信息:")
+        ui.print_info(f"📊 {args.type}词典统计信息:")
         ui.print_info(f"  总条目数: {stats['total_entries']}")
         ui.print_info(f"  词典路径: {stats['dictionary_path']}")
         ui.print_info(f"  词典存在: {'是' if stats['dictionary_exists'] else '否'}")
@@ -50,17 +58,17 @@ def main():
 
     if args.reload:
         if translator.reload_dictionary():
-            ui.print_success("✅ 游戏词典重新加载成功")
+            ui.print_success(f"✅ {args.type}词典重新加载成功")
         else:
-            ui.print_error("❌ 游戏词典重新加载失败")
+            ui.print_error(f"❌ {args.type}词典重新加载失败")
         return
 
     if args.add:
         english, chinese = args.add
         if translator.add_custom_translation(english, chinese):
-            ui.print_success(f"✅ 添加游戏自定义翻译: {english} -> {chinese}")
+            ui.print_success(f"✅ 添加{args.type}自定义翻译: {english} -> {chinese}")
         else:
-            ui.print_error("❌ 添加游戏自定义翻译失败")
+            ui.print_error(f"❌ 添加{args.type}自定义翻译失败")
         return
 
     # 检查是否提供了输入文件
@@ -79,18 +87,20 @@ def main():
 
     if not output_csv:
         input_path = Path(input_csv)
-        output_csv = str(input_path.parent / f"{input_path.stem}_game_translated.csv")
+        output_csv = str(
+            input_path.parent / f"{input_path.stem}_{args.type}_translated.csv"
+        )
 
-    ui.print_info(f"🔍 开始处理游戏内容翻译...")
+    ui.print_info(f"🔍 开始处理{args.type}内容翻译...")
     ui.print_info(f"   输入文件: {input_csv}")
     ui.print_info(f"   输出文件: {output_csv}")
 
-    success = translate_game_content_in_csv(input_csv, output_csv)
+    success = translate_content_in_csv(input_csv, output_csv, args.type)
 
     if success:
-        ui.print_success(f"✅ 游戏内容翻译完成: {output_csv}")
+        ui.print_success(f"✅ {args.type}内容翻译完成: {output_csv}")
     else:
-        ui.print_error("❌ 游戏内容翻译失败")
+        ui.print_error(f"❌ {args.type}内容翻译失败")
 
 
 if __name__ == "__main__":

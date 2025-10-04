@@ -1,6 +1,7 @@
 """
-成人内容翻译处理器
+词典翻译处理器
 处理翻译API无法处理的敏感内容，使用自定义词典进行翻译
+支持成人内容和游戏内容两种词典类型
 """
 
 try:
@@ -8,41 +9,45 @@ try:
 except ImportError:
     yaml = None
 from pathlib import Path
-from typing import Dict, Optional, List, Tuple
+from typing import Dict, Optional, Tuple
 from ...utils.logging_config import get_logger
 from ...utils.ui_style import ui
 
 logger = get_logger(__name__)
 
 
-class AdultContentTranslator:
-    """成人内容翻译器"""
+class DictionaryTranslator:
+    """词典翻译器"""
 
-    def __init__(self, dictionary_path: Optional[str] = None):
+    def __init__(
+        self, dictionary_type: str = "adult", dictionary_path: Optional[str] = None
+    ):
         """
-        初始化成人内容翻译器
+        初始化词典翻译器
 
         Args:
+            dictionary_type: 词典类型 ("adult" 或 "game")
             dictionary_path: 自定义词典文件路径
         """
+        self.dictionary_type = dictionary_type
         self.dictionary = {}
         self.dictionary_path = dictionary_path or self._get_default_dictionary_path()
         self._load_dictionary()
 
     def _get_default_dictionary_path(self) -> str:
         """获取默认词典路径"""
+        filename = f"{self.dictionary_type}_dictionary.yaml"
         return str(
-            Path(__file__).parent.parent.parent
-            / "user_config"
-            / "config"
-            / "adult_dictionary.yaml"
+            Path(__file__).parent.parent.parent / "user_config" / "config" / filename
         )
 
     def _load_dictionary(self) -> None:
         """加载自定义词典"""
         try:
             if not Path(self.dictionary_path).exists():
-                logger.warning("自定义词典文件不存在: %s", self.dictionary_path)
+                logger.warning(
+                    f"{self.dictionary_type}词典文件不存在: %s", self.dictionary_path
+                )
                 return
 
             if yaml is None:
@@ -52,7 +57,7 @@ class AdultContentTranslator:
             with open(self.dictionary_path, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f)
 
-            # 加载成人内容词典（新格式）
+            # 加载词典（新格式）
             total_entries = 0
             for category, category_data in data.items():
                 if isinstance(category_data, dict) and "entries" in category_data:
@@ -64,9 +69,11 @@ class AdultContentTranslator:
                             total_entries += 1
 
             if total_entries > 0:
-                logger.info("已加载 %d 个成人内容翻译条目", total_entries)
+                logger.info(
+                    "已加载 %d 个%s内容翻译条目", total_entries, self.dictionary_type
+                )
             else:
-                logger.warning("词典文件中未找到成人内容翻译条目")
+                logger.warning("词典文件中未找到%s内容翻译条目", self.dictionary_type)
 
         except Exception as e:
             logger.error("加载自定义词典失败: %s", e)
@@ -113,7 +120,7 @@ class AdultContentTranslator:
 
     def translate_csv_file(self, input_csv: str, output_csv: str) -> bool:
         """
-        翻译CSV文件中的成人内容
+        翻译CSV文件中的内容
 
         Args:
             input_csv: 输入CSV文件路径
@@ -167,18 +174,19 @@ class AdultContentTranslator:
                     writer.writerow(row)
 
             logger.info(
-                "成人内容翻译完成: %d/%d 条记录使用了自定义词典",
+                "%s内容翻译完成: %d/%d 条记录使用了自定义词典",
+                self.dictionary_type,
                 translated_count,
                 total_count,
             )
             ui.print_success(
-                f"✅ 成人内容翻译完成: {translated_count}/{total_count} 条记录"
+                f"✅ {self.dictionary_type}内容翻译完成: {translated_count}/{total_count} 条记录"
             )
             return True
 
         except Exception as e:
             logger.error("翻译CSV文件失败: %s", e)
-            ui.print_error(f"❌ 成人内容翻译失败: {e}")
+            ui.print_error(f"❌ {self.dictionary_type}内容翻译失败: {e}")
             return False
 
     def add_custom_translation(self, english: str, chinese: str) -> bool:
@@ -200,11 +208,16 @@ class AdultContentTranslator:
                 return False
 
             self.dictionary[english_lower] = chinese_stripped
-            logger.info("添加自定义翻译: %s -> %s", english_lower, chinese_stripped)
+            logger.info(
+                "添加%s自定义翻译: %s -> %s",
+                self.dictionary_type,
+                english_lower,
+                chinese_stripped,
+            )
             return True
 
         except Exception as e:
-            logger.error("添加自定义翻译失败: %s", e)
+            logger.error("添加%s自定义翻译失败: %s", self.dictionary_type, e)
             return False
 
     def get_dictionary_stats(self) -> Dict[str, int]:
@@ -230,28 +243,54 @@ class AdultContentTranslator:
         try:
             self.dictionary.clear()
             self._load_dictionary()
-            logger.info("词典重新加载完成")
+            logger.info("%s词典重新加载完成", self.dictionary_type)
             return True
         except Exception as e:
-            logger.error("重新加载词典失败: %s", e)
+            logger.error("重新加载%s词典失败: %s", self.dictionary_type, e)
             return False
 
 
-def create_adult_content_translator() -> AdultContentTranslator:
-    """创建成人内容翻译器实例"""
-    return AdultContentTranslator()
+def create_dictionary_translator(
+    dictionary_type: str = "adult",
+) -> DictionaryTranslator:
+    """创建词典翻译器实例"""
+    return DictionaryTranslator(dictionary_type)
 
 
-def translate_adult_content_in_csv(input_csv: str, output_csv: str) -> bool:
+def translate_content_in_csv(
+    input_csv: str, output_csv: str, dictionary_type: str = "adult"
+) -> bool:
     """
-    翻译CSV文件中的成人内容（便捷函数）
+    翻译CSV文件中的内容（便捷函数）
 
     Args:
         input_csv: 输入CSV文件路径
         output_csv: 输出CSV文件路径
+        dictionary_type: 词典类型 ("adult" 或 "game")
 
     Returns:
         bool: 是否成功
     """
-    translator = create_adult_content_translator()
+    translator = create_dictionary_translator(dictionary_type)
     return translator.translate_csv_file(input_csv, output_csv)
+
+
+# 向后兼容的便捷函数
+def create_adult_content_translator() -> DictionaryTranslator:
+    """创建成人内容翻译器实例（向后兼容）"""
+    return DictionaryTranslator("adult")
+
+
+def create_game_content_translator() -> DictionaryTranslator:
+    """创建游戏内容翻译器实例（向后兼容）"""
+    return DictionaryTranslator("game")
+
+
+def translate_adult_content_in_csv(input_csv: str, output_csv: str) -> bool:
+    """翻译CSV文件中的成人内容（向后兼容）"""
+    return translate_content_in_csv(input_csv, output_csv, "adult")
+
+
+def translate_game_content_in_csv(input_csv: str, output_csv: str) -> bool:
+    """翻译CSV文件中的游戏内容（向后兼容）"""
+    return translate_content_in_csv(input_csv, output_csv, "game")
