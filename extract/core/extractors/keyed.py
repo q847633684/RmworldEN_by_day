@@ -33,7 +33,7 @@ class KeyedExtractor(BaseExtractor):
 
     def extract(
         self, source_path: str, language: str
-    ) -> List[Tuple[str, str, str, str]]:
+    ) -> List[Tuple[str, str, str, str, str]]:
         """
         从 Keyed 目录提取翻译
 
@@ -42,7 +42,7 @@ class KeyedExtractor(BaseExtractor):
             language: 语言代码
 
         Returns:
-            List[Tuple[str, str, str, str]]: 四元组列表 (key, text, tag, rel_path)
+            List[Tuple[str, str, str, str, str]]: 五元组列表 (key, text, tag, rel_path, en_text)
         """
         self.logger.info("开始从 Keyed 目录提取翻译: %s, %s", source_path, language)
 
@@ -74,7 +74,7 @@ class KeyedExtractor(BaseExtractor):
 
     def _extract_from_xml_file(
         self, xml_file: Path, keyed_dir: Path
-    ) -> List[Tuple[str, str, str, str]]:
+    ) -> List[Tuple[str, str, str, str, str]]:
         """
         从单个XML文件提取翻译数据
 
@@ -83,7 +83,7 @@ class KeyedExtractor(BaseExtractor):
             keyed_dir: Keyed目录路径
 
         Returns:
-            List[Tuple[str, str, str, str]]: 四元组列表
+            List[Tuple[str, str, str, str, str]]: 五元组列表 (key, text, tag, rel_path, en_text)
         """
         translations = []
 
@@ -94,11 +94,22 @@ class KeyedExtractor(BaseExtractor):
 
             rel_path = str(xml_file.relative_to(keyed_dir))
 
-            # 使用 XMLProcessor 提取翻译
-            for key, text, tag in self.processor.extract_translations(
-                tree, context="Keyed", filter_func=self.content_filter.filter_content
-            ):
-                translations.append((key, text, tag, rel_path))
+            # 手动处理 XML 以提取英文注释
+            last_en_comment = ""
+            for elem in tree.iter():
+                if type(elem).__name__ == "_Comment":
+                    # 处理注释节点
+                    text = elem.text or ""
+                    if text.strip().startswith("EN:"):
+                        last_en_comment = text.strip()[3:].strip()
+                elif isinstance(elem.tag, str) and not elem.tag.startswith("{"):
+                    # 处理元素节点
+                    key, text, tag, en_text = self._parse_comment_and_element(
+                        elem, last_en_comment
+                    )
+                    if self.content_filter.filter_content(key, text, "Keyed"):
+                        translations.append((key, text, tag, rel_path, en_text))
+                    # 注意：不清空last_en_comment，因为可能有多个元素共享同一个EN注释
 
             self.logger.debug(
                 "从 %s 提取到 %d 条翻译", xml_file.name, len(translations)
@@ -108,3 +119,31 @@ class KeyedExtractor(BaseExtractor):
             self.logger.error("处理Keyed文件时发生错误: %s, %s", xml_file, e)
 
         return translations
+
+    def _parse_comment_and_element(
+        self, elem, last_en_comment: str
+    ) -> Tuple[str, str, str, str]:
+        """
+        解析注释和元素，生成翻译数据
+
+        Args:
+            elem: XML元素
+            last_en_comment: 上一个EN注释内容
+
+        Returns:
+            Tuple[str, str, str, str]: (key, text, tag, en_text)
+        """
+        # 生成key
+        key = elem.tag
+
+        # 生成text
+        text = elem.text or ""
+
+        # 生成tag
+        tag = elem.tag
+
+        # 生成en_text
+        # 如果有英文注释，使用注释；否则使用text（英文目录的情况）
+        en_text = last_en_comment if last_en_comment else text
+
+        return key, text, tag, en_text

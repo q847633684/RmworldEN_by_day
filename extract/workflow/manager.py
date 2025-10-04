@@ -234,11 +234,6 @@ class TemplateManager:
             self.logger.debug(
                 "从Keyed 目录提取到 %s 条 Keyed 翻译", len(keyed_translations)
             )
-            # 将Keyed四元组转换为五元组，保持数据一致性
-            keyed_translations = [
-                (key, text, tag, rel_path, text)  # en_text用text填充
-                for key, text, tag, rel_path in keyed_translations
-            ]
         else:
             keyed_translations = []
 
@@ -266,11 +261,7 @@ class TemplateManager:
             self.logger.debug(
                 "从Defs目录提取到 %s 条 Defs 翻译", len(defs_translations)
             )
-            # 将Defs四元组转换为五元组，保持数据一致性
-            defs_translations = [
-                (key, text, tag, rel_path, text)
-                for key, text, tag, rel_path in defs_translations  # en_text用text填充
-            ]
+            # Defs提取器直接返回六元组，无需转换
             return (keyed_translations, defs_translations)
 
         # 如果到了这里，说明没有匹配的data_source_choice
@@ -287,7 +278,7 @@ class TemplateManager:
         has_input_keyed: bool = True,
     ):
         """在指定输出目录生成翻译模板结构"""
-        template_structure = template_structure or "defs_by_type"
+        template_structure = template_structure or "original_structure"
         output_path = Path(output_dir)
 
         if not keyed_translations and not def_translations:
@@ -356,9 +347,12 @@ class TemplateManager:
             )
             ui.print_success("DefInjected 模板已生成（按文件结构）")
         else:
-            ui.print_success("未知结构 请检查配置")
-            self.logger.warning("未知结构 请检查配置")
-            raise ValueError("未知结构 请检查配置")
+            # 默认使用原始结构
+            self.definjected_exporter.export_with_original_structure(
+                output_dir, output_language, def_translations
+            )
+            self.logger.debug("生成 %s 条 DefInjected 模板", len(def_translations))
+            ui.print_success("DefInjected 模板已生成")
 
     def _write_merged_translations(
         self, merged: List[Tuple], output_dir: str, output_language: str, sub_dir: str
@@ -523,6 +517,7 @@ class TemplateManager:
             # 添加DefInjected翻译数据
             for item in def_translations:
                 if len(item) >= 4:
+                    # 取前4个元素作为基础数据，添加类型标识
                     all_translations.append((*item[:4], "def"))
 
             # 使用进度条进行导出

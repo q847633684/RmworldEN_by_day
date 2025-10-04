@@ -32,7 +32,7 @@ class DefsScanner(BaseExtractor):
 
     def extract(
         self, source_path: str, language: str = None
-    ) -> List[Tuple[str, str, str, str]]:
+    ) -> List[Tuple[str, str, str, str, str, str]]:
         """
         扫描 Defs 目录中的可翻译内容
 
@@ -41,7 +41,7 @@ class DefsScanner(BaseExtractor):
             language: 语言代码（Defs扫描不需要语言参数）
 
         Returns:
-            List[Tuple[str, str, str, str]]: 四元组列表 (key, text, tag, rel_path)
+            List[Tuple[str, str, str, str, str, str]]: 六元组列表 (key, text, tag, rel_path, en_text, def_type)
         """
         self.logger.info("开始扫描 Defs 目录: %s", source_path)
 
@@ -58,7 +58,7 @@ class DefsScanner(BaseExtractor):
         xml_files = list(defs_dir.rglob("*.xml"))
 
         # 使用进度条进行提取
-        for i, xml_file in ui.iter_with_progress(
+        for _, xml_file in ui.iter_with_progress(
             xml_files,
             prefix="扫描Defs",
             description=f"正在扫描 Defs 目录中的 {len(xml_files)} 个文件",
@@ -118,8 +118,11 @@ class DefsScanner(BaseExtractor):
                         clean_path = clean_path[len(def_type) + 1 :]
 
                     full_path = f"{def_type}/{def_name}.{clean_path}"
+                    # 去除DefType/前缀，只保留defName.field
+                    key = full_path.split("/", 1)[-1] if "/" in full_path else full_path
                     rel_path = str(xml_file.relative_to(defs_dir))
-                    translations.append((full_path, text, tag, rel_path))
+                    # 导出六元组：(key, text, tag, rel_path, en_text, def_type)
+                    translations.append((key, text, tag, rel_path, text, def_type))
 
                 self.logger.debug(
                     "从 %s 提取到 %d 条翻译", def_name, len(field_translations)

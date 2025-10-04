@@ -699,4 +699,4 @@ class InteractionManager:
                     ui.print_error("请输入 1 或 2")
 
         # 默认选择
-        return "defs_by_type"
+        return "original_structure"

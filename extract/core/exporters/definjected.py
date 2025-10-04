@@ -30,7 +30,7 @@ class DefInjectedExporter(BaseExporter):
 
     def export(self, translations: List[Tuple], output_dir: str, language: str) -> bool:
         """
-        导出 DefInjected 翻译数据
+        导出 DefInjected 翻译数据（实现抽象方法）
 
         Args:
             translations: 翻译数据列表
@@ -40,8 +40,9 @@ class DefInjectedExporter(BaseExporter):
         Returns:
             bool: 是否成功
         """
-        # 默认使用按类型分组的方式
-        return self.export_with_defs_structure(output_dir, language, translations)
+        # 使用原始结构导出
+        self.export_with_original_structure(output_dir, language, translations)
+        return True
 
     def export_with_original_structure(
         self, output_dir: str, output_language: str, def_translations: List[Tuple]
@@ -106,7 +107,7 @@ class DefInjectedExporter(BaseExporter):
         Args:
             output_dir: 输出目录
             output_language: 输出语言
-            def_translations: DefInjected 翻译数据
+            def_translations: DefInjected 翻译数据（可能包含def_type信息）
         """
         self.logger.info("按 DefType 分组导出 DefInjected 翻译")
 
@@ -117,29 +118,13 @@ class DefInjectedExporter(BaseExporter):
         # 按 DefType 分组翻译内容
         file_groups = {}
         for item in def_translations:
-            full_path, text, tag, _ = item[:4]
-            # 从 full_path 生成键名和提取 def_type
-            if "/" in full_path:
-                def_type_part, field_part = full_path.split("/", 1)
-                if "." in field_part:
-                    def_name, field_path = field_part.split(".", 1)
-                    full_key = f"{def_name}.{field_path}"
-                else:
-                    full_key = field_part
-
-                # 清理 def_type 名称
-                if "." in def_type_part:
-                    def_type = def_type_part.split(".")[-1]
-                else:
-                    def_type = def_type_part
-            else:
-                full_key = full_path
-                def_type = "UnknownDef"
+            # 六元组：(key, text, tag, rel_path, en_text, def_type)
+            key, text, tag, rel_path, en_text, def_type = item[:6]
 
             # 使用 def_type 作为分组依据
             if def_type not in file_groups:
                 file_groups[def_type] = []
-            file_groups[def_type].append((full_key, text, tag))
+            file_groups[def_type].append((key, text, tag))
 
         # 使用进度条进行导出
         for _, (def_type, translations) in ui.iter_with_progress(
@@ -158,13 +143,13 @@ class DefInjectedExporter(BaseExporter):
             root = self.processor.create_element("LanguageData")
 
             # 按键名排序，保持一致性
-            for full_key, text, _ in sorted(translations, key=lambda x: x[0]):
+            for key, text, _ in sorted(translations, key=lambda x: x[0]):
                 # 添加英文注释
                 comment = self.processor.create_comment(f"EN: {text}")
                 root.append(comment)
 
                 # 添加翻译元素
-                self.processor.create_subelement(root, full_key, text)
+                self.processor.create_subelement(root, key, text)
 
             # 保存文件
             success = self._save_xml_file(root, str(output_file))
@@ -215,11 +200,8 @@ class DefInjectedExporter(BaseExporter):
                     text = ""
                 assert isinstance(text, str), f"text 非字符串: {text}"
 
-                # 去除 DefType/ 只保留 defName.字段
-                if "/" in key:
-                    _, tag_name = key.split("/", 1)
-                else:
-                    tag_name = key
+                # key已经在提取阶段去除了DefType/前缀，直接使用
+                tag_name = key
 
                 # 合法性修复：只允许字母、数字、下划线、点号，其它替换为点号
                 tag_name = re.sub(r"[^A-Za-z0-9_.]", ".", tag_name)

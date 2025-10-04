@@ -33,6 +33,8 @@ RimWorld 智能翻译合并器
 
 from typing import List, Tuple, Any, Dict
 import datetime
+import html
+import re
 from utils.logging_config import get_logger, log_data_processing, log_performance
 
 
@@ -42,7 +44,6 @@ class SmartMerger:
 
     用于处理翻译数据的智能合并，支持：
     - 自动补齐数据为标准五元组格式
-    - 规范化 key（去除 DefType/ 前缀）
     - 智能合并输入和输出数据
     - 生成包含历史记录的六元组结果
     """
@@ -51,7 +52,7 @@ class SmartMerger:
         """
         初始化时：
         - 自动补齐为五元组 (key, test, tag, rel_path, en_test)
-        - 统一规范化 key（去除 DefType/ 前缀）
+        - 创建输入和输出数据的映射表
         """
         self.logger = get_logger(f"{__name__}.SmartMerger")
 
@@ -77,29 +78,63 @@ class SmartMerger:
         )
 
     def _normalize_tuple(self, item: tuple) -> Tuple[str, Any, Any, Any, Any]:
-        """补齐为五元组，并规范化 key"""
+        """补齐为五元组（忽略额外的def_type信息）"""
         if not isinstance(item, tuple):
             raise ValueError(f"输入必须是元组类型，实际类型: {type(item)}")
 
         if len(item) < 4:
             raise ValueError(f"元组长度至少为4，实际长度: {len(item)}")
 
-        key = self._normalize_key(item[0])
-
         if len(item) == 4:
             # 四元组补齐为五元组：(key, test, tag, rel_path) -> (key, test, tag, rel_path, test)
-            return (key, item[1], item[2], item[3], item[1])
+            return (item[0], item[1], item[2], item[3], item[1])
         elif len(item) == 5:
-            # 五元组直接规范化key：(key, test, tag, rel_path, en_test)
-            return (key, item[1], item[2], item[3], item[4])
+            # 五元组直接返回：(key, test, tag, rel_path, en_test)
+            return (item[0], item[1], item[2], item[3], item[4])
+        elif len(item) == 6:
+            # 六元组取前5个元素：(key, test, tag, rel_path, en_test, def_type) -> (key, test, tag, rel_path, en_test)
+            return (item[0], item[1], item[2], item[3], item[4])
         else:
-            # 长度超过5的元组，只取前5个元素
-            self.logger.warning("元组长度超过5，截取前5个元素: %s", item)
-            return (key, item[1], item[2], item[3], item[4])
+            # 长度超过6的元组，只取前5个元素
+            self.logger.warning("元组长度超过6，截取前5个元素: %s", item)
+            return (item[0], item[1], item[2], item[3], item[4])
 
-    def _normalize_key(self, key: str) -> str:
-        """去除 DefType/ 前缀，规范化 key"""
-        return key.split("/", 1)[-1] if "/" in key else key
+    @staticmethod
+    def _normalize_html_entities(text: str) -> str:
+        """
+        规范化HTML实体，用于文本比较
+
+        Args:
+            text: 要规范化的文本
+
+        Returns:
+            str: 规范化后的文本
+        """
+        if not text or not isinstance(text, str):
+            return ""
+
+        # 规范化HTML实体
+        normalized = html.unescape(text)
+
+        # 处理全角字符（＆ -> &）
+        normalized = normalized.replace("＆", "&")
+
+        # 处理XML实体（如 &apos;）
+        xml_entities = {
+            "&apos;": "'",
+            "&quot;": '"',
+            "&lt;": "<",
+            "&gt;": ">",
+            "&amp;": "&",
+        }
+
+        for entity, char in xml_entities.items():
+            normalized = normalized.replace(entity, char)
+
+        # 规范化空白字符
+        normalized = re.sub(r"\s+", " ", normalized.strip())
+
+        return normalized
 
     def merge(
         self, include_unchanged: bool = False
@@ -166,15 +201,20 @@ class SmartMerger:
         new_count = 0
         today = datetime.date.today().isoformat()
 
-        # 性能优化：预计算所有key的集合，避免重复查找
-        output_keys = set(output_map.keys())
+        # output_keys = set(output_map.keys())  # 暂时未使用
 
         for key, in_item in input_map.items():
             out_item = output_map.get(key)
 
             if out_item:
                 # 根据设计文档5.1规则：比较input_text和output_en_text
-                if in_item[1] == out_item[4]:  # 输入的翻译 == 输出的英文注释
+                # 使用HTML实体规范化进行比较
+                normalized_input = SmartMerger._normalize_html_entities(in_item[1])
+                normalized_output = SmartMerger._normalize_html_entities(out_item[4])
+
+                if (
+                    normalized_input == normalized_output
+                ):  # 输入的翻译 == 输出的英文注释
                     unchanged_count += 1
                     if include_unchanged:
                         merged.append(
@@ -276,9 +316,9 @@ class SmartMerger:
             if not isinstance(item, tuple):
                 raise ValueError(f"{data_name}[{i}] 必须是元组类型")
 
-            if len(item) not in [4, 5]:
+            if len(item) not in [4, 5, 6]:
                 raise ValueError(
-                    f"{data_name}[{i}] 元组长度必须是4或5，实际长度: {len(item)}"
+                    f"{data_name}[{i}] 元组长度必须是4、5或6，实际长度: {len(item)}"
                 )
 
             if not isinstance(item[0], str) or not item[0].strip():
@@ -336,7 +376,7 @@ class SmartMerger:
         }
         return report
 
-    def _analyze_data_quality(self, data: list, data_name: str) -> Dict[str, Any]:
+    def _analyze_data_quality(self, data: list, _data_name: str) -> Dict[str, Any]:
         """分析数据质量"""
         if not data:
             return {"count": 0, "empty_keys": 0, "empty_translations": 0}

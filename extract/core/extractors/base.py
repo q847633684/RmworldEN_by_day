@@ -42,9 +42,11 @@ class BaseExtractor(ABC):
         self.processor = XMLProcessor()
 
     @abstractmethod
-    def extract(
-        self, source_path: str, language: str
-    ) -> Union[List[Tuple[str, str, str, str]], List[Tuple[str, str, str, str, str]]]:
+    def extract(self, source_path: str, language: str) -> Union[
+        List[Tuple[str, str, str, str]],
+        List[Tuple[str, str, str, str, str]],
+        List[Tuple[str, str, str, str, str, str]],
+    ]:
         """
         提取翻译数据的抽象方法
 
@@ -53,9 +55,9 @@ class BaseExtractor(ABC):
             language: 语言代码
 
         Returns:
-            四元组列表 (key, text, tag, rel_path) 或 五元组列表 (key, text, tag, rel_path, en_text)
-            - KeyedExtractor 和 DefsScanner 返回四元组
-            - DefInjectedExtractor 返回五元组
+            四元组、五元组或六元组列表
+            - DefsScanner 返回六元组 (key, text, tag, rel_path, en_text, def_type)
+            - KeyedExtractor 和 DefInjectedExtractor 返回五元组 (key, text, tag, rel_path, en_text)
         """
         raise NotImplementedError("子类必须实现extract方法")
 

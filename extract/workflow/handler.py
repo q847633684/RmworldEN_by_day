@@ -91,7 +91,7 @@ def handle_extract() -> Optional[tuple]:
                 ui.print_info(f"CSV文件：{csv_path}")
                 ui.print_info(f"输出目录：{output_dir}")
                 return (csv_path, mod_dir)
-            elif conflict_resolution == "rebuild":  # 包括 'rebuild' 和 'new'
+            elif conflict_resolution in ["rebuild", "new"]:  # 包括 'rebuild' 和 'new'
                 ui.print_info("重建模式")
                 language_dir = config.language_config.get_language_dir(
                     output_path, output_language

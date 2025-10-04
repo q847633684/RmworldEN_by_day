@@ -19,6 +19,7 @@ except ImportError:
     logger.warning("lxml 未安装，将使用 ElementTree")
 
 from user_config import UserConfigManager
+
 # 延迟初始化配置，避免循环导入
 CONFIG = None
 
@@ -260,52 +261,6 @@ class XMLProcessor:
             if self.config.error_on_invalid:
                 raise
             return False
-
-    def extract_translations(
-        self,
-        tree: Any,
-        context: str = "",
-        filter_func: Optional[Callable] = None,
-        include_attributes: bool = True,
-    ) -> List[Tuple[str, str, str]]:
-        """
-        提取可翻译内容
-
-        Args:
-            tree (Any): XML 树对象
-            context (str): 上下文
-            filter_func (Optional[Callable]): 过滤函数
-            include_attributes (bool): 是否包含属性
-
-        Returns:
-            List[Tuple[str, str, str]]: 提取的翻译列表
-        """
-        translations = []
-        root = tree.getroot() if hasattr(tree, "getroot") else tree
-
-        # 使用 xpath 或 iter 遍历
-        elements = root.xpath(".//*") if self.use_lxml else root.iter()
-
-        for elem in elements:
-            # 检查文本内容
-            if elem.text and elem.text.strip():
-                key = self._get_element_key(elem)
-                text = elem.text.strip()
-                if filter_func and not filter_func(key, text, context):
-                    continue
-                translations.append((key, text, elem.tag))
-
-            # 检查属性
-            if include_attributes:
-                for attr_name, attr_value in elem.attrib.items():
-                    if isinstance(attr_value, str) and attr_value.strip():
-                        key = f"{self._get_element_key(elem)}.{attr_name}"
-                        text = attr_value.strip()
-                        if filter_func and not filter_func(key, text, context):
-                            continue
-                        translations.append((key, text, f"{elem.tag}.{attr_name}"))
-
-        return translations
 
     def update_translations(
         self,

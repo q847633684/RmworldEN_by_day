@@ -140,7 +140,7 @@ class DefInjectedExtractor(BaseExtractor):
         # 反转列表
         parent_tags = list(reversed(parent_tags))
 
-        # 生成key
+        # 生成key（DefInjected文件中的key直接就是defName.field格式，无需去除前缀）
         key = "/".join(parent_tags + [elem.tag]) if parent_tags else elem.tag
 
         # 生成text
