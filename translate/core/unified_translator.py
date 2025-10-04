@@ -97,9 +97,9 @@ class UnifiedTranslator:
             ui.print_info("🔍 检查成人内容...")
             temp_csv = input_csv
             try:
-                from ..dictionary.adult_content_translator import AdultContentTranslator
+                from ..dictionary.dictionary_translator import DictionaryTranslator
 
-                adult_translator = AdultContentTranslator()
+                adult_translator = DictionaryTranslator("adult")
 
                 # 创建临时文件用于成人内容翻译
                 temp_csv = str(Path(input_csv).with_suffix(".temp_adult.csv"))

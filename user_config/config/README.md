@@ -9,7 +9,7 @@
 - **内容**: 定义需要翻译的字段、忽略的字段、非文本模式等
 - **加载**: 由 `SystemConfig` 自动加载
 
-### `translation_dictionary.yaml`
+### `adult_dictionary.yaml` 和 `game_dictionary.yaml`
 - **用途**: 翻译词典配置
 - **内容**: 常用词汇的翻译对照关系
 - **用途**: 提供翻译参考和一致性检查

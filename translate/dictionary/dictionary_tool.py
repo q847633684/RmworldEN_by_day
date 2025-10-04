@@ -10,15 +10,15 @@ import argparse
 from pathlib import Path
 
 # 添加项目根目录到路径
-project_root = Path(__file__).parent
+project_root = Path(__file__).parent.parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-from .dictionary_translator import (
+from translate.dictionary.dictionary_translator import (
     DictionaryTranslator,
     translate_content_in_csv,
 )
-from ...utils.ui_style import ui
+from utils.ui_style import ui
 
 
 def main():

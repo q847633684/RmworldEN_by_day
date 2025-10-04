@@ -39,6 +39,18 @@ translation_fields:
         - skillLabel
         - pawnLabel
         - titleShort
+        - labelFemale
+        - labelPlural
+        - headerTip
+        - useLabel
+        - baseInspectLine
+        - beginLetter
+        - beginLetterLabel
+        - discoverLetterLabel
+        - discoverLetterText
+        - recoveryMessage
+        - ingestCommandString
+        - ingestReportString
     
     override:
       description: "覆盖字段"

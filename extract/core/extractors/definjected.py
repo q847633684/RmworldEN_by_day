@@ -149,4 +149,8 @@ class DefInjectedExtractor(BaseExtractor):
         # 生成tag
         tag = elem.tag
 
-        return key, text, tag, last_en_comment
+        # 生成en_text
+        # 如果有英文注释，使用注释；否则使用text（英文目录的情况）
+        en_text = last_en_comment if last_en_comment else text
+
+        return key, text, tag, en_text

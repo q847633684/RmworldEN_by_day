@@ -157,7 +157,7 @@ class SmartMerger:
         input_data: list,
         output_data: list,
         include_unchanged: bool = False,
-        merge_strategy: str = "input_priority",
+        merge_strategy: str = "output_priority",
         preserve_metadata: bool = True,
     ) -> list:
         """
@@ -169,7 +169,7 @@ class SmartMerger:
             input_data: 输入数据列表
             output_data: 输出数据列表
             include_unchanged: 是否包含未变化的项目
-            merge_strategy: 合并策略 ("input_priority", "output_priority", "smart")
+            merge_strategy: 合并策略 ("input_priority", "output_priority")
             preserve_metadata: 是否保留输出数据的元数据（tag, rel_path）
         """
         import time
@@ -209,8 +209,12 @@ class SmartMerger:
             if out_item:
                 # 根据设计文档5.1规则：比较input_text和output_en_text
                 # 使用HTML实体规范化进行比较
-                normalized_input = SmartMerger._normalize_html_entities(in_item[1])
-                normalized_output = SmartMerger._normalize_html_entities(out_item[4])
+                normalized_input = SmartMerger._normalize_html_entities(
+                    in_item[1]
+                )  # input_text
+                normalized_output = SmartMerger._normalize_html_entities(
+                    out_item[4]
+                )  # output_en_text
 
                 if (
                     normalized_input == normalized_output

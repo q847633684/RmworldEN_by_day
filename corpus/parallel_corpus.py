@@ -122,8 +122,9 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
         )
         keyed_dir = config.language_config.get_value("keyed_dir", "Keyed")
 
-        lang_path = PathManager.get_language_folder_path(mod_dir, cn_language)
-        src_lang_path = PathManager.get_language_folder_path(mod_dir, en_language)
+        path_manager = PathManager(config)
+        lang_path = path_manager.get_language_folder_path(mod_dir, cn_language)
+        src_lang_path = path_manager.get_language_folder_path(mod_dir, en_language)
 
         def_injected_path = os.path.join(src_lang_path, definjected_dir)
         keyed_path = os.path.join(src_lang_path, keyed_dir)

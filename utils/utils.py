@@ -345,6 +345,14 @@ class XMLProcessor:
         """
         cleaned_text = text.strip()
 
+        # XML注释不能包含 '--' 或以 '-' 结尾
+        # 替换 '--' 为 '—' (em dash) 或 '–' (en dash)
+        cleaned_text = cleaned_text.replace("--", "—")
+
+        # 如果以 '-' 结尾，添加空格
+        if cleaned_text.endswith("-"):
+            cleaned_text = cleaned_text + " "
+
         if self.use_lxml:
             return etree.Comment(cleaned_text)
         else:

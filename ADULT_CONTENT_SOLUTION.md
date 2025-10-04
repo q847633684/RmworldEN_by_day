@@ -54,7 +54,7 @@ python adult_content_tool.py --reload
 **优点**：完全自定义，支持批量添加
 
 #### 编辑词典文件：
-文件位置：`user_config/config/translation_dictionary.yaml`
+文件位置：`user_config/config/adult_dictionary.yaml`
 
 ```yaml
 # 成人内容翻译词典
@@ -203,7 +203,7 @@ adult_content:
 python adult_content_tool.py --add "new_word" "新词汇"
 
 # 或直接编辑词典文件
-# 在 user_config/config/translation_dictionary.yaml 中添加
+# 在 user_config/config/adult_dictionary.yaml 中添加
 ```
 
 ### 批量导入：

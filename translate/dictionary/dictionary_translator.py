@@ -10,8 +10,8 @@ except ImportError:
     yaml = None
 from pathlib import Path
 from typing import Dict, Optional, Tuple
-from ...utils.logging_config import get_logger
-from ...utils.ui_style import ui
+from utils.logging_config import get_logger
+from utils.ui_style import ui
 
 logger = get_logger(__name__)
 
