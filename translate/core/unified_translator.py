@@ -93,20 +93,51 @@ class UnifiedTranslator:
                     input_path.parent / f"{input_path.stem}_translated.csv"
                 )
 
+            # 步骤1：预处理成人内容
+            ui.print_info("🔍 检查成人内容...")
+            temp_csv = input_csv
+            try:
+                from ..dictionary.adult_content_translator import AdultContentTranslator
+
+                adult_translator = AdultContentTranslator()
+
+                # 创建临时文件用于成人内容翻译
+                temp_csv = str(Path(input_csv).with_suffix(".temp_adult.csv"))
+                adult_success = adult_translator.translate_csv_file(input_csv, temp_csv)
+
+                if adult_success:
+                    ui.print_success("✅ 成人内容预处理完成")
+                    self.logger.info("成人内容预处理完成，使用临时文件: %s", temp_csv)
+                else:
+                    ui.print_warning("⚠️ 成人内容预处理失败，使用原始文件")
+                    temp_csv = input_csv
+
+            except Exception as e:
+                self.logger.warning("成人内容预处理失败: %s，使用原始文件", e)
+                temp_csv = input_csv
+
             self.logger.info(
                 "开始统一翻译: input=%s, output=%s, type=%s",
-                input_csv,
+                temp_csv,
                 output_csv,
                 translator_type,
             )
 
-            # 选择翻译器
+            # 步骤2：选择翻译器
             translator = self._select_translator(translator_type)
             if not translator:
                 raise RuntimeError(f"无法创建翻译器: {translator_type}")
 
-            # 执行翻译
-            success = translator.translate_csv(input_csv, output_csv, **kwargs)
+            # 步骤3：执行机器翻译
+            success = translator.translate_csv(temp_csv, output_csv, **kwargs)
+
+            # 步骤4：清理临时文件
+            if temp_csv != input_csv and Path(temp_csv).exists():
+                try:
+                    Path(temp_csv).unlink()
+                    self.logger.debug("已清理临时文件: %s", temp_csv)
+                except Exception as e:
+                    self.logger.warning("清理临时文件失败: %s", e)
 
             if success:
                 self.logger.info("翻译成功完成: %s", output_csv)
