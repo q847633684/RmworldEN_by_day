@@ -51,6 +51,7 @@ translation_fields:
         - recoveryMessage
         - ingestCommandString
         - ingestReportString
+        - tips
     
     override:
       description: "覆盖字段"

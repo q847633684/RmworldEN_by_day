@@ -47,8 +47,11 @@ class SystemConfig(BaseConfig):
         if not self._data["log_file"]:
             self._generate_log_file_path()
 
-        # 加载翻译字段规则
-        self._load_translation_rules()
+        # 初始化缓存
+        self._translation_fields_cache = None
+        self._ignore_fields_cache = None
+        self._non_text_patterns_cache = None
+        self._config_file_mtime = None
 
     def _generate_log_file_path(self):
         """动态生成日志文件路径"""
@@ -56,75 +59,6 @@ class SystemConfig(BaseConfig):
         log_dir = Path(__file__).parent.parent.parent / "logs"
         log_file = log_dir / f"day_translation_{timestamp}.log"
         self._data["log_file"] = str(log_file)
-
-    def _load_translation_rules(self):
-        """加载翻译字段规则"""
-        try:
-            # 尝试导入YAML
-            try:
-                import yaml
-            except ImportError:
-                self.logger.warning("YAML库未安装，使用默认翻译规则")
-                self._set_default_translation_rules()
-                return
-
-            # 加载配置文件
-            config_path = (
-                Path(__file__).parent.parent / "config" / "translation_fields.yaml"
-            )
-
-            if not config_path.exists():
-                self.logger.warning("翻译字段配置文件不存在，使用默认规则")
-                self._set_default_translation_rules()
-                return
-
-            with open(config_path, "r", encoding="utf-8") as f:
-                config = yaml.safe_load(f)
-
-            # 提取字段规则
-            self._data["translation_fields"] = self._extract_fields_from_categories(
-                config.get("translation_fields", {}).get("categories", {})
-            )
-            self._data["ignore_fields"] = self._extract_fields_from_categories(
-                config.get("ignore_fields", {}).get("categories", {})
-            )
-            self._data["non_text_patterns"] = list(
-                self._extract_fields_from_categories(
-                    config.get("non_text_patterns", {}).get("categories", {})
-                )
-            )
-
-            self.logger.debug("翻译字段规则加载成功")
-
-        except Exception as e:
-            self.logger.error(f"加载翻译字段规则失败: {e}")
-            self._set_default_translation_rules()
-
-    def _extract_fields_from_categories(self, categories: Dict[str, Any]) -> Set[str]:
-        """从分类中提取字段列表"""
-        fields = set()
-        for category_data in categories.values():
-            if isinstance(category_data, dict) and "fields" in category_data:
-                fields.update(category_data["fields"])
-        return fields
-
-    def _set_default_translation_rules(self):
-        """设置默认翻译规则"""
-        self._data["translation_fields"] = {
-            "label",
-            "description",
-            "text",
-            "message",
-            "tooltip",
-        }
-        self._data["ignore_fields"] = {"defName", "id", "cost", "damage"}
-        self._data["non_text_patterns"] = [
-            r"^\d+$",  # 整数
-            r"^-?\d+\.\d+$",  # 浮点数
-            r"^[0-9a-fA-F]+$",  # 十六进制
-            r"^\s*$",  # 纯空白
-            r"^true$|^false$",  # 布尔值
-        ]
 
     def get_schema(self) -> Dict[str, Any]:
         """获取配置模式"""
@@ -187,15 +121,121 @@ class SystemConfig(BaseConfig):
 
     def get_translation_fields(self) -> Set[str]:
         """获取需要翻译的字段集合"""
-        return self.get_value("translation_fields", set())
+        if self._translation_fields_cache is None or self._is_config_file_modified():
+            self._translation_fields_cache = self._load_translation_fields()
+        return self._translation_fields_cache
 
     def get_ignore_fields(self) -> Set[str]:
         """获取需要忽略的字段集合"""
-        return self.get_value("ignore_fields", set())
+        if self._ignore_fields_cache is None or self._is_config_file_modified():
+            self._ignore_fields_cache = self._load_ignore_fields()
+        return self._ignore_fields_cache
 
     def get_non_text_patterns(self) -> List[str]:
         """获取非文本模式列表"""
-        return self.get_value("non_text_patterns", [])
+        if self._non_text_patterns_cache is None or self._is_config_file_modified():
+            self._non_text_patterns_cache = self._load_non_text_patterns()
+        return self._non_text_patterns_cache
+
+    def _is_config_file_modified(self) -> bool:
+        """检查配置文件是否被修改"""
+        try:
+            config_path = (
+                Path(__file__).parent.parent / "config" / "translation_fields.yaml"
+            )
+
+            if not config_path.exists():
+                return False
+
+            current_mtime = config_path.stat().st_mtime
+
+            if self._config_file_mtime is None:
+                self._config_file_mtime = current_mtime
+                return False
+
+            if current_mtime != self._config_file_mtime:
+                self._config_file_mtime = current_mtime
+                # 清除所有缓存
+                self._translation_fields_cache = None
+                self._ignore_fields_cache = None
+                self._non_text_patterns_cache = None
+                return True
+
+            return False
+
+        except Exception as e:
+            self.logger.warning(f"检查配置文件修改时间失败: {e}")
+            return False
+
+    def clear_cache(self):
+        """清除所有缓存，强制重新加载配置"""
+        self._translation_fields_cache = None
+        self._ignore_fields_cache = None
+        self._non_text_patterns_cache = None
+        self._config_file_mtime = None
+        self.logger.info("配置缓存已清除")
+
+    def _load_translation_fields(self) -> Set[str]:
+        """直接加载翻译字段"""
+        return self._load_config_section(
+            "translation_fields", {"label", "description", "text", "message", "tooltip"}
+        )
+
+    def _load_ignore_fields(self) -> Set[str]:
+        """直接加载忽略字段"""
+        return self._load_config_section(
+            "ignore_fields", {"defName", "id", "cost", "damage"}
+        )
+
+    def _load_non_text_patterns(self) -> List[str]:
+        """直接加载非文本模式"""
+        default_patterns = [
+            r"^\d+$",
+            r"^-?\d+\.\d+$",
+            r"^[0-9a-fA-F]+$",
+            r"^\s*$",
+            r"^true$|^false$",
+        ]
+        return self._load_config_section("non_text_patterns", default_patterns)
+
+    def _load_config_section(self, section_name: str, default_value) -> any:
+        """加载配置文件的指定部分"""
+        try:
+            import yaml
+
+            config_path = (
+                Path(__file__).parent.parent / "config" / "translation_fields.yaml"
+            )
+
+            if not config_path.exists():
+                self.logger.warning(f"翻译字段配置文件不存在，使用默认{section_name}")
+                return default_value
+
+            with open(config_path, "r", encoding="utf-8") as f:
+                config = yaml.safe_load(f)
+
+            # 提取指定部分的字段
+            fields = self._extract_fields_from_categories(
+                config.get(section_name, {}).get("categories", {})
+            )
+
+            # 根据默认值类型返回相应格式
+            if isinstance(default_value, list):
+                return list(fields)
+            else:
+                return fields
+
+        except Exception as e:
+            self.logger.error(f"加载{section_name}失败: {e}")
+            return default_value
+
+    def _extract_fields_from_categories(self, categories: Dict[str, Any]) -> Set[str]:
+        """从分类中提取字段列表"""
+        fields = set()
+        for category_data in categories.values():
+            if isinstance(category_data, dict) and "fields" in category_data:
+                fields.update(category_data["fields"])
+        return fields
 
     def to_dict(self) -> Dict[str, Any]:
         """
