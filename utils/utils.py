@@ -262,126 +262,12 @@ class XMLProcessor:
                 raise
             return False
 
-    def update_translations(
-        self,
-        tree: Any,
-        translations: Dict[str, str],
-        generate_key_func: Optional[Callable] = None,
-        merge: bool = True,
-        include_attributes: bool = True,
-    ) -> bool:
-        """
-        更新 XML 中的翻译
-
-        Args:
-            tree (Any): XML 树对象
-            translations (Dict[str, str]): 翻译字典
-            generate_key_func (Optional[Callable]): 生成键的函数
-            merge (bool): 是否合并更新
-            include_attributes (bool): 是否更新属性
-
-        Returns:
-            bool: 是否更新成功
-        """
-        modified = False
-        root = tree.getroot() if self.use_lxml else tree
-        parent_map = (
-            {c: p for p in root.iter() for c in p} if not self.use_lxml else None
-        )
-
-        # 使用 xpath 或 iter 遍历
-        elements = root.xpath(".//*") if self.use_lxml else root.iter()
-
-        for elem in elements:
-            # 更新文本内容
-            if elem.text and elem.text.strip():
-                key = (
-                    generate_key_func(elem, root, parent_map)
-                    if generate_key_func
-                    else self._get_element_key(elem)
-                )
-                if key in translations:
-                    if merge and elem.text.strip() != translations[key]:
-                        elem.text = sanitize_xml(translations[key])
-                        modified = True
-                    elif not merge:
-                        elem.text = sanitize_xml(translations[key])
-                        modified = True
-
-            # 更新属性
-            if include_attributes:
-                for attr_name, attr_value in elem.attrib.items():
-                    if isinstance(attr_value, str) and attr_value.strip():
-                        key = (
-                            f"{generate_key_func(elem, root, parent_map)}.{attr_name}"
-                            if generate_key_func
-                            else f"{self._get_element_key(elem)}.{attr_name}"
-                        )
-                        if key in translations:
-                            if merge and attr_value.strip() != translations[key]:
-                                elem.set(attr_name, sanitize_xml(translations[key]))
-                                modified = True
-                            elif not merge:
-                                elem.set(attr_name, sanitize_xml(translations[key]))
-                                modified = True
-
-        return modified
-
     def _get_element_key(self, elem: Any) -> str:
         """获取元素的键"""
         if self.use_lxml:
             return elem.get("key", elem.tag)
         else:
             return elem.get("key", elem.tag)
-
-    def add_comments(
-        self,
-        tree: Any,
-        comment_prefix: str = "EN",
-        comment_func: Optional[Callable] = None,
-    ) -> None:
-        """
-        为 XML 元素添加注释
-
-        Args:
-            tree (Any): XML 树对象
-            comment_prefix (str): 注释前缀
-            comment_func (Optional[Callable]): 自定义注释生成函数
-        """
-        if not self.config.preserve_comments:
-            logger.warning("注释功能已禁用")
-            return
-
-        root = tree.getroot() if self.use_lxml else tree
-        parent_map = (
-            {c: p for p in root.iter() for c in p} if not self.use_lxml else None
-        )
-
-        # 使用 xpath 或 iter 遍历
-        elements = root.xpath(".//*") if self.use_lxml else root.iter()
-
-        for elem in elements:
-            if elem.text and elem.text.strip():
-                original = elem.text.strip()
-                comment_text = (
-                    comment_func(original)
-                    if comment_func
-                    else f"{comment_prefix}: {original}"
-                )
-                comment = (
-                    etree.Comment(sanitize_xcomment(comment_text))
-                    if self.use_lxml
-                    else ET.Comment(sanitize_xcomment(comment_text))
-                )  # type: ignore
-
-                parent = (
-                    parent_map.get(elem)
-                    if parent_map and not self.use_lxml
-                    else elem.getparent()
-                )
-                if parent is not None:
-                    idx = list(parent).index(elem)
-                    parent.insert(idx, comment)
 
     def __str__(self) -> str:
         """返回处理器的字符串表示"""
@@ -390,27 +276,6 @@ class XMLProcessor:
     def __repr__(self) -> str:
         """返回处理器的详细表示"""
         return f"XMLProcessor(\n  use_lxml={self.use_lxml},\n  validate_xml={self.config.validate_xml},\n  parser={self.parser}\n)"
-
-    @staticmethod
-    def generate_element_key(
-        elem: Any, root: Any, parent_map: Optional[Dict[Any, Any]] = None
-    ) -> str:
-        """生成元素键（支持递归路径）"""
-        key = elem.get("key") or elem.tag
-        path_parts = []
-        current = elem
-        if parent_map:  # ElementTree
-            while current is not None and current != root:
-                if current.tag != "LanguageData":
-                    path_parts.append(current.tag)
-                current = parent_map.get(current)
-        else:  # lxml
-            while current is not None and current != root:
-                if current.tag != "LanguageData":
-                    path_parts.append(current.tag)
-                current = current.getparent()
-        path_parts.reverse()
-        return ".".join(path_parts) if path_parts else key
 
     def create_element(
         self,
@@ -478,7 +343,7 @@ class XMLProcessor:
         Returns:
             Any: 注释对象
         """
-        cleaned_text = sanitize_xcomment(text)
+        cleaned_text = text.strip()
 
         if self.use_lxml:
             return etree.Comment(cleaned_text)
@@ -513,74 +378,3 @@ def sanitize_xml(text: str) -> str:
         .replace("'", "&apos;")
     )
     return text
-
-
-def sanitize_xcomment(text: str) -> str:
-    """清理 XML 注释内容，防止非法字符和注释断裂"""
-    if not isinstance(text, str):
-        text = str(text)
-    text = text.replace("--", "- -")
-    text = text.replace("<", "＜").replace(">", "＞").replace("&", "＆")
-    # 去除所有控制字符
-    text = "".join(c for c in text if c >= " " or c == "\n" or c == "\r")
-    # 注释不能以 - 结尾
-    if text.endswith("-"):
-        text += " "
-    return text
-
-
-def get_language_folder_path(language: str, mod_dir: str) -> str:
-    """获取语言文件夹路径"""
-    return os.path.join(mod_dir, "Languages", language)
-
-
-def update_history_list(key: str, value: str) -> None:
-    """更新历史记录"""
-    import json
-
-    history_file = os.path.join(
-        os.path.dirname(__file__), ".day_translation_history.json"
-    )
-    try:
-        history = get_history_list(key)
-        if value in history:
-            history.remove(value)
-        history.insert(0, value)
-        history = history[:10]
-        with open(history_file, "w", encoding="utf-8") as f:
-            json.dump({key: history}, f, indent=2)
-    except (OSError, IOError, ValueError) as e:
-        logger.error("更新历史记录失败: %s", e)
-
-
-def get_history_list(key: str) -> List[str]:
-    """获取历史记录"""
-    import json
-
-    history_file = os.path.join(
-        os.path.dirname(__file__), ".day_translation_history.json"
-    )
-    try:
-        if os.path.exists(history_file):
-            with open(history_file, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                return data.get(key, [])
-    except (OSError, IOError, ValueError) as e:
-        logger.error("读取历史记录失败: %s", e)
-    return []
-
-
-def load_translations_from_csv(csv_path: str) -> Dict[str, str]:
-    """从 CSV 加载翻译"""
-    translations = {}
-    try:
-        with open(csv_path, encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                key = row.get("key", "").strip()
-                translated = row.get("translated", row.get("text", "")).strip()
-                if key and translated:
-                    translations[key] = translated
-    except (OSError, IOError, csv.Error) as e:
-        logger.error("CSV 解析失败: %s: %s", csv_path, e)
-    return translations

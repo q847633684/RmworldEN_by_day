@@ -6,8 +6,9 @@ import csv
 from utils.logging_config import get_logger
 from utils.ui_style import ui
 from pathlib import Path
-from typing import Dict, Tuple
-from utils.utils import XMLProcessor, get_language_folder_path
+from typing import Dict, Tuple, Any, Optional, Callable
+from utils.utils import XMLProcessor
+from user_config.path_manager import PathManager
 
 # 使用新配置系统
 from user_config import UserConfigManager
@@ -15,60 +16,6 @@ from user_config import UserConfigManager
 # 使用全局配置实例，避免重复初始化
 CONFIG = UserConfigManager.get_instance()
 logger = get_logger(__name__)
-
-
-def update_all_xml(
-    mod_dir: str,
-    translations: Dict[str, str],
-    language: str = CONFIG.language_config.get_value(
-        "cn_language", "ChineseSimplified"
-    ),
-    merge: bool = True,
-) -> None:
-    """
-    更新所有 XML 文件中的翻译
-
-    Args:
-        mod_dir (str): 模组目录
-        translations (Dict[str, str]): 翻译字典
-        language (str): 目标语言
-        merge (bool): 是否合并更新
-    """
-    processor = XMLProcessor()
-
-    language_dir = get_language_folder_path(language, mod_dir)
-    updated_count = 0
-
-    # 获取所有XML文件列表
-    xml_files = list(Path(language_dir).rglob("*.xml"))
-    total_files = len(xml_files)
-
-    if total_files == 0:
-        ui.print_info("没有找到需要更新的XML文件")
-        return
-
-    # 显示进度条
-    ui.print_info(f"正在更新 {total_files} 个文件...")
-
-    for i, xml_file in enumerate(xml_files, 1):
-        try:
-            tree = processor.parse_xml(str(xml_file))
-            if tree is None:
-                continue
-
-            if processor.update_translations(tree, translations, merge=merge):
-                processor.save_xml(tree, str(xml_file))
-                updated_count += 1
-
-            # 显示进度条
-            ui.print_progress_bar(i, total_files, prefix="更新文件")
-
-        except (OSError, ValueError, TypeError) as e:
-            logger.error("处理文件失败: %s: %s", xml_file, e)
-
-    # 完成进度条
-    ui.print_info("")  # 换行
-    ui.print_success(f"更新了 {updated_count} 个文件")
 
 
 def import_translations(
@@ -266,7 +213,7 @@ def _update_xml_in_subdir(
             tree = processor.parse_xml(str(xml_file))
             if tree is None:
                 continue
-            if processor.update_translations(tree, translations, merge=merge):
+            if update_translations(processor, tree, translations, merge=merge):
                 processor.save_xml(tree, str(xml_file))
                 updated_count += 1
 
@@ -283,6 +230,75 @@ def _update_xml_in_subdir(
     # 完成进度条
     ui.print_info("")  # 换行
     return updated_count
+
+
+def update_translations(
+    processor: XMLProcessor,
+    tree: Any,
+    translations: Dict[str, str],
+    generate_key_func: Optional[Callable] = None,
+    merge: bool = True,
+    include_attributes: bool = True,
+) -> bool:
+    """
+    更新 XML 中的翻译
+
+    Args:
+        processor (XMLProcessor): XML处理器实例
+        tree (Any): XML 树对象
+        translations (Dict[str, str]): 翻译字典
+        generate_key_func (Optional[Callable]): 生成键的函数
+        merge (bool): 是否合并更新
+        include_attributes (bool): 是否更新属性
+
+    Returns:
+        bool: 是否更新成功
+    """
+    from utils.utils import sanitize_xml
+
+    modified = False
+    root = tree.getroot() if processor.use_lxml else tree
+    parent_map = (
+        {c: p for p in root.iter() for c in p} if not processor.use_lxml else None
+    )
+
+    # 使用 xpath 或 iter 遍历
+    elements = root.xpath(".//*") if processor.use_lxml else root.iter()
+
+    for elem in elements:
+        # 更新文本内容
+        if elem.text and elem.text.strip():
+            key = (
+                generate_key_func(elem, root, parent_map)
+                if generate_key_func
+                else processor._get_element_key(elem)
+            )
+            if key in translations:
+                if merge and elem.text.strip() != translations[key]:
+                    elem.text = sanitize_xml(translations[key])
+                    modified = True
+                elif not merge:
+                    elem.text = sanitize_xml(translations[key])
+                    modified = True
+
+        # 更新属性
+        if include_attributes:
+            for attr_name, attr_value in elem.attrib.items():
+                if isinstance(attr_value, str) and attr_value.strip():
+                    key = (
+                        f"{generate_key_func(elem, root, parent_map)}.{attr_name}"
+                        if generate_key_func
+                        else f"{processor._get_element_key(elem)}.{attr_name}"
+                    )
+                    if key in translations:
+                        if merge and attr_value.strip() != translations[key]:
+                            elem.set(attr_name, sanitize_xml(translations[key]))
+                            modified = True
+                        elif not merge:
+                            elem.set(attr_name, sanitize_xml(translations[key]))
+                            modified = True
+
+    return modified
 
 
 def _verify_import_results(mod_dir: str, language: str) -> bool:

@@ -7,7 +7,6 @@ Keyed 提取器
 from typing import List, Tuple
 from pathlib import Path
 from utils.logging_config import get_logger
-from user_config import UserConfigManager
 from utils.ui_style import ui
 from .base import BaseExtractor
 from ..filters import ContentFilter

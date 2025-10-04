@@ -12,7 +12,7 @@ import re
 from pathlib import Path
 from typing import List, Tuple
 from user_config import UserConfigManager
-from utils.utils import XMLProcessor, get_language_folder_path
+from user_config.path_manager import PathManager
 
 try:
     from colorama import Fore, Style, init as _colorama_init  # type: ignore
@@ -97,6 +97,8 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
     corpus: List[Tuple[str, str]] = []
     seen = set()
 
+    from utils.utils import XMLProcessor
+
     processor = XMLProcessor()
 
     if mode == "1":
@@ -120,8 +122,8 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
         )
         keyed_dir = config.language_config.get_value("keyed_dir", "Keyed")
 
-        lang_path = get_language_folder_path(cn_language, mod_dir)
-        src_lang_path = get_language_folder_path(en_language, mod_dir)
+        lang_path = PathManager.get_language_folder_path(mod_dir, cn_language)
+        src_lang_path = PathManager.get_language_folder_path(mod_dir, en_language)
 
         def_injected_path = os.path.join(src_lang_path, definjected_dir)
         keyed_path = os.path.join(src_lang_path, keyed_dir)

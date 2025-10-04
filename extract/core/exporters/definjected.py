@@ -119,7 +119,7 @@ class DefInjectedExporter(BaseExporter):
         file_groups = {}
         for item in def_translations:
             # 六元组：(key, text, tag, rel_path, en_text, def_type)
-            key, text, tag, rel_path, en_text, def_type = item[:6]
+            key, text, tag, _, _, def_type = item[:6]
 
             # 使用 def_type 作为分组依据
             if def_type not in file_groups:
