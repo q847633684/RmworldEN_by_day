@@ -192,6 +192,7 @@ class JavaTranslator:
         model_id: int = 27345,
         enable_interrupt: bool = True,
         resume_line: Optional[int] = None,
+        translation_field: str = "text",
     ) -> bool:
         """
         直接调用Java翻译器（不进行占位符保护）
@@ -234,7 +235,7 @@ class JavaTranslator:
             else:
                 start_line = 0
 
-            input_data = f"{input_csv}\n{output_csv}\n{access_key_id}\n{access_key_secret}\n{model_id}\n{start_line}\n"
+            input_data = f"{input_csv}\n{output_csv}\n{access_key_id}\n{access_key_secret}\n{model_id}\n{start_line}\n{translation_field}\n"
 
             # 调用Java程序
             self.logger.debug(
@@ -571,33 +572,26 @@ class JavaTranslator:
         """
         # 检查输入CSV是否包含protected_text字段
         has_protected_text = self._check_protected_text_field(input_csv)
-
+        
+        # 决定使用哪个字段进行翻译
         if has_protected_text:
-            # 如果有protected_text字段，创建临时CSV用于翻译
-            temp_csv = self._create_translation_csv(input_csv)
-            self.logger.info("检测到protected_text字段，创建临时翻译CSV...")
+            translation_field = "protected_text"
+            self.logger.info("检测到protected_text字段，将使用protected_text进行翻译")
         else:
-            # 如果没有protected_text字段，直接使用原文件
-            temp_csv = input_csv
-            self.logger.info("未检测到protected_text字段，直接翻译原文件...")
+            translation_field = "text"
+            self.logger.info("未检测到protected_text字段，将使用text字段进行翻译")
 
         self.logger.info("开始Java翻译...")
         success = self._call_java_translator_directly(
-            temp_csv,
+            input_csv,
             output_csv,
             access_key_id,
             access_key_secret,
             model_id,
             enable_interrupt,
             resume_line,
+            translation_field=translation_field,
         )
-
-        # 如果使用了临时文件，需要将翻译结果合并回原文件
-        if has_protected_text and success:
-            self._merge_translation_results(input_csv, output_csv)
-            # 清理临时文件
-            if os.path.exists(temp_csv) and temp_csv != input_csv:
-                os.remove(temp_csv)
 
         return success
 
@@ -618,105 +612,6 @@ class JavaTranslator:
         except (FileNotFoundError, PermissionError, csv.Error) as e:
             self.logger.debug("检查protected_text字段失败: %s", e)
             return False
-
-    def _create_translation_csv(self, input_csv: str) -> str:
-        """
-        创建用于翻译的临时CSV文件，将protected_text字段作为text字段
-
-        Args:
-            input_csv: 输入CSV文件路径
-
-        Returns:
-            str: 临时CSV文件路径
-        """
-        import tempfile
-
-        temp_fd, temp_path = tempfile.mkstemp(suffix=".csv", prefix="translation_")
-
-        try:
-            with open(input_csv, "r", encoding="utf-8") as infile, os.fdopen(
-                temp_fd, "w", encoding="utf-8", newline=""
-            ) as outfile:
-
-                reader = csv.DictReader(infile)
-                fieldnames = ["key", "text", "tag", "file", "type"]
-                writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-                writer.writeheader()
-
-                for row in reader:
-                    # 使用protected_text作为text字段进行翻译
-                    translation_row = {
-                        "key": row.get("key", ""),
-                        "text": row.get("protected_text", row.get("text", "")),
-                        "tag": row.get("tag", ""),
-                        "file": row.get("file", ""),
-                        "type": row.get("type", ""),
-                    }
-                    writer.writerow(translation_row)
-
-            self.logger.debug(f"创建临时翻译CSV: {temp_path}")
-            return temp_path
-
-        except Exception as e:
-            self.logger.error("创建临时翻译CSV失败: %s", e)
-            # 确保临时文件被清理
-            try:
-                os.close(temp_fd)
-                os.remove(temp_path)
-            except OSError:
-                pass
-            raise
-
-    def _merge_translation_results(
-        self, original_csv: str, translated_csv: str
-    ) -> None:
-        """
-        将翻译结果合并回原始CSV文件
-
-        Args:
-            original_csv: 原始CSV文件路径
-            translated_csv: 翻译后的CSV文件路径
-        """
-        try:
-            # 读取翻译结果
-            translation_map = {}
-            with open(translated_csv, "r", encoding="utf-8") as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    key = row.get("key", "")
-                    translated_text = row.get("translated", "")
-                    if key and translated_text:
-                        translation_map[key] = translated_text
-
-            # 更新原始文件
-            rows = []
-            with open(original_csv, "r", encoding="utf-8") as f:
-                reader = csv.DictReader(f)
-                fieldnames = list(reader.fieldnames)
-
-                # 确保有translated字段
-                if "translated" not in fieldnames:
-                    fieldnames.append("translated")
-
-                for row in reader:
-                    key = row.get("key", "")
-                    if key in translation_map:
-                        row["translated"] = translation_map[key]
-                    else:
-                        row["translated"] = ""
-                    rows.append(row)
-
-            # 写回原始文件
-            with open(original_csv, "w", encoding="utf-8", newline="") as f:
-                writer = csv.DictWriter(f, fieldnames=fieldnames)
-                writer.writeheader()
-                writer.writerows(rows)
-
-            self.logger.debug(f"翻译结果已合并到原始文件: {original_csv}")
-
-        except Exception as e:
-            self.logger.error("合并翻译结果失败: %s", e)
-            raise
 
     def get_status(self) -> Dict[str, Any]:
         """

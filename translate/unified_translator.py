@@ -28,32 +28,7 @@ class UnifiedTranslator:
         self.logger = get_logger(f"{__name__}.UnifiedTranslator")
         # 从新配置系统获取配置
         if config is None:
-            try:
-                from user_config import UserConfigManager
-
-                config_manager = UserConfigManager()
-                api_manager = config_manager.api_manager
-                primary_api = api_manager.get_primary_api()
-
-                if primary_api and primary_api.api_type == "aliyun":
-                    config = {
-                        "access_key_id": primary_api.get_value("access_key_id", ""),
-                        "access_key_secret": primary_api.get_value(
-                            "access_key_secret", ""
-                        ),
-                        "region_id": primary_api.get_value("region", "cn-hangzhou"),
-                        "model_id": primary_api.get_value("model_id", 27345),
-                        "sleep_sec": primary_api.get_value("sleep_sec", 0.5),
-                        "enable_interrupt": primary_api.get_value(
-                            "enable_interrupt", True
-                        ),
-                        "default_translator": "aliyun",
-                    }
-                else:
-                    config = {}
-            except Exception as e:
-                self.logger.warning(f"从新配置系统获取配置失败: {e}")
-                config = {}
+            config = self._load_config_from_system()
 
         self.config = config
         self.factory = TranslatorFactory(self.config)
@@ -61,6 +36,36 @@ class UnifiedTranslator:
         # 缓存翻译器实例
         self._java_translator = None
         self._python_translator = None
+
+    def _load_config_from_system(self) -> dict:
+        """
+        从配置系统加载配置
+
+        Returns:
+            dict: 配置字典
+        """
+        try:
+            from user_config import UserConfigManager
+
+            config_manager = UserConfigManager()
+            api_manager = config_manager.api_manager
+            primary_api = api_manager.get_primary_api()
+
+            if primary_api and primary_api.api_type == "aliyun":
+                return {
+                    "access_key_id": primary_api.get_value("access_key_id", ""),
+                    "access_key_secret": primary_api.get_value("access_key_secret", ""),
+                    "region_id": primary_api.get_value("region", "cn-hangzhou"),
+                    "model_id": primary_api.get_value("model_id", 27345),
+                    "sleep_sec": primary_api.get_value("sleep_sec", 0.5),
+                    "enable_interrupt": primary_api.get_value("enable_interrupt", True),
+                    "default_translator": "aliyun",
+                }
+            else:
+                return {}
+        except Exception as e:
+            self.logger.warning(f"从新配置系统获取配置失败: {e}")
+            return {}
 
     def translate_csv(
         self,
@@ -100,19 +105,23 @@ class UnifiedTranslator:
                 raise RuntimeError(f"无法创建翻译器: {translator_type}")
 
             # 步骤3：执行机器翻译
+            # 如果没有指定输出文件，自动生成
+            if output_csv is None:
+                input_path = Path(input_csv)
+                output_csv = str(
+                    input_path.parent / f"{input_path.stem}_zh{input_path.suffix}"
+                )
+
             success = translator.translate_csv(input_csv, output_csv, **kwargs)
 
             # 步骤4：恢复占位符和翻译成人内容
             if success:
                 restore_success = placeholder_manager.translate_csv(
-                    output_csv,
-                    mode="restore",
-                    placeholder_map=placeholder_map,
+                    output_csv, mode="restore", placeholder_map=placeholder_map
                 )
+                self.logger.info("翻译成功完成: %s", output_csv)
                 if not restore_success:
                     self.logger.warning("占位符恢复失败，但翻译已完成")
-            if success:
-                self.logger.info("翻译成功完成: %s", output_csv)
             else:
                 self.logger.warning("翻译未完成或被中断: %s", output_csv)
 
@@ -144,7 +153,7 @@ class UnifiedTranslator:
             return None
 
         except Exception as e:
-            self.logger.debug("检查恢复状态失败: %s", e)
+            self.logger.warning("检查恢复状态失败: %s", e)
             return None
 
     def resume_translation(self, input_csv: str, output_csv: str) -> bool:
@@ -186,7 +195,18 @@ class UnifiedTranslator:
         }
 
     def _select_translator(self, translator_type: str):
-        """选择翻译器"""
+        """
+        选择翻译器
+
+        Args:
+            translator_type: 翻译器类型 ("auto", "java", "python")
+
+        Returns:
+            翻译器实例
+
+        Raises:
+            ValueError: 不支持的翻译器类型
+        """
         if translator_type == "auto":
             # 自动选择：优先Java，回退Python
             if self._is_java_available():
@@ -223,8 +243,8 @@ class UnifiedTranslator:
     def _is_java_available(self) -> bool:
         """检查Java翻译器是否可用"""
         try:
-            translator = self._get_java_translator()
-            return translator is not None
+            status = self._get_java_status()
+            return status.get("available", False)
         except Exception:
             return False
 

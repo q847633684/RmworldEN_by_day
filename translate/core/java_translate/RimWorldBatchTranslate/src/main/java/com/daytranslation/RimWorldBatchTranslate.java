@@ -183,8 +183,19 @@ public class RimWorldBatchTranslate {
             }
         }
 
+        // 读取翻译字段参数
+        if (interactiveMode) {
+            System.out.print("请输入翻译字段名（如：text、protected_text，直接回车使用text）: ");
+        }
+        String translationFieldInput = scanner.nextLine().trim();
+        String translationField = "text"; // 默认使用text字段
+        if (!translationFieldInput.isEmpty()) {
+            translationField = translationFieldInput;
+        }
+
         // 调试输出
         System.out.println("[调试] 接收到的起始行参数: " + startLineInput + " -> " + startLine);
+        System.out.println("[调试] 翻译字段: " + translationField);
         scanner.close();
 
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
@@ -247,7 +258,8 @@ public class RimWorldBatchTranslate {
                 }
 
                 String key = record.isMapped("key") ? record.get("key") : "";
-                String text = record.isMapped("text") ? record.get("text") : "";
+                // 根据参数决定使用哪个字段进行翻译
+                String text = record.isMapped(translationField) ? record.get(translationField) : "";
                 String zh = "";
 
                 // 优化：统一处理跳过逻辑，减少重复代码
