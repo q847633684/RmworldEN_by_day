@@ -11,6 +11,7 @@ from utils.ui_style import ui
 
 from .translator_factory import TranslatorFactory
 
+
 # Python翻译器依赖通过try-except导入，这里不直接导入
 
 
@@ -85,42 +86,13 @@ class UnifiedTranslator:
             if not os.path.exists(input_csv):
                 raise FileNotFoundError(f"输入CSV文件不存在: {input_csv}")
 
-            # 自动生成输出路径
-            if output_csv is None:
-                input_path = Path(input_csv)
-                output_csv = str(
-                    input_path.parent / f"{input_path.stem}_translated.csv"
-                )
-
-            # 步骤1：保护成人内容（用ALIMT标签保护英文原文）
-            ui.print_info("🔍 保护成人内容...")
-            temp_csv = input_csv
-            # 创建临时文件用于保护成人内容
-            try:
-                adult_translator = self.factory.create_dictionary_translator("adult")
-
-                temp_csv = str(Path(input_csv).with_suffix(".temp_protected.csv"))
-                protect_success = adult_translator.translate_csv(
-                    input_csv, temp_csv, mode="protect"
-                )
-
-                if protect_success:
-                    ui.print_success("✅ 成人内容保护完成")
-                    self.logger.info("成人内容保护完成，使用临时文件: %s", temp_csv)
-                else:
-                    ui.print_warning("⚠️ 成人内容保护失败，使用原始文件")
-                    temp_csv = input_csv
-
-            except Exception as e:
-                self.logger.warning("成人内容保护失败: %s，使用原始文件", e)
-                temp_csv = input_csv
-
-            self.logger.info(
-                "开始统一翻译: input=%s, output=%s, type=%s",
-                temp_csv,
-                output_csv,
-                translator_type,
+            # 步骤1：保护
+            placeholder_manager = self.factory.create_dictionary_translator("adult")
+            success, placeholder_map = placeholder_manager.translate_csv(
+                input_csv, mode="protect"
             )
+            if not success:
+                raise RuntimeError("占位符保护失败")
 
             # 步骤2：选择翻译器
             translator = self._select_translator(translator_type)
@@ -128,42 +100,17 @@ class UnifiedTranslator:
                 raise RuntimeError(f"无法创建翻译器: {translator_type}")
 
             # 步骤3：执行机器翻译
-            success = translator.translate_csv(temp_csv, output_csv, **kwargs)
+            success = translator.translate_csv(input_csv, output_csv, **kwargs)
 
-            # 步骤4：翻译成人内容（阿里云翻译后，ALIMT标签已被移除）
+            # 步骤4：恢复占位符和翻译成人内容
             if success:
-                ui.print_info("🔍 翻译成人内容...")
-                try:
-                    adult_translator = self.factory.create_dictionary_translator(
-                        "adult"
-                    )
-
-                    # 创建最终输出文件
-                    final_output = str(Path(output_csv).with_suffix(".final.csv"))
-                    adult_success = adult_translator.translate_csv(
-                        output_csv, final_output, mode="translate"
-                    )
-
-                    if adult_success:
-                        # 替换原输出文件
-                        Path(output_csv).unlink()
-                        Path(final_output).rename(output_csv)
-                        ui.print_success("✅ 成人内容翻译完成")
-                        self.logger.info("成人内容翻译完成")
-                    else:
-                        ui.print_warning("⚠️ 成人内容翻译失败，使用机器翻译结果")
-
-                except Exception as e:
-                    self.logger.warning("成人内容翻译失败: %s，使用机器翻译结果", e)
-
-            # 步骤5：清理临时文件
-            if temp_csv != input_csv and Path(temp_csv).exists():
-                try:
-                    Path(temp_csv).unlink()
-                    self.logger.debug("已清理临时文件: %s", temp_csv)
-                except Exception as e:
-                    self.logger.warning("清理临时文件失败: %s", e)
-
+                restore_success = placeholder_manager.translate_csv(
+                    output_csv,
+                    mode="restore",
+                    placeholder_map=placeholder_map,
+                )
+                if not restore_success:
+                    self.logger.warning("占位符恢复失败，但翻译已完成")
             if success:
                 self.logger.info("翻译成功完成: %s", output_csv)
             else:

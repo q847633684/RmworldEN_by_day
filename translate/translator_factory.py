@@ -9,7 +9,7 @@ from utils.logging_config import get_logger
 # 翻译配置已迁移到新配置系统
 from .core.java_translator import JavaTranslator
 from .core.python_translator import translate_csv, AcsClient, TranslateGeneralRequest
-from .core.dictionary_translator import DictionaryTranslator
+from .core.placeholders import PlaceholderManager
 
 
 class TranslatorFactory:
@@ -50,15 +50,15 @@ class TranslatorFactory:
     def create_dictionary_translator(self, dictionary_type: str = "adult"):
         """创建词典翻译器实例"""
         try:
-            return DictionaryTranslatorAdapter(
-                DictionaryTranslator(dictionary_type), self.config
+            return PlaceholderManagerAdapter(
+                PlaceholderManager(dictionary_type), self.config
             )
         except ImportError as e:
-            self.logger.debug("词典翻译器导入失败: %s", e)
-            raise RuntimeError("词典翻译器不可用") from e
+            self.logger.debug("占位符管理器导入失败: %s", e)
+            raise RuntimeError("占位符管理器不可用") from e
         except Exception as e:
-            self.logger.debug("创建词典翻译器失败: %s", e)
-            raise RuntimeError(f"创建词典翻译器失败: {str(e)}") from e
+            self.logger.debug("创建占位符管理器失败: %s", e)
+            raise RuntimeError(f"创建占位符管理器失败: {str(e)}") from e
 
 
 class JavaTranslatorAdapter:
@@ -222,113 +222,87 @@ class PythonTranslatorAdapter:
             return {"available": False, "type": "python", "reason": str(e)}
 
 
-class DictionaryTranslatorAdapter:
-    """词典翻译器适配器"""
+class PlaceholderManagerAdapter:
+    """占位符管理器适配器"""
 
-    def __init__(self, dictionary_translator, config: dict):
+    def __init__(self, placeholder_manager, config: dict):
         """
-        初始化词典翻译器适配器
+        初始化占位符管理器适配器
 
         Args:
-            dictionary_translator: 词典翻译器实例
+            placeholder_manager: 占位符管理器实例
             config: 翻译配置
         """
-        self.dictionary_translator = dictionary_translator
+        self.placeholder_manager = placeholder_manager
         self.config = config
-        self.logger = get_logger(f"{__name__}.DictionaryTranslatorAdapter")
+        self.logger = get_logger(f"{__name__}.PlaceholderManagerAdapter")
 
     def translate_csv(
-        self, input_csv: str, output_csv: str, mode: str = "protect", **kwargs
-    ) -> bool:
+        self, input_csv: str, mode: str = "protect", **kwargs
+    ):
         """
-        翻译CSV文件
+        处理CSV文件中的占位符
 
         Args:
             input_csv: 输入CSV文件路径
             output_csv: 输出CSV文件路径
-            mode: 处理模式 ("protect" 保护英文原文, "translate" 翻译保护内容)
+            mode: 处理模式 ("protect" 保护, "restore" 恢复)
             **kwargs: 其他参数
 
         Returns:
-            bool: 翻译是否成功
+            bool 或 (bool, dict): 处理是否成功，保护模式时返回 (success, placeholder_map)
         """
         try:
-            # 调用词典翻译器
-            success = self.dictionary_translator.translate_csv_file(
-                input_csv, output_csv, mode
-            )
-
-            self.logger.info(
-                "词典翻译完成: %s -> %s (模式: %s)", input_csv, output_csv, mode
-            )
-            return success
+            if mode == "protect":
+                success, placeholder_map = self.placeholder_manager.protect_csv_file(
+                    input_csv
+                )
+                self.logger.info("占位符保护完成: %s (模式: %s)", input_csv, mode)
+                return success, placeholder_map
+            elif mode == "restore":
+                # 从kwargs中获取placeholder_map
+                placeholder_map = kwargs.get("placeholder_map", {})
+                success = self.placeholder_manager.restore_csv_file(
+                    input_csv, placeholder_map
+                )
+                self.logger.info("占位符恢复完成: %s (模式: %s)", input_csv, mode)
+                return success
+            else:
+                self.logger.error("不支持的模式: %s", mode)
+                return False
 
         except Exception as e:
-            self.logger.error("词典翻译失败: %s", e, exc_info=True)
+            self.logger.error("占位符处理失败: %s", e, exc_info=True)
             return False
 
-    def translate_text(self, text: str) -> tuple:
-        """
-        翻译文本
+    def protect_csv_file(self, input_csv: str):
+        """保护CSV文件"""
+        return self.placeholder_manager.protect_csv_file(input_csv)
 
-        Args:
-            text: 要翻译的文本
+    def restore_csv_file(self, input_csv: str, placeholder_map: dict):
+        """恢复CSV文件"""
+        return self.placeholder_manager.restore_csv_file(input_csv, placeholder_map)
 
-        Returns:
-            tuple: (翻译后的文本, 是否使用了自定义词典)
-        """
-        try:
-            return self.dictionary_translator.translate_text(text)
-        except Exception as e:
-            self.logger.error("词典文本翻译失败: %s", e, exc_info=True)
-            return text, False
+    def protect_text(self, text: str, csv_key: str = "single_text"):
+        """保护单个文本"""
+        return self.placeholder_manager.protect_text(text, csv_key)
 
-    def translate_protected_content(self, text: str) -> str:
-        """
-        翻译保护的内容
-
-        Args:
-            text: 要翻译的文本
-
-        Returns:
-            str: 翻译后的文本
-        """
-        try:
-            return self.dictionary_translator.translate_protected_content(text)
-        except Exception as e:
-            self.logger.error("词典保护内容翻译失败: %s", e, exc_info=True)
-            return text
+    def restore_text(self, text: str, csv_key: str = "single_text"):
+        """恢复单个文本"""
+        return self.placeholder_manager.restore_text(text, csv_key)
 
     def get_dictionary_stats(self) -> dict:
         """获取词典统计信息"""
-        try:
-            return self.dictionary_translator.get_dictionary_stats()
-        except Exception as e:
-            return {"error": str(e)}
-
-    def reload_dictionary(self) -> bool:
-        """重新加载词典"""
-        try:
-            return self.dictionary_translator.reload_dictionary()
-        except Exception as e:
-            self.logger.error("重新加载词典失败: %s", e, exc_info=True)
-            return False
+        return {
+            "total_entries": len(self.placeholder_manager.dictionary),
+            "dictionary_type": self.placeholder_manager.dictionary_type,
+        }
 
     def get_status(self) -> dict:
-        """获取翻译器状态"""
-        try:
-            stats = self.dictionary_translator.get_dictionary_stats()
-            return {
-                "available": stats.get("dictionary_exists", False),
-                "type": "dictionary",
-                "dictionary_type": self.dictionary_translator.dictionary_type,
-                "total_entries": stats.get("total_entries", 0),
-                "dictionary_path": stats.get("dictionary_path", ""),
-                "reason": (
-                    "词典翻译器可用"
-                    if stats.get("dictionary_exists", False)
-                    else "词典文件不存在"
-                ),
-            }
-        except Exception as e:
-            return {"available": False, "type": "dictionary", "reason": str(e)}
+        """获取状态"""
+        return {
+            "available": True,
+            "type": "placeholder_manager",
+            "dictionary_type": self.placeholder_manager.dictionary_type,
+            "dictionary_entries": len(self.placeholder_manager.dictionary),
+        }

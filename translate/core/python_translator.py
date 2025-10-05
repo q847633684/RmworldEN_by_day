@@ -116,6 +116,7 @@ def translate_text(
 def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
     """
     翻译 CSV 文件，生成包含翻译列的输出文件
+    支持 protected_text 字段优先翻译
 
     Args:
         input_path (str): 输入 CSV 文件路径
@@ -124,7 +125,7 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
 
     Raises:
         FileNotFoundError: 如果输入文件不存在
-        KeyError: 如果 CSV 缺少 'text' 列
+        KeyError: 如果 CSV 缺少 'text' 或 'protected_text' 列
     """
     if output_path is None:
         input_file = Path(input_path)
@@ -161,9 +162,23 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
 
         with open(input_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
-            if "text" not in reader.fieldnames:
-                ui.print_error(f"❌ CSV 文件缺少 'text' 列: {input_path}")
+            fieldnames = reader.fieldnames
+
+            # 检查是否有text或protected_text字段
+            if "text" not in fieldnames and "protected_text" not in fieldnames:
+                ui.print_error(
+                    f"❌ CSV 文件缺少 'text' 或 'protected_text' 列: {input_path}"
+                )
                 return
+
+            # 确定使用哪个字段进行翻译
+            use_protected_text = "protected_text" in fieldnames
+            translation_field = "protected_text" if use_protected_text else "text"
+
+            if use_protected_text:
+                ui.print_info("🔒 检测到 protected_text 字段，将优先翻译保护后的内容")
+            else:
+                ui.print_info("📝 使用 text 字段进行翻译")
 
             total_rows = sum(1 for _ in reader)
             f.seek(0)
@@ -175,7 +190,7 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
             for line_num, row in enumerate(
                 tqdm(reader, total=total_rows, desc="翻译进度", unit="行"), 2
             ):
-                text = row["text"].strip()
+                text = row[translation_field].strip()
                 ui.print_info(f"处理第 {line_num} 行: {text[:50]}...")
                 if not text:
                     row["translated"] = ""

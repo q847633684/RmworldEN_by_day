@@ -31,14 +31,12 @@ def update_progress(current: int, total: int, status: str = ""):
 def count_csv_lines(csv_path: str) -> int:
     """统计CSV文件行数（不包括标题行）"""
     try:
-        import csv
-
         with open(csv_path, "r", encoding="utf-8") as f:
             reader = csv.reader(f)
             lines = list(reader)
             # 减去标题行，只统计数据行
             return max(0, len(lines) - 1)
-    except Exception:
+    except (FileNotFoundError, PermissionError, csv.Error):
         return 0
 
 
@@ -90,14 +88,14 @@ class JavaTranslator:
             ui.print_info("🔨 未找到JAR文件，正在自动编译Java项目...")
             return self._auto_build_jar()
         except Exception as e:
-            self.logger.error(f"自动编译失败: {e}")
+            self.logger.error("自动编译失败: %s", e)
             raise FileNotFoundError(
                 f"未找到Java翻译工具JAR文件，自动编译也失败了：\n"
                 f"错误: {e}\n"
                 f"请手动构建Java项目：\n"
                 f"cd java_translate/RimWorldBatchTranslate && mvn package\n"
                 f"查找路径：{[str(d / '*with-dependencies.jar') for d in search_dirs] + [str(d / '*.jar') for d in search_dirs]}"
-            )
+            ) from e
 
     def _auto_build_jar(self) -> str:
         """自动编译Java项目"""
@@ -130,7 +128,7 @@ class JavaTranslator:
             if mvn_cmd is None:
                 raise RuntimeError("Maven未安装或不在PATH中，请先安装Maven")
 
-            self.logger.info(f"开始编译Java项目: {java_project_path}")
+            self.logger.info("开始编译Java项目: %s", java_project_path)
             ui.print_info(f"📁 项目路径: {java_project_path}")
 
             # 执行编译
@@ -156,10 +154,10 @@ class JavaTranslator:
                     error_msg += f"\n输出信息: {result.stdout}"
                 raise RuntimeError(error_msg)
 
-        except subprocess.TimeoutExpired:
-            raise RuntimeError("编译超时（5分钟），请检查项目配置或手动编译")
+        except subprocess.TimeoutExpired as exc:
+            raise RuntimeError("编译超时（5分钟），请检查项目配置或手动编译") from exc
         except Exception as e:
-            raise RuntimeError(f"自动编译失败: {str(e)}")
+            raise RuntimeError(f"自动编译失败: {str(e)}") from e
 
     def _find_jar_path_after_build(self) -> str:
         """编译后重新查找JAR文件"""
@@ -184,249 +182,6 @@ class JavaTranslator:
             return jar_candidates[0]
 
         raise FileNotFoundError(f"编译后未找到JAR文件: {target_dir}")
-
-    def _protect_placeholders(self, text: str) -> tuple[str, list[str]]:
-        """
-        保护文本中的占位符，避免被翻译
-
-        Args:
-            text: 要保护的文本
-
-        Returns:
-            tuple: (保护后的文本, 占位符列表)
-        """
-        if not text or not isinstance(text, str):
-            return text, []
-
-        # 定义保护模式（与Java代码保持一致）
-        patterns = [
-            r"\\n",  # \n 换行符
-            r"\[[^\]]+\]",  # [xxx]
-            r"\{\d+\}",  # {0}, {1}
-            r"%[sdif]",  # %s, %d, %i, %f
-            r"</?[^>]+>",  # <color> 或 <br>
-            r"[a-zA-Z_][a-zA-Z0-9_]*\([^)]*\)",  # 函数调用
-            r"->\[[^\]]+\]",  # ->[结果]
-            r"\bpawn\b",  # pawn 游戏术语
-        ]
-
-        protected_text = text
-        placeholders = []
-        idx = 1
-
-        # 首先标准化换行符
-        protected_text = protected_text.replace("\r\n", "\\n").replace("\n", "\\n")
-
-        for pattern in patterns:
-            matches = list(re.finditer(pattern, protected_text))
-            for match in reversed(matches):  # 从后往前替换，避免位置偏移
-                placeholder_text = match.group()
-                # 跳过已经保护的ALIMT标签
-                if "ALIMT" in placeholder_text:
-                    continue
-
-                placeholders.append(placeholder_text)
-                placeholder = f"(PH_{idx})"
-                alimt_tag = f"<ALIMT >{placeholder}</ALIMT>"
-
-                start, end = match.span()
-                protected_text = (
-                    protected_text[:start] + alimt_tag + protected_text[end:]
-                )
-                idx += 1
-
-        return protected_text, placeholders
-
-    def _restore_placeholders(self, text: str, placeholders: list[str]) -> str:
-        """
-        恢复占位符
-
-        Args:
-            text: 包含占位符的文本
-            placeholders: 原始占位符列表
-
-        Returns:
-            str: 恢复后的文本
-        """
-        if not placeholders:
-            return text
-
-        restored_text = text
-        for i, placeholder in enumerate(placeholders, 1):
-            ph_pattern = f"<ALIMT >\\(PH_{i}\\)</ALIMT>"
-            restored_text = re.sub(ph_pattern, placeholder, restored_text)
-
-        return restored_text
-
-    def translate_csv_with_python_protection(
-        self,
-        input_csv: str,
-        output_csv: str,
-        access_key_id: str,
-        access_key_secret: str,
-        model_id: int = 27345,
-        enable_interrupt: bool = True,
-        resume_line: Optional[int] = None,
-    ) -> bool:
-        """
-        使用Python层占位符保护的CSV翻译
-
-        Args:
-            input_csv: 输入CSV文件路径
-            output_csv: 输出CSV文件路径
-            access_key_id: 阿里云AccessKeyId
-            access_key_secret: 阿里云AccessKeySecret
-            model_id: 翻译模型ID
-            enable_interrupt: 是否启用中断功能
-            resume_line: 恢复行号
-
-        Returns:
-            bool: 翻译是否成功
-        """
-        try:
-            # 创建临时文件用于占位符保护
-            temp_csv = str(Path(input_csv).with_suffix(".temp_protected.csv"))
-
-            # 步骤1：保护占位符
-            self.logger.info("开始保护占位符...")
-            ui.print_info("🔒 保护占位符...")
-
-            protected_count = 0
-            total_count = 0
-
-            with open(input_csv, "r", encoding="utf-8") as infile, open(
-                temp_csv, "w", encoding="utf-8", newline=""
-            ) as outfile:
-
-                reader = csv.DictReader(infile)
-                fieldnames = reader.fieldnames
-                writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-                writer.writeheader()
-
-                for row in reader:
-                    total_count += 1
-
-                    # 保护text列
-                    if "text" in row and row["text"]:
-                        original_text = row["text"]
-                        protected_text, placeholders = self._protect_placeholders(
-                            original_text
-                        )
-                        if placeholders:
-                            row["text"] = protected_text
-                            protected_count += 1
-                            self.logger.debug(
-                                f"保护了 {len(placeholders)} 个占位符: {placeholders}"
-                            )
-
-                    # 保护translated列（如果存在）
-                    if "translated" in row and row["translated"]:
-                        original_translated = row["translated"]
-                        protected_translated, placeholders = self._protect_placeholders(
-                            original_translated
-                        )
-                        if placeholders:
-                            row["translated"] = protected_translated
-                            protected_count += 1
-
-                    writer.writerow(row)
-
-            ui.print_success(
-                f"✅ 占位符保护完成: {protected_count}/{total_count} 条记录"
-            )
-
-            # 步骤2：调用Java翻译器（简化版，不需要占位符保护）
-            self.logger.info("开始Java翻译...")
-            success = self._call_java_translator_directly(
-                temp_csv,
-                output_csv,
-                access_key_id,
-                access_key_secret,
-                model_id,
-                enable_interrupt,
-                resume_line,
-            )
-
-            # 步骤3：恢复占位符
-            if success:
-                self.logger.info("开始恢复占位符...")
-                ui.print_info("🔄 恢复占位符...")
-
-                final_csv = str(Path(output_csv).with_suffix(".final.csv"))
-                restored_count = 0
-
-                with open(output_csv, "r", encoding="utf-8") as infile, open(
-                    final_csv, "w", encoding="utf-8", newline=""
-                ) as outfile:
-
-                    reader = csv.DictReader(infile)
-                    fieldnames = reader.fieldnames
-                    writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-                    writer.writeheader()
-
-                    for row in reader:
-                        # 恢复text列
-                        if "text" in row and row["text"]:
-                            original_text = row["text"]
-                            # 这里需要从原始CSV获取占位符信息
-                            # 简化处理：直接恢复常见的占位符模式
-                            restored_text = self._restore_common_placeholders(
-                                original_text
-                            )
-                            if restored_text != original_text:
-                                row["text"] = restored_text
-                                restored_count += 1
-
-                        # 恢复translated列
-                        if "translated" in row and row["translated"]:
-                            original_translated = row["translated"]
-                            restored_translated = self._restore_common_placeholders(
-                                original_translated
-                            )
-                            if restored_translated != original_translated:
-                                row["translated"] = restored_translated
-                                restored_count += 1
-
-                        writer.writerow(row)
-
-                # 替换原输出文件
-                Path(output_csv).unlink()
-                Path(final_csv).rename(output_csv)
-
-                ui.print_success(f"✅ 占位符恢复完成: {restored_count} 条记录")
-
-            # 清理临时文件
-            if Path(temp_csv).exists():
-                Path(temp_csv).unlink()
-
-            return success
-
-        except Exception as e:
-            self.logger.error(f"Python层占位符保护翻译失败: {e}")
-            ui.print_error(f"❌ 翻译失败: {e}")
-            return False
-
-    def _restore_common_placeholders(self, text: str) -> str:
-        """
-        恢复常见的占位符模式
-
-        Args:
-            text: 包含占位符的文本
-
-        Returns:
-            str: 恢复后的文本
-        """
-        if not text:
-            return text
-
-        # 恢复ALIMT标签中的占位符
-        # 这里简化处理，实际应该根据原始占位符列表恢复
-        restored_text = text
-
-        # 恢复换行符
-        restored_text = restored_text.replace("\\n", "\n")
-
-        return restored_text
 
     def _call_java_translator_directly(
         self,
@@ -579,42 +334,6 @@ class JavaTranslator:
             # 清理进程引用
             self.current_process = None
 
-    def translate_csv_simple(
-        self,
-        input_csv: str,
-        output_csv: str,
-        access_key_id: str,
-        access_key_secret: str,
-        model_id: int = 27345,
-        enable_interrupt: bool = True,
-        resume_line: Optional[int] = None,
-    ) -> bool:
-        """
-        简化的CSV翻译（不包含占位符保护，假设输入已经保护过）
-
-        Args:
-            input_csv: 输入CSV文件路径
-            output_csv: 输出CSV文件路径
-            access_key_id: 阿里云AccessKeyId
-            access_key_secret: 阿里云AccessKeySecret
-            model_id: 翻译模型ID
-            enable_interrupt: 是否启用中断功能
-            resume_line: 恢复行号
-
-        Returns:
-            bool: 翻译是否成功
-        """
-        # 直接调用Java翻译器，不进行占位符保护
-        return self._call_java_translator_directly(
-            input_csv,
-            output_csv,
-            access_key_id,
-            access_key_secret,
-            model_id,
-            enable_interrupt,
-            resume_line,
-        )
-
     def _validate_jar(self) -> None:
         """验证JAR文件是否存在且可执行"""
         if not os.path.exists(self.jar_path):
@@ -623,45 +342,12 @@ class JavaTranslator:
         # 检查Java是否可用
         try:
             subprocess.run(["java", "-version"], capture_output=True, check=True)
-        except (subprocess.CalledProcessError, FileNotFoundError):
-            raise RuntimeError("Java未安装或不在PATH中")
+        except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+            raise RuntimeError("Java未安装或不在PATH中") from exc
 
-    def translate_csv(
-        self,
-        input_csv: str,
-        output_csv: str,
-        access_key_id: str,
-        access_key_secret: str,
-        model_id: int = 27345,
-        enable_interrupt: bool = True,
-        resume_line: Optional[int] = None,
-    ) -> bool:
-        """
-        翻译CSV文件（使用Python层占位符保护）
-
-        Args:
-            input_csv (str): 输入CSV文件路径
-            output_csv (str): 输出CSV文件路径
-            access_key_id (str): 阿里云AccessKeyId
-            access_key_secret (str): 阿里云AccessKeySecret
-            model_id (int): 翻译模型ID，默认27345
-            enable_interrupt (bool): 是否启用中断功能
-
-        Returns:
-            bool: 翻译是否成功
-        """
-        # 使用Python层占位符保护的翻译方法
-        return self.translate_csv_with_python_protection(
-            input_csv,
-            output_csv,
-            access_key_id,
-            access_key_secret,
-            model_id,
-            enable_interrupt,
-            resume_line,
-        )
-
-    def _signal_handler(self, signum, frame):
+    def _signal_handler(
+        self, signum: int, frame: Any
+    ) -> None:  # pylint: disable=unused-argument
         """信号处理器，用于处理中断信号"""
         with self.interrupt_lock:
             if not self.is_interrupted:
@@ -758,7 +444,7 @@ class JavaTranslator:
             # 但至少要有一行数据（不包括标题行）
             return 0 < output_data_lines < input_data_lines
 
-        except Exception as e:
+        except (FileNotFoundError, PermissionError, csv.Error) as e:
             self.logger.debug("检查文件恢复状态失败: %s", e)
             return False
 
@@ -785,7 +471,7 @@ class JavaTranslator:
             # 返回已翻译的行数（从0开始计数）
             return max(0, output_data_lines)
 
-        except Exception as e:
+        except (FileNotFoundError, PermissionError, csv.Error) as e:
             self.logger.debug("获取恢复行号失败: %s", e)
             return 0
 
@@ -837,7 +523,7 @@ class JavaTranslator:
             else:
                 cfg = {}
         except Exception as e:
-            self.logger.warning(f"从新配置系统获取配置失败: {e}")
+            self.logger.warning("从新配置系统获取配置失败: %s", e)
             cfg = {}
 
         # 直接使用原始文件进行恢复翻译
@@ -858,6 +544,180 @@ class JavaTranslator:
             self.logger.debug("恢复翻译被中断或未完成")
             return False
 
+    def translate_csv(
+        self,
+        input_csv: str,
+        output_csv: str,
+        access_key_id: str,
+        access_key_secret: str,
+        model_id: int = 27345,
+        enable_interrupt: bool = True,
+        resume_line: Optional[int] = None,
+    ) -> bool:
+        """
+        翻译CSV文件（主要入口方法）
+
+        Args:
+            input_csv: 输入CSV文件路径
+            output_csv: 输出CSV文件路径
+            access_key_id: 阿里云AccessKeyId
+            access_key_secret: 阿里云AccessKeySecret
+            model_id: 翻译模型ID
+            enable_interrupt: 是否启用中断功能
+            resume_line: 恢复行号
+
+        Returns:
+            bool: 翻译是否成功
+        """
+        # 检查输入CSV是否包含protected_text字段
+        has_protected_text = self._check_protected_text_field(input_csv)
+
+        if has_protected_text:
+            # 如果有protected_text字段，创建临时CSV用于翻译
+            temp_csv = self._create_translation_csv(input_csv)
+            self.logger.info("检测到protected_text字段，创建临时翻译CSV...")
+        else:
+            # 如果没有protected_text字段，直接使用原文件
+            temp_csv = input_csv
+            self.logger.info("未检测到protected_text字段，直接翻译原文件...")
+
+        self.logger.info("开始Java翻译...")
+        success = self._call_java_translator_directly(
+            temp_csv,
+            output_csv,
+            access_key_id,
+            access_key_secret,
+            model_id,
+            enable_interrupt,
+            resume_line,
+        )
+
+        # 如果使用了临时文件，需要将翻译结果合并回原文件
+        if has_protected_text and success:
+            self._merge_translation_results(input_csv, output_csv)
+            # 清理临时文件
+            if os.path.exists(temp_csv) and temp_csv != input_csv:
+                os.remove(temp_csv)
+
+        return success
+
+    def _check_protected_text_field(self, csv_file: str) -> bool:
+        """
+        检查CSV文件是否包含protected_text字段
+
+        Args:
+            csv_file: CSV文件路径
+
+        Returns:
+            bool: 是否包含protected_text字段
+        """
+        try:
+            with open(csv_file, "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                return "protected_text" in reader.fieldnames
+        except (FileNotFoundError, PermissionError, csv.Error) as e:
+            self.logger.debug("检查protected_text字段失败: %s", e)
+            return False
+
+    def _create_translation_csv(self, input_csv: str) -> str:
+        """
+        创建用于翻译的临时CSV文件，将protected_text字段作为text字段
+
+        Args:
+            input_csv: 输入CSV文件路径
+
+        Returns:
+            str: 临时CSV文件路径
+        """
+        import tempfile
+
+        temp_fd, temp_path = tempfile.mkstemp(suffix=".csv", prefix="translation_")
+
+        try:
+            with open(input_csv, "r", encoding="utf-8") as infile, os.fdopen(
+                temp_fd, "w", encoding="utf-8", newline=""
+            ) as outfile:
+
+                reader = csv.DictReader(infile)
+                fieldnames = ["key", "text", "tag", "file", "type"]
+                writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+                writer.writeheader()
+
+                for row in reader:
+                    # 使用protected_text作为text字段进行翻译
+                    translation_row = {
+                        "key": row.get("key", ""),
+                        "text": row.get("protected_text", row.get("text", "")),
+                        "tag": row.get("tag", ""),
+                        "file": row.get("file", ""),
+                        "type": row.get("type", ""),
+                    }
+                    writer.writerow(translation_row)
+
+            self.logger.debug(f"创建临时翻译CSV: {temp_path}")
+            return temp_path
+
+        except Exception as e:
+            self.logger.error("创建临时翻译CSV失败: %s", e)
+            # 确保临时文件被清理
+            try:
+                os.close(temp_fd)
+                os.remove(temp_path)
+            except OSError:
+                pass
+            raise
+
+    def _merge_translation_results(
+        self, original_csv: str, translated_csv: str
+    ) -> None:
+        """
+        将翻译结果合并回原始CSV文件
+
+        Args:
+            original_csv: 原始CSV文件路径
+            translated_csv: 翻译后的CSV文件路径
+        """
+        try:
+            # 读取翻译结果
+            translation_map = {}
+            with open(translated_csv, "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    key = row.get("key", "")
+                    translated_text = row.get("translated", "")
+                    if key and translated_text:
+                        translation_map[key] = translated_text
+
+            # 更新原始文件
+            rows = []
+            with open(original_csv, "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                fieldnames = list(reader.fieldnames)
+
+                # 确保有translated字段
+                if "translated" not in fieldnames:
+                    fieldnames.append("translated")
+
+                for row in reader:
+                    key = row.get("key", "")
+                    if key in translation_map:
+                        row["translated"] = translation_map[key]
+                    else:
+                        row["translated"] = ""
+                    rows.append(row)
+
+            # 写回原始文件
+            with open(original_csv, "w", encoding="utf-8", newline="") as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(rows)
+
+            self.logger.debug(f"翻译结果已合并到原始文件: {original_csv}")
+
+        except Exception as e:
+            self.logger.error("合并翻译结果失败: %s", e)
+            raise
+
     def get_status(self) -> Dict[str, Any]:
         """
         获取翻译器状态
@@ -869,7 +729,7 @@ class JavaTranslator:
         jar_path = None
         try:
             jar_path = self._find_jar_path()
-        except Exception:
+        except (FileNotFoundError, PermissionError):
             pass
         return {
             "java_available": java_path is not None,

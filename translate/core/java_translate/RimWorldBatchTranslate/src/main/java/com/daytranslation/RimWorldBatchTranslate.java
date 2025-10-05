@@ -14,9 +14,115 @@ import java.util.regex.*;
 import java.util.Scanner;
 
 public class RimWorldBatchTranslate {
+    // 常量定义
+    private static final Long DEFAULT_MODEL_ID = 27345L;
+    private static final int DEFAULT_MAX_RETRY = 3;
+    private static final long TRANSLATION_DELAY_MS = 500L;
+    private static final long RETRY_DELAY_MS = 2000L;
+    private static final String ALIMT_OPEN_TAG = "<ALIMT >";
+    private static final String ALIMT_CLOSE_TAG = "</ALIMT>";
+
     static String accessKeyId = null;
     static String accessKeySecret = null;
-    static Long modelId = 27345L;
+    static Long modelId = DEFAULT_MODEL_ID;
+
+    /**
+     * 判断是否应该跳过翻译
+     * 
+     * @param key  键值
+     * @param text 文本内容
+     * @return 跳过原因，如果不跳过则返回null
+     */
+    private static String shouldSkipTranslation(String key, String text) {
+        // 检查空值
+        if (key == null || text == null || key.trim().isEmpty() || text.trim().isEmpty()) {
+            return "空内容";
+        }
+
+        String trimmedText = text.trim();
+
+        // 1. 纯占位符（如 [xxx], [yyy]）
+        if (trimmedText.matches("(\\s*\\[[^\\]]+\\]\\s*)+")) {
+            return "纯占位符";
+        }
+
+        // 2. 纯数字
+        if (trimmedText.matches("^\\d+$")) {
+            return "纯数字";
+        }
+
+        // 3. 纯空格或制表符
+        if (trimmedText.matches("^\\s+$")) {
+            return "纯空白字符";
+        }
+
+        // 4. 函数调用（如 function_name(args)）
+        if (trimmedText.matches("^[a-zA-Z_][a-zA-Z0-9_]*\\([^)]*\\)$")) {
+            return "函数调用";
+        }
+
+        // 5. HTML标签（如 <color>red</color>）
+        if (trimmedText.matches("^<[^>]+>.*</[^>]+>$") || trimmedText.matches("^<[^>]+/>$")) {
+            return "HTML标签";
+        }
+
+        // 6. 文件路径或URL
+        if (trimmedText.matches("^[a-zA-Z]:\\\\") || // Windows路径
+                trimmedText.matches("^/") || // Unix路径
+                trimmedText.matches("^https?://")) { // URL
+            return "路径或URL";
+        }
+
+        // 7. 布尔值
+        if (trimmedText.matches("^(true|false)$")) {
+            return "布尔值";
+        }
+
+        // 8. 浮点数
+        if (trimmedText.matches("^-?\\d+\\.\\d+$")) {
+            return "浮点数";
+        }
+
+        // 9. 十六进制数
+        if (trimmedText.matches("^0x[0-9a-fA-F]+$")) {
+            return "十六进制数";
+        }
+
+        // 10. 特殊标记（如 {0}, {1} 等格式化占位符）
+        if (trimmedText.matches("^\\{\\d+\\}$")) {
+            return "格式化占位符";
+        }
+
+        // 11. 纯ALIMT保护内容（如 <ALIMT >content</ALIMT> 或 <ALIMT >(PH_1)</ALIMT>）
+        if (trimmedText.matches("^<ALIMT >.*</ALIMT>$")) {
+            return "纯ALIMT保护内容";
+        }
+
+        // 12. 多个纯ALIMT标签（如 <ALIMT >(PH_1)</ALIMT><ALIMT >(PH_2)</ALIMT>）
+        if (trimmedText.matches("^(<ALIMT >.*</ALIMT>)+$")) {
+            return "多个ALIMT标签";
+        }
+
+        // 不跳过
+        return null;
+    }
+
+    /**
+     * 移除ALIMT标签，只保留标签内的内容
+     * 
+     * @param text 包含ALIMT标签的文本
+     * @return 移除标签后的文本
+     */
+    private static String removeAlimtTags(String text) {
+        if (text == null || text.trim().isEmpty()) {
+            return text;
+        }
+
+        // 移除所有 <ALIMT > 和 </ALIMT> 标签
+        String result = text.replaceAll(ALIMT_OPEN_TAG, "").replaceAll(ALIMT_CLOSE_TAG, "");
+
+        return result;
+    }
 
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
@@ -144,22 +250,26 @@ public class RimWorldBatchTranslate {
                 String text = record.isMapped("text") ? record.get("text") : "";
                 String zh = "";
 
-                if (key.trim().isEmpty() || text.trim().isEmpty()) {
+                // 优化：统一处理跳过逻辑，减少重复代码
+                String skipReason = shouldSkipTranslation(key, text);
+                if (skipReason != null) {
                     java.util.List<String> row = new java.util.ArrayList<>(originalCols);
-                    row.add("");
+
+                    // 对于ALIMT保护内容，删除标签只保留内容
+                    String processedText = text;
+                    if (skipReason.contains("ALIMT")) {
+                        processedText = removeAlimtTags(text);
+                        System.out.println("跳过翻译并移除ALIMT标签: " + skipReason);
+                    } else {
+                        System.out.println("跳过翻译: " + skipReason);
+                    }
+
+                    row.add(processedText);
                     printer.printRecord(row);
-                    System.out.println("跳过空行");
-                    continue;
-                }
-                if (text.matches("(\\s*\\[[^\\]]+\\]\\s*)+")) {
-                    java.util.List<String> row = new java.util.ArrayList<>(originalCols);
-                    row.add(text);
-                    printer.printRecord(row);
-                    System.out.println("跳过占位符");
                     continue;
                 }
 
-                zh = aliyunTranslateCustom(client, text, modelId);
+                zh = translatePartWithRetry(client, text, modelId);
                 if (zh == null || zh.trim().isEmpty()) {
                     zh = text;
                     System.out.println("翻译失败，使用原文");
@@ -177,7 +287,7 @@ public class RimWorldBatchTranslate {
                 }
                 // 添加延迟以避免API限制，可以根据需要调整
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(TRANSLATION_DELAY_MS);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     System.out.println("[警告] 翻译过程被中断");
@@ -244,12 +354,16 @@ public class RimWorldBatchTranslate {
         }
     }
 
-    public static String aliyunTranslateCustom(IAcsClient client, String text, Long modelId) {
-        // 简化版本：直接翻译，不进行占位符保护
-        // 占位符保护现在由Python层处理
-        return translatePartWithRetry(client, text, modelId, 2);
+    /**
+     * 翻译文本（使用默认重试次数）
+     */
+    public static String translatePartWithRetry(IAcsClient client, String part, Long modelId) {
+        return translatePartWithRetry(client, part, modelId, DEFAULT_MAX_RETRY);
     }
 
+    /**
+     * 翻译文本（指定重试次数）
+     */
     public static String translatePartWithRetry(IAcsClient client, String part, Long modelId, int maxRetry) {
         if (part.trim().isEmpty())
             return part;
@@ -260,9 +374,10 @@ public class RimWorldBatchTranslate {
                     return zh;
             } catch (Exception e) {
                 // 静默处理错误，避免干扰进度条显示
+                // 可以在这里添加日志记录：System.err.println("翻译重试失败: " + e.getMessage());
             }
             try {
-                Thread.sleep(2000);
+                Thread.sleep(RETRY_DELAY_MS);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 System.out.println("[错误] 线程被中断");
