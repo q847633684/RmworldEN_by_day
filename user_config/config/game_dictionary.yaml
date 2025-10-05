@@ -1,381 +1,240 @@
-# 游戏词汇翻译词典
-# 存储游戏相关词汇的翻译对照关系
-
-# 基础词汇翻译
 basic_terms:
-  description: "基础词汇翻译对照"
+  description: 基础词汇翻译对照
   entries:
-    # 游戏基础概念
-    - english: "Health"
-      chinese: "生命值"
-      context: "游戏属性"
-      priority: "high"
-    
-    - english: "Mood"
-      chinese: "心情"
-      context: "游戏属性"
-      priority: "high"
-    
-    - english: "Food"
-      chinese: "食物"
-      context: "游戏物品"
-      priority: "high"
-    
-    - english: "Weapon"
-      chinese: "武器"
-      context: "游戏物品"
-      priority: "high"
-    
-    - english: "Armor"
-      chinese: "护甲"
-      context: "游戏物品"
-      priority: "high"
-    
-    - english: "Medicine"
-      chinese: "药物"
-      context: "游戏物品"
-      priority: "high"
-    
-    - english: "Research"
-      chinese: "研究"
-      context: "游戏机制"
-      priority: "high"
-    
-    - english: "Construction"
-      chinese: "建造"
-      context: "游戏机制"
-      priority: "high"
-    
-    - english: "Cooking"
-      chinese: "烹饪"
-      context: "游戏机制"
-      priority: "high"
-    
-    - english: "Mining"
-      chinese: "采矿"
-      context: "游戏机制"
-      priority: "high"
-
-# RimWorld 特有术语
-rimworld_terms:
-  description: "RimWorld 特有术语翻译"
-  entries:
-    - english: "Colonist"
-      chinese: "殖民者"
-      context: "游戏角色"
-      priority: "high"
-    
-    - english: "Pawn"
-      chinese: "角色"
-      context: "游戏角色"
-      priority: "high"
-    
-    - english: "Raid"
-      chinese: "袭击"
-      context: "游戏事件"
-      priority: "high"
-    
-    - english: "Mood Debuff"
-      chinese: "心情减益"
-      context: "游戏机制"
-      priority: "medium"
-    
-    - english: "Mood Buff"
-      chinese: "心情增益"
-      context: "游戏机制"
-      priority: "medium"
-    
-    - english: "Mental Break"
-      chinese: "精神崩溃"
-      context: "游戏机制"
-      priority: "high"
-    
-    - english: "Break Risk"
-      chinese: "崩溃风险"
-      context: "游戏机制"
-      priority: "medium"
-    
-    - english: "Work Priority"
-      chinese: "工作优先级"
-      context: "游戏机制"
-      priority: "medium"
-    
-    - english: "Restrict"
-      chinese: "限制"
-      context: "游戏机制"
-      priority: "medium"
-    
-    - english: "Assign"
-      chinese: "分配"
-      context: "游戏机制"
-      priority: "medium"
-
-# 技术术语
-technical_terms:
-  description: "技术术语翻译"
-  entries:
-    - english: "Def"
-      chinese: "定义"
-      context: "技术术语"
-      priority: "low"
-    
-    - english: "XML"
-      chinese: "XML"
-      context: "技术术语"
-      priority: "low"
-    
-    - english: "Mod"
-      chinese: "模组"
-      context: "技术术语"
-      priority: "medium"
-    
-    - english: "Patch"
-      chinese: "补丁"
-      context: "技术术语"
-      priority: "low"
-    
-    - english: "Override"
-      chinese: "覆盖"
-      context: "技术术语"
-      priority: "low"
-    
-    - english: "Inherit"
-      chinese: "继承"
-      context: "技术术语"
-      priority: "low"
-    
-    - english: "Abstract"
-      chinese: "抽象"
-      context: "技术术语"
-      priority: "low"
-    
-    - english: "Parent"
-      chinese: "父级"
-      context: "技术术语"
-      priority: "low"
-    
-    - english: "Child"
-      chinese: "子级"
-      context: "技术术语"
-      priority: "low"
-
-# 物品类型
-item_types:
-  description: "物品类型翻译"
-  entries:
-    - english: "ThingDef"
-      chinese: "物品定义"
-      context: "物品类型"
-      priority: "medium"
-    
-    - english: "PawnKindDef"
-      chinese: "角色类型定义"
-      context: "物品类型"
-      priority: "medium"
-    
-    - english: "FactionDef"
-      chinese: "派系定义"
-      context: "物品类型"
-      priority: "medium"
-    
-    - english: "ResearchProjectDef"
-      chinese: "研究项目定义"
-      context: "物品类型"
-      priority: "medium"
-    
-    - english: "RecipeDef"
-      chinese: "配方定义"
-      context: "物品类型"
-      priority: "medium"
-    
-    - english: "WorkTypeDef"
-      chinese: "工作类型定义"
-      context: "物品类型"
-      priority: "medium"
-    
-    - english: "SkillDef"
-      chinese: "技能定义"
-      context: "物品类型"
-      priority: "medium"
-    
-    - english: "TraitDef"
-      chinese: "特质定义"
-      context: "物品类型"
-      priority: "medium"
-
-# 翻译规则
-translation_rules:
-  description: "翻译规则和约定"
-  rules:
-    - rule: "专有名词保持英文"
-      example: "XML, API, GUI"
-      priority: "high"
-    
-    - rule: "游戏内物品名称保持原意"
-      example: "Steel -> 钢铁, Wood -> 木材"
-      priority: "high"
-    
-    - rule: "技能名称使用动词形式"
-      example: "Mining -> 采矿, Cooking -> 烹饪"
-      priority: "medium"
-    
-    - rule: "状态描述使用形容词"
-      example: "Happy -> 快乐, Sad -> 悲伤"
-      priority: "medium"
-    
-    - rule: "动作描述使用动词"
-      example: "Attack -> 攻击, Defend -> 防御"
-      priority: "medium"
-
-# 常用短语
+  - chinese: 生命值
+    context: 游戏属性
+    english: Health
+    priority: high
+  - chinese: 心情
+    context: 游戏属性
+    english: Mood
+    priority: high
+  - chinese: 研究
+    context: 游戏机制
+    english: Research
+    priority: high
 common_phrases:
-  description: "常用短语翻译"
+  description: 常用短语翻译
   entries:
-    - english: "Ate without table"
-      chinese: "在无桌环境下用餐"
-      context: "心情描述"
-      priority: "high"
-    
-    - english: "Slept on ground"
-      chinese: "睡在地上"
-      context: "心情描述"
-      priority: "high"
-    
-    - english: "Ate raw food"
-      chinese: "食用生食"
-      context: "心情描述"
-      priority: "high"
-    
-    - english: "Wearing tattered apparel"
-      chinese: "穿着破烂服装"
-      context: "心情描述"
-      priority: "high"
-    
-    - english: "Slept in the cold"
-      chinese: "在寒冷中睡觉"
-      context: "心情描述"
-      priority: "high"
-    
-    - english: "Slept in the heat"
-      chinese: "在炎热中睡觉"
-      context: "心情描述"
-      priority: "high"
-    
-    - english: "Slept in the dark"
-      chinese: "在黑暗中睡觉"
-      context: "心情描述"
-      priority: "high"
-    
-    - english: "Slept outside"
-      chinese: "在户外睡觉"
-      context: "心情描述"
-      priority: "high"
-
-# 游戏相关补充词汇
+  - chinese: 在无桌环境下用餐
+    context: 心情描述
+    english: Ate without table
+    priority: high
+  - chinese: 睡在地上
+    context: 心情描述
+    english: Slept on ground
+    priority: high
+  - chinese: 食用生食
+    context: 心情描述
+    english: Ate raw food
+    priority: high
+  - chinese: 穿着破烂服装
+    context: 心情描述
+    english: Wearing tattered apparel
+    priority: high
+  - chinese: 在寒冷中睡觉
+    context: 心情描述
+    english: Slept in the cold
+    priority: high
+  - chinese: 在炎热中睡觉
+    context: 心情描述
+    english: Slept in the heat
+    priority: high
+  - chinese: 在黑暗中睡觉
+    context: 心情描述
+    english: Slept in the dark
+    priority: high
+  - chinese: 在户外睡觉
+    context: 心情描述
+    english: Slept outside
+    priority: high
 game_supplements:
-  description: "游戏相关补充词汇"
+  description: 游戏相关补充词汇
   entries:
-    - english: "guest joins"
-      chinese: "客人加入"
-      context: "游戏事件"
-      priority: "low"
-    
-    - english: "guest"
-      chinese: "客人"
-      context: "角色类型"
-      priority: "low"
-    
-    - english: "joins"
-      chinese: "加入"
-      context: "行为动作"
-      priority: "low"
-    
-    - english: "colonist"
-      chinese: "殖民者"
-      context: "游戏角色"
-      priority: "medium"
-    
-    - english: "colonists"
-      chinese: "殖民者们"
-      context: "游戏角色"
-      priority: "medium"
-    
-    - english: "colony"
-      chinese: "殖民地"
-      context: "游戏概念"
-      priority: "medium"
-    
-    - english: "couple of days"
-      chinese: "几天"
-      context: "时间描述"
-      priority: "low"
-    
-    - english: "hang around"
-      chinese: "逗留"
-      context: "行为描述"
-      priority: "low"
-    
-    - english: "decide to join"
-      chinese: "决定加入"
-      context: "行为描述"
-      priority: "low"
-    
-    - english: "decided to stay"
-      chinese: "决定留下"
-      context: "行为描述"
-      priority: "low"
-    
-    - english: "enjoys it here"
-      chinese: "喜欢这里"
-      context: "情感描述"
-      priority: "low"
-    
-    - english: "fed"
-      chinese: "进食"
-      context: "动作描述"
-      priority: "medium"
-    
-    - english: "feeding"
-      chinese: "进食"
-      context: "动作描述"
-      priority: "medium"
-    
-    - english: "feeds"
-      chinese: "进食"
-      context: "动作描述"
-      priority: "medium"
-    
-    - english: "impressed"
-      chinese: "印象深刻"
-      context: "心理状态"
-      priority: "medium"
-    
-    - english: "impress"
-      chinese: "印象深刻"
-      context: "心理状态"
-      priority: "medium"
-    
-    - english: "impressing"
-      chinese: "印象深刻"
-      context: "心理状态"
-      priority: "medium"
-    
-    - english: "desperate"
-      chinese: "绝望的"
-      context: "心理状态"
-      priority: "medium"
-    
-    - english: "desperation"
-      chinese: "绝望"
-      context: "心理状态"
-      priority: "medium"
-    
-    - english: "prowess"
-      chinese: "能力"
-      context: "能力描述"
-      priority: "medium"
-    
-    - english: "dirty"
-      chinese: "肮脏的"
-      context: "描述词"
-      priority: "medium"
+  - chinese: 客人加入
+    context: 游戏事件
+    english: guest joins
+    priority: low
+  - chinese: 客人
+    context: 角色类型
+    english: guest
+    priority: low
+  - chinese: 加入
+    context: 行为动作
+    english: joins
+    priority: low
+  - chinese: 殖民者们
+    context: 游戏角色
+    english: colonists
+    priority: medium
+  - chinese: 殖民地
+    context: 游戏概念
+    english: colony
+    priority: medium
+  - chinese: 几天
+    context: 时间描述
+    english: couple of days
+    priority: low
+  - chinese: 逗留
+    context: 行为描述
+    english: hang around
+    priority: low
+  - chinese: 决定加入
+    context: 行为描述
+    english: decide to join
+    priority: low
+  - chinese: 决定留下
+    context: 行为描述
+    english: decided to stay
+    priority: low
+  - chinese: 喜欢这里
+    context: 情感描述
+    english: enjoys it here
+    priority: low
+  - chinese: 进食
+    context: 动作描述
+    english: fed
+    priority: medium
+  - chinese: 进食
+    context: 动作描述
+    english: feeds
+    priority: medium
+  - chinese: 印象深刻
+    context: 心理状态
+    english: impress
+    priority: medium
+  - chinese: 印象深刻
+    context: 心理状态
+    english: impressing
+    priority: medium
+  - chinese: 绝望的
+    context: 心理状态
+    english: desperate
+    priority: medium
+  - chinese: 绝望
+    context: 心理状态
+    english: desperation
+    priority: medium
+  - chinese: 能力
+    context: 能力描述
+    english: prowess
+    priority: medium
+item_types:
+  description: 物品类型翻译
+  entries:
+  - chinese: 物品定义
+    context: 物品类型
+    english: ThingDef
+    priority: medium
+  - chinese: 角色类型定义
+    context: 物品类型
+    english: PawnKindDef
+    priority: medium
+  - chinese: 派系定义
+    context: 物品类型
+    english: FactionDef
+    priority: medium
+  - chinese: 研究项目定义
+    context: 物品类型
+    english: ResearchProjectDef
+    priority: medium
+  - chinese: 配方定义
+    context: 物品类型
+    english: RecipeDef
+    priority: medium
+  - chinese: 工作类型定义
+    context: 物品类型
+    english: WorkTypeDef
+    priority: medium
+  - chinese: 技能定义
+    context: 物品类型
+    english: SkillDef
+    priority: medium
+  - chinese: 特质定义
+    context: 物品类型
+    english: TraitDef
+    priority: medium
+rimworld_terms:
+  description: RimWorld 特有术语翻译
+  entries:
+  - chinese: 殖民者
+    context: 游戏角色
+    english: Colonist
+    priority: high
+  - chinese: 袭击
+    context: 游戏事件
+    english: Raid
+    priority: high
+  - chinese: 心情减益
+    context: 游戏机制
+    english: Mood Debuff
+    priority: medium
+  - chinese: 心情增益
+    context: 游戏机制
+    english: Mood Buff
+    priority: medium
+  - chinese: 精神崩溃
+    context: 游戏机制
+    english: Mental Break
+    priority: high
+  - chinese: 崩溃风险
+    context: 游戏机制
+    english: Break Risk
+    priority: medium
+  - chinese: 工作优先级
+    context: 游戏机制
+    english: Work Priority
+    priority: medium
+  - chinese: 限制
+    context: 游戏机制
+    english: Restrict
+    priority: medium
+  - chinese: 分配
+    context: 游戏机制
+    english: Assign
+    priority: medium
+technical_terms:
+  description: 技术术语翻译
+  entries:
+  - chinese: 定义
+    context: 技术术语
+    english: Def
+    priority: low
+  - chinese: XML
+    context: 技术术语
+    english: XML
+    priority: low
+  - chinese: 模组
+    context: 技术术语
+    english: Mod
+    priority: medium
+  - chinese: 覆盖
+    context: 技术术语
+    english: Override
+    priority: low
+  - chinese: 继承
+    context: 技术术语
+    english: Inherit
+    priority: low
+  - chinese: 父级
+    context: 技术术语
+    english: Parent
+    priority: low
+translation_rules:
+  description: 翻译规则和约定
+  rules:
+  - example: XML, API, GUI
+    priority: high
+    rule: 专有名词保持英文
+  - example: Steel -> 钢铁, Wood -> 木材
+    priority: high
+    rule: 游戏内物品名称保持原意
+  - example: Mining -> 采矿, Cooking -> 烹饪
+    priority: medium
+    rule: 技能名称使用动词形式
+  - example: Happy -> 快乐, Sad -> 悲伤
+    priority: medium
+    rule: 状态描述使用形容词
+  - example: Attack -> 攻击, Defend -> 防御
+    priority: medium
+    rule: 动作描述使用动词

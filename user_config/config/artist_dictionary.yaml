@@ -954,10 +954,6 @@ western_artists:
     context: artist_terms
     english: dr.bug
     priority: high
-  - chinese: 核座头
-    context: artist_terms
-    english: kakuzatou
-    priority: high
   - chinese: 白野じん
     context: artist_terms
     english: nora shinji
@@ -1346,10 +1342,6 @@ western_artists:
     context: artist_terms
     english: soine
     priority: high
-  - chinese: わさび \
-    context: artist_terms
-    english: wasabi
-    priority: high
   - chinese: 犬
     context: artist_terms
     english: inu
@@ -1361,10 +1353,6 @@ western_artists:
   - chinese: 小梅京人
     context: artist_terms
     english: koume keito
-    priority: high
-  - chinese: ホムンクルス
-    context: artist_terms
-    english: homunculus
     priority: high
   - chinese: 鹰势优
     context: artist_terms
@@ -1537,10 +1525,6 @@ western_artists:
   - chinese: 水点下
     context: artist_terms
     english: mizutenka
-    priority: high
-  - chinese: ひぽぽたます
-    context: artist_terms
-    english: hippopotamus
     priority: high
   - chinese: 新井大器
     context: artist_terms
@@ -2214,10 +2198,6 @@ western_artists:
     context: artist_terms
     english: mikage baku
     priority: high
-  - chinese: 鲑
-    context: artist_terms
-    english: sake
-    priority: high
   - chinese: 上上上
     context: artist_terms
     english: kamijou noboru
@@ -2437,10 +2417,6 @@ western_artists:
   - chinese: R5
     context: artist_terms
     english: r5
-    priority: high
-  - chinese: にゅくす
-    context: artist_terms
-    english: nyx
     priority: high
   - chinese: 酔っ払い鬼?
     context: artist_terms
@@ -2874,10 +2850,6 @@ western_artists:
     context: artist_terms
     english: byougaku
     priority: high
-  - chinese: モチ
-    context: artist_terms
-    english: mochi
-    priority: high
   - chinese: 彩季なお
     context: artist_terms
     english: saeki nao
@@ -3058,10 +3030,6 @@ western_artists:
     context: artist_terms
     english: abara heiki
     priority: high
-  - chinese: 凡
-    context: artist_terms
-    english: bon
-    priority: high
   - chinese: 卷田佳春
     context: artist_terms
     english: makita yoshiharu
@@ -3105,10 +3073,6 @@ western_artists:
   - chinese: 鹿成トクサク
     context: artist_terms
     english: kanari tokusaku
-    priority: high
-  - chinese: 煎饼
-    context: artist_terms
-    english: senbei
     priority: high
   - chinese: イトハナ
     context: artist_terms
@@ -3282,10 +3246,6 @@ western_artists:
     context: artist_terms
     english: muryotaro
     priority: high
-  - chinese: カジノ
-    context: artist_terms
-    english: casino
-    priority: high
   - chinese: 不嬢女子
     context: artist_terms
     english: fujoujoshi
@@ -3457,10 +3417,6 @@ western_artists:
   - chinese: 鈴玉レンリ
     context: artist_terms
     english: suzudama renri
-    priority: high
-  - chinese: 墓場
-    context: artist_terms
-    english: hakaba
     priority: high
   - chinese: たかみち
     context: artist_terms
@@ -3909,10 +3865,6 @@ western_artists:
   - chinese: あくびんす
     context: artist_terms
     english: acbins
-    priority: high
-  - chinese: あちゅむち
-    context: artist_terms
-    english: achumuchi
     priority: high
   - chinese: あふろ
     context: artist_terms
@@ -4446,10 +4398,6 @@ western_artists:
     context: artist_terms
     english: bakuchin
     priority: high
-  - chinese: ばん!
-    context: artist_terms
-    english: ban
-    priority: high
   - chinese: ばんこく堂
     context: artist_terms
     english: bankokudou
@@ -4542,10 +4490,6 @@ western_artists:
     context: artist_terms
     english: bun
     priority: high
-  - chinese: バニー
-    context: artist_terms
-    english: bunny
-    priority: high
   - chinese: 豚じまん
     context: artist_terms
     english: butajiman
@@ -4562,10 +4506,6 @@ western_artists:
     context: artist_terms
     english: cashew
     priority: high
-  - chinese: キャタピラ
-    context: artist_terms
-    english: caterpillar
-    priority: high
   - chinese: せぼい
     context: artist_terms
     english: cevoy
@@ -4577,10 +4517,6 @@ western_artists:
   - chinese: ちゃぐ
     context: artist_terms
     english: chagu
-    priority: high
-  - chinese: かめれおん
-    context: artist_terms
-    english: chameleon
     priority: high
   - chinese: 茶野みな
     context: artist_terms
@@ -4678,10 +4614,6 @@ western_artists:
     context: artist_terms
     english: ci
     priority: high
-  - chinese: ここあ
-    context: artist_terms
-    english: cocoa
-    priority: high
   - chinese: 心野ありか
     context: artist_terms
     english: cocorono arika
@@ -4702,10 +4634,6 @@ western_artists:
     context: artist_terms
     english: crazy white
     priority: high
-  - chinese: クロス
-    context: artist_terms
-    english: cross
-    priority: high
   - chinese: クリスタル少女
     context: artist_terms
     english: crystal shoujo
@@ -4713,10 +4641,6 @@ western_artists:
   - chinese: くましょう
     context: artist_terms
     english: cumasyo
-    priority: high
-  - chinese: カスタム
-    context: artist_terms
-    english: custom
     priority: high
   - chinese: ちょりすけ
     context: artist_terms
@@ -4741,10 +4665,6 @@ western_artists:
   - chinese: ダン
     context: artist_terms
     english: dan
-    priority: high
-  - chinese: 団子
-    context: artist_terms
-    english: dango
     priority: high
   - chinese: 暖冬
     context: artist_terms
@@ -5626,10 +5546,6 @@ western_artists:
     context: artist_terms
     english: hiwatari rin
     priority: high
-  - chinese: 飛熊
-    context: artist_terms
-    english: hiyou
-    priority: high
   - chinese: ホカゲミオ
     context: artist_terms
     english: hokagemio
@@ -5913,10 +5829,6 @@ western_artists:
   - chinese: イシトク
     context: artist_terms
     english: ishitoku
-    priority: high
-  - chinese: あいらんど
-    context: artist_terms
-    english: island
     priority: high
   - chinese: いそろく
     context: artist_terms
@@ -6262,10 +6174,6 @@ western_artists:
     context: artist_terms
     english: kanzaki gorou
     priority: high
-  - chinese: かっぱ
-    context: artist_terms
-    english: kappa
-    priority: high
   - chinese: からあげチャン
     context: artist_terms
     english: karaage-chan
@@ -6317,10 +6225,6 @@ western_artists:
   - chinese: カタギリ
     context: artist_terms
     english: katagiri
-    priority: high
-  - chinese: カタカナ
-    context: artist_terms
-    english: katakana
     priority: high
   - chinese: かたり
     context: artist_terms
@@ -6637,10 +6541,6 @@ western_artists:
   - chinese: 小池定路
     context: artist_terms
     english: koike sadaji
-    priority: high
-  - chinese: コキリ
-    context: artist_terms
-    english: kokiri
     priority: high
   - chinese: ここのか
     context: artist_terms
@@ -7122,10 +7022,6 @@ western_artists:
     context: artist_terms
     english: manboren
     priority: high
-  - chinese: マンゴスチン
-    context: artist_terms
-    english: mangosteen
-    priority: high
   - chinese: マンモスまりも
     context: artist_terms
     english: manmosu marimo
@@ -7141,10 +7037,6 @@ western_artists:
   - chinese: まーがもいど
     context: artist_terms
     english: margamoid
-    priority: high
-  - chinese: マリモ
-    context: artist_terms
-    english: marimo
     priority: high
   - chinese: まりぴょん
     context: artist_terms
@@ -7358,10 +7250,6 @@ western_artists:
     context: artist_terms
     english: mimasaka hideaki
     priority: high
-  - chinese: 耳式
-    context: artist_terms
-    english: mimishiki
-    priority: high
   - chinese: みもとん
     context: artist_terms
     english: mimoton
@@ -7509,10 +7397,6 @@ western_artists:
   - chinese: 宮崎ユウキ
     context: artist_terms
     english: miyazaki yuki
-    priority: high
-  - chinese: 深雪
-    context: artist_terms
-    english: miyuki
     priority: high
   - chinese: みじんこすちん
     context: artist_terms
@@ -8282,10 +8166,6 @@ western_artists:
     context: artist_terms
     english: oda akira
     priority: high
-  - chinese: おデン
-    context: artist_terms
-    english: oden
-    priority: high
   - chinese: Og
     context: artist_terms
     english: og
@@ -8422,10 +8302,6 @@ western_artists:
     context: artist_terms
     english: ore ebis
     priority: high
-  - chinese: おるがにこ
-    context: artist_terms
-    english: organico
-    priority: high
   - chinese: 折川
     context: artist_terms
     english: orikawa
@@ -8514,10 +8390,6 @@ western_artists:
     context: artist_terms
     english: pageratta
     priority: high
-  - chinese: ぱんだ
-    context: artist_terms
-    english: panda
-    priority: high
   - chinese: パオ
     context: artist_terms
     english: pao
@@ -8526,10 +8398,6 @@ western_artists:
     context: artist_terms
     english: pappa
     priority: high
-  - chinese: ぱふぇ
-    context: artist_terms
-    english: parfait
-    priority: high
   - chinese: ぱるぱる
     context: artist_terms
     english: paruparu
@@ -8537,10 +8405,6 @@ western_artists:
   - chinese: パトちゃん
     context: artist_terms
     english: pato-chan
-    priority: high
-  - chinese: 筆吟堂
-    context: artist_terms
-    english: penguindou
     priority: high
   - chinese: ぺぽ
     context: artist_terms
@@ -8570,10 +8434,6 @@ western_artists:
     context: artist_terms
     english: pira
     priority: high
-  - chinese: ぴすとん
-    context: artist_terms
-    english: piston
-    priority: high
   - chinese: プラス
     context: artist_terms
     english: plus
@@ -8581,10 +8441,6 @@ western_artists:
   - chinese: ぽっけ
     context: artist_terms
     english: pokke
-    priority: high
-  - chinese: ポール
-    context: artist_terms
-    english: pole
     priority: high
   - chinese: ぽむぽむ
     context: artist_terms
@@ -8653,10 +8509,6 @@ western_artists:
   - chinese: らーめん
     context: artist_terms
     english: ra-men
-    priority: high
-  - chinese: らけっと
-    context: artist_terms
-    english: racket
     priority: high
   - chinese: ラフロ
     context: artist_terms
@@ -8897,10 +8749,6 @@ western_artists:
   - chinese: 坂本サルトムント練馬
     context: artist_terms
     english: sakamoto sarutomunto nerima
-    priority: high
-  - chinese: 坂田金時
-    context: artist_terms
-    english: sakata kintoki
     priority: high
   - chinese: サケマス
     context: artist_terms
@@ -9158,10 +9006,6 @@ western_artists:
     context: artist_terms
     english: setuna rio
     priority: high
-  - chinese: しゃち
-    context: artist_terms
-    english: shachi
-    priority: high
   - chinese: しゃけ
     context: artist_terms
     english: shake
@@ -9197,10 +9041,6 @@ western_artists:
   - chinese: しぃ
     context: artist_terms
     english: shii
-    priority: high
-  - chinese: しじま
-    context: artist_terms
-    english: shijima
     priority: high
   - chinese: しじょっこ
     context: artist_terms
@@ -9473,10 +9313,6 @@ western_artists:
   - chinese: そば湯
     context: artist_terms
     english: sovayu
-    priority: high
-  - chinese: 雀
-    context: artist_terms
-    english: sparrow
     priority: high
   - chinese: ステルス改行
     context: artist_terms
@@ -9770,10 +9606,6 @@ western_artists:
     context: artist_terms
     english: tako kuboh
     priority: high
-  - chinese: 章鱼烧
-    context: artist_terms
-    english: takoyaki
-    priority: high
   - chinese: 卓二雄作
     context: artist_terms
     english: takuji yuusaku
@@ -9970,10 +9802,6 @@ western_artists:
     context: artist_terms
     english: tobari
     priority: high
-  - chinese: とうふ
-    context: artist_terms
-    english: tofu
-    priority: high
   - chinese: とーご
     context: artist_terms
     english: togo
@@ -10021,10 +9849,6 @@ western_artists:
   - chinese: とくたん
     context: artist_terms
     english: tokutan
-    priority: high
-  - chinese: トム
-    context: artist_terms
-    english: tom
     priority: high
   - chinese: トマトマト
     context: artist_terms
@@ -10133,10 +9957,6 @@ western_artists:
   - chinese: 豊島ゆーさく
     context: artist_terms
     english: toyoshima yuusaku
-    priority: high
-  - chinese: トライデント
-    context: artist_terms
-    english: trident
     priority: high
   - chinese: ツバキハラ
     context: artist_terms
@@ -10253,10 +10073,6 @@ western_artists:
   - chinese: 内座
     context: artist_terms
     english: uchikura
-    priority: high
-  - chinese: うどん
-    context: artist_terms
-    english: udon
     priority: high
   - chinese: 上原あり
     context: artist_terms
@@ -10601,10 +10417,6 @@ western_artists:
   - chinese: 柳田史太
     context: artist_terms
     english: yanagida fumita
-    priority: high
-  - chinese: 柳瀬川部屋
-    context: artist_terms
-    english: yanasegawabeya
     priority: high
   - chinese: やのかけ
     context: artist_terms
@@ -11505,10 +11317,6 @@ western_artists:
   - chinese: 石见やそや
     context: artist_terms
     english: iwami yasoya
-    priority: high
-  - chinese: 唐扬
-    context: artist_terms
-    english: karaage
     priority: high
   - chinese: 池竜静留
     context: artist_terms
