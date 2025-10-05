@@ -11,8 +11,7 @@ from utils.ui_style import ui
 
 from .translator_factory import TranslatorFactory
 
-# 翻译配置已迁移到新配置系统
-from .python_translator import AcsClient, TranslateGeneralRequest
+# Python翻译器依赖通过try-except导入，这里不直接导入
 
 
 class UnifiedTranslator:
@@ -93,27 +92,27 @@ class UnifiedTranslator:
                     input_path.parent / f"{input_path.stem}_translated.csv"
                 )
 
-            # 步骤1：预处理成人内容
-            ui.print_info("🔍 检查成人内容...")
+            # 步骤1：保护成人内容（用ALIMT标签保护英文原文）
+            ui.print_info("🔍 保护成人内容...")
             temp_csv = input_csv
+            # 创建临时文件用于保护成人内容
             try:
-                from ..dictionary.dictionary_translator import DictionaryTranslator
+                adult_translator = self.factory.create_dictionary_translator("adult")
 
-                adult_translator = DictionaryTranslator("adult")
+                temp_csv = str(Path(input_csv).with_suffix(".temp_protected.csv"))
+                protect_success = adult_translator.translate_csv(
+                    input_csv, temp_csv, mode="protect"
+                )
 
-                # 创建临时文件用于成人内容翻译
-                temp_csv = str(Path(input_csv).with_suffix(".temp_adult.csv"))
-                adult_success = adult_translator.translate_csv_file(input_csv, temp_csv)
-
-                if adult_success:
-                    ui.print_success("✅ 成人内容预处理完成")
-                    self.logger.info("成人内容预处理完成，使用临时文件: %s", temp_csv)
+                if protect_success:
+                    ui.print_success("✅ 成人内容保护完成")
+                    self.logger.info("成人内容保护完成，使用临时文件: %s", temp_csv)
                 else:
-                    ui.print_warning("⚠️ 成人内容预处理失败，使用原始文件")
+                    ui.print_warning("⚠️ 成人内容保护失败，使用原始文件")
                     temp_csv = input_csv
 
             except Exception as e:
-                self.logger.warning("成人内容预处理失败: %s，使用原始文件", e)
+                self.logger.warning("成人内容保护失败: %s，使用原始文件", e)
                 temp_csv = input_csv
 
             self.logger.info(
@@ -131,7 +130,33 @@ class UnifiedTranslator:
             # 步骤3：执行机器翻译
             success = translator.translate_csv(temp_csv, output_csv, **kwargs)
 
-            # 步骤4：清理临时文件
+            # 步骤4：翻译成人内容（阿里云翻译后，ALIMT标签已被移除）
+            if success:
+                ui.print_info("🔍 翻译成人内容...")
+                try:
+                    adult_translator = self.factory.create_dictionary_translator(
+                        "adult"
+                    )
+
+                    # 创建最终输出文件
+                    final_output = str(Path(output_csv).with_suffix(".final.csv"))
+                    adult_success = adult_translator.translate_csv(
+                        output_csv, final_output, mode="translate"
+                    )
+
+                    if adult_success:
+                        # 替换原输出文件
+                        Path(output_csv).unlink()
+                        Path(final_output).rename(output_csv)
+                        ui.print_success("✅ 成人内容翻译完成")
+                        self.logger.info("成人内容翻译完成")
+                    else:
+                        ui.print_warning("⚠️ 成人内容翻译失败，使用机器翻译结果")
+
+                except Exception as e:
+                    self.logger.warning("成人内容翻译失败: %s，使用机器翻译结果", e)
+
+            # 步骤5：清理临时文件
             if temp_csv != input_csv and Path(temp_csv).exists():
                 try:
                     Path(temp_csv).unlink()
@@ -286,11 +311,11 @@ class UnifiedTranslator:
     def _get_python_status(self) -> Dict[str, Any]:
         """获取Python翻译器状态"""
         try:
-            # 检查Python翻译依赖
-            return {
-                "available": AcsClient is not None
-                and TranslateGeneralRequest is not None,
-                "reason": "Python翻译器可用" if AcsClient else "阿里云SDK未安装",
-            }
+            # 通过工厂获取Python翻译器状态
+            python_translator = self._get_python_translator()
+            if python_translator:
+                return python_translator.get_status()
+            else:
+                return {"available": False, "reason": "无法创建Python翻译器"}
         except Exception as e:
             return {"available": False, "reason": str(e)}

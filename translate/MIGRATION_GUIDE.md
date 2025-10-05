@@ -76,7 +76,7 @@ elif mode == "3":
 - `java_translate/handler.py` 和 `java_translate/__init__.py`（已废弃，已删除）
 
 **保留的文件：**
-- `java_translate/RimWorldBatchTranslate/`（Java Maven项目，包含构建产物）
+- `translate/core/java_translate/RimWorldBatchTranslate/`（Java Maven项目，包含构建产物）
 - `core/translation_facade.py`（增强功能）
 
 ## 🚀 新功能特性
@@ -166,7 +166,7 @@ translator = UnifiedTranslator(config)
 1. **Java翻译器不可用**
    - 检查Java环境是否正确安装
    - 检查JAR文件是否已构建
-   - 运行：`cd java_translate/RimWorldBatchTranslate && mvn package`
+   - 运行：`cd translate/core/java_translate/RimWorldBatchTranslate && mvn package`
 
 2. **Python翻译器不可用**
    - 检查阿里云SDK是否安装：`pip install aliyun-python-sdk-core aliyun-python-sdk-alimt`

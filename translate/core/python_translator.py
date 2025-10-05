@@ -1,6 +1,5 @@
 import csv
-import logging
-from utils.logging_config import get_logger, log_error_with_context
+from utils.logging_config import get_logger
 from utils.ui_style import ui
 import os
 import re
@@ -55,8 +54,23 @@ def translate_text(
         return text
 
     try:
+        # 处理ALIMT标签：保护不需要翻译的内容
+        alimt_pattern = r"<ALIMT >(.*?)</ALIMT>"
+        alimt_matches = {}
+        idx = 1
+
+        def replace_alimt(match):
+            nonlocal idx
+            placeholder = f"(ALIMT_PH_{idx})"
+            alimt_matches[placeholder] = match.group(1)
+            idx += 1
+            return placeholder
+
+        # 替换ALIMT标签为占位符
+        protected_text = re.sub(alimt_pattern, replace_alimt, text, flags=re.DOTALL)
+
         # 分割文本，保留占位符
-        parts = re.split(r"(\[[^\]]+\])", text)
+        parts = re.split(r"(\[[^\]]+\])", protected_text)
         translated_parts = []
 
         client = AcsClient(access_key_id, access_key_secret, region_id)
@@ -85,6 +99,12 @@ def translate_text(
                 translated_parts.append(part)
 
         translated = "".join(translated_parts)
+
+        # 恢复ALIMT标签内容
+        for placeholder, original_content in alimt_matches.items():
+            translated = translated.replace(placeholder, original_content)
+            ui.print_info(f"恢复ALIMT内容: {placeholder} -> {original_content[:30]}...")
+
         ui.print_success(f"翻译完成: {text[:30]}... -> {translated[:30]}...")
         return translated
 
@@ -184,7 +204,7 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
                         TimeoutError,
                         ValueError,
                         RuntimeError,
-                    ) as e:
+                    ):
                         ui.print_error(f"❌ 第{line_num}行翻译失败: {text[:50]}...")
                         row["translated"] = text
 

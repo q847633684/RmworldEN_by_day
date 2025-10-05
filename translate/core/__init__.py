@@ -1,14 +1,16 @@
 """
 翻译核心模块
-包含统一翻译器和相关核心组件
+包含核心翻译组件
 """
 
-from .unified_translator import UnifiedTranslator
-from .translator_factory import TranslatorFactory
-
-# 翻译配置已迁移到新配置系统
+from .dictionary_translator import DictionaryTranslator
+from .java_translator import JavaTranslator
+from .python_translator import translate_csv, AcsClient, TranslateGeneralRequest
 
 __all__ = [
-    "UnifiedTranslator",
-    "TranslatorFactory",
+    "DictionaryTranslator",
+    "JavaTranslator",
+    "translate_csv",
+    "AcsClient",
+    "TranslateGeneralRequest",
 ]

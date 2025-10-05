@@ -27,7 +27,7 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
 
     try:
         # 直接使用统一翻译器
-        from translate.core.unified_translator import UnifiedTranslator
+        from translate.unified_translator import UnifiedTranslator
 
         # 创建统一翻译器实例
         translator = UnifiedTranslator()
@@ -93,9 +93,6 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
 
         # 自动生成输出CSV文件路径
         output_csv = auto_generate_output_path(csv_path)
-
-        # 将输出CSV加入"导入翻译"的历史
-        PathManager().remember_path("import_csv", output_csv)
 
         # 显示翻译配置（简化版）
         ui.print_section_header("翻译配置", ui.Icons.SETTINGS)

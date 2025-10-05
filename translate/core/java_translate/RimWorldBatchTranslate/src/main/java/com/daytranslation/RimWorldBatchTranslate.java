@@ -22,14 +22,14 @@ public class RimWorldBatchTranslate {
         Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
 
         // 检查是否是交互模式（通过环境变量或参数判断）
-        boolean interactiveMode = System.getenv("INTERACTIVE_MODE") != null || 
-                                (args.length > 0 && "interactive".equals(args[0]));
+        boolean interactiveMode = System.getenv("INTERACTIVE_MODE") != null ||
+                (args.length > 0 && "interactive".equals(args[0]));
 
         if (interactiveMode) {
             System.out.print("请输入输入CSV文件名（如 translations.csv）: ");
         }
         String inputCsv = scanner.nextLine().trim();
-        
+
         if (interactiveMode) {
             System.out.print("请输入输出CSV文件名（如 translations_zh.csv）: ");
         }
@@ -39,12 +39,12 @@ public class RimWorldBatchTranslate {
             System.out.print("请输入阿里云 AccessKeyId: ");
         }
         accessKeyId = scanner.nextLine().trim();
-        
+
         if (interactiveMode) {
             System.out.print("请输入阿里云 AccessKeySecret: ");
         }
         accessKeySecret = scanner.nextLine().trim();
-        
+
         // 读取model_id参数（如果提供）
         if (interactiveMode) {
             System.out.print("请输入翻译模型ID（直接回车使用默认27345）: ");
@@ -59,7 +59,7 @@ public class RimWorldBatchTranslate {
                 }
             }
         }
-        
+
         // 读取起始行参数（如果提供）
         if (interactiveMode) {
             System.out.print("请输入起始行号（直接回车从第0行开始）: ");
@@ -76,7 +76,7 @@ public class RimWorldBatchTranslate {
                 startLine = 0;
             }
         }
-        
+
         // 调试输出
         System.out.println("[调试] 接收到的起始行参数: " + startLineInput + " -> " + startLine);
         scanner.close();
@@ -88,30 +88,29 @@ public class RimWorldBatchTranslate {
         Writer out = null;
         CSVPrinter printer = null;
         boolean isResumeMode = false;
-        
+
         // 检查输出文件是否存在
         java.io.File outputFile = new java.io.File(outputCsv);
         if (outputFile.exists()) {
             isResumeMode = true;
             System.out.println("检测到已存在的输出文件，将删除最后一行不完整的翻译...");
             removeLastLine(outputCsv);
-            
+
             // 打开文件用于追加
             out = new OutputStreamWriter(new FileOutputStream(outputCsv, true), StandardCharsets.UTF_8);
             printer = new CSVPrinter(out, CSVFormat.DEFAULT);
         }
-        
+
         try (
-            Reader in = new InputStreamReader(new FileInputStream(inputCsv), StandardCharsets.UTF_8);
-            CSVParser parser = new CSVParser(in, CSVFormat.DEFAULT.withFirstRecordAsHeader());
-        ) {
+                Reader in = new InputStreamReader(new FileInputStream(inputCsv), StandardCharsets.UTF_8);
+                CSVParser parser = new CSVParser(in, CSVFormat.DEFAULT.withFirstRecordAsHeader());) {
             // 先统计总行数
             java.util.List<CSVRecord> records = new java.util.ArrayList<>();
             for (CSVRecord record : parser) {
                 records.add(record);
             }
             int totalLines = records.size();
-            
+
             // 智能恢复：通过key对比确定实际恢复位置
             int actualStartLine = startLine;
             if (isResumeMode) {
@@ -125,9 +124,10 @@ public class RimWorldBatchTranslate {
                 System.out.println("开始翻译，总计 " + totalLines + " 行...");
                 // 创建新的输出文件
                 out = new OutputStreamWriter(new FileOutputStream(outputCsv), StandardCharsets.UTF_8);
-                printer = new CSVPrinter(out, CSVFormat.DEFAULT.withHeader(appendHeader(parser.getHeaderMap(), "translated")));
+                printer = new CSVPrinter(out,
+                        CSVFormat.DEFAULT.withHeader(appendHeader(parser.getHeaderMap(), "translated")));
             }
-            
+
             int currentLine = 0;
             for (CSVRecord record : records) {
                 // 跳过起始行之前的记录（actualStartLine是数据行号，不包括标题行）
@@ -203,7 +203,7 @@ public class RimWorldBatchTranslate {
             }
         }
     }
-    
+
     /**
      * 删除CSV文件的最后一行（用于清理不完整的翻译）
      */
@@ -213,28 +213,30 @@ public class RimWorldBatchTranslate {
             if (!file.exists()) {
                 return;
             }
-            
+
             // 读取所有行
             java.util.List<String> lines = new java.util.ArrayList<>();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     lines.add(line);
                 }
             }
-            
+
             // 删除最后一行
             if (!lines.isEmpty()) {
                 lines.remove(lines.size() - 1);
-                
+
                 // 写回文件
-                try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
+                try (BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
                     for (String line : lines) {
                         writer.write(line);
                         writer.newLine();
                     }
                 }
-                
+
                 System.out.println("已删除最后一行不完整的翻译");
             }
         } catch (Exception e) {
@@ -243,75 +245,24 @@ public class RimWorldBatchTranslate {
     }
 
     public static String aliyunTranslateCustom(IAcsClient client, String text, Long modelId) {
-        String protectedText = text;
-        String prefix = null;
-
-        java.util.regex.Matcher prefixMatcher = java.util.regex.Pattern.compile("^([a-zA-Z0-9_]+->)").matcher(protectedText);
-        if (prefixMatcher.find()) {
-            prefix = prefixMatcher.group(1);
-            protectedText = protectedText.replaceFirst(java.util.regex.Pattern.quote(prefix), "{{PREFIX}}");
-        }
-
-        java.util.List<String> placeholders = new java.util.ArrayList<>();
-        int idx = 1;
-        // 首先将真实换行符转换为转义换行符
-        protectedText = protectedText.replace("\r\n", "\\n").replace("\n", "\\n");
-        
-        String[] patterns = {
-            "\\\\n",                             // \n 换行符（标准化后的格式）
-            "\\[[^\\]]+\\]",                    // [xxx]
-            "\\{\\d+\\}",                        // {0}, {1}
-            "%[sdif]",                            // %s, %d, %i, %f
-            "</?[^>]+>",                          // <color> 或 <br>
-            "[a-zA-Z_][a-zA-Z0-9_]*\\([^)]*\\)", // 函数调用，如 bad_opinion_rapist(...)
-            "->\\[[^\\]]+\\]",                    // ->[结果]
-            "\\bpawn\\b",                        // pawn 游戏术语
-        };
-        
-        for (String pat : patterns) {
-            java.util.regex.Matcher m = java.util.regex.Pattern.compile(pat).matcher(protectedText);
-            StringBuffer sb = new StringBuffer();
-            while (m.find()) {
-                String ph = m.group();
-                // 跳过已经保护的ALIMT标签
-                if (ph.contains("ALIMT")) {
-                    continue;
-                }
-                placeholders.add(ph);
-                String placeholder = "(PH_" + idx++ + ")"; // 加括号更保险
-                String alimtTag = "<ALIMT >" + placeholder + "</ALIMT>";
-                m.appendReplacement(sb, alimtTag);
-            }
-            m.appendTail(sb);
-            protectedText = sb.toString();
-        }
-
-        String translatedText = translatePartWithRetry(client, protectedText, modelId, 2);
-        if (prefix != null) translatedText = translatedText.replace("{{PREFIX}}", prefix);
-        
-        // 根据占位符顺序恢复保护的内容
-        for (int i = 0; i < placeholders.size(); i++) {
-            String original = placeholders.get(i);
-            String placeholder = "(PH_" + (i + 1) + ")";
-            
-            if (translatedText.contains(placeholder)) {
-                translatedText = translatedText.replace(placeholder, original);
-            }
-        }
-        return translatedText;
+        // 简化版本：直接翻译，不进行占位符保护
+        // 占位符保护现在由Python层处理
+        return translatePartWithRetry(client, text, modelId, 2);
     }
 
     public static String translatePartWithRetry(IAcsClient client, String part, Long modelId, int maxRetry) {
-        if (part.trim().isEmpty()) return part;
+        if (part.trim().isEmpty())
+            return part;
         for (int attempt = 1; attempt <= maxRetry; attempt++) {
             try {
                 String zh = translatePart(client, part, modelId);
-                if (zh != null && !zh.trim().isEmpty()) return zh;
+                if (zh != null && !zh.trim().isEmpty())
+                    return zh;
             } catch (Exception e) {
                 // 静默处理错误，避免干扰进度条显示
             }
-            try { 
-                Thread.sleep(2000); 
+            try {
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 System.out.println("[错误] 线程被中断");
@@ -341,29 +292,29 @@ public class RimWorldBatchTranslate {
     private static String extractResultFromJson(String json) {
         try {
             com.alibaba.fastjson.JSONObject obj = com.alibaba.fastjson.JSON.parseObject(json);
-            
+
             // 尝试从Data字段提取
             if (obj.containsKey("Data")) {
                 Object dataObj = obj.get("Data");
                 com.alibaba.fastjson.JSONArray arr = null;
-                
+
                 if (dataObj instanceof String) {
                     arr = com.alibaba.fastjson.JSON.parseArray((String) dataObj);
                 } else if (dataObj instanceof com.alibaba.fastjson.JSONArray) {
                     arr = (com.alibaba.fastjson.JSONArray) dataObj;
                 }
-                
+
                 if (arr != null && arr.size() > 0) {
                     return arr.getString(0);
                 }
             }
-            
+
             // 尝试从Result字段提取
             String result = obj.getString("Result");
             if (result != null) {
                 return result;
             }
-            
+
             return null;
         } catch (Exception e) {
             return null;
@@ -378,8 +329,8 @@ public class RimWorldBatchTranslate {
             // 读取输出文件中已翻译的key
             java.util.Set<String> translatedKeys = new java.util.HashSet<>();
             try (Reader reader = new InputStreamReader(new FileInputStream(outputCsv), StandardCharsets.UTF_8);
-                 CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
-                
+                    CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+
                 for (CSVRecord record : parser) {
                     if (record.isMapped("key")) {
                         String key = record.get("key");
@@ -389,7 +340,7 @@ public class RimWorldBatchTranslate {
                     }
                 }
             }
-            
+
             // 找到第一个未翻译的key对应的行号
             for (int i = 0; i < inputRecords.size(); i++) {
                 CSVRecord record = inputRecords.get(i);
@@ -401,11 +352,11 @@ public class RimWorldBatchTranslate {
                     }
                 }
             }
-            
+
             // 如果所有key都已翻译，返回总行数（表示翻译完成）
             System.out.println("智能检测：所有key都已翻译完成");
             return inputRecords.size();
-            
+
         } catch (Exception e) {
             System.out.println("[警告] 智能检测失败，使用默认行号: " + e.getMessage());
             return 0;
@@ -415,9 +366,10 @@ public class RimWorldBatchTranslate {
     private static String[] appendHeader(java.util.Map<String, Integer> headerMap, String newCol) {
         String[] arr = new String[headerMap.size() + 1];
         int i = 0;
-        for (String h : headerMap.keySet()) arr[i++] = h;
+        for (String h : headerMap.keySet())
+            arr[i++] = h;
         arr[i] = newCol;
         return arr;
     }
-    
+
 }

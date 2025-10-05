@@ -7,8 +7,9 @@ from typing import Optional
 from utils.logging_config import get_logger
 
 # 翻译配置已迁移到新配置系统
-from .java_translator import JavaTranslator
-from .python_translator import translate_csv, AcsClient, TranslateGeneralRequest
+from .core.java_translator import JavaTranslator
+from .core.python_translator import translate_csv, AcsClient, TranslateGeneralRequest
+from .core.dictionary_translator import DictionaryTranslator
 
 
 class TranslatorFactory:
@@ -45,6 +46,19 @@ class TranslatorFactory:
         except Exception as e:
             self.logger.debug("创建Python翻译器失败: %s", e)
             raise RuntimeError(f"创建Python翻译器失败: {str(e)}") from e
+
+    def create_dictionary_translator(self, dictionary_type: str = "adult"):
+        """创建词典翻译器实例"""
+        try:
+            return DictionaryTranslatorAdapter(
+                DictionaryTranslator(dictionary_type), self.config
+            )
+        except ImportError as e:
+            self.logger.debug("词典翻译器导入失败: %s", e)
+            raise RuntimeError("词典翻译器不可用") from e
+        except Exception as e:
+            self.logger.debug("创建词典翻译器失败: %s", e)
+            raise RuntimeError(f"创建词典翻译器失败: {str(e)}") from e
 
 
 class JavaTranslatorAdapter:
@@ -206,3 +220,115 @@ class PythonTranslatorAdapter:
             }
         except Exception as e:
             return {"available": False, "type": "python", "reason": str(e)}
+
+
+class DictionaryTranslatorAdapter:
+    """词典翻译器适配器"""
+
+    def __init__(self, dictionary_translator, config: dict):
+        """
+        初始化词典翻译器适配器
+
+        Args:
+            dictionary_translator: 词典翻译器实例
+            config: 翻译配置
+        """
+        self.dictionary_translator = dictionary_translator
+        self.config = config
+        self.logger = get_logger(f"{__name__}.DictionaryTranslatorAdapter")
+
+    def translate_csv(
+        self, input_csv: str, output_csv: str, mode: str = "protect", **kwargs
+    ) -> bool:
+        """
+        翻译CSV文件
+
+        Args:
+            input_csv: 输入CSV文件路径
+            output_csv: 输出CSV文件路径
+            mode: 处理模式 ("protect" 保护英文原文, "translate" 翻译保护内容)
+            **kwargs: 其他参数
+
+        Returns:
+            bool: 翻译是否成功
+        """
+        try:
+            # 调用词典翻译器
+            success = self.dictionary_translator.translate_csv_file(
+                input_csv, output_csv, mode
+            )
+
+            self.logger.info(
+                "词典翻译完成: %s -> %s (模式: %s)", input_csv, output_csv, mode
+            )
+            return success
+
+        except Exception as e:
+            self.logger.error("词典翻译失败: %s", e, exc_info=True)
+            return False
+
+    def translate_text(self, text: str) -> tuple:
+        """
+        翻译文本
+
+        Args:
+            text: 要翻译的文本
+
+        Returns:
+            tuple: (翻译后的文本, 是否使用了自定义词典)
+        """
+        try:
+            return self.dictionary_translator.translate_text(text)
+        except Exception as e:
+            self.logger.error("词典文本翻译失败: %s", e, exc_info=True)
+            return text, False
+
+    def translate_protected_content(self, text: str) -> str:
+        """
+        翻译保护的内容
+
+        Args:
+            text: 要翻译的文本
+
+        Returns:
+            str: 翻译后的文本
+        """
+        try:
+            return self.dictionary_translator.translate_protected_content(text)
+        except Exception as e:
+            self.logger.error("词典保护内容翻译失败: %s", e, exc_info=True)
+            return text
+
+    def get_dictionary_stats(self) -> dict:
+        """获取词典统计信息"""
+        try:
+            return self.dictionary_translator.get_dictionary_stats()
+        except Exception as e:
+            return {"error": str(e)}
+
+    def reload_dictionary(self) -> bool:
+        """重新加载词典"""
+        try:
+            return self.dictionary_translator.reload_dictionary()
+        except Exception as e:
+            self.logger.error("重新加载词典失败: %s", e, exc_info=True)
+            return False
+
+    def get_status(self) -> dict:
+        """获取翻译器状态"""
+        try:
+            stats = self.dictionary_translator.get_dictionary_stats()
+            return {
+                "available": stats.get("dictionary_exists", False),
+                "type": "dictionary",
+                "dictionary_type": self.dictionary_translator.dictionary_type,
+                "total_entries": stats.get("total_entries", 0),
+                "dictionary_path": stats.get("dictionary_path", ""),
+                "reason": (
+                    "词典翻译器可用"
+                    if stats.get("dictionary_exists", False)
+                    else "词典文件不存在"
+                ),
+            }
+        except Exception as e:
+            return {"available": False, "type": "dictionary", "reason": str(e)}
