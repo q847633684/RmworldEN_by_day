@@ -17,39 +17,32 @@ from utils.ui_style import ui
 
 logger = get_logger(__name__)
 
-# 导入YAML处理
-import yaml
-
 
 class PlaceholderManager:
-    """占位符管理器，负责保护和恢复占位符"""
+    """占位符管理器"""
 
-    def __init__(self, dictionary_type: str = "adult"):
+    def __init__(self, dictionary_file: str = None):
         """
         初始化占位符管理器
 
         Args:
-            dictionary_type: 词典类型 ("adult" 或 "game")
+            dictionary_file: 词典文件路径
         """
         self.placeholder_map: Dict[str, Dict[str, str]] = {}
-        # placeholder_map 结构: {csv_key: {placeholder_id: original_value}}
-
-        # 直接加载词典
-        self.dictionary_type = dictionary_type
-        self.dictionary = {}
-        self._load_dictionary()
+        self.dictionary_file = dictionary_file
+        self.dictionary = self._load_dictionary()
 
     def protect_csv_file(
         self, csv_file: str
     ) -> Tuple[bool, Dict[str, Dict[str, str]], str]:
         """
-        直接修改CSV文件，添加保护后的字段
+        保护CSV文件中的占位符
 
         Args:
-            csv_file: CSV文件路径（直接修改原文件）
+            csv_file: CSV文件路径
 
         Returns:
-            Tuple[bool, Dict[str, Dict[str, str]]]: (是否成功, 占位符映射)
+            Tuple[bool, Dict[str, Dict[str, str]], str]: (是否成功, 占位符映射, 保护后的文本字段名)
         """
         try:
             import csv
@@ -57,10 +50,12 @@ class PlaceholderManager:
 
             if not Path(csv_file).exists():
                 logger.error("CSV文件不存在: %s", csv_file)
-                return False, {}
+                return False, {}, ""
 
             protected_count = 0
             total_count = 0
+            logger.info("开始保护CSV文件中的占位符")
+            logger.info("CSV文件路径: %s", csv_file)
 
             # 读取所有数据到内存
             rows = []
@@ -127,18 +122,14 @@ class PlaceholderManager:
                 writer.writeheader()
                 writer.writerows(rows)
 
-            ui.print_success(
-                f"✅ CSV文件保护完成: {protected_count}/{total_count} 条记录"
-            )
+            ui.print_success(f"✅ CSV文件保护完成: {protected_count}/{total_count} 条记录")
             logger.info("CSV文件保护完成: %d/%d 条记录", protected_count, total_count)
-
-            # 返回成功状态和占位符映射
             return True, self.placeholder_map.copy(), "protected_text"
 
         except Exception as e:
             logger.error("CSV文件保护失败: %s", e)
             ui.print_error(f"❌ CSV文件保护失败: {e}")
-            return False, {}
+            return False, {}, ""
 
     def restore_csv_file(
         self,
@@ -165,7 +156,9 @@ class PlaceholderManager:
 
             restored_count = 0
             total_count = 0
-
+            logger.info("开始恢复CSV文件中的占位符")
+            logger.info("占位符映射: %s", placeholder_map)
+            logger.info("CSV文件路径: %s", csv_file)
             # 读取所有数据到内存
             rows = []
             with open(csv_file, "r", encoding="utf-8") as infile:
@@ -236,6 +229,7 @@ class PlaceholderManager:
             protected_text, csv_key
         )
         all_placeholders.extend(placeholders)
+
         # 步骤2: 保护成人内容词汇
         protected_text, used_dict = self._protect_adult_content(protected_text)
         if used_dict:
@@ -372,7 +366,7 @@ class PlaceholderManager:
             r"\[[^\]]+\]",  # [xxx]
             r"\{\d+\}",  # {0}, {1}
             r"%[sdif]",  # %s, %d, %i, %f
-            r"</?[^>]+>",  # <color> 或 <br>
+            r"</?(?!ALIMT\s*>)[^>]+>",  # <color> 或 <br>，但排除ALIMT标签
             r"[a-zA-Z_][a-zA-Z0-9_]*\([^)]*\)",  # 函数调用
             r"->\[[^\]]+\]",  # ->[结果]
             r"\bpawn\b",  # pawn 游戏术语
@@ -385,9 +379,20 @@ class PlaceholderManager:
         # 首先标准化换行符
         protected_text = protected_text.replace("\r\n", "\\n").replace("\n", "\\n")
 
-        for pattern in patterns:
-            matches = list(re.finditer(pattern, protected_text))
-            for match in reversed(matches):  # 从后往前替换，避免位置偏移
+        # 合并所有模式为一个正则表达式
+        combined_pattern = "|".join(f"({pattern})" for pattern in patterns)
+        
+        # 一次性匹配所有模式
+        matches = list(re.finditer(combined_pattern, protected_text))
+        
+        # 只有当有匹配的占位符时才记录到placeholder_map
+        if matches:
+            # 初始化该行的占位符映射
+            if csv_key not in self.placeholder_map:
+                self.placeholder_map[csv_key] = {}
+                
+            # 从后往前替换，避免位置偏移
+            for match in reversed(matches):
                 placeholder_text = match.group()
                 # 记录占位符映射
                 placeholder_id = f"PH_{idx}"

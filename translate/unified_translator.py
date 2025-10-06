@@ -112,7 +112,7 @@ class UnifiedTranslator:
 
             # 步骤4：恢复占位符和翻译成人内容
             if success:
-                restore_success = placeholder_manager.translate_csv(
+                restore_success, _, _ = placeholder_manager.translate_csv(
                     output_csv, mode="restore", placeholder_map=placeholder_map
                 )
                 self.logger.info("翻译成功完成: %s", output_csv)
@@ -120,7 +120,6 @@ class UnifiedTranslator:
                     self.logger.warning("占位符恢复失败，但翻译已完成")
             else:
                 self.logger.warning("翻译未完成或被中断: %s", output_csv)
-
             return success
 
         except (FileNotFoundError, RuntimeError, ValueError, OSError) as e:
@@ -151,7 +150,7 @@ class UnifiedTranslator:
             output_csv: 输出CSV文件路径
 
         Returns:
-            Optional[str]: 可恢复的输出文件路径，如果没有则返回None
+            Optional[str]: 可恢复的输出文件路径, 如果没有则返回None
         """
         try:
             # 优先检查Java翻译器
@@ -169,7 +168,9 @@ class UnifiedTranslator:
             self.logger.warning("检查恢复状态失败: %s", e)
             return None
 
-    def resume_translation(self, input_csv: str, output_csv: str, protected_text: str) -> bool:
+    def resume_translation(
+        self, input_csv: str, output_csv: str, protected_text: str
+    ) -> bool:
         """
         恢复翻译任务
 
@@ -183,12 +184,16 @@ class UnifiedTranslator:
         try:
             java_translator = self._get_java_translator()
             if java_translator:
-                return java_translator.resume_translation(input_csv, output_csv, protected_text)
+                return java_translator.resume_translation(
+                    input_csv, output_csv, protected_text
+                )
 
             # 检查Python翻译器恢复功能
             python_translator = self._get_python_translator()
             if python_translator:
-                return python_translator.resume_translation(input_csv, output_csv, protected_text)
+                return python_translator.resume_translation(
+                    input_csv, output_csv, protected_text
+                )
 
             ui.print_warning("当前翻译器不支持恢复功能")
             return False

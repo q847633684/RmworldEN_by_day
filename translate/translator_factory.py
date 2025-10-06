@@ -278,7 +278,7 @@ class PlaceholderManagerAdapter:
                     input_csv, placeholder_map
                 )
                 self.logger.info("占位符恢复完成: %s (模式: %s)", input_csv, mode)
-                return success
+                return success, placeholder_map, ""
             else:
                 self.logger.error("不支持的模式: %s", mode)
                 return False
