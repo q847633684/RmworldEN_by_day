@@ -63,8 +63,8 @@ class UnifiedTranslator:
                 }
             else:
                 return {}
-        except Exception as e:
-            self.logger.warning(f"从新配置系统获取配置失败: {e}")
+        except (ImportError, AttributeError, KeyError, ValueError) as e:
+            self.logger.warning("从新配置系统获取配置失败: %s", e)
             return {}
 
     def translate_csv(
@@ -93,8 +93,8 @@ class UnifiedTranslator:
 
             # 步骤1：保护
             placeholder_manager = self.factory.create_dictionary_translator("adult")
-            success, placeholder_map = placeholder_manager.translate_csv(
-                input_csv, mode="protect"
+            success, placeholder_map, protected_text = (
+                placeholder_manager.translate_csv(input_csv, mode="protect")
             )
             if not success:
                 raise RuntimeError("占位符保护失败")
@@ -105,14 +105,10 @@ class UnifiedTranslator:
                 raise RuntimeError(f"无法创建翻译器: {translator_type}")
 
             # 步骤3：执行机器翻译
-            # 如果没有指定输出文件，自动生成
-            if output_csv is None:
-                input_path = Path(input_csv)
-                output_csv = str(
-                    input_path.parent / f"{input_path.stem}_zh{input_path.suffix}"
-                )
 
-            success = translator.translate_csv(input_csv, output_csv, **kwargs)
+            success = translator.translate_csv(
+                input_csv, output_csv, protected_text=protected_text
+            )
 
             # 步骤4：恢复占位符和翻译成人内容
             if success:
@@ -127,18 +123,32 @@ class UnifiedTranslator:
 
             return success
 
-        except Exception as e:
+        except (FileNotFoundError, RuntimeError, ValueError, OSError) as e:
             error_msg = f"统一翻译失败: {str(e)}"
             self.logger.error(error_msg, exc_info=True)
             ui.print_error(error_msg)
             return False
 
-    def can_resume_translation(self, input_csv: str) -> Optional[str]:
+    def _generate_output_path(self, input_csv: str) -> str:
+        """
+        生成输出文件路径
+
+        Args:
+            input_csv: 输入CSV文件路径
+
+        Returns:
+            str: 输出文件路径
+        """
+        input_path = Path(input_csv)
+        return str(input_path.parent / f"{input_path.stem}_zh{input_path.suffix}")
+
+    def can_resume_translation(self, input_csv: str, output_csv: str) -> Optional[str]:
         """
         检查是否可以恢复翻译
 
         Args:
             input_csv: 输入CSV文件路径
+            output_csv: 输出CSV文件路径
 
         Returns:
             Optional[str]: 可恢复的输出文件路径，如果没有则返回None
@@ -147,16 +157,19 @@ class UnifiedTranslator:
             # 优先检查Java翻译器
             java_translator = self._get_java_translator()
             if java_translator:
-                return java_translator.can_resume_translation(input_csv)
+                return java_translator.can_resume_translation(input_csv, output_csv)
 
-            # TODO: 为Python翻译器添加恢复功能
+            # 检查Python翻译器恢复功能
+            python_translator = self._get_python_translator()
+            if python_translator:
+                return python_translator.can_resume_translation(input_csv, output_csv)
             return None
 
-        except Exception as e:
+        except (FileNotFoundError, PermissionError, RuntimeError) as e:
             self.logger.warning("检查恢复状态失败: %s", e)
             return None
 
-    def resume_translation(self, input_csv: str, output_csv: str) -> bool:
+    def resume_translation(self, input_csv: str, output_csv: str, protected_text: str) -> bool:
         """
         恢复翻译任务
 
@@ -170,13 +183,17 @@ class UnifiedTranslator:
         try:
             java_translator = self._get_java_translator()
             if java_translator:
-                return java_translator.resume_translation(input_csv, output_csv)
+                return java_translator.resume_translation(input_csv, output_csv, protected_text)
 
-            # TODO: 为Python翻译器添加恢复功能
+            # 检查Python翻译器恢复功能
+            python_translator = self._get_python_translator()
+            if python_translator:
+                return python_translator.resume_translation(input_csv, output_csv, protected_text)
+
             ui.print_warning("当前翻译器不支持恢复功能")
             return False
 
-        except Exception as e:
+        except (FileNotFoundError, PermissionError, RuntimeError, ValueError) as e:
             error_msg = f"恢复翻译失败: {str(e)}"
             self.logger.error(error_msg, exc_info=True)
             ui.print_error(error_msg)
@@ -225,7 +242,7 @@ class UnifiedTranslator:
         if self._java_translator is None:
             try:
                 self._java_translator = self.factory.create_java_translator()
-            except Exception as e:
+            except (ImportError, FileNotFoundError, RuntimeError) as e:
                 self.logger.debug("创建Java翻译器失败: %s", e)
                 return None
         return self._java_translator
@@ -235,7 +252,7 @@ class UnifiedTranslator:
         if self._python_translator is None:
             try:
                 self._python_translator = self.factory.create_python_translator()
-            except Exception as e:
+            except (ImportError, FileNotFoundError, RuntimeError) as e:
                 self.logger.debug("创建Python翻译器失败: %s", e)
                 return None
         return self._python_translator
@@ -245,7 +262,7 @@ class UnifiedTranslator:
         try:
             status = self._get_java_status()
             return status.get("available", False)
-        except Exception:
+        except (AttributeError, KeyError, RuntimeError):
             return False
 
     def _get_java_status(self) -> Dict[str, Any]:
@@ -272,7 +289,7 @@ class UnifiedTranslator:
                 }
             else:
                 return {"available": False, "reason": "无法创建Java翻译器"}
-        except Exception as e:
+        except (AttributeError, KeyError, RuntimeError) as e:
             return {"available": False, "reason": str(e)}
 
     def _get_python_status(self) -> Dict[str, Any]:
@@ -284,5 +301,5 @@ class UnifiedTranslator:
                 return python_translator.get_status()
             else:
                 return {"available": False, "reason": "无法创建Python翻译器"}
-        except Exception as e:
+        except (AttributeError, KeyError, RuntimeError) as e:
             return {"available": False, "reason": str(e)}

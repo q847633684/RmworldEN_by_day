@@ -35,7 +35,7 @@ def handle_full_pipeline():
         if confirm_action("是否立即进行机翻并导入？"):
             # 第二步：执行翻译
             ui.print_info("步骤 2/3: 执行机器翻译...")
-            translated_csv = handle_unified_translate(csv_path)
+            translated_csv = handle_unified_translate(csv_path, mod_dir)
 
             if translated_csv:
                 # 第三步：执行导入

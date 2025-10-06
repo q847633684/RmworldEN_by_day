@@ -12,6 +12,7 @@ import re
 import csv
 from utils.logging_config import get_logger
 from utils.ui_style import ui
+from .resume_base import ResumeBase
 
 # 移除旧配置系统依赖
 from typing import Optional, Dict, Any
@@ -40,7 +41,7 @@ def count_csv_lines(csv_path: str) -> int:
         return 0
 
 
-class JavaTranslator:
+class JavaTranslator(ResumeBase):
     """简化的Java翻译工具包装器"""
 
     def __init__(self, jar_path: Optional[str] = None):
@@ -189,10 +190,10 @@ class JavaTranslator:
         output_csv: str,
         access_key_id: str,
         access_key_secret: str,
+        protected_text: str,
         model_id: int = 27345,
         enable_interrupt: bool = True,
         resume_line: Optional[int] = None,
-        translation_field: str = "text",
     ) -> bool:
         """
         直接调用Java翻译器（不进行占位符保护）
@@ -235,7 +236,7 @@ class JavaTranslator:
             else:
                 start_line = 0
 
-            input_data = f"{input_csv}\n{output_csv}\n{access_key_id}\n{access_key_secret}\n{model_id}\n{start_line}\n{translation_field}\n"
+            input_data = f"{input_csv}\n{output_csv}\n{access_key_id}\n{access_key_secret}\n{model_id}\n{start_line}\n{protected_text}\n"
 
             # 调用Java程序
             self.logger.debug(
@@ -368,115 +369,9 @@ class JavaTranslator:
                     except Exception as e:
                         self.logger.error("停止Java进程时发生错误: %s", e)
 
-    def interrupt_translation(self) -> None:
-        """
-        中断当前翻译任务
-        """
-        with self.interrupt_lock:
-            self.is_interrupted = True
-            self.logger.debug("用户请求中断翻译")
-
-    def can_resume_translation(self, input_csv: str) -> Optional[str]:
-        """
-        检查是否可以恢复翻译（基于文件对比）
-
-        Args:
-            input_csv (str): 输入CSV文件路径
-
-        Returns:
-            Optional[str]: 可恢复的输出文件路径，如果没有则返回None
-        """
-        # 自动生成输出文件路径
-        output_csv = self._generate_output_path(input_csv)
-
-        # 检查是否可以恢复
-        if self._can_resume_from_files(input_csv, output_csv):
-            return output_csv
-
-        return None
-
-    def _generate_output_path(self, input_csv: str) -> str:
-        """
-        自动生成输出文件路径
-
-        Args:
-            input_csv (str): 输入CSV文件路径
-
-        Returns:
-            str: 输出CSV文件路径
-        """
-        input_path = Path(input_csv)
-        # 在文件名后添加 _zh
-        output_name = input_path.stem + "_zh" + input_path.suffix
-        return str(input_path.parent / output_name)
-
-    def _can_resume_from_files(self, input_csv: str, output_csv: str) -> bool:
-        """
-        通过对比CSV文件检查是否可以恢复翻译
-
-        Args:
-            input_csv (str): 输入CSV文件路径
-            output_csv (str): 输出CSV文件路径
-
-        Returns:
-            bool: 是否可以恢复
-        """
-        try:
-            import csv
-            import os
-
-            # 检查文件是否存在
-            if not os.path.exists(input_csv) or not os.path.exists(output_csv):
-                return False
-
-            # 读取输入文件行数
-            with open(input_csv, "r", encoding="utf-8") as f:
-                input_reader = csv.reader(f)
-                input_lines = list(input_reader)
-                input_data_lines = len(input_lines) - 1  # 减去标题行
-
-            # 读取输出文件行数
-            with open(output_csv, "r", encoding="utf-8") as f:
-                output_reader = csv.reader(f)
-                output_lines = list(output_reader)
-                output_data_lines = len(output_lines) - 1  # 减去标题行
-
-            # 如果输出文件行数小于输入文件，说明可以恢复
-            # 但至少要有一行数据（不包括标题行）
-            return 0 < output_data_lines < input_data_lines
-
-        except (FileNotFoundError, PermissionError, csv.Error) as e:
-            self.logger.debug("检查文件恢复状态失败: %s", e)
-            return False
-
-    def get_resume_line_from_files(self, input_csv: str, output_csv: str) -> int:
-        """
-        通过对比CSV文件获取恢复起始行号
-
-        Args:
-            input_csv (str): 输入CSV文件路径
-            output_csv (str): 输出CSV文件路径
-
-        Returns:
-            int: 恢复起始行号
-        """
-        try:
-            import csv
-
-            # 读取输出文件行数
-            with open(output_csv, "r", encoding="utf-8") as f:
-                output_reader = csv.reader(f)
-                output_lines = list(output_reader)
-                output_data_lines = len(output_lines) - 1  # 减去标题行
-
-            # 返回已翻译的行数（从0开始计数）
-            return max(0, output_data_lines)
-
-        except (FileNotFoundError, PermissionError, csv.Error) as e:
-            self.logger.debug("获取恢复行号失败: %s", e)
-            return 0
-
-    def resume_translation(self, input_csv: str, output_csv: str) -> bool:
+    def resume_translation(
+        self, input_csv: str, output_csv: str, protected_text: str
+    ) -> bool:
         """
         恢复翻译任务（基于文件对比）
 
@@ -536,6 +431,7 @@ class JavaTranslator:
             cfg.get("model_id", 27345),
             True,  # 启用中断功能
             resume_line,  # 传递通过文件对比确定的恢复行号
+            protected_text,
         )
 
         if success:
@@ -554,6 +450,7 @@ class JavaTranslator:
         model_id: int = 27345,
         enable_interrupt: bool = True,
         resume_line: Optional[int] = None,
+        protected_text: str = "text",
     ) -> bool:
         """
         翻译CSV文件（主要入口方法）
@@ -570,48 +467,19 @@ class JavaTranslator:
         Returns:
             bool: 翻译是否成功
         """
-        # 检查输入CSV是否包含protected_text字段
-        has_protected_text = self._check_protected_text_field(input_csv)
-        
-        # 决定使用哪个字段进行翻译
-        if has_protected_text:
-            translation_field = "protected_text"
-            self.logger.info("检测到protected_text字段，将使用protected_text进行翻译")
-        else:
-            translation_field = "text"
-            self.logger.info("未检测到protected_text字段，将使用text字段进行翻译")
-
         self.logger.info("开始Java翻译...")
         success = self._call_java_translator_directly(
             input_csv,
             output_csv,
             access_key_id,
             access_key_secret,
+            protected_text,
             model_id,
             enable_interrupt,
             resume_line,
-            translation_field=translation_field,
         )
 
         return success
-
-    def _check_protected_text_field(self, csv_file: str) -> bool:
-        """
-        检查CSV文件是否包含protected_text字段
-
-        Args:
-            csv_file: CSV文件路径
-
-        Returns:
-            bool: 是否包含protected_text字段
-        """
-        try:
-            with open(csv_file, "r", encoding="utf-8") as f:
-                reader = csv.DictReader(f)
-                return "protected_text" in reader.fieldnames
-        except (FileNotFoundError, PermissionError, csv.Error) as e:
-            self.logger.debug("检查protected_text字段失败: %s", e)
-            return False
 
     def get_status(self) -> Dict[str, Any]:
         """

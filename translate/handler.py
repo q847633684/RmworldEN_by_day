@@ -7,16 +7,15 @@ import os
 from typing import Optional
 from utils.logging_config import get_logger
 from utils.ui_style import ui
-from utils.interaction import (
-    select_csv_path_with_history,
-    auto_generate_output_path,
-)
+from utils.interaction import select_csv_path_with_history
 from user_config.path_manager import PathManager
 
 # 延迟导入避免循环依赖
 
 
-def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
+def handle_unified_translate(
+    csv_path: Optional[str] = None, output_csv: Optional[str] = None
+) -> Optional[str]:
     """
     处理统一翻译功能
 
@@ -76,13 +75,21 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
         else:
             # 使用提供的CSV路径
             ui.print_info(f"📄 使用指定CSV文件: {os.path.basename(csv_path)}")
-
+        # 检查输出CSV文件
+        if output_csv is None:
+            output_csv = translator._generate_output_path(csv_path)
+            ui.print_info(f"📄 自动生成输出CSV文件: {os.path.basename(output_csv)}")
+        else:
+            # 使用提供的输出CSV路径
+            ui.print_info(f"📄 使用指定输出CSV文件: {os.path.basename(output_csv)}")
         # 检查是否可以恢复翻译
-        resume_file = translator.can_resume_translation(csv_path)
+        resume_file = translator.can_resume_translation(csv_path, output_csv)
         if resume_file:
             ui.print_info(f"检测到可恢复的翻译文件: {resume_file}")
             ui.print_info("自动恢复翻译...")
-            success = translator.resume_translation(csv_path, resume_file)
+            success = translator.resume_translation(
+                csv_path, resume_file, "protected_text"
+            )
             if success:
                 ui.print_success("恢复翻译完成！")
                 # 将输出CSV加入"导入翻译"的历史
@@ -90,9 +97,6 @@ def handle_unified_translate(csv_path: Optional[str] = None) -> Optional[str]:
                 return resume_file  # 翻译完成，返回输出文件路径
             else:
                 return None  # 翻译未完成（用户中断）
-
-        # 自动生成输出CSV文件路径
-        output_csv = auto_generate_output_path(csv_path)
 
         # 显示翻译配置（简化版）
         ui.print_section_header("翻译配置", ui.Icons.SETTINGS)

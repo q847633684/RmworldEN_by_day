@@ -332,12 +332,6 @@ def confirm_action(message: str) -> bool:
     return result and result.lower() in ["y", "yes", "是", "确认"]
 
 
-def auto_generate_output_path(input_path: str) -> str:
-    """自动生成输出CSV文件路径"""
-    input_path_obj = Path(input_path)
-    return str(input_path_obj.parent / f"{input_path_obj.stem}_zh.csv")
-
-
 # 这些函数已被移除，请直接使用 ui.print_success, ui.print_error, ui.print_warning, ui.print_info
 
 

@@ -4,9 +4,10 @@ from utils.ui_style import ui
 import os
 import re
 import time
-from typing import List, Dict
+from typing import List, Dict, Optional, Any
 from pathlib import Path
 from tqdm import tqdm
+from .resume_base import ResumeBase
 
 logger = get_logger(__name__)
 
@@ -240,3 +241,148 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
 
     except (OSError, IOError, csv.Error, ValueError, RuntimeError) as e:
         ui.print_error(f"❌ 翻译失败: {e}")
+
+
+class PythonTranslator(ResumeBase):
+    """Python翻译器类，提供恢复功能"""
+
+    def __init__(self):
+        self.logger = get_logger(__name__)
+
+    def resume_translation(self, input_csv: str, output_csv: str, protected_text: str) -> bool:
+        """
+        恢复翻译任务（基于文件对比）
+
+        Args:
+            input_csv: 输入CSV文件路径
+            output_csv: 输出CSV文件路径
+
+        Returns:
+            bool: 是否成功恢复
+        """
+        # 通过文件对比获取实际的恢复行号
+        resume_line = self.get_resume_line_from_files(input_csv, output_csv)
+
+        ui.print_info(f"从第 {resume_line} 行开始恢复翻译")
+
+        # 从新配置系统获取必要的参数
+        try:
+            from user_config import UserConfigManager
+
+            config_manager = UserConfigManager()
+            primary_api = config_manager.get_primary_api()
+
+            if primary_api:
+                kwargs = {
+                    "access_key_id": primary_api.get_value("access_key_id", ""),
+                    "access_key_secret": primary_api.get_value("access_key_secret", ""),
+                    "region_id": primary_api.get_value("region", "cn-hangzhou"),
+                    "sleep_sec": primary_api.get_value("sleep_sec", 0.5),
+                }
+            else:
+                kwargs = {}
+
+        except (ImportError, AttributeError, KeyError, ValueError):
+            kwargs = {}
+
+        # 调用原有的翻译函数，但需要修改以支持恢复
+        return self._translate_csv_with_resume(
+            input_csv, output_csv, resume_line, protected_text, **kwargs
+        )
+
+    def get_status(self) -> Dict[str, Any]:
+        """获取Python翻译器状态"""
+        try:
+            # 检查阿里云SDK是否可用
+            sdk_available = (
+                AcsClient is not None and TranslateGeneralRequest is not None
+            )
+
+            return {
+                "available": sdk_available,
+                "sdk_available": sdk_available,
+                "reason": "SDK不可用" if not sdk_available else "正常",
+            }
+        except Exception as e:
+            return {"available": False, "sdk_available": False, "reason": str(e)}
+
+    def _translate_csv_with_resume(
+        self, input_path: str, output_path: str, resume_line: int, **kwargs
+    ) -> bool:
+        """带恢复功能的CSV翻译"""
+        try:
+            # 获取 API 密钥
+            access_key_id = kwargs.get("access_key_id") or os.getenv(
+                "ALIYUN_ACCESS_KEY_ID"
+            )
+            access_key_secret = kwargs.get("access_key_secret") or os.getenv(
+                "ALIYUN_ACCESS_SECRET"
+            )
+
+            if not access_key_id or not access_key_secret:
+                ui.print_error("❌ 缺少阿里云 API 密钥")
+                return False
+
+            region_id = kwargs.get("region_id", "cn-hangzhou")
+            sleep_sec = kwargs.get("sleep_sec", 0.5)
+
+            # 读取输入文件
+            rows: List[Dict[str, str]] = []
+            with open(input_path, encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                fieldnames = reader.fieldnames
+                for i, row in enumerate(reader, 1):
+                    if i >= resume_line:  # 从恢复行开始
+                        rows.append(row)
+
+            if not rows:
+                ui.print_info("没有需要翻译的内容")
+                return True
+
+            # 翻译
+            translated_rows = []
+            for row in tqdm(rows, desc="翻译进度"):
+                # 优先使用protected_text字段
+                text_to_translate = row.get("protected_text", row.get("text", ""))
+
+                if text_to_translate.strip():
+                    try:
+                        translated_text = translate_text(
+                            text_to_translate,
+                            access_key_id,
+                            access_key_secret,
+                            region_id,
+                        )
+                        row["translated"] = translated_text
+                    except Exception as e:
+                        ui.print_warning(f"翻译失败: {e}")
+                        row["translated"] = text_to_translate
+                else:
+                    row["translated"] = ""
+
+                translated_rows.append(row)
+                time.sleep(sleep_sec)
+
+            # 读取已有的输出文件内容（如果有的话）
+            existing_rows = []
+            if os.path.exists(output_path):
+                with open(output_path, encoding="utf-8") as f:
+                    reader = csv.DictReader(f)
+                    existing_rows = list(reader)
+
+            # 合并结果
+            all_rows = existing_rows + translated_rows
+
+            # 写入输出文件
+            with open(output_path, "w", encoding="utf-8", newline="") as f:
+                if fieldnames:
+                    writer = csv.DictWriter(f, fieldnames=fieldnames + ["translated"])
+                    writer.writeheader()
+                    writer.writerows(all_rows)
+
+            ui.print_success(f"✅ 翻译完成: {output_path}")
+            return True
+
+        except Exception as e:
+            ui.print_error(f"❌ 恢复翻译失败: {e}")
+            return False

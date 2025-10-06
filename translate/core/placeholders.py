@@ -39,7 +39,9 @@ class PlaceholderManager:
         self.dictionary = {}
         self._load_dictionary()
 
-    def protect_csv_file(self, csv_file: str) -> Tuple[bool, Dict[str, Dict[str, str]]]:
+    def protect_csv_file(
+        self, csv_file: str
+    ) -> Tuple[bool, Dict[str, Dict[str, str]], str]:
         """
         直接修改CSV文件，添加保护后的字段
 
@@ -131,7 +133,7 @@ class PlaceholderManager:
             logger.info("CSV文件保护完成: %d/%d 条记录", protected_count, total_count)
 
             # 返回成功状态和占位符映射
-            return True, self.placeholder_map.copy()
+            return True, self.placeholder_map.copy(), "protected_text"
 
         except Exception as e:
             logger.error("CSV文件保护失败: %s", e)
@@ -265,7 +267,6 @@ class PlaceholderManager:
 
         return restored_text
 
-
     def _load_dictionary(self):
         """加载词典文件"""
         try:
@@ -388,17 +389,13 @@ class PlaceholderManager:
             matches = list(re.finditer(pattern, protected_text))
             for match in reversed(matches):  # 从后往前替换，避免位置偏移
                 placeholder_text = match.group()
-                # 跳过已经保护的ALIMT标签
-                if "ALIMT" in placeholder_text:
-                    continue
-
                 # 记录占位符映射
                 placeholder_id = f"PH_{idx}"
                 self.placeholder_map[csv_key][placeholder_id] = placeholder_text
                 placeholders.append(placeholder_text)
 
                 # 用ALIMT标签保护
-                alimt_tag = f"<ALIMT >{placeholder_id}</ALIMT>"
+                alimt_tag = f"<ALIMT >({placeholder_id})</ALIMT>"
 
                 start, end = match.span()
                 protected_text = (
