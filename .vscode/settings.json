@@ -1,16 +1,9 @@
 {
-    "commentTranslate.targetLanguage": "zh-CN",
-    "cSpell.words": [
-        "defname",
-        "getprevious"
-    ],
-    "pylint.args": [
-        "--ignore=Day_EN",
-        "--disable=C0103,C0301,R0902,R0912,R0914,R0915,C0415,W0603,E0402"
-    ],
-    "python.linting.pylintEnabled": true,
+    "python.defaultInterpreterPath": "python",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "python.linting.enabled": true,
-    "cmake.configureSettings": {
-        
-    }
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true
 }

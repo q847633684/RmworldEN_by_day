@@ -96,6 +96,7 @@ class UnifiedTranslator:
             success, placeholder_map, protected_text = (
                 placeholder_manager.translate_csv(input_csv, mode="protect")
             )
+            self.logger.info("保护后的占位符数据: %s", placeholder_map) 
             if not success:
                 raise RuntimeError("占位符保护失败")
 

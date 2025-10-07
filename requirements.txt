@@ -4,3 +4,4 @@ aliyun-python-sdk-alimt
 tqdm
 colorama
 PyYAML
+deep-translator

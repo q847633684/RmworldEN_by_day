@@ -97,3 +97,36 @@ class ResumeBase:
                 return len(lines) - 1  # 减去标题行
         except Exception:
             return 0
+
+    def _get_resume_row(self, output_file: str, key_column: str) -> int:
+        """
+        获取恢复起始行号
+
+        Args:
+            output_file: 输出文件路径
+            key_column: 键列名
+
+        Returns:
+            int: 恢复起始行号（从0开始）
+        """
+        try:
+            if not os.path.exists(output_file):
+                return 0
+
+            with open(output_file, "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                rows = list(reader)
+                return len(rows)
+        except Exception:
+            return 0
+
+    def _save_progress(self, output_file: str, current_row: int) -> None:
+        """
+        保存翻译进度（空实现，子类可重写）
+
+        Args:
+            output_file: 输出文件路径
+            current_row: 当前行号
+        """
+        # 默认空实现，子类可以重写此方法
+        pass
