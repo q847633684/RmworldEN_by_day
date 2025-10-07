@@ -58,13 +58,25 @@ class APIConfigUI:
         while True:
             ui.print_header("API配置管理", ui.Icons.API)
 
-            # 显示API状态摘要
-            self._show_api_summary()
+            # 显示API配置和操作选项
+            ui.print_section_header("API配置", ui.Icons.INFO)
 
-            # 显示API列表（只显示有翻译工具支持的API）
-            ui.print_section_header("API提供商", ui.Icons.API)
+            # 获取API状态
+            status = self.api_manager.get_api_status()
             apis = self.api_manager.get_supported_apis()
-            for i, (api_type, api_config) in enumerate(apis.items(), 1):
+
+            # 配置项列表
+            config_items = []
+
+            # 显示配置项
+            for key, label, value, icon, description in config_items:
+                ui.print_menu_item(
+                    key, f"{label}: {value}", description, icon, compact=True
+                )
+
+            # API提供商列表
+            ui.print_section_header("API提供商", ui.Icons.API)
+            for i, (api_type, api_config) in enumerate(apis.items(), 4):
                 # 状态图标
                 enabled_icon = "🟢" if api_config.is_enabled() else "🔴"
                 config_icon = "🟢" if api_config.is_complete() else "🟡"
@@ -80,36 +92,28 @@ class APIConfigUI:
                 valid_text = "有效" if api_config.validate() else "无效"
                 connection_text = "连通" if test_success else "失败"
 
-                status_text = (
-                    f"{enabled_icon}{enabled_text} {config_icon}{config_text} "
-                    f"{valid_icon}{valid_text} {connection_icon}{connection_text}"
-                )
+                status_text = f"{enabled_icon}{enabled_text} {config_icon}{config_text} {valid_icon}{valid_text} {connection_icon}{connection_text}"
 
-                ui.print_menu_item(str(i), api_config.name, status_text, ui.Icons.API)
+                ui.print_menu_item(
+                    str(i),
+                    f"{api_config.name}: {status_text}",
+                    f"配置{api_config.name}",
+                    ui.Icons.API,
+                    compact=True,
+                )
 
                 # 显示详细状态信息
                 if not test_success and api_config.is_enabled():
                     ui.print_warning(f"   └── 连接问题: {test_message}")
 
-            # 显示管理选项
-            ui.print_section_header("管理选项", ui.Icons.TOOLS)
+            # 额外操作
             ui.print_menu_item(
-                "a", "设置默认API", "设置默认使用的API", ui.Icons.DEFAULT
+                "b", "返回上级", "返回上级菜单", ui.Icons.BACK, compact=True
             )
-            ui.print_menu_item(
-                "b", "负载均衡设置", "配置负载均衡策略", ui.Icons.BALANCE
-            )
-            ui.print_menu_item(
-                "c", "测试所有API", "测试所有已启用API的连接", ui.Icons.TEST
-            )
-            ui.print_menu_item("d", "API优先级", "设置API优先级", ui.Icons.PRIORITY)
-            ui.print_menu_item("x", "返回上级", "返回上级菜单", ui.Icons.BACK)
 
             ui.print_separator()
 
-            choice = input(
-                ui.get_input_prompt("请选择API或操作", options="1-5, a-d, x")
-            ).strip()
+            choice = input(ui.get_input_prompt("请选择API", options="1-4, b")).strip()
 
             # 处理API选择
             try:
@@ -122,15 +126,7 @@ class APIConfigUI:
                 pass
 
             # 处理管理选项
-            if choice.lower() == "a":
-                self._set_default_api()
-            elif choice.lower() == "b":
-                self._set_load_balancing()
-            elif choice.lower() == "c":
-                self._test_all_apis()
-            elif choice.lower() == "d":
-                self._set_api_priorities()
-            elif choice.lower() == "x":
+            if choice.lower() == "b":
                 break
             else:
                 ui.print_warning("无效选择，请重新输入")
@@ -140,15 +136,6 @@ class APIConfigUI:
         ui.print_section_header("API状态", ui.Icons.INFO)
 
         status = self.api_manager.get_api_status()
-
-        # 显示管理设置
-        ui.print_key_value("默认API", status["default_api"], ui.Icons.DEFAULT)
-        ui.print_key_value(
-            "故障切换",
-            "启用" if status["failover_enabled"] else "禁用",
-            ui.Icons.FAILOVER,
-        )
-        ui.print_key_value("负载均衡", status["load_balancing"], ui.Icons.BALANCE)
 
         # 统计信息（只统计支持的API）
         supported_apis = status.get("supported_apis", [])
@@ -199,7 +186,6 @@ class APIConfigUI:
             ui.print_section_header("操作选项", ui.Icons.TOOLS)
             ui.print_menu_item("1", "修改配置", "修改API配置参数", ui.Icons.EDIT)
             ui.print_menu_item("2", "启用/禁用", "切换API启用状态", ui.Icons.TOGGLE)
-            ui.print_menu_item("3", "设置优先级", "设置API优先级", ui.Icons.PRIORITY)
             ui.print_menu_item("4", "重置配置", "重置为默认配置", ui.Icons.RESET)
             ui.print_menu_item("b", "返回上级", "返回API列表", ui.Icons.BACK)
 
@@ -214,8 +200,6 @@ class APIConfigUI:
                 self._edit_api_config(api_config)
             elif choice == "2":
                 self._toggle_api_enabled(api_config)
-            elif choice == "3":
-                self._set_api_priority(api_config)
             elif choice == "4":
                 self._reset_api_config(api_config)
             elif choice.lower() == "b":
@@ -234,7 +218,6 @@ class APIConfigUI:
         ui.print_key_value(
             "启用状态", "启用" if display_info["enabled"] else "禁用", ui.Icons.STATUS
         )
-        ui.print_key_value("优先级", str(display_info["priority"]), ui.Icons.PRIORITY)
         ui.print_key_value("配置状态", display_info["status"], ui.Icons.CONFIG)
         ui.print_key_value(
             "验证状态", "通过" if display_info["valid"] else "失败", ui.Icons.VALID
@@ -495,26 +478,6 @@ class APIConfigUI:
         status_text = "启用" if new_status else "禁用"
         ui.print_success(f"{api_config.name}已{status_text}")
 
-    def _set_api_priority(self, api_config: BaseAPIConfig) -> None:
-        """设置API优先级"""
-        current_priority = api_config.get_priority()
-
-        print(f"当前优先级: {current_priority} (数字越小优先级越高)")
-
-        try:
-            new_priority = input("请输入新的优先级 (0-100, 留空保持当前值): ").strip()
-            if new_priority:
-                new_priority = int(new_priority)
-                if 0 <= new_priority <= 100:
-                    api_config.set_priority(new_priority)
-                    ui.print_success(f"{api_config.name}优先级已设置为: {new_priority}")
-                else:
-                    ui.print_error("优先级必须在 0-100 范围内")
-            else:
-                ui.print_info("优先级保持不变")
-        except ValueError:
-            ui.print_error("请输入有效的数字")
-
     def _reset_api_config(self, api_config: BaseAPIConfig) -> None:
         """重置API配置"""
         ui.print_warning("⚠️ 重置操作将会:")
@@ -531,147 +494,3 @@ class APIConfigUI:
             self._auto_save_and_test(api_config)
         else:
             ui.print_info("取消重置操作")
-
-    def _set_default_api(self) -> None:
-        """设置默认API"""
-        ui.print_header("设置默认API", ui.Icons.DEFAULT)
-
-        apis = self.api_manager.get_all_apis()
-        current_default = self.api_manager.default_api
-
-        print(f"当前默认API: {current_default}")
-        print("\n可选API:")
-
-        for i, (api_type, api_config) in enumerate(apis.items(), 1):
-            status = "启用" if api_config.is_enabled() else "禁用"
-            print(f"  {i}. {api_config.name} ({api_type}) - {status}")
-
-        try:
-            choice = input(f"请选择默认API (1-{len(apis)}, 留空保持当前值): ").strip()
-            if choice:
-                choice = int(choice)
-                if 1 <= choice <= len(apis):
-                    api_type = list(apis.keys())[choice - 1]
-                    if self.api_manager.set_default_api(api_type):
-                        ui.print_success(f"默认API已设置为: {apis[api_type].name}")
-                    else:
-                        ui.print_error("设置默认API失败")
-                else:
-                    ui.print_error("无效选择")
-            else:
-                ui.print_info("默认API保持不变")
-        except ValueError:
-            ui.print_error("请输入有效的数字")
-
-        input("\n按回车键继续...")
-
-    def _set_load_balancing(self) -> None:
-        """设置负载均衡策略"""
-        ui.print_header("负载均衡设置", ui.Icons.BALANCE)
-
-        strategies = [
-            ("priority", "优先级模式", "按优先级顺序使用API"),
-            ("round_robin", "轮询模式", "依次轮流使用各个API"),
-            ("random", "随机模式", "随机选择可用的API"),
-        ]
-
-        current_strategy = self.api_manager.load_balancing
-        print(f"当前策略: {current_strategy}")
-
-        print("\n可选策略:")
-        for i, (strategy, name, desc) in enumerate(strategies, 1):
-            print(f"  {i}. {name} ({strategy}) - {desc}")
-
-        try:
-            choice = input(
-                f"请选择负载均衡策略 (1-{len(strategies)}, 留空保持当前值): "
-            ).strip()
-            if choice:
-                choice = int(choice)
-                if 1 <= choice <= len(strategies):
-                    new_strategy = strategies[choice - 1][0]
-                    self.api_manager.load_balancing = new_strategy
-                    ui.print_success(
-                        f"负载均衡策略已设置为: {strategies[choice - 1][1]}"
-                    )
-                else:
-                    ui.print_error("无效选择")
-            else:
-                ui.print_info("负载均衡策略保持不变")
-        except ValueError:
-            ui.print_error("请输入有效的数字")
-
-        # 设置故障切换
-        current_failover = self.api_manager.failover_enabled
-        failover_choice = (
-            input(
-                f"是否启用故障切换？当前: {'启用' if current_failover else '禁用'} (y/n, 留空保持当前值): "
-            )
-            .strip()
-            .lower()
-        )
-
-        if failover_choice in ["y", "yes", "true", "1", "是"]:
-            self.api_manager.failover_enabled = True
-            ui.print_success("故障切换已启用")
-        elif failover_choice in ["n", "no", "false", "0", "否"]:
-            self.api_manager.failover_enabled = False
-            ui.print_success("故障切换已禁用")
-        elif failover_choice == "":
-            ui.print_info("故障切换设置保持不变")
-
-        input("\n按回车键继续...")
-
-    def _test_all_apis(self) -> None:
-        """测试所有API连接"""
-        ui.print_header("测试所有API", ui.Icons.TEST)
-
-        ui.print_info("正在测试所有已启用的API连接...")
-
-        results = self.api_manager.test_all_apis()
-
-        ui.print_section_header("测试结果", ui.Icons.RESULT)
-
-        for api_type, (success, message) in results.items():
-            api_config = self.api_manager.get_api(api_type)
-            status_icon = "✓" if success else "✗"
-
-            ui.print_key_value(
-                f"{api_config.name}", f"{status_icon} {message}", ui.Icons.API
-            )
-
-        input("\n按回车键继续...")
-
-    def _set_api_priorities(self) -> None:
-        """设置API优先级"""
-        ui.print_header("设置API优先级", ui.Icons.PRIORITY)
-
-        apis = self.api_manager.get_all_apis()
-
-        print("当前API优先级 (数字越小优先级越高):")
-        for api_type, api_config in apis.items():
-            priority = api_config.get_priority()
-            enabled = "启用" if api_config.is_enabled() else "禁用"
-            print(f"  {api_config.name}: {priority} ({enabled})")
-
-        print("\n请为每个API设置优先级:")
-
-        for api_type, api_config in apis.items():
-            current_priority = api_config.get_priority()
-            try:
-                new_priority = input(
-                    f"{api_config.name} 当前优先级:{current_priority} 新优先级(留空保持不变): "
-                ).strip()
-                if new_priority:
-                    new_priority = int(new_priority)
-                    if 0 <= new_priority <= 100:
-                        api_config.set_priority(new_priority)
-                        ui.print_success(
-                            f"{api_config.name}优先级已设置为: {new_priority}"
-                        )
-                    else:
-                        ui.print_error(f"{api_config.name}优先级必须在 0-100 范围内")
-            except ValueError:
-                ui.print_error(f"{api_config.name}请输入有效的数字")
-
-        input("\n按回车键继续...")

@@ -10,6 +10,7 @@ test，用记录key值和占位符对应的value值把translated列中的占位�
 import csv
 import re
 import json
+import yaml
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 from utils.logging_config import get_logger
@@ -21,15 +22,15 @@ logger = get_logger(__name__)
 class PlaceholderManager:
     """占位符管理器"""
 
-    def __init__(self, dictionary_file: str = None):
+    def __init__(self, dictionary_type: str = "adult"):
         """
         初始化占位符管理器
 
         Args:
-            dictionary_file: 词典文件路径
+            dictionary_type: 词典类型 (adult, general, game, artist)
         """
         self.placeholder_map: Dict[str, Dict[str, str]] = {}
-        self.dictionary_file = dictionary_file
+        self.dictionary_type = dictionary_type
         self.dictionary = self._load_dictionary()
 
     def protect_csv_file(
@@ -61,7 +62,12 @@ class PlaceholderManager:
             rows = []
             with open(csv_file, "r", encoding="utf-8") as infile:
                 reader = csv.DictReader(infile)
-                fieldnames = list(reader.fieldnames)
+                # 过滤掉None字段名
+                fieldnames = (
+                    [f for f in reader.fieldnames if f is not None]
+                    if reader.fieldnames
+                    else []
+                )
 
                 # 确保包含所有必要字段
                 required_fields = [
@@ -122,7 +128,9 @@ class PlaceholderManager:
                 writer.writeheader()
                 writer.writerows(rows)
 
-            ui.print_success(f"✅ CSV文件保护完成: {protected_count}/{total_count} 条记录")
+            ui.print_success(
+                f"✅ CSV文件保护完成: {protected_count}/{total_count} 条记录"
+            )
             logger.info("CSV文件保护完成: %d/%d 条记录", protected_count, total_count)
             return True, self.placeholder_map.copy(), "protected_text"
 
@@ -163,7 +171,12 @@ class PlaceholderManager:
             rows = []
             with open(csv_file, "r", encoding="utf-8") as infile:
                 reader = csv.DictReader(infile)
-                fieldnames = reader.fieldnames
+                # 过滤掉None字段名
+                fieldnames = (
+                    [f for f in reader.fieldnames if f is not None]
+                    if reader.fieldnames
+                    else []
+                )
 
                 for row in reader:
                     total_count += 1
@@ -270,13 +283,13 @@ class PlaceholderManager:
 
             if not dictionary_file.exists():
                 logger.warning("词典文件不存在: %s", dictionary_file)
-                return
+                return {}
 
             with open(dictionary_file, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f)
 
             # 提取所有词汇
-            self.dictionary = {}
+            dictionary = {}
             for category, category_data in data.items():
                 if isinstance(category_data, dict) and "entries" in category_data:
                     entries = category_data["entries"]
@@ -288,18 +301,24 @@ class PlaceholderManager:
                                 and "chinese" in entry
                             ):
                                 english_word = entry["english"]
-                                self.dictionary[english_word] = {
+                                dictionary[english_word] = {
                                     "chinese": entry["chinese"],
                                     "priority": entry.get("priority", "medium"),
                                 }
 
+            self.dictionary = dictionary
             logger.info(
                 "已加载%s词典，共%d个词汇", self.dictionary_type, len(self.dictionary)
             )
+            return self.dictionary
 
         except Exception as e:
             logger.error("加载词典失败: %s", e)
+            import traceback
+
+            logger.error("详细错误信息: %s", traceback.format_exc())
             self.dictionary = {}
+            return self.dictionary
 
     def _protect_adult_content(self, text: str) -> Tuple[str, bool]:
         """
@@ -364,11 +383,12 @@ class PlaceholderManager:
         patterns = [
             r"\\n",  # \n 换行符
             r"\[[^\]]+\]",  # [xxx]
-            r"\{\d+\}",  # {0}, {1}
+            r"\{[^}]+\}%",  # {VALUE}%, {COUNT}% 等带百分号的占位符（必须先匹配，避免被通用模式截断）
+            r"\{[^}]+\}",  # {所有内容} - 包括 {0}, {0_labelShort}, {RAPIST}, {RAPIST_possessive} 等
             r"%[sdif]",  # %s, %d, %i, %f
             r"</?(?!ALIMT\s*>)[^>]+>",  # <color> 或 <br>，但排除ALIMT标签
             r"[a-zA-Z_][a-zA-Z0-9_]*\([^)]*\)",  # 函数调用
-            r"->\[[^\]]+\]",  # ->[结果]
+            r"[a-zA-Z_][a-zA-Z0-9_]*->",  # 任意前缀-> 格式，如 r_logentry->, sent->, name-> 等
             r"\bpawn\b",  # pawn 游戏术语
         ]
 
@@ -381,16 +401,16 @@ class PlaceholderManager:
 
         # 合并所有模式为一个正则表达式
         combined_pattern = "|".join(f"({pattern})" for pattern in patterns)
-        
+
         # 一次性匹配所有模式
         matches = list(re.finditer(combined_pattern, protected_text))
-        
+
         # 只有当有匹配的占位符时才记录到placeholder_map
         if matches:
             # 初始化该行的占位符映射
             if csv_key not in self.placeholder_map:
                 self.placeholder_map[csv_key] = {}
-                
+
             # 从后往前替换，避免位置偏移
             for match in reversed(matches):
                 placeholder_text = match.group()

@@ -23,13 +23,11 @@ class BaseAPIConfig(BaseConfig):
         super().__init__(name)
         self.api_type = api_type
         self.enabled = False
-        self.priority = 0
 
         # 通用API配置
         self._defaults.update(
             {
                 "enabled": False,
-                "priority": 0,
                 "timeout": 30,
                 "max_retries": 3,
                 "retry_delay": 1.0,
@@ -41,7 +39,6 @@ class BaseAPIConfig(BaseConfig):
         self._field_types.update(
             {
                 "enabled": bool,
-                "priority": int,
                 "timeout": int,
                 "max_retries": int,
                 "retry_delay": float,
@@ -96,24 +93,6 @@ class BaseAPIConfig(BaseConfig):
             enabled: 是否启用
         """
         self.set_value("enabled", enabled)
-
-    def get_priority(self) -> int:
-        """
-        获取API优先级
-
-        Returns:
-            优先级（数字越小优先级越高）
-        """
-        return self.get_value("priority", 0)
-
-    def set_priority(self, priority: int) -> None:
-        """
-        设置API优先级
-
-        Args:
-            priority: 优先级
-        """
-        self.set_value("priority", priority)
 
     def get_timeout(self) -> int:
         """
@@ -184,7 +163,6 @@ class BaseAPIConfig(BaseConfig):
             "name": self.name,
             "type": self.api_type,
             "enabled": self.is_enabled(),
-            "priority": self.get_priority(),
             "status": "已配置" if self.is_complete() else "未配置",
             "valid": self.validate(),
         }

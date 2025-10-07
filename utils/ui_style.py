@@ -69,11 +69,8 @@ class UIStyle:
         API = "🌐"  # API
         MODULE = "📦"  # 模块
         TOOLS = "🛠️"  # 工具
-        DEFAULT = "⭐"  # 默认
-        BALANCE = "⚖️"  # 负载均衡
         TEST = "🧪"  # 测试
         PRIORITY = "🔢"  # 优先级
-        FAILOVER = "🛡️"  # 故障切换
         STATS = "📊"  # 统计
         EDIT = "✏️"  # 编辑
         TOGGLE = "🔄"  # 切换
@@ -106,6 +103,8 @@ class UIStyle:
         VERSION = "🔖"  # 版本
         RECOMMEND = "💡"  # 推荐
         TIME = "🕐"  # 时间
+        CLEANUP = "🧹"  # 清理
+        DELETE = "🗑️"  # 删除
 
     # 布局常量
     class Layout:

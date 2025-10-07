@@ -78,6 +78,28 @@ def handle_config_manage():
 def main():
     """主程序入口"""
 
+    # 根据配置决定是否在启动时清理日志
+    try:
+        from user_config import UserConfigManager
+
+        config_manager = UserConfigManager()
+        log_config = config_manager.log_config
+
+        if log_config.get_value("auto_cleanup_logs", True):
+            from utils.logging_config import LoggingConfig
+
+            # 根据配置决定清理模式
+            if log_config.get_value("cleanup_all_logs_on_startup", False):
+                # 清理所有日志
+                LoggingConfig.cleanup_all_logs()
+            else:
+                # 清理指定天数的日志
+                retention_days = log_config.get_value("log_retention_days", 7)
+                LoggingConfig._cleanup_old_logs(retention_days)
+    except Exception:
+        # 忽略日志清理错误，不影响主程序运行
+        pass
+
     while True:
         os.system("cls" if os.name == "nt" else "clear")
         mode = show_main_menu()

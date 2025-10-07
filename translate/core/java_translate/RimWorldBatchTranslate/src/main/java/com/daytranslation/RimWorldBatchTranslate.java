@@ -41,68 +41,50 @@ public class RimWorldBatchTranslate {
 
         String trimmedText = text.trim();
 
-        // 1. 纯占位符（如 [xxx], [yyy]）
-        if (trimmedText.matches("(\\s*\\[[^\\]]+\\]\\s*)+")) {
-            return "纯占位符";
-        }
-
-        // 2. 纯数字
+        // 1. 纯数字
         if (trimmedText.matches("^\\d+$")) {
             return "纯数字";
         }
 
-        // 3. 纯空格或制表符
+        // 2. 纯空格或制表符
         if (trimmedText.matches("^\\s+$")) {
             return "纯空白字符";
         }
 
-        // 4. 函数调用（如 function_name(args)）
-        if (trimmedText.matches("^[a-zA-Z_][a-zA-Z0-9_]*\\([^)]*\\)$")) {
-            return "函数调用";
+        // 3. ALIMT标签检查
+        // 检查是否只包含ALIMT标签（没有其他内容）
+        // 先移除所有ALIMT标签，然后检查剩余内容
+        String withoutAlimt = trimmedText.replaceAll("<ALIMT >.*?</ALIMT>", "").trim();
+        if (withoutAlimt.isEmpty() && trimmedText.contains("<ALIMT >")) {
+            // 如果移除ALIMT标签后为空，且原文本包含ALIMT标签
+            if (trimmedText.matches("^<ALIMT >.*</ALIMT>$")) {
+                return "纯ALIMT保护内容";
+            } else {
+                return "多个ALIMT标签";
+            }
         }
 
-        // 5. HTML标签（如 <color>red</color>）
-        if (trimmedText.matches("^<[^>]+>.*</[^>]+>$") || trimmedText.matches("^<[^>]+/>$")) {
-            return "HTML标签";
-        }
-
-        // 6. 文件路径或URL
+        // 4. 文件路径或URL
         if (trimmedText.matches("^[a-zA-Z]:\\\\") || // Windows路径
                 trimmedText.matches("^/") || // Unix路径
                 trimmedText.matches("^https?://")) { // URL
             return "路径或URL";
         }
 
-        // 7. 布尔值
+        // 5. 布尔值
         if (trimmedText.matches("^(true|false)$")) {
             return "布尔值";
         }
 
-        // 8. 浮点数
+        // 6. 浮点数
         if (trimmedText.matches("^-?\\d+\\.\\d+$")) {
             return "浮点数";
         }
 
-        // 9. 十六进制数
+        // 7. 十六进制数
         if (trimmedText.matches("^0x[0-9a-fA-F]+$")) {
             return "十六进制数";
         }
-
-        // 10. 特殊标记（如 {0}, {1} 等格式化占位符）
-        if (trimmedText.matches("^\\{\\d+\\}$")) {
-            return "格式化占位符";
-        }
-
-        // 11. 纯ALIMT保护内容（如 <ALIMT >content</ALIMT> 或 <ALIMT >(PH_1)</ALIMT>）
-        if (trimmedText.matches("^<ALIMT >.*</ALIMT>$")) {
-            return "纯ALIMT保护内容";
-        }
-
-        // 12. 多个纯ALIMT标签（如 <ALIMT >(PH_1)</ALIMT><ALIMT >(PH_2)</ALIMT>）
-        if (trimmedText.matches("^(<ALIMT >.*</ALIMT>)+$")) {
-            return "多个ALIMT标签";
-        }
-
         // 不跳过
         return null;
     }

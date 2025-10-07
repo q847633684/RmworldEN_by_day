@@ -13143,3 +13143,74 @@ violent_sexual_behavior:
     context: 性行为方式
     english: beastiality
     priority: high
+size_levels:
+  description: 生殖器尺寸等级
+  entries:
+  - chinese: 微型
+    context: size_levels
+    english: Micro
+    priority: high
+  - chinese: 小型
+    context: size_levels
+    english: Small
+    priority: high
+  - chinese: 紧致
+    context: size_levels
+    english: Tight
+    priority: high
+  - chinese: 平均
+    context: size_levels
+    english: Average
+    priority: high
+  - chinese: 大型
+    context: size_levels
+    english: Large
+    priority: high
+  - chinese: 巨大
+    context: size_levels
+    english: Huge
+    priority: high
+  - chinese: 高耸
+    context: size_levels
+    english: Towering
+    priority: high
+  - chinese: 微小
+    context: size_levels
+    english: Tiny
+    priority: high
+  - chinese: 容纳
+    context: size_levels
+    english: Accommodating
+    priority: high
+  - chinese: 深渊
+    context: size_levels
+    english: Cavernous
+    priority: high
+  - chinese: 无底
+    context: size_levels
+    english: Abyssal
+    priority: high
+  - chinese: 巨大
+    context: size_levels
+    english: Enormous
+    priority: high
+  - chinese: 庞大
+    context: size_levels
+    english: Massive
+    priority: high
+  - chinese: 巨大
+    context: size_levels
+    english: Gargantuan
+    priority: high
+  - chinese: 巨大
+    context: size_levels
+    english: Colossal
+    priority: high
+  - chinese: 泰坦
+    context: size_levels
+    english: Titanic
+    priority: high
+  - chinese: 天文
+    context: size_levels
+    english: Astronomical
+    priority: high

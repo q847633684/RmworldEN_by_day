@@ -324,6 +324,9 @@ class LogConfig(BaseConfig):
                 "log_file_size": 10,  # MB
                 "log_backup_count": 5,
                 "log_format": "%(asctime)s - %(levelname)s - %(message)s",
+                "auto_cleanup_logs": True,  # 启动时自动清理日志
+                "cleanup_all_logs_on_startup": False,  # 启动时清理所有日志（True）还是指定天数（False）
+                "log_retention_days": 7,  # 日志保留天数
             }
         )
 
@@ -336,6 +339,9 @@ class LogConfig(BaseConfig):
                 "log_file_size": int,
                 "log_backup_count": int,
                 "log_format": str,
+                "auto_cleanup_logs": bool,
+                "cleanup_all_logs_on_startup": bool,
+                "log_retention_days": int,
             }
         )
 
@@ -382,6 +388,26 @@ class LogConfig(BaseConfig):
                 "max": 20,
                 "default": 5,
             },
+            "auto_cleanup_logs": {
+                "type": "boolean",
+                "label": "启动时自动清理日志",
+                "description": "程序启动时是否自动清理旧日志文件",
+                "default": True,
+            },
+            "cleanup_all_logs_on_startup": {
+                "type": "boolean",
+                "label": "启动时清理所有日志",
+                "description": "开启：启动时清理所有日志；关闭：启动时清理指定天数的日志",
+                "default": False,
+            },
+            "log_retention_days": {
+                "type": "number",
+                "label": "日志保留天数",
+                "description": "当'启动时清理所有日志'关闭时，保留最近几天的日志文件",
+                "min": 1,
+                "max": 30,
+                "default": 7,
+            },
         }
 
     def validate(self) -> bool:
@@ -394,6 +420,11 @@ class LogConfig(BaseConfig):
         log_file_size = self.get_value("log_file_size", 10)
         if log_file_size < 1 or log_file_size > 100:
             self.logger.error("日志文件大小无效: %s", log_file_size)
+            return False
+
+        log_retention_days = self.get_value("log_retention_days", 7)
+        if log_retention_days < 1 or log_retention_days > 30:
+            self.logger.error("日志保留天数无效: %s", log_retention_days)
             return False
 
         return True

@@ -4,9 +4,9 @@
 提供用户友好的配置管理界面
 """
 
-from typing import Dict, Any, Optional
+from typing import Optional
 from utils.logging_config import get_logger
-from utils.ui_style import ui
+from utils.ui_style import ui, confirm_action
 from ..core.user_config import UserConfigManager
 from ..core.config_validator import ConfigValidator
 from .api_config_ui import APIConfigUI
@@ -115,64 +115,118 @@ class MainConfigUI:
 
             system_config = self.config_manager.system_config
 
-            # 显示当前配置
-            ui.print_section_header("当前配置", ui.Icons.INFO)
-            ui.print_key_value(
-                "配置版本", system_config.get_value("version"), ui.Icons.VERSION
-            )
-            ui.print_key_value(
-                "日志格式", system_config.get_value("log_format"), ui.Icons.LOG
-            )
-            ui.print_key_value(
-                "调试模式",
-                "开启" if system_config.get_value("debug_mode") else "关闭",
-                ui.Icons.DEBUG,
-            )
-            ui.print_key_value(
-                "预览字段数",
-                str(system_config.get_value("preview_translatable_fields", 0)),
-                ui.Icons.FIELD,
-            )
+            # 显示系统配置和操作选项
+            ui.print_section_header("系统配置", ui.Icons.INFO)
 
-            # 显示翻译规则统计
+            # 获取翻译规则统计
             translation_fields = system_config.get_translation_fields()
             ignore_fields = system_config.get_ignore_fields()
             non_text_patterns = system_config.get_non_text_patterns()
 
-            ui.print_section_header("翻译规则", ui.Icons.RULES)
-            ui.print_key_value(
-                "翻译字段", f"{len(translation_fields)} 个", ui.Icons.FIELD
-            )
-            ui.print_key_value("忽略字段", f"{len(ignore_fields)} 个", ui.Icons.FIELD)
-            ui.print_key_value(
-                "非文本模式", f"{len(non_text_patterns)} 个", ui.Icons.PATTERN
-            )
+            # 配置项列表
+            config_items = [
+                (
+                    "1",
+                    "配置版本",
+                    system_config.get_value("version"),
+                    ui.Icons.VERSION,
+                    "查看配置版本信息",
+                ),
+                (
+                    "2",
+                    "日志格式",
+                    system_config.get_value("log_format"),
+                    ui.Icons.LOG,
+                    "修改日志格式字符串",
+                ),
+                (
+                    "3",
+                    "调试模式",
+                    "开启" if system_config.get_value("debug_mode") else "关闭",
+                    ui.Icons.DEBUG,
+                    "开启/关闭调试模式",
+                ),
+                (
+                    "4",
+                    "预览字段数",
+                    str(system_config.get_value("preview_translatable_fields", 0)),
+                    ui.Icons.FIELD,
+                    "设置预览可翻译字段数量",
+                ),
+                (
+                    "5",
+                    "翻译字段",
+                    f"{len(translation_fields)} 个",
+                    ui.Icons.FIELD,
+                    "查看翻译字段规则",
+                ),
+                (
+                    "6",
+                    "忽略字段",
+                    f"{len(ignore_fields)} 个",
+                    ui.Icons.FIELD,
+                    "查看忽略字段规则",
+                ),
+                (
+                    "7",
+                    "非文本模式",
+                    f"{len(non_text_patterns)} 个",
+                    ui.Icons.PATTERN,
+                    "查看非文本模式规则",
+                ),
+            ]
 
-            # 显示菜单
-            ui.print_section_header("配置选项", ui.Icons.MENU)
-            ui.print_menu_item("1", "编辑日志格式", "修改日志格式字符串", ui.Icons.EDIT)
+            # 显示配置项
+            for key, label, value, icon, description in config_items:
+                ui.print_menu_item(
+                    key, f"{label}: {value}", description, icon, compact=True
+                )
+
+            # 返回选项
             ui.print_menu_item(
-                "2", "切换调试模式", "开启/关闭调试模式", ui.Icons.TOGGLE
+                "b", "返回上级", "返回主配置菜单", ui.Icons.BACK, compact=True
             )
-            ui.print_menu_item(
-                "3", "设置预览字段数", "设置预览可翻译字段数量", ui.Icons.EDIT
-            )
-            ui.print_menu_item("b", "返回上级", "返回主配置菜单", ui.Icons.BACK)
 
             ui.print_separator()
 
-            choice = input(ui.get_input_prompt("请选择操作", options="1-3, b")).strip()
+            choice = input(ui.get_input_prompt("请选择操作", options="1-7, b")).strip()
 
             if choice == "1":
-                self._edit_system_field("log_format", "日志格式")
+                ui.print_info(f"配置版本: {system_config.get_value('version')}")
+                input("\n按回车键继续...")
             elif choice == "2":
+                self._edit_system_field("log_format", "日志格式")
+            elif choice == "3":
                 current = system_config.get_value("debug_mode", True)
                 system_config.set_value("debug_mode", not current)
                 ui.print_success(f"调试模式已{'关闭' if current else '开启'}")
-            elif choice == "3":
+            elif choice == "4":
                 self._edit_system_field(
                     "preview_translatable_fields", "预览字段数", field_type="int"
                 )
+            elif choice == "5":
+                ui.print_info(f"翻译字段规则: {len(translation_fields)} 个")
+                if translation_fields:
+                    ui.print_info(
+                        "字段列表: " + ", ".join(list(translation_fields)[:10])
+                    )
+                    if len(translation_fields) > 10:
+                        ui.print_info(f"... 还有 {len(translation_fields) - 10} 个字段")
+                input("\n按回车键继续...")
+            elif choice == "6":
+                ui.print_info(f"忽略字段规则: {len(ignore_fields)} 个")
+                if ignore_fields:
+                    ui.print_info("字段列表: " + ", ".join(list(ignore_fields)[:10]))
+                    if len(ignore_fields) > 10:
+                        ui.print_info(f"... 还有 {len(ignore_fields) - 10} 个字段")
+                input("\n按回车键继续...")
+            elif choice == "7":
+                ui.print_info(f"非文本模式规则: {len(non_text_patterns)} 个")
+                if non_text_patterns:
+                    ui.print_info("模式列表: " + ", ".join(non_text_patterns[:10]))
+                    if len(non_text_patterns) > 10:
+                        ui.print_info(f"... 还有 {len(non_text_patterns) - 10} 个模式")
+                input("\n按回车键继续...")
             elif choice.lower() == "b":
                 break
             else:
@@ -209,36 +263,44 @@ class MainConfigUI:
 
             path_config = self.config_manager.path_config
 
-            # 显示当前配置
-            ui.print_section_header("当前路径配置", ui.Icons.INFO)
-            ui.print_key_value(
-                "默认导出CSV",
-                path_config.get_value("default_export_csv", "未设置"),
-                ui.Icons.EXPORT,
-            )
-            ui.print_key_value(
-                "默认输出目录",
-                path_config.get_value("default_output_dir", "未设置"),
-                ui.Icons.FOLDER,
-            )
-            ui.print_key_value(
-                "记住路径",
-                "是" if path_config.get_value("remember_paths", True) else "否",
-                ui.Icons.SETTINGS,
-            )
+            # 显示路径配置和操作选项
+            ui.print_section_header("路径配置", ui.Icons.INFO)
 
-            # 显示菜单
-            ui.print_section_header("配置选项", ui.Icons.SETTINGS)
+            # 配置项列表
+            config_items = [
+                (
+                    "1",
+                    "默认导出CSV",
+                    path_config.get_value("default_export_csv", "未设置"),
+                    ui.Icons.EXPORT,
+                    "设置默认的CSV导出文件路径",
+                ),
+                (
+                    "2",
+                    "默认输出目录",
+                    path_config.get_value("default_output_dir", "未设置"),
+                    ui.Icons.FOLDER,
+                    "设置默认的输出目录",
+                ),
+                (
+                    "3",
+                    "记住路径",
+                    "是" if path_config.get_value("remember_paths", True) else "否",
+                    ui.Icons.SETTINGS,
+                    "开启/关闭路径记忆功能",
+                ),
+            ]
+
+            # 显示配置项
+            for key, label, value, icon, description in config_items:
+                ui.print_menu_item(
+                    key, f"{label}: {value}", description, icon, compact=True
+                )
+
+            # 返回选项
             ui.print_menu_item(
-                "1", "设置导出CSV路径", "设置默认的CSV导出文件路径", ui.Icons.EXPORT
+                "b", "返回上级", "返回上级菜单", ui.Icons.BACK, compact=True
             )
-            ui.print_menu_item(
-                "2", "设置输出目录", "设置默认的输出目录", ui.Icons.FOLDER
-            )
-            ui.print_menu_item(
-                "3", "切换记住路径", "开启/关闭路径记忆功能", ui.Icons.TOGGLE
-            )
-            ui.print_menu_item("b", "返回上级", "返回上级菜单", ui.Icons.BACK)
 
             ui.print_separator()
 
@@ -297,36 +359,9 @@ class MainConfigUI:
 
             lang_config = self.config_manager.language_config
 
-            # 显示语言目录配置
-            ui.print_section_header("语言目录配置", ui.Icons.FOLDER)
-            ui.print_key_value(
-                "中文语言目录",
-                lang_config.get_value("cn_language") or "未设置",
-                ui.Icons.LANGUAGE,
-            )
-            ui.print_key_value(
-                "英文语言目录",
-                lang_config.get_value("en_language") or "未设置",
-                ui.Icons.LANGUAGE,
-            )
-            ui.print_key_value(
-                "DefInjected目录",
-                lang_config.get_value("definjected_dir") or "未设置",
-                ui.Icons.FOLDER,
-            )
-            ui.print_key_value(
-                "Keyed目录",
-                lang_config.get_value("keyed_dir") or "未设置",
-                ui.Icons.FOLDER,
-            )
-            ui.print_key_value(
-                "默认输出CSV",
-                lang_config.get_value("output_csv") or "未设置",
-                ui.Icons.FILE,
-            )
+            # 显示语言配置和操作选项
+            ui.print_section_header("语言配置", ui.Icons.INFO)
 
-            # 显示界面和格式配置
-            ui.print_section_header("界面和格式配置", ui.Icons.INFO)
             # 界面语言显示
             interface_lang = lang_config.get_value("interface_language")
             if interface_lang == "zh_CN":
@@ -336,31 +371,79 @@ class MainConfigUI:
             else:
                 lang_display = interface_lang or "未设置"
 
-            ui.print_key_value(
-                "界面语言",
-                lang_display,
-                ui.Icons.LANGUAGE,
-            )
-            ui.print_key_value(
-                "CSV编码",
-                lang_config.get_value("csv_encoding") or "未设置",
-                ui.Icons.FILE,
-            )
-            ui.print_key_value(
-                "CSV分隔符",
-                lang_config.get_value("csv_delimiter") or "未设置",
-                ui.Icons.FILE,
-            )
-            ui.print_key_value(
-                "日期格式",
-                lang_config.get_value("date_format") or "未设置",
-                ui.Icons.TIME,
-            )
-            ui.print_key_value(
-                "数字格式",
-                lang_config.get_value("number_format") or "未设置",
-                ui.Icons.FIELD,
-            )
+            # 配置项列表
+            config_items = [
+                (
+                    "1",
+                    "中文语言目录",
+                    lang_config.get_value("cn_language") or "未设置",
+                    ui.Icons.LANGUAGE,
+                    "设置中文语言目录",
+                ),
+                (
+                    "2",
+                    "英文语言目录",
+                    lang_config.get_value("en_language") or "未设置",
+                    ui.Icons.LANGUAGE,
+                    "设置英文语言目录",
+                ),
+                (
+                    "3",
+                    "DefInjected目录",
+                    lang_config.get_value("definjected_dir") or "未设置",
+                    ui.Icons.FOLDER,
+                    "设置DefInjected目录",
+                ),
+                (
+                    "4",
+                    "Keyed目录",
+                    lang_config.get_value("keyed_dir") or "未设置",
+                    ui.Icons.FOLDER,
+                    "设置Keyed目录",
+                ),
+                (
+                    "5",
+                    "默认输出CSV",
+                    lang_config.get_value("output_csv") or "未设置",
+                    ui.Icons.FILE,
+                    "设置默认输出CSV文件",
+                ),
+                ("6", "界面语言", lang_display, ui.Icons.LANGUAGE, "设置界面显示语言"),
+                (
+                    "7",
+                    "CSV编码",
+                    lang_config.get_value("csv_encoding") or "未设置",
+                    ui.Icons.FILE,
+                    "设置CSV文件编码",
+                ),
+                (
+                    "8",
+                    "CSV分隔符",
+                    lang_config.get_value("csv_delimiter") or "未设置",
+                    ui.Icons.FILE,
+                    "设置CSV分隔符",
+                ),
+                (
+                    "9",
+                    "日期格式",
+                    lang_config.get_value("date_format") or "未设置",
+                    ui.Icons.TIME,
+                    "设置日期显示格式",
+                ),
+                (
+                    "0",
+                    "数字格式",
+                    lang_config.get_value("number_format") or "未设置",
+                    ui.Icons.FIELD,
+                    "设置数字显示格式",
+                ),
+            ]
+
+            # 显示配置项
+            for key, label, value, icon, description in config_items:
+                ui.print_menu_item(
+                    key, f"{label}: {value}", description, icon, compact=True
+                )
 
             # 显示菜单
             ui.print_section_header("配置选项", ui.Icons.SETTINGS)
@@ -420,50 +503,103 @@ class MainConfigUI:
 
             log_config = self.config_manager.log_config
 
-            # 显示当前配置
-            ui.print_section_header("当前日志配置", ui.Icons.INFO)
-            ui.print_key_value(
-                "日志级别", log_config.get_value("log_level", "INFO"), ui.Icons.LOG
-            )
-            ui.print_key_value(
-                "记录到文件",
-                "是" if log_config.get_value("log_to_file", True) else "否",
-                ui.Icons.FILE,
-            )
-            ui.print_key_value(
-                "输出到控制台",
-                "是" if log_config.get_value("log_to_console", False) else "否",
-                ui.Icons.CONSOLE,
-            )
-            ui.print_key_value(
-                "文件大小限制",
-                f"{log_config.get_value('log_file_size', 10)}MB",
-                ui.Icons.SIZE,
-            )
-            ui.print_key_value(
-                "备份文件数量",
-                f"{log_config.get_value('log_backup_count', 5)}个",
-                ui.Icons.BACKUP,
-            )
+            # 显示配置和操作选项
+            ui.print_section_header("日志配置", ui.Icons.INFO)
 
-            # 显示菜单
-            ui.print_section_header("配置选项", ui.Icons.SETTINGS)
-            ui.print_menu_item("1", "设置日志级别", "设置日志记录级别", ui.Icons.LOG)
+            # 配置项列表
+            config_items = [
+                (
+                    "1",
+                    "日志级别",
+                    log_config.get_value("log_level", "INFO"),
+                    ui.Icons.LOG,
+                    "设置日志记录级别",
+                ),
+                (
+                    "2",
+                    "记录到文件",
+                    "是" if log_config.get_value("log_to_file", True) else "否",
+                    ui.Icons.FILE,
+                    "开启/关闭文件记录",
+                ),
+                (
+                    "3",
+                    "输出到控制台",
+                    "是" if log_config.get_value("log_to_console", False) else "否",
+                    ui.Icons.CONSOLE,
+                    "开启/关闭控制台输出",
+                ),
+                (
+                    "4",
+                    "文件大小限制",
+                    f"{log_config.get_value('log_file_size', 10)}MB",
+                    ui.Icons.SIZE,
+                    "设置日志文件大小限制",
+                ),
+                (
+                    "5",
+                    "备份文件数量",
+                    f"{log_config.get_value('log_backup_count', 5)}个",
+                    ui.Icons.BACKUP,
+                    "设置备份文件数量",
+                ),
+                (
+                    "6",
+                    "启动时自动清理",
+                    "是" if log_config.get_value("auto_cleanup_logs", True) else "否",
+                    ui.Icons.CLEANUP,
+                    "开启/关闭启动时自动清理日志",
+                ),
+                (
+                    "7",
+                    "启动时清理所有日志",
+                    (
+                        "是"
+                        if log_config.get_value("cleanup_all_logs_on_startup", False)
+                        else "否"
+                    ),
+                    ui.Icons.DELETE,
+                    "开启：清理所有日志；关闭：清理指定天数",
+                ),
+                (
+                    "8",
+                    "日志保留天数",
+                    f"{log_config.get_value('log_retention_days', 7)}天",
+                    ui.Icons.TIME,
+                    "设置日志保留天数",
+                ),
+            ]
+
+            # 显示配置项
+            for key, label, value, icon, description in config_items:
+                ui.print_menu_item(
+                    key, f"{label}: {value}", description, icon, compact=True
+                )
+
+            # 额外操作
             ui.print_menu_item(
-                "2", "切换文件记录", "开启/关闭文件记录", ui.Icons.TOGGLE
+                "9",
+                "手动清理日志",
+                "立即清理指定天数前的日志文件",
+                ui.Icons.CLEANUP,
+                compact=True,
             )
             ui.print_menu_item(
-                "3", "切换控制台输出", "开启/关闭控制台输出", ui.Icons.TOGGLE
+                "0",
+                "清理所有日志",
+                "立即清理所有日志文件（谨慎使用）",
+                ui.Icons.DELETE,
+                compact=True,
             )
             ui.print_menu_item(
-                "4", "设置文件大小", "设置日志文件大小限制", ui.Icons.SIZE
+                "b", "返回上级", "返回上级菜单", ui.Icons.BACK, compact=True
             )
-            ui.print_menu_item("5", "设置备份数量", "设置备份文件数量", ui.Icons.BACKUP)
-            ui.print_menu_item("b", "返回上级", "返回上级菜单", ui.Icons.BACK)
 
             ui.print_separator()
 
-            choice = input(ui.get_input_prompt("请选择操作", options="1-5, b")).strip()
+            choice = input(
+                ui.get_input_prompt("请选择操作", options="1-9, 0, b")
+            ).strip()
 
             if choice == "1":
                 self._set_log_level(log_config)
@@ -483,6 +619,23 @@ class MainConfigUI:
                 self._set_number_config(
                     log_config, "log_backup_count", "备份文件数量", 1, 20, 5
                 )
+            elif choice == "6":
+                current = log_config.get_value("auto_cleanup_logs", True)
+                log_config.set_value("auto_cleanup_logs", not current)
+                ui.print_success(f"启动时自动清理日志已{'关闭' if current else '开启'}")
+            elif choice == "7":
+                current = log_config.get_value("cleanup_all_logs_on_startup", False)
+                log_config.set_value("cleanup_all_logs_on_startup", not current)
+                mode = "清理所有日志" if not current else "清理指定天数"
+                ui.print_success(f"启动时清理模式已切换为：{mode}")
+            elif choice == "8":
+                self._set_number_config(
+                    log_config, "log_retention_days", "日志保留天数", 1, 30, 7
+                )
+            elif choice == "9":
+                self._cleanup_old_logs_ui()
+            elif choice == "0":
+                self._cleanup_all_logs_ui()
             elif choice.lower() == "b":
                 break
             else:
@@ -495,46 +648,58 @@ class MainConfigUI:
 
             ui_config = self.config_manager.ui_config
 
-            # 显示当前配置
-            ui.print_section_header("当前界面配置", ui.Icons.INFO)
-            ui.print_key_value(
-                "界面主题", ui_config.get_value("theme", "default"), ui.Icons.THEME
-            )
-            ui.print_key_value(
-                "界面语言", ui_config.get_value("language", "zh_CN"), ui.Icons.LANGUAGE
-            )
-            ui.print_key_value(
-                "显示进度条",
-                "是" if ui_config.get_value("show_progress", True) else "否",
-                ui.Icons.PROGRESS,
-            )
-            ui.print_key_value(
-                "确认操作",
-                "是" if ui_config.get_value("confirm_actions", True) else "否",
-                ui.Icons.CONFIRM,
-            )
-            ui.print_key_value(
-                "自动保存",
-                "是" if ui_config.get_value("auto_save", True) else "否",
-                ui.Icons.SAVE,
-            )
+            # 显示配置和操作选项
+            ui.print_section_header("界面配置", ui.Icons.INFO)
 
-            # 显示菜单
-            ui.print_section_header("配置选项", ui.Icons.SETTINGS)
-            ui.print_menu_item("1", "设置界面主题", "选择界面主题", ui.Icons.THEME)
+            # 配置项列表
+            config_items = [
+                (
+                    "1",
+                    "界面主题",
+                    ui_config.get_value("theme", "default"),
+                    ui.Icons.THEME,
+                    "选择界面主题",
+                ),
+                (
+                    "2",
+                    "界面语言",
+                    ui_config.get_value("language", "zh_CN"),
+                    ui.Icons.LANGUAGE,
+                    "选择界面显示语言",
+                ),
+                (
+                    "3",
+                    "显示进度条",
+                    "是" if ui_config.get_value("show_progress", True) else "否",
+                    ui.Icons.PROGRESS,
+                    "开启/关闭进度条显示",
+                ),
+                (
+                    "4",
+                    "确认操作",
+                    "是" if ui_config.get_value("confirm_actions", True) else "否",
+                    ui.Icons.CONFIRM,
+                    "开启/关闭操作确认",
+                ),
+                (
+                    "5",
+                    "自动保存",
+                    "是" if ui_config.get_value("auto_save", True) else "否",
+                    ui.Icons.SAVE,
+                    "开启/关闭自动保存",
+                ),
+            ]
+
+            # 显示配置项
+            for key, label, value, icon, description in config_items:
+                ui.print_menu_item(
+                    key, f"{label}: {value}", description, icon, compact=True
+                )
+
+            # 额外操作
             ui.print_menu_item(
-                "2", "设置界面语言", "选择界面显示语言", ui.Icons.LANGUAGE
+                "b", "返回上级", "返回上级菜单", ui.Icons.BACK, compact=True
             )
-            ui.print_menu_item(
-                "3", "切换进度条显示", "开启/关闭进度条显示", ui.Icons.TOGGLE
-            )
-            ui.print_menu_item(
-                "4", "切换操作确认", "开启/关闭操作确认", ui.Icons.TOGGLE
-            )
-            ui.print_menu_item(
-                "5", "切换自动保存", "开启/关闭自动保存", ui.Icons.TOGGLE
-            )
-            ui.print_menu_item("b", "返回上级", "返回上级菜单", ui.Icons.BACK)
 
             ui.print_separator()
 
@@ -714,6 +879,90 @@ class MainConfigUI:
             ui.print_success("配置备份成功")
         else:
             ui.print_error("配置备份失败")
+
+        input("\n按回车键继续...")
+
+    def _cleanup_old_logs_ui(self) -> None:
+        """清理旧日志文件 - UI包装"""
+        from utils.logging_config import LoggingConfig
+
+        ui.print_header("清理旧日志", ui.Icons.CLEANUP)
+
+        try:
+            # 显示当前日志信息
+            log_info = LoggingConfig.get_log_info()
+            if "error" in log_info:
+                ui.print_error(f"获取日志信息失败: {log_info['error']}")
+                input("\n按回车键继续...")
+                return
+
+            if "message" in log_info:
+                ui.print_info(log_info["message"])
+                input("\n按回车键继续...")
+                return
+
+            ui.print_info(f"当前日志文件: {log_info['total_files']} 个")
+            ui.print_info(f"总大小: {log_info['total_size_mb']:.2f} MB")
+
+            # 获取用户输入的天数
+            days_input = input("\n请输入要保留的天数 (默认7天): ").strip()
+            try:
+                days = int(days_input) if days_input else 7
+                if days < 0:
+                    ui.print_error("天数不能为负数")
+                    input("\n按回车键继续...")
+                    return
+            except ValueError:
+                ui.print_error("请输入有效的数字")
+                input("\n按回车键继续...")
+                return
+
+            # 确认清理
+            if confirm_action(f"确定要清理 {days} 天前的日志文件吗？"):
+                LoggingConfig.cleanup_old_logs(days)
+            else:
+                ui.print_info("取消清理操作")
+
+        except Exception as e:
+            ui.print_error(f"清理日志时发生错误: {str(e)}")
+
+        input("\n按回车键继续...")
+
+    def _cleanup_all_logs_ui(self) -> None:
+        """清理所有日志文件 - UI包装"""
+        from utils.logging_config import LoggingConfig
+
+        ui.print_header("清理所有日志", ui.Icons.DELETE)
+
+        try:
+            # 显示当前日志信息
+            log_info = LoggingConfig.get_log_info()
+            if "error" in log_info:
+                ui.print_error(f"获取日志信息失败: {log_info['error']}")
+                input("\n按回车键继续...")
+                return
+
+            if "message" in log_info:
+                ui.print_info(log_info["message"])
+                input("\n按回车键继续...")
+                return
+
+            ui.print_warning(
+                f"⚠️ 当前有 {log_info['total_files']} 个日志文件，总大小 {log_info['total_size_mb']:.2f} MB"
+            )
+            ui.print_warning("⚠️ 此操作将删除所有日志文件，无法恢复！")
+
+            # 双重确认
+            if confirm_action("确定要删除所有日志文件吗？"):
+                if confirm_action("请再次确认：删除所有日志文件？"):
+                    LoggingConfig.cleanup_all_logs()
+                else:
+                    ui.print_info("取消清理操作")
+            else:
+                ui.print_info("取消清理操作")
+
+        except Exception as e:
+            ui.print_error(f"清理所有日志时发生错误: {str(e)}")
 
         input("\n按回车键继续...")
 

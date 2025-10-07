@@ -7,7 +7,7 @@
 ### ✨ 可扩展API配置
 - **多API支持**: 阿里云、百度、腾讯、谷歌、自定义API
 - **插件化架构**: 轻松添加新的API提供商
-- **智能管理**: 优先级、负载均衡、故障切换
+- **智能管理**: 多API支持
 - **连接测试**: 内置API连接测试功能
 - **配置验证**: 自动验证配置的正确性
 
@@ -176,9 +176,6 @@ class APIManager:
 {
   "version": "2.0.0",
   "api": {
-    "default_api": "aliyun",
-    "failover_enabled": true,
-    "load_balancing": "priority",
     "apis": {
       "aliyun": {
         "enabled": true,
@@ -234,7 +231,6 @@ API配置管理器。
 - `get_enabled_apis()`: 获取已启用的API列表
 - `get_primary_api()`: 获取主要API
 - `test_api(api_type)`: 测试API连接
-- `set_default_api(api_type)`: 设置默认API
 - `enable_api(api_type)`: 启用API
 - `disable_api(api_type)`: 禁用API
 
