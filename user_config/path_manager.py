@@ -497,16 +497,25 @@ class PathManager:
                 # 让用户选择版本号，直接返回最终目录
                 final_dir = self._choose_versioned_content_dir(mod_dir)
                 if final_dir:
+                    # 添加最终目录到历史记录
+                    self.path_config.add_to_history("mod_dir", final_dir)
+                    self._save_history()
                     # 版本结构只返回路径，不返回path_type
                     return final_dir
                 else:
                     return None
             else:
+                # 添加路径到历史记录
+                self.path_config.add_to_history("mod_dir", result.normalized_path)
+                self._save_history()
                 # 非版本结构也只返回路径
                 return result.normalized_path
         else:
             # 多DLC结构直接返回路径和类型
             if allow_multidlc:
+                # 添加路径到历史记录
+                self.path_config.add_to_history("mod_dir", result.normalized_path)
+                self._save_history()
                 return (result.normalized_path, "standard")
             else:
                 ui.print_error(result.error_message)

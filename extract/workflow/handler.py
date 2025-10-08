@@ -91,6 +91,26 @@ def handle_extract() -> Optional[tuple]:
                 ui.print_info(f"CSV文件：{csv_path}")
                 ui.print_info(f"输出目录：{output_dir}")
                 return (csv_path, mod_dir)
+            elif conflict_resolution == "incremental":
+                ui.print_info("新增模式")
+                # 新增模式
+                translations, csv_path = template_manager.incremental_mode(
+                    import_dir=import_dir,
+                    import_language=import_language,
+                    output_dir=output_dir,
+                    output_language=output_language,
+                    data_source_choice=data_source_choice,
+                    has_input_keyed=has_input_keyed,
+                    output_csv=output_csv,
+                )
+                if translations:
+                    ui.print_success(f"新增模式完成！新增了 {len(translations)} 条翻译")
+                    ui.print_info(f"CSV文件：{csv_path}")
+                    ui.print_info(f"输出目录：{output_dir}")
+                    return (csv_path, mod_dir)
+                else:
+                    ui.print_success("新增模式完成！没有发现缺少的key")
+                    return None
             elif conflict_resolution in ["rebuild", "new"]:  # 包括 'rebuild' 和 'new'
                 ui.print_info("重建模式")
                 language_dir = config.language_config.get_language_dir(

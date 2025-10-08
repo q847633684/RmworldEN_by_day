@@ -538,3 +538,140 @@ class TemplateManager:
             self.logger.warning("无法记录CSV历史路径: %s, 错误: %s", csv_path, e)
 
         return str(csv_path)
+
+    def incremental_mode(
+        self,
+        import_dir: str,
+        import_language: str,
+        output_dir: str,
+        output_language: str,
+        data_source_choice: str,
+        has_input_keyed: bool,
+        output_csv: str,
+    ) -> Tuple[List[Tuple], str]:
+        """
+        新增模式：扫描对比现有内容，只新增缺少的key
+        按照智能合并的逻辑：步骤1提取输入数据，步骤2提取输出数据，步骤3新增翻译数据
+
+        Args:
+            import_dir: 输入目录
+            import_language: 输入语言
+            output_dir: 输出目录
+            output_language: 输出语言
+            data_source_choice: 数据来源选择
+            has_input_keyed: 是否有输入Keyed
+            output_csv: 输出CSV文件名
+
+        Returns:
+            Tuple[List[Tuple], str]: (翻译数据列表, CSV文件路径)
+        """
+        self.logger.info("开始新增模式处理")
+        ui.print_info("=== 新增模式：扫描对比现有内容 ===")
+
+        # 步骤1：提取输入数据
+        ui.print_info("🔍 步骤1：提取输入数据...")
+        input_keyed, input_def = self.extract_all_translations(
+            import_dir=import_dir,
+            import_language=import_language,
+            data_source_choice=data_source_choice,
+            has_input_keyed=has_input_keyed,
+        )
+
+        if not input_keyed and not input_def:
+            ui.print_warning("未找到输入翻译数据")
+            return [], ""
+
+        ui.print_success(
+            f"输入数据提取完成：Keyed {len(input_keyed)} 条，DefInjected {len(input_def)} 条"
+        )
+
+        # 步骤2：提取输出数据
+        ui.print_info("📋 步骤2：提取输出数据...")
+        output_keyed, output_def = self.extract_all_translations(
+            import_dir=output_dir,
+            import_language=output_language,
+            data_source_choice="definjected_only",
+            has_input_keyed=has_input_keyed,
+        )
+
+        ui.print_info(
+            f"输出数据提取完成：Keyed {len(output_keyed)} 条，DefInjected {len(output_def)} 条"
+        )
+
+        # 步骤3：新增翻译数据（只保留新增的部分）
+        ui.print_info("🔍 步骤3：智能对比，筛选新增翻译数据...")
+
+        # 使用智能合并器，但只保留新增的部分
+        keyed_new = self._filter_new_translations(input_keyed, output_keyed)
+        def_new = self._filter_new_translations(input_def, output_def)
+
+        if not keyed_new and not def_new:
+            ui.print_success("✅ 没有发现缺少的key，所有内容都已存在")
+            return [], ""
+
+        ui.print_success(
+            f"发现新增翻译：Keyed {len(keyed_new)} 条，DefInjected {len(def_new)} 条"
+        )
+
+        # 生成新增的模板文件
+        ui.print_info("📝 生成新增的模板文件...")
+        if keyed_new:
+            ui.print_info("正在生成 Keyed 新增模板...")
+            self._write_merged_translations(
+                keyed_new, output_dir, output_language, "Keyed"
+            )
+
+        if def_new:
+            ui.print_info("正在生成 DefInjected 新增模板...")
+            self._write_merged_translations(
+                def_new, output_dir, output_language, "DefInjected"
+            )
+
+        # 保存新增的CSV文件
+        ui.print_info("💾 保存新增的CSV文件...")
+        csv_path = self._save_translations_to_csv(
+            keyed_new,
+            def_new,
+            output_dir,
+            output_language,
+            output_csv,
+        )
+
+        total_new = len(keyed_new) + len(def_new)
+        ui.print_success(f"新增模式完成！新增了 {total_new} 条翻译")
+        ui.print_info(f"CSV文件：{csv_path}")
+
+        return keyed_new + def_new, csv_path
+
+    def _filter_new_translations(
+        self, input_data: List[Tuple], output_data: List[Tuple]
+    ) -> List[Tuple]:
+        """
+        筛选出新增的翻译数据（输入中存在但输出中不存在的key）
+
+        Args:
+            input_data: 输入翻译数据
+            output_data: 输出翻译数据
+
+        Returns:
+            List[Tuple]: 新增的翻译数据列表
+        """
+        if not input_data:
+            return []
+
+        # 创建输出数据的key映射
+        output_keys = {item[0] for item in output_data}
+
+        # 筛选出新增的翻译
+        new_translations = []
+        for item in input_data:
+            key = item[0]
+            if key not in output_keys:
+                # 为新增的翻译添加历史记录
+                import datetime
+
+                today = datetime.date.today().isoformat()
+                new_item = item + (f"翻译内容: '{item[1]}',新增于{today}",)
+                new_translations.append(new_item)
+
+        return new_translations

@@ -99,10 +99,14 @@ class InteractionManager:
 
         # 第五步：选择模板结构（根据决策树逻辑）
         self._print_step_header(5, 5, "选择模板结构")
-        # 根据你的决策树，如果选择了merge，则使用5.1合并逻辑，不需要选择模板结构
+        # 根据你的决策树，如果选择了merge或incremental，则使用合并/新增逻辑，不需要选择模板结构
         if conflict_resolution == "merge":
             ui.print_info("检测到选择合并模式")
             ui.print_success("将使用5.1智能合并逻辑，无需选择模板结构")
+            template_structure = "merge_logic"  # 特殊标识
+        elif conflict_resolution == "incremental":
+            ui.print_info("检测到选择新增模式")
+            ui.print_success("将使用5.2新增逻辑，无需选择模板结构")
             template_structure = "merge_logic"  # 特殊标识
         else:
             template_structure = self._choose_template_structure(
@@ -204,6 +208,7 @@ class InteractionManager:
         """格式化冲突处理描述"""
         descriptions = {
             "merge": "合并现有文件",
+            "incremental": "新增缺少的key",
             "rebuild": "重建所有文件",
             "new": "新建目录",
         }
@@ -519,7 +524,10 @@ class InteractionManager:
                 "1", "合并", "保留现有翻译文件，仅添加新内容", ui.Icons.SETTINGS
             )
             ui.print_menu_item(
-                "2", "重建", "清空整个输出目录，所有内容全部重建", ui.Icons.SETTINGS
+                "2", "新增", "扫描对比现有内容，只新增缺少的key", ui.Icons.SETTINGS
+            )
+            ui.print_menu_item(
+                "3", "重建", "清空整个输出目录，所有内容全部重建", ui.Icons.SETTINGS
             )
 
             if analysis["recommended"]:
@@ -530,7 +538,7 @@ class InteractionManager:
                 )
 
             while True:
-                prompt_options = "1-2"
+                prompt_options = "1-3"
                 if analysis["recommended"]:
                     prompt_options += " 或直接回车使用智能推荐"
 
@@ -542,6 +550,9 @@ class InteractionManager:
                     ui.print_success("选择：合并")
                     return "merge"
                 elif choice == "2":
+                    ui.print_success("选择：新增")
+                    return "incremental"
+                elif choice == "3":
                     ui.print_success("选择：重建")
                     return "rebuild"
                 elif (
@@ -552,7 +563,7 @@ class InteractionManager:
                     ui.print_success(f"采用智能推荐：{analysis['recommended']}")
                     return analysis["recommended_value"]
                 else:
-                    ui.print_error("请输入 1 或 2，或直接按回车使用智能推荐")
+                    ui.print_error("请输入 1、2 或 3，或直接按回车使用智能推荐")
         else:
             ui.print_info("输出目录中没有现有翻译文件")
             ui.print_success("自动选择：新建")
@@ -657,17 +668,17 @@ class InteractionManager:
             str: 模板结构选择
         """
         # 根据你的决策树逻辑：
-        # 1. 如果选择了merge(3.2)，使用5.1合并逻辑，不需要选择结构
-        if conflict_resolution == "merge":
+        # 1. 如果选择了merge(3.2)或incremental(3.3)，使用合并/新增逻辑，不需要选择结构
+        if conflict_resolution in ["merge", "incremental"]:
             return "merge_logic"  # 这应该在上层已经处理了
 
-        # 2. 如果选择definjected_only且非merge，使用4.1(original_structure)
+        # 2. 如果选择definjected_only且非merge/incremental，使用4.1(original_structure)
         if data_source_choice == "definjected_only":
             ui.print_info("检测到使用DefInjected目录提取翻译")
             ui.print_success("自动选择：保持原英文DefInjected结构")
             return "original_structure"
 
-        # 3. 如果选择defs_only且非merge，询问用户选择4.2或4.3
+        # 3. 如果选择defs_only且非merge/incremental，询问用户选择4.2或4.3
         elif data_source_choice == "defs_only":
             ui.print_info("检测到使用Defs文件扫描提取翻译")
             ui.print_section_header("请选择DefInjected文件组织方式", ui.Icons.FOLDER)
