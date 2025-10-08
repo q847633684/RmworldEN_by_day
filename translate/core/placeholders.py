@@ -457,8 +457,9 @@ class PlaceholderManager:
 
         for english_word, entry_data in sorted_entries:
             if english_word in text_lower:
-                # 使用正则表达式进行精确匹配
-                pattern = r"\b" + re.escape(english_word) + r"\b"
+                # 使用正则表达式进行精确匹配，支持中英文混合文本
+                # 匹配英文词汇，前后可以是中文、标点符号或边界
+                pattern = r"(?<![a-zA-Z])" + re.escape(english_word) + r"(?![a-zA-Z])"
                 if re.search(pattern, text_lower):
                     # 获取翻译和优先级
                     chinese_word = entry_data["chinese"]
