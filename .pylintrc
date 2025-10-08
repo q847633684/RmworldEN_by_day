@@ -1,0 +1,26 @@
+[MASTER]
+# 忽略的文件或目录
+ignore=Day_EN
+
+# 忽略的文件模式
+ignore-patterns=
+
+[MESSAGES CONTROL]
+# 禁用的警告和错误
+disable=C0103,C0301,R0902,R0912,R0914,R0915,C0415,W0603,E0402
+
+[FORMAT]
+# 最大行长度
+max-line-length=120
+
+[DESIGN]
+# 最大参数数量
+max-args=10
+# 最大局部变量数量  
+max-locals=20
+# 最大分支数量
+max-branches=15
+# 最大语句数量
+max-statements=60
+# 最大属性数量
+max-attributes=15

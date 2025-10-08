@@ -1,0 +1,341 @@
+"""
+导入功能模块 - 实现翻译结果导入到模板的功能
+"""
+
+import csv
+from utils.logging_config import get_logger
+from utils.ui_style import ui
+from pathlib import Path
+from typing import Dict, Tuple, Any, Optional, Callable
+from utils.utils import XMLProcessor
+from user_config.path_manager import PathManager
+
+# 使用新配置系统
+from user_config import UserConfigManager
+
+# 使用全局配置实例，避免重复初始化
+CONFIG = UserConfigManager.get_instance()
+logger = get_logger(__name__)
+
+
+def import_translations(
+    csv_path: str,
+    mod_dir: str,
+    merge: bool = True,
+    auto_create_templates: bool = True,
+    language: str = CONFIG.language_config.get_value(
+        "cn_language", "ChineseSimplified"
+    ),
+) -> bool:
+    """
+    将翻译CSV导入到翻译模板
+
+    Args:
+        csv_path (str): 翻译CSV文件路径
+        mod_dir (str): 模组目录
+        merge (bool): 是否合并现有翻译
+        auto_create_templates (bool): 是否自动创建模板
+        language (str): 目标语言
+
+    Returns:
+        bool: 导入是否成功
+    """
+    logger.info("开始导入翻译到模板: %s", csv_path)
+    try:
+        # 步骤1：确保翻译模板存在
+        if auto_create_templates:
+            # 检查模板目录是否存在，如果不存在则提示用户先创建模板
+            if not CONFIG.language_config.get_language_dir(mod_dir, language).exists():
+                logger.error("翻译模板目录不存在，请先使用提取功能创建翻译模板")
+                ui.print_error("❌ 翻译模板目录不存在，请先使用提取功能创建翻译模板")
+                return False
+        # 步骤2：验证CSV文件
+        if not _validate_csv_file(csv_path):
+            return False
+        # 步骤3：加载翻译数据并按类型分组
+        keyed_translations, definjected_translations = _load_translations_from_csv(
+            csv_path
+        )
+        if not keyed_translations and not definjected_translations:
+            return False
+
+        # 步骤4：分别更新 Keyed 与 DefInjected 目录下的 XML 文件
+        updated_count = 0
+        updated_count += _update_xml_in_subdir(
+            mod_dir, language, "keyed", keyed_translations, merge
+        )
+        updated_count += _update_xml_in_subdir(
+            mod_dir, language, "definjected", definjected_translations, merge
+        )
+        # 步骤5：验证导入结果
+        success = _verify_import_results(mod_dir, language)
+        if success:
+            logger.info("翻译导入到模板完成，更新了 %s 个文件", updated_count)
+            ui.print_success("翻译已成功导入到模板")
+        else:
+            logger.warning("翻译导入可能存在问题")
+            ui.print_warning("⚠️ 翻译导入完成，但可能存在问题")
+        return success
+    except FileNotFoundError as e:
+        logger.error("文件未找到: %s", e)
+        ui.print_error(f"❌ 文件未找到: {e}")
+        return False
+    except PermissionError as e:
+        logger.error("权限错误: %s", e)
+        ui.print_error(f"❌ 权限错误: {e}")
+        return False
+    except (OSError, ValueError, TypeError, RuntimeError) as e:
+        logger.error("导入翻译时发生错误: %s", e, exc_info=True)
+        ui.print_error(f"❌ 导入失败: {e}")
+        return False
+
+
+def _validate_csv_file(csv_path: str) -> bool:
+    """验证CSV文件"""
+    if not Path(csv_path).is_file():
+        logger.error("CSV文件不存在: %s", csv_path)
+        return False
+
+    try:
+        with open(csv_path, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            header = reader.fieldnames
+            if not header or not all(col in header for col in ["key", "text"]):
+                logger.error("CSV文件格式无效：缺少必要的列 (key, text)")
+                return False
+
+            # 检查是否有type列，如果没有则使用兼容模式
+            has_type_column = "type" in header
+            if has_type_column:
+                logger.info("检测到新格式CSV文件（包含type列）")
+            else:
+                logger.info("检测到旧格式CSV文件（无type列），将使用兼容模式")
+
+            return True
+    except FileNotFoundError:
+        logger.error("CSV文件不存在: %s", csv_path)
+        return False
+    except PermissionError:
+        logger.error("无权限访问CSV文件: %s", csv_path)
+        return False
+    except UnicodeDecodeError:
+        logger.error("CSV文件编码错误: %s", csv_path)
+        return False
+    except (OSError, ValueError, TypeError) as e:
+        logger.error("验证CSV文件时发生错误: %s", e)
+        return False
+
+
+def _load_translations_from_csv(csv_path: str) -> Tuple[Dict[str, str], Dict[str, str]]:
+    """从CSV文件加载翻译数据，按类型分组
+
+    Returns:
+        Tuple[Dict[str, str], Dict[str, str]]: (keyed_translations, definjected_translations)
+    """
+    keyed_translations = {}
+    definjected_translations = {}
+
+    try:
+        with open(csv_path, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                key = (row.get("key") or "").strip()
+                # 优先使用 translated 列，其次回退到 text 列
+                value = (row.get("translated") or row.get("text") or "").strip()
+                translation_type = (row.get("type") or "").strip().lower()
+
+                if key and value:
+                    if translation_type == "keyed":
+                        keyed_translations[key] = value
+                    elif translation_type == "def":
+                        definjected_translations[key] = value
+                    else:
+                        # 兼容旧格式：如果没有type列或type为空，使用原来的规则
+                        if "/" in key:
+                            definjected_translations[key] = value
+                        else:
+                            keyed_translations[key] = value
+
+        return keyed_translations, definjected_translations
+    except FileNotFoundError:
+        logger.error("CSV文件不存在: %s", csv_path)
+        ui.print_error(f"❌ CSV文件不存在: {csv_path}")
+        return {}, {}
+    except PermissionError:
+        logger.error("无权限访问CSV文件: %s", csv_path)
+        ui.print_error(f"❌ 无权限访问CSV文件: {csv_path}")
+        return {}, {}
+    except (OSError, ValueError, TypeError) as e:
+        logger.error("加载CSV文件时发生错误: %s", e)
+        ui.print_error(f"❌ 加载CSV文件失败: {e}")
+        return {}, {}
+
+
+def _update_xml_in_subdir(
+    mod_dir: str,
+    language: str,
+    subdir_type: str,
+    translations: Dict[str, str],
+    merge: bool = True,
+) -> int:
+    """仅在指定子目录(Keyed/DefInjected)内更新翻译"""
+    if not translations:
+        return 0
+    subdir = CONFIG.language_config.get_language_subdir(mod_dir, language, subdir_type)
+    if not subdir.exists():
+        logger.warning("语言子目录不存在: %s", subdir)
+        return 0
+    processor = XMLProcessor()
+    updated_count = 0
+
+    # 规格化 DefInjected 键：移除前缀（如 "HediffDef/"），保留标签键（如 "Name.field"）
+    if subdir_type.lower() == "definjected":
+        normalized: Dict[str, str] = {}
+        for key, value in translations.items():
+            if "/" in key:
+                normalized[key.split("/", 1)[1]] = value
+            else:
+                normalized[key] = value
+        translations = normalized
+
+    # 获取所有XML文件列表
+    xml_files = list(Path(subdir).rglob("*.xml"))
+    total_files = len(xml_files)
+
+    if total_files == 0:
+        return 0
+
+    # 显示进度条
+    ui.print_info(f"正在更新 {subdir_type} 目录中的 {total_files} 个文件...")
+
+    for i, xml_file in enumerate(xml_files, 1):
+        try:
+            tree = processor.parse_xml(str(xml_file))
+            if tree is None:
+                continue
+            if update_translations(processor, tree, translations, merge=merge):
+                processor.save_xml(tree, str(xml_file))
+                updated_count += 1
+
+            # 显示进度条
+            ui.print_progress_bar(i, total_files, prefix="更新文件")
+
+        except FileNotFoundError:
+            logger.error("XML文件不存在: %s", xml_file)
+        except PermissionError:
+            logger.error("无权限访问XML文件: %s", xml_file)
+        except (OSError, ValueError, TypeError) as e:
+            logger.error("处理XML文件失败: %s: %s", xml_file, e)
+
+    # 完成进度条
+    ui.print_info("")  # 换行
+    return updated_count
+
+
+def update_translations(
+    processor: XMLProcessor,
+    tree: Any,
+    translations: Dict[str, str],
+    generate_key_func: Optional[Callable] = None,
+    merge: bool = True,
+    include_attributes: bool = True,
+) -> bool:
+    """
+    更新 XML 中的翻译
+
+    Args:
+        processor (XMLProcessor): XML处理器实例
+        tree (Any): XML 树对象
+        translations (Dict[str, str]): 翻译字典
+        generate_key_func (Optional[Callable]): 生成键的函数
+        merge (bool): 是否合并更新
+        include_attributes (bool): 是否更新属性
+
+    Returns:
+        bool: 是否更新成功
+    """
+    from utils.utils import sanitize_xml
+
+    modified = False
+    root = tree.getroot() if processor.use_lxml else tree
+    parent_map = (
+        {c: p for p in root.iter() for c in p} if not processor.use_lxml else None
+    )
+
+    # 使用 xpath 或 iter 遍历
+    elements = root.xpath(".//*") if processor.use_lxml else root.iter()
+
+    for elem in elements:
+        # 更新文本内容
+        if elem.text and elem.text.strip():
+            key = (
+                generate_key_func(elem, root, parent_map)
+                if generate_key_func
+                else processor._get_element_key(elem)
+            )
+            if key in translations:
+                if merge and elem.text.strip() != translations[key]:
+                    elem.text = sanitize_xml(translations[key])
+                    modified = True
+                elif not merge:
+                    elem.text = sanitize_xml(translations[key])
+                    modified = True
+
+        # 更新属性
+        if include_attributes:
+            for attr_name, attr_value in elem.attrib.items():
+                if isinstance(attr_value, str) and attr_value.strip():
+                    key = (
+                        f"{generate_key_func(elem, root, parent_map)}.{attr_name}"
+                        if generate_key_func
+                        else f"{processor._get_element_key(elem)}.{attr_name}"
+                    )
+                    if key in translations:
+                        if merge and attr_value.strip() != translations[key]:
+                            elem.set(attr_name, sanitize_xml(translations[key]))
+                            modified = True
+                        elif not merge:
+                            elem.set(attr_name, sanitize_xml(translations[key]))
+                            modified = True
+
+    return modified
+
+
+def _verify_import_results(mod_dir: str, language: str) -> bool:
+    """验证导入结果"""
+    template_dir = CONFIG.language_config.get_language_dir(mod_dir, language)
+    if not template_dir.exists():
+        logger.error("导入后模板目录不存在")
+        return False
+    # 检查是否有翻译文件
+    has_keyed = (
+        any(
+            (
+                CONFIG.language_config.get_language_subdir(
+                    mod_dir, language, "keyed"
+                ).rglob("*.xml")
+            )
+        )
+        if CONFIG.language_config.get_language_subdir(
+            mod_dir, language, "keyed"
+        ).exists()
+        else False
+    )
+    has_definjected = (
+        any(
+            (
+                CONFIG.language_config.get_language_subdir(
+                    mod_dir, language, "definjected"
+                ).rglob("*.xml")
+            )
+        )
+        if CONFIG.language_config.get_language_subdir(
+            mod_dir, language, "definjected"
+        ).exists()
+        else False
+    )
+    if not has_keyed and not has_definjected:
+        logger.warning("导入后未找到翻译文件")
+        return False
+    logger.info("导入结果验证通过")
+    return True

@@ -1,0 +1,240 @@
+# 翻译字段配置文件
+# 支持 YAML 格式，更易读和维护
+
+translation_fields:
+  description: "需要翻译的字段列表"
+  categories:
+    basic:
+      description: "基础字段"
+      fields:
+        - label
+        - description
+        - labelShort
+        - descriptionShort
+        - title
+        - text
+        - message
+        - tooltip
+        - baseDesc
+        - skillDescription
+        - backstoryDesc
+        - jobString
+        - gerundLabel
+        - verb
+        - deathMessage
+        - summary
+        - note
+        - flavor
+        - quote
+        - caption
+    
+    rimworld_specific:
+      description: "RimWorld 特有字段"
+      fields:
+        - RMBLabel
+        - rulesStrings
+        - labelNoun
+        - gerund
+        - reportString
+        - skillLabel
+        - pawnLabel
+        - titleShort
+        - labelFemale
+        - labelPlural
+        - headerTip
+        - useLabel
+        - baseInspectLine
+        - beginLetter
+        - beginLetterLabel
+        - discoverLetterLabel
+        - discoverLetterText
+        - recoveryMessage
+        - ingestCommandString
+        - ingestReportString
+        - tips
+    
+    override:
+      description: "覆盖字段"
+      fields:
+        - reportStringOverride
+        - overrideReportString
+        - overrideLabel
+        - overrideDescription
+        - overrideLabelShort
+        - overrideDescriptionShort
+        - overrideTitle
+        - overrideText
+        - overrideMessage
+        - overrideTooltip
+        - overrideBaseDesc
+        - overrideSkillDescription
+        - overrideBackstoryDesc
+        - overrideJobString
+        - overrideGerundLabel
+        - overrideVerb
+        - overrideDeathMessage
+        - overrideSummary
+        - overrideNote
+        - overrideFlavor
+        - overrideQuote
+        - overrideCaption
+    
+    custom:
+      description: "自定义字段"
+      fields:
+        - customLabel
+        - customDescription
+        - customTooltip
+        - customMessage
+        - customText
+        - customTitle
+        - customBaseDesc
+        - customSkillDescription
+        - customBackstoryDesc
+        - customJobString
+        - customGerundLabel
+        - customVerb
+        - customDeathMessage
+        - customSummary
+        - customNote
+        - customFlavor
+        - customQuote
+        - customCaption
+
+ignore_fields:
+  description: "需要忽略的字段列表"
+  categories:
+    basic:
+      description: "基础字段"
+      fields:
+        - defName
+        - id
+        - cost
+        - damage
+        - x
+        - y
+        - z
+        - width
+        - height
+        - priority
+        - count
+        - index
+        - version
+        - url
+        - path
+        - file
+        - key
+    
+    numeric:
+      description: "数值字段"
+      fields:
+        - order
+        - weight
+        - value
+        - amount
+        - quantity
+        - duration
+        - cooldown
+        - range
+        - radius
+        - angle
+        - speed
+        - force
+        - power
+        - energy
+        - health
+        - armor
+        - shield
+        - resistance
+        - penetration
+        - accuracy
+        - evasion
+        - critChance
+        - critDamage
+        - dodgeChance
+        - blockChance
+        - parryChance
+    
+    technical:
+      description: "技术字段"
+      fields:
+        - guid
+        - uuid
+        - timestamp
+        - date
+        - time
+        - checksum
+        - signature
+        - token
+        - secret
+        - password
+        - salt
+        - hash
+        - encryption
+        - compression
+        - encoding
+        - format
+        - type
+        - category
+        - tag
+        - group
+        - class
+        - style
+
+# 字段优先级配置
+field_priority:
+  high: ["label", "description", "text", "message", "tooltip"]
+  medium: ["title", "summary", "note", "flavor", "quote"]
+  low: ["caption", "gerundLabel", "verb", "deathMessage"]
+
+# 字段验证规则
+field_validation:
+  max_length: 1000
+  min_length: 1
+  required_patterns:
+    - "^[^<>]*$"  # 不能包含 < 和 >
+  forbidden_patterns:
+    - "^\\s*$"    # 不能是纯空白
+    - "^\\d+$"    # 不能是纯数字
+
+# 非文本模式（不需要翻译的模式）
+non_text_patterns:
+  description: "不需要翻译的文本模式"
+  patterns:
+    # 数字模式
+    - "^\\d+$"  # 整数
+    - "^-?\\d+\\.\\d+$"  # 浮点数
+    - "^[0-9a-fA-F]+$"  # 十六进制
+    - "^[+-]?(\\d+\\.?\\d*|\\.\\d+)$"  # 科学计数法
+    - "^\\d+[kKmMgGtT]?$"  # 带单位的数字
+    
+    # 空白模式
+    - "^\\s*$"  # 纯空白
+    - "^[\\s\\-_]+$"  # 分隔符
+    
+    # 布尔值
+    - "^true$|^false$"  # 布尔值
+    - "^yes$|^no$"  # 是/否
+    - "^on$|^off$"  # 开/关
+    
+    # 路径模式
+    - "^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$"  # 文件名
+    - "^[A-Za-z0-9_-]+/[A-Za-z0-9_-]+$"  # 路径
+    - "^[A-Za-z0-9_-]+\\\\[A-Za-z0-9_-]+$"  # Windows路径
+    
+    # URL模式
+    - "https?://[^\\s<>\"']+|www\\.[^\\s<>\"']+"  # URL
+    
+    # 域名模式
+    - "^[A-Za-z0-9_-]+\\.(com|org|net|edu|gov|io|co|uk|cn|jp|ru|de|fr|it|es|nl|be|ch|at|dk|se|no|fi|pl|cz|hu|ro|bg|gr|tr|il|sa|ae|in|br|mx|ar|cl|co|pe|ve|za|au|nz|sg|my|id|ph|vn|th|kr|tw|hk|mo)$"  # 域名
+    
+    # 文件扩展名模式
+    - "^[A-Za-z0-9_-]+\\.(xml|json|txt|csv|ini|cfg|conf|config|yaml|yml|toml|md|markdown|rst|log|dat|bin|exe|dll|so|dylib|py|pyc|pyo|pyd|java|class|jar|war|ear|zip|rar|7z|tar|gz|bz2|xz|iso|img|vhd|vmdk|ova|ovf|qcow2|raw|vdi|vbox|vmx|vhd|vhdx|vmdk|vmsd|vmsn|vmss|vmtm|vmx|vmxf|nvram|vmem|vswp|vmtx|vmtm|vmsd|vmsn|vmss|vmtm|vmx|vmxf|nvram|vmem|vswp|vmtx)$"  # 文件扩展名
+    
+    # 特殊模式
+    - "^[A-Za-z0-9_-]+#[A-Za-z0-9_-]+$"  # 带#的标识符
+    - "^[A-Za-z0-9_-]+@[A-Za-z0-9_-]+\\.(com|org|net|edu|gov|io|co|uk|cn|jp|ru|de|fr|it|es|nl|be|ch|at|dk|se|no|fi|pl|cz|hu|ro|bg|gr|tr|il|sa|ae|in|br|mx|ar|cl|co|pe|ve|za|au|nz|sg|my|id|ph|vn|th|kr|tw|hk|mo)$"  # 邮箱
+    - "^[A-Za-z0-9_-]+:[A-Za-z0-9_-]+$"  # 带:的标识符
+    - "^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$"  # 带.的标识符
+    - "^[A-Za-z0-9_-]+\\-[A-Za-z0-9_-]+\\-[A-Za-z0-9_-]+$"  # 带-的标识符
+    - "^[A-Za-z0-9_-]+\\_[A-Za-z0-9_-]+\\_[A-Za-z0-9_-]+$"  # 带_的标识符

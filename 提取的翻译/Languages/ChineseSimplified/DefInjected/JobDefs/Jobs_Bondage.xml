@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<LanguageData>
-    <!-- EN: struggling -->
-    <StruggleInBondageGear.reportString>struggling</StruggleInBondageGear.reportString>
-    <!-- EN: unlocking -->
-    <UnlockBondageGear.reportString>unlocking</UnlockBondageGear.reportString>
-    <!-- EN: equipping -->
-    <GiveBondageGear.reportString>equipping</GiveBondageGear.reportString>
-    </LanguageData>

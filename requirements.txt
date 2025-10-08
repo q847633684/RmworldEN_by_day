@@ -1,1 +1,7 @@
-lxml aliyun-python-sdk-core aliyun-python-sdk-alimt tqdm
+lxml
+aliyun-python-sdk-core
+aliyun-python-sdk-alimt
+tqdm
+colorama
+PyYAML
+deep-translator
