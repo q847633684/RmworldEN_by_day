@@ -495,6 +495,7 @@ class TemplateManager:
         Returns:
             str: CSV文件路径
         """
+        # 使用配置系统的功能生成输出路径
         config_manager = UserConfigManager.get_instance()
         csv_path = (
             config_manager.language_config.get_language_dir(output_dir, output_language)

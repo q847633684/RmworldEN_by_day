@@ -408,30 +408,37 @@ class MainConfigUI:
                     ui.Icons.FILE,
                     "设置默认输出CSV文件",
                 ),
-                ("6", "界面语言", lang_display, ui.Icons.LANGUAGE, "设置界面显示语言"),
                 (
-                    "7",
+                    "6",
+                    "汉化输出CSV",
+                    lang_config.get_value("translated_csv") or "未设置",
+                    ui.Icons.FILE,
+                    "设置汉化输出CSV文件",
+                ),
+                ("7", "界面语言", lang_display, ui.Icons.LANGUAGE, "设置界面显示语言"),
+                (
+                    "8",
                     "CSV编码",
                     lang_config.get_value("csv_encoding") or "未设置",
                     ui.Icons.FILE,
                     "设置CSV文件编码",
                 ),
                 (
-                    "8",
+                    "9",
                     "CSV分隔符",
                     lang_config.get_value("csv_delimiter") or "未设置",
                     ui.Icons.FILE,
                     "设置CSV分隔符",
                 ),
                 (
-                    "9",
+                    "10",
                     "日期格式",
                     lang_config.get_value("date_format") or "未设置",
                     ui.Icons.TIME,
                     "设置日期显示格式",
                 ),
                 (
-                    "0",
+                    "11",
                     "数字格式",
                     lang_config.get_value("number_format") or "未设置",
                     ui.Icons.FIELD,
@@ -445,28 +452,16 @@ class MainConfigUI:
                     key, f"{label}: {value}", description, icon, compact=True
                 )
 
-            # 显示菜单
-            ui.print_section_header("配置选项", ui.Icons.SETTINGS)
+            # 返回选项
             ui.print_menu_item(
-                "1", "设置中文语言目录", "设置中文语言目录名称", ui.Icons.LANGUAGE
+                "b", "返回上级", "返回主配置菜单", ui.Icons.BACK, compact=True
             )
-            ui.print_menu_item(
-                "2", "设置英文语言目录", "设置英文语言目录名称", ui.Icons.LANGUAGE
-            )
-            ui.print_menu_item(
-                "3", "设置DefInjected目录", "设置DefInjected子目录名称", ui.Icons.FOLDER
-            )
-            ui.print_menu_item(
-                "4", "设置Keyed目录", "设置Keyed子目录名称", ui.Icons.FOLDER
-            )
-            ui.print_menu_item(
-                "5", "设置默认CSV文件名", "设置默认输出CSV文件名", ui.Icons.FILE
-            )
-            ui.print_menu_item("b", "返回上级", "返回上级菜单", ui.Icons.BACK)
 
             ui.print_separator()
 
-            choice = input(ui.get_input_prompt("请选择操作", options="1-5, b")).strip()
+            choice = input(
+                ui.get_input_prompt("请选择操作", options="1-6, 7-9, 10-11, b")
+            ).strip()
 
             if choice == "1":
                 self._set_string_config(
@@ -490,6 +485,43 @@ class MainConfigUI:
                     "output_csv",
                     "默认CSV文件名",
                     "extracted_translations.csv",
+                )
+            elif choice == "6":
+                self._set_string_config(
+                    lang_config,
+                    "translated_csv",
+                    "汉化CSV文件名",
+                    "extracted_translations_zh.csv",
+                )
+            elif choice == "7":
+                self._set_interface_language(lang_config)
+            elif choice == "8":
+                self._set_string_config(
+                    lang_config,
+                    "csv_encoding",
+                    "CSV编码",
+                    "utf-8",
+                )
+            elif choice == "9":
+                self._set_string_config(
+                    lang_config,
+                    "csv_delimiter",
+                    "CSV分隔符",
+                    ",",
+                )
+            elif choice == "10":
+                self._set_string_config(
+                    lang_config,
+                    "date_format",
+                    "日期格式",
+                    "%Y-%m-%d %H:%M:%S",
+                )
+            elif choice == "11":
+                self._set_string_config(
+                    lang_config,
+                    "number_format",
+                    "数字格式",
+                    "1,234.56",
                 )
             elif choice.lower() == "b":
                 break
@@ -995,3 +1027,25 @@ class MainConfigUI:
             ui.print_info("取消重置操作")
 
         input("\n按回车键继续...")
+
+    def _set_interface_language(self, lang_config) -> None:
+        """设置界面语言"""
+        ui.print_header("设置界面语言", ui.Icons.LANGUAGE)
+
+        current_lang = lang_config.get_value("interface_language", "zh_CN")
+        print(f"   当前语言: {current_lang}")
+
+        print("\n可选语言:")
+        print("  1. zh_CN - 简体中文")
+        print("  2. en_US - English")
+
+        choice = input("请选择语言 (1-2): ").strip()
+
+        if choice == "1":
+            lang_config.set_value("interface_language", "zh_CN")
+            ui.print_success("界面语言已设置为简体中文")
+        elif choice == "2":
+            lang_config.set_value("interface_language", "en_US")
+            ui.print_success("Interface language set to English")
+        else:
+            ui.print_warning("无效选择，保持当前设置")

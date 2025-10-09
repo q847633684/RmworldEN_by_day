@@ -239,7 +239,7 @@ class PathManager:
                         self.path_config.add_to_history(
                             path_type, result.normalized_path
                         )
-                        self._save_history()
+                        # 注意：add_to_history 已经自动保存，无需再次调用 _save_history()
 
                     return result.normalized_path
                 else:
@@ -269,7 +269,7 @@ class PathManager:
             # 更新历史记录（使用新配置系统）
             if self.path_config.get_value("remember_paths", True):
                 self.path_config.add_to_history(path_type, result.normalized_path)
-                self._save_history()
+                # 注意：add_to_history 已经自动保存，无需再次调用 _save_history()
 
             return True
         except (OSError, IOError, ValueError) as e:
@@ -497,9 +497,9 @@ class PathManager:
                 # 让用户选择版本号，直接返回最终目录
                 final_dir = self._choose_versioned_content_dir(mod_dir)
                 if final_dir:
-                    # 添加最终目录到历史记录
-                    self.path_config.add_to_history("mod_dir", final_dir)
-                    self._save_history()
+                    # 添加根目录到历史记录（保持与扫描功能的一致性）
+                    self.path_config.add_to_history("mod_dir", result.normalized_path)
+                    # 注意：add_to_history 已经自动保存，无需再次调用 _save_history()
                     # 版本结构只返回路径，不返回path_type
                     return final_dir
                 else:
@@ -507,7 +507,7 @@ class PathManager:
             else:
                 # 添加路径到历史记录
                 self.path_config.add_to_history("mod_dir", result.normalized_path)
-                self._save_history()
+                # 注意：add_to_history 已经自动保存，无需再次调用 _save_history()
                 # 非版本结构也只返回路径
                 return result.normalized_path
         else:
@@ -515,7 +515,7 @@ class PathManager:
             if allow_multidlc:
                 # 添加路径到历史记录
                 self.path_config.add_to_history("mod_dir", result.normalized_path)
-                self._save_history()
+                # 注意：add_to_history 已经自动保存，无需再次调用 _save_history()
                 return (result.normalized_path, "standard")
             else:
                 ui.print_error(result.error_message)

@@ -130,6 +130,7 @@ class LanguageConfig(BaseConfig):
                 "definjected_dir": "DefInjected",
                 "keyed_dir": "Keyed",
                 "output_csv": "extracted_translations.csv",
+                "translated_csv": "extracted_translations_zh.csv",
                 # 界面和格式配置
                 "interface_language": "zh_CN",  # 界面语言
                 "csv_encoding": "utf-8",  # CSV文件编码
@@ -146,6 +147,7 @@ class LanguageConfig(BaseConfig):
             "definjected_dir",
             "keyed_dir",
             "output_csv",
+            "translated_csv",
         }
 
         # 字段类型
@@ -157,6 +159,7 @@ class LanguageConfig(BaseConfig):
                 "definjected_dir": str,
                 "keyed_dir": str,
                 "output_csv": str,
+                "translated_csv": str,
                 # 界面和格式类型
                 "interface_language": str,
                 "csv_encoding": str,
@@ -203,6 +206,13 @@ class LanguageConfig(BaseConfig):
                 "label": "默认输出CSV",
                 "description": "默认输出CSV文件名",
                 "default": "extracted_translations.csv",
+                "required": True,
+            },
+            "translated_csv": {
+                "type": "text",
+                "label": "汉化输出CSV",
+                "description": "汉化输出CSV文件名",
+                "default": "extracted_translations_zh.csv",
                 "required": True,
             },
             # 界面和格式配置

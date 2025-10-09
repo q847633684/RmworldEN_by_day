@@ -3,7 +3,7 @@
 负责创建和管理不同类型的翻译器实例
 """
 
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Dict
 from utils.logging_config import get_logger
 
 # 翻译配置已迁移到新配置系统
@@ -295,13 +295,23 @@ class PlaceholderManagerAdapter:
         """恢复CSV文件"""
         return self.placeholder_manager.restore_csv_file(input_csv, placeholder_map)
 
-    def protect_text(self, text: str, csv_key: str = "single_text"):
+    def protect_text(
+        self,
+        text: str,
+        csv_key: str = "single_text",
+        placeholder_map: Optional[Dict[str, Dict[str, str]]] = None,
+    ):
         """保护单个文本"""
-        return self.placeholder_manager.protect_text(text, csv_key)
+        return self.placeholder_manager.protect_text(text, csv_key, placeholder_map)
 
-    def restore_text(self, text: str, csv_key: str = "single_text"):
+    def restore_text(
+        self,
+        text: str,
+        csv_key: str = "single_text",
+        placeholder_map: Optional[Dict[str, Dict[str, str]]] = None,
+    ):
         """恢复单个文本"""
-        return self.placeholder_manager.restore_text(text, csv_key)
+        return self.placeholder_manager.restore_text(text, csv_key, placeholder_map)
 
     def get_dictionary_stats(self) -> dict:
         """获取词典统计信息"""

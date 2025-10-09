@@ -96,7 +96,7 @@ class UnifiedTranslator:
             success, placeholder_map, protected_text = (
                 placeholder_manager.translate_csv(input_csv, mode="protect")
             )
-            self.logger.info("保护后的占位符数据: %s", placeholder_map) 
+            self.logger.info("保护后的占位符数据: %s", placeholder_map)
             if not success:
                 raise RuntimeError("占位符保护失败")
 
@@ -139,8 +139,17 @@ class UnifiedTranslator:
         Returns:
             str: 输出文件路径
         """
+        from user_config import UserConfigManager
+
+        # 获取配置中的汉化输出CSV文件名
+        config_manager = UserConfigManager.get_instance()
+        translated_csv = config_manager.language_config.get_value(
+            "translated_csv", "extracted_translations_zh.csv"
+        )
+
         input_path = Path(input_csv)
-        return str(input_path.parent / f"{input_path.stem}_zh{input_path.suffix}")
+        # 使用配置中的汉化输出文件名，但保持在同一目录
+        return str(input_path.parent / translated_csv)
 
     def can_resume_translation(self, input_csv: str, output_csv: str) -> Optional[str]:
         """

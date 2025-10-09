@@ -59,7 +59,6 @@ class PlaceholderManager:
         Args:
             dictionary_type: 词典类型 (adult, general, game, artist)
         """
-        self.placeholder_map: Dict[str, Dict[str, str]] = {}
         self.dictionary_type = dictionary_type
         self.dictionary = self._load_dictionary()
 
@@ -75,6 +74,8 @@ class PlaceholderManager:
         Returns:
             Tuple[bool, Dict[str, Dict[str, str]], str]: (是否成功, 占位符映射, 保护后的文本字段名)
         """
+        # 为每次调用创建新的占位符映射
+        placeholder_map: Dict[str, Dict[str, str]] = {}
         try:
             import csv
             from pathlib import Path
@@ -124,7 +125,7 @@ class PlaceholderManager:
                     if text:
                         # 使用protect_text保护占位符
                         protected_text, all_placeholders = self.protect_text(
-                            text, csv_key
+                            text, csv_key, placeholder_map
                         )
 
                         # 添加新的字段存储保护后的内容
@@ -162,7 +163,7 @@ class PlaceholderManager:
                 f"✅ CSV文件保护完成: {protected_count}/{total_count} 条记录"
             )
             logger.info("CSV文件保护完成: %d/%d 条记录", protected_count, total_count)
-            return True, self.placeholder_map.copy(), "protected_text"
+            return True, placeholder_map, "protected_text"
 
         except Exception as e:
             logger.error("CSV文件保护失败: %s", e)
@@ -214,14 +215,7 @@ class PlaceholderManager:
 
                     # 恢复translated列中的占位符
                     if "translated" in row and row["translated"]:
-                        # 临时设置占位符映射
-                        original_map = self.placeholder_map.copy()
-                        self.placeholder_map = placeholder_map
-
-                        restored_text = self.restore_text(row["translated"], csv_key)
-
-                        # 恢复原始映射
-                        self.placeholder_map = original_map
+                        restored_text = self.restore_text(row["translated"], csv_key, placeholder_map)
 
                         if restored_text != row["translated"]:
                             row["translated"] = restored_text
@@ -245,7 +239,10 @@ class PlaceholderManager:
             return False
 
     def protect_text(
-        self, text: str, csv_key: str = "single_text"
+        self,
+        text: str,
+        csv_key: str = "single_text",
+        placeholder_map: Optional[Dict[str, Dict[str, str]]] = None,
     ) -> Tuple[str, List[str]]:
         """
         保护单个文本中的占位符和成人内容
@@ -253,23 +250,22 @@ class PlaceholderManager:
         Args:
             text: 要保护的文本
             csv_key: CSV行的键值（用于占位符映射）
+            placeholder_map: 占位符映射字典（可选，如果不提供则创建新的）
 
         Returns:
             Tuple[str, List[str]]: (保护后的文本, 占位符列表)
         """
+        if placeholder_map is None:
+            placeholder_map = {}
         if not text or not isinstance(text, str):
             return text, []
-
-        # 初始化该行的占位符映射
-        if csv_key not in self.placeholder_map:
-            self.placeholder_map[csv_key] = {}
 
         protected_text = text
 
         # 步骤1: 保护占位符
         all_placeholders = []
         protected_text, placeholders = self._protect_placeholders_in_text(
-            protected_text, csv_key
+            protected_text, csv_key, placeholder_map
         )
         all_placeholders.extend(placeholders)
 
@@ -280,24 +276,27 @@ class PlaceholderManager:
 
         return protected_text, all_placeholders
 
-    def restore_text(self, text: str, csv_key: str = "single_text") -> str:
+    def restore_text(self, text: str, csv_key: str = "single_text", placeholder_map: Optional[Dict[str, Dict[str, str]]] = None) -> str:
         """
         恢复单个文本中的占位符和成人内容
 
         Args:
             text: 包含占位符的文本
             csv_key: CSV行的键值（用于占位符映射）
+            placeholder_map: 占位符映射字典（可选，如果不提供则创建新的）
 
         Returns:
             str: 恢复后的文本
         """
+        if placeholder_map is None:
+            placeholder_map = {}
         if not text:
             return text
 
         restored_text = text
 
         # 步骤1: 恢复占位符
-        restored_text = self._restore_placeholders_in_text(restored_text, csv_key)
+        restored_text = self._restore_placeholders_in_text(restored_text, csv_key, placeholder_map)
 
         # 步骤2: 翻译成人内容词汇（直接翻译英文成人词汇）
         restored_text = self._translate_remaining_adult_words(restored_text)
@@ -394,7 +393,7 @@ class PlaceholderManager:
         return protected_text, used_custom_dict
 
     def _protect_placeholders_in_text(
-        self, text: str, csv_key: str
+        self, text: str, csv_key: str, placeholder_map: Dict[str, Dict[str, str]]
     ) -> Tuple[str, List[str]]:
         """
         保护文本中的占位符
@@ -402,6 +401,7 @@ class PlaceholderManager:
         Args:
             text: 要保护的文本
             csv_key: CSV行的键值
+            placeholder_map: 占位符映射字典
 
         Returns:
             Tuple[str, List[str]]: (保护后的文本, 占位符列表)
@@ -438,15 +438,15 @@ class PlaceholderManager:
         # 只有当有匹配的占位符时才记录到placeholder_map
         if matches:
             # 初始化该行的占位符映射
-            if csv_key not in self.placeholder_map:
-                self.placeholder_map[csv_key] = {}
+            if csv_key not in placeholder_map:
+                placeholder_map[csv_key] = {}
 
             # 从后往前替换，避免位置偏移
             for match in reversed(matches):
                 placeholder_text = match.group()
                 # 记录占位符映射
                 placeholder_id = f"PH_{idx}"
-                self.placeholder_map[csv_key][placeholder_id] = placeholder_text
+                placeholder_map[csv_key][placeholder_id] = placeholder_text
                 placeholders.append(placeholder_text)
 
                 # 用ALIMT标签保护
@@ -457,6 +457,10 @@ class PlaceholderManager:
                     protected_text[:start] + alimt_tag + protected_text[end:]
                 )
                 idx += 1
+        else:
+            # 如果没有找到占位符，确保不创建空的映射条目
+            if csv_key in placeholder_map and not placeholder_map[csv_key]:
+                del placeholder_map[csv_key]
 
         return protected_text, placeholders
 
@@ -559,25 +563,30 @@ class PlaceholderManager:
             middle_index = len(translations) // 2
             return translations[middle_index]
 
-    def _restore_placeholders_in_text(self, text: str, csv_key: str) -> str:
+    def _restore_placeholders_in_text(self, text: str, csv_key: str, placeholder_map: Dict[str, Dict[str, str]]) -> str:
         """
         恢复文本中的占位符
 
         Args:
             text: 包含占位符的文本
             csv_key: CSV行的键值
+            placeholder_map: 占位符映射字典
 
         Returns:
             str: 恢复后的文本
         """
-        if not text or csv_key not in self.placeholder_map:
+        if not text or csv_key not in placeholder_map:
             return text
 
         restored_text = text
-        placeholder_map = self.placeholder_map[csv_key]
+        key_placeholders = placeholder_map[csv_key]
 
         # 恢复占位符
-        for placeholder_id, original_value in placeholder_map.items():
+        for placeholder_id, original_value in key_placeholders.items():
+            # 处理ALIMT标签格式的占位符（如 <ALIMT >(PH_1)</ALIMT>）
+            alimt_pattern = f"<ALIMT >({placeholder_id})</ALIMT>"
+            restored_text = restored_text.replace(alimt_pattern, original_value)
+            
             # 处理直接格式的占位符（如 (PH_1)）
             direct_pattern = f"({placeholder_id})"
             restored_text = restored_text.replace(direct_pattern, original_value)

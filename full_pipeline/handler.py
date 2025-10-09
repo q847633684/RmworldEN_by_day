@@ -35,7 +35,12 @@ def handle_full_pipeline():
         if confirm_action("是否立即进行机翻并导入？"):
             # 第二步：执行翻译
             ui.print_info("步骤 2/3: 执行机器翻译...")
-            translated_csv = handle_unified_translate(csv_path, mod_dir)
+            # 使用配置系统的功能生成输出路径
+            from translate.unified_translator import UnifiedTranslator
+
+            translator = UnifiedTranslator()
+            output_csv = translator._generate_output_path(csv_path)
+            translated_csv = handle_unified_translate(csv_path, output_csv)
 
             if translated_csv:
                 # 第三步：执行导入
