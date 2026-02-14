@@ -48,10 +48,11 @@ class DefsScanner(BaseExtractor):
         if not self._validate_source(source_path):
             return []
 
-        defs_dir = Path(source_path) / "Defs"
+        # 支持多个 Defs 目录位置（按优先级）
+        defs_dir = self._find_defs_directory(source_path)
 
-        if not defs_dir.exists():
-            self.logger.warning("Defs 目录不存在: %s", defs_dir)
+        if defs_dir is None:
+            self.logger.warning("未找到 Defs 目录，已尝试的路径: Defs/、Common/Defs/")
             return []
 
         translations = []
@@ -166,6 +167,35 @@ class DefsScanner(BaseExtractor):
             self.logger.error("处理Defs文件时发生错误: %s, %s", xml_file, e)
 
         return translations
+
+    def _find_defs_directory(self, source_path: str) -> Optional[Path]:
+        """
+        查找 Defs 目录，支持多个位置
+
+        按优先级查找以下位置：
+        1. {source_path}/Defs/          (标准 RimWorld mod)
+        2. {source_path}/Common/Defs/   (带 Common 目录的 mod，如 NMM)
+        3. {source_path}/Source/Defs/   (源代码结构)
+
+        Args:
+            source_path: 模组根目录路径
+
+        Returns:
+            Optional[Path]: 找到的 Defs 目录路径，未找到则返回 None
+        """
+        source_root = Path(source_path)
+        possible_paths = [
+            source_root / "Defs",
+            source_root / "Common" / "Defs",
+            source_root / "Source" / "Defs",
+        ]
+
+        for defs_path in possible_paths:
+            if defs_path.exists() and defs_path.is_dir():
+                self.logger.info("找到 Defs 目录: %s", defs_path)
+                return defs_path
+
+        return None
 
     def _find_def_nodes(self, root) -> List:
         """
