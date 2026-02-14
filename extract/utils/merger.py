@@ -306,6 +306,24 @@ class SmartMerger:
                     )
                 )
 
+        # 输出中有、输入（Defs）中没有的 key：视为过时，加「过时key，需删除」注释
+        outdated_count = 0
+        for key, out_items in output_map.items():
+            if key in input_map:
+                continue
+            for out_item in out_items:
+                outdated_count += 1
+                merged.append(
+                    (
+                        key,
+                        out_item[1],  # 保留原内容
+                        out_item[2],
+                        out_item[3],
+                        "",  # 不写 EN 注释
+                        "过时key，需删除",
+                    )
+                )
+
         # 生成详细统计信息
         stats = {
             "total_input": len(input_data),
@@ -314,6 +332,7 @@ class SmartMerger:
             "unchanged_count": unchanged_count,
             "updated_count": updated_count,
             "new_count": new_count,
+            "outdated_count": outdated_count,
             "merge_strategy": merge_strategy,
             "preserve_metadata": preserve_metadata,
         }
@@ -342,6 +361,7 @@ class SmartMerger:
             unchanged_count=stats.get("unchanged_count", 0),
             updated_count=stats.get("updated_count", 0),
             new_count=stats.get("new_count", 0),
+            outdated_count=stats.get("outdated_count", 0),
             total_input=stats.get("total_input", 0),
         )
         logger.info("智能合并完成: 耗时 %.3f秒, 输出 %d 条记录", duration, len(merged))
@@ -375,6 +395,7 @@ class SmartMerger:
         logger.info("  未变化项目: %d (跳过)", stats.get("unchanged_count", 0))
         logger.info("  需要更新项目: %d", stats.get("updated_count", 0))
         logger.info("  新增项目: %d", stats.get("new_count", 0))
+        logger.info("  过时项目: %d (需删除)", stats.get("outdated_count", 0))
         logger.info("  最终输出项目: %d", stats.get("merged_count", 0))
         logger.info("  合并策略: %s", stats.get("merge_strategy", "unknown"))
         logger.info("  保留元数据: %s", stats.get("preserve_metadata", False))

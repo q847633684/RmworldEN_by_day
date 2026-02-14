@@ -486,11 +486,17 @@ class TemplateManager:
             else:
                 logger.error("保存文件失败: %s", output_file)
 
-        # 统计合并结果
-        updated_count = sum(1 for item in merged if len(item) > 5 and item[5])
-        new_count = sum(1 for item in merged if len(item) > 5 and "新增于" in item[5])
+        # 统计合并结果（按 history 内容区分类型）
+        def _hist(item):
+            return (item[5] or "") if len(item) > 5 else ""
+
+        updated_count = sum(1 for item in merged if "更新于" in _hist(item))
+        new_count = sum(1 for item in merged if "新增于" in _hist(item))
+        unchanged_count = sum(1 for item in merged if not _hist(item).strip())
+        outdated_count = sum(1 for item in merged if "过时key" in _hist(item))
+        duplicate_count = sum(1 for item in merged if "重复key" in _hist(item))
         ui.print_success(
-            f"{sub_dir} 智能合并完成！共处理 {len(merged)} 条翻译（更新: {updated_count} 条，新增: {new_count} 条）"
+            f"{sub_dir} 智能合并完成！共处理 {len(merged)} 条翻译（更新: {updated_count} 条，新增: {new_count} 条，不变: {unchanged_count} 条，过时: {outdated_count} 条，重复: {duplicate_count} 条）"
         )
 
     def _save_translations_to_csv(
