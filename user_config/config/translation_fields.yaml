@@ -27,6 +27,29 @@ translation_fields:
         - flavor
         - quote
         - caption
+        # 新增字段魔法
+        - helpText
+        - fixedName
+        - pawnsPlural
+        - leaderTitle
+        - pawnSingular
+        - endMessage
+        - letterText
+        - labelTendedWell
+        - labelTendedWellInner
+        - labelSolidTendedWell
+        - destroyedLabel
+        - destroyedOutLabel
+        - permanentLabel
+        - regenPerTickUpgradeName
+        - jobString
+        - letterInfoText
+        - effectDesc
+        - expectedThingLabelTip
+        - missingDesc
+        - stuffAdjective
+        - labelNounPretty
+
     
     rimworld_specific:
       description: "RimWorld 特有字段"
@@ -51,7 +74,9 @@ translation_fields:
         - recoveryMessage
         - ingestCommandString
         - ingestReportString
-        - tips
+        - letterLabel
+        - text
+        - slateRef
     
     override:
       description: "覆盖字段"

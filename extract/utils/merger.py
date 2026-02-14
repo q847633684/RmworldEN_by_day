@@ -31,7 +31,7 @@ RimWorld 智能翻译合并器
 - 支持元数据保留和策略选择
 """
 
-from typing import List, Tuple, Any, Dict
+from typing import List, Tuple, Any, Dict, Set
 import datetime
 import html
 import re
@@ -148,9 +148,10 @@ class SmartMerger:
         Returns:
             六元组列表：(key, test, tag, rel_path, en_test, history)
         """
-        return SmartMerger.smart_merge_translations(
+        merged, _ = SmartMerger.smart_merge_translations(
             self.input_data, self.output_data, include_unchanged
         )
+        return merged
 
     @staticmethod
     def smart_merge_translations(
@@ -306,11 +307,26 @@ class SmartMerger:
                     )
                 )
 
-        # 输出中有、输入（Defs）中没有的 key：视为过时，加「过时key，需删除」注释
+        # 输出中有、输入（Defs）中没有的 key：若字段在 translation_fields 中则「过时key，需删除」，否则「未识别字段，谨慎删除」
         outdated_count = 0
+        _translation_fields: Set[str] = set()
+        try:
+            from user_config import UserConfigManager
+            _translation_fields = UserConfigManager.get_instance().system_config.get_translation_fields() or set()
+            _translation_fields = {f.lower() for f in _translation_fields if isinstance(f, str)}
+        except Exception:  # 配置不可用时全部标为过时
+            _translation_fields = set()
+
         for key, out_items in output_map.items():
             if key in input_map:
                 continue
+            # 从 key 提取字段名（如 DefName.label -> label）
+            field = key.split(".")[-1].strip() if "." in key else key.strip()
+            field_lower = field.lower() if field else ""
+            if field_lower in _translation_fields:
+                history_outdated = "过时key，需删除"
+            else:
+                history_outdated = "未识别字段，谨慎删除"
             for out_item in out_items:
                 outdated_count += 1
                 merged.append(
@@ -320,7 +336,7 @@ class SmartMerger:
                         out_item[2],
                         out_item[3],
                         "",  # 不写 EN 注释
-                        "过时key，需删除",
+                        history_outdated,
                     )
                 )
 
@@ -365,7 +381,7 @@ class SmartMerger:
             total_input=stats.get("total_input", 0),
         )
         logger.info("智能合并完成: 耗时 %.3f秒, 输出 %d 条记录", duration, len(merged))
-        return merged
+        return merged, stats
 
     @staticmethod
     def _validate_data_format(data: list, data_name: str) -> None:

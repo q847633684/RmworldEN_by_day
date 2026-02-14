@@ -74,6 +74,9 @@ def show_main_menu() -> str:
     ui.print_menu_item(
         "7", "语料生成", "生成英-中平行语料", ui.Icons.CORPUS, compact=True
     )
+    ui.print_menu_item(
+        "8", "清理过时/重复 key", "删除带「过时key」或「重复key」标记的条目", ui.Icons.SETTINGS, compact=True
+    )
 
     # 退出选项
     ui.print_section_header("退出程序", ui.Icons.EXIT)
@@ -81,7 +84,7 @@ def show_main_menu() -> str:
 
     ui.print_separator()
 
-    result = safe_input(ui.get_input_prompt("请选择模式", options="1-7, q"), "q")
+    result = safe_input(ui.get_input_prompt("请选择模式", options="1-8, q"), "q")
     return result if result is not None else "q"
 
 

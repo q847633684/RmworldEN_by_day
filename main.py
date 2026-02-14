@@ -48,6 +48,7 @@ from extract import handle_extract
 from full_pipeline.handler import handle_full_pipeline
 from import_template.handler import handle_import_template
 from translate.handler import handle_unified_translate
+from extract.cleanup_outdated_keys import handle_cleanup_outdated_keys
 from utils.interaction import show_main_menu, wait_for_user_input
 from utils.ui_style import confirm_action, ui
 
@@ -126,11 +127,14 @@ def main():
             elif mode == "7":
                 handle_corpus()
                 wait_for_user_input("按回车返回主菜单...")
+            elif mode == "8":
+                handle_cleanup_outdated_keys()
+                wait_for_user_input("按回车返回主菜单...")
             elif mode == "q":
                 ui.print_success("👋 感谢使用 Day Translation！")
                 break
             else:
-                ui.print_error("❌ 无效选项，请重新输入。")
+                ui.print_error("❌ 无效选项，请重新输入（1-8 或 q）。")
                 wait_for_user_input("按回车返回主菜单...")
         except KeyboardInterrupt:
             ui.print_warning("\n⚠️ 用户中断操作")

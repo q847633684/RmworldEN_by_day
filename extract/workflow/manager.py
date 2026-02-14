@@ -166,12 +166,12 @@ class TemplateManager:
         )
 
         # 步骤3：智能合并翻译数据
-        keyed_translations = SmartMerger.smart_merge_translations(
+        keyed_translations, keyed_stats = SmartMerger.smart_merge_translations(
             input_data=input_keyed,
             output_data=output_keyed,
             include_unchanged=False,
         )
-        def_translations = SmartMerger.smart_merge_translations(
+        def_translations, def_stats = SmartMerger.smart_merge_translations(
             input_data=input_def,
             output_data=output_def,
             include_unchanged=False,
@@ -180,13 +180,13 @@ class TemplateManager:
         if keyed_translations:
             ui.print_info("正在合并 Keyed ...")
             self._write_merged_translations(
-                keyed_translations, output_dir, output_language, "Keyed"
+                keyed_translations, output_dir, output_language, "Keyed", keyed_stats
             )
 
         if def_translations:
             ui.print_info("正在合并 DefInjected ...")
             self._write_merged_translations(
-                def_translations, output_dir, output_language, "DefInjected"
+                def_translations, output_dir, output_language, "DefInjected", def_stats
             )
 
         # 步骤4：导出CSV到输出目录
@@ -354,7 +354,12 @@ class TemplateManager:
             ui.print_success("DefInjected 模板已生成")
 
     def _write_merged_translations(
-        self, merged: List[Tuple], output_dir: str, output_language: str, sub_dir: str
+        self,
+        merged: List[Tuple],
+        output_dir: str,
+        output_language: str,
+        sub_dir: str,
+        merge_stats: Optional[dict] = None,
     ) -> None:
         """
         通用写回 XML 方法，支持 DefInjected 和 Keyed
@@ -363,6 +368,7 @@ class TemplateManager:
             merged: List[(key, test, tag, rel_path, en_test, history)]
             output_dir: 输出根目录
             sub_dir: 子目录名（defInjected 或 keyed）
+            merge_stats: 合并统计（含 unchanged_count 等），用于正确显示「不变」数量（因 include_unchanged=False 时不变项不在 merged 中）
         """
         logger = get_logger(f"{__name__}.write_merged_translations")
 
@@ -421,7 +427,7 @@ class TemplateManager:
                     )
 
                     if text_changed:
-                        # 删除紧挨着元素的前一个EN注释（匹配具体内容）
+                        # 删除紧挨着元素的前一个 EN 注释（匹配具体内容）
                         if elem_index > 0 and en_test:
                             prev_child = root[elem_index - 1]
                             expected_en_text = f"EN: {en_test}"
@@ -432,7 +438,19 @@ class TemplateManager:
                                 and prev_child.text.strip() == expected_en_text
                             ):
                                 root.remove(prev_child)
-                                elem_index -= 1  # 调整索引
+                                elem_index -= 1
+                        # 若再前一个节点是历史类注释（如「翻译内容: ...,新增于」或「原中文...更新于」），一并删除，避免重复堆积
+                        if elem_index > 0:
+                            prev_child = root[elem_index - 1]
+                            if (
+                                type(prev_child).__name__ == "_Comment"
+                                and hasattr(prev_child, "text")
+                                and prev_child.text
+                            ):
+                                t = prev_child.text.strip()
+                                if "新增于" in t or "更新于" in t:
+                                    root.remove(prev_child)
+                                    elem_index -= 1
 
                         # 添加历史注释
                         if history and history.strip():
@@ -449,11 +467,22 @@ class TemplateManager:
                             root.insert(elem_index, en_comment)
                             elem_index += 1  # 调整索引
                     elif need_insert_en_only:
-                        # 仅添加英文注释、不改动原中文：插入历史注释 + EN 注释
+                        # 仅添加英文注释、不改动原中文：先删旧历史注释再插入历史 + EN
+                        if elem_index > 0:
+                            prev_child = root[elem_index - 1]
+                            if (
+                                type(prev_child).__name__ == "_Comment"
+                                and hasattr(prev_child, "text")
+                                and prev_child.text
+                            ):
+                                t = prev_child.text.strip()
+                                if "新增于" in t or "更新于" in t:
+                                    root.remove(prev_child)
+                                    elem_index -= 1
                         if history and history.strip():
                             history_comment = processor.create_comment(history)
                             root.insert(elem_index, history_comment)
-                            elem_index += 1  # 调整索引
+                            elem_index += 1
                         if en_test:
                             en_comment = processor.create_comment(f"EN: {en_test}")
                             root.insert(elem_index, en_comment)
@@ -485,17 +514,21 @@ class TemplateManager:
             else:
                 logger.error("保存文件失败: %s", output_file)
 
-        # 统计合并结果（按 history 内容区分类型）
+        # 统计合并结果：从 merge_stats 取「不变」数（不变项未写入 merged），其余从 merged 的 history 区分
         def _hist(item):
             return (item[5] or "") if len(item) > 5 else ""
 
         updated_count = sum(1 for item in merged if "更新于" in _hist(item))
         new_count = sum(1 for item in merged if "新增于" in _hist(item))
-        unchanged_count = sum(1 for item in merged if not _hist(item).strip())
-        outdated_count = sum(1 for item in merged if "过时key" in _hist(item))
+        unchanged_count = (merge_stats or {}).get("unchanged_count", 0)
+        if unchanged_count == 0:
+            unchanged_count = sum(1 for item in merged if not _hist(item).strip())
+        outdated_count = sum(1 for item in merged if "过时key，需删除" in _hist(item))
+        unrecognized_count = sum(1 for item in merged if "未识别字段，谨慎删除" in _hist(item))
         duplicate_count = sum(1 for item in merged if "重复key" in _hist(item))
+        total_processed = len(merged) + unchanged_count
         ui.print_success(
-            f"{sub_dir} 智能合并完成！共处理 {len(merged)} 条翻译（更新: {updated_count} 条，新增: {new_count} 条，不变: {unchanged_count} 条，过时: {outdated_count} 条，重复: {duplicate_count} 条）"
+            f"{sub_dir} 智能合并完成！共处理 {total_processed} 条翻译（更新: {updated_count} 条，新增: {new_count} 条，不变: {unchanged_count} 条，过时: {outdated_count} 条，未识别: {unrecognized_count} 条，重复: {duplicate_count} 条）"
         )
 
     def _save_translations_to_csv(
