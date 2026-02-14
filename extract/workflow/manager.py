@@ -7,19 +7,18 @@
 import csv
 import re
 from pathlib import Path
-from typing import List, Tuple, Optional
-from utils.ui_style import ui
-from utils.utils import sanitize_xml
-from utils.logging_config import (
-    get_logger,
-    log_data_processing,
-    log_user_action,
-)
-from ..core.extractors import DefInjectedExtractor, KeyedExtractor, DefsScanner
-from ..core.exporters import DefInjectedExporter, KeyedExporter
-from ..utils import SmartMerger
+from typing import List, Optional, Tuple
+
 from user_config import UserConfigManager
 from user_config.path_manager import PathManager
+from utils.logging_config import (get_logger, log_data_processing,
+                                  log_user_action)
+from utils.ui_style import ui
+from utils.utils import sanitize_xml
+
+from ..core.exporters import DefInjectedExporter, KeyedExporter
+from ..core.extractors import DefInjectedExtractor, DefsScanner, KeyedExtractor
+from ..utils import SmartMerger
 
 
 class TemplateManager:
