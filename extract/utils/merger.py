@@ -189,10 +189,16 @@ class SmartMerger:
         SmartMerger._validate_data_format(output_data, "output_data")
 
         input_map = {item[0]: item for item in input_data}
-        output_map = {item[0]: item for item in output_data}
+        # 同一 key 可能出现在多个输出文件中（不同 rel_path），按 key -> [item, ...] 保留全部
+        output_map: Dict[str, List[tuple]] = {}
+        for item in output_data:
+            output_map.setdefault(item[0], []).append(item)
 
         logger.info(
-            "数据映射完成: 输入 %d 条, 输出 %d 条", len(input_map), len(output_map)
+            "数据映射完成: 输入 %d 条, 输出 %d 条(key 去重后 %d)",
+            len(input_map),
+            len(output_data),
+            len(output_map),
         )
 
         merged = []
@@ -201,60 +207,91 @@ class SmartMerger:
         new_count = 0
         today = datetime.date.today().isoformat()
 
-        # output_keys = set(output_map.keys())  # 暂时未使用
-
         for key, in_item in input_map.items():
-            out_item = output_map.get(key)
+            out_items = output_map.get(key)  # 同一 key 可能对应多个文件
 
-            if out_item:
-                # 根据设计文档5.1规则：比较input_text和output_en_text
-                # 使用HTML实体规范化进行比较
-                normalized_input = SmartMerger._normalize_html_entities(
-                    in_item[1]
-                )  # input_text
-                normalized_output = SmartMerger._normalize_html_entities(
-                    out_item[4]
-                )  # output_en_text
+            if out_items:
+                # 同一 key 出现在多个文件时：第一个正常合并；第二个及以后只加「重复key，需删除」并保留原内容
+                for idx, out_item in enumerate(out_items):
+                    is_duplicate_extra = len(out_items) > 1 and idx > 0
 
-                if (
-                    normalized_input == normalized_output
-                ):  # 输入的翻译 == 输出的英文注释
-                    unchanged_count += 1
-                    if include_unchanged:
+                    if is_duplicate_extra:
+                        # 重复 key 的第二个及以后：仅加「重复key，需删除」注释，保留原中文，不写 EN
+                        if preserve_metadata and merge_strategy == "output_priority":
+                            tag, rel_path = out_item[2], out_item[3]
+                        else:
+                            tag, rel_path = in_item[2], in_item[3]
                         merged.append(
                             (
                                 key,
-                                out_item[1],  # 保持现有翻译
-                                out_item[2],  # 保持现有tag
-                                out_item[3],  # 保持现有rel_path
-                                out_item[4],  # 保持现有en_test
-                                "",  # 无历史记录
+                                out_item[1],  # 保留原内容
+                                tag,
+                                rel_path,
+                                "",  # 不写 EN 注释
+                                "重复key，需删除",
                             )
                         )
-                    else:
                         continue
-                else:
-                    # 翻译内容不同，需要更新
-                    updated_count += 1
 
-                    # 根据合并策略选择元数据
-                    if preserve_metadata and merge_strategy == "output_priority":
-                        # 保留输出数据的元数据
-                        tag, rel_path = out_item[2], out_item[3]
-                    else:
-                        # 使用输入数据的元数据
-                        tag, rel_path = in_item[2], in_item[3]
-
-                    merged.append(
-                        (
-                            key,
-                            in_item[1],  # 使用新的翻译
-                            tag,  # 根据策略选择tag
-                            rel_path,  # 根据策略选择rel_path
-                            out_item[4],  # 使用输出数据的英文原文
-                            f"原中文: '{out_item[1]}', 原英文: '{out_item[4]}' -> 新英文: '{in_item[1]}',更新于{today}",
-                        )
+                    # 第一个（或仅有一个时）：按原逻辑比较并合并
+                    normalized_input = SmartMerger._normalize_html_entities(
+                        in_item[1]
                     )
+                    normalized_output = SmartMerger._normalize_html_entities(
+                        out_item[4]
+                    )
+
+                    if normalized_input == normalized_output:
+                        unchanged_count += 1
+                        if include_unchanged:
+                            merged.append(
+                                (
+                                    key,
+                                    out_item[1],
+                                    out_item[2],
+                                    out_item[3],
+                                    out_item[4],
+                                    "",
+                                )
+                            )
+                    else:
+                        updated_count += 1
+
+                        if preserve_metadata and merge_strategy == "output_priority":
+                            tag, rel_path = out_item[2], out_item[3]
+                        else:
+                            tag, rel_path = in_item[2], in_item[3]
+
+                        old_en = (out_item[4] or "").strip()
+                        old_zh = (out_item[1] or "").strip()
+                        no_original_en = not old_en or old_en == old_zh
+                        orig_en_display = (
+                            f"'{out_item[4]}'"
+                            if not no_original_en
+                            else "'无'"
+                        )
+                        if no_original_en:
+                            merged.append(
+                                (
+                                    key,
+                                    out_item[1],
+                                    tag,
+                                    rel_path,
+                                    in_item[1],
+                                    f"原中文: '{out_item[1]}', 原英文: {orig_en_display} -> 新英文: '{in_item[1]}',更新于{today}",
+                                )
+                            )
+                        else:
+                            merged.append(
+                                (
+                                    key,
+                                    in_item[1],
+                                    tag,
+                                    rel_path,
+                                    out_item[4],
+                                    f"原中文: '{out_item[1]}', 原英文: {orig_en_display} -> 新英文: '{in_item[1]}',更新于{today}",
+                                )
+                            )
             else:
                 # 新增项目
                 new_count += 1

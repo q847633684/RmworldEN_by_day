@@ -332,12 +332,6 @@ def confirm_action(message: str) -> bool:
     return result and result.lower() in ["y", "yes", "是", "确认"]
 
 
-# 这些函数已被移除，请直接使用 ui.print_success, ui.print_error, ui.print_warning, ui.print_info
-
-
 def wait_for_user_input(prompt: str = "按回车继续..."):
     """等待用户输入"""
     safe_input(f"{UIStyle.Colors.INFO}{prompt}{UIStyle.Colors.RESET}")
-
-
-# 这些函数已被移除，请直接使用 ui.print_info 和 ui.print_success

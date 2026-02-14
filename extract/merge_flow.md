@@ -75,7 +75,8 @@
 #### 合并模式历史记录格式
 ```python
 # 内容有更新时的历史记录
-"原中文: '{old_text}', 原英文: '{old_en_text}' -> 新英文: '{new_text}',更新于{date}"
+# 当原翻译无 EN 注释时，原英文显示为 '无'，且不改动原中文、仅添加新英文注释
+"原中文: '{old_text}', 原英文: '{old_en_text}' 或 原英文: '无' -> 新英文: '{new_text}',更新于{date}"
 
 # 新增内容时的历史记录  
 "翻译内容: '{text}',新增于{date}"
@@ -431,14 +432,17 @@ def merge_translations(input_data, output_data):
                 # 内容无变化，跳过（include_unchanged=False时）
                 continue
             else:
-                # 内容有更新，替换并保留历史
+                # 内容有更新：无原英文时显示 '无'、保留原中文仅添加 EN 注释；有原英文时替换
+                orig_en = (out_item[4] or "").strip()
+                orig_zh = (out_item[1] or "").strip()
+                orig_en_display = f"'{out_item[4]}'" if (orig_en and orig_en != orig_zh) else "'无'"
                 merged.append((
                     key,
                     in_item[1],  # 新翻译
                     out_item[2],  # 保持输出tag
                     out_item[3],  # 保持输出rel_path
                     out_item[4],  # 保持输出en_text
-                    f"原中文: '{out_item[1]}', 原英文: '{out_item[4]}' -> 新英文: '{in_item[1]}',更新于{today}"
+                    f"原中文: '{out_item[1]}', 原英文: {orig_en_display} -> 新英文: '{in_item[1]}',更新于{today}"
                 ))
         else:
             # key不存在，新增

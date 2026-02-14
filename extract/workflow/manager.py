@@ -412,11 +412,16 @@ class TemplateManager:
                 # 查找现有元素
                 existing_elem = root.find(clean_key)
                 if existing_elem is not None:
-                    # 更新现有元素 - 采用旧代码的简单逻辑
+                    # 更新现有元素
                     original_text = existing_elem.text or ""
-                    if original_text != test:
-                        elem_index = list(root).index(existing_elem)
+                    elem_index = list(root).index(existing_elem)
+                    text_changed = original_text != test
+                    # 无原英文时仅添加 EN 注释、不改动原中文：需插入历史+EN 注释
+                    need_insert_en_only = (
+                        not text_changed and (en_test or (history and history.strip()))
+                    )
 
+                    if text_changed:
                         # 删除紧挨着元素的前一个EN注释（匹配具体内容）
                         if elem_index > 0 and en_test:
                             prev_child = root[elem_index - 1]
@@ -436,9 +441,22 @@ class TemplateManager:
                             root.insert(elem_index, history_comment)
                             elem_index += 1  # 调整索引
 
-                        # 添加新的英文注释
-                        if test:
-                            en_comment = processor.create_comment(f"EN: {test}")
+                        # 添加新的英文注释（优先用 en_test，如无则用 test）
+                        en_for_comment = en_test if en_test else test
+                        if en_for_comment:
+                            en_comment = processor.create_comment(
+                                f"EN: {en_for_comment}"
+                            )
+                            root.insert(elem_index, en_comment)
+                            elem_index += 1  # 调整索引
+                    elif need_insert_en_only:
+                        # 仅添加英文注释、不改动原中文：插入历史注释 + EN 注释
+                        if history and history.strip():
+                            history_comment = processor.create_comment(history)
+                            root.insert(elem_index, history_comment)
+                            elem_index += 1  # 调整索引
+                        if en_test:
+                            en_comment = processor.create_comment(f"EN: {en_test}")
                             root.insert(elem_index, en_comment)
                             elem_index += 1  # 调整索引
 
@@ -450,12 +468,12 @@ class TemplateManager:
                         history_comment = processor.create_comment(history)
                         root.append(history_comment)
 
-                    # 添加英文注释（如果有）
-                    if test:
-                        en_comment = processor.create_comment(f"EN: {test}")
-                        root.append(en_comment)
-                    else:
-                        en_comment = processor.create_comment(f"EN: {en_test}")
+                    # 添加英文注释（优先用 en_test，如无则用 test）
+                    en_for_comment = en_test if en_test else test
+                    if en_for_comment:
+                        en_comment = processor.create_comment(
+                            f"EN: {en_for_comment}"
+                        )
                         root.append(en_comment)
 
                     # 创建新的翻译元素
