@@ -6,8 +6,9 @@
 
 import csv
 import re
+import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from user_config import UserConfigManager
 from user_config.path_manager import PathManager
@@ -19,6 +20,135 @@ from utils.utils import sanitize_xml
 from ..core.exporters import DefInjectedExporter, KeyedExporter
 from ..core.extractors import DefInjectedExtractor, DefsScanner, KeyedExtractor
 from ..utils import SmartMerger
+
+
+def find_content_roots(base_path: str) -> List[str]:
+    """
+    发现所有「内容根目录」：即 base_path 下所有含 Defs 子目录的目录。
+    用于多子模组（如 Rimvore-2 的 Common、MajorModIntegrations/Biotech、LightGenitals）：
+    Defs 在哪就在同目录生成 Languages。
+
+    Args:
+        base_path: 模组根或版本目录（如 rimvore-2 或 rimvore-2/1.6）
+
+    Returns:
+        去重且排序的路径列表，每个路径为「Defs 所在目录」（即 Languages 应生成于此）
+    """
+    base = Path(base_path)
+    if not base.is_dir():
+        return []
+    roots = set()
+    for p in base.rglob("Defs"):
+        if p.is_dir():
+            roots.add(p.parent)
+    return sorted(str(r) for r in roots)
+
+
+def _parse_load_folders_from_mod(
+    mod_dir: str, version: str = "1.6"
+) -> Tuple[Dict[str, Dict[str, str]], List[str]]:
+    """
+    从原 mod 的 LoadFolders.xml 解析指定版本块：路径→属性，以及原始顺序的路径列表。
+    只包含原文件中出现的路径，未在原 LoadFolders 中的目录（如 Source、RimJobWorld/Source）不应写入生成文件。
+
+    Args:
+        mod_dir: 模组根目录（其下应有 LoadFolders.xml）
+        version: 版本块名，如 "1.6" -> 解析 <v1.6> 内的 <li>
+
+    Returns:
+        (path_to_attrib, ordered_paths)
+        - path_to_attrib: 路径(归一化) -> { "IfModActive"/"IfModNotActive": "..." }，仅包含有属性的项
+        - ordered_paths: 原文件中该版本块内 <li> 的路径顺序（归一化后），用于生成时只输出原 mod 里有的项
+    """
+    xml_path = Path(mod_dir) / "LoadFolders.xml"
+    path_to_attrib: Dict[str, Dict[str, str]] = {}
+    ordered_paths: List[str] = []
+    if not xml_path.is_file():
+        return path_to_attrib, ordered_paths
+    version_tag = f"v{version}" if not version.startswith("v") else version
+    try:
+        tree = ET.parse(xml_path)
+        root = tree.getroot()
+        version_elem = root.find(version_tag)
+        if version_elem is None:
+            return path_to_attrib, ordered_paths
+        for li in version_elem.findall("li"):
+            path = (li.text or "").strip()
+            if not path:
+                continue
+            key = path.replace("\\", "/")
+            ordered_paths.append(key)
+            attrib = {
+                k: v
+                for k, v in li.attrib.items()
+                if k in ("IfModActive", "IfModNotActive")
+            }
+            if attrib:
+                path_to_attrib[key] = attrib
+    except (ET.ParseError, OSError, IOError):
+        pass
+    return path_to_attrib, ordered_paths
+
+
+def generate_load_folders_xml(
+    output_dir: str,
+    folder_names: List[str],
+    version: str = "1.6",
+    mod_dir: Optional[str] = None,
+) -> Optional[Path]:
+    """
+    在输出目录生成 LoadFolders.xml，供外部导出时让 RimWorld 正确加载子目录。
+    若提供 mod_dir：从原 mod 的 LoadFolders.xml 读取路径顺序与 IfModActive/IfModNotActive，
+    只生成原文件中出现的路径（不生成 Source、RimJobWorld/Source 等原 mod 未列出的目录）。
+
+    Args:
+        output_dir: 输出根目录（xml 将写在此目录下）
+        folder_names: 本次导出的目录名（相对路径）；当提供 mod_dir 时仅输出其中在原 LoadFolders 里存在的项
+        version: 版本标签，如 "1.6" -> <v1.6>
+        mod_dir: 原模组根目录，用于读取 LoadFolders.xml 的路径列表与属性（可选）
+
+    Returns:
+        生成的 LoadFolders.xml 路径，失败返回 None
+    """
+    if not folder_names:
+        return None
+    folder_set = {n.replace("\\", "/") for n in folder_names}
+    li_attrs: Dict[str, Dict[str, str]] = {}
+    ordered_paths: List[str] = []
+    if mod_dir:
+        li_attrs, ordered_paths = _parse_load_folders_from_mod(mod_dir, version)
+        # 只保留「原 LoadFolders 中有」且「本次有导出」的路径，按原顺序
+        to_output = [p for p in ordered_paths if p in folder_set]
+        # 若版本结构下原文件只列了版本块（如仅 "1.6"）导致交集为空，则用本次导出的目录列表生成，避免不生成文件
+        if not to_output and folder_set:
+            to_output = sorted(folder_set)
+    else:
+        to_output = list(folder_set)
+    if not to_output:
+        return None
+    out = Path(output_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    version_tag = f"v{version}" if not version.startswith("v") else version
+    lines = [
+        '<?xml version="1.0" encoding="utf-8"?>',
+        "<loadFolders>",
+        f"  <{version_tag}>",
+    ]
+    for name in to_output:
+        attrs = li_attrs.get(name, {})
+        if attrs:
+            attr_str = " ".join(f'{k}="{v}"' for k, v in sorted(attrs.items()))
+            lines.append(f"    <li {attr_str}>{name}</li>")
+        else:
+            lines.append(f"    <li>{name}</li>")
+    lines.append(f"  </{version_tag}>")
+    lines.append("</loadFolders>")
+    xml_path = out / "LoadFolders.xml"
+    try:
+        xml_path.write_text("\n".join(lines), encoding="utf-8")
+        return xml_path
+    except (OSError, IOError):
+        return None
 
 
 class TemplateManager:
@@ -92,7 +222,7 @@ class TemplateManager:
         if not keyed_translations and not def_translations:
             self.logger.warning("未找到任何翻译数据")
             ui.print_warning("未找到任何翻译数据")
-            return []
+            return [], ""
 
         # 步骤2：根据用户选择的输出模式生成翻译模板
         self._generate_templates_to_output_dir_with_structure(
@@ -165,7 +295,7 @@ class TemplateManager:
             has_input_keyed=has_input_keyed,
         )
 
-        # 步骤3：智能合并翻译数据
+        # 步骤3：智能合并翻译数据（include_unchanged=False，不变项不进入 merged，故 CSV 也不会包含）
         keyed_translations, keyed_stats = SmartMerger.smart_merge_translations(
             input_data=input_keyed,
             output_data=output_keyed,
@@ -176,7 +306,7 @@ class TemplateManager:
             output_data=output_def,
             include_unchanged=False,
         )
-        # 写入合并结果
+        # 写入合并结果（仅更新、新增、过时等，不含「不变」）
         if keyed_translations:
             ui.print_info("正在合并 Keyed ...")
             self._write_merged_translations(
@@ -189,7 +319,7 @@ class TemplateManager:
                 def_translations, output_dir, output_language, "DefInjected", def_stats
             )
 
-        # 步骤4：导出CSV到输出目录
+        # 步骤4：导出CSV到输出目录（同上，仅含更新/新增/过时等，不含不变项）
         csv_path = self._save_translations_to_csv(
             keyed_translations,
             def_translations,
@@ -539,7 +669,7 @@ class TemplateManager:
         output_language: str,
         output_csv: Optional[str] = None,
     ) -> str:
-        """保存翻译数据到CSV文件
+        """保存翻译数据到CSV文件；无数据时不创建目录和文件。
 
         Args:
             keyed_translations: Keyed翻译数据列表
@@ -549,8 +679,10 @@ class TemplateManager:
             output_csv: CSV文件名，默认为"translations.csv"
 
         Returns:
-            str: CSV文件路径
+            str: CSV文件路径，无数据时返回空字符串
         """
+        if not keyed_translations and not def_translations:
+            return ""
         # 使用配置系统的功能生成输出路径
         config_manager = UserConfigManager.get_instance()
         csv_path = (

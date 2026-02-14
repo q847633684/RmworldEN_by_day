@@ -4,6 +4,7 @@
 """
 
 import csv
+from pathlib import Path
 from utils.logging_config import get_logger
 
 from utils.interaction import (
@@ -11,11 +12,8 @@ from utils.interaction import (
     confirm_action,
 )
 from utils.ui_style import ui
-from user_config.path_manager import PathManager
 from user_config import UserConfigManager
 from .importers import import_translations
-
-path_manager = PathManager()
 
 
 def handle_import_template(
@@ -24,9 +22,12 @@ def handle_import_template(
 ):
     """处理导入模板功能
 
+    不依赖版本号与 About 识别：以所选 CSV 所在目录为导入目标，
+    直接使用该目录下的 Languages/<语言> 作为模板目录（与多子目录各自生成 CSV 的提取结果一致）。
+
     Args:
         csv_path: CSV文件路径，如果提供则跳过路径选择
-        mod_dir: 模组目录路径，如果提供则跳过目录选择
+        mod_dir: 模组/导入目录路径，若提供则直接使用；否则由 CSV 所在目录推导
     """
     logger = get_logger(f"{__name__}.handle_import_template")
 
@@ -39,35 +40,16 @@ def handle_import_template(
         else:
             ui.print_info(f"使用提供的CSV路径: {csv_path}")
 
-        # 获取模组目录
+        # 导入目标目录：未提供时取 CSV 所在目录（该目录下应有 Languages/<语言>）
         if not mod_dir:
-            selected_path = path_manager.get_path(
-                path_type="mod_dir",
-                prompt="请输入编号或模组目录路径（支持历史编号或直接输入路径）: ",
-                validator_type="mod",
-                required=True,
-            )
-            if not selected_path:
-                return
-
-            result = path_manager.detect_version_and_choose(selected_path)
-            if not result:
-                return
-
-            # 解包结果：mod_dir, project_type
-            if isinstance(result, tuple):
-                mod_dir, _ = result  # project_type 暂时不使用
-            else:
-                # 兼容旧格式
-                mod_dir = result
+            mod_dir = str(Path(csv_path).resolve().parent)
+            ui.print_info(f"导入目标目录（由 CSV 所在目录确定）: {mod_dir}")
         else:
-            ui.print_info(f"使用提供的模组目录: {mod_dir}")
+            ui.print_info(f"使用提供的导入目录: {mod_dir}")
 
-        # 获取配置
         config = UserConfigManager.get_instance()
         language = config.language_config.get_value("cn_language", "ChineseSimplified")
 
-        # 确认导入
         if confirm_action("确认导入翻译到模板？"):
             ui.print_info("=== 开始导入 ===")
             try:
