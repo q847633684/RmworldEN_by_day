@@ -77,6 +77,9 @@ def show_main_menu() -> str:
     ui.print_menu_item(
         "8", "清理过时/重复 key", "删除带「过时key」或「重复key」标记的条目", ui.Icons.SETTINGS, compact=True
     )
+    ui.print_menu_item(
+        "9", "迁移旧翻译到新模板", "将旧翻译目录中已有翻译填到新目录（可仅填充空项）", ui.Icons.IMPORT, compact=True
+    )
 
     # 退出选项
     ui.print_section_header("退出程序", ui.Icons.EXIT)
@@ -84,7 +87,7 @@ def show_main_menu() -> str:
 
     ui.print_separator()
 
-    result = safe_input(ui.get_input_prompt("请选择模式", options="1-8, q"), "q")
+    result = safe_input(ui.get_input_prompt("请选择模式", options="1-9, q"), "q")
     return result if result is not None else "q"
 
 

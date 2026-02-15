@@ -171,22 +171,175 @@ def _load_translations_from_csv(csv_path: str) -> Tuple[Dict[str, str], Dict[str
         return {}, {}
 
 
+def _definjected_key_func(elem: Any, root: Any, parent_map: Optional[dict]) -> str:
+    """DefInjected 用「父路径/标签」生成 key，与提取器一致"""
+    if parent_map is None:
+        return elem.get("key", elem.tag)
+    parent_tags = []
+    p = parent_map.get(elem)
+    while p is not None and p is not root:
+        if isinstance(getattr(p, "tag", None), str) and not str(p.tag).startswith("{"):
+            parent_tags.append(p.tag)
+        p = parent_map.get(p)
+    parent_tags.reverse()
+    return "/".join(parent_tags + [elem.tag]) if parent_tags else elem.tag
+
+
+def _get_language_subdir_path(base_dir: str, language: str, subdir_type: str) -> Path:
+    """
+    解析语言子目录路径。若 base_dir 下已有 Keyed/DefInjected，视为语言目录；否则按模组根处理。
+    """
+    base = Path(base_dir)
+    if (base / "Keyed").exists() or (base / "DefInjected").exists():
+        return base / subdir_type.lower()
+    return CONFIG.language_config.get_language_subdir(
+        base_dir, language, subdir_type
+    )
+
+
+def _collect_old_translations(
+    old_base_dir: str,
+    language: str,
+) -> Tuple[Dict[str, str], Dict[str, str]]:
+    """
+    扫描旧翻译目录，收集 Keyed 与 DefInjected 中已有翻译（key → 非空译文）。
+
+    Args:
+        old_base_dir: 旧模组根目录（其下应有 Languages/<language>），或直接为语言目录（含 Keyed/DefInjected）
+        language: 语言代码，如 ChineseSimplified
+
+    Returns:
+        (keyed_map, definjected_map)
+    """
+    processor = XMLProcessor()
+    keyed_map: Dict[str, str] = {}
+    definjected_map: Dict[str, str] = {}
+
+    for subdir_type, out_map, use_def_key in [
+        ("keyed", keyed_map, False),
+        ("definjected", definjected_map, True),
+    ]:
+        subdir = _get_language_subdir_path(old_base_dir, language, subdir_type)
+        if not subdir.exists():
+            continue
+        xml_files = list(Path(subdir).rglob("*.xml"))
+        for xml_file in xml_files:
+            try:
+                tree = processor.parse_xml(str(xml_file))
+                if tree is None:
+                    continue
+                root = tree.getroot() if processor.use_lxml else tree
+                parent_map = (
+                    {c: p for p in root.iter() for c in p}
+                    if not processor.use_lxml
+                    else None
+                )
+                for elem in root.xpath(".//*") if processor.use_lxml else root.iter():
+                    key = (
+                        _definjected_key_func(elem, root, parent_map)
+                        if use_def_key
+                        else processor._get_element_key(elem)
+                    )
+                    if not key:
+                        continue
+                    text = (elem.text or "").strip()
+                    if text:
+                        out_map[key] = text
+            except (OSError, ValueError, TypeError) as e:
+                logger.debug("跳过 %s: %s", xml_file, e)
+
+    return keyed_map, definjected_map
+
+
+def migrate_translations_to_new(
+    old_base_dir: str,
+    new_base_dir: str,
+    language: str,
+    only_fill_empty: bool = True,
+) -> int:
+    """
+    将旧翻译目录中已有翻译合并到新翻译目录；默认仅填充新目录中的空项。
+
+    Args:
+        old_base_dir: 旧模组根目录，或直接为语言目录（含 Keyed/DefInjected）
+        new_base_dir: 新模组/模板根目录，或直接为语言目录
+        language: 语言代码
+        only_fill_empty: 为 True 时仅填充新文件中空项，不覆盖已有翻译
+
+    Returns:
+        更新的文件数量
+    """
+    keyed_map, definjected_map = _collect_old_translations(old_base_dir, language)
+    ui.print_info(
+        f"从旧目录收集到 Keyed {len(keyed_map)} 条、DefInjected {len(definjected_map)} 条翻译。"
+    )
+    if not keyed_map and not definjected_map:
+        logger.warning("未从旧目录收集到任何翻译，请确认旧目录下存在 Keyed/DefInjected 且 XML 中含译文")
+        return 0
+    new_base = Path(new_base_dir)
+    if (new_base / "Keyed").exists() or (new_base / "DefInjected").exists():
+        new_lang_dir = str(new_base)
+    elif (new_base / language).exists():
+        # 新目录已是 Languages 父目录（如 .../Languages），直接取 .../Languages/ChineseSimplified
+        new_lang_dir = str(new_base / language)
+    else:
+        new_lang_dir = str(
+            CONFIG.language_config.get_language_dir(new_base_dir, language)
+        )
+    if not Path(new_lang_dir).exists():
+        logger.warning("新语言目录不存在: %s", new_lang_dir)
+        ui.print_warning(f"新语言目录不存在: {new_lang_dir}")
+        return 0
+    updated = 0
+    if keyed_map:
+        updated += _update_xml_in_subdir(
+            new_base_dir,
+            language,
+            "keyed",
+            keyed_map,
+            merge=True,
+            only_fill_empty=only_fill_empty,
+            language_dir_override=new_lang_dir,
+        )
+    if definjected_map:
+        updated += _update_xml_in_subdir(
+            new_base_dir,
+            language,
+            "definjected",
+            definjected_map,
+            merge=True,
+            only_fill_empty=only_fill_empty,
+            language_dir_override=new_lang_dir,
+        )
+    return updated
+
+
 def _update_xml_in_subdir(
     mod_dir: str,
     language: str,
     subdir_type: str,
     translations: Dict[str, str],
     merge: bool = True,
+    only_fill_empty: bool = False,
+    language_dir_override: Optional[str] = None,
 ) -> int:
     """仅在指定子目录(Keyed/DefInjected)内更新翻译"""
     if not translations:
         return 0
-    subdir = CONFIG.language_config.get_language_subdir(mod_dir, language, subdir_type)
+    if language_dir_override:
+        subdir = Path(language_dir_override) / subdir_type.lower()
+    else:
+        subdir = CONFIG.language_config.get_language_subdir(
+            mod_dir, language, subdir_type
+        )
     if not subdir.exists():
         logger.warning("语言子目录不存在: %s", subdir)
         return 0
     processor = XMLProcessor()
     updated_count = 0
+    generate_key_func = (
+        _definjected_key_func if subdir_type.lower() == "definjected" else None
+    )
 
     # 规格化 DefInjected 键：移除前缀（如 "HediffDef/"），保留标签键（如 "Name.field"）
     if subdir_type.lower() == "definjected":
@@ -213,7 +366,15 @@ def _update_xml_in_subdir(
             tree = processor.parse_xml(str(xml_file))
             if tree is None:
                 continue
-            if update_translations(processor, tree, translations, merge=merge):
+            if update_translations(
+                processor,
+                tree,
+                translations,
+                generate_key_func=generate_key_func,
+                merge=merge,
+                include_attributes=True,
+                only_fill_empty=only_fill_empty,
+            ):
                 processor.save_xml(tree, str(xml_file))
                 updated_count += 1
 
@@ -239,17 +400,19 @@ def update_translations(
     generate_key_func: Optional[Callable] = None,
     merge: bool = True,
     include_attributes: bool = True,
+    only_fill_empty: bool = False,
 ) -> bool:
     """
-    更新 XML 中的翻译
+    更新 XML 中的翻译。当 only_fill_empty=True 时也会处理无文本节点，仅填充空项。
 
     Args:
         processor (XMLProcessor): XML处理器实例
         tree (Any): XML 树对象
         translations (Dict[str, str]): 翻译字典
-        generate_key_func (Optional[Callable]): 生成键的函数
+        generate_key_func (Optional[Callable]): 生成键的函数（DefInjected 用）
         merge (bool): 是否合并更新
         include_attributes (bool): 是否更新属性
+        only_fill_empty (bool): 仅当当前为空时写入（用于旧翻译迁移）
 
     Returns:
         bool: 是否更新成功
@@ -262,41 +425,53 @@ def update_translations(
         {c: p for p in root.iter() for c in p} if not processor.use_lxml else None
     )
 
-    # 使用 xpath 或 iter 遍历
+    def get_key(elem):
+        return (
+            generate_key_func(elem, root, parent_map)
+            if generate_key_func
+            else processor._get_element_key(elem)
+        )
+
     elements = root.xpath(".//*") if processor.use_lxml else root.iter()
 
     for elem in elements:
-        # 更新文本内容
-        if elem.text and elem.text.strip():
-            key = (
-                generate_key_func(elem, root, parent_map)
-                if generate_key_func
-                else processor._get_element_key(elem)
-            )
-            if key in translations:
-                if merge and elem.text.strip() != translations[key]:
-                    elem.text = sanitize_xml(translations[key])
-                    modified = True
-                elif not merge:
-                    elem.text = sanitize_xml(translations[key])
-                    modified = True
+        # 更新文本内容（含无文本节点，便于 only_fill_empty 填充）
+        key = get_key(elem)
+        if not key:
+            continue
+        if key in translations:
+            current = (elem.text or "").strip()
+            if only_fill_empty and current:
+                pass
+            elif only_fill_empty:
+                elem.text = sanitize_xml(translations[key])
+                modified = True
+            elif merge and current != translations[key]:
+                elem.text = sanitize_xml(translations[key])
+                modified = True
+            elif not merge:
+                elem.text = sanitize_xml(translations[key])
+                modified = True
 
         # 更新属性
         if include_attributes:
             for attr_name, attr_value in elem.attrib.items():
                 if isinstance(attr_value, str) and attr_value.strip():
-                    key = (
-                        f"{generate_key_func(elem, root, parent_map)}.{attr_name}"
-                        if generate_key_func
-                        else f"{processor._get_element_key(elem)}.{attr_name}"
-                    )
-                    if key in translations:
-                        if merge and attr_value.strip() != translations[key]:
-                            elem.set(attr_name, sanitize_xml(translations[key]))
-                            modified = True
-                        elif not merge:
-                            elem.set(attr_name, sanitize_xml(translations[key]))
-                            modified = True
+                    attr_key = f"{get_key(elem)}.{attr_name}"
+                    if attr_key not in translations:
+                        continue
+                    current_attr = (attr_value or "").strip()
+                    if only_fill_empty and current_attr:
+                        pass
+                    elif only_fill_empty:
+                        elem.set(attr_name, sanitize_xml(translations[attr_key]))
+                        modified = True
+                    elif merge and current_attr != translations[attr_key]:
+                        elem.set(attr_name, sanitize_xml(translations[attr_key]))
+                        modified = True
+                    elif not merge:
+                        elem.set(attr_name, sanitize_xml(translations[attr_key]))
+                        modified = True
 
     return modified
 

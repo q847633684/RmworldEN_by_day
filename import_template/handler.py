@@ -10,10 +10,11 @@ from utils.logging_config import get_logger
 from utils.interaction import (
     select_csv_path_with_history,
     confirm_action,
+    safe_input,
 )
 from utils.ui_style import ui
 from user_config import UserConfigManager
-from .importers import import_translations
+from .importers import import_translations, migrate_translations_to_new
 
 
 def handle_import_template(
@@ -73,3 +74,51 @@ def handle_import_template(
     except (OSError, ValueError, RuntimeError, ImportError) as e:
         ui.print_error(f"导入模板失败: {str(e)}")
         logger.error("导入模板失败: %s", str(e), exc_info=True)
+
+
+def handle_migrate_translations():
+    """迁移旧翻译到新模板：扫描旧翻译目录，将已有翻译填到新目录（默认仅填充空项）。"""
+    logger = get_logger(f"{__name__}.handle_migrate_translations")
+    try:
+        config = UserConfigManager.get_instance()
+        language = config.language_config.get_value("cn_language", "ChineseSimplified")
+        ui.print_info("将扫描旧翻译目录中的 Keyed / DefInjected，并把已有翻译合并到新目录。")
+        ui.print_info("旧/新目录请选择模组根（即含 Languages 的目录），或直接选 Languages/ChineseSimplified。")
+
+        old_dir = safe_input(ui.get_input_prompt("请输入旧翻译根目录", options="q 退出"))
+        if not old_dir or old_dir.strip().lower() == "q":
+            return
+        old_dir = str(Path(old_dir).resolve())
+        if not Path(old_dir).is_dir():
+            ui.print_error(f"目录不存在: {old_dir}")
+            return
+
+        new_dir = safe_input(ui.get_input_prompt("请输入新翻译根目录", options="q 退出"))
+        if not new_dir or new_dir.strip().lower() == "q":
+            return
+        new_dir = str(Path(new_dir).resolve())
+        if not Path(new_dir).is_dir():
+            ui.print_error(f"目录不存在: {new_dir}")
+            return
+
+        only_fill_empty = True
+        if confirm_action("是否仅填充空项（不覆盖新文件中已有翻译）？选 n 将覆盖已有翻译"):
+            only_fill_empty = True
+        else:
+            only_fill_empty = False
+
+        if not confirm_action("确认开始迁移？"):
+            ui.print_warning("已取消迁移")
+            return
+
+        ui.print_info("正在扫描旧翻译...")
+        updated = migrate_translations_to_new(
+            old_base_dir=old_dir,
+            new_base_dir=new_dir,
+            language=language,
+            only_fill_empty=only_fill_empty,
+        )
+        ui.print_success(f"迁移完成，共更新 {updated} 个文件。")
+    except (OSError, ValueError, RuntimeError, ImportError) as e:
+        ui.print_error(f"迁移失败: {str(e)}")
+        logger.error("迁移失败: %s", str(e), exc_info=True)
