@@ -1,7 +1,8 @@
 """
 DefInjected 提取器
 
-专门用于从 DefInjected 目录提取翻译结构
+专门用于从 DefInjected 目录提取翻译结构。
+支持三种 XML 格式的解析：nested / flat_with_li / flat_all，统一输出 key 为 DefName.field 或 DefName.field.0。
 """
 
 from typing import List, Tuple
@@ -100,17 +101,23 @@ class DefInjectedExtractor(BaseExtractor):
                     continue  # 跳过根节点
 
                 if type(elem).__name__ == "_Comment":
-                    # 处理注释节点
                     text = elem.text or ""
                     if text.strip().startswith("EN:"):
                         last_en_comment = text.strip()[3:].strip()
                 elif isinstance(elem.tag, str) and not elem.tag.startswith("{"):
-                    # 处理元素节点
-                    key, text, tag, en_text = self._parse_comment_and_element(
-                        elem, last_en_comment
+                    # 跳过仅作容器的节点（如 <stages>），只输出叶子或 <li>
+                    has_element_children = any(
+                        c for c in elem
+                        if isinstance(getattr(c, "tag", None), str) and not str(c.tag).startswith("{")
                     )
+                    if has_element_children and elem.tag != "li":
+                        continue
+                    key, text, tag, en_text = self._parse_comment_and_element(
+                        elem, root, last_en_comment
+                    )
+                    if not key:
+                        continue
                     translations.append((key, text, tag, rel_path, en_text))
-                    # 注意：不清空last_en_comment，因为可能有多个元素共享同一个EN注释
 
         except (OSError, ValueError, AttributeError) as e:
             self.logger.error("处理DefInjected文件时发生错误: %s, %s", xml_file, e)
@@ -118,39 +125,53 @@ class DefInjectedExtractor(BaseExtractor):
         return translations
 
     def _parse_comment_and_element(
-        self, elem, last_en_comment: str
+        self, elem, root, last_en_comment: str
     ) -> Tuple[str, str, str, str]:
         """
-        解析注释和元素，生成翻译数据
-
-        Args:
-            elem: XML元素
-            last_en_comment: 上一个EN注释内容
-
-        Returns:
-            Tuple[str, str, str, str]: (key, text, tag, en_text)
+        解析注释和元素，生成翻译数据。支持三种格式，统一 key 为 DefName.field 或 DefName.field.0。
         """
-        # 生成key的逻辑与原函数一致
+        # 收集父链，路径中的 <li> 用索引代替，与 flat_all 的 DefName.field.0 一致
         parent_tags = []
-        parent = elem.getparent()
-        while parent is not None and parent.tag != elem.getroottree().getroot().tag:
-            parent_tags.append(parent.tag)
-            parent = parent.getparent()
-
-        # 反转列表
+        p = elem.getparent()
+        while p is not None and p != root:
+            pt = getattr(p, "tag", None)
+            if pt == "li":
+                parent = p.getparent()
+                if parent is not None:
+                    li_siblings = [c for c in parent if getattr(c, "tag", None) == "li"]
+                    try:
+                        idx = li_siblings.index(p)
+                    except ValueError:
+                        idx = 0
+                    parent_tags.append(str(idx))
+                else:
+                    parent_tags.append("0")
+            elif isinstance(pt, str) and not pt.startswith("{"):
+                parent_tags.append(pt)
+            p = p.getparent()
         parent_tags = list(reversed(parent_tags))
 
-        # 生成key（DefInjected文件中的key直接就是defName.field格式，无需去除前缀）
-        key = "/".join(parent_tags + [elem.tag]) if parent_tags else elem.tag
-
-        # 生成text
-        text = elem.text or ""
-
-        # 生成tag
         tag = elem.tag
+        text = (elem.text or "").strip()
 
-        # 生成en_text
-        # 如果有英文注释，使用注释；否则使用text（英文目录的情况）
+        # <li> 节点：key = 父路径.索引（0-based）
+        if tag == "li":
+            parent = elem.getparent()
+            if parent is not None:
+                li_siblings = [c for c in parent if getattr(c, "tag", None) == "li"]
+                try:
+                    idx = li_siblings.index(elem)
+                except ValueError:
+                    idx = 0
+                key = ".".join(parent_tags + [str(idx)])
+            else:
+                key = ".".join(parent_tags + ["0"])
+        else:
+            # 平铺格式（flat_all）：直接子元素标签名即 key（如 Sex_Anal.modExtensions.0.RMBLabel）
+            if not parent_tags and "." in tag:
+                key = tag
+            else:
+                key = ".".join(parent_tags + [tag]) if parent_tags else tag
+
         en_text = last_en_comment if last_en_comment else text
-
         return key, text, tag, en_text

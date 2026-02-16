@@ -59,7 +59,7 @@ class InteractionManager:
         执行用户设计的四步智能流程
 
         Args:
-            mod_dir: 模组目录路径
+            mod_dir: 当前内容根路径（如 1.6 或 1.6/rimvore-2/Common），Keyed/Defs 同逻辑：从该目录提取即该目录下 Languages
             skip_output_selection: 是否跳过输出目录选择，直接使用默认目录
 
         Returns:
@@ -74,9 +74,11 @@ class InteractionManager:
             "cn_language", "ChineseSimplified"
         )
 
-        # 第一步：检测英文目录状态
+        # 第一步：检测当前内容根下的英文目录状态（Keyed/DefInjected 与 Defs 同逻辑）
         self._print_step_header(1, 5, "检测mod英文目录状态")
-        import_status = self._detect_language_directories(mod_dir, language=en_language)
+        import_status = self._detect_language_directories(
+            mod_dir, language=en_language
+        )
 
         # 第二步：检测输出目录状态
         self._print_step_header(2, 5, "检测输出目录状态")
@@ -86,7 +88,7 @@ class InteractionManager:
             skip_user_selection=skip_output_selection,
         )
         output_status = self._detect_language_directories(
-            output_dir, language=output_language
+            output_dir, language=output_language, for_output=True
         )
 
         # 第三步：选择数据来源
@@ -225,14 +227,16 @@ class InteractionManager:
         return descriptions.get(structure, structure)
 
     def _detect_language_directories(
-        self, mod_dir: str, language: str
+        self, mod_dir: str, language: str, for_output: bool = False
     ) -> Dict[str, Union[bool, str]]:
         """
-        检测指定语言目录状态（DefInjected/Keyed）
+        检测当前内容根下指定语言目录状态（DefInjected/Keyed）。
+        与 Defs 同逻辑：从该目录提取的 Keyed/DefInjected 即该目录下的 Languages。
 
         Args:
-            mod_dir: 模组目录路径
+            mod_dir: 当前内容根路径（如 1.6 或 1.6/rimvore-2/Common）
             language: 语言目录名（如 'English', 'ChineseSimplified'）
+            for_output: 若为 True 表示在检测「输出目录」状态，不回退到父目录 Keyed，只认当前路径下
 
         Returns:
             Dict[str, Union[bool, str]]: 目录状态
@@ -248,9 +252,16 @@ class InteractionManager:
         keyed_dir = config.language_config.get_language_subdir(
             mod_dir, language, "keyed"
         )
-
+        if not keyed_dir.exists() and not for_output:
+            # 仅检测「导入源」时回退到根目录 Languages；检测「输出目录」时只看当前路径，避免把父目录当成本目录有 Keyed
+            root_keyed = config.language_config.get_language_subdir(
+                str(Path(mod_dir).parent), language, "keyed"
+            )
+            if root_keyed.exists():
+                keyed_dir = root_keyed
         has_definjected = def_dir.exists() and any(def_dir.rglob("*.xml"))
-        has_keyed = keyed_dir.exists() and any(keyed_dir.rglob("*.xml"))
+        # 目录存在即视为有 Keyed，不强制要求 *.xml（避免漏检如 rjw-brothel-colony）
+        has_keyed = keyed_dir.exists()
 
         if has_definjected:
             ui.print_success(f"   检测到{def_dir}目录: ✅ 有")

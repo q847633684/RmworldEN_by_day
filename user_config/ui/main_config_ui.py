@@ -444,6 +444,13 @@ class MainConfigUI:
                     ui.Icons.FIELD,
                     "设置数字显示格式",
                 ),
+                (
+                    "12",
+                    "DefInjected XML 格式",
+                    lang_config.get_value("definjected_xml_format") or "flat_with_li",
+                    ui.Icons.FILE,
+                    "设置导出 DefInjected 时的 XML 结构",
+                ),
             ]
 
             # 显示配置项
@@ -460,7 +467,7 @@ class MainConfigUI:
             ui.print_separator()
 
             choice = input(
-                ui.get_input_prompt("请选择操作", options="1-6, 7-9, 10-11, b")
+                ui.get_input_prompt("请选择操作", options="1-6, 7-9, 10-12, b")
             ).strip()
 
             if choice == "1":
@@ -523,6 +530,8 @@ class MainConfigUI:
                     "数字格式",
                     "1,234.56",
                 )
+            elif choice == "12":
+                self._set_definjected_xml_format(lang_config)
             elif choice.lower() == "b":
                 break
             else:
@@ -1048,4 +1057,24 @@ class MainConfigUI:
             lang_config.set_value("interface_language", "en_US")
             ui.print_success("Interface language set to English")
         else:
+            ui.print_warning("无效选择，保持当前设置")
+
+    def _set_definjected_xml_format(self, lang_config) -> None:
+        """设置 DefInjected 导出 XML 格式"""
+        ui.print_header("DefInjected XML 格式", ui.Icons.FILE)
+        formats = [
+            ("nested", "嵌套 (DefName 下子节点)"),
+            ("flat_with_li", "平铺+li (路径标签，列表用 <li>)"),
+            ("flat_all", "全部平铺 (含 stages.0 等)"),
+        ]
+        current = lang_config.get_value("definjected_xml_format", "flat_with_li")
+        print(f"   当前格式: {current}")
+        for i, (value, label) in enumerate(formats, 1):
+            print(f"   {i}. {label} ({value})")
+        choice = input("请选择 (1-3, 留空保持当前): ").strip()
+        if choice and choice in ("1", "2", "3"):
+            new_val = formats[int(choice) - 1][0]
+            lang_config.set_value("definjected_xml_format", new_val)
+            ui.print_success(f"已设置为: {formats[int(choice) - 1][1]}")
+        elif choice:
             ui.print_warning("无效选择，保持当前设置")

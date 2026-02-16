@@ -171,27 +171,75 @@ def _load_translations_from_csv(csv_path: str) -> Tuple[Dict[str, str], Dict[str
         return {}, {}
 
 
+def _definjected_get_parent(elem: Any, root: Any, parent_map: Optional[dict]) -> Any:
+    """获取元素的父节点，兼容 lxml（getparent）与标准库（parent_map）。"""
+    if parent_map is not None:
+        return parent_map.get(elem)
+    getparent = getattr(elem, "getparent", None)
+    if callable(getparent):
+        return getparent()
+    return None
+
+
 def _definjected_key_func(elem: Any, root: Any, parent_map: Optional[dict]) -> str:
-    """DefInjected 用「父路径/标签」生成 key，与提取器一致"""
-    if parent_map is None:
-        return elem.get("key", elem.tag)
+    """
+    DefInjected 用「父路径.标签」或「父路径.索引」生成 key，与提取器一致。
+    路径中的 <li> 用索引代替，使 nested 与 flat_all 的 key 一致（如 Sex_Anal.modExtensions.0.RMBLabel）。
+    兼容 lxml（parent_map 为 None 时用 elem.getparent()）与标准库 XML。
+    """
+    tag = getattr(elem, "tag", None)
+    if not isinstance(tag, str) or tag.startswith("{"):
+        return ""
     parent_tags = []
-    p = parent_map.get(elem)
+    p = _definjected_get_parent(elem, root, parent_map)
     while p is not None and p is not root:
-        if isinstance(getattr(p, "tag", None), str) and not str(p.tag).startswith("{"):
-            parent_tags.append(p.tag)
-        p = parent_map.get(p)
+        pt = getattr(p, "tag", None)
+        if pt == "li":
+            parent = _definjected_get_parent(p, root, parent_map)
+            if parent is not None:
+                li_siblings = [c for c in parent if getattr(c, "tag", None) == "li"]
+                try:
+                    idx = li_siblings.index(p)
+                except ValueError:
+                    idx = 0
+                parent_tags.append(str(idx))
+            else:
+                parent_tags.append("0")
+        elif isinstance(pt, str) and not str(pt).startswith("{"):
+            parent_tags.append(pt)
+        p = _definjected_get_parent(p, root, parent_map)
     parent_tags.reverse()
-    return "/".join(parent_tags + [elem.tag]) if parent_tags else elem.tag
+    if tag == "li":
+        parent = _definjected_get_parent(elem, root, parent_map)
+        if parent is not None:
+            li_siblings = [c for c in parent if getattr(c, "tag", None) == "li"]
+            try:
+                idx = li_siblings.index(elem)
+            except ValueError:
+                idx = 0
+            return ".".join(parent_tags + [str(idx)])
+        return ".".join(parent_tags + ["0"])
+    if not parent_tags and "." in tag:
+        return tag
+    return ".".join(parent_tags + [tag]) if parent_tags else tag
 
 
 def _get_language_subdir_path(base_dir: str, language: str, subdir_type: str) -> Path:
     """
-    解析语言子目录路径。若 base_dir 下已有 Keyed/DefInjected，视为语言目录；否则按模组根处理。
+    解析语言子目录路径。支持三种情况：
+    1) base_dir 下直接有 Keyed/DefInjected -> 视为语言目录
+    2) base_dir 下有 language/Keyed（如 Languages2/ChineseSimplified/Keyed）-> 视为 Languages 父目录
+    3) 否则按模组根：base_dir/Languages/language/Keyed
     """
     base = Path(base_dir)
-    if (base / "Keyed").exists() or (base / "DefInjected").exists():
-        return base / subdir_type.lower()
+    keyed_name = CONFIG.language_config.get_value("keyed_dir", "Keyed")
+    def_name = CONFIG.language_config.get_value("definjected_dir", "DefInjected")
+    if (base / keyed_name).exists() or (base / def_name).exists():
+        sub = keyed_name if subdir_type.lower() == "keyed" else def_name
+        return base / sub
+    if (base / language / keyed_name).exists() or (base / language / def_name).exists():
+        sub = keyed_name if subdir_type.lower() == "keyed" else def_name
+        return base / language / sub
     return CONFIG.language_config.get_language_subdir(
         base_dir, language, subdir_type
     )
@@ -341,14 +389,12 @@ def _update_xml_in_subdir(
         _definjected_key_func if subdir_type.lower() == "definjected" else None
     )
 
-    # 规格化 DefInjected 键：移除前缀（如 "HediffDef/"），保留标签键（如 "Name.field"）
+    # 规格化 DefInjected 键：统一为点号格式（DefName.field 或 DefName.field.0），与三种导出格式一致
     if subdir_type.lower() == "definjected":
         normalized: Dict[str, str] = {}
         for key, value in translations.items():
-            if "/" in key:
-                normalized[key.split("/", 1)[1]] = value
-            else:
-                normalized[key] = value
+            k = key.replace("\\", "/").replace("/", ".") if "/" in key or "\\" in key else key
+            normalized[k] = value
         translations = normalized
 
     # 获取所有XML文件列表
@@ -439,18 +485,30 @@ def update_translations(
         key = get_key(elem)
         if not key:
             continue
-        if key in translations:
+        # 精确匹配
+        value = translations.get(key)
+        # DefInjected 迁移：新模板 flat_with_li 中 <li> 的 key 为 .0/.1，旧 flat_all 为 .0.RMBLabel 等，用前缀匹配回退
+        if value is None and generate_key_func is not None:
+            tag = getattr(elem, "tag", None)
+            if tag == "li":
+                prefix = key + "."
+                candidates = [k for k in translations if k.startswith(prefix)]
+                if len(candidates) == 1:
+                    value = translations[candidates[0]]
+                elif len(candidates) > 1:
+                    value = translations.get(prefix + "RMBLabel") or translations.get(candidates[0])
+        if value is not None:
             current = (elem.text or "").strip()
             if only_fill_empty and current:
                 pass
             elif only_fill_empty:
-                elem.text = sanitize_xml(translations[key])
+                elem.text = sanitize_xml(value)
                 modified = True
-            elif merge and current != translations[key]:
-                elem.text = sanitize_xml(translations[key])
+            elif merge and current != value:
+                elem.text = sanitize_xml(value)
                 modified = True
             elif not merge:
-                elem.text = sanitize_xml(translations[key])
+                elem.text = sanitize_xml(value)
                 modified = True
 
         # 更新属性

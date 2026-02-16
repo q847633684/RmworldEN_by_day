@@ -129,6 +129,7 @@ class LanguageConfig(BaseConfig):
                 "en_language": "English",
                 "definjected_dir": "DefInjected",
                 "keyed_dir": "Keyed",
+                "definjected_xml_format": "flat_with_li",
                 "output_csv": "extracted_translations.csv",
                 "translated_csv": "extracted_translations_zh.csv",
                 # 界面和格式配置
@@ -158,6 +159,7 @@ class LanguageConfig(BaseConfig):
                 "en_language": str,
                 "definjected_dir": str,
                 "keyed_dir": str,
+                "definjected_xml_format": str,
                 "output_csv": str,
                 "translated_csv": str,
                 # 界面和格式类型
@@ -200,6 +202,17 @@ class LanguageConfig(BaseConfig):
                 "description": "Keyed子目录名称",
                 "default": "Keyed",
                 "required": True,
+            },
+            "definjected_xml_format": {
+                "type": "select",
+                "label": "DefInjected XML 格式",
+                "description": "导出 DefInjected 时的 XML 结构：嵌套 / 平铺+li / 全部平铺",
+                "default": "flat_with_li",
+                "options": [
+                    {"value": "nested", "label": "嵌套 (DefName 下子节点)"},
+                    {"value": "flat_with_li", "label": "平铺+li (路径标签，列表用 <li>)"},
+                    {"value": "flat_all", "label": "全部平铺 (含 stages.0 等)"},
+                ],
             },
             "output_csv": {
                 "type": "text",

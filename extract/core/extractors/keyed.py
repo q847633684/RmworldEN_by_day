@@ -51,10 +51,16 @@ class KeyedExtractor(BaseExtractor):
         keyed_dir = self.config.language_config.get_language_subdir(
             source_path, language, "keyed"
         )
-
         if not keyed_dir.exists():
-            self.logger.warning("Keyed 目录不存在: %s", keyed_dir)
-            return []
+            # 形态一：选 1.6 时英文 Keyed 在根目录 Languages（模组根/Languages/English/Keyed）
+            keyed_dir_root = self.config.language_config.get_language_subdir(
+                str(Path(source_path).parent), language, "keyed"
+            )
+            if keyed_dir_root.exists():
+                keyed_dir = keyed_dir_root
+            else:
+                self.logger.warning("Keyed 目录不存在: %s", keyed_dir)
+                return []
 
         translations = []
         xml_files = list(keyed_dir.rglob("*.xml"))

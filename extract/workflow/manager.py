@@ -5,6 +5,7 @@
 """
 
 import csv
+import os
 import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -22,25 +23,56 @@ from ..core.extractors import DefInjectedExtractor, DefsScanner, KeyedExtractor
 from ..utils import SmartMerger
 
 
-def find_content_roots(base_path: str) -> List[str]:
+def find_content_roots(
+    base_path: str, language: Optional[str] = None
+) -> List[str]:
     """
-    发现所有「内容根目录」：即 base_path 下所有含 Defs 子目录的目录。
-    用于多子模组（如 Rimvore-2 的 Common、MajorModIntegrations/Biotech、LightGenitals）：
-    Defs 在哪就在同目录生成 Languages。
+    发现所有「内容根目录」：含 Defs 的目录 + 含 Languages/<lang>/Keyed 或 DefInjected 的目录。
+    统一逻辑：从某目录提取的 Defs/Keyed 都放在该目录下的 Languages，每个内容根自包含。
 
     Args:
-        base_path: 模组根或版本目录（如 rimvore-2 或 rimvore-2/1.6）
+        base_path: 模组根或版本目录（如 workshop/3232074807 或 3232074807/1.6）
+        language: 用于检测 Languages 的语言名（如 English），未传则用配置的 en_language
 
     Returns:
-        去重且排序的路径列表，每个路径为「Defs 所在目录」（即 Languages 应生成于此）
+        去重且排序的路径列表，每个路径为「内容根」（该目录下 Defs 或 Languages 将参与提取/输出）
     """
     base = Path(base_path)
     if not base.is_dir():
         return []
     roots = set()
+    # 1) 含 Defs 的目录
     for p in base.rglob("Defs"):
         if p.is_dir():
             roots.add(p.parent)
+    # 2) 含 Languages/<lang>/Keyed 或 DefInjected 的目录（Keyed 与 Defs 同逻辑：在哪就在同目录下 Languages）
+    config = UserConfigManager.get_instance()
+    if language is None:
+        try:
+            language = config.language_config.get_value(
+                "en_language", "English"
+            )
+        except Exception:
+            language = "English"
+    keyed_dir_name = config.language_config.get_value("keyed_dir", "Keyed")
+    definjected_dir_name = config.language_config.get_value(
+        "definjected_dir", "DefInjected"
+    )
+    lang_lower = language.lower()
+    for subdir_name in (keyed_dir_name, definjected_dir_name):
+        for p in base.rglob(subdir_name):
+            if not p.is_dir():
+                continue
+            try:
+                # 期望结构: .../Languages/<lang>/Keyed（语言名不区分大小写）
+                if p.parent.name.lower() != lang_lower:
+                    continue
+                grandparent_name = p.parent.parent.name
+                # 标准：.../Languages/English/Keyed -> 内容根 = Languages 的上级（不会出现 root/语言/Keyed 无 Languages 层）
+                if grandparent_name.lower() == "languages":
+                    roots.add(p.parent.parent.parent)
+            except (IndexError, AttributeError):
+                continue
     return sorted(str(r) for r in roots)
 
 
@@ -88,6 +120,58 @@ def _parse_load_folders_from_mod(
     except (ET.ParseError, OSError, IOError):
         pass
     return path_to_attrib, ordered_paths
+
+
+def _path_is_strict_under(path: str, ancestor: str) -> bool:
+    """path 是否严格位于 ancestor 之下（ancestor 为 path 的祖先且 path != ancestor）。"""
+    if path == ancestor:
+        return False
+    try:
+        Path(path).resolve().relative_to(Path(ancestor).resolve())
+        return True
+    except ValueError:
+        return False
+
+
+def get_content_roots_from_load_folders(
+    scan_base: str, version: str
+) -> List[str]:
+    """
+    从 LoadFolders.xml 的指定版本块（如 v1.6）读取要加载的路径，作为内容根列表。
+    与游戏实际加载的目录一致；仅排除「某路径下的 Languages 子目录」作为内容根
+    （如存在 1.6 时排除 1.6/Languages），避免重复提取。与 1.6 同级的路径（如 Biotech）
+    保留为独立内容根，各自 Defs/Keyed 写入各自目录下的 Languages。
+
+    Args:
+        scan_base: 模组根目录（其下应有 LoadFolders.xml）
+        version: 版本名，如 "1.6" -> 解析 <v1.6> 内的 <li>
+
+    Returns:
+        存在的绝对路径列表 [scan_base/1.6, scan_base/Biotech, ...]，仅去掉 xxx/Languages
+    """
+    _, ordered_paths = _parse_load_folders_from_mod(scan_base, version)
+    base = Path(scan_base)
+    result = []
+    for p in ordered_paths:
+        # <li>/</li> 表示模组根：归一化为 base，避免 Windows 下 base / "/" 变成盘符
+        p_norm = (p or "").strip().replace("\\", "/")
+        if p_norm in ("", "/", "."):
+            full = base
+        else:
+            full = base / p_norm.replace("/", os.sep)
+        if full.exists() and full.is_dir():
+            result.append(str(full.resolve()))
+    # 只排除「某路径下的 Languages 子目录」作为内容根，避免 1.6 与 1.6/Languages 同时作为根；
+    # 与 1.6 同级的路径（如 Biotech）保留为独立内容根
+    result = [
+        r for r in result
+        if not any(
+            _path_is_strict_under(r, s) and Path(r).name.lower() == "languages"
+            for s in result
+            if s != r
+        )
+    ]
+    return result
 
 
 def generate_load_folders_xml(
@@ -183,10 +267,11 @@ class TemplateManager:
         output_csv: Optional[str] = None,
     ) -> tuple[List[Tuple[str, str, str, str]], str]:
         """
-        提取翻译数据并生成模板，同时导出CSV
+        提取翻译数据并生成模板，同时导出CSV。
+        Keyed/DefInjected 与 Defs 同逻辑：从当前内容根 import_dir 读取，输出到 output_dir。
 
         Args:
-            import_dir: 输入目录路径
+            import_dir: 当前内容根路径
             import_language: 输入语言代码
             output_dir: 输出目录路径
             output_language: 输出语言代码
@@ -211,7 +296,7 @@ class TemplateManager:
             template_structure=template_structure,
         )
 
-        # 步骤1：提取翻译数据
+        # 步骤1：提取翻译数据（Keyed/DefInjected 与 Defs 同逻辑：从当前内容根 import_dir 读取）
         keyed_translations, def_translations = self.extract_all_translations(
             import_dir,
             import_language,
@@ -254,6 +339,67 @@ class TemplateManager:
         self.logger.debug("模板生成完成，总计 %s 条翻译", len(all_translations))
         return all_translations, csv_path
 
+    def extract_and_generate_templates_from_roots(
+        self,
+        import_dirs: List[str],
+        import_language: str,
+        output_dir: str,
+        output_language: str,
+        data_source_choice: Optional[str] = None,
+        template_structure: Optional[str] = None,
+        has_input_keyed: bool = True,
+        output_csv: Optional[str] = None,
+    ) -> tuple[List[Tuple[str, str, str, str]], str]:
+        """
+        从多个内容根提取并合并到同一输出目录（一个 Languages/Keyed、一个 Languages/DefInjected）。
+        用于「无 LoadFolders」或 LoadFolders 中版本路径（如 1.6）时，版本目录+同级目录合并导出。
+        """
+        all_keyed: List[Tuple] = []
+        all_def: List[Tuple] = []
+        for import_dir in import_dirs:
+            k, d = self.extract_all_translations(
+                import_dir,
+                import_language,
+                data_source_choice=data_source_choice,
+                has_input_keyed=has_input_keyed,
+            )
+            all_keyed.extend(k)
+            all_def.extend(d)
+        if not all_keyed and not all_def:
+            self.logger.warning("多根合并：未找到任何翻译数据")
+            ui.print_warning("未找到任何翻译数据")
+            return [], ""
+        log_user_action(
+            "提取翻译模板（多根合并）",
+            import_dirs=import_dirs,
+            output_dir=output_dir,
+            data_source=data_source_choice,
+            template_structure=template_structure,
+        )
+        self._generate_templates_to_output_dir_with_structure(
+            output_dir=output_dir,
+            output_language=output_language,
+            keyed_translations=all_keyed,
+            def_translations=all_def,
+            template_structure=template_structure or "original_structure",
+            has_input_keyed=has_input_keyed,
+        )
+        csv_path = self._save_translations_to_csv(
+            all_keyed,
+            all_def,
+            output_dir,
+            output_language,
+            output_csv,
+        )
+        all_translations = all_keyed + all_def
+        log_data_processing(
+            "提取翻译模板（多根合并）",
+            len(all_translations),
+            data_source=data_source_choice,
+            template_structure=template_structure,
+        )
+        return all_translations, csv_path
+
     def merge_mode(
         self,
         import_dir: str,
@@ -263,29 +409,26 @@ class TemplateManager:
         data_source_choice: str = "defs_only",
         has_input_keyed: bool = True,
         output_csv: Optional[str] = None,
+        input_keyed: Optional[List[Tuple]] = None,
+        input_def: Optional[List[Tuple]] = None,
     ) -> tuple[List[Tuple[str, str, str, str]], str]:
         """
-        执行智能合并模式处理翻译数据
+        执行智能合并模式处理翻译数据。
+        若提供 input_keyed/input_def（多根合并后的数据），则不再从 import_dir 提取。
 
         Args:
-            import_dir: 输入目录路径
-            import_language: 输入语言代码
-            output_dir: 输出目录路径
-            output_language: 输出语言代码
-            data_source_choice: 数据来源选择
-            has_input_keyed: 是否包含Keyed输入
-            output_csv: CSV输出文件名
-
-        Returns:
-            tuple[List[Tuple[str, str, str, str]], str]: (合并后的翻译数据列表, CSV文件路径)
+            input_keyed: 可选，预提取的 Keyed 数据（多根合并时传入）
+            input_def: 可选，预提取的 DefInjected 数据（多根合并时传入）
         """
-        # 步骤1：提取输入数据
-        input_keyed, input_def = self.extract_all_translations(
-            import_dir,
-            import_language,
-            data_source_choice=data_source_choice,
-            has_input_keyed=has_input_keyed,
-        )
+        if input_keyed is not None and input_def is not None:
+            pass
+        else:
+            input_keyed, input_def = self.extract_all_translations(
+                import_dir,
+                import_language,
+                data_source_choice=data_source_choice,
+                has_input_keyed=has_input_keyed,
+            )
 
         # 步骤2：提取输出数据
         output_keyed, output_def = self.extract_all_translations(
@@ -338,10 +481,11 @@ class TemplateManager:
         has_input_keyed: bool = True,
     ) -> List[Tuple[str, str, str, str, str]]:
         """
-        提取所有翻译数据
+        提取所有翻译数据。
+        Keyed/DefInjected 与 Defs 同逻辑：均从当前内容根 import_dir 读取（该目录下 Defs 或 Languages）。
 
         Args:
-            import_dir: 输入目录路径
+            import_dir: 当前内容根路径（Defs、Keyed、DefInjected 均在此目录下）
             import_language: 输入语言代码
             data_source_choice: 数据来源选择 ('definjected_only', 'defs_only')
             has_input_keyed: 是否包含Keyed输入
@@ -351,7 +495,7 @@ class TemplateManager:
         """
         data_source_choice = data_source_choice or "defs_only"
 
-        # 提取Keyed翻译
+        # 提取Keyed翻译（与 Defs 同逻辑：从当前内容根 import_dir 下的 Languages/.../Keyed 读取）
         if has_input_keyed:
             self.logger.debug("正在扫描 Keyed 目录...")
             keyed_translations = self.keyed_extractor.extract(
@@ -368,7 +512,6 @@ class TemplateManager:
 
         if data_source_choice == "definjected_only":
             self.logger.debug("正在扫描 DefInjected 目录...")
-            # 从DefInjected目录提取翻译数据
             definjected_translations = self.definjected_extractor.extract(
                 import_dir, import_language
             )
@@ -737,34 +880,25 @@ class TemplateManager:
         data_source_choice: str,
         has_input_keyed: bool,
         output_csv: str,
+        input_keyed: Optional[List[Tuple]] = None,
+        input_def: Optional[List[Tuple]] = None,
     ) -> Tuple[List[Tuple], str]:
         """
-        新增模式：扫描对比现有内容，只新增缺少的key
-        按照智能合并的逻辑：步骤1提取输入数据，步骤2提取输出数据，步骤3新增翻译数据
-
-        Args:
-            import_dir: 输入目录
-            import_language: 输入语言
-            output_dir: 输出目录
-            output_language: 输出语言
-            data_source_choice: 数据来源选择
-            has_input_keyed: 是否有输入Keyed
-            output_csv: 输出CSV文件名
-
-        Returns:
-            Tuple[List[Tuple], str]: (翻译数据列表, CSV文件路径)
+        新增模式：若提供 input_keyed/input_def（多根合并后的数据），则不再从 import_dir 提取。
         """
         self.logger.info("开始新增模式处理")
         ui.print_info("=== 新增模式：扫描对比现有内容 ===")
 
-        # 步骤1：提取输入数据
-        ui.print_info("🔍 步骤1：提取输入数据...")
-        input_keyed, input_def = self.extract_all_translations(
-            import_dir=import_dir,
-            import_language=import_language,
-            data_source_choice=data_source_choice,
-            has_input_keyed=has_input_keyed,
-        )
+        if input_keyed is not None and input_def is not None:
+            pass
+        else:
+            ui.print_info("🔍 步骤1：提取输入数据...")
+            input_keyed, input_def = self.extract_all_translations(
+                import_dir=import_dir,
+                import_language=import_language,
+                data_source_choice=data_source_choice,
+                has_input_keyed=has_input_keyed,
+            )
 
         if not input_keyed and not input_def:
             ui.print_warning("未找到输入翻译数据")

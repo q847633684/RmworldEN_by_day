@@ -17,7 +17,12 @@ from utils.interaction import (
     select_mod_path_with_version_detection,
 )
 from utils.ui_style import ui
-from .manager import TemplateManager, find_content_roots, generate_load_folders_xml
+from .manager import (
+    TemplateManager,
+    find_content_roots,
+    generate_load_folders_xml,
+    get_content_roots_from_load_folders,
+)
 from .interaction import InteractionManager
 
 
@@ -64,36 +69,95 @@ def handle_extract() -> Optional[tuple]:
             )
         ):
             scan_base = str(parent)
-        content_roots = find_content_roots(scan_base)
+        en_lang = config.language_config.get_value("en_language", "English")
+        # 版本结构：先选版本 → 扫 LoadFolders；无则扫版本目录+根目录，合并导出到一个 Languages
+        use_load_folders = False
         if scan_base != mod_dir:
-            mod_dir_n = mod_dir.replace("\\", "/")
-            content_roots = [
-                r for r in content_roots
-                if r == mod_dir or r.replace("\\", "/").startswith(mod_dir_n + "/")
-            ]
+            version_name = mod_path.name
+            load_folders_roots = get_content_roots_from_load_folders(
+                scan_base, version_name
+            )
+            if load_folders_roots:
+                use_load_folders = True
+                content_roots = load_folders_roots
+                ui.print_info(
+                    f"已从 LoadFolders.xml 读取 <v{version_name}> 共 {len(content_roots)} 个内容根"
+                )
+            else:
+                # 无 LoadFolders：仅所选版本目录 + 模组根（若根下含 Defs/Languages），不包含其他版本目录
+                all_found = find_content_roots(scan_base, language=en_lang)
+                mod_dir_resolved = str(Path(mod_dir).resolve())
+                scan_base_resolved = str(Path(scan_base).resolve())
+                content_roots = [
+                    r for r in all_found
+                    if r == mod_dir_resolved
+                    or r == scan_base_resolved
+                    or r.replace("\\", "/").startswith(mod_dir_resolved.replace("\\", "/") + "/")
+                ]
+                # 所选版本目录放首位，供智能流程默认检测/输出
+                if content_roots and mod_dir_resolved in content_roots:
+                    content_roots = [mod_dir_resolved] + [r for r in content_roots if r != mod_dir_resolved]
+                if content_roots:
+                    ui.print_info(
+                        "未找到 LoadFolders.xml，已按所选版本目录+模组根扫描，合并导出到 Languages"
+                    )
+        else:
+            content_roots = find_content_roots(scan_base, language=en_lang)
         if not content_roots and (Path(mod_dir) / "Defs").exists():
             content_roots = [mod_dir]
         if not content_roots:
-            ui.print_error("未找到 Defs 目录，请确认模组路径正确")
-            return None
-        # 读取 LoadFolders.xml 时用模组根（版本结构下 = scan_base）
-        load_folders_mod_root = scan_base
-        if len(content_roots) > 1:
-            ui.print_success(
-                f"检测到 {len(content_roots)} 个汉化目录，将按「Defs 在哪就在同目录生成 Languages」逐一处理"
-            )
             try:
-                mod_path_base = Path(mod_dir).resolve()
-                for r in content_roots:
-                    rp = Path(r).resolve()
-                    if rp == mod_path_base or mod_path_base in rp.parents:
-                        rel = rp.relative_to(mod_path_base)
-                    else:
-                        rel = r
-                    ui.print_info(f"   · {rel}")
-            except (ValueError, OSError):
-                for r in content_roots:
-                    ui.print_info(f"   · {r}")
+                content_roots = find_content_roots(mod_dir, language=en_lang)
+            except (OSError, ValueError, TypeError, AttributeError):
+                pass
+        if not content_roots:
+            ui.print_error("未找到 Defs 或 Languages 目录，请确认模组路径正确")
+            return None
+        load_folders_mod_root = scan_base
+        # 构建 root_groups：(roots, export_rel)。无 LoadFolders 或仅版本路径时合并到根 Languages
+        def _version_sibling_roots():
+            cr = find_content_roots(scan_base, language=en_lang)
+            mod_dir_res = str(Path(mod_dir).resolve())
+            scan_base_res = str(Path(scan_base).resolve())
+            roots = [
+                r for r in cr
+                if r == mod_dir_res
+                or r == scan_base_res
+                or r.replace("\\", "/").startswith(mod_dir_res.replace("\\", "/") + "/")
+            ]
+            if roots and mod_dir_res in roots:
+                roots = [mod_dir_res] + [r for r in roots if r != mod_dir_res]
+            return roots
+        if scan_base == mod_dir:
+            root_groups: List[tuple] = [([mod_dir], "")]
+        elif not use_load_folders:
+            root_groups = [(content_roots, "")]
+        else:
+            version_sibling = _version_sibling_roots()
+            root_groups = []
+            seen_version = False
+            for full in content_roots:
+                try:
+                    rel_str = str(Path(full).resolve().relative_to(Path(scan_base).resolve())).replace("\\", "/")
+                except (ValueError, OSError):
+                    rel_str = Path(full).name or ""
+                if rel_str in ("", ".", version_name):
+                    if not seen_version:
+                        root_groups.append((version_sibling, ""))
+                        seen_version = True
+                else:
+                    root_groups.append(([full], rel_str))
+        num_groups = len(root_groups)
+        multi_group_or_merge = num_groups > 1 or (num_groups == 1 and len(root_groups[0][0]) > 1)
+        if multi_group_or_merge:
+            ui.print_success(
+                f"共 {num_groups} 个导出组，合并组导出到 Languages，其余按路径导出"
+            )
+            for roots, export_rel in root_groups:
+                if export_rel:
+                    ui.print_info(f"   · {export_rel}")
+                else:
+                    ui.print_info("   · / (合并到 Languages)")
 
         # 创建模板管理器和交互管理器
         template_manager = TemplateManager()
@@ -102,18 +166,35 @@ def handle_extract() -> Optional[tuple]:
         ui.print_info("=== 开始智能提取模板 ===")
         try:
             # 执行四步智能流程（始终显示输出目录选择，支持外部导出）
-            effective_dir = content_roots[0]
+            effective_dir = root_groups[0][0][0]
             smart_config = interaction_manager.handle_smart_extraction_workflow(
-                effective_dir, skip_output_selection=False
+                effective_dir,
+                skip_output_selection=False,
             )
 
             conflict_resolution = smart_config["output_config"]["conflict_resolution"]
             data_source_choice = smart_config["data_sources"]["choice"]
             template_structure = smart_config["template_structure"]
-            has_input_keyed = smart_config["data_sources"]["import_status"].get(
-                "has_keyed", False
-            )
-            import_language = smart_config["data_sources"]["import_status"]["language"]
+            import_status = smart_config["data_sources"]["import_status"]
+            import_language = import_status["language"]
+            # 多根时对每个根检测 Keyed
+            all_roots = [r for roots, _ in root_groups for r in roots]
+            has_input_keyed = import_status.get("has_keyed", False)
+            if len(all_roots) > 1:
+                for r in all_roots:
+                    keyed_dir = config.language_config.get_language_subdir(
+                        str(r), import_language, "keyed"
+                    )
+                    # 目录存在即视为有 Keyed，不强制要求 *.xml（避免漏检）
+                    if keyed_dir.exists():
+                        has_input_keyed = True
+                        break
+                    root_parent = config.language_config.get_language_subdir(
+                        str(Path(r).parent), import_language, "keyed"
+                    )
+                    if root_parent.exists():
+                        has_input_keyed = True
+                        break
             output_language = smart_config["output_config"]["output_status"]["language"]
 
             ui.print_info(
@@ -125,6 +206,7 @@ def handle_extract() -> Optional[tuple]:
             )
             all_csv_paths: List[str] = []
             chosen_output_dir = smart_config["output_config"]["output_dir"]
+            rel_names: List[str] = []
 
             def _is_external_output(out_dir: str, base_dir: str) -> bool:
                 try:
@@ -133,74 +215,70 @@ def handle_extract() -> Optional[tuple]:
                 except (ValueError, TypeError):
                     return True
 
-            # 多根且选择外部目录时，各内容根导出到 外部目录/相对路径，并生成 LoadFolders.xml
-            multi_root_external = (
-                len(content_roots) > 1 and _is_external_output(chosen_output_dir, mod_dir)
-            )
-            if multi_root_external:
-                try:
-                    mod_path_base = Path(mod_dir).resolve()
-                    rel_names = [
-                        str(Path(r).resolve().relative_to(mod_path_base)).replace("\\", "/")
-                        for r in content_roots
-                    ]
-                except (ValueError, OSError):
-                    rel_names = [Path(r).name or "." for r in content_roots]
-            # 仅对有导出内容的根生成 LoadFolders；版本结构下用「版本/路径」格式以匹配原 mod 取 IfModActive
+            rel_base = Path(load_folders_mod_root).resolve() if load_folders_mod_root else Path(mod_dir).resolve()
+            multi_root_external = num_groups > 1 and _is_external_output(chosen_output_dir, mod_dir)
+            groups_with_content: List[str] = []  # export_rel 列表，用于生成 LoadFolders.xml
             roots_with_content: set = set()
+            roots_with_content_output_dirs: dict = {}
 
-            # 单根且外部导出时也按「外部/相对路径」创建子目录（如 Common），与多根行为一致
-            single_root_external = (
-                len(content_roots) == 1 and _is_external_output(chosen_output_dir, mod_dir)
-            )
-            # 对每个内容根分别执行；外部导出=外部/相对路径（含单根），模组内=各根
-            for root in content_roots:
-                import_dir = root
-                if single_root_external or multi_root_external:
-                    try:
-                        rel = Path(root).resolve().relative_to(Path(mod_dir).resolve())
-                        output_dir = str(Path(chosen_output_dir) / rel)
-                    except (ValueError, OSError):
-                        output_dir = str(Path(chosen_output_dir) / (Path(root).name or "."))
-                elif len(content_roots) == 1:
-                    output_dir = chosen_output_dir
-                else:
-                    output_dir = root
+            for roots, export_rel in root_groups:
+                output_dir = chosen_output_dir if not export_rel else str(Path(chosen_output_dir) / export_rel)
                 output_csv = str(Path(output_dir) / output_csv_name)
                 output_path = Path(output_dir)
+                import_dir = roots[0] if len(roots) == 1 else ""
 
-                if len(content_roots) > 1:
-                    ui.print_info(f"正在处理: {Path(root).name or root}")
+                if num_groups > 1 or len(roots) > 1:
+                    label = export_rel if export_rel else "/"
+                    ui.print_info(f"正在处理: {label}")
 
                 # 根据冲突处理方式执行相应操作
                 if conflict_resolution == "merge":
                     ui.print_info("合并模式")
-                    translations, csv_path = template_manager.merge_mode(
-                        import_dir=import_dir,
-                        import_language=import_language,
-                        output_dir=output_dir,
-                        output_language=output_language,
-                        data_source_choice=data_source_choice,
-                        has_input_keyed=has_input_keyed,
-                        output_csv=output_csv,
-                    )
+                    if len(roots) > 1:
+                        all_keyed, all_def = [], []
+                        for r in roots:
+                            k, d = template_manager.extract_all_translations(
+                                r, import_language,
+                                data_source_choice=data_source_choice,
+                                has_input_keyed=has_input_keyed,
+                            )
+                            all_keyed.extend(k)
+                            all_def.extend(d)
+                        translations, csv_path = template_manager.merge_mode(
+                            import_dir=roots[0],
+                            import_language=import_language,
+                            output_dir=output_dir,
+                            output_language=output_language,
+                            data_source_choice=data_source_choice,
+                            has_input_keyed=has_input_keyed,
+                            output_csv=output_csv,
+                            input_keyed=all_keyed,
+                            input_def=all_def,
+                        )
+                    else:
+                        translations, csv_path = template_manager.merge_mode(
+                            import_dir=import_dir,
+                            import_language=import_language,
+                            output_dir=output_dir,
+                            output_language=output_language,
+                            data_source_choice=data_source_choice,
+                            has_input_keyed=has_input_keyed,
+                            output_csv=output_csv,
+                        )
                     if csv_path:
                         all_csv_paths.append(csv_path)
-                        roots_with_content.add(root)
-                    if len(content_roots) == 1:
+                        for r in roots:
+                            roots_with_content.add(r)
+                            roots_with_content_output_dirs[r] = output_dir
+                        groups_with_content.append(export_rel if export_rel else "/")  # 单根/多根都记入
+                    if num_groups == 1 and len(roots) == 1:
                         ui.print_success(f"智能提取完成！共提取 {len(translations)} 条翻译")
                         if csv_path:
                             ui.print_info(f"CSV文件：{csv_path}")
                         ui.print_info(f"输出目录：{output_dir}")
                         if _is_external_output(output_dir, mod_dir):
-                            _rel = (
-                                "."
-                                if Path(root).resolve() == Path(mod_dir).resolve()
-                                else str(Path(root).resolve().relative_to(Path(mod_dir).resolve())).replace("\\", "/")
-                            )
-                            _name = _rel
-                            if scan_base != mod_dir and _rel != ".":
-                                _name = f"{Path(mod_dir).name}/{_rel}"
+                            _rel = export_rel if export_rel else "/"
+                            _name = _rel if _rel == "/" or scan_base == mod_dir else f"{Path(mod_dir).name}/{export_rel}"
                             xml_path = generate_load_folders_xml(
                                 chosen_output_dir, [_name], mod_dir=load_folders_mod_root
                             )
@@ -209,29 +287,50 @@ def handle_extract() -> Optional[tuple]:
                         return (csv_path, mod_dir)
                 elif conflict_resolution == "incremental":
                     ui.print_info("新增模式")
-                    translations, csv_path = template_manager.incremental_mode(
-                        import_dir=import_dir,
-                        import_language=import_language,
-                        output_dir=output_dir,
-                        output_language=output_language,
-                        data_source_choice=data_source_choice,
-                        has_input_keyed=has_input_keyed,
-                        output_csv=output_csv,
-                    )
+                    if len(roots) > 1:
+                        all_keyed, all_def = [], []
+                        for r in roots:
+                            k, d = template_manager.extract_all_translations(
+                                r, import_language,
+                                data_source_choice=data_source_choice,
+                                has_input_keyed=has_input_keyed,
+                            )
+                            all_keyed.extend(k)
+                            all_def.extend(d)
+                        translations, csv_path = template_manager.incremental_mode(
+                            import_dir=roots[0],
+                            import_language=import_language,
+                            output_dir=output_dir,
+                            output_language=output_language,
+                            data_source_choice=data_source_choice,
+                            has_input_keyed=has_input_keyed,
+                            output_csv=output_csv,
+                            input_keyed=all_keyed,
+                            input_def=all_def,
+                        )
+                    else:
+                        translations, csv_path = template_manager.incremental_mode(
+                            import_dir=import_dir,
+                            import_language=import_language,
+                            output_dir=output_dir,
+                            output_language=output_language,
+                            data_source_choice=data_source_choice,
+                            has_input_keyed=has_input_keyed,
+                            output_csv=output_csv,
+                        )
                     if translations:
                         all_csv_paths.append(csv_path)
-                        roots_with_content.add(root)
+                        for r in roots:
+                            roots_with_content.add(r)
+                            roots_with_content_output_dirs[r] = output_dir
+                        groups_with_content.append(export_rel if export_rel else "/")
                         ui.print_success(f"新增模式完成！新增了 {len(translations)} 条翻译")
                         ui.print_info(f"CSV文件：{csv_path}")
                         ui.print_info(f"输出目录：{output_dir}")
-                        if len(content_roots) == 1:
+                        if num_groups == 1 and len(roots) == 1:
                             if _is_external_output(output_dir, mod_dir):
-                                _rel = (
-                                    "."
-                                    if Path(root).resolve() == Path(mod_dir).resolve()
-                                    else str(Path(root).resolve().relative_to(Path(mod_dir).resolve())).replace("\\", "/")
-                                )
-                                _name = _rel if _rel == "." or scan_base == mod_dir else f"{Path(mod_dir).name}/{_rel}"
+                                _rel = export_rel if export_rel else "/"
+                                _name = _rel if _rel == "/" or scan_base == mod_dir else f"{Path(mod_dir).name}/{export_rel}"
                                 xml_path = generate_load_folders_xml(
                                     chosen_output_dir, [_name], mod_dir=load_folders_mod_root
                                 )
@@ -240,7 +339,7 @@ def handle_extract() -> Optional[tuple]:
                             return (csv_path, mod_dir)
                     else:
                         ui.print_success("新增模式完成！没有发现缺少的key")
-                        if len(content_roots) == 1:
+                        if num_groups == 1 and len(roots) == 1:
                             return None
                 elif conflict_resolution in ["rebuild", "new"]:
                     ui.print_info("重建模式")
@@ -261,9 +360,9 @@ def handle_extract() -> Optional[tuple]:
                             ui.print_warning(
                                 f"⚠️ 无法删除某些文件（可能是系统文件），跳过：{e}"
                             )
-                    translations, csv_path = (
-                        template_manager.extract_and_generate_templates(
-                            import_dir=import_dir,
+                    if len(roots) > 1:
+                        translations, csv_path = template_manager.extract_and_generate_templates_from_roots(
+                            import_dirs=roots,
                             import_language=import_language,
                             output_dir=output_dir,
                             output_language=output_language,
@@ -272,21 +371,32 @@ def handle_extract() -> Optional[tuple]:
                             has_input_keyed=has_input_keyed,
                             output_csv=output_csv,
                         )
-                    )
+                    else:
+                        translations, csv_path = (
+                            template_manager.extract_and_generate_templates(
+                                import_dir=import_dir,
+                                import_language=import_language,
+                                output_dir=output_dir,
+                                output_language=output_language,
+                                data_source_choice=data_source_choice,
+                                template_structure=template_structure,
+                                has_input_keyed=has_input_keyed,
+                                output_csv=output_csv,
+                            )
+                        )
                     if csv_path:
                         all_csv_paths.append(csv_path)
-                        roots_with_content.add(root)
+                        for r in roots:
+                            roots_with_content.add(r)
+                            roots_with_content_output_dirs[r] = output_dir
+                        groups_with_content.append(export_rel if export_rel else "/")
                     ui.print_success(f"重建完成！共提取 {len(translations)} 条翻译")
                     ui.print_info(f"CSV文件：{csv_path}")
                     ui.print_info(f"输出目录：{output_dir}")
-                    if len(content_roots) == 1:
+                    if num_groups == 1 and len(roots) == 1:
                         if _is_external_output(output_dir, mod_dir):
-                            _rel = (
-                                "."
-                                if Path(root).resolve() == Path(mod_dir).resolve()
-                                else str(Path(root).resolve().relative_to(Path(mod_dir).resolve())).replace("\\", "/")
-                            )
-                            _name = _rel if _rel == "." or scan_base == mod_dir else f"{Path(mod_dir).name}/{_rel}"
+                            _rel = export_rel if export_rel else "/"
+                            _name = _rel if _rel == "/" or scan_base == mod_dir else f"{Path(mod_dir).name}/{export_rel}"
                             xml_path = generate_load_folders_xml(
                                 chosen_output_dir, [_name], mod_dir=load_folders_mod_root
                             )
@@ -297,33 +407,31 @@ def handle_extract() -> Optional[tuple]:
                     ui.print_info(f"无效的冲突处理方式: {conflict_resolution}")
                     return None
 
-            # 多根时汇总并返回；若为外部导出则生成 LoadFolders.xml（仅含实际有导出的根，版本结构下用 1.6/Mods/xxx 以匹配原 mod 取 IfModActive）
-            if len(content_roots) > 1:
-                if multi_root_external and rel_names:
-                    # 只对有导出内容的根生成 <li>
-                    indices_with_content = [i for i, r in enumerate(content_roots) if r in roots_with_content]
-                    names_for_xml = [rel_names[i] for i in indices_with_content if i < len(rel_names)]
-                    if scan_base != mod_dir:
-                        version_prefix = Path(mod_dir).name
-                        names_for_xml = [f"{version_prefix}/{n}".replace("\\", "/") for n in names_for_xml]
-                    if names_for_xml:
-                        xml_path = generate_load_folders_xml(
-                            chosen_output_dir, names_for_xml, mod_dir=load_folders_mod_root
-                        )
-                        if xml_path:
-                            ui.print_info(f"已生成 LoadFolders.xml：{xml_path}")
-                        else:
-                            ui.print_warning("未生成 LoadFolders.xml，请检查输出目录是否可写")
+            # 多组时汇总并返回；若为外部导出则用 groups_with_content 生成 LoadFolders.xml
+            if num_groups > 1:
+                if multi_root_external and groups_with_content:
+                    names_for_xml = [rel if rel != "/" else "/" for rel in groups_with_content]
+                    xml_version = Path(mod_dir).name if scan_base != mod_dir else "1.6"
+                    xml_path = generate_load_folders_xml(
+                        chosen_output_dir,
+                        names_for_xml,
+                        version=xml_version,
+                        mod_dir=load_folders_mod_root,
+                    )
+                    if xml_path:
+                        ui.print_info(f"已生成 LoadFolders.xml：{xml_path}")
+                    else:
+                        ui.print_warning("未生成 LoadFolders.xml，请检查输出目录是否可写")
                 if all_csv_paths:
                     ui.print_success(
-                        f"智能提取完成！共处理 {len(content_roots)} 个目录，生成 CSV: {len(all_csv_paths)} 个"
+                        f"智能提取完成！共处理 {num_groups} 个导出组，生成 CSV: {len(all_csv_paths)} 个"
                     )
                     for p in all_csv_paths:
                         ui.print_info(f"   · {p}")
                     return (all_csv_paths[0], mod_dir)
                 return (all_csv_paths[0], mod_dir) if all_csv_paths else None
 
-        except (OSError, IOError, ValueError, RuntimeError) as e:
+        except (OSError, RuntimeError) as e:
             ui.print_error(f"智能提取失败: {str(e)}")
             log_error_with_context(e, "智能提取失败", mod_dir=mod_dir)
             if config.system_config.get_value("debug_mode", False):
@@ -342,7 +450,7 @@ def handle_extract() -> Optional[tuple]:
                 traceback.print_exc()
             return None
 
-    except (OSError, IOError, ValueError, ImportError, AttributeError) as e:
+    except (OSError, ImportError, AttributeError) as e:
         ui.print_error(f"提取模板功能失败: {str(e)}")
         log_error_with_context(e, "提取模板功能失败")
         if config.system_config.get_value("debug_mode", False):

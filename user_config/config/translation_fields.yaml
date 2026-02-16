@@ -28,27 +28,7 @@ translation_fields:
         - quote
         - caption
         # 新增字段魔法
-        - helpText
-        - fixedName
-        - pawnsPlural
-        - leaderTitle
-        - pawnSingular
-        - endMessage
-        - letterText
-        - labelTendedWell
-        - labelTendedWellInner
-        - labelSolidTendedWell
-        - destroyedLabel
-        - destroyedOutLabel
-        - permanentLabel
-        - regenPerTickUpgradeName
-        - jobString
-        - letterInfoText
-        - effectDesc
-        - expectedThingLabelTip
-        - missingDesc
-        - stuffAdjective
-        - labelNounPretty
+
 
     
     rimworld_specific:
@@ -77,6 +57,32 @@ translation_fields:
         - letterLabel
         - text
         - slateRef
+        #magic
+        - helpText
+        - fixedName
+        - pawnsPlural
+        - leaderTitle
+        - pawnSingular
+        - endMessage
+        - letterText
+        - labelTendedWell
+        - labelTendedWellInner
+        - labelSolidTendedWell
+        - destroyedLabel
+        - destroyedOutLabel
+        - permanentLabel
+        - regenPerTickUpgradeName
+        - jobString
+        - letterInfoText
+        - effectDesc
+        - expectedThingLabelTip
+        - missingDesc
+        - stuffAdjective
+        - labelNounPretty
+        # 含 <li> 的列表型可翻译节点（如 OpinionDef 的 opinionTexts）
+        #Nudity Matters More opinions
+        - opinionTexts
+        - texts
     
     override:
       description: "覆盖字段"
