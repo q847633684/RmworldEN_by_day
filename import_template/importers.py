@@ -68,6 +68,17 @@ def import_translations(
             mod_dir, language, "definjected", definjected_translations, merge
         )
         # 步骤5：验证导入结果
+        had_translations = bool(keyed_translations or definjected_translations)
+        if had_translations and updated_count == 0:
+            logger.warning(
+                "CSV 中有 %s 条 Keyed、%s 条 DefInjected，但未匹配到任何 XML 节点，未写入任何文件",
+                len(keyed_translations),
+                len(definjected_translations),
+            )
+            ui.print_warning(
+                "⚠️ 未导入任何内容：CSV 的 key 与模板 XML 节点不匹配，请确认 CSV 与当前模板来自同一模组/同一提取。"
+            )
+            return False
         success = _verify_import_results(mod_dir, language)
         if success:
             logger.info("翻译导入到模板完成，更新了 %s 个文件", updated_count)
@@ -181,23 +192,42 @@ def _definjected_get_parent(elem: Any, root: Any, parent_map: Optional[dict]) ->
     return None
 
 
+def _definjected_tag_local(tag: Any) -> str:
+    """取标签的本地名（去掉命名空间），便于与 CSV 的 key 一致。"""
+    if not isinstance(tag, str):
+        return ""
+    if tag.startswith("{"):
+        return tag.split("}", 1)[-1]
+    return tag
+
+
 def _definjected_key_func(elem: Any, root: Any, parent_map: Optional[dict]) -> str:
     """
     DefInjected 用「父路径.标签」或「父路径.索引」生成 key，与提取器一致。
-    路径中的 <li> 用索引代替，使 nested 与 flat_all 的 key 一致（如 Sex_Anal.modExtensions.0.RMBLabel）。
+    支持的格式示例（根为 <LanguageData>）：
+      - 平铺标签：<Anal_Breed_Reply.label>text</...> → key = "Anal_Breed_Reply.label"
+      - 列表容器 + <li>：<Anal_Breed_Reply.xxx.rulesStrings><li>...</li></...> → key = "Anal_Breed_Reply.xxx.rulesStrings.0", ".1", ...
+    路径中的 <li> 用索引代替，使 nested 与 flat_all 的 key 一致。
     兼容 lxml（parent_map 为 None 时用 elem.getparent()）与标准库 XML。
+    带命名空间的标签使用本地名，以便与 CSV 中通常无命名空间的 key 匹配。
     """
     tag = getattr(elem, "tag", None)
-    if not isinstance(tag, str) or tag.startswith("{"):
+    tag_local = _definjected_tag_local(tag)
+    if not tag_local:
         return ""
     parent_tags = []
     p = _definjected_get_parent(elem, root, parent_map)
     while p is not None and p is not root:
         pt = getattr(p, "tag", None)
-        if pt == "li":
+        pt_local = _definjected_tag_local(pt) if isinstance(pt, str) else ""
+        if pt_local == "li":
             parent = _definjected_get_parent(p, root, parent_map)
             if parent is not None:
-                li_siblings = [c for c in parent if getattr(c, "tag", None) == "li"]
+                li_siblings = [
+                    c
+                    for c in parent
+                    if _definjected_tag_local(getattr(c, "tag", None)) == "li"
+                ]
                 try:
                     idx = li_siblings.index(p)
                 except ValueError:
@@ -205,23 +235,27 @@ def _definjected_key_func(elem: Any, root: Any, parent_map: Optional[dict]) -> s
                 parent_tags.append(str(idx))
             else:
                 parent_tags.append("0")
-        elif isinstance(pt, str) and not str(pt).startswith("{"):
-            parent_tags.append(pt)
+        elif pt_local:
+            parent_tags.append(pt_local)
         p = _definjected_get_parent(p, root, parent_map)
     parent_tags.reverse()
-    if tag == "li":
+    if tag_local == "li":
         parent = _definjected_get_parent(elem, root, parent_map)
         if parent is not None:
-            li_siblings = [c for c in parent if getattr(c, "tag", None) == "li"]
+            li_siblings = [
+                c
+                for c in parent
+                if _definjected_tag_local(getattr(c, "tag", None)) == "li"
+            ]
             try:
                 idx = li_siblings.index(elem)
             except ValueError:
                 idx = 0
             return ".".join(parent_tags + [str(idx)])
         return ".".join(parent_tags + ["0"])
-    if not parent_tags and "." in tag:
-        return tag
-    return ".".join(parent_tags + [tag]) if parent_tags else tag
+    if not parent_tags and "." in tag_local:
+        return tag_local
+    return ".".join(parent_tags + [tag_local]) if parent_tags else tag_local
 
 
 def _get_language_subdir_path(base_dir: str, language: str, subdir_type: str) -> Path:
@@ -380,6 +414,8 @@ def _update_xml_in_subdir(
         subdir = CONFIG.language_config.get_language_subdir(
             mod_dir, language, subdir_type
         )
+        if not subdir.exists():
+            subdir = _get_language_subdir_path(mod_dir, language, subdir_type)
     if not subdir.exists():
         logger.warning("语言子目录不存在: %s", subdir)
         return 0
