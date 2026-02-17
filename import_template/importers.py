@@ -288,10 +288,11 @@ def _definjected_key_func(elem: Any, root: Any, parent_map: Optional[dict]) -> s
 
 def _get_language_subdir_path(base_dir: str, language: str, subdir_type: str) -> Path:
     """
-    解析语言子目录路径。支持三种情况：
+    解析语言子目录路径。支持四种情况：
     1) base_dir 下直接有 Keyed/DefInjected -> 视为语言目录
     2) base_dir 下有 language/Keyed（如 Languages2/ChineseSimplified/Keyed）-> 视为 Languages 父目录
-    3) 否则按模组根：base_dir/Languages/language/Keyed
+    3) base_dir 下递归查找第一个 Keyed/DefInjected 目录（支持补丁目录如 Cumpilation/ould）
+    4) 否则按模组根：base_dir/Languages/language/Keyed
     """
     base = Path(base_dir)
     keyed_name = CONFIG.language_config.get_value("keyed_dir", "Keyed")
@@ -302,6 +303,12 @@ def _get_language_subdir_path(base_dir: str, language: str, subdir_type: str) ->
     if (base / language / keyed_name).exists() or (base / language / def_name).exists():
         sub = keyed_name if subdir_type.lower() == "keyed" else def_name
         return base / language / sub
+    # 补丁目录：在 base 下递归找 Keyed/DefInjected 目录，优先最浅层
+    sub = keyed_name if subdir_type.lower() == "keyed" else def_name
+    candidates = [p for p in base.rglob(sub) if p.is_dir()]
+    if candidates:
+        candidates.sort(key=lambda p: len(p.relative_to(base).parts))
+        return candidates[0]
     return CONFIG.language_config.get_language_subdir(
         base_dir, language, subdir_type
     )
@@ -310,33 +317,33 @@ def _get_language_subdir_path(base_dir: str, language: str, subdir_type: str) ->
 def _collect_old_translations(
     old_base_dir: str,
     language: str,
-) -> Tuple[Dict[str, str], Dict[str, str]]:
+) -> Tuple[Dict[str, str], Dict[Tuple[str, str], str]]:
     """
-    扫描旧翻译目录，收集 Keyed 与 DefInjected 中已有翻译（key → 非空译文）。
-    支持 DefInjected 任意格式：flat_all（标签为 DefName.field.0）、flat_with_li（容器+<li>）、nested（嵌套树），
-    统一生成与提取器一致的 key（如 TM_Transcendent.descriptionMaker.rules.rulesStrings.0）。
+    扫描旧翻译目录，收集 Keyed 与 DefInjected 中已有翻译。
+    Keyed: key → 非空译文。
+    DefInjected: (key, scope) → 非空译文，按 Def 类型(scope)区分，避免同 key 不同 Def 类型互相覆盖。
 
     Args:
         old_base_dir: 旧模组根目录、语言目录、或直接 Keyed/DefInjected 文件夹
         language: 语言代码，如 ChineseSimplified
 
     Returns:
-        (keyed_map, definjected_map)
+        (keyed_map, definjected_map) 其中 definjected_map 的 key 为 (key, scope)
     """
     processor = XMLProcessor()
     keyed_map: Dict[str, str] = {}
-    definjected_map: Dict[str, str] = {}
+    definjected_map: Dict[Tuple[str, str], str] = {}
 
-    for subdir_type, out_map, use_def_key in [
-        ("keyed", keyed_map, False),
-        ("definjected", definjected_map, True),
-    ]:
+    for subdir_type, use_def_key in [("keyed", False), ("definjected", True)]:
         subdir = _get_language_subdir_path(old_base_dir, language, subdir_type)
         if not subdir.exists():
             continue
         xml_files = list(Path(subdir).rglob("*.xml"))
         for xml_file in xml_files:
             try:
+                # DefInjected：scope = 相对 subdir 的首段路径（Def 类型，如 HediffDef）
+                rel = xml_file.relative_to(subdir)
+                scope = rel.parts[0] if rel.parts else (xml_file.stem or "")
                 tree = processor.parse_xml(str(xml_file))
                 if tree is None:
                     continue
@@ -356,7 +363,10 @@ def _collect_old_translations(
                         continue
                     text = (elem.text or "").strip()
                     if text:
-                        out_map[key] = text
+                        if use_def_key:
+                            definjected_map[(key, scope)] = text
+                        else:
+                            keyed_map[key] = text
             except (OSError, ValueError, TypeError) as e:
                 logger.debug("跳过 %s: %s", xml_file, e)
 
@@ -387,17 +397,23 @@ def migrate_translations_to_new(
     if isinstance(old_base_dirs, str):
         old_base_dirs = [old_base_dirs]
     keyed_map: Dict[str, str] = {}
-    definjected_map: Dict[str, str] = {}
+    definjected_map: Dict[Tuple[str, str], str] = {}  # (key, scope) -> text
     for old_base_dir in old_base_dirs:
         old_base_dir = old_base_dir.strip()
         if not old_base_dir:
             continue
         k_map, d_map = _collect_old_translations(old_base_dir, language)
         keyed_map.update(k_map)
+        # 同 (key, scope) 后者覆盖
         definjected_map.update(d_map)
+    # DefInjected 按 scope 分组，写入时每个文件用对应 scope 的 key→text
+    definjected_by_scope: Dict[str, Dict[str, str]] = {}
+    for (k, scope), text in definjected_map.items():
+        definjected_by_scope.setdefault(scope, {})[k] = text
+    total_def = sum(len(m) for m in definjected_by_scope.values())
     ui.print_info(
-        f"从 %s 个旧目录合并收集到 Keyed %s 条、DefInjected %s 条翻译。"
-        % (len(old_base_dirs), len(keyed_map), len(definjected_map))
+        f"从 %s 个旧目录合并收集到 Keyed %s 条、DefInjected %s 条（按 Def 类型分组）。"
+        % (len(old_base_dirs), len(keyed_map), total_def)
     )
     if not keyed_map and not definjected_map:
         logger.warning("未从旧目录收集到任何翻译，请确认旧目录下存在 Keyed/DefInjected 且 XML 中含译文")
@@ -406,7 +422,6 @@ def migrate_translations_to_new(
     if (new_base / "Keyed").exists() or (new_base / "DefInjected").exists():
         new_lang_dir = str(new_base)
     elif (new_base / language).exists():
-        # 新目录已是 Languages 父目录（如 .../Languages），直接取 .../Languages/ChineseSimplified
         new_lang_dir = str(new_base / language)
     else:
         new_lang_dir = str(
@@ -427,17 +442,74 @@ def migrate_translations_to_new(
             only_fill_empty=only_fill_empty,
             language_dir_override=new_lang_dir,
         )
-    if definjected_map:
-        updated += _update_xml_in_subdir(
+    if definjected_by_scope:
+        updated += _update_definjected_by_scope(
             new_base_dir,
             language,
-            "definjected",
-            definjected_map,
-            merge=True,
+            definjected_by_scope,
             only_fill_empty=only_fill_empty,
             language_dir_override=new_lang_dir,
         )
     return updated
+
+
+def _update_definjected_by_scope(
+    mod_dir: str,
+    language: str,
+    definjected_by_scope: Dict[str, Dict[str, str]],
+    only_fill_empty: bool = False,
+    language_dir_override: Optional[str] = None,
+) -> int:
+    """按 Def 类型(scope)更新 DefInjected：每个 XML 文件只使用对应 scope 的 key→译文。"""
+    if not definjected_by_scope:
+        return 0
+    def_name = CONFIG.language_config.get_value("definjected_dir", "DefInjected")
+    if language_dir_override:
+        subdir = Path(language_dir_override) / def_name
+    else:
+        subdir = CONFIG.language_config.get_language_subdir(mod_dir, language, "definjected")
+        if not subdir.exists():
+            subdir = _get_language_subdir_path(mod_dir, language, "definjected")
+    if not subdir.exists():
+        logger.warning("DefInjected 目录不存在: %s", subdir)
+        return 0
+    processor = XMLProcessor()
+    updated_count = 0
+    xml_files = list(Path(subdir).rglob("*.xml"))
+    total_files = len(xml_files)
+    if total_files == 0:
+        return 0
+    ui.print_info(f"正在更新 DefInjected 目录中的 {total_files} 个文件（按 Def 类型匹配）...")
+    for i, xml_file in enumerate(xml_files, 1):
+        try:
+            rel = xml_file.relative_to(subdir)
+            scope = rel.parts[0] if rel.parts else (xml_file.stem or "")
+            translations = definjected_by_scope.get(scope, {})
+            if not translations:
+                continue
+            normalized: Dict[str, str] = {}
+            for key, value in translations.items():
+                k = key.replace("\\", "/").replace("/", ".") if "/" in key or "\\" in key else key
+                normalized[k] = value
+            tree = processor.parse_xml(str(xml_file))
+            if tree is None:
+                continue
+            if update_translations(
+                processor,
+                tree,
+                normalized,
+                generate_key_func=_definjected_key_func,
+                merge=True,
+                include_attributes=True,
+                only_fill_empty=only_fill_empty,
+            ):
+                processor.save_xml(tree, str(xml_file))
+                updated_count += 1
+            ui.print_progress_bar(i, total_files, prefix="更新文件")
+        except (FileNotFoundError, PermissionError, OSError, ValueError, TypeError) as e:
+            logger.debug("跳过 %s: %s", xml_file, e)
+    ui.print_info("")
+    return updated_count
 
 
 def _update_xml_in_subdir(

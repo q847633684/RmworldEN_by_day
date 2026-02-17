@@ -4,6 +4,8 @@
 """
 
 import os
+import threading
+from pathlib import Path
 from typing import Optional
 from utils.logging_config import get_logger
 from utils.ui_style import ui
@@ -55,17 +57,46 @@ def handle_unified_translate(
 
         if not available_translators:
             ui.print_error("没有可用的翻译器！")
-            ui.print_info("请检查：")
-            ui.print_info("1. Java环境是否正确安装")
-            ui.print_info("2. Java翻译工具是否已构建")
-            ui.print_info("3. 阿里云SDK是否已安装")
+            ui.print_info("请安装免费翻译: pip install deep-translator")
+            ui.print_info("或配置阿里云/Java 翻译。")
             return
 
-        # 自动选择最佳翻译器
-        translator_type = "auto"  # 默认自动选择最佳翻译器
-        ui.print_info(
-            f"🎯 自动选择翻译器: {'Java' if 'java' in available_translators else 'Python'}"
-        )
+        # 子选项：仅当未传入 csv_path 时显示
+        if csv_path is None:
+            ui.print_section_header("操作选择", ui.Icons.SETTINGS)
+            ui.print_menu_item("1", "翻译 CSV", "使用当前翻译器翻译 CSV", ui.Icons.TRANSLATE, compact=True)
+            ui.print_menu_item(
+                "2",
+                "仅恢复翻译列占位符",
+                "将 translated 列中的 (PH_1) 等恢复为 [saw]、[nudity] 等（用于阿里云等未恢复的 CSV）",
+                ui.Icons.SETTINGS,
+                compact=True,
+            )
+            from utils.interaction import safe_input
+            choice = safe_input(ui.get_input_prompt("请选择", options="1-2, q（回车=1）"), "1")
+            if choice is None or choice.lower() == "q":
+                return None
+            if choice.strip() == "2":
+                restore_path = select_csv_path_with_history()
+                if not restore_path:
+                    return None
+                from translate.core.placeholders import PlaceholderManager
+                pm = PlaceholderManager()
+                ok, count = pm.restore_csv_translated_column(restore_path)
+                if ok:
+                    ui.print_success(f"✅ 翻译列占位符已恢复，共 {count} 条。可继续用「翻译 CSV」选 Google 重新翻译，或直接导入。")
+                else:
+                    ui.print_error("恢复失败，请确认 CSV 含 key / text / translated 列。")
+                return restore_path if ok else None
+
+        # 自动选择：优先 Google（免费），其次 Java/阿里云，最后 Python/阿里云
+        translator_type = "auto"
+        if "google" in available_translators:
+            ui.print_info("🎯 自动选择: Google 翻译（免费，无需 API 密钥）")
+        elif "java" in available_translators:
+            ui.print_info("🎯 自动选择: Java/阿里云 翻译")
+        else:
+            ui.print_info("🎯 自动选择: Python/阿里云 翻译")
 
         # 获取输入CSV文件
         if csv_path is None:
@@ -91,6 +122,20 @@ def handle_unified_translate(
                 csv_path, resume_file, "protected_text"
             )
             if success:
+                # 断点续传未走「保护→翻译→恢复」全流程，此处补做占位符恢复：(PH_1) -> [saw] 等
+                try:
+                    placeholder_manager = translator.factory.create_dictionary_translator("adult")
+                    _, placeholder_map, _ = placeholder_manager.translate_csv(csv_path, mode="protect")
+                    restore_ok, _, _ = placeholder_manager.translate_csv(
+                        resume_file, mode="restore", placeholder_map=placeholder_map
+                    )
+                    if restore_ok:
+                        ui.print_success("占位符已恢复（(PH_1) 等已还原为 [saw] 等）")
+                    else:
+                        ui.print_warning("占位符恢复未完全成功，可稍后使用「仅恢复翻译列占位符」再试")
+                except Exception as e:
+                    logger.warning("断点续传后占位符恢复失败: %s", e)
+                    ui.print_warning("占位符未自动恢复，请使用「仅恢复翻译列占位符」手动恢复")
                 ui.print_success("恢复翻译完成！")
                 # 将输出CSV加入"导入翻译"的历史
                 PathManager().remember_path("import_csv", resume_file)
@@ -98,54 +143,85 @@ def handle_unified_translate(
             else:
                 return None  # 翻译未完成（用户中断）
 
-        # 显示翻译配置（简化版）
+        # 实际将使用的翻译器（与自动选择顺序一致）
+        actual_translator = (
+            "google"
+            if "google" in available_translators
+            else "java"
+            if "java" in available_translators
+            else "python"
+        )
+
+        # 显示翻译配置（与真实使用的翻译器一致）
         ui.print_section_header("翻译配置", ui.Icons.SETTINGS)
         ui.print_key_value("输入文件", os.path.basename(csv_path), ui.Icons.FILE)
         ui.print_key_value("输出文件", os.path.basename(output_csv), ui.Icons.FILE)
-        ui.print_key_value(
-            "翻译器",
-            f"{'Java' if 'java' in available_translators else 'Python'}翻译器",
-            ui.Icons.SETTINGS,
+        translator_label = (
+            "Google翻译器"
+            if actual_translator == "google"
+            else "Java翻译器"
+            if actual_translator == "java"
+            else "Python翻译器"
         )
+        ui.print_key_value("翻译器", translator_label, ui.Icons.SETTINGS)
 
         # 显示翻译器特性（简化版）
-        if "java" in available_translators:
+        if actual_translator == "google":
+            ui.print_info("🌐 Google 翻译: 免费，无需 API 密钥")
+        elif actual_translator == "java":
             ui.print_info("🚀 Java翻译器: 高性能，支持中断和恢复")
         else:
             ui.print_info("🐍 Python翻译器: 简单部署，稳定可靠")
 
         ui.print_section_header("开始翻译", ui.Icons.TRANSLATE)
 
-        # 检查API密钥配置（使用新配置系统）
-        try:
-            from user_config import UserConfigManager
+        # 仅在使用 Java/Python 时检查阿里云 API；Google 无需 API
+        if actual_translator in ("java", "python"):
+            try:
+                from user_config import UserConfigManager
 
-            config_manager = UserConfigManager()
-            api_manager = config_manager.api_manager
+                config_manager = UserConfigManager()
+                api_manager = config_manager.api_manager
+                primary_api = api_manager.get_primary_api()
 
-            # 获取主要API配置
-            primary_api = api_manager.get_primary_api()
+                if not primary_api or not primary_api.is_enabled():
+                    ui.print_error("未找到启用的翻译API配置")
+                    ui.print_info("请先配置翻译API：")
+                    ui.print_info("1. 运行主程序选择'配置管理'")
+                    ui.print_info("2. 选择'API配置'进行设置")
+                    ui.print_info("3. 配置并启用至少一个翻译API")
+                    return None
 
-            if not primary_api or not primary_api.is_enabled():
-                ui.print_error("未找到启用的翻译API配置")
-                ui.print_info("请先配置翻译API：")
-                ui.print_info("1. 运行主程序选择'配置管理'")
-                ui.print_info("2. 选择'API配置'进行设置")
-                ui.print_info("3. 配置并启用至少一个翻译API")
+                if not primary_api.validate():
+                    ui.print_error(f"{primary_api.name}配置不完整或无效")
+                    ui.print_info("请检查API配置中的必需字段")
+                    return None
+
+                ui.print_info(f"🌐 使用翻译API: {primary_api.name}")
+
+            except Exception as e:
+                ui.print_error(f"加载翻译API配置失败: {str(e)}")
+                ui.print_info("请检查配置系统是否正常工作")
                 return None
+        else:
+            ui.print_info("🌐 使用翻译API: Google 翻译（免费）")
 
-            # 验证API配置
-            if not primary_api.validate():
-                ui.print_error(f"{primary_api.name}配置不完整或无效")
-                ui.print_info("请检查API配置中的必需字段")
-                return None
+        # Google 翻译：后台线程「按 Enter 暂停」，当前块写盘后生效
+        if actual_translator == "google":
+            pause_flag = Path(output_csv).parent / "translate_pause.flag"
 
-            ui.print_info(f"🌐 使用翻译API: {primary_api.name}")
+            def wait_pause():
+                try:
+                    input("按 Enter 暂停翻译（当前块完成后生效） ")
+                except (EOFError, KeyboardInterrupt):
+                    return
+                try:
+                    pause_flag.touch()
+                except OSError:
+                    pass
 
-        except Exception as e:
-            ui.print_error(f"加载翻译API配置失败: {str(e)}")
-            ui.print_info("请检查配置系统是否正常工作")
-            return None
+            pause_thread = threading.Thread(target=wait_pause, daemon=True)
+            pause_thread.start()
 
         # 执行翻译
         try:
@@ -154,7 +230,7 @@ def handle_unified_translate(
                 ui.print_success(f"翻译完成：{output_csv}")
                 return output_csv  # 翻译完成，返回输出文件路径
             else:
-                ui.print_warning("翻译未完成或被中断")
+                ui.print_warning("翻译未完成、已暂停或已中断，可重新运行翻译以继续")
                 return None  # 翻译未完成
         except Exception as e:
             ui.print_error(f"翻译失败: {str(e)}")

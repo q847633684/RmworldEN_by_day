@@ -36,6 +36,7 @@ class UnifiedTranslator:
         # 缓存翻译器实例
         self._java_translator = None
         self._python_translator = None
+        self._google_translator = None
 
     def _load_config_from_system(self) -> dict:
         """
@@ -105,20 +106,25 @@ class UnifiedTranslator:
             if not translator:
                 raise RuntimeError(f"无法创建翻译器: {translator_type}")
 
-            # 步骤3：执行机器翻译
-
+            # 步骤3：执行机器翻译（若翻译器支持 placeholder_map 则每行翻译后立即恢复占位符，否则步骤4再整表恢复）
             success = translator.translate_csv(
-                input_csv, output_csv, protected_text=protected_text
+                input_csv,
+                output_csv,
+                protected_text=protected_text,
+                placeholder_map=placeholder_map,
             )
 
-            # 步骤4：恢复占位符和翻译成人内容
-            if success:
+            # 步骤4：若翻译器未做行内恢复，则在此恢复占位符
+            if success and getattr(translator, "restores_placeholders_per_row", False) is False:
                 restore_success, _, _ = placeholder_manager.translate_csv(
                     output_csv, mode="restore", placeholder_map=placeholder_map
                 )
-                self.logger.info("翻译成功完成: %s", output_csv)
-                if not restore_success:
+                if restore_success:
+                    self.logger.info("占位符恢复完成: %s", output_csv)
+                else:
                     self.logger.warning("占位符恢复失败，但翻译已完成")
+            elif success:
+                self.logger.info("翻译成功完成: %s", output_csv)
             else:
                 self.logger.warning("翻译未完成或被中断: %s", output_csv)
             return success
@@ -163,17 +169,17 @@ class UnifiedTranslator:
             Optional[str]: 可恢复的输出文件路径, 如果没有则返回None
         """
         try:
-            # 优先检查Java翻译器
-            java_translator = self._get_java_translator()
-            if java_translator:
-                return java_translator.can_resume_translation(input_csv, output_csv)
-
-            # 检查Python翻译器恢复功能
-            python_translator = self._get_python_translator()
-            if python_translator:
-                return python_translator.can_resume_translation(input_csv, output_csv)
+            for getter in (
+                self._get_google_translator,
+                self._get_java_translator,
+                self._get_python_translator,
+            ):
+                translator = getter()
+                if translator:
+                    result = translator.can_resume_translation(input_csv, output_csv)
+                    if result:
+                        return result
             return None
-
         except (FileNotFoundError, PermissionError, RuntimeError) as e:
             self.logger.warning("检查恢复状态失败: %s", e)
             return None
@@ -192,22 +198,18 @@ class UnifiedTranslator:
             bool: 是否成功恢复
         """
         try:
-            java_translator = self._get_java_translator()
-            if java_translator:
-                return java_translator.resume_translation(
-                    input_csv, output_csv, protected_text
-                )
-
-            # 检查Python翻译器恢复功能
-            python_translator = self._get_python_translator()
-            if python_translator:
-                return python_translator.resume_translation(
-                    input_csv, output_csv, protected_text
-                )
-
-            ui.print_warning("当前翻译器不支持恢复功能")
+            for getter in (
+                self._get_google_translator,
+                self._get_java_translator,
+                self._get_python_translator,
+            ):
+                translator = getter()
+                if translator and translator.can_resume_translation(input_csv, output_csv):
+                    return translator.resume_translation(
+                        input_csv, output_csv, protected_text
+                    )
+            ui.print_warning("当前无可用翻译器或无法恢复")
             return False
-
         except (FileNotFoundError, PermissionError, RuntimeError, ValueError) as e:
             error_msg = f"恢复翻译失败: {str(e)}"
             self.logger.error(error_msg, exc_info=True)
@@ -222,6 +224,7 @@ class UnifiedTranslator:
             Dict[str, Dict[str, Any]]: 翻译器状态信息
         """
         return {
+            "google": self._get_google_status(),
             "java": self._get_java_status(),
             "python": self._get_python_status(),
         }
@@ -231,7 +234,7 @@ class UnifiedTranslator:
         选择翻译器
 
         Args:
-            translator_type: 翻译器类型 ("auto", "java", "python")
+            translator_type: 翻译器类型 ("auto", "google", "java", "python")
 
         Returns:
             翻译器实例
@@ -240,11 +243,14 @@ class UnifiedTranslator:
             ValueError: 不支持的翻译器类型
         """
         if translator_type == "auto":
-            # 自动选择：优先Java，回退Python
+            # 自动选择：优先 Google（免费），其次 Java/阿里云，最后 Python/阿里云
+            if self._is_google_available():
+                return self._get_google_translator()
             if self._is_java_available():
                 return self._get_java_translator()
-            else:
-                return self._get_python_translator()
+            return self._get_python_translator()
+        elif translator_type == "google":
+            return self._get_google_translator()
         elif translator_type == "java":
             return self._get_java_translator()
         elif translator_type == "python":
@@ -271,6 +277,34 @@ class UnifiedTranslator:
                 self.logger.debug("创建Python翻译器失败: %s", e)
                 return None
         return self._python_translator
+
+    def _get_google_translator(self):
+        """获取 Google 免费翻译器实例"""
+        if self._google_translator is None:
+            try:
+                self._google_translator = self.factory.create_google_translator()
+            except (ImportError, FileNotFoundError, RuntimeError) as e:
+                self.logger.debug("创建 Google 翻译器失败: %s", e)
+                return None
+        return self._google_translator
+
+    def _is_google_available(self) -> bool:
+        """检查 Google 翻译器是否可用"""
+        try:
+            status = self._get_google_status()
+            return status.get("available", False)
+        except (AttributeError, KeyError, RuntimeError):
+            return False
+
+    def _get_google_status(self) -> Dict[str, Any]:
+        """获取 Google 翻译器状态"""
+        try:
+            translator = self._get_google_translator()
+            if translator:
+                return translator.get_status()
+            return {"available": False, "reason": "无法创建 Google 翻译器"}
+        except (AttributeError, KeyError, RuntimeError) as e:
+            return {"available": False, "reason": str(e)}
 
     def _is_java_available(self) -> bool:
         """检查Java翻译器是否可用"""

@@ -238,6 +238,68 @@ class PlaceholderManager:
             ui.print_error(f"❌ CSV文件恢复失败: {e}")
             return False
 
+    def restore_csv_translated_column(
+        self, csv_file: str, output_file: Optional[str] = None
+    ) -> Tuple[bool, int]:
+        """
+        仅恢复 CSV 中 translated 列的占位符（(PH_1) -> [saw] 等）。
+        通过逐行用 text 列重新保护以重建 placeholder_map，再对 translated 列做恢复。
+        用于阿里云等翻译后未恢复占位符的 CSV；恢复后可继续用 Google 翻译或导入。
+
+        Args:
+            csv_file: 输入 CSV 路径（需含 key, text, translated 列）
+            output_file: 输出路径，为 None 则覆盖原文件
+
+        Returns:
+            Tuple[bool, int]: (是否成功, 恢复条数)
+        """
+        import csv
+        from pathlib import Path
+
+        out_path = Path(output_file) if output_file else Path(csv_file)
+        if not Path(csv_file).exists():
+            logger.error("CSV文件不存在: %s", csv_file)
+            return False, 0
+
+        placeholder_map: Dict[str, Dict[str, str]] = {}
+        restored_count = 0
+        rows = []
+        fieldnames = []
+        try:
+            with open(csv_file, "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                fieldnames = [x for x in (reader.fieldnames or []) if x is not None]
+                if "translated" not in fieldnames:
+                    logger.error("CSV 缺少 translated 列: %s", csv_file)
+                    return False, 0
+                rows = list(reader)
+            total = len(rows)
+            try:
+                from tqdm import tqdm
+                row_iter = tqdm(rows, desc="恢复占位符", unit="行")
+            except ImportError:
+                row_iter = rows
+            for row in row_iter:
+                csv_key = row.get("key", "")
+                text = (row.get("text") or "").strip()
+                translated = (row.get("translated") or "").strip()
+                if text and translated:
+                    self.protect_text(text, csv_key, placeholder_map)
+                    restored = self.restore_text(translated, csv_key, placeholder_map)
+                    if restored != translated:
+                        row["translated"] = restored
+                        restored_count += 1
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(out_path, "w", encoding="utf-8", newline="") as f:
+                w = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+                w.writeheader()
+                w.writerows(rows)
+            logger.info("恢复翻译列占位符完成: %s, %d 条", csv_file, restored_count)
+            return True, restored_count
+        except Exception as e:
+            logger.error("恢复翻译列占位符失败: %s", e)
+            return False, 0
+
     def protect_text(
         self,
         text: str,
@@ -262,17 +324,12 @@ class PlaceholderManager:
 
         protected_text = text
 
-        # 步骤1: 保护占位符
+        # 保护占位符（不再使用 ALIMT 保护成人词汇，Google 等翻译器整句翻译时占位符用 [[...]] 即可）
         all_placeholders = []
         protected_text, placeholders = self._protect_placeholders_in_text(
             protected_text, csv_key, placeholder_map
         )
         all_placeholders.extend(placeholders)
-
-        # 步骤2: 保护成人内容词汇
-        protected_text, used_dict = self._protect_adult_content(protected_text)
-        if used_dict:
-            logger.debug("保护了成人内容词汇")
 
         return protected_text, all_placeholders
 
@@ -295,10 +352,21 @@ class PlaceholderManager:
 
         restored_text = text
 
-        # 步骤1: 恢复占位符
+        # 步骤0: 去掉 Google 翻译残留的 [[...]] 包裹（如 [[阴道]]、[[(PH_1)]]），避免恢复后仍带 [[...]]
+        while True:
+            next_text = re.sub(r"\[\[(.*?)\]\]", r"\1", restored_text, flags=re.DOTALL)
+            if next_text == restored_text:
+                break
+            restored_text = next_text
+
+        # 步骤1: 恢复占位符（(PH_1)、<ALIMT >(PH_1)</ALIMT> -> 原始游戏占位符）
         restored_text = self._restore_placeholders_in_text(restored_text, csv_key, placeholder_map)
 
-        # 步骤2: 翻译成人内容词汇（直接翻译英文成人词汇）
+        # 步骤2: 去掉剩余的 <ALIMT >xxx</ALIMT> 标签，只保留内容（与阿里云 removeAlimtTags 一致）
+        # 这样裸露的英文成人词（如 anal）会在步骤3 被词典翻译
+        restored_text = re.sub(r"<ALIMT\s*>([^<]*)</ALIMT>", r"\1", restored_text)
+
+        # 步骤3: 翻译剩余英文成人词汇（如 anal -> 肛门）
         restored_text = self._translate_remaining_adult_words(restored_text)
 
         return restored_text
@@ -418,7 +486,7 @@ class PlaceholderManager:
             r"%[sdif]",  # %s, %d, %i, %f
             r"</?(?!ALIMT\s*>)[^>]+>",  # <color> 或 <br>，但排除ALIMT标签
             r"[a-zA-Z_][a-zA-Z0-9_]*\([^)]*\)",  # 函数调用
-            r"[a-zA-Z_][a-zA-Z0-9_]*->",  # 任意前缀-> 格式，如 r_logentry->, sent->, name-> 等
+            r"[a-zA-Z_][a-zA-Z0-9_]*\s*->",  # 任意前缀-> 格式（允许箭头前有空格），如 r_logentry->, bottomless->, bottomless -> 等
             r"\bpawn\b",  # pawn 游戏术语
         ]
 
@@ -449,12 +517,12 @@ class PlaceholderManager:
                 placeholder_map[csv_key][placeholder_id] = placeholder_text
                 placeholders.append(placeholder_text)
 
-                # 用ALIMT标签保护
-                alimt_tag = f"<ALIMT >({placeholder_id})</ALIMT>"
+                # 用 (PH_1) 占位即可，翻译时会按占位符分段、不发给 API，无需 ALIMT 包装
+                placeholder_tag = f"({placeholder_id})"
 
                 start, end = match.span()
                 protected_text = (
-                    protected_text[:start] + alimt_tag + protected_text[end:]
+                    protected_text[:start] + placeholder_tag + protected_text[end:]
                 )
                 idx += 1
         else:
@@ -464,23 +532,50 @@ class PlaceholderManager:
 
         return protected_text, placeholders
 
+    # 与 protect 中一致的「占位形式」模式，用于成人词翻译前掩码，避免 [nudity]、breast->、{0} 等被翻译
+    _KEEP_PATTERNS = [
+        r"\[[^\]]+\]",  # [saw], [nudity]
+        r"\{[^}]+\}%",
+        r"\{[^}]+\}",
+        r"%[sdif]",
+        r"[a-zA-Z_][a-zA-Z0-9_]*\s*->",  # breast->, r_logentry->
+        r"\\n",
+    ]
+    _KEEP_PLACEHOLDER = "\x00KEEP\x00"  # 临时占位，翻译后还原
+
+    def _mask_placeholder_like_spans(self, text: str) -> Tuple[str, List[str]]:
+        """把 [xxx]、{xxx}、xxx-> 等占位形式临时替换掉，避免成人词步骤误译。返回 (掩码后文本, 被替换的片段列表)。"""
+        if not text:
+            return text, []
+        combined = "|".join(f"({p})" for p in self._KEEP_PATTERNS)
+        spans = []
+        def repl(m):
+            spans.append(m.group(0))
+            return f"{self._KEEP_PLACEHOLDER}{len(spans)-1}{self._KEEP_PLACEHOLDER}"
+        masked = re.sub(combined, repl, text)
+        return masked, spans
+
+    def _unmask_placeholder_like_spans(self, text: str, spans: List[str]) -> str:
+        """把 _mask_placeholder_like_spans 的占位还原为原始片段。"""
+        if not spans:
+            return text
+        for i, orig in enumerate(spans):
+            text = text.replace(f"{self._KEEP_PLACEHOLDER}{i}{self._KEEP_PLACEHOLDER}", orig)
+        return text
+
     def _translate_remaining_adult_words(self, text: str) -> str:
         """
-        翻译文本中剩余的英文成人词汇
-
-        Args:
-            text: 要翻译的文本
-
-        Returns:
-            str: 翻译后的文本
+        翻译文本中剩余的英文成人词汇。
+        会先掩码 [xxx]、{xxx}、xxx-> 等占位形式，只对正文中的成人词翻译，再还原。
         """
         if not self.dictionary or not text:
             return text
 
         import re
 
-        text_lower = text.lower()
-        translated_text = text
+        masked, spans = self._mask_placeholder_like_spans(text)
+        text_lower = masked.lower()
+        translated_text = masked
 
         # 按优先级排序的词汇（长词汇优先，避免部分匹配问题）
         sorted_entries = sorted(
@@ -491,8 +586,7 @@ class PlaceholderManager:
 
         for english_word, entry_data in sorted_entries:
             if english_word in text_lower:
-                # 使用正则表达式进行精确匹配，支持中英文混合文本
-                # 匹配英文词汇，前后可以是中文、标点符号或边界
+                # 只匹配正文中的独立英文词（占位形式已被掩码，不会误译）
                 pattern = r"(?<![a-zA-Z])" + re.escape(english_word) + r"(?![a-zA-Z])"
                 if re.search(pattern, text_lower):
                     # 获取翻译和优先级
@@ -530,7 +624,7 @@ class PlaceholderManager:
                     )
                     text_lower = translated_text.lower()  # 更新小写版本
 
-        return translated_text
+        return self._unmask_placeholder_like_spans(translated_text, spans)
 
     def _select_translation_by_priority(self, translations: list, priority: str) -> str:
         """
