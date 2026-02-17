@@ -31,10 +31,10 @@
 - **3.3 incremental**: 新增 - 扫描对比现有内容，只新增缺少的key
 - **3.4 rebuild**: 重建 - 清空输出目录后重新生成
 
-### 4. 模板结构选择 (template_structure)
-- **4.1 original_structure**: 保持原英文 DefInjected 结构
-- **4.2 defs_by_type**: 按定义类型分组 (如 ThingDefs.xml、PawnKindDefs.xml)
-- **4.3 defs_by_file_structure**: 按原始 Defs 文件结构组织
+### 4. 模板结构 (template_structure，由数据来源自动决定)
+- **definjected_only** → **original_structure**：保持原英文 DefInjected 结构
+- **defs_only** → **defs_by_type**：按 Def 类型分组，子文件夹名与游戏注册的 Def 类型名一致
+- **merge/incremental** → **merge_logic**：使用智能合并/新增逻辑
 
 ## 🔄 智能合并核心逻辑
 
@@ -158,7 +158,7 @@
    - 输入模组目录（input_mod_dir）
    - 输出目录（output_dir）
    - 数据源选择（data_source_choice）
-   - 模板结构（template_structure）
+   - 模板结构（template_structure，由 data_source_choice 与 conflict_resolution 自动决定）
 
 2. **提取输入目录翻译**
    - 通过 `_extract_all_translations` 方法

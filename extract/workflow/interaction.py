@@ -75,13 +75,13 @@ class InteractionManager:
         )
 
         # 第一步：检测当前内容根下的英文目录状态（Keyed/DefInjected 与 Defs 同逻辑）
-        self._print_step_header(1, 5, "检测mod英文目录状态")
+        self._print_step_header(1, 4, "检测mod英文目录状态")
         import_status = self._detect_language_directories(
             mod_dir, language=en_language
         )
 
         # 第二步：检测输出目录状态
-        self._print_step_header(2, 5, "检测输出目录状态")
+        self._print_step_header(2, 4, "检测输出目录状态")
         output_dir, output_language = self._get_output_directory(
             mod_dir,
             language=cn_language,
@@ -92,28 +92,20 @@ class InteractionManager:
         )
 
         # 第三步：选择数据来源
-        self._print_step_header(3, 5, "选择数据来源")
+        self._print_step_header(3, 4, "选择数据来源")
         data_source_choice = self._choose_data_source(import_status)
 
         # 第四步：处理输出冲突
-        self._print_step_header(4, 5, "处理输出冲突")
+        self._print_step_header(4, 4, "处理输出冲突")
         conflict_resolution = self._handle_output_conflicts(output_status)
 
-        # 第五步：选择模板结构（根据决策树逻辑）
-        self._print_step_header(5, 5, "选择模板结构")
-        # 根据你的决策树，如果选择了merge或incremental，则使用合并/新增逻辑，不需要选择模板结构
-        if conflict_resolution == "merge":
-            ui.print_info("检测到选择合并模式")
-            ui.print_success("将使用5.1智能合并逻辑，无需选择模板结构")
-            template_structure = "merge_logic"  # 特殊标识
-        elif conflict_resolution == "incremental":
-            ui.print_info("检测到选择新增模式")
-            ui.print_success("将使用5.2新增逻辑，无需选择模板结构")
-            template_structure = "merge_logic"  # 特殊标识
+        # 模板结构：由数据来源直接决定，Defs 固定按 Def 类型分组，DefInjected 保持原结构
+        if conflict_resolution in ["merge", "incremental"]:
+            template_structure = "merge_logic"
+        elif data_source_choice == "definjected_only":
+            template_structure = "original_structure"
         else:
-            template_structure = self._choose_template_structure(
-                data_source_choice, conflict_resolution
-            )
+            template_structure = "defs_by_type"
 
         # 构建智能配置
         smart_config = {
@@ -220,9 +212,8 @@ class InteractionManager:
         """格式化文件结构描述"""
         descriptions = {
             "original_structure": "保持原英文结构",
-            "defs_by_type": "按定义类型分组",
-            "defs_by_file_structure": "按Defs文件结构",
-            "merge_logic": "5.1智能合并逻辑",
+            "defs_by_type": "按 Def 类型分组",
+            "merge_logic": "智能合并/新增逻辑",
         }
         return descriptions.get(structure, structure)
 
@@ -298,8 +289,6 @@ class InteractionManager:
         """
         path_manager = PathManager()
         default_dir = str(Path(mod_dir))
-        # config = UserConfigManager()
-        # default_dirs = config.language_config.get_language_dir(mod_dir, language)
         history = path_manager.get_history_list("output_dir")
 
         # 如果跳过用户选择，直接使用模组根目录
@@ -368,34 +357,6 @@ class InteractionManager:
             else:
                 ui.print_error("请输入选择或路径")
                 ui.print_tip("直接回车选择默认目录")
-
-    def _analyze_keyed_quality(self, keyed_dir: str) -> dict:
-        """
-        分析 Keyed 目录质量，统计文件数、最近30天修改数，给出智能建议
-        """
-        dir_path = Path(keyed_dir)
-        xml_files = list(dir_path.rglob("*.xml"))
-        file_count = len(xml_files)
-        recent_files = 0
-
-        for xml_file in xml_files:
-            mtime = datetime.fromtimestamp(os.path.getmtime(xml_file))
-            if (datetime.now() - mtime).days < 30:
-                recent_files += 1
-
-        suggestion = "合并" if recent_files > file_count * 0.5 else "覆盖"
-        reason = (
-            "大部分文件近期有更新"
-            if recent_files > file_count * 0.5
-            else "文件较旧或较少，建议覆盖"
-        )
-
-        return {
-            "file_count": file_count,
-            "recent_files": recent_files,
-            "suggestion": suggestion,
-            "reason": reason,
-        }
 
     def _choose_data_source(self, import_status: Dict[str, Union[bool, str]]) -> str:
         """
@@ -645,80 +606,3 @@ class InteractionManager:
                 "reason": "分析失败",
                 "recommended_value": None,
             }
-
-    def get_english_keyed_directory(self, mod_dir: str) -> Optional[str]:
-        """
-        获取英文 Keyed 目录路径
-
-        Args:
-            mod_dir: 模组目录路径
-
-        Returns:
-            Optional[str]: Keyed 目录路径，如果不存在则返回 None
-        """
-        config = UserConfigManager()
-        en_language = config.language_config.get_value("en_language", "English")
-        en_keyed_dir = config.language_config.get_language_subdir(
-            mod_dir, en_language, "keyed"
-        )
-        if en_keyed_dir.exists() and any(en_keyed_dir.rglob("*.xml")):
-            return str(en_keyed_dir)
-        return None
-
-    def _choose_template_structure(
-        self, data_source_choice: str, conflict_resolution: str
-    ) -> str:
-        """
-        根据数据来源和冲突处理方式选择模板结构（实现你的决策树逻辑）
-
-        Args:
-            data_source_choice: 数据来源选择
-            conflict_resolution: 冲突处理方式
-
-        Returns:
-            str: 模板结构选择
-        """
-        # 根据你的决策树逻辑：
-        # 1. 如果选择了merge(3.2)或incremental(3.3)，使用合并/新增逻辑，不需要选择结构
-        if conflict_resolution in ["merge", "incremental"]:
-            return "merge_logic"  # 这应该在上层已经处理了
-
-        # 2. 如果选择definjected_only且非merge/incremental，使用4.1(original_structure)
-        if data_source_choice == "definjected_only":
-            ui.print_info("检测到使用DefInjected目录提取翻译")
-            ui.print_success("自动选择：保持原英文DefInjected结构")
-            return "original_structure"
-
-        # 3. 如果选择defs_only且非merge/incremental，询问用户选择4.2或4.3
-        elif data_source_choice == "defs_only":
-            ui.print_info("检测到使用Defs文件扫描提取翻译")
-            ui.print_section_header("请选择DefInjected文件组织方式", ui.Icons.FOLDER)
-            ui.print_menu_item(
-                "1",
-                "按原始Defs文件结构组织",
-                "保持与Defs目录相同的文件夹和文件结构，便于对照原始定义文件",
-                ui.Icons.FOLDER,
-                is_recommended=True,
-            )
-            ui.print_menu_item(
-                "2",
-                "按定义类型分组",
-                "ThingDefs.xml、PawnKindDefs.xml 等，便于翻译工作分类管理",
-                ui.Icons.FOLDER,
-            )
-
-            while True:
-                choice = input(
-                    ui.get_input_prompt("请选择", options="1/2", default="1")
-                ).strip()
-                if choice == "1" or choice == "":
-                    ui.print_success("选择：按原始Defs文件结构组织")
-                    return "defs_by_file_structure"
-                elif choice == "2":
-                    ui.print_success("选择：按定义类型分组")
-                    return "defs_by_type"
-                else:
-                    ui.print_error("请输入 1 或 2")
-
-        # 默认选择
-        return "original_structure"

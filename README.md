@@ -194,9 +194,8 @@ day_translation/
 - 配备进度条显示
 
 **DefInjectedExporter**: 导出DefInjected格式的翻译文件
-- `export_with_original_structure()`: 按原始文件路径结构导出
-- `export_with_defs_structure()`: 按DefType分类导出
-- `export_with_file_structure()`: 按文件目录结构导出
+- `export_with_original_structure()`: 按原始文件路径结构导出（DefInjected 数据来源时）
+- `export_with_defs_structure()`: 按 Def 类型分组导出，子文件夹名与游戏 Def 类型名一致（Defs 数据来源时）
 - 所有方法都配备进度条显示
 
 ### 6. utils/ui_style.py - UI样式和进度条
@@ -297,7 +296,7 @@ main()
 
 ℹ️ 正在生成 DefInjected 模板中的 25 个文件...
 生成DefInjected: [████████████████████████████████████████] 100.0% (25/25) ℹ️ 
-✅ DefInjected 模板已生成（按文件结构）
+✅ DefInjected 模板已生成（按Def类型分组）
 ```
 
 ## 🛠️ 技术特性

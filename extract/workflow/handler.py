@@ -10,7 +10,7 @@ RimWorld 翻译提取主处理器
 
 import re
 from pathlib import Path
-from typing import Optional, List
+from typing import Optional, List, Tuple
 from user_config import UserConfigManager
 from utils.logging_config import get_logger, log_user_action, log_error_with_context
 from utils.interaction import (
@@ -24,6 +24,25 @@ from .manager import (
     get_content_roots_from_load_folders,
 )
 from .interaction import InteractionManager
+
+
+def _dedupe_translations_by_key(
+    keyed_list: List, def_list: List
+) -> Tuple[List, List]:
+    """多根合并时按 key 去重，避免同一 Keyed/Def 目录被多个根解析到导致重复。"""
+    seen_k, seen_d = set(), set()
+    out_k, out_d = [], []
+    for item in keyed_list:
+        k = item[0] if item else None
+        if k is not None and k not in seen_k:
+            seen_k.add(k)
+            out_k.append(item)
+    for item in def_list:
+        k = item[0] if item else None
+        if k is not None and k not in seen_d:
+            seen_d.add(k)
+            out_d.append(item)
+    return out_k, out_d
 
 
 def handle_extract() -> Optional[tuple]:
@@ -114,26 +133,12 @@ def handle_extract() -> Optional[tuple]:
             ui.print_error("未找到 Defs 或 Languages 目录，请确认模组路径正确")
             return None
         load_folders_mod_root = scan_base
-        # 构建 root_groups：(roots, export_rel)。无 LoadFolders 或仅版本路径时合并到根 Languages
-        def _version_sibling_roots():
-            cr = find_content_roots(scan_base, language=en_lang)
-            mod_dir_res = str(Path(mod_dir).resolve())
-            scan_base_res = str(Path(scan_base).resolve())
-            roots = [
-                r for r in cr
-                if r == mod_dir_res
-                or r == scan_base_res
-                or r.replace("\\", "/").startswith(mod_dir_res.replace("\\", "/") + "/")
-            ]
-            if roots and mod_dir_res in roots:
-                roots = [mod_dir_res] + [r for r in roots if r != mod_dir_res]
-            return roots
+        # 构建 root_groups：(roots, export_rel)。版本组只用版本路径单根，Defs/Languages 均「版本优先、根目录回退」
         if scan_base == mod_dir:
             root_groups: List[tuple] = [([mod_dir], "")]
         elif not use_load_folders:
             root_groups = [(content_roots, "")]
         else:
-            version_sibling = _version_sibling_roots()
             root_groups = []
             seen_version = False
             for full in content_roots:
@@ -143,7 +148,8 @@ def handle_extract() -> Optional[tuple]:
                     rel_str = Path(full).name or ""
                 if rel_str in ("", ".", version_name):
                     if not seen_version:
-                        root_groups.append((version_sibling, ""))
+                        # 版本组：传版本路径 mod_dir（如 v1.6），提取时 Defs/Keyed 自动「版本有则用版本，无则用根」
+                        root_groups.append(([mod_dir], ""))
                         seen_version = True
                 else:
                     root_groups.append(([full], rel_str))
@@ -244,6 +250,9 @@ def handle_extract() -> Optional[tuple]:
                             )
                             all_keyed.extend(k)
                             all_def.extend(d)
+                        all_keyed, all_def = _dedupe_translations_by_key(
+                            all_keyed, all_def
+                        )
                         translations, csv_path = template_manager.merge_mode(
                             import_dir=roots[0],
                             import_language=import_language,
@@ -297,6 +306,9 @@ def handle_extract() -> Optional[tuple]:
                             )
                             all_keyed.extend(k)
                             all_def.extend(d)
+                        all_keyed, all_def = _dedupe_translations_by_key(
+                            all_keyed, all_def
+                        )
                         translations, csv_path = template_manager.incremental_mode(
                             import_dir=roots[0],
                             import_language=import_language,

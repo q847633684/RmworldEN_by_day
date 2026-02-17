@@ -6,7 +6,7 @@ import csv
 from utils.logging_config import get_logger
 from utils.ui_style import ui
 from pathlib import Path
-from typing import Dict, Tuple, Any, Optional, Callable
+from typing import Dict, Tuple, Any, Optional, Callable, List, Union
 from utils.utils import XMLProcessor
 from user_config.path_manager import PathManager
 
@@ -192,6 +192,31 @@ def _definjected_get_parent(elem: Any, root: Any, parent_map: Optional[dict]) ->
     return None
 
 
+def _looks_like_en_placeholder(text: str) -> bool:
+    """
+    判断文本是否像 DefInjected 中的英文占位（新模板常带 EN 注释格式），
+    这类内容在迁移时应视为可覆盖，即使用户选了「仅填充空项」。
+    """
+    if not text or len(text) < 20:
+        return False
+    t = text.strip()
+    # 常见 EN 占位：tag=... -> 英文句子、或 -&gt; 英文
+    if "->" in t or "&gt;" in t or "-&gt;" in t:
+        # 大部分为 ASCII 或拉丁字符则视为英文占位
+        try:
+            ascii_or_latin = sum(1 for c in t if ord(c) < 256)
+            if ascii_or_latin >= len(t) * 0.85:
+                return True
+        except Exception:
+            pass
+    # 以常见规则前缀开头（RimWorld / AROM 等）
+    lower = t.lower()
+    for prefix in ("creation(", "episode(", "intro(", "conflict(", "victory(", "setup(", "story(", "lesson", "archist", "animist", "founder"):
+        if lower.startswith(prefix) and ("->" in t or "&gt;" in t):
+            return True
+    return False
+
+
 def _definjected_tag_local(tag: Any) -> str:
     """取标签的本地名（去掉命名空间），便于与 CSV 的 key 一致。"""
     if not isinstance(tag, str):
@@ -201,13 +226,24 @@ def _definjected_tag_local(tag: Any) -> str:
     return tag
 
 
+def _definjected_li_siblings(parent: Any) -> list:
+    """取父节点下所有 <li> 子元素（排除注释等），保证索引与旧版 flat_all 的 .0/.1 一致。"""
+    return [
+        c
+        for c in parent
+        if isinstance(getattr(c, "tag", None), str)
+        and _definjected_tag_local(getattr(c, "tag", None)) == "li"
+    ]
+
+
 def _definjected_key_func(elem: Any, root: Any, parent_map: Optional[dict]) -> str:
     """
     DefInjected 用「父路径.标签」或「父路径.索引」生成 key，与提取器一致。
+    约定：容器下的第 1 个 <li> -> 容器路径.0，第 2 个 -> .1，与旧版 flat_all 的 key 一致。
     支持的格式示例（根为 <LanguageData>）：
-      - 平铺标签：<Anal_Breed_Reply.label>text</...> → key = "Anal_Breed_Reply.label"
-      - 列表容器 + <li>：<Anal_Breed_Reply.xxx.rulesStrings><li>...</li></...> → key = "Anal_Breed_Reply.xxx.rulesStrings.0", ".1", ...
-    路径中的 <li> 用索引代替，使 nested 与 flat_all 的 key 一致。
+      - 平铺标签：<DefName.field>text</...> → key = "DefName.field"
+      - 列表容器+<li>：<DefName.xxx.rulesStrings><li>...</li><li>...</li></...>
+        → 第 1 个 li 的 key = "DefName.xxx.rulesStrings.0"，第 2 个 = ".1"
     兼容 lxml（parent_map 为 None 时用 elem.getparent()）与标准库 XML。
     带命名空间的标签使用本地名，以便与 CSV 中通常无命名空间的 key 匹配。
     """
@@ -223,11 +259,7 @@ def _definjected_key_func(elem: Any, root: Any, parent_map: Optional[dict]) -> s
         if pt_local == "li":
             parent = _definjected_get_parent(p, root, parent_map)
             if parent is not None:
-                li_siblings = [
-                    c
-                    for c in parent
-                    if _definjected_tag_local(getattr(c, "tag", None)) == "li"
-                ]
+                li_siblings = _definjected_li_siblings(parent)
                 try:
                     idx = li_siblings.index(p)
                 except ValueError:
@@ -242,11 +274,7 @@ def _definjected_key_func(elem: Any, root: Any, parent_map: Optional[dict]) -> s
     if tag_local == "li":
         parent = _definjected_get_parent(elem, root, parent_map)
         if parent is not None:
-            li_siblings = [
-                c
-                for c in parent
-                if _definjected_tag_local(getattr(c, "tag", None)) == "li"
-            ]
+            li_siblings = _definjected_li_siblings(parent)
             try:
                 idx = li_siblings.index(elem)
             except ValueError:
@@ -285,9 +313,11 @@ def _collect_old_translations(
 ) -> Tuple[Dict[str, str], Dict[str, str]]:
     """
     扫描旧翻译目录，收集 Keyed 与 DefInjected 中已有翻译（key → 非空译文）。
+    支持 DefInjected 任意格式：flat_all（标签为 DefName.field.0）、flat_with_li（容器+<li>）、nested（嵌套树），
+    统一生成与提取器一致的 key（如 TM_Transcendent.descriptionMaker.rules.rulesStrings.0）。
 
     Args:
-        old_base_dir: 旧模组根目录（其下应有 Languages/<language>），或直接为语言目录（含 Keyed/DefInjected）
+        old_base_dir: 旧模组根目录、语言目录、或直接 Keyed/DefInjected 文件夹
         language: 语言代码，如 ChineseSimplified
 
     Returns:
@@ -334,26 +364,40 @@ def _collect_old_translations(
 
 
 def migrate_translations_to_new(
-    old_base_dir: str,
+    old_base_dirs: Union[str, List[str]],
     new_base_dir: str,
     language: str,
     only_fill_empty: bool = True,
 ) -> int:
     """
-    将旧翻译目录中已有翻译合并到新翻译目录；默认仅填充新目录中的空项。
+    从多个旧翻译目录收集所有 key→译文，合并后按 key 一一对应写入新模板；无需移动文件。
+
+    old_base_dirs 可为单个路径或路径列表；多个目录时从各处收集并合并（同 key 后者覆盖）。
+    DefInjected 的 nested / flat_with_li / flat_all 可任意互导，读写时统一按 key 匹配。
 
     Args:
-        old_base_dir: 旧模组根目录，或直接为语言目录（含 Keyed/DefInjected）
-        new_base_dir: 新模组/模板根目录，或直接为语言目录
+        old_base_dirs: 旧模组根/语言目录或 Keyed/DefInjected 文件夹；多个用列表，将合并收集
+        new_base_dir: 新模组/模板根目录、语言目录、或 Keyed/DefInjected 文件夹
         language: 语言代码
         only_fill_empty: 为 True 时仅填充新文件中空项，不覆盖已有翻译
 
     Returns:
         更新的文件数量
     """
-    keyed_map, definjected_map = _collect_old_translations(old_base_dir, language)
+    if isinstance(old_base_dirs, str):
+        old_base_dirs = [old_base_dirs]
+    keyed_map: Dict[str, str] = {}
+    definjected_map: Dict[str, str] = {}
+    for old_base_dir in old_base_dirs:
+        old_base_dir = old_base_dir.strip()
+        if not old_base_dir:
+            continue
+        k_map, d_map = _collect_old_translations(old_base_dir, language)
+        keyed_map.update(k_map)
+        definjected_map.update(d_map)
     ui.print_info(
-        f"从旧目录收集到 Keyed {len(keyed_map)} 条、DefInjected {len(definjected_map)} 条翻译。"
+        f"从 %s 个旧目录合并收集到 Keyed %s 条、DefInjected %s 条翻译。"
+        % (len(old_base_dirs), len(keyed_map), len(definjected_map))
     )
     if not keyed_map and not definjected_map:
         logger.warning("未从旧目录收集到任何翻译，请确认旧目录下存在 Keyed/DefInjected 且 XML 中含译文")
@@ -416,6 +460,13 @@ def _update_xml_in_subdir(
         )
         if not subdir.exists():
             subdir = _get_language_subdir_path(mod_dir, language, subdir_type)
+    # 使用配置的目录名（如 DefInjected）以便正确解析路径
+    if language_dir_override and subdir_type.lower() == "definjected":
+        def_name = CONFIG.language_config.get_value("definjected_dir", "DefInjected")
+        subdir = Path(language_dir_override) / def_name
+    elif language_dir_override and subdir_type.lower() == "keyed":
+        keyed_name = CONFIG.language_config.get_value("keyed_dir", "Keyed")
+        subdir = Path(language_dir_override) / keyed_name
     if not subdir.exists():
         logger.warning("语言子目录不存在: %s", subdir)
         return 0
@@ -486,6 +537,7 @@ def update_translations(
 ) -> bool:
     """
     更新 XML 中的翻译。当 only_fill_empty=True 时也会处理无文本节点，仅填充空项。
+    用于 DefInjected 时，nested / flat_with_li / flat_all 任意格式均可作为目标，按统一 key 写入。
 
     Args:
         processor (XMLProcessor): XML处理器实例
@@ -523,19 +575,36 @@ def update_translations(
             continue
         # 精确匹配
         value = translations.get(key)
-        # DefInjected 迁移：新模板 flat_with_li 中 <li> 的 key 为 .0/.1，旧 flat_all 为 .0.RMBLabel 等，用前缀匹配回退
+        # DefInjected 迁移：支持旧 flat_all / flat_with_li / nested 与任意新格式互导
         if value is None and generate_key_func is not None:
             tag = getattr(elem, "tag", None)
-            if tag == "li":
+            tag_local = _definjected_tag_local(tag) if isinstance(tag, str) else ""
+            # 1) 新模板是 <li> 时：旧 flat_all 可能为 .0、.1，用前缀匹配
+            if tag_local == "li":
                 prefix = key + "."
                 candidates = [k for k in translations if k.startswith(prefix)]
                 if len(candidates) == 1:
                     value = translations[candidates[0]]
                 elif len(candidates) > 1:
                     value = translations.get(prefix + "RMBLabel") or translations.get(candidates[0])
+            # 2) 按后缀匹配：旧翻译 key 可能带不同前缀（如不同 Def 文件夹结构），用路径后缀唯一匹配
+            if value is None and "." in key:
+                suffix = key.split(".", 1)[-1]
+                candidates = [k for k in translations if k == suffix or k.endswith("." + suffix)]
+                if len(candidates) == 1:
+                    value = translations[candidates[0]]
+                elif len(candidates) > 1:
+                    def_name = key.split(".")[0]
+                    for c in candidates:
+                        if c.startswith(def_name + "."):
+                            value = translations[c]
+                            break
+                    if value is None:
+                        value = translations.get(candidates[0])
         if value is not None:
             current = (elem.text or "").strip()
-            if only_fill_empty and current:
+            # 迁移时：若当前内容像英文占位（如 creation(tag=...)->...），仍用旧翻译覆盖
+            if only_fill_empty and current and not _looks_like_en_placeholder(current):
                 pass
             elif only_fill_empty:
                 elem.text = sanitize_xml(value)
@@ -555,7 +624,7 @@ def update_translations(
                     if attr_key not in translations:
                         continue
                     current_attr = (attr_value or "").strip()
-                    if only_fill_empty and current_attr:
+                    if only_fill_empty and current_attr and not _looks_like_en_placeholder(current_attr):
                         pass
                     elif only_fill_empty:
                         elem.set(attr_name, sanitize_xml(translations[attr_key]))

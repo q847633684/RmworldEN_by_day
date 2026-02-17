@@ -365,6 +365,28 @@ class TemplateManager:
             )
             all_keyed.extend(k)
             all_def.extend(d)
+        # 多根时可能同一 Keyed/Def 目录被多个根解析到，按 key 去重保留首次出现
+        if len(import_dirs) > 1:
+            _seen_k: set = set()
+            _out_k: List[Tuple] = []
+            for item in all_keyed:
+                if not item:
+                    continue
+                key = item[0]
+                if key is not None and key not in _seen_k:
+                    _seen_k.add(key)
+                    _out_k.append(item)
+            all_keyed = _out_k
+            _seen_d: set = set()
+            _out_d: List[Tuple] = []
+            for item in all_def:
+                if not item:
+                    continue
+                key = item[0]
+                if key is not None and key not in _seen_d:
+                    _seen_d.add(key)
+                    _out_d.append(item)
+            all_def = _out_d
         if not all_keyed and not all_def:
             self.logger.warning("多根合并：未找到任何翻译数据")
             ui.print_warning("未找到任何翻译数据")
@@ -423,6 +445,7 @@ class TemplateManager:
         if input_keyed is not None and input_def is not None:
             pass
         else:
+            ui.print_info("【输入】英文源")
             input_keyed, input_def = self.extract_all_translations(
                 import_dir,
                 import_language,
@@ -430,7 +453,8 @@ class TemplateManager:
                 has_input_keyed=has_input_keyed,
             )
 
-        # 步骤2：提取输出数据
+        # 步骤2：提取输出目录现有翻译（用于与输入合并）
+        ui.print_info("【输出】现有翻译")
         output_keyed, output_def = self.extract_all_translations(
             output_dir,
             output_language,
@@ -451,16 +475,28 @@ class TemplateManager:
         )
         # 写入合并结果（仅更新、新增、过时等，不含「不变」）
         if keyed_translations:
-            ui.print_info("正在合并 Keyed ...")
             self._write_merged_translations(
                 keyed_translations, output_dir, output_language, "Keyed", keyed_stats
             )
 
         if def_translations:
-            ui.print_info("正在合并 DefInjected ...")
             self._write_merged_translations(
                 def_translations, output_dir, output_language, "DefInjected", def_stats
             )
+        else:
+            # DefInjected 参与合并但无需写入时，与 Keyed 同格式单行统计
+            total_def = def_stats.get("merged_count", 0) + def_stats.get(
+                "unchanged_count", 0
+            )
+            if total_def or len(input_def) or len(output_def):
+                u, n, c = (
+                    def_stats.get("updated_count", 0),
+                    def_stats.get("new_count", 0),
+                    def_stats.get("unchanged_count", 0),
+                )
+                ui.print_success(
+                    f"合并 DefInjected → {total_def} 条（更新 {u}，新增 {n}，不变 {c}）"
+                )
 
         # 步骤4：导出CSV到输出目录（同上，仅含更新/新增/过时等，不含不变项）
         csv_path = self._save_translations_to_csv(
@@ -501,9 +537,7 @@ class TemplateManager:
             keyed_translations = self.keyed_extractor.extract(
                 import_dir, import_language
             )
-            ui.print_success(
-                f"从Keyed 目录提取到 {len(keyed_translations)} 条 Keyed 翻译"
-            )
+            ui.print_info(f"  Keyed → {len(keyed_translations)} 条")
             self.logger.debug(
                 "从Keyed 目录提取到 %s 条 Keyed 翻译", len(keyed_translations)
             )
@@ -515,10 +549,7 @@ class TemplateManager:
             definjected_translations = self.definjected_extractor.extract(
                 import_dir, import_language
             )
-
-            ui.print_success(
-                f"从DefInjected 目录提取到 {len(definjected_translations)} 条 DefInjected 翻译"
-            )
+            ui.print_info(f"  DefInjected → {len(definjected_translations)} 条")
             self.logger.info(
                 "从DefInjected 目录提取到 %s 条 DefInjected 翻译",
                 len(definjected_translations),
@@ -528,8 +559,7 @@ class TemplateManager:
         elif data_source_choice == "defs_only":
             self.logger.debug("正在扫描 Defs 目录...")
             defs_translations = self.defs_scanner.extract(import_dir)
-
-            ui.print_success(f"从Defs目录提取到 {len(defs_translations)} 条 Defs 翻译")
+            ui.print_info(f"  Defs → {len(defs_translations)} 条")
             self.logger.debug(
                 "从Defs目录提取到 %s 条 Defs 翻译", len(defs_translations)
             )
@@ -601,7 +631,7 @@ class TemplateManager:
             )
             ui.print_success("DefInjected 模板已生成（保持原结构）")
         elif template_structure == "defs_by_type":
-            # 按DefType分组的导出函数
+            # 按 Def 类型分组的导出函数（符合游戏要求）
             self.definjected_exporter.export_with_defs_structure(
                 output_dir, output_language, def_translations
             )
@@ -609,17 +639,8 @@ class TemplateManager:
                 "生成 %s 条 DefInjected 模板（按DefType分组）", len(def_translations)
             )
             ui.print_success("DefInjected 模板已生成（按DefType分组）")
-        elif template_structure == "defs_by_file_structure":
-            # 按文件结构的导出函数
-            self.definjected_exporter.export_with_file_structure(
-                output_dir, output_language, def_translations
-            )
-            self.logger.debug(
-                "生成 %s 条 DefInjected 模板（按文件结构）", len(def_translations)
-            )
-            ui.print_success("DefInjected 模板已生成（按文件结构）")
         else:
-            # 默认使用原始结构
+            # merge_logic 或未知值：按原结构写回
             self.definjected_exporter.export_with_original_structure(
                 output_dir, output_language, def_translations
             )
@@ -682,8 +703,8 @@ class TemplateManager:
 
             # 更新或添加翻译条目
             for key, test, _, _, en_test, history in sorted(items, key=lambda x: x[0]):
-                # 清理标签名：去除斜杠，只保留字母、数字、下划线、点号
-                clean_key = re.sub(r"[^A-Za-z0-9_.]", ".", key)
+                # 清理标签名：保留连字符（defName 可含连字符如 TM_Mecha-Golem_EarthCoreHD），其余非法字符替换为点
+                clean_key = re.sub(r"[^A-Za-z0-9_.\-]", ".", key)
                 if not re.match(r"^[A-Za-z_]", clean_key):
                     clean_key = "_" + clean_key
 
@@ -787,7 +808,7 @@ class TemplateManager:
             else:
                 logger.error("保存文件失败: %s", output_file)
 
-        # 统计合并结果：从 merge_stats 取「不变」数（不变项未写入 merged），其余从 merged 的 history 区分
+        # 单行合并结果（与 DefInjected 无写入时格式一致）
         def _hist(item):
             return (item[5] or "") if len(item) > 5 else ""
 
@@ -796,12 +817,9 @@ class TemplateManager:
         unchanged_count = (merge_stats or {}).get("unchanged_count", 0)
         if unchanged_count == 0:
             unchanged_count = sum(1 for item in merged if not _hist(item).strip())
-        outdated_count = sum(1 for item in merged if "过时key，需删除" in _hist(item))
-        unrecognized_count = sum(1 for item in merged if "未识别字段，谨慎删除" in _hist(item))
-        duplicate_count = sum(1 for item in merged if "重复key" in _hist(item))
         total_processed = len(merged) + unchanged_count
         ui.print_success(
-            f"{sub_dir} 智能合并完成！共处理 {total_processed} 条翻译（更新: {updated_count} 条，新增: {new_count} 条，不变: {unchanged_count} 条，过时: {outdated_count} 条，未识别: {unrecognized_count} 条，重复: {duplicate_count} 条）"
+            f"合并 {sub_dir} → {total_processed} 条（更新 {updated_count}，新增 {new_count}，不变 {unchanged_count}）"
         )
 
     def _save_translations_to_csv(
@@ -856,11 +874,11 @@ class TemplateManager:
             for _, item in ui.iter_with_progress(
                 all_translations,
                 prefix="导出CSV",
-                description=f"正在导出 {len(all_translations)} 条翻译到CSV",
+                description="",
             ):
                 writer.writerow(item)
 
-        ui.print_success(f"CSV文件已生成: {csv_path}")
+        ui.print_success(f"导出 CSV → {Path(csv_path).name}")
         self.logger.debug("翻译数据已保存到CSV: %s", csv_path)
 
         # 记入历史：让提取生成的 CSV 出现在后续"Python机翻/导入翻译"的历史列表

@@ -111,7 +111,11 @@ class DefInjectedExporter(BaseExporter):
         xml_format: Optional[str] = None,
     ) -> None:
         """
-        按 DefType 分组导出 DefInjected 翻译。
+        按 Def 类型分组导出 DefInjected 翻译。
+
+        子文件夹名 = Def 类型名（StatDef、BookDef、ThoughtDef 等），符合 RimWorld 要求：
+        「DefInjected 下子文件夹名必须与游戏/模组注册的 Def 类型名完全一致」，
+        可避免 "dir XXX 不对应任何 def 类型" 报错。
 
         Args:
             xml_format: 可选，nested / flat_with_li / flat_all
@@ -142,53 +146,6 @@ class DefInjectedExporter(BaseExporter):
             type_dir.mkdir(parents=True, exist_ok=True)
 
             output_file = type_dir / f"{def_type}.xml"
-
-            fmt = xml_format or self._get_definjected_xml_format()
-            root = self._build_languagedata(translations, fmt)
-
-            success = self._save_xml_file(root, str(output_file))
-            if success:
-                self._log_export_stats(
-                    str(output_file), len(translations), "DefInjected"
-                )
-
-    def export_with_file_structure(
-        self,
-        output_dir: str,
-        output_language: str,
-        def_translations: List[Tuple],
-        xml_format: Optional[str] = None,
-    ) -> None:
-        """
-        按原始 Defs 文件目录结构导出 DefInjected 翻译。
-
-        Args:
-            xml_format: 可选，nested / flat_with_li / flat_all
-        """
-        self.logger.info("按原始 Defs 文件目录结构导出 DefInjected 翻译")
-
-        def_injected_path = self._create_output_directory(
-            output_dir, output_language, "definjected"
-        )
-
-        # 按 rel_path 分组，保留 en_text 用于导出注释
-        file_groups = {}
-        for item in def_translations:
-            key, text, tag, rel_path = item[:4]
-            en_text = item[4] if len(item) >= 5 else text
-            if rel_path not in file_groups:
-                file_groups[rel_path] = []
-            file_groups[rel_path].append((key, text, tag, en_text))
-
-        # 使用进度条进行导出
-        for _, (rel_path, translations) in ui.iter_with_progress(
-            file_groups.items(),
-            prefix="生成DefInjected",
-            description=f"正在生成 DefInjected 模板中的 {len(file_groups)} 个文件",
-        ):
-
-            output_file = def_injected_path / rel_path
-            output_file.parent.mkdir(parents=True, exist_ok=True)
 
             fmt = xml_format or self._get_definjected_xml_format()
             root = self._build_languagedata(translations, fmt)
@@ -244,7 +201,8 @@ class DefInjectedExporter(BaseExporter):
         return self.processor.create_comment(f"EN: {en_text or ''}")
 
     def _norm_key(self, k: str) -> str:
-        k = re.sub(r"[^A-Za-z0-9_.]", ".", k)
+        # 保留连字符：defName 可含连字符（如 TM_Mecha-Golem_EarthCoreHD），游戏按 defName 精确匹配
+        k = re.sub(r"[^A-Za-z0-9_.\-]", ".", k)
         return k if re.match(r"^[A-Za-z_]", k) else "_" + k
 
     def _build_languagedata_nested(

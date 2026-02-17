@@ -40,10 +40,9 @@ InteractionManager 实现四步智能流程:
 4. 处理输出冲突 (合并/覆盖/重建)
 
 ### DefInjected 结构支持
-支持三种导出结构:
-- original_structure: 保持原英文结构
-- defs_by_type: 按定义类型分组
-- defs_by_file: 按原始文件结构
+支持两种导出结构:
+- original_structure: 保持原英文 DefInjected 结构（数据来源为 DefInjected 时）
+- defs_by_type: 按 Def 类型分组，子文件夹名与游戏 Def 类型名一致（数据来源为 Defs 时）
 
 ## 🔧 关键开发约定
 

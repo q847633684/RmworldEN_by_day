@@ -52,7 +52,11 @@ class DefInjectedExtractor(BaseExtractor):
         definjected_dir = self.config.language_config.get_language_subdir(
             source_path, language, "definjected"
         )
-
+        if not definjected_dir.exists() and source_path:
+            # 版本优先、根目录回退：版本下无 DefInjected 则用根目录
+            definjected_dir = self.config.language_config.get_language_subdir(
+                str(Path(source_path).parent), language, "definjected"
+            )
         if not definjected_dir.exists():
             self.logger.warning("DefInjected 目录不存在: %s", definjected_dir)
             return []
@@ -107,7 +111,7 @@ class DefInjectedExtractor(BaseExtractor):
                 elif isinstance(elem.tag, str) and not elem.tag.startswith("{"):
                     # 跳过仅作容器的节点（如 <stages>），只输出叶子或 <li>
                     has_element_children = any(
-                        c for c in elem
+                        True for c in elem
                         if isinstance(getattr(c, "tag", None), str) and not str(c.tag).startswith("{")
                     )
                     if has_element_children and elem.tag != "li":

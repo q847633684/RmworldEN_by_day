@@ -309,7 +309,7 @@ class UIStyle:
 
         def __enter__(self):
             """进入上下文"""
-            if self.total > 0:
+            if self.total > 0 and self.description:
                 ui.print_info(f"{self.description}...")
             return self
 

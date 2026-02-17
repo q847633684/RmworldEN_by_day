@@ -48,11 +48,20 @@ class DefsScanner(BaseExtractor):
         if not self._validate_source(source_path):
             return []
 
-        # 支持多个 Defs 目录位置（按优先级）
+        # 版本优先、根目录回退：先查当前路径（如版本号）下 Defs，没有再查模组根
         defs_dir = self._find_defs_directory(source_path)
-
+        if defs_dir is None and source_path:
+            try:
+                src_resolved = Path(source_path).resolve()
+                parent = src_resolved.parent
+                if parent.exists() and parent.is_dir() and str(parent) != str(src_resolved):
+                    defs_dir = self._find_defs_directory(str(parent))
+                    if defs_dir:
+                        self.logger.info("Defs 使用根目录回退: %s", defs_dir)
+            except (OSError, ValueError, TypeError) as e:
+                self.logger.debug("Defs 根目录回退失败: %s", e)
         if defs_dir is None:
-            self.logger.warning("未找到 Defs 目录，已尝试的路径: Defs/、Common/Defs/")
+            self.logger.warning("未找到 Defs 目录，已尝试：当前路径/Defs、根目录/Defs")
             return []
 
         translations = []
@@ -125,10 +134,13 @@ class DefsScanner(BaseExtractor):
             )
 
             for def_node in def_nodes:
-                def_type = def_node.tag
+                # 去掉 XML 命名空间，保证输出目录为 HediffDef 而非 {uri}HediffDef
+                def_type = self._local_tag(def_node.tag)
                 defname_elem = def_node.find("defName")
-
-                if defname_elem is None or not defname_elem.text:
+                if defname_elem is None:
+                    # 带命名空间时 find("defName") 找不到，尝试按本地名查找
+                    defname_elem = self._find_child_by_local_name(def_node, "defName")
+                if defname_elem is None or not (defname_elem.text or "").strip():
                     continue
 
                 def_name = defname_elem.text
@@ -152,7 +164,8 @@ class DefsScanner(BaseExtractor):
                     full_path = f"{def_type}/{def_name}.{clean_path}"
                     # 去除DefType/前缀，只保留defName.field
                     key = full_path.split("/", 1)[-1] if "/" in full_path else full_path
-                    rel_path = str(xml_file.relative_to(defs_dir))
+                    # rel_path 用 DefInjected 路径格式（Def类型/Def类型.xml），合并写回时直接可用 in_item[3]
+                    rel_path = f"{def_type}/{def_type}.xml"
                     # 导出六元组：(key, text, tag, rel_path, en_text, def_type)
                     translations.append((key, text, tag, rel_path, text, def_type))
 
@@ -170,31 +183,23 @@ class DefsScanner(BaseExtractor):
 
     def _find_defs_directory(self, source_path: str) -> Optional[Path]:
         """
-        查找 Defs 目录，支持多个位置
-
-        按优先级查找以下位置：
-        1. {source_path}/Defs/          (标准 RimWorld mod)
-        2. {source_path}/Common/Defs/   (带 Common 目录的 mod，如 NMM)
-        3. {source_path}/Source/Defs/   (源代码结构)
+        查找 Defs 目录（无 LoadFolders 时用）。
+        只查两处：版本号下 Defs、根目录 Defs。
 
         Args:
-            source_path: 模组根目录路径
+            source_path: 当前路径（版本目录或模组根）
 
         Returns:
             Optional[Path]: 找到的 Defs 目录路径，未找到则返回 None
         """
-        source_root = Path(source_path)
-        possible_paths = [
-            source_root / "Defs",
-            source_root / "Common" / "Defs",
-            source_root / "Source" / "Defs",
-        ]
-
-        for defs_path in possible_paths:
-            if defs_path.exists() and defs_path.is_dir():
-                self.logger.info("找到 Defs 目录: %s", defs_path)
-                return defs_path
-
+        try:
+            source_root = Path(source_path).resolve()
+        except (OSError, ValueError, TypeError):
+            source_root = Path(source_path)
+        defs_path = source_root / "Defs"
+        if defs_path.exists() and defs_path.is_dir():
+            self.logger.info("找到 Defs 目录: %s", defs_path)
+            return defs_path
         return None
 
     def _find_def_nodes(self, root) -> List:
@@ -210,9 +215,29 @@ class DefsScanner(BaseExtractor):
         def_nodes = []
         for elem in root.iter():
             defname_elem = elem.find("defName")
-            if defname_elem is not None and defname_elem.text:
+            if defname_elem is None:
+                defname_elem = self._find_child_by_local_name(elem, "defName")
+            if defname_elem is not None and (defname_elem.text or "").strip():
                 def_nodes.append(elem)
         return def_nodes
+
+    @staticmethod
+    def _local_tag(tag: str) -> str:
+        """去掉 XML 命名空间，如 {http://...}HediffDef -> HediffDef"""
+        if not isinstance(tag, str):
+            return tag
+        if "}" in tag:
+            return tag.split("}", 1)[-1]
+        return tag
+
+    @staticmethod
+    def _find_child_by_local_name(parent, local_name: str):
+        """按本地名查找子节点（兼容带命名空间的 XML）"""
+        for child in parent:
+            local = DefsScanner._local_tag(child.tag)
+            if local == local_name:
+                return child
+        return None
 
     def _find_abstract_nodes(self, root) -> Dict[str, any]:
         """
@@ -312,13 +337,14 @@ class DefsScanner(BaseExtractor):
 
         translations = []
         node_tag = node.tag
+        node_tag_local = self._local_tag(node_tag)
 
         # 跳过 defName 节点
-        if node_tag == "defName":
+        if node_tag_local == "defName":
             return translations
 
-        # 构建当前路径
-        if node_tag == "li":
+        # 构建当前路径（用本地名，便于 key 一致）
+        if node_tag_local == "li":
             # 处理列表项索引
             index_key = f"{path}|li"
             if index_key in list_indices:
@@ -331,7 +357,7 @@ class DefsScanner(BaseExtractor):
                 else str(list_indices[index_key])
             )
         else:
-            current_path = f"{path}.{node_tag}" if path else node_tag
+            current_path = f"{path}.{node_tag_local}" if path else node_tag_local
 
         # 检查当前节点的文本内容
         if node.text and node.text.strip():
@@ -349,30 +375,29 @@ class DefsScanner(BaseExtractor):
                 self.logger.warning("获取 default_fields 失败: %s", e)
                 default_fields_lower = set()
 
-            if node_tag == "li":
+            if node_tag_local == "li":
                 # li 节点特殊处理：只有当父标签在默认字段中时才提取
-                if (
-                    parent_tag
-                    and isinstance(parent_tag, str)
-                    and parent_tag.lower() in default_fields_lower
-                ):
+                parent_local = (
+                    self._local_tag(parent_tag) if isinstance(parent_tag, str) else ""
+                )
+                if parent_local and parent_local.lower() in default_fields_lower:
                     should_extract = True
             else:
-                # 非 li 节点：检查当前标签是否在默认字段中
+                # 非 li 节点：检查当前标签（本地名）是否在默认字段中
                 if (
-                    isinstance(node_tag, str)
-                    and node_tag.lower() in default_fields_lower
+                    isinstance(node_tag_local, str)
+                    and node_tag_local.lower() in default_fields_lower
                 ):
                     should_extract = True
 
             if should_extract and self.content_filter.filter_content(
                 current_path, node.text.strip(), "DefInjected"
             ):
-                translations.append((current_path, node.text.strip(), node_tag))
+                translations.append((current_path, node.text.strip(), node_tag_local))
 
         # 递归处理子节点
         for child in node:
-            if child.tag == "li":
+            if self._local_tag(child.tag) == "li":
                 # li 子节点传递当前节点作为父标签，但保持 list_indices 引用
                 child_translations = self._extract_translatable_fields_recursive(
                     child,
@@ -380,7 +405,7 @@ class DefsScanner(BaseExtractor):
                     def_name,
                     current_path,
                     list_indices,
-                    parent_tag=node_tag,
+                    parent_tag=node_tag_local,
                 )
             else:
                 # 非 li 子节点复制 list_indices，传递当前节点作为父标签
@@ -390,7 +415,7 @@ class DefsScanner(BaseExtractor):
                     def_name,
                     current_path,
                     list_indices.copy(),
-                    parent_tag=node_tag,
+                    parent_tag=node_tag_local,
                 )
             translations.extend(child_translations)
 

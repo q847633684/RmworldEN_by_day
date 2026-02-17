@@ -189,15 +189,34 @@ class SmartMerger:
         SmartMerger._validate_data_format(input_data, "input_data")
         SmartMerger._validate_data_format(output_data, "output_data")
 
-        input_map = {item[0]: item for item in input_data}
-        # 同一 key 可能出现在多个输出文件中（不同 rel_path），按 key -> [item, ...] 保留全部
+        def _scope_from_rel_path(r: str) -> str:
+            p = (r or "").replace("\\", "/").strip()
+            return p.split("/")[0] if "/" in p else p
+
+        # 输入按 Def 类型分组：若为六元组 (含 def_type)，则 (key, def_type) -> item，避免不同 Def 类型同 key 互相覆盖
+        has_def_type = any(len(it) >= 6 for it in input_data)
+        input_map: Dict[Any, tuple] = {}
+        if has_def_type:
+            for it in input_data:
+                input_map[(it[0], it[5])] = it  # (key, def_type)
+        else:
+            for it in input_data:
+                input_map[it[0]] = it
+
+        # 同一 key 可能出现在多个输出文件中（不同 Def 类型），按 key -> [item, ...] 保留全部
         output_map: Dict[str, List[tuple]] = {}
         for item in output_data:
             output_map.setdefault(item[0], []).append(item)
 
+        def _get_in_item(key: str, scope: str):
+            if has_def_type:
+                return input_map.get((key, scope))
+            return input_map.get(key)
+
         logger.info(
-            "数据映射完成: 输入 %d 条, 输出 %d 条(key 去重后 %d)",
-            len(input_map),
+            "数据映射完成: 输入 %d 条(按类型=%s), 输出 %d 条(key 去重后 %d)",
+            len(input_data),
+            has_def_type,
             len(output_data),
             len(output_map),
         )
@@ -207,107 +226,122 @@ class SmartMerger:
         updated_count = 0
         new_count = 0
         today = datetime.date.today().isoformat()
+        processed_input_keys: Set[Any] = set()  # (key, scope) 或 key，用于最后补「新增」
 
-        for key, in_item in input_map.items():
-            out_items = output_map.get(key)  # 同一 key 可能对应多个文件
-
-            if out_items:
-                # 同一 key 出现在多个文件时：第一个正常合并；第二个及以后只加「重复key，需删除」并保留原内容
-                for idx, out_item in enumerate(out_items):
-                    is_duplicate_extra = len(out_items) > 1 and idx > 0
-
+        for key, out_items in output_map.items():
+            # 按 Def 类型分组：同一 key 在不同 Def 类型分别合并，不冲突
+            by_scope: Dict[str, List[tuple]] = {}
+            for out_item in out_items:
+                scope = _scope_from_rel_path(out_item[3])
+                by_scope.setdefault(scope, []).append(out_item)
+            for scope, items_in_file in by_scope.items():
+                in_item = _get_in_item(key, scope)
+                for idx, out_item in enumerate(items_in_file):
+                    is_duplicate_extra = len(items_in_file) > 1 and idx > 0
                     if is_duplicate_extra:
-                        # 重复 key 的第二个及以后：仅加「重复key，需删除」注释，保留原中文，不写 EN
+                        # 同一 Def 类型内重复 key：第二个及以后标「重复key，需删除」
                         if preserve_metadata and merge_strategy == "output_priority":
                             tag, rel_path = out_item[2], out_item[3]
                         else:
-                            tag, rel_path = in_item[2], in_item[3]
+                            tag, rel_path = (in_item[2], in_item[3]) if in_item else (out_item[2], out_item[3])
                         merged.append(
                             (
                                 key,
-                                out_item[1],  # 保留原内容
+                                out_item[1],
                                 tag,
                                 rel_path,
-                                "",  # 不写 EN 注释
+                                "",
                                 "重复key，需删除",
                             )
                         )
                         continue
-
-                    # 第一个（或仅有一个时）：按原逻辑比较并合并
-                    normalized_input = SmartMerger._normalize_html_entities(
-                        in_item[1]
-                    )
-                    normalized_output = SmartMerger._normalize_html_entities(
-                        out_item[4]
-                    )
-
-                    if normalized_input == normalized_output:
-                        unchanged_count += 1
-                        if include_unchanged:
-                            merged.append(
-                                (
-                                    key,
-                                    out_item[1],
-                                    out_item[2],
-                                    out_item[3],
-                                    out_item[4],
-                                    "",
+                    if in_item:
+                        processed_input_keys.add((key, scope) if has_def_type else key)
+                        normalized_input = SmartMerger._normalize_html_entities(in_item[1])
+                        normalized_output = SmartMerger._normalize_html_entities(out_item[4])
+                        if normalized_input == normalized_output:
+                            unchanged_count += 1
+                            if include_unchanged:
+                                merged.append(
+                                    (key, out_item[1], out_item[2], out_item[3], out_item[4], "")
                                 )
+                        else:
+                            updated_count += 1
+                            if preserve_metadata and merge_strategy == "output_priority":
+                                tag, rel_path = out_item[2], out_item[3]
+                            else:
+                                tag, rel_path = in_item[2], in_item[3]
+                            old_en = (out_item[4] or "").strip()
+                            old_zh = (out_item[1] or "").strip()
+                            no_original_en = not old_en or old_en == old_zh
+                            orig_en_display = (
+                                f"'{out_item[4]}'" if not no_original_en else "'无'"
                             )
+                            if no_original_en:
+                                merged.append(
+                                    (
+                                        key,
+                                        out_item[1],
+                                        tag,
+                                        rel_path,
+                                        in_item[1],
+                                        f"原中文: '{out_item[1]}', 原英文: {orig_en_display} -> 新英文: '{in_item[1]}',更新于{today}",
+                                    )
+                                )
+                            else:
+                                merged.append(
+                                    (
+                                        key,
+                                        in_item[1],
+                                        tag,
+                                        rel_path,
+                                        out_item[4],
+                                        f"原中文: '{out_item[1]}', 原英文: {orig_en_display} -> 新英文: '{in_item[1]}',更新于{today}",
+                                    )
+                                )
                     else:
-                        updated_count += 1
+                        # 该 (key, scope) 在输出有、输入无，放到后面「过时」逻辑统一标
+                        pass
 
-                        if preserve_metadata and merge_strategy == "output_priority":
-                            tag, rel_path = out_item[2], out_item[3]
-                        else:
-                            tag, rel_path = in_item[2], in_item[3]
-
-                        old_en = (out_item[4] or "").strip()
-                        old_zh = (out_item[1] or "").strip()
-                        no_original_en = not old_en or old_en == old_zh
-                        orig_en_display = (
-                            f"'{out_item[4]}'"
-                            if not no_original_en
-                            else "'无'"
-                        )
-                        if no_original_en:
-                            merged.append(
-                                (
-                                    key,
-                                    out_item[1],
-                                    tag,
-                                    rel_path,
-                                    in_item[1],
-                                    f"原中文: '{out_item[1]}', 原英文: {orig_en_display} -> 新英文: '{in_item[1]}',更新于{today}",
-                                )
-                            )
-                        else:
-                            merged.append(
-                                (
-                                    key,
-                                    in_item[1],
-                                    tag,
-                                    rel_path,
-                                    out_item[4],
-                                    f"原中文: '{out_item[1]}', 原英文: {orig_en_display} -> 新英文: '{in_item[1]}',更新于{today}",
-                                )
-                            )
-            else:
-                # 新增项目
+        # 过时：输出中有、输入中该 key+scope 无的，下面循环会处理
+        # 新增：输入中有、输出中该 key+scope 无的
+        if has_def_type:
+            for (key, scope), in_item in input_map.items():
+                if (key, scope) in processed_input_keys:
+                    continue
+                out_items = output_map.get(key)
+                if out_items and any(_scope_from_rel_path(o[3]) == scope for o in out_items):
+                    continue
                 new_count += 1
                 merged.append(
                     (
                         key,
-                        in_item[1],  # 新翻译
-                        in_item[2],  # 新tag
-                        in_item[3],  # 新rel_path
-                        in_item[4],  # 英文原文
+                        in_item[1],
+                        in_item[2],
+                        in_item[3],
+                        in_item[4],
+                        f"翻译内容: '{in_item[1]}',新增于{today}",
+                    )
+                )
+        else:
+            for key, in_item in input_map.items():
+                if key in processed_input_keys:
+                    continue
+                if key in output_map:
+                    continue
+                new_count += 1
+                merged.append(
+                    (
+                        key,
+                        in_item[1],
+                        in_item[2],
+                        in_item[3],
+                        in_item[4],
                         f"翻译内容: '{in_item[1]}',新增于{today}",
                     )
                 )
 
-        # 输出中有、输入（Defs）中没有的 key：若字段在 translation_fields 中则「过时key，需删除」，否则「未识别字段，谨慎删除」
+        # 输出中有、输入（Defs）中该 key+scope 没有的：标「过时key，需删除」或「未识别字段，谨慎删除」
         outdated_count = 0
         _translation_fields: Set[str] = set()
         try:
@@ -318,9 +352,6 @@ class SmartMerger:
             _translation_fields = set()
 
         for key, out_items in output_map.items():
-            if key in input_map:
-                continue
-            # 从 key 提取字段名（如 DefName.label -> label）
             field = key.split(".")[-1].strip() if "." in key else key.strip()
             field_lower = field.lower() if field else ""
             if field_lower in _translation_fields:
@@ -328,14 +359,17 @@ class SmartMerger:
             else:
                 history_outdated = "未识别字段，谨慎删除"
             for out_item in out_items:
+                scope = _scope_from_rel_path(out_item[3])
+                if _get_in_item(key, scope) is not None:
+                    continue  # 该 (key, scope) 在输入中有，已在上方合并过
                 outdated_count += 1
                 merged.append(
                     (
                         key,
-                        out_item[1],  # 保留原内容
+                        out_item[1],
                         out_item[2],
                         out_item[3],
-                        "",  # 不写 EN 注释
+                        "",
                         history_outdated,
                     )
                 )
