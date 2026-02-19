@@ -235,6 +235,45 @@ def generate_load_folders_xml(
         return None
 
 
+def generate_total_load_folders_xml(
+    output_dir: str,
+    version: str,
+    entries: List[Tuple[str, Dict[str, str], Optional[str]]],
+) -> Optional[Path]:
+    """
+    生成批量导出用的总 LoadFolders.xml：每个条目为 (路径, 属性字典, 可选注释)。
+    路径为相对输出根的路径（如 "Vanilla Brewing Expanded/1.6"）；无 IfModActive 时由调用方
+    传入 packageId 等属性；comment 为 None 或 "<!-- Mod Name -->" 在该 <li> 前输出。
+    """
+    if not entries:
+        return None
+    out = Path(output_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    version_tag = f"v{version}" if not version.startswith("v") else version
+    lines = [
+        '<?xml version="1.0" encoding="utf-8"?>',
+        "<loadFolders>",
+        f"  <{version_tag}>",
+    ]
+    for path, attrs, comment_before in entries:
+        if comment_before:
+            lines.append(f"    {comment_before}")
+        path_norm = (path or "").replace("\\", "/")
+        if attrs:
+            attr_str = " ".join(f'{k}="{v}"' for k, v in sorted(attrs.items()))
+            lines.append(f"    <li {attr_str}>{path_norm}</li>")
+        else:
+            lines.append(f"    <li>{path_norm}</li>")
+    lines.append(f"  </{version_tag}>")
+    lines.append("</loadFolders>")
+    xml_path = out / "LoadFolders.xml"
+    try:
+        xml_path.write_text("\n".join(lines), encoding="utf-8")
+        return xml_path
+    except (OSError, IOError):
+        return None
+
+
 class TemplateManager:
     """
     翻译模板管理器

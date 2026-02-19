@@ -4,6 +4,7 @@ Defs 扫描器
 专门用于扫描 Defs 目录中的可翻译内容
 """
 
+import re
 from typing import List, Tuple, Dict, Optional
 from pathlib import Path
 from utils.logging_config import get_logger
@@ -48,18 +49,20 @@ class DefsScanner(BaseExtractor):
         if not self._validate_source(source_path):
             return []
 
-        # 版本优先、根目录回退：先查当前路径（如版本号）下 Defs，没有再查模组根
+        # 版本优先、根目录回退：仅当当前路径为版本目录（如 1.6）时才回退；子内容根（如 1.6/Quirks）不回退，避免误用本体 Defs
         defs_dir = self._find_defs_directory(source_path)
         if defs_dir is None and source_path:
-            try:
-                src_resolved = Path(source_path).resolve()
-                parent = src_resolved.parent
-                if parent.exists() and parent.is_dir() and str(parent) != str(src_resolved):
-                    defs_dir = self._find_defs_directory(str(parent))
-                    if defs_dir:
-                        self.logger.info("Defs 使用根目录回退: %s", defs_dir)
-            except (OSError, ValueError, TypeError) as e:
-                self.logger.debug("Defs 根目录回退失败: %s", e)
+            path_name = Path(source_path).name
+            if path_name and re.match(r"^\d+\.\d+$", path_name):
+                try:
+                    src_resolved = Path(source_path).resolve()
+                    parent = src_resolved.parent
+                    if parent.exists() and parent.is_dir() and str(parent) != str(src_resolved):
+                        defs_dir = self._find_defs_directory(str(parent))
+                        if defs_dir:
+                            self.logger.info("Defs 使用根目录回退: %s", defs_dir)
+                except (OSError, ValueError, TypeError) as e:
+                    self.logger.debug("Defs 根目录回退失败: %s", e)
         if defs_dir is None:
             self.logger.warning("未找到 Defs 目录，已尝试：当前路径/Defs、根目录/Defs")
             return []
@@ -135,7 +138,10 @@ class DefsScanner(BaseExtractor):
 
             for def_node in def_nodes:
                 # 去掉 XML 命名空间，保证输出目录为 HediffDef 而非 {uri}HediffDef
-                def_type = self._local_tag(def_node.tag)
+                tag_local = self._local_tag(def_node.tag)
+                # DefInjected 子文件夹须与 RimWorld Def 类型一致：有 Class 属性时用 Class 最后一段（如 OpinionDef_SexPart），无则用标签名（如 BackstoryDef）
+                class_attr = (def_node.get("Class") or "").strip()
+                def_type = class_attr.split(".")[-1] if class_attr else tag_local
                 defname_elem = def_node.find("defName")
                 if defname_elem is None:
                     # 带命名空间时 find("defName") 找不到，尝试按本地名查找
@@ -154,12 +160,14 @@ class DefsScanner(BaseExtractor):
                 )
                 field_translations.extend(inherited_stages)
 
-                # 转换为标准格式，清理重复的 def_type
+                # 转换为标准格式，清理重复的 def_type 或根节点标签（如 <Def Class="..."> 时路径会带 Def.，应去掉）
                 for field_path, text, tag in field_translations:
-                    # 清理路径中重复的 def_type 前缀
                     clean_path = field_path
                     if clean_path.startswith(def_type + "."):
                         clean_path = clean_path[len(def_type) + 1 :]
+                    # 当 XML 根为 <Def Class="..."> 时，递归路径会带 "Def."，RimWorld 键应为 defName.field 不含 Def
+                    if tag_local != def_type and clean_path.startswith(tag_local + "."):
+                        clean_path = clean_path[len(tag_local) + 1 :]
 
                     full_path = f"{def_type}/{def_name}.{clean_path}"
                     # 去除DefType/前缀，只保留defName.field

@@ -315,8 +315,24 @@ class LanguageConfig(BaseConfig):
         return True
 
     def get_language_dir(self, base_dir, language: str):
-        """获取指定语言的Languages目录路径"""
+        """获取指定语言的 Languages 目录路径（标准结构：base_dir/Languages/language）"""
         return Path(base_dir) / "Languages" / language
+
+    def get_template_dir(self, base_dir, language: str):
+        """
+        解析「模板/语言目录」路径，兼容两种结构：
+        - 标准：base_dir/Languages/language（智能提取默认输出）
+        - 直接：base_dir/language（部分汉化包仅用语言名）
+        优先返回已存在的路径；若都不存在则返回标准路径（与 get_language_dir 一致）。
+        """
+        base = Path(base_dir)
+        p_standard = base / "Languages" / language
+        p_direct = base / language
+        if p_standard.exists():
+            return p_standard
+        if p_direct.exists():
+            return p_direct
+        return p_standard
 
     def get_language_subdir(self, base_dir, language: str, subdir_type: str):
         """获取指定语言的子目录路径"""

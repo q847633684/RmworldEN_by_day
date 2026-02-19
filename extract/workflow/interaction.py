@@ -53,7 +53,11 @@ class InteractionManager:
         ui.print_step_header(step_num, total_steps, title)
 
     def handle_smart_extraction_workflow(
-        self, mod_dir: str, skip_output_selection: bool = False
+        self,
+        mod_dir: str,
+        skip_output_selection: bool = False,
+        fixed_output_dir: Optional[str] = None,
+        batch_mode: bool = False,
     ) -> Dict[str, Any]:
         """
         执行用户设计的四步智能流程
@@ -61,11 +65,14 @@ class InteractionManager:
         Args:
             mod_dir: 当前内容根路径（如 1.6 或 1.6/rimvore-2/Common），Keyed/Defs 同逻辑：从该目录提取即该目录下 Languages
             skip_output_selection: 是否跳过输出目录选择，直接使用默认目录
+            fixed_output_dir: 若指定，则强制使用该目录为输出目录（用于批量提取）
+            batch_mode: 批量模式，使用默认数据来源与冲突处理，不交互、不确认
 
         Returns:
             Dict[str, Any]: 智能流程决策结果
         """
-        self._print_separator("智能提取翻译模板工作流", "=", 60)
+        if not batch_mode:
+            self._print_separator("智能提取翻译模板工作流", "=", 60)
 
         # 获取配置中的语言设置
         config = UserConfigManager.get_instance()
@@ -75,29 +82,40 @@ class InteractionManager:
         )
 
         # 第一步：检测当前内容根下的英文目录状态（Keyed/DefInjected 与 Defs 同逻辑）
-        self._print_step_header(1, 4, "检测mod英文目录状态")
+        if not batch_mode:
+            self._print_step_header(1, 4, "检测mod英文目录状态")
         import_status = self._detect_language_directories(
             mod_dir, language=en_language
         )
 
         # 第二步：检测输出目录状态
-        self._print_step_header(2, 4, "检测输出目录状态")
+        if not batch_mode:
+            self._print_step_header(2, 4, "检测输出目录状态")
         output_dir, output_language = self._get_output_directory(
             mod_dir,
             language=cn_language,
-            skip_user_selection=skip_output_selection,
+            skip_user_selection=skip_output_selection or fixed_output_dir is not None,
+            fixed_output_dir=fixed_output_dir,
         )
         output_status = self._detect_language_directories(
             output_dir, language=output_language, for_output=True
         )
 
         # 第三步：选择数据来源
-        self._print_step_header(3, 4, "选择数据来源")
-        data_source_choice = self._choose_data_source(import_status)
+        if not batch_mode:
+            self._print_step_header(3, 4, "选择数据来源")
+        if batch_mode:
+            data_source_choice = self._get_data_source_default(import_status)
+        else:
+            data_source_choice = self._choose_data_source(import_status)
 
         # 第四步：处理输出冲突
-        self._print_step_header(4, 4, "处理输出冲突")
-        conflict_resolution = self._handle_output_conflicts(output_status)
+        if not batch_mode:
+            self._print_step_header(4, 4, "处理输出冲突")
+        if batch_mode:
+            conflict_resolution = self._get_conflict_resolution_default(output_status)
+        else:
+            conflict_resolution = self._handle_output_conflicts(output_status)
 
         # 模板结构：由数据来源直接决定，Defs 固定按 Def 类型分组，DefInjected 保持原结构
         if conflict_resolution in ["merge", "incremental"]:
@@ -121,6 +139,16 @@ class InteractionManager:
             },
             "template_structure": template_structure,  # 模板结构
         }
+
+        if batch_mode:
+            log_user_action(
+                "智能提取配置完成(批量)",
+                mod_dir=mod_dir,
+                data_source=data_source_choice,
+                conflict_resolution=conflict_resolution,
+                template_structure=template_structure,
+            )
+            return smart_config
 
         # 配置确认和验证
         if self._confirm_configuration(smart_config):
@@ -274,7 +302,11 @@ class InteractionManager:
         }
 
     def _get_output_directory(
-        self, mod_dir: str, language: str, skip_user_selection: bool = False
+        self,
+        mod_dir: str,
+        language: str,
+        skip_user_selection: bool = False,
+        fixed_output_dir: Optional[str] = None,
     ) -> tuple:
         """
         获取用户指定的输出目录（支持多语言）
@@ -283,6 +315,7 @@ class InteractionManager:
             mod_dir: 模组目录路径
             language: 目标语言目录名
             skip_user_selection: 是否跳过用户选择，直接使用默认目录
+            fixed_output_dir: 若指定则强制使用该路径（批量提取用），忽略 skip_user_selection 的默认目录
 
         Returns:
             (str, str): 输出目录路径和语言名（自定义目录时 language 为空字符串）
@@ -290,6 +323,11 @@ class InteractionManager:
         path_manager = PathManager()
         default_dir = str(Path(mod_dir))
         history = path_manager.get_history_list("output_dir")
+
+        # 批量提取时使用指定输出目录
+        if fixed_output_dir is not None:
+            path_manager.remember_path("output_dir", str(fixed_output_dir))
+            return str(fixed_output_dir), language
 
         # 如果跳过用户选择，直接使用模组根目录
         if skip_user_selection:
@@ -357,6 +395,28 @@ class InteractionManager:
             else:
                 ui.print_error("请输入选择或路径")
                 ui.print_tip("直接回车选择默认目录")
+
+    def _get_data_source_default(
+        self, import_status: Dict[str, Union[bool, str]]
+    ) -> str:
+        """批量模式：根据 import_status 返回默认数据来源，不交互。"""
+        has_definjected = import_status.get("has_definjected", False)
+        if not has_definjected:
+            return "defs_only"
+        definjected_path = import_status.get("definjected_path")
+        if not definjected_path:
+            return "defs_only"
+        recommendation = self._analyze_definjected_quality(str(definjected_path))
+        return recommendation.get("recommended", "definjected_only")
+
+    def _get_conflict_resolution_default(
+        self, output_status: Dict[str, Union[bool, str]]
+    ) -> str:
+        """批量模式：根据 output_status 返回默认冲突处理，不交互。"""
+        has_output_files = output_status.get("has_definjected") or output_status.get(
+            "has_keyed"
+        )
+        return "merge" if has_output_files else "new"
 
     def _choose_data_source(self, import_status: Dict[str, Union[bool, str]]) -> str:
         """

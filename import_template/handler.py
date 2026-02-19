@@ -43,15 +43,21 @@ def handle_import_template(
         else:
             ui.print_info(f"使用提供的CSV路径: {csv_path}")
 
-        # 导入目标目录：未提供时取 CSV 所在目录（该目录下应有 Languages/<语言>）
+        config = UserConfigManager.get_instance()
+        language = config.language_config.get_value("cn_language", "ChineseSimplified")
+        # 导入目标目录：未提供时由 CSV 所在目录推导；若 CSV 在 Languages/<语言> 下则用其上级模组根
         if not mod_dir:
-            mod_dir = str(Path(csv_path).resolve().parent)
+            csv_parent = Path(csv_path).resolve().parent
+            if csv_parent.name == language and (
+                csv_parent.parent.name == "Languages"
+                or csv_parent.parent.name == "Language"
+            ):
+                mod_dir = str(csv_parent.parent.parent)
+            else:
+                mod_dir = str(csv_parent)
             ui.print_info(f"导入目标目录（由 CSV 所在目录确定）: {mod_dir}")
         else:
             ui.print_info(f"使用提供的导入目录: {mod_dir}")
-
-        config = UserConfigManager.get_instance()
-        language = config.language_config.get_value("cn_language", "ChineseSimplified")
 
         if skip_confirm or confirm_action("确认导入翻译到模板？"):
             ui.print_info("=== 开始导入 ===")

@@ -370,17 +370,35 @@ class XMLProcessor:
 
 
 def sanitize_xml(text: str) -> str:
-    """清理 XML 文本，去除所有非法字符并转义"""
+    """清理 XML 文本，仅去除非法控制字符。
+
+    注意：不在此处转义 & < > \" '，否则写入 XML 时会被 XML 库再次转义，
+    导致双重编码（如 > 变成 &amp;gt;）。ElementTree/lxml 在 write() 时
+    会自动正确转义，RimWorld 的 RulePack 语法（如 memeAdjective->吞食的）
+    依赖 > 保持为 > 才能被解析。
+    """
     if not isinstance(text, str):
         text = str(text)
-    # 去除所有非法 XML 字符（包括 C0/C1 控制符）
+    # 去除非法 XML 控制字符（C0/C1）
     text = re.sub(r"[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F]", "", text)
-    # 转义特殊字符
+    return text
+
+
+def normalize_xml_entities_in_text(text: str) -> str:
+    """把从 XML 读出的文本中的实体还原为字符，便于游戏识别。
+
+    文件中若曾被双重编码为 &amp;gt;，解析后 elem.text 为字面量 \"&gt;\"，
+    游戏只认 &gt;（单次编码）或直接 >。将 &gt; &lt; &quot; &apos; &amp; 还原后，
+    再写入时由 XML 库正确单次转义，或保持 > 不转义。
+    """
+    if not text or not isinstance(text, str):
+        return text
+    # 先还原除 & 外的实体，最后还原 &amp;，避免把 &gt; 里的 & 误还原
     text = (
-        text.replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
-        .replace('"', "&quot;")
-        .replace("'", "&apos;")
+        text.replace("&gt;", ">")
+        .replace("&lt;", "<")
+        .replace("&quot;", '"')
+        .replace("&apos;", "'")
+        .replace("&amp;", "&")
     )
     return text

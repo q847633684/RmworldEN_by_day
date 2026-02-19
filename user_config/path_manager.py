@@ -525,9 +525,12 @@ class PathManager:
     def _choose_versioned_content_dir(self, mod_dir: str) -> Optional[str]:
         """
         让用户选择版本号内容目录，直接返回最终目录。
-        仅从 LoadFolders.xml 读取版本列表（进入此函数时已确认 LoadFolders 含版本块）。
+        版本列表优先从 LoadFolders.xml 读取；无则从模组根下版本号子目录（1.4、1.5、1.6 等）扫描。
         """
         lf_versions = self._get_version_tags_from_load_folders(mod_dir)
+        from_load_folders = bool(lf_versions)
+        if not lf_versions:
+            lf_versions = self._get_version_dirs_from_filesystem(mod_dir)
         version_dirs = []
         for name in lf_versions:
             item_path = os.path.join(mod_dir, name)
@@ -545,9 +548,10 @@ class PathManager:
         if version_dirs:
             version_dirs.sort(key=lambda x: x["version"], reverse=True)
 
-            # 美化版本选择界面
+            # 美化版本选择界面（区分来源以便用户知晓）
+            source_label = "来自 LoadFolders.xml" if from_load_folders else "来自版本号子目录"
             ui.print_section_header(
-                f"{ui.Icons.MODULE} 检测到版本号结构模组（来自 LoadFolders.xml）",
+                f"{ui.Icons.MODULE} 检测到版本号结构模组（{source_label}）",
                 ui.Icons.INFO,
             )
             ui.print_info(f"{ui.Icons.FOLDER} 模组目录: {mod_dir}")
@@ -814,7 +818,9 @@ class PathManager:
         if not xml_path.is_file():
             return []
         try:
-            tree = ET.parse(xml_path)
+            # 显式用 UTF-8 打开，避免 Windows 下默认编码或 BOM 导致解析失败
+            with open(xml_path, "r", encoding="utf-8") as f:
+                tree = ET.parse(f)
             root = tree.getroot()
             versions = []
             for child in root:
@@ -827,6 +833,26 @@ class PathManager:
             return versions
         except (ET.ParseError, OSError, IOError):
             return []
+
+    def _get_version_dirs_from_filesystem(self, mod_dir: str) -> List[str]:
+        """
+        从模组根目录下扫描版本号子目录（如 1.4、1.5、1.6 或 v1.6），用于无 LoadFolders.xml 时的版本选择。
+        仅返回直接子目录且名称匹配 ^v?(\\d+\\.)+\\d+$ 的目录名，按版本号降序排列。
+        """
+        base = Path(mod_dir)
+        if not base.is_dir():
+            return []
+        pattern = re.compile(r"^v?(\d+\.)+\d+$", re.IGNORECASE)
+        found = []
+        for p in base.iterdir():
+            if p.is_dir() and pattern.match(p.name.strip()):
+                try:
+                    ver = self._parse_version_number(p.name)
+                    found.append((p.name, ver))
+                except (ValueError, TypeError):
+                    found.append((p.name, (0, 0)))
+        found.sort(key=lambda x: x[1], reverse=True)
+        return [name for name, _ in found]
 
     def _detect_mod_structure_type(self, mod_dir: str) -> tuple[str, str, str]:
         """
@@ -843,12 +869,14 @@ class PathManager:
         """
         about_dir = os.path.join(mod_dir, "About")
         if os.path.isdir(about_dir):
-            # 仅以 LoadFolders.xml 判断 versioned：有版本块则弹出版本选择，无则视为 standard/unknown
+            # 先以 LoadFolders.xml 判断 versioned；无则用目录下版本号子目录（1.4、1.5、1.6 等）作为回退
             lf_versions = self._get_version_tags_from_load_folders(mod_dir)
+            if not lf_versions:
+                lf_versions = self._get_version_dirs_from_filesystem(mod_dir)
             if lf_versions:
                 return "versioned", mod_dir, mod_dir
 
-            # 无 LoadFolders 或空版本块：检查根目录是否有模组内容
+            # 无 LoadFolders 且无版本号子目录：检查根目录是否有模组内容
             content_dirs = {"Defs", "Languages", "Textures", "Sounds"}
             found_content_dirs = {
                 d

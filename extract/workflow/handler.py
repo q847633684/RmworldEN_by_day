@@ -69,14 +69,24 @@ def _dedupe_translations_by_key(
     return out_k, out_d
 
 
-def handle_extract() -> Optional[tuple]:
+def handle_extract(
+    batch_mod_dir: Optional[str] = None,
+    batch_output_dir: Optional[str] = None,
+    batch_version: Optional[str] = None,
+) -> Optional[tuple]:
     """处理提取模板功能
+
+    Args:
+        batch_mod_dir: 批量模式时传入的模组目录，与 batch_output_dir 同时传入则跳过模组/输出选择
+        batch_output_dir: 批量模式时传入的输出目录
+        batch_version: 仅批量模式使用，指定版本（如 "1.6"、"1.5"），单次提取不传，版本由 LoadFolders.xml 决定
 
     Returns:
         Optional[tuple]: (csv_path, mod_dir) 元组，如果失败则返回None
     """
     logger = get_logger(f"{__name__}.handle_extract")
     config = UserConfigManager.get_instance()
+    batch_mode = batch_mod_dir is not None and batch_output_dir is not None
 
     print(f"日志文件路径：{config.system_config.get_value('log_file')}")
     if config.system_config.get_value("debug_mode"):
@@ -85,15 +95,17 @@ def handle_extract() -> Optional[tuple]:
     logger.info("开始处理提取模板功能")
 
     try:
-        # 选择模组目录（可能返回 tuple，如 (path, type)，统一取路径）
-        result = select_mod_path_with_version_detection()
-        if not result:
-            logger.info("用户取消了模组目录选择")
-            return None
-        mod_dir = result[0] if isinstance(result, tuple) else result
-
-        # 记录用户操作
-        log_user_action("选择模组目录", mod_dir=mod_dir)
+        if batch_mode:
+            mod_dir = batch_mod_dir
+            log_user_action("批量提取模组目录", mod_dir=mod_dir)
+        else:
+            # 选择模组目录（可能返回 tuple，如 (path, type)，统一取路径）
+            result = select_mod_path_with_version_detection()
+            if not result:
+                logger.info("用户取消了模组目录选择")
+                return None
+            mod_dir = result[0] if isinstance(result, tuple) else result
+            log_user_action("选择模组目录", mod_dir=mod_dir)
 
         # 若当前路径在「版本号结构」下（如 mod/1.6），用模组根做扫描，避免漏掉根下 Defs；再只保留所选版本下的根
         def _is_version_number(name: str) -> bool:
@@ -145,9 +157,12 @@ def handle_extract() -> Optional[tuple]:
                         "未找到 LoadFolders.xml，已按所选版本目录+模组根扫描，合并导出到 Languages"
                     )
         else:
-            # 用户选择模组根时，也尝试从 LoadFolders.xml 读取（Defs 可能在 1.6/ 等版本子目录下）
+            # 模组根：单次提取从 LoadFolders.xml 读取版本（不询问）；批量提取使用传入的 batch_version
             content_roots = find_content_roots(scan_base, language=en_lang)
-            for ver in ("1.6", "1.5"):
+            if batch_mode and batch_version:
+                ver = batch_version.strip() if batch_version else "1.6"
+                if ver not in ("1.6", "1.5"):
+                    ver = "1.6"
                 lf_roots = get_content_roots_from_load_folders(scan_base, ver)
                 if lf_roots:
                     content_roots = lf_roots
@@ -155,7 +170,18 @@ def handle_extract() -> Optional[tuple]:
                         f"已从 LoadFolders.xml 读取 <v{ver}> 共 {len(content_roots)} 个内容根"
                     )
                     use_load_folders = True
-                    break
+                # 批量未找到该版本 LoadFolders 时保留 find_content_roots 结果
+            else:
+                # 单次提取：仅从 LoadFolders.xml 读取，先试 1.6 再试 1.5，不询问用户
+                for ver in ("1.6", "1.5"):
+                    lf_roots = get_content_roots_from_load_folders(scan_base, ver)
+                    if lf_roots:
+                        content_roots = lf_roots
+                        ui.print_info(
+                            f"已从 LoadFolders.xml 读取 <v{ver}> 共 {len(content_roots)} 个内容根"
+                        )
+                        use_load_folders = True
+                        break
         if not content_roots and (Path(mod_dir) / "Defs").exists():
             content_roots = [mod_dir]
         if not content_roots:
@@ -169,10 +195,41 @@ def handle_extract() -> Optional[tuple]:
         load_folders_mod_root = scan_base
         # 构建 root_groups：(roots, export_rel)。版本组只用版本路径单根，Defs/Languages 均「版本优先、根目录回退」
         if scan_base == mod_dir:
-            # 若有 content_roots（来自 LoadFolders 或 find_content_roots），用其扫描；否则仅用模组根
-            root_groups: List[tuple] = (
-                [(content_roots, "")] if content_roots else [([mod_dir], "")]
-            )
+            if use_load_folders and content_roots:
+                if batch_mode and batch_version:
+                    # 批量：与单次提取「选 1.6 文件夹」一致，版本根与模组根合并为一组，只导出一份 Languages
+                    version_name = (batch_version or "1.6").strip()
+                    if version_name not in ("1.6", "1.5"):
+                        version_name = "1.6"
+                    version_path = Path(scan_base) / version_name
+                    merge_root = str(version_path) if version_path.is_dir() else scan_base
+                    root_groups = []
+                    seen_version = False
+                    for full in content_roots:
+                        try:
+                            rel_str = str(Path(full).resolve().relative_to(Path(scan_base).resolve())).replace("\\", "/")
+                        except (ValueError, OSError):
+                            rel_str = Path(full).name or ""
+                        if rel_str in ("", ".", version_name):
+                            if not seen_version:
+                                root_groups.append(([merge_root], ""))
+                                seen_version = True
+                        else:
+                            root_groups.append(([full], rel_str))
+                else:
+                    # 模组根 + LoadFolders（单次）：按每个内容根单独导出，保留 1.6 Content、Mods/Revia 等结构
+                    root_groups = []
+                    for full in content_roots:
+                        try:
+                            rel_str = str(Path(full).resolve().relative_to(Path(scan_base).resolve())).replace("\\", "/")
+                        except (ValueError, OSError):
+                            rel_str = Path(full).name or ""
+                        root_groups.append(([full], rel_str))
+            elif content_roots:
+                # 模组根但无 LoadFolders（find_content_roots 结果）：合并到单一输出
+                root_groups = [(content_roots, "")]
+            else:
+                root_groups = [([mod_dir], "")]
         elif not use_load_folders:
             root_groups = [(content_roots, "")]
         else:
@@ -206,13 +263,16 @@ def handle_extract() -> Optional[tuple]:
         template_manager = TemplateManager()
         interaction_manager = InteractionManager()
 
-        ui.print_info("=== 开始智能提取模板 ===")
+        if not batch_mode:
+            ui.print_info("=== 开始智能提取模板 ===")
         try:
-            # 执行四步智能流程（始终显示输出目录选择，支持外部导出）
+            # 执行四步智能流程（批量模式时使用固定输出目录与默认选项）
             effective_dir = root_groups[0][0][0]
             smart_config = interaction_manager.handle_smart_extraction_workflow(
                 effective_dir,
-                skip_output_selection=False,
+                skip_output_selection=batch_mode,
+                fixed_output_dir=batch_output_dir if batch_mode else None,
+                batch_mode=batch_mode,
             )
 
             conflict_resolution = smart_config["output_config"]["conflict_resolution"]
@@ -265,6 +325,10 @@ def handle_extract() -> Optional[tuple]:
             roots_with_content: set = set()
             roots_with_content_output_dirs: dict = {}
 
+            ui.print_info(
+                f"提取输入(模组)根: {load_folders_mod_root or mod_dir}"
+            )
+            ui.print_info(f"导出输出根: {chosen_output_dir}")
             for roots, export_rel in root_groups:
                 output_dir = chosen_output_dir if not export_rel else str(Path(chosen_output_dir) / export_rel)
                 if mod_name:
@@ -279,6 +343,7 @@ def handle_extract() -> Optional[tuple]:
                 if num_groups > 1 or len(roots) > 1:
                     label = export_rel if export_rel else "/"
                     ui.print_info(f"正在处理: {label}")
+                ui.print_info(f"  输入源: {import_dir}  →  输出: {output_dir}")
 
                 # 根据冲突处理方式执行相应操作
                 if conflict_resolution == "merge":
@@ -328,7 +393,7 @@ def handle_extract() -> Optional[tuple]:
                         if csv_path:
                             ui.print_info(f"CSV文件：{csv_path}")
                         ui.print_info(f"输出目录：{output_dir}")
-                        if _is_external_output(output_dir, mod_dir):
+                        if not batch_mode and _is_external_output(output_dir, mod_dir):
                             _rel = export_rel if export_rel else "/"
                             _name = _rel if _rel == "/" or scan_base == mod_dir else f"{Path(mod_dir).name}/{export_rel}"
                             xml_path = generate_load_folders_xml(
@@ -383,7 +448,7 @@ def handle_extract() -> Optional[tuple]:
                         ui.print_info(f"CSV文件：{csv_path}")
                         ui.print_info(f"输出目录：{output_dir}")
                         if num_groups == 1 and len(roots) == 1:
-                            if _is_external_output(output_dir, mod_dir):
+                            if not batch_mode and _is_external_output(output_dir, mod_dir):
                                 _rel = export_rel if export_rel else "/"
                                 _name = _rel if _rel == "/" or scan_base == mod_dir else f"{Path(mod_dir).name}/{export_rel}"
                                 xml_path = generate_load_folders_xml(
@@ -449,7 +514,7 @@ def handle_extract() -> Optional[tuple]:
                     ui.print_info(f"CSV文件：{csv_path}")
                     ui.print_info(f"输出目录：{output_dir}")
                     if num_groups == 1 and len(roots) == 1:
-                        if _is_external_output(output_dir, mod_dir):
+                        if not batch_mode and _is_external_output(output_dir, mod_dir):
                             _rel = export_rel if export_rel else "/"
                             _name = _rel if _rel == "/" or scan_base == mod_dir else f"{Path(mod_dir).name}/{export_rel}"
                             xml_path = generate_load_folders_xml(
@@ -462,9 +527,9 @@ def handle_extract() -> Optional[tuple]:
                     ui.print_info(f"无效的冲突处理方式: {conflict_resolution}")
                     return None
 
-            # 多组时汇总并返回；若为外部导出则用 groups_with_content 生成 LoadFolders.xml
+            # 多组时汇总并返回；若为外部导出则用 groups_with_content 生成 LoadFolders.xml（批量模式不生成单独 xml）
             if num_groups > 1:
-                if multi_root_external and groups_with_content:
+                if not batch_mode and multi_root_external and groups_with_content:
                     names_for_xml = [rel if rel != "/" else "/" for rel in groups_with_content]
                     xml_version = Path(mod_dir).name if scan_base != mod_dir else "1.6"
                     xml_path = generate_load_folders_xml(

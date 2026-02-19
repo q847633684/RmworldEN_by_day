@@ -5,10 +5,12 @@ DefInjected 提取器
 支持三种 XML 格式的解析：nested / flat_with_li / flat_all，统一输出 key 为 DefName.field 或 DefName.field.0。
 """
 
+import re
 from typing import List, Tuple
 from pathlib import Path
 from utils.logging_config import get_logger
 from utils.ui_style import ui
+from utils.utils import normalize_xml_entities_in_text
 from .base import BaseExtractor
 
 
@@ -53,10 +55,12 @@ class DefInjectedExtractor(BaseExtractor):
             source_path, language, "definjected"
         )
         if not definjected_dir.exists() and source_path:
-            # 版本优先、根目录回退：版本下无 DefInjected 则用根目录
-            definjected_dir = self.config.language_config.get_language_subdir(
-                str(Path(source_path).parent), language, "definjected"
-            )
+            # 仅当当前路径为版本目录（如 1.6）时才回退到父目录；子内容根（如 1.6/Quirks）不回退，避免误用本体翻译
+            path_name = Path(source_path).name
+            if path_name and re.match(r"^\d+\.\d+$", path_name):
+                definjected_dir = self.config.language_config.get_language_subdir(
+                    str(Path(source_path).parent), language, "definjected"
+                )
         if not definjected_dir.exists():
             self.logger.warning("DefInjected 目录不存在: %s", definjected_dir)
             return []
@@ -156,7 +160,7 @@ class DefInjectedExtractor(BaseExtractor):
         parent_tags = list(reversed(parent_tags))
 
         tag = elem.tag
-        text = (elem.text or "").strip()
+        text = normalize_xml_entities_in_text((elem.text or "").strip())
 
         # <li> 节点：key = 父路径.索引（0-based）
         if tag == "li":

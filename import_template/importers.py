@@ -7,7 +7,7 @@ from utils.logging_config import get_logger
 from utils.ui_style import ui
 from pathlib import Path
 from typing import Dict, Tuple, Any, Optional, Callable, List, Union
-from utils.utils import XMLProcessor
+from utils.utils import XMLProcessor, XMLProcessorConfig
 # 使用新配置系统
 from user_config import UserConfigManager
 
@@ -43,31 +43,54 @@ def import_translations(
         language = _get_config().language_config.get_value("cn_language", "ChineseSimplified")
     logger.info("开始导入翻译到模板: %s", csv_path)
     try:
-        # 步骤1：确保翻译模板存在
+        # 步骤1：解析所有模板目录（含 mod 根下 Languages/<语言> 与子路径如 Common/Languages/<语言>）
+        lang_dirs = _find_all_language_dirs(mod_dir, language)
+        if not lang_dirs:
+            fallback = _get_config().language_config.get_template_dir(mod_dir, language)
+            if fallback.exists():
+                lang_dirs = [str(fallback)]
         if auto_create_templates:
-            # 检查模板目录是否存在，如果不存在则提示用户先创建模板
-            if not _get_config().language_config.get_language_dir(mod_dir, language).exists():
+            if not lang_dirs or not any(Path(d).exists() for d in lang_dirs):
                 logger.error("翻译模板目录不存在，请先使用提取功能创建翻译模板")
                 ui.print_error("❌ 翻译模板目录不存在，请先使用提取功能创建翻译模板")
                 return False
         # 步骤2：验证CSV文件
         if not _validate_csv_file(csv_path):
             return False
-        # 步骤3：加载翻译数据并按类型分组
-        keyed_translations, definjected_translations = _load_translations_from_csv(
-            csv_path
-        )
+        # 步骤3：加载翻译数据并按类型分组（支持 key+file 双校验，避免重复 key 写错文件）
+        (
+            keyed_translations,
+            definjected_translations,
+            keyed_by_file,
+            definjected_by_file,
+        ) = _load_translations_from_csv(csv_path)
         if not keyed_translations and not definjected_translations:
             return False
 
-        # 步骤4：分别更新 Keyed 与 DefInjected 目录下的 XML 文件
+        # 步骤4：对每个语言目录分别更新 Keyed 与 DefInjected；有 by_file 时按 key+file 双校验
+        use_by_file = bool(keyed_by_file or definjected_by_file)
+        if use_by_file:
+            logger.info("使用 key+file 双校验导入，按路径精确匹配")
         updated_count = 0
-        updated_count += _update_xml_in_subdir(
-            mod_dir, language, "keyed", keyed_translations, merge
-        )
-        updated_count += _update_xml_in_subdir(
-            mod_dir, language, "definjected", definjected_translations, merge
-        )
+        for template_dir in lang_dirs:
+            updated_count += _update_xml_in_subdir(
+                mod_dir,
+                language,
+                "keyed",
+                keyed_translations,
+                merge,
+                language_dir_override=template_dir,
+                translations_by_file=keyed_by_file if use_by_file else None,
+            )
+            updated_count += _update_xml_in_subdir(
+                mod_dir,
+                language,
+                "definjected",
+                definjected_translations,
+                merge,
+                language_dir_override=template_dir,
+                translations_by_file=definjected_by_file if use_by_file else None,
+            )
         # 步骤5：验证导入结果
         had_translations = bool(keyed_translations or definjected_translations)
         if had_translations and updated_count == 0:
@@ -80,7 +103,10 @@ def import_translations(
                 "⚠️ 未导入任何内容：CSV 的 key 与模板 XML 节点不匹配，请确认 CSV 与当前模板来自同一模组/同一提取。"
             )
             return False
-        success = _verify_import_results(mod_dir, language)
+        first_template = Path(lang_dirs[0]) if lang_dirs else None
+        success = _verify_import_results(
+            mod_dir, language, template_dir=first_template
+        )
         if success:
             logger.info("翻译导入到模板完成，更新了 %s 个文件", updated_count)
             ui.print_success("翻译已成功导入到模板")
@@ -138,49 +164,87 @@ def _validate_csv_file(csv_path: str) -> bool:
         return False
 
 
-def _load_translations_from_csv(csv_path: str) -> Tuple[Dict[str, str], Dict[str, str]]:
-    """从CSV文件加载翻译数据，按类型分组
+def _load_translations_from_csv(
+    csv_path: str,
+) -> Tuple[
+    Dict[str, str],
+    Dict[str, str],
+    Dict[str, Dict[str, str]],
+    Dict[str, Dict[str, str]],
+]:
+    """从CSV文件加载翻译数据，按类型分组；支持 key+file 双校验（同 key 不同 file 分开）。
 
     Returns:
-        Tuple[Dict[str, str], Dict[str, str]]: (keyed_translations, definjected_translations)
+        (keyed_translations, definjected_translations, keyed_by_file, definjected_by_file)
+        by_file 为 file_rel_path -> {key -> value}，仅当 CSV 含 file 列时填充；用于按文件精确写入。
     """
-    keyed_translations = {}
-    definjected_translations = {}
+    keyed_translations: Dict[str, str] = {}
+    definjected_translations: Dict[str, str] = {}
+    keyed_by_file: Dict[str, Dict[str, str]] = {}
+    definjected_by_file: Dict[str, Dict[str, str]] = {}
 
     try:
-        with open(csv_path, "r", encoding="utf-8") as f:
+        with open(csv_path, "r", encoding="utf-8-sig") as f:
             reader = csv.DictReader(f)
+            has_file_col = reader.fieldnames and "file" in reader.fieldnames
             for row in reader:
-                key = (row.get("key") or "").strip()
-                # 优先使用 translated 列，其次回退到 text 列
-                value = (row.get("translated") or row.get("text") or "").strip()
+                key = (row.get("key") or "").strip().strip("\ufeff")
+                file_rel = (row.get("file") or "").strip().replace("\\", "/")
+                value = (
+                    row.get("translated")
+                    or row.get("译文")
+                    or row.get("中文")
+                    or row.get("target")
+                )
+                if value is None or (isinstance(value, str) and not value.strip()):
+                    extra = row.get(None)
+                    if isinstance(extra, list) and len(extra) > 0:
+                        value = extra[-1]
+                    elif isinstance(row, dict) and len(row) >= 6:
+                        vals = list(row.values())
+                        if len(vals) >= 6:
+                            value = vals[-1]
+                value = (value or row.get("text") or "").strip()
                 translation_type = (row.get("type") or "").strip().lower()
 
-                if key and value:
-                    if translation_type == "keyed":
-                        keyed_translations[key] = value
-                    elif translation_type == "def":
+                if not key or not value:
+                    continue
+                if translation_type == "keyed":
+                    keyed_translations[key] = value
+                    if has_file_col and file_rel:
+                        keyed_by_file.setdefault(file_rel, {})[key] = value
+                elif translation_type == "def":
+                    definjected_translations[key] = value
+                    if has_file_col and file_rel:
+                        definjected_by_file.setdefault(file_rel, {})[key] = value
+                else:
+                    if "/" in key:
                         definjected_translations[key] = value
+                        if has_file_col and file_rel:
+                            definjected_by_file.setdefault(file_rel, {})[key] = value
                     else:
-                        # 兼容旧格式：如果没有type列或type为空，使用原来的规则
-                        if "/" in key:
-                            definjected_translations[key] = value
-                        else:
-                            keyed_translations[key] = value
+                        keyed_translations[key] = value
+                        if has_file_col and file_rel:
+                            keyed_by_file.setdefault(file_rel, {})[key] = value
 
-        return keyed_translations, definjected_translations
+        return (
+            keyed_translations,
+            definjected_translations,
+            keyed_by_file,
+            definjected_by_file,
+        )
     except FileNotFoundError:
         logger.error("CSV文件不存在: %s", csv_path)
         ui.print_error(f"❌ CSV文件不存在: {csv_path}")
-        return {}, {}
+        return {}, {}, {}, {}
     except PermissionError:
         logger.error("无权限访问CSV文件: %s", csv_path)
         ui.print_error(f"❌ 无权限访问CSV文件: {csv_path}")
-        return {}, {}
+        return {}, {}, {}, {}
     except (OSError, ValueError, TypeError) as e:
         logger.error("加载CSV文件时发生错误: %s", e)
         ui.print_error(f"❌ 加载CSV文件失败: {e}")
-        return {}, {}
+        return {}, {}, {}, {}
 
 
 def _definjected_get_parent(elem: Any, _root: Any, parent_map: Optional[dict]) -> Any:
@@ -287,10 +351,35 @@ def _definjected_key_func(elem: Any, root: Any, parent_map: Optional[dict]) -> s
     return ".".join(parent_tags + [tag_local]) if parent_tags else tag_local
 
 
+def _get_lang_dir_scope(base_dir: str, lang_dir: str) -> str:
+    """获取 lang_dir 相对于 base_dir 的 path scope（到 Languages 父级），用于 LoadFolders 路径映射。"""
+    base = Path(base_dir).resolve()
+    lang = Path(lang_dir).resolve()
+    try:
+        rel = lang.relative_to(base)
+    except ValueError:
+        return ""
+    # lang_dir 形如 .../Languages/ChineseSimplified，scope 为 Languages 的父路径
+    parts = rel.parts
+    for i, p in enumerate(parts):
+        if p == "Languages" or p == "Language":
+            return "/".join(parts[:i]) if i else ""
+    return "/".join(parts[:-1]) if len(parts) > 1 else ""
+
+
+def _find_all_language_dirs_with_scope(
+    base_dir: str, language: str
+) -> List[Tuple[str, str]]:
+    """返回 [(lang_dir, scope), ...]，scope 为 LoadFolders 路径（相对 base_dir）。"""
+    lang_dirs = _find_all_language_dirs(base_dir, language)
+    return [(d, _get_lang_dir_scope(base_dir, d)) for d in lang_dirs]
+
+
 def _find_all_language_dirs(base_dir: str, language: str) -> List[str]:
     """
-    递归查找 base_dir 下所有 Languages/<language> 目录（含 Keyed 或 DefInjected）。
-    用于迁移时识别子路径翻译，如 MajorModIntegrations/Biotech/Languages/ChineseSimplified
+    递归查找 base_dir 下所有「语言目录」（含 Keyed 或 DefInjected），兼容两种结构：
+    - 标准：Languages/<language>（智能提取默认）
+    - 直接：<language>（部分汉化包仅用语言名）
     """
     base = Path(base_dir)
     if not base.is_dir():
@@ -306,6 +395,12 @@ def _find_all_language_dirs(base_dir: str, language: str) -> List[str]:
             (lang_dir / keyed_name).exists() or (lang_dir / def_name).exists()
         ):
             found.append(str(lang_dir))
+    # 兼容「直接 language」结构：base 下或任意子目录下的 base/language 含 Keyed 或 DefInjected 也视为语言目录
+    for p in base.rglob(language):
+        if not p.is_dir() or p.name != language:
+            continue
+        if (p / keyed_name).exists() or (p / def_name).exists():
+            found.append(str(p))
     # 去重并按路径深度排序（浅层优先）
     seen = set()
     unique = []
@@ -343,6 +438,36 @@ def _get_language_subdir_path(base_dir: str, language: str, subdir_type: str) ->
     return _get_config().language_config.get_language_subdir(
         base_dir, language, subdir_type
     )
+
+
+def _infer_path_versions(old_scopes: List[str], new_scopes: List[str]) -> Tuple[str, str]:
+    """从 path scope 推断版本号（如 1.5、1.6），用于旧→新 LoadFolders 路径映射。"""
+    import re
+    ver_pat = re.compile(r"^v?(\d+\.\d+)$")
+
+    def _first_version(scopes: List[str]) -> str:
+        for s in scopes:
+            for p in (s or "").replace("\\", "/").strip().split("/"):
+                m = ver_pat.match(p.strip())
+                if m:
+                    return m.group(1)
+        return ""
+
+    old_ver = _first_version(old_scopes)
+    new_ver = _first_version(new_scopes)
+    return old_ver or "1.5", new_ver or "1.6"
+
+
+def _map_old_scope_to_new(
+    old_scope: str, new_scope: str, old_ver: str, new_ver: str
+) -> bool:
+    """判断 old_scope 是否对应 new_scope（版本替换后路径一致）。"""
+    o = old_scope.replace("\\", "/").strip()
+    n = new_scope.replace("\\", "/").strip()
+    if not o and not n:
+        return True
+    mapped = o.replace(old_ver, new_ver, 1) if old_ver else o
+    return mapped == n or (mapped.rstrip("/") == n.rstrip("/"))
 
 
 def _collect_old_translations(
@@ -420,6 +545,89 @@ def _collect_old_translations(
     return keyed_map, definjected_map
 
 
+def _collect_old_translations_by_path(
+    old_base_dirs: List[str],
+    language: str,
+) -> Tuple[
+    Dict[str, Dict[str, str]],
+    Dict[str, Dict[str, Dict[str, str]]],
+]:
+    """
+    按 path scope 收集旧翻译，避免不同 LoadFolders 路径的同 key 互相覆盖。
+
+    Returns:
+        keyed_by_path: scope -> {key -> value}
+        definjected_by_path_file: scope -> (file_rel -> {key -> value})
+    """
+    keyed_by_path: Dict[str, Dict[str, str]] = {}
+    definjected_by_path_file: Dict[str, Dict[str, Dict[str, str]]] = {}
+
+    processor = XMLProcessor()
+    keyed_name = _get_config().language_config.get_value("keyed_dir", "Keyed")
+    def_name = _get_config().language_config.get_value("definjected_dir", "DefInjected")
+
+    for old_base_dir in old_base_dirs:
+        old_base_dir = old_base_dir.strip() if isinstance(old_base_dir, str) else ""
+        if not old_base_dir:
+            continue
+        base = Path(old_base_dir).resolve()
+        lang_dirs_with_scope = _find_all_language_dirs_with_scope(old_base_dir, language)
+        if not lang_dirs_with_scope:
+            for subdir_type in ["keyed", "definjected"]:
+                subdir = _get_language_subdir_path(old_base_dir, language, subdir_type)
+                if subdir.exists():
+                    parent = subdir.parent
+                    if parent.name.lower() == language.lower():
+                        lang_dirs_with_scope = [(str(parent), _get_lang_dir_scope(old_base_dir, str(parent)))]
+                        break
+
+        for lang_dir, scope in lang_dirs_with_scope:
+            scope_norm = scope.replace("\\", "/") or ""
+            for subdir_type, use_def_key in [("keyed", False), ("definjected", True)]:
+                subdir = Path(lang_dir) / (def_name if use_def_key else keyed_name)
+                if not subdir.exists():
+                    continue
+                xml_files = list(subdir.rglob("*.xml"))
+                for xml_file in xml_files:
+                    try:
+                        file_rel = str(xml_file.relative_to(subdir)).replace("\\", "/")
+                        tree = processor.parse_xml(str(xml_file))
+                        if tree is None:
+                            continue
+                        root = tree.getroot() if processor.use_lxml else tree
+                        parent_map = (
+                            {c: p for p in root.iter() for c in p}
+                            if not processor.use_lxml
+                            else None
+                        )
+                        for elem in root.xpath(".//*") if processor.use_lxml else root.iter():
+                            key = (
+                                _definjected_key_func(elem, root, parent_map)
+                                if use_def_key
+                                else processor._get_element_key(elem)
+                            )
+                            if not key:
+                                continue
+                            text = (elem.text or "").strip()
+                            if not text:
+                                continue
+                            if use_def_key:
+                                k = key.replace("\\", "/").replace("/", ".") if "/" in key or "\\" in key else key
+                                if scope_norm not in definjected_by_path_file:
+                                    definjected_by_path_file[scope_norm] = {}
+                                if file_rel not in definjected_by_path_file[scope_norm]:
+                                    definjected_by_path_file[scope_norm][file_rel] = {}
+                                definjected_by_path_file[scope_norm][file_rel][k] = text
+                            else:
+                                if scope_norm not in keyed_by_path:
+                                    keyed_by_path[scope_norm] = {}
+                                keyed_by_path[scope_norm][key] = text
+                    except (OSError, ValueError, TypeError) as e:
+                        logger.debug("跳过 %s: %s", xml_file, e)
+
+    return keyed_by_path, definjected_by_path_file
+
+
 def migrate_translations_to_new(
     old_base_dirs: Union[str, List[str]],
     new_base_dir: str,
@@ -443,41 +651,54 @@ def migrate_translations_to_new(
     """
     if isinstance(old_base_dirs, str):
         old_base_dirs = [old_base_dirs]
-    keyed_map: Dict[str, str] = {}
-    definjected_flat: Dict[str, str] = {}  # key → 译文，不按 Def 类型分组
-    for old_base_dir in old_base_dirs:
-        old_base_dir = old_base_dir.strip()
-        if not old_base_dir:
-            continue
-        k_map, d_map = _collect_old_translations(old_base_dir, language)
-        keyed_map.update(k_map)
-        definjected_flat.update(d_map)
-    ui.print_info(
-        f"从 %s 个旧目录合并收集到 Keyed %s 条、DefInjected %s 条。"
-        % (len(old_base_dirs), len(keyed_map), len(definjected_flat))
+    old_base_dirs = [d.strip() for d in old_base_dirs if d and str(d).strip()]
+    keyed_by_path, definjected_by_path_file = _collect_old_translations_by_path(
+        old_base_dirs, language
     )
-    if not keyed_map and not definjected_flat:
+    total_keyed = sum(len(m) for m in keyed_by_path.values())
+    total_def = sum(len(f) for sc in definjected_by_path_file.values() for f in sc.values())
+    ui.print_info(
+        f"从 %s 个旧目录按路径收集到 Keyed %s 条、DefInjected %s 条（%s 个 path scope）。"
+        % (len(old_base_dirs), total_keyed, total_def, len(set(keyed_by_path) | set(definjected_by_path_file)))
+    )
+    if total_keyed == 0 and total_def == 0:
         logger.warning("未从旧目录收集到任何翻译，请确认旧目录下存在 Keyed/DefInjected 且 XML 中含译文")
         return 0
-    # 递归查找新模组下所有 Languages/<lang> 目录（含子路径）
-    new_lang_dirs = _find_all_language_dirs(new_base_dir, language)
-    if not new_lang_dirs:
+    new_lang_dirs_with_scope = _find_all_language_dirs_with_scope(new_base_dir, language)
+    if not new_lang_dirs_with_scope:
         new_base = Path(new_base_dir)
         if (new_base / "Keyed").exists() or (new_base / "DefInjected").exists():
-            new_lang_dirs = [str(new_base)]
+            new_lang_dirs_with_scope = [(str(new_base), "")]
         elif (new_base / language).exists():
-            new_lang_dirs = [str(new_base / language)]
+            new_lang_dirs_with_scope = [(str(new_base / language), "")]
         else:
             fallback = _get_config().language_config.get_language_dir(new_base_dir, language)
             if fallback.exists():
-                new_lang_dirs = [str(fallback)]
-    if not new_lang_dirs:
+                new_lang_dirs_with_scope = [(str(fallback), "")]
+    if not new_lang_dirs_with_scope:
         logger.warning("新模组下未找到语言目录: %s", new_base_dir)
         ui.print_warning(f"新模组下未找到 Languages/{language} 目录: {new_base_dir}")
         return 0
-    ui.print_info(f"找到 {len(new_lang_dirs)} 个语言目录，将逐一更新")
+    old_scopes = list(set(keyed_by_path) | set(definjected_by_path_file))
+    new_scopes = [s for _, s in new_lang_dirs_with_scope]
+    old_ver, new_ver = _infer_path_versions(old_scopes, new_scopes)
+    logger.info("路径版本映射: 旧 %s -> 新 %s", old_ver, new_ver)
+    ui.print_info(f"找到 {len(new_lang_dirs_with_scope)} 个语言目录，按 LoadFolders 路径映射（%s→%s）更新", old_ver, new_ver)
     updated = 0
-    for new_lang_dir in new_lang_dirs:
+    for new_lang_dir, new_scope in new_lang_dirs_with_scope:
+        new_scope_norm = (new_scope or "").replace("\\", "/")
+        matched_old_scope = None
+        for old_scope in old_scopes:
+            if _map_old_scope_to_new(old_scope, new_scope_norm, old_ver, new_ver):
+                matched_old_scope = old_scope
+                break
+        if matched_old_scope is None:
+            logger.debug("未找到匹配的旧 path scope: new=%s", new_scope_norm)
+            continue
+        keyed_map = keyed_by_path.get(matched_old_scope, {})
+        definjected_by_file = definjected_by_path_file.get(matched_old_scope, {})
+        if not keyed_map and not definjected_by_file:
+            continue
         if keyed_map:
             updated += _update_xml_in_subdir(
                 new_base_dir,
@@ -488,7 +709,8 @@ def migrate_translations_to_new(
                 only_fill_empty=only_fill_empty,
                 language_dir_override=new_lang_dir,
             )
-        if definjected_flat:
+        if definjected_by_file:
+            definjected_flat = {k: v for f in definjected_by_file.values() for k, v in f.items()}
             updated += _update_xml_in_subdir(
                 new_base_dir,
                 language,
@@ -497,6 +719,7 @@ def migrate_translations_to_new(
                 merge=True,
                 only_fill_empty=only_fill_empty,
                 language_dir_override=new_lang_dir,
+                translations_by_file=definjected_by_file,
             )
     return updated
 
@@ -568,9 +791,12 @@ def _update_xml_in_subdir(
     merge: bool = True,
     only_fill_empty: bool = False,
     language_dir_override: Optional[str] = None,
+    translations_by_file: Optional[Dict[str, Dict[str, str]]] = None,
 ) -> int:
-    """仅在指定子目录(Keyed/DefInjected)内更新翻译"""
-    if not translations:
+    """仅在指定子目录(Keyed/DefInjected)内更新翻译。
+    translations_by_file 非空时按 key+file 双校验：仅对每个 xml 文件应用其 file 路径对应的译文。
+    """
+    if not translations and not translations_by_file:
         return 0
     if language_dir_override:
         subdir = Path(language_dir_override) / subdir_type.lower()
@@ -580,7 +806,6 @@ def _update_xml_in_subdir(
         )
         if not subdir.exists():
             subdir = _get_language_subdir_path(mod_dir, language, subdir_type)
-    # 使用配置的目录名（如 DefInjected）以便正确解析路径
     if language_dir_override and subdir_type.lower() == "definjected":
         def_name = _get_config().language_config.get_value("definjected_dir", "DefInjected")
         subdir = Path(language_dir_override) / def_name
@@ -590,13 +815,16 @@ def _update_xml_in_subdir(
     if not subdir.exists():
         logger.warning("语言子目录不存在: %s", subdir)
         return 0
-    processor = XMLProcessor()
+    if subdir_type.lower() == "definjected":
+        config = XMLProcessorConfig(max_file_size=500 * 1024 * 1024)  # 500MB
+        processor = XMLProcessor(config=config)
+    else:
+        processor = XMLProcessor()
     updated_count = 0
     generate_key_func = (
         _definjected_key_func if subdir_type.lower() == "definjected" else None
     )
 
-    # 规格化 DefInjected 键：统一为点号格式（DefName.field 或 DefName.field.0），与三种导出格式一致
     if subdir_type.lower() == "definjected":
         normalized: Dict[str, str] = {}
         for key, value in translations.items():
@@ -604,25 +832,47 @@ def _update_xml_in_subdir(
             normalized[k] = value
         translations = normalized
 
-    # 获取所有XML文件列表
     xml_files = list(Path(subdir).rglob("*.xml"))
     total_files = len(xml_files)
-
     if total_files == 0:
         return 0
 
-    # 显示进度条
     ui.print_info(f"正在更新 {subdir_type} 目录中的 {total_files} 个文件...")
 
     for i, xml_file in enumerate(xml_files, 1):
         try:
+            # key+file 双校验：仅对该文件路径的译文应用
+            if translations_by_file:
+                try:
+                    rel = xml_file.relative_to(subdir)
+                    file_key = str(rel).replace("\\", "/")
+                except ValueError:
+                    file_key = xml_file.name
+                file_translations = translations_by_file.get(file_key, {})
+                if subdir_type.lower() == "definjected" and file_translations:
+                    norm_file: Dict[str, str] = {}
+                    for key, value in file_translations.items():
+                        k = key.replace("\\", "/").replace("/", ".") if "/" in key or "\\" in key else key
+                        norm_file[k] = value
+                    file_translations = norm_file
+            else:
+                file_translations = translations
+            if not file_translations:
+                ui.print_progress_bar(i, total_files, prefix="更新文件")
+                continue
             tree = processor.parse_xml(str(xml_file))
             if tree is None:
+                logger.warning("跳过（解析失败或文件过大）: %s", xml_file.name)
+                ui.print_info(
+                    "跳过: %s（可能文件过大超过默认限制或解析失败，DefInjected 已使用 500MB 限制）"
+                    % xml_file.name
+                )
+                ui.print_progress_bar(i, total_files, prefix="更新文件")
                 continue
             if update_translations(
                 processor,
                 tree,
-                translations,
+                file_translations,
                 generate_key_func=generate_key_func,
                 merge=merge,
                 include_attributes=True,
@@ -630,6 +880,12 @@ def _update_xml_in_subdir(
             ):
                 processor.save_xml(tree, str(xml_file))
                 updated_count += 1
+            elif subdir_type.lower() == "definjected":
+                logger.debug("未修改: %s（key 未匹配 / 仅填充空项且已有内容 / 或 CSV 译文与当前相同）", xml_file.name)
+                ui.print_info(
+                    "未修改: %s（可能 key 不一致、仅填充空项且节点已有内容、或 CSV 译文与当前相同）"
+                    % xml_file.name
+                )
 
             # 显示进度条
             ui.print_progress_bar(i, total_files, prefix="更新文件")
@@ -671,7 +927,7 @@ def update_translations(
     Returns:
         bool: 是否更新成功
     """
-    from utils.utils import sanitize_xml
+    from utils.utils import sanitize_xml, normalize_xml_entities_in_text
 
     modified = False
     root = tree.getroot() if processor.use_lxml else tree
@@ -722,7 +978,8 @@ def update_translations(
                     if value is None:
                         value = translations.get(candidates[0])
         if value is not None:
-            current = (elem.text or "").strip()
+            value = normalize_xml_entities_in_text(value)
+            current = normalize_xml_entities_in_text((elem.text or "").strip())
             # 迁移时：若当前内容像英文占位（如 creation(tag=...)->...），仍用旧翻译覆盖
             if only_fill_empty and current and not _looks_like_en_placeholder(current):
                 pass
@@ -743,54 +1000,42 @@ def update_translations(
                     attr_key = f"{get_key(elem)}.{attr_name}"
                     if attr_key not in translations:
                         continue
-                    current_attr = (attr_value or "").strip()
+                    current_attr = normalize_xml_entities_in_text((attr_value or "").strip())
+                    attr_val = normalize_xml_entities_in_text(translations[attr_key])
                     if only_fill_empty and current_attr and not _looks_like_en_placeholder(current_attr):
                         pass
                     elif only_fill_empty:
-                        elem.set(attr_name, sanitize_xml(translations[attr_key]))
+                        elem.set(attr_name, sanitize_xml(attr_val))
                         modified = True
-                    elif merge and current_attr != translations[attr_key]:
-                        elem.set(attr_name, sanitize_xml(translations[attr_key]))
+                    elif merge and current_attr != attr_val:
+                        elem.set(attr_name, sanitize_xml(attr_val))
                         modified = True
                     elif not merge:
-                        elem.set(attr_name, sanitize_xml(translations[attr_key]))
+                        elem.set(attr_name, sanitize_xml(attr_val))
                         modified = True
 
     return modified
 
 
-def _verify_import_results(mod_dir: str, language: str) -> bool:
-    """验证导入结果"""
-    template_dir = _get_config().language_config.get_language_dir(mod_dir, language)
+def _verify_import_results(
+    mod_dir: str, language: str, template_dir: Optional[Path] = None
+) -> bool:
+    """验证导入结果（template_dir 未提供时用 get_template_dir 解析，兼容 Languages/<语言> 与直接 <语言>）"""
+    if template_dir is None:
+        template_dir = _get_config().language_config.get_template_dir(
+            mod_dir, language
+        )
+    template_dir = Path(template_dir)
     if not template_dir.exists():
         logger.error("导入后模板目录不存在")
         return False
-    # 检查是否有翻译文件
-    has_keyed = (
-        any(
-            (
-                _get_config().language_config.get_language_subdir(
-                    mod_dir, language, "keyed"
-                ).rglob("*.xml")
-            )
-        )
-        if _get_config().language_config.get_language_subdir(
-            mod_dir, language, "keyed"
-        ).exists()
-        else False
-    )
+    keyed_name = _get_config().language_config.get_value("keyed_dir", "Keyed")
+    def_name = _get_config().language_config.get_value("definjected_dir", "DefInjected")
+    keyed_subdir = template_dir / keyed_name
+    def_subdir = template_dir / def_name
+    has_keyed = any(keyed_subdir.rglob("*.xml")) if keyed_subdir.exists() else False
     has_definjected = (
-        any(
-            (
-                _get_config().language_config.get_language_subdir(
-                    mod_dir, language, "definjected"
-                ).rglob("*.xml")
-            )
-        )
-        if _get_config().language_config.get_language_subdir(
-            mod_dir, language, "definjected"
-        ).exists()
-        else False
+        any(def_subdir.rglob("*.xml")) if def_subdir.exists() else False
     )
     if not has_keyed and not has_definjected:
         logger.warning("导入后未找到翻译文件")

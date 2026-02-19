@@ -4,10 +4,12 @@ Keyed 提取器
 专门用于从 Keyed 目录提取键值对翻译
 """
 
+import re
 from typing import List, Tuple
 from pathlib import Path
 from utils.logging_config import get_logger
 from utils.ui_style import ui
+from utils.utils import normalize_xml_entities_in_text
 from .base import BaseExtractor
 from ..filters import ContentFilter
 
@@ -52,13 +54,15 @@ class KeyedExtractor(BaseExtractor):
             source_path, language, "keyed"
         )
         if not keyed_dir.exists():
-            # 形态一：选 1.6 时英文 Keyed 在根目录 Languages（模组根/Languages/English/Keyed）
-            keyed_dir_root = self.config.language_config.get_language_subdir(
-                str(Path(source_path).parent), language, "keyed"
-            )
-            if keyed_dir_root.exists():
-                keyed_dir = keyed_dir_root
-            else:
+            # 仅当当前路径为版本目录（如 1.6）时才回退到父目录；子内容根（如 1.6/Quirks）不回退，避免误用本体翻译
+            path_name = Path(source_path).name
+            if path_name and re.match(r"^\d+\.\d+$", path_name):
+                keyed_dir_root = self.config.language_config.get_language_subdir(
+                    str(Path(source_path).parent), language, "keyed"
+                )
+                if keyed_dir_root.exists():
+                    keyed_dir = keyed_dir_root
+            if not keyed_dir.exists():
                 self.logger.warning("Keyed 目录不存在: %s", keyed_dir)
                 return []
 
@@ -141,8 +145,8 @@ class KeyedExtractor(BaseExtractor):
         # 生成key
         key = elem.tag
 
-        # 生成text
-        text = elem.text or ""
+        # 生成text（还原 &gt; 等实体，避免 &amp;gt; 无法被游戏识别）
+        text = normalize_xml_entities_in_text(elem.text or "").strip()
 
         # 生成tag
         tag = elem.tag
