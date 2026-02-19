@@ -6,6 +6,7 @@
 
 import os
 import re
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Dict, Optional, Callable, List, TYPE_CHECKING
 from utils.logging_config import get_logger
@@ -523,37 +524,31 @@ class PathManager:
 
     def _choose_versioned_content_dir(self, mod_dir: str) -> Optional[str]:
         """
-        让用户选择版本号内容目录，直接返回最终目录
+        让用户选择版本号内容目录，直接返回最终目录。
+        仅从 LoadFolders.xml 读取版本列表（进入此函数时已确认 LoadFolders 含版本块）。
         """
+        lf_versions = self._get_version_tags_from_load_folders(mod_dir)
         version_dirs = []
-        try:
-            for item in os.listdir(mod_dir):
-                item_path = os.path.join(mod_dir, item)
-                if os.path.isdir(item_path):
-                    if self._is_version_number(item):
-                        content_dirs = {"Defs", "Languages", "Textures", "Sounds"}
-                        found_content_dirs = {
-                            d
-                            for d in os.listdir(item_path)
-                            if os.path.isdir(os.path.join(item_path, d))
-                        }
-                        if content_dirs.intersection(found_content_dirs):
-                            version_dirs.append(
-                                {
-                                    "name": item,
-                                    "path": item_path,
-                                    "version": self._parse_version_number(item),
-                                }
-                            )
-        except (OSError, IOError, ValueError) as e:
-            self.logger.error("检测版本目录失败: %s", e)
+        for name in lf_versions:
+            item_path = os.path.join(mod_dir, name)
+            path = item_path if os.path.isdir(item_path) else mod_dir
+            try:
+                version_dirs.append({
+                    "name": name,
+                    "path": path,
+                    "version": self._parse_version_number(name),
+                })
+            except (ValueError, TypeError):
+                version_dirs.append({"name": name, "path": path, "version": (0, 0)})
+        version_dirs.sort(key=lambda x: x["version"], reverse=True)
 
         if version_dirs:
             version_dirs.sort(key=lambda x: x["version"], reverse=True)
 
             # 美化版本选择界面
             ui.print_section_header(
-                f"{ui.Icons.MODULE} 检测到版本号结构模组", ui.Icons.INFO
+                f"{ui.Icons.MODULE} 检测到版本号结构模组（来自 LoadFolders.xml）",
+                ui.Icons.INFO,
             )
             ui.print_info(f"{ui.Icons.FOLDER} 模组目录: {mod_dir}")
             ui.print_info(f"{ui.Icons.SCAN} 发现以下可用版本：")
@@ -819,6 +814,29 @@ class PathManager:
             # 降级到常规方法
             return self.get_path(path_type, prompt, validator_type, required, default)
 
+    def _get_version_tags_from_load_folders(self, mod_dir: str) -> List[str]:
+        """
+        从 LoadFolders.xml 读取版本标签（v1.6 -> 1.6），仅返回有 <li> 内容的版本块。
+        RimWorld 多版本模组以 LoadFolders.xml 为准，不再依赖扫描目录结构。
+        """
+        xml_path = Path(mod_dir) / "LoadFolders.xml"
+        if not xml_path.is_file():
+            return []
+        try:
+            tree = ET.parse(xml_path)
+            root = tree.getroot()
+            versions = []
+            for child in root:
+                if not child.tag or len(child.tag) < 2:
+                    continue
+                if child.tag.startswith("v") and child.tag[1:].replace(".", "").isdigit():
+                    ver = child.tag[1:]
+                    if list(child.findall("li")):
+                        versions.append(ver)
+            return versions
+        except (ET.ParseError, OSError, IOError):
+            return []
+
     def _detect_mod_structure_type(self, mod_dir: str) -> tuple[str, str, str]:
         """
         检测模组目录结构类型
@@ -832,16 +850,14 @@ class PathManager:
                 模组目录: 包含About的目录
                 内容目录: 包含Defs/Languages的目录
         """
-        # 检查根目录是否有About
         about_dir = os.path.join(mod_dir, "About")
         if os.path.isdir(about_dir):
-            # 首先检查是否有版本号子目录
-            version_result = self._find_version_content_dir(mod_dir)
-            if version_result[0] == "versioned":
-                # 如果找到版本号结构，优先使用版本号结构
-                return version_result
+            # 仅以 LoadFolders.xml 判断 versioned：有版本块则弹出版本选择，无则视为 standard/unknown
+            lf_versions = self._get_version_tags_from_load_folders(mod_dir)
+            if lf_versions:
+                return "versioned", mod_dir, mod_dir
 
-            # 检查根目录是否有模组内容
+            # 无 LoadFolders 或空版本块：检查根目录是否有模组内容
             content_dirs = {"Defs", "Languages", "Textures", "Sounds"}
             found_content_dirs = {
                 d
@@ -856,51 +872,6 @@ class PathManager:
                 # 根目录有About但没有内容
                 return "unknown", mod_dir, mod_dir
 
-        return "unknown", mod_dir, mod_dir
-
-    def _find_version_content_dir(self, mod_dir: str) -> tuple[str, str, str]:
-        """
-        在版本号子目录中查找内容目录
-
-        Args:
-            mod_dir (str): 模组根目录路径
-
-        Returns:
-            tuple[str, str, str]: (结构类型, 模组目录, 内容目录)
-        """
-        version_dirs = []
-        try:
-            for item in os.listdir(mod_dir):
-                item_path = os.path.join(mod_dir, item)
-                if os.path.isdir(item_path):
-                    # 检查是否为版本号格式（如 1.5, 1.4, 1.3 等）
-                    if self._is_version_number(item):
-                        # 检查该版本目录下是否有模组内容
-                        content_dirs = {"Defs", "Languages", "Textures", "Sounds"}
-                        found_content_dirs = {
-                            d
-                            for d in os.listdir(item_path)
-                            if os.path.isdir(os.path.join(item_path, d))
-                        }
-
-                        if content_dirs.intersection(found_content_dirs):
-                            version_dirs.append(
-                                {
-                                    "name": item,
-                                    "path": item_path,
-                                    "version": self._parse_version_number(item),
-                                }
-                            )
-        except (OSError, IOError, ValueError) as e:
-            self.logger.error("检测版本目录失败: %s", e)
-
-        if version_dirs:
-            # 按版本号排序，选择最新版本
-            version_dirs.sort(key=lambda x: x["version"], reverse=True)
-            latest_version = version_dirs[0]
-            return "versioned", mod_dir, latest_version["path"]
-
-        # 没有找到版本号内容目录
         return "unknown", mod_dir, mod_dir
 
     def _calculate_version_layout(self, version_names: List[str]) -> tuple:

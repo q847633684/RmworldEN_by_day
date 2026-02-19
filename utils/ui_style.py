@@ -16,7 +16,7 @@ init(autoreset=True, strip=False)
 class UIStyle:
     """统一UI样式类"""
 
-    # 颜色主题
+    # 颜色主题（避免 Fore.BLACK 在 Windows 深色背景下不可见）
     class Colors:
         PRIMARY = Fore.CYAN  # 主色调 - 青色
         SUCCESS = Fore.GREEN  # 成功 - 绿色
@@ -24,7 +24,7 @@ class UIStyle:
         ERROR = Fore.RED  # 错误 - 红色
         INFO = Fore.BLUE  # 信息 - 蓝色
         HIGHLIGHT = Fore.MAGENTA  # 高亮 - 紫色
-        MUTED = Fore.BLACK  # 次要信息 - 黑色
+        MUTED = Fore.LIGHTBLACK_EX  # 次要信息 - 灰色（黑底可见，不用 Fore.BLACK）
         RESET = Style.RESET_ALL  # 重置样式
 
     # 图标主题

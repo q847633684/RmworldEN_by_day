@@ -294,16 +294,25 @@ class LoggingConfig:
             space_saved = total_size_before - total_size_after
             space_saved_mb = space_saved / (1024 * 1024)
 
-            # 输出清理结果
-            if deleted_count > 0:
-                print(
-                    f"🗑️ 日志清理完成：删除了 {deleted_count} 个旧日志文件，节省 {space_saved_mb:.2f} MB 空间"
-                )
-            else:
-                print(f"📁 日志目录检查完成：当前保留 {len(log_files)} 个日志文件")
+            # 输出清理结果（避免 emoji 在 Windows gbk 下报错）
+            try:
+                if deleted_count > 0:
+                    print(
+                        f"🗑️ 日志清理完成：删除了 {deleted_count} 个旧日志文件，节省 {space_saved_mb:.2f} MB 空间"
+                    )
+                else:
+                    print(f"📁 日志目录检查完成：当前保留 {len(log_files)} 个日志文件")
+            except UnicodeEncodeError:
+                if deleted_count > 0:
+                    print(f"[日志清理] 删除了 {deleted_count} 个旧日志，节省 {space_saved_mb:.2f} MB")
+                else:
+                    print(f"[日志] 保留 {len(log_files)} 个日志文件")
 
         except (OSError, IOError, PermissionError) as e:
-            print(f"⚠️ 日志清理过程中出现错误: {e}")
+            try:
+                print(f"⚠️ 日志清理过程中出现错误: {e}")
+            except UnicodeEncodeError:
+                print(f"[!] 日志清理错误: {e}")
 
     @classmethod
     def cleanup_old_logs(cls, days_to_keep: int = 7) -> None:
@@ -321,7 +330,10 @@ class LoggingConfig:
         清理所有日志文件（谨慎使用）
         """
         if cls._log_dir is None or not cls._log_dir.exists():
-            print("📁 日志目录不存在，无需清理")
+            try:
+                print("📁 日志目录不存在，无需清理")
+            except UnicodeEncodeError:
+                print("[日志] 目录不存在，无需清理")
             return
 
         try:
@@ -329,7 +341,10 @@ class LoggingConfig:
             log_files = list(cls._log_dir.glob("day_translation*.log"))
 
             if not log_files:
-                print("📁 没有找到日志文件")
+                try:
+                    print("📁 没有找到日志文件")
+                except UnicodeEncodeError:
+                    print("[日志] 没有找到日志文件")
                 return
 
             # 计算总大小
@@ -345,12 +360,18 @@ class LoggingConfig:
                 except (OSError, IOError):
                     pass
 
-            print(
-                f"🗑️ 已清理所有日志文件：删除了 {deleted_count} 个文件，释放 {total_size_mb:.2f} MB 空间"
-            )
+            try:
+                print(
+                    f"🗑️ 已清理所有日志文件：删除了 {deleted_count} 个文件，释放 {total_size_mb:.2f} MB 空间"
+                )
+            except UnicodeEncodeError:
+                print(f"[日志清理] 删除了 {deleted_count} 个文件，释放 {total_size_mb:.2f} MB 空间")
 
         except (OSError, IOError, PermissionError) as e:
-            print(f"⚠️ 清理所有日志时出现错误: {e}")
+            try:
+                print(f"⚠️ 清理所有日志时出现错误: {e}")
+            except UnicodeEncodeError:
+                print(f"[!] 清理日志错误: {e}")
 
     @classmethod
     def get_log_info(cls) -> dict:

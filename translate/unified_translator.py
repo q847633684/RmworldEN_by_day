@@ -137,7 +137,7 @@ class UnifiedTranslator:
 
     def _generate_output_path(self, input_csv: str) -> str:
         """
-        生成输出文件路径
+        生成输出文件路径：输入 xxx.csv → 输出 xxx_zh.csv（同一目录）
 
         Args:
             input_csv: 输入CSV文件路径
@@ -145,17 +145,9 @@ class UnifiedTranslator:
         Returns:
             str: 输出文件路径
         """
-        from user_config import UserConfigManager
-
-        # 获取配置中的汉化输出CSV文件名
-        config_manager = UserConfigManager.get_instance()
-        translated_csv = config_manager.language_config.get_value(
-            "translated_csv", "extracted_translations_zh.csv"
-        )
-
         input_path = Path(input_csv)
-        # 使用配置中的汉化输出文件名，但保持在同一目录
-        return str(input_path.parent / translated_csv)
+        output_name = input_path.stem + "_zh" + input_path.suffix
+        return str(input_path.parent / output_name)
 
     def can_resume_translation(self, input_csv: str, output_csv: str) -> Optional[str]:
         """

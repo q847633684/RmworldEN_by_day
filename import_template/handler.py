@@ -20,6 +20,7 @@ from .importers import import_translations, migrate_translations_to_new
 def handle_import_template(
     csv_path: str = None,
     mod_dir: str = None,
+    skip_confirm: bool = False,
 ):
     """处理导入模板功能
 
@@ -29,6 +30,7 @@ def handle_import_template(
     Args:
         csv_path: CSV文件路径，如果提供则跳过路径选择
         mod_dir: 模组/导入目录路径，若提供则直接使用；否则由 CSV 所在目录推导
+        skip_confirm: 为 True 时不再询问「确认导入翻译到模板？」（用于翻译完成后已问过「是否导入」的场景）
     """
     logger = get_logger(f"{__name__}.handle_import_template")
 
@@ -51,7 +53,7 @@ def handle_import_template(
         config = UserConfigManager.get_instance()
         language = config.language_config.get_value("cn_language", "ChineseSimplified")
 
-        if confirm_action("确认导入翻译到模板？"):
+        if skip_confirm or confirm_action("确认导入翻译到模板？"):
             ui.print_info("=== 开始导入 ===")
             try:
                 success = import_translations(

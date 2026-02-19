@@ -16,7 +16,7 @@ from utils.logging_config import get_logger, log_user_action, log_error_with_con
 from utils.interaction import (
     select_mod_path_with_version_detection,
 )
-from utils.ui_style import ui
+from utils.ui_style import ui, _get_mod_display_name
 from .manager import (
     TemplateManager,
     find_content_roots,
@@ -24,6 +24,30 @@ from .manager import (
     get_content_roots_from_load_folders,
 )
 from .interaction import InteractionManager
+
+
+def _sanitize_mod_name_for_filename(name: str) -> str:
+    """将模组名转为安全的文件名（替换非法字符）"""
+    import re
+    s = re.sub(r'[\\/:*?"<>|]', "_", str(name).strip())
+    return s[:64] if s else ""
+
+
+def _short_csv_basename(mod_name: str, export_rel: str) -> str:
+    """生成简短 CSV 名。根目录用 {mod_name}_extracted.csv；子路径用 R_M_Biotech_extracted.csv 格式"""
+    if not export_rel:
+        return f"{mod_name}_extracted.csv" if mod_name else "extracted.csv"
+    mod_prefix = (mod_name[0] if mod_name else "").upper()
+    parts = [p for p in export_rel.replace("\\", "/").split("/") if p]
+    if not parts:
+        return f"{mod_prefix}_extracted.csv" if mod_prefix else "extracted.csv"
+    initials = "_".join(p[0].upper() for p in parts[:-1])
+    last = parts[-1]
+    if initials:
+        base = f"{mod_prefix}_{initials}_{last}"
+    else:
+        base = f"{mod_prefix}_{last}"
+    return f"{base}_extracted.csv"
 
 
 def _dedupe_translations_by_key(
@@ -121,7 +145,17 @@ def handle_extract() -> Optional[tuple]:
                         "未找到 LoadFolders.xml，已按所选版本目录+模组根扫描，合并导出到 Languages"
                     )
         else:
+            # 用户选择模组根时，也尝试从 LoadFolders.xml 读取（Defs 可能在 1.6/ 等版本子目录下）
             content_roots = find_content_roots(scan_base, language=en_lang)
+            for ver in ("1.6", "1.5"):
+                lf_roots = get_content_roots_from_load_folders(scan_base, ver)
+                if lf_roots:
+                    content_roots = lf_roots
+                    ui.print_info(
+                        f"已从 LoadFolders.xml 读取 <v{ver}> 共 {len(content_roots)} 个内容根"
+                    )
+                    use_load_folders = True
+                    break
         if not content_roots and (Path(mod_dir) / "Defs").exists():
             content_roots = [mod_dir]
         if not content_roots:
@@ -135,7 +169,10 @@ def handle_extract() -> Optional[tuple]:
         load_folders_mod_root = scan_base
         # 构建 root_groups：(roots, export_rel)。版本组只用版本路径单根，Defs/Languages 均「版本优先、根目录回退」
         if scan_base == mod_dir:
-            root_groups: List[tuple] = [([mod_dir], "")]
+            # 若有 content_roots（来自 LoadFolders 或 find_content_roots），用其扫描；否则仅用模组根
+            root_groups: List[tuple] = (
+                [(content_roots, "")] if content_roots else [([mod_dir], "")]
+            )
         elif not use_load_folders:
             root_groups = [(content_roots, "")]
         else:
@@ -207,9 +244,11 @@ def handle_extract() -> Optional[tuple]:
                 f"智能配置：数据来源={data_source_choice}, 模板结构={template_structure}, 冲突处理={conflict_resolution}"
             )
 
-            output_csv_name = config.language_config.get_value(
+            default_csv_name = config.language_config.get_value(
                 "output_csv", "translations.csv"
             )
+            mod_root = load_folders_mod_root or mod_dir
+            mod_name = _sanitize_mod_name_for_filename(_get_mod_display_name(mod_root))
             all_csv_paths: List[str] = []
             chosen_output_dir = smart_config["output_config"]["output_dir"]
             rel_names: List[str] = []
@@ -229,7 +268,12 @@ def handle_extract() -> Optional[tuple]:
 
             for roots, export_rel in root_groups:
                 output_dir = chosen_output_dir if not export_rel else str(Path(chosen_output_dir) / export_rel)
-                output_csv = str(Path(output_dir) / output_csv_name)
+                if mod_name:
+                    output_csv_name = _short_csv_basename(mod_name, export_rel)
+                else:
+                    output_csv_name = default_csv_name
+                # 传文件名给 manager，CSV 会写入 output_dir/Languages/{output_language}/ 与 Keyed/DefInjected 同级
+                output_csv = output_csv_name
                 output_path = Path(output_dir)
                 import_dir = roots[0] if len(roots) == 1 else ""
 

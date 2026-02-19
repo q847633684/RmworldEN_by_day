@@ -286,6 +286,36 @@ def _definjected_key_func(elem: Any, root: Any, parent_map: Optional[dict]) -> s
     return ".".join(parent_tags + [tag_local]) if parent_tags else tag_local
 
 
+def _find_all_language_dirs(base_dir: str, language: str) -> List[str]:
+    """
+    递归查找 base_dir 下所有 Languages/<language> 目录（含 Keyed 或 DefInjected）。
+    用于迁移时识别子路径翻译，如 MajorModIntegrations/Biotech/Languages/ChineseSimplified
+    """
+    base = Path(base_dir)
+    if not base.is_dir():
+        return []
+    keyed_name = CONFIG.language_config.get_value("keyed_dir", "Keyed")
+    def_name = CONFIG.language_config.get_value("definjected_dir", "DefInjected")
+    found: List[str] = []
+    for p in base.rglob("Languages"):
+        if not p.is_dir():
+            continue
+        lang_dir = p / language
+        if lang_dir.exists() and (
+            (lang_dir / keyed_name).exists() or (lang_dir / def_name).exists()
+        ):
+            found.append(str(lang_dir))
+    # 去重并按路径深度排序（浅层优先）
+    seen = set()
+    unique = []
+    for d in sorted(found, key=lambda x: len(Path(x).parts)):
+        n = Path(d).resolve()
+        if n not in seen:
+            seen.add(n)
+            unique.append(d)
+    return unique
+
+
 def _get_language_subdir_path(base_dir: str, language: str, subdir_type: str) -> Path:
     """
     解析语言子目录路径。支持四种情况：
@@ -317,58 +347,74 @@ def _get_language_subdir_path(base_dir: str, language: str, subdir_type: str) ->
 def _collect_old_translations(
     old_base_dir: str,
     language: str,
-) -> Tuple[Dict[str, str], Dict[Tuple[str, str], str]]:
+) -> Tuple[Dict[str, str], Dict[str, str]]:
     """
     扫描旧翻译目录，收集 Keyed 与 DefInjected 中已有翻译。
+    递归扫描所有子路径的 Languages/<lang> 目录（如 MajorModIntegrations/Biotech/...）。
     Keyed: key → 非空译文。
-    DefInjected: (key, scope) → 非空译文，按 Def 类型(scope)区分，避免同 key 不同 Def 类型互相覆盖。
+    DefInjected: key → 非空译文（扁平，不按 Def 类型分组），以便旧翻译无 Def 类型目录时也能匹配新模板。
 
     Args:
         old_base_dir: 旧模组根目录、语言目录、或直接 Keyed/DefInjected 文件夹
         language: 语言代码，如 ChineseSimplified
 
     Returns:
-        (keyed_map, definjected_map) 其中 definjected_map 的 key 为 (key, scope)
+        (keyed_map, definjected_map) 其中 definjected_map 为 key → 译文
     """
     processor = XMLProcessor()
     keyed_map: Dict[str, str] = {}
-    definjected_map: Dict[Tuple[str, str], str] = {}
+    definjected_map: Dict[str, str] = {}
 
-    for subdir_type, use_def_key in [("keyed", False), ("definjected", True)]:
-        subdir = _get_language_subdir_path(old_base_dir, language, subdir_type)
-        if not subdir.exists():
-            continue
-        xml_files = list(Path(subdir).rglob("*.xml"))
-        for xml_file in xml_files:
-            try:
-                # DefInjected：scope = 相对 subdir 的首段路径（Def 类型，如 HediffDef）
-                rel = xml_file.relative_to(subdir)
-                scope = rel.parts[0] if rel.parts else (xml_file.stem or "")
-                tree = processor.parse_xml(str(xml_file))
-                if tree is None:
-                    continue
-                root = tree.getroot() if processor.use_lxml else tree
-                parent_map = (
-                    {c: p for p in root.iter() for c in p}
-                    if not processor.use_lxml
-                    else None
-                )
-                for elem in root.xpath(".//*") if processor.use_lxml else root.iter():
-                    key = (
-                        _definjected_key_func(elem, root, parent_map)
-                        if use_def_key
-                        else processor._get_element_key(elem)
-                    )
-                    if not key:
+    # 递归查找所有 Languages/<lang> 目录（含子路径）
+    lang_dirs = _find_all_language_dirs(old_base_dir, language)
+    if not lang_dirs:
+        # 回退：按原逻辑尝试单一目录
+        for subdir_type in ["keyed", "definjected"]:
+            subdir = _get_language_subdir_path(old_base_dir, language, subdir_type)
+            if subdir.exists():
+                parent = subdir.parent
+                if parent.name.lower() == language.lower():
+                    lang_dirs = [str(parent)]
+                    break
+
+    for lang_dir in lang_dirs:
+        for subdir_type, use_def_key in [("keyed", False), ("definjected", True)]:
+            subdir = Path(lang_dir) / (
+                CONFIG.language_config.get_value("definjected_dir", "DefInjected")
+                if use_def_key
+                else CONFIG.language_config.get_value("keyed_dir", "Keyed")
+            )
+            if not subdir.exists():
+                continue
+            xml_files = list(Path(subdir).rglob("*.xml"))
+            for xml_file in xml_files:
+                try:
+                    tree = processor.parse_xml(str(xml_file))
+                    if tree is None:
                         continue
-                    text = (elem.text or "").strip()
-                    if text:
-                        if use_def_key:
-                            definjected_map[(key, scope)] = text
-                        else:
-                            keyed_map[key] = text
-            except (OSError, ValueError, TypeError) as e:
-                logger.debug("跳过 %s: %s", xml_file, e)
+                    root = tree.getroot() if processor.use_lxml else tree
+                    parent_map = (
+                        {c: p for p in root.iter() for c in p}
+                        if not processor.use_lxml
+                        else None
+                    )
+                    for elem in root.xpath(".//*") if processor.use_lxml else root.iter():
+                        key = (
+                            _definjected_key_func(elem, root, parent_map)
+                            if use_def_key
+                            else processor._get_element_key(elem)
+                        )
+                        if not key:
+                            continue
+                        text = (elem.text or "").strip()
+                        if text:
+                            if use_def_key:
+                                k = key.replace("\\", "/").replace("/", ".") if "/" in key or "\\" in key else key
+                                definjected_map[k] = text
+                            else:
+                                keyed_map[key] = text
+                except (OSError, ValueError, TypeError) as e:
+                    logger.debug("跳过 %s: %s", xml_file, e)
 
     return keyed_map, definjected_map
 
@@ -397,59 +443,60 @@ def migrate_translations_to_new(
     if isinstance(old_base_dirs, str):
         old_base_dirs = [old_base_dirs]
     keyed_map: Dict[str, str] = {}
-    definjected_map: Dict[Tuple[str, str], str] = {}  # (key, scope) -> text
+    definjected_flat: Dict[str, str] = {}  # key → 译文，不按 Def 类型分组
     for old_base_dir in old_base_dirs:
         old_base_dir = old_base_dir.strip()
         if not old_base_dir:
             continue
         k_map, d_map = _collect_old_translations(old_base_dir, language)
         keyed_map.update(k_map)
-        # 同 (key, scope) 后者覆盖
-        definjected_map.update(d_map)
-    # DefInjected 按 scope 分组，写入时每个文件用对应 scope 的 key→text
-    definjected_by_scope: Dict[str, Dict[str, str]] = {}
-    for (k, scope), text in definjected_map.items():
-        definjected_by_scope.setdefault(scope, {})[k] = text
-    total_def = sum(len(m) for m in definjected_by_scope.values())
+        definjected_flat.update(d_map)
     ui.print_info(
-        f"从 %s 个旧目录合并收集到 Keyed %s 条、DefInjected %s 条（按 Def 类型分组）。"
-        % (len(old_base_dirs), len(keyed_map), total_def)
+        f"从 %s 个旧目录合并收集到 Keyed %s 条、DefInjected %s 条。"
+        % (len(old_base_dirs), len(keyed_map), len(definjected_flat))
     )
-    if not keyed_map and not definjected_map:
+    if not keyed_map and not definjected_flat:
         logger.warning("未从旧目录收集到任何翻译，请确认旧目录下存在 Keyed/DefInjected 且 XML 中含译文")
         return 0
-    new_base = Path(new_base_dir)
-    if (new_base / "Keyed").exists() or (new_base / "DefInjected").exists():
-        new_lang_dir = str(new_base)
-    elif (new_base / language).exists():
-        new_lang_dir = str(new_base / language)
-    else:
-        new_lang_dir = str(
-            CONFIG.language_config.get_language_dir(new_base_dir, language)
-        )
-    if not Path(new_lang_dir).exists():
-        logger.warning("新语言目录不存在: %s", new_lang_dir)
-        ui.print_warning(f"新语言目录不存在: {new_lang_dir}")
+    # 递归查找新模组下所有 Languages/<lang> 目录（含子路径）
+    new_lang_dirs = _find_all_language_dirs(new_base_dir, language)
+    if not new_lang_dirs:
+        new_base = Path(new_base_dir)
+        if (new_base / "Keyed").exists() or (new_base / "DefInjected").exists():
+            new_lang_dirs = [str(new_base)]
+        elif (new_base / language).exists():
+            new_lang_dirs = [str(new_base / language)]
+        else:
+            fallback = CONFIG.language_config.get_language_dir(new_base_dir, language)
+            if fallback.exists():
+                new_lang_dirs = [str(fallback)]
+    if not new_lang_dirs:
+        logger.warning("新模组下未找到语言目录: %s", new_base_dir)
+        ui.print_warning(f"新模组下未找到 Languages/{language} 目录: {new_base_dir}")
         return 0
+    ui.print_info(f"找到 {len(new_lang_dirs)} 个语言目录，将逐一更新")
     updated = 0
-    if keyed_map:
-        updated += _update_xml_in_subdir(
-            new_base_dir,
-            language,
-            "keyed",
-            keyed_map,
-            merge=True,
-            only_fill_empty=only_fill_empty,
-            language_dir_override=new_lang_dir,
-        )
-    if definjected_by_scope:
-        updated += _update_definjected_by_scope(
-            new_base_dir,
-            language,
-            definjected_by_scope,
-            only_fill_empty=only_fill_empty,
-            language_dir_override=new_lang_dir,
-        )
+    for new_lang_dir in new_lang_dirs:
+        if keyed_map:
+            updated += _update_xml_in_subdir(
+                new_base_dir,
+                language,
+                "keyed",
+                keyed_map,
+                merge=True,
+                only_fill_empty=only_fill_empty,
+                language_dir_override=new_lang_dir,
+            )
+        if definjected_flat:
+            updated += _update_xml_in_subdir(
+                new_base_dir,
+                language,
+                "definjected",
+                definjected_flat,
+                merge=True,
+                only_fill_empty=only_fill_empty,
+                language_dir_override=new_lang_dir,
+            )
     return updated
 
 

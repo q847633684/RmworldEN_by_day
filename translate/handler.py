@@ -9,10 +9,19 @@ from pathlib import Path
 from typing import Optional
 from utils.logging_config import get_logger
 from utils.ui_style import ui
-from utils.interaction import select_csv_path_with_history
+from utils.interaction import select_csv_path_with_history, confirm_action
 from user_config.path_manager import PathManager
 
 # 延迟导入避免循环依赖
+
+
+def _ask_and_import_if_yes(translated_csv_path: str) -> None:
+    """翻译完成后询问是否导入翻译，选是则复用导入模板流程。"""
+    if not translated_csv_path or not Path(translated_csv_path).exists():
+        return
+    if confirm_action("是否导入翻译？选 y 将把翻译结果导入模板（与主菜单「导入模板」相同）"):
+        from import_template.handler import handle_import_template
+        handle_import_template(csv_path=translated_csv_path, skip_confirm=True)
 
 
 def handle_unified_translate(
@@ -137,9 +146,9 @@ def handle_unified_translate(
                     logger.warning("断点续传后占位符恢复失败: %s", e)
                     ui.print_warning("占位符未自动恢复，请使用「仅恢复翻译列占位符」手动恢复")
                 ui.print_success("恢复翻译完成！")
-                # 将输出CSV加入"导入翻译"的历史
                 PathManager().remember_path("import_csv", resume_file)
-                return resume_file  # 翻译完成，返回输出文件路径
+                _ask_and_import_if_yes(resume_file)
+                return resume_file
             else:
                 return None  # 翻译未完成（用户中断）
 
@@ -228,7 +237,9 @@ def handle_unified_translate(
             success = translator.translate_csv(csv_path, output_csv, translator_type)
             if success:
                 ui.print_success(f"翻译完成：{output_csv}")
-                return output_csv  # 翻译完成，返回输出文件路径
+                PathManager().remember_path("import_csv", output_csv)
+                _ask_and_import_if_yes(output_csv)
+                return output_csv
             else:
                 ui.print_warning("翻译未完成、已暂停或已中断，可重新运行翻译以继续")
                 return None  # 翻译未完成
