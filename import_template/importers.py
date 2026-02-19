@@ -8,14 +8,15 @@ from utils.ui_style import ui
 from pathlib import Path
 from typing import Dict, Tuple, Any, Optional, Callable, List, Union
 from utils.utils import XMLProcessor
-from user_config.path_manager import PathManager
-
 # 使用新配置系统
 from user_config import UserConfigManager
 
-# 使用全局配置实例，避免重复初始化
-CONFIG = UserConfigManager.get_instance()
 logger = get_logger(__name__)
+
+
+def _get_config():
+    """懒加载配置，避免模块加载时依赖未就绪"""
+    return UserConfigManager.get_instance()
 
 
 def import_translations(
@@ -23,9 +24,7 @@ def import_translations(
     mod_dir: str,
     merge: bool = True,
     auto_create_templates: bool = True,
-    language: str = CONFIG.language_config.get_value(
-        "cn_language", "ChineseSimplified"
-    ),
+    language: Optional[str] = None,
 ) -> bool:
     """
     将翻译CSV导入到翻译模板
@@ -40,12 +39,14 @@ def import_translations(
     Returns:
         bool: 导入是否成功
     """
+    if language is None:
+        language = _get_config().language_config.get_value("cn_language", "ChineseSimplified")
     logger.info("开始导入翻译到模板: %s", csv_path)
     try:
         # 步骤1：确保翻译模板存在
         if auto_create_templates:
             # 检查模板目录是否存在，如果不存在则提示用户先创建模板
-            if not CONFIG.language_config.get_language_dir(mod_dir, language).exists():
+            if not _get_config().language_config.get_language_dir(mod_dir, language).exists():
                 logger.error("翻译模板目录不存在，请先使用提取功能创建翻译模板")
                 ui.print_error("❌ 翻译模板目录不存在，请先使用提取功能创建翻译模板")
                 return False
@@ -182,7 +183,7 @@ def _load_translations_from_csv(csv_path: str) -> Tuple[Dict[str, str], Dict[str
         return {}, {}
 
 
-def _definjected_get_parent(elem: Any, root: Any, parent_map: Optional[dict]) -> Any:
+def _definjected_get_parent(elem: Any, _root: Any, parent_map: Optional[dict]) -> Any:
     """获取元素的父节点，兼容 lxml（getparent）与标准库（parent_map）。"""
     if parent_map is not None:
         return parent_map.get(elem)
@@ -294,8 +295,8 @@ def _find_all_language_dirs(base_dir: str, language: str) -> List[str]:
     base = Path(base_dir)
     if not base.is_dir():
         return []
-    keyed_name = CONFIG.language_config.get_value("keyed_dir", "Keyed")
-    def_name = CONFIG.language_config.get_value("definjected_dir", "DefInjected")
+    keyed_name = _get_config().language_config.get_value("keyed_dir", "Keyed")
+    def_name = _get_config().language_config.get_value("definjected_dir", "DefInjected")
     found: List[str] = []
     for p in base.rglob("Languages"):
         if not p.is_dir():
@@ -325,8 +326,8 @@ def _get_language_subdir_path(base_dir: str, language: str, subdir_type: str) ->
     4) 否则按模组根：base_dir/Languages/language/Keyed
     """
     base = Path(base_dir)
-    keyed_name = CONFIG.language_config.get_value("keyed_dir", "Keyed")
-    def_name = CONFIG.language_config.get_value("definjected_dir", "DefInjected")
+    keyed_name = _get_config().language_config.get_value("keyed_dir", "Keyed")
+    def_name = _get_config().language_config.get_value("definjected_dir", "DefInjected")
     if (base / keyed_name).exists() or (base / def_name).exists():
         sub = keyed_name if subdir_type.lower() == "keyed" else def_name
         return base / sub
@@ -339,7 +340,7 @@ def _get_language_subdir_path(base_dir: str, language: str, subdir_type: str) ->
     if candidates:
         candidates.sort(key=lambda p: len(p.relative_to(base).parts))
         return candidates[0]
-    return CONFIG.language_config.get_language_subdir(
+    return _get_config().language_config.get_language_subdir(
         base_dir, language, subdir_type
     )
 
@@ -380,9 +381,9 @@ def _collect_old_translations(
     for lang_dir in lang_dirs:
         for subdir_type, use_def_key in [("keyed", False), ("definjected", True)]:
             subdir = Path(lang_dir) / (
-                CONFIG.language_config.get_value("definjected_dir", "DefInjected")
+                _get_config().language_config.get_value("definjected_dir", "DefInjected")
                 if use_def_key
-                else CONFIG.language_config.get_value("keyed_dir", "Keyed")
+                else _get_config().language_config.get_value("keyed_dir", "Keyed")
             )
             if not subdir.exists():
                 continue
@@ -467,7 +468,7 @@ def migrate_translations_to_new(
         elif (new_base / language).exists():
             new_lang_dirs = [str(new_base / language)]
         else:
-            fallback = CONFIG.language_config.get_language_dir(new_base_dir, language)
+            fallback = _get_config().language_config.get_language_dir(new_base_dir, language)
             if fallback.exists():
                 new_lang_dirs = [str(fallback)]
     if not new_lang_dirs:
@@ -510,11 +511,11 @@ def _update_definjected_by_scope(
     """按 Def 类型(scope)更新 DefInjected：每个 XML 文件只使用对应 scope 的 key→译文。"""
     if not definjected_by_scope:
         return 0
-    def_name = CONFIG.language_config.get_value("definjected_dir", "DefInjected")
+    def_name = _get_config().language_config.get_value("definjected_dir", "DefInjected")
     if language_dir_override:
         subdir = Path(language_dir_override) / def_name
     else:
-        subdir = CONFIG.language_config.get_language_subdir(mod_dir, language, "definjected")
+        subdir = _get_config().language_config.get_language_subdir(mod_dir, language, "definjected")
         if not subdir.exists():
             subdir = _get_language_subdir_path(mod_dir, language, "definjected")
     if not subdir.exists():
@@ -574,17 +575,17 @@ def _update_xml_in_subdir(
     if language_dir_override:
         subdir = Path(language_dir_override) / subdir_type.lower()
     else:
-        subdir = CONFIG.language_config.get_language_subdir(
+        subdir = _get_config().language_config.get_language_subdir(
             mod_dir, language, subdir_type
         )
         if not subdir.exists():
             subdir = _get_language_subdir_path(mod_dir, language, subdir_type)
     # 使用配置的目录名（如 DefInjected）以便正确解析路径
     if language_dir_override and subdir_type.lower() == "definjected":
-        def_name = CONFIG.language_config.get_value("definjected_dir", "DefInjected")
+        def_name = _get_config().language_config.get_value("definjected_dir", "DefInjected")
         subdir = Path(language_dir_override) / def_name
     elif language_dir_override and subdir_type.lower() == "keyed":
-        keyed_name = CONFIG.language_config.get_value("keyed_dir", "Keyed")
+        keyed_name = _get_config().language_config.get_value("keyed_dir", "Keyed")
         subdir = Path(language_dir_override) / keyed_name
     if not subdir.exists():
         logger.warning("语言子目录不存在: %s", subdir)
@@ -760,7 +761,7 @@ def update_translations(
 
 def _verify_import_results(mod_dir: str, language: str) -> bool:
     """验证导入结果"""
-    template_dir = CONFIG.language_config.get_language_dir(mod_dir, language)
+    template_dir = _get_config().language_config.get_language_dir(mod_dir, language)
     if not template_dir.exists():
         logger.error("导入后模板目录不存在")
         return False
@@ -768,12 +769,12 @@ def _verify_import_results(mod_dir: str, language: str) -> bool:
     has_keyed = (
         any(
             (
-                CONFIG.language_config.get_language_subdir(
+                _get_config().language_config.get_language_subdir(
                     mod_dir, language, "keyed"
                 ).rglob("*.xml")
             )
         )
-        if CONFIG.language_config.get_language_subdir(
+        if _get_config().language_config.get_language_subdir(
             mod_dir, language, "keyed"
         ).exists()
         else False
@@ -781,12 +782,12 @@ def _verify_import_results(mod_dir: str, language: str) -> bool:
     has_definjected = (
         any(
             (
-                CONFIG.language_config.get_language_subdir(
+                _get_config().language_config.get_language_subdir(
                     mod_dir, language, "definjected"
                 ).rglob("*.xml")
             )
         )
-        if CONFIG.language_config.get_language_subdir(
+        if _get_config().language_config.get_language_subdir(
             mod_dir, language, "definjected"
         ).exists()
         else False

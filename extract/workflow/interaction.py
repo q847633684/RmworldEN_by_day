@@ -68,7 +68,7 @@ class InteractionManager:
         self._print_separator("智能提取翻译模板工作流", "=", 60)
 
         # 获取配置中的语言设置
-        config = UserConfigManager()
+        config = UserConfigManager.get_instance()
         en_language = config.language_config.get_value("en_language", "English")
         cn_language = config.language_config.get_value(
             "cn_language", "ChineseSimplified"
@@ -232,7 +232,7 @@ class InteractionManager:
         Returns:
             Dict[str, Union[bool, str]]: 目录状态
         """
-        config = UserConfigManager()
+        config = UserConfigManager.get_instance()
         language_dir = config.language_config.get_language_dir(mod_dir, language)
         ui.print_info(f"🔍 正在检测目录:{mod_dir} 语言:{language}...")
         ui.print_info(f"🔍 正在检测 {language_dir} 目录状态...")

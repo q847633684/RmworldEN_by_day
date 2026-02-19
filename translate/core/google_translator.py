@@ -5,8 +5,7 @@ Google翻译工具
 
 import csv
 import time
-import re
-from typing import List, Dict, Optional, Any
+from typing import List, Dict
 from pathlib import Path
 from tqdm import tqdm
 from utils.logging_config import get_logger
@@ -180,8 +179,6 @@ class GoogleTranslator(ResumeBase):
                     except Exception as e:
                         logger.error(f"翻译第 {i + 1} 行失败: {str(e)}")
                         ui.print_warning(f"第 {i + 1} 行翻译失败，保留原文")
-                        # 翻译失败时保留原文
-                        pass
 
                     # 写入行
                     writer.writerow(row)

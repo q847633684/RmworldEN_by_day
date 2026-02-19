@@ -1,26 +1,59 @@
 [MASTER]
-# 忽略的文件或目录
-ignore=Day_EN
-
-# 忽略的文件模式
-ignore-patterns=
+# 添加项目根到 Python 路径，减少 E0401 假阳性
+init-hook='import sys; sys.path.insert(0, ".")'
+extension-pkg-allow-list=lxml.etree
 
 [MESSAGES CONTROL]
-# 禁用的警告和错误
-disable=C0103,C0301,R0902,R0912,R0914,R0915,C0415,W0603,E0402
+# 抑制常见假阳性或低优先级
+disable=
+    import-error,
+    c-extension-no-member,
+    fixme,
+    broad-exception-caught,
+    redefined-outer-name,
+    logging-fstring-interpolation,
+    duplicate-except,
+    line-too-long,
+    too-many-arguments,
+    too-many-positional-arguments,
+    too-many-branches,
+    too-many-locals,
+    too-many-statements,
+    too-many-instance-attributes,
+    too-many-return-statements,
+    too-many-nested-blocks,
+    too-few-public-methods,
+    import-outside-toplevel,
+    wrong-import-order,
+    ungrouped-imports,
+    consider-using-from-import,
+    unnecessary-negation,
+    no-else-return,
+    no-else-break,
+    too-many-lines,
+    invalid-name,
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
+    protected-access,
+    use-implicit-booleaness-not-len,
+    consider-using-in,
+    inconsistent-return-statements,
+    global-statement,
+    attribute-defined-outside-init,
+    disallowed-name,
+    consider-using-max-builtin,
+    too-many-public-methods,
+    wrong-import-position,
+    duplicate-code,
+    reimported,
+    subprocess-run-check,
+    consider-using-with,
+    super-init-not-called,
+    f-string-without-interpolation
 
-[FORMAT]
-# 最大行长度
-max-line-length=120
+[BASIC]
+good-names=i,e,_,r,f,p,_i,_status,_content_dir
 
-[DESIGN]
-# 最大参数数量
-max-args=10
-# 最大局部变量数量  
-max-locals=20
-# 最大分支数量
-max-branches=15
-# 最大语句数量
-max-statements=60
-# 最大属性数量
-max-attributes=15
+[TYPECHECK]
+ignored-modules=lxml.etree

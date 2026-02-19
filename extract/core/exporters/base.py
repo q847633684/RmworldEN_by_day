@@ -29,7 +29,7 @@ class BaseExporter(ABC):
         """
         self.logger = get_logger(f"{__name__}.{self.__class__.__name__}")
         if config is None:
-            config = UserConfigManager()
+            config = UserConfigManager.get_instance()
         self.config = config
         self.processor = XMLProcessor()
 
@@ -63,7 +63,7 @@ class BaseExporter(ABC):
             Path: 创建的输出目录路径
         """
         # 使用新配置系统获取语言子目录
-        config_manager = UserConfigManager()
+        config_manager = UserConfigManager.get_instance()
         output_path = config_manager.language_config.get_language_subdir(
             output_dir, language, subdir_type
         )

@@ -108,7 +108,7 @@ def cleanup_mod_outdated_keys(
 def handle_cleanup_outdated_keys():
     """交互式执行：选择模组目录后清理过时/重复 key"""
     from utils.interaction import select_mod_path_with_version_detection
-    from utils.ui_style import confirm_action
+    from utils.interaction import confirm_action
 
     logger_local = get_logger(f"{__name__}.handle_cleanup_outdated_keys")
     ui.print_section_header("清理过时/重复 key", ui.Icons.SETTINGS)

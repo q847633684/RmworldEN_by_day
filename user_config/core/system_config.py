@@ -8,7 +8,6 @@ from datetime import datetime
 from pathlib import Path
 from typing import Set, List, Dict, Any
 from .base_config import BaseConfig
-from utils.logging_config import get_logger
 
 
 class SystemConfig(BaseConfig):

@@ -258,7 +258,7 @@ class LanguageConfig(BaseConfig):
                 "options": [
                     {"value": ",", "label": "逗号 (,)"},
                     {"value": ";", "label": "分号 (;)"},
-                    {"value": "\\t", "label": "制表符 (Tab)"},
+                    {"value": "\t", "label": "制表符 (Tab)"},
                 ],
             },
             "date_format": {
@@ -307,7 +307,8 @@ class LanguageConfig(BaseConfig):
 
         # 验证CSV分隔符
         csv_delimiter = self.get_value("csv_delimiter", "")
-        if csv_delimiter not in [",", ";", "\\t"]:
+        # 兼容旧配置中可能存储的 "\\t"（两字符），新配置使用 "\t"
+        if csv_delimiter not in [",", ";", "\t", "\\t"]:
             self.logger.error("CSV分隔符必须是支持的分隔符")
             return False
 

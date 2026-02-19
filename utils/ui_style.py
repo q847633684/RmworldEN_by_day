@@ -719,16 +719,18 @@ def display_mods_with_adaptive_width(
         # 显示分页导航
         _display_pagination_navigation(current_page, total_pages, len(all_mods))
 
-        # 获取用户输入
-        choice = (
-            input(
+        # 获取用户输入（使用 safe_input 处理 EOF/Ctrl+C）
+        raw = None
+        try:
+            from utils.interaction import safe_input
+            raw = safe_input(
                 ui.get_input_prompt(
                     "请选择操作", options="n下一页, p上一页, 数字选择模组, q退出"
                 )
             )
-            .strip()
-            .lower()
-        )
+        except ImportError:
+            raw = input(ui.get_input_prompt("请选择操作", options="n下一页, p上一页, 数字选择模组, q退出"))
+        choice = (raw or "q").strip().lower()
 
         if choice == "q":
             break
@@ -789,11 +791,12 @@ def _display_mods_page(
             global_index = start_index + i
             mod_name = mod_names[i]
 
-            # 计算可用的模组名长度
-            available_width = item_width - 3  # 预留3个字符给编号和点
+            # 计算模组名最大显示长度（预留 "99. " 给编号）
+            num_prefix_len = 4
+            name_max_len = max(1, item_width - num_prefix_len)
             display_name = (
-                mod_name[: available_width - 3] + "..."
-                if len(mod_name) > available_width
+                mod_name[: name_max_len - 3] + "..."
+                if len(mod_name) > name_max_len
                 else mod_name
             )
 
@@ -836,15 +839,3 @@ def _display_pagination_navigation(
         ui.print_info("导航: " + " | ".join(nav_options))
 
     ui.print_info(f"💡 直接输入数字选择模组 (1-{total_items})")
-
-
-def confirm_action(message: str) -> bool:
-    """确认操作"""
-    return input(
-        f"{UIStyle.Colors.WARNING}{message} [y/n]: {UIStyle.Colors.RESET}"
-    ).lower() in [
-        "y",
-        "yes",
-        "是",
-        "确认",
-    ]

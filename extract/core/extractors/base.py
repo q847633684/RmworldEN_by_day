@@ -37,7 +37,7 @@ class BaseExtractor(ABC):
         """
         self.logger = get_logger(f"{__name__}.{self.__class__.__name__}")
         if config is None:
-            config = UserConfigManager()
+            config = UserConfigManager.get_instance()
         self.config = config
         self.processor = XMLProcessor()
 

@@ -4,9 +4,9 @@
 """
 
 import os
-from pathlib import Path
 from typing import Optional, List
 from user_config.path_manager import PathManager
+from .constants import get_common_mod_paths, get_steam_workshop_paths
 from .ui_style import (
     ui,
     display_mods_with_adaptive_width,
@@ -158,15 +158,7 @@ def select_mod_path_with_version_detection(
     """选择模组目录，支持版本检测和自动扫描"""
     ui.print_header("模组目录选择", ui.Icons.FOLDER)
 
-    # 扫描常见的RimWorld模组目录
-    common_mod_paths = [
-        r"C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods",
-        r"C:\Program Files\Steam\steamapps\common\RimWorld\Mods",
-        r"D:\Steam\steamapps\common\RimWorld\Mods",
-        r"D:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods",
-        r"D:\Program Files\Steam\steamapps\common\RimWorld\Mods",
-    ]
-
+    common_mod_paths = get_common_mod_paths()
     available_mod_dirs = []
     for mod_path in common_mod_paths:
         if os.path.exists(mod_path):
@@ -242,94 +234,58 @@ def select_mod_path_with_version_detection(
             ui.print_error("请输入选择或路径")
 
 
-def _scan_game_mods() -> Optional[str]:
-    """扫描游戏内置模组"""
-    ui.print_header("扫描Steam Workshop模组", ui.Icons.SCAN)
+def _collect_mods_from_dirs(base_dirs: List[str]) -> List[str]:
+    """从多个基目录收集含 About 的模组路径"""
+    found = []
+    for base_dir in base_dirs:
+        if not os.path.exists(base_dir):
+            continue
+        try:
+            for name in os.listdir(base_dir):
+                path = os.path.join(base_dir, name)
+                if os.path.isdir(path) and os.path.exists(os.path.join(path, "About")):
+                    found.append(path)
+        except (OSError, PermissionError):
+            continue
+    return found
 
-    # Steam Workshop模组路径
-    steam_workshop_paths = [
-        r"C:\Program Files (x86)\Steam\steamapps\workshop\content\294100",
-        r"C:\Program Files\Steam\steamapps\workshop\content\294100",
-        r"D:\Steam\steamapps\workshop\content\294100",
-        r"E:\Steam\steamapps\workshop\content\294100",
-    ]
 
-    ui.print_info("正在扫描Steam Workshop目录...")
-
-    found_mods = []
-    for workshop_path in steam_workshop_paths:
-        if os.path.exists(workshop_path):
-            try:
-                mods = [
-                    d
-                    for d in os.listdir(workshop_path)
-                    if os.path.isdir(os.path.join(workshop_path, d))
-                ]
-                for mod_id in mods:
-                    mod_path = os.path.join(workshop_path, mod_id)
-                    # 检查是否有About目录（RimWorld模组的标准特征）
-                    if os.path.exists(os.path.join(mod_path, "About")):
-                        found_mods.append(mod_path)
-            except (OSError, PermissionError):
-                continue
-
-    if not found_mods:
-        ui.print_warning("未找到Steam Workshop模组")
-        ui.print_info("请确保RimWorld已通过Steam安装")
+def _select_mod_from_list(
+    mods: List[str], empty_msg: str, success_label: str
+) -> Optional[str]:
+    """显示模组列表并处理选择，成功则记住路径并返回版本检测结果"""
+    if not mods:
+        ui.print_warning(empty_msg)
         return None
-
-    # 使用自适应列宽显示Steam Workshop模组列表
-    selected_mod = display_mods_with_adaptive_width(found_mods)
-    if selected_mod:
-        mod_display_name = _get_mod_display_name(selected_mod)
-        mod_id = os.path.basename(selected_mod)
-
-        ui.print_success("🎮 选择Steam Workshop模组")
-        ui.print_info(f"📁 路径：{selected_mod}")
-        ui.print_info(f"📦 模组名称：{mod_display_name}")
-        ui.print_info(f"🆔 模组ID：{mod_id}")
-        path_manager.remember_path("mod_dir", selected_mod)
-        # 对选择的模组进行版本检测
-        return path_manager.detect_version_and_choose(selected_mod)
+    selected = display_mods_with_adaptive_width(mods)
+    if selected:
+        ui.print_success(success_label)
+        ui.print_info(f"📁 路径：{selected}")
+        ui.print_info(f"📦 模组名称：{_get_mod_display_name(selected)}")
+        path_manager.remember_path("mod_dir", selected)
+        return path_manager.detect_version_and_choose(selected)
     return None
+
+
+def _scan_game_mods() -> Optional[str]:
+    """扫描 Steam Workshop 模组"""
+    ui.print_header("扫描Steam Workshop模组", ui.Icons.SCAN)
+    ui.print_info("正在扫描Steam Workshop目录...")
+    mods = _collect_mods_from_dirs(get_steam_workshop_paths())
+    if not mods:
+        ui.print_info("请确保RimWorld已通过Steam安装")
+    return _select_mod_from_list(
+        mods, "未找到Steam Workshop模组", "🎮 选择Steam Workshop模组"
+    )
 
 
 def _scan_third_party_mods(available_mod_dirs: List[str]) -> Optional[str]:
-    """扫描第三方模组"""
+    """扫描第三方模组目录"""
     ui.print_info("📦 正在扫描第三方模组...")
-
-    all_mods = []
-    for mod_dir in available_mod_dirs:
-        try:
-            mods = [
-                d
-                for d in os.listdir(mod_dir)
-                if os.path.isdir(os.path.join(mod_dir, d))
-            ]
-            for mod in mods:
-                mod_path = os.path.join(mod_dir, mod)
-                # 检查是否有About目录（RimWorld模组的标准特征）
-                if os.path.exists(os.path.join(mod_path, "About")):
-                    all_mods.append(mod_path)
-        except (OSError, PermissionError):
-            continue
-
-    if not all_mods:
-        ui.print_warning("⚠️ 未找到任何第三方模组")
-        return None
-
-    # 使用自适应列宽显示模组列表
-    selected_mod = display_mods_with_adaptive_width(all_mods)
-    if selected_mod:
-        mod_display_name = _get_mod_display_name(selected_mod)
-
-        ui.print_success("📦 选择第三方模组")
-        ui.print_info(f"📁 路径：{selected_mod}")
-        ui.print_info(f"📦 模组名称：{mod_display_name}")
-        path_manager.remember_path("mod_dir", selected_mod)
-        # 对选择的模组进行版本检测
-        return path_manager.detect_version_and_choose(selected_mod)
-    return None
+    mods = _collect_mods_from_dirs(available_mod_dirs)
+    return _select_mod_from_list(
+        mods, "⚠️ 未找到任何第三方模组", "📦 选择第三方模组"
+    )
 
 
 def confirm_action(message: str) -> bool:

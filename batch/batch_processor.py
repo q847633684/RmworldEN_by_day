@@ -11,7 +11,7 @@ from user_config import UserConfigManager
 from dataclasses import dataclass
 
 # 使用新配置系统
-CONFIG = UserConfigManager()
+CONFIG = UserConfigManager.get_instance()
 
 
 @dataclass

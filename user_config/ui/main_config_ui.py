@@ -6,7 +6,8 @@
 
 from typing import Optional
 from utils.logging_config import get_logger
-from utils.ui_style import ui, confirm_action
+from utils.ui_style import ui
+from utils.interaction import confirm_action
 from ..core.user_config import UserConfigManager
 from ..core.config_validator import ConfigValidator
 from .api_config_ui import APIConfigUI
@@ -23,7 +24,7 @@ class MainConfigUI:
             config_manager: 用户配置管理器
         """
         self.logger = get_logger(f"{__name__}.MainConfigUI")
-        self.config_manager = config_manager or UserConfigManager()
+        self.config_manager = config_manager or UserConfigManager.get_instance()
         self.validator = ConfigValidator()
         self.api_ui = APIConfigUI(self.config_manager)
 
@@ -1026,7 +1027,7 @@ class MainConfigUI:
         """重置配置"""
         ui.print_header("重置配置", ui.Icons.RESET)
 
-        if ui.confirm("确定要重置所有配置为默认值吗？此操作不可撤销！"):
+        if confirm_action("确定要重置所有配置为默认值吗？此操作不可撤销！"):
             self.config_manager.reset_to_defaults()
             if self.config_manager.save_config():
                 ui.print_success("配置已重置为默认值")

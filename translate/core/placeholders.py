@@ -39,7 +39,6 @@ RimWorld 模组翻译占位符保护系统
 
 import csv
 import re
-import json
 import yaml
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
@@ -273,7 +272,7 @@ class PlaceholderManager:
                     logger.error("CSV 缺少 translated 列: %s", csv_file)
                     return False, 0
                 rows = list(reader)
-            total = len(rows)
+            _ = len(rows)  # total rows, for future progress display
             try:
                 from tqdm import tqdm
                 row_iter = tqdm(rows, desc="恢复占位符", unit="行")
@@ -387,7 +386,7 @@ class PlaceholderManager:
 
             # 提取所有词汇
             dictionary = {}
-            for category, category_data in data.items():
+            for _category, category_data in data.items():
                 if isinstance(category_data, dict) and "entries" in category_data:
                     entries = category_data["entries"]
                     if isinstance(entries, list):
@@ -441,7 +440,7 @@ class PlaceholderManager:
             self.dictionary.items(), key=lambda x: len(x[0]), reverse=True
         )
 
-        for english_word, entry_data in sorted_entries:
+        for english_word, _entry_data in sorted_entries:
             if english_word in text_lower:
                 # 使用正则表达式进行精确匹配
                 pattern = r"\b" + re.escape(english_word) + r"\b"
@@ -680,7 +679,7 @@ class PlaceholderManager:
             # 处理ALIMT标签格式的占位符（如 <ALIMT >(PH_1)</ALIMT>）
             alimt_pattern = f"<ALIMT >({placeholder_id})</ALIMT>"
             restored_text = restored_text.replace(alimt_pattern, original_value)
-            
+
             # 处理直接格式的占位符（如 (PH_1)）
             direct_pattern = f"({placeholder_id})"
             restored_text = restored_text.replace(direct_pattern, original_value)

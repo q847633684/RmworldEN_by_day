@@ -30,7 +30,7 @@ class ContentFilter:
         """
         self.logger = get_logger(f"{__name__}.ContentFilter")
         if config is None:
-            config = UserConfigManager()
+            config = UserConfigManager.get_instance()
         self.config = config
         # 直接使用新配置系统
         self.default_fields = config.system_config.get_translation_fields()

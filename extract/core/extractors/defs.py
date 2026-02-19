@@ -97,7 +97,7 @@ class DefsScanner(BaseExtractor):
         return translations
 
     def _extract_from_xml_file(
-        self, xml_file: Path, defs_dir: Path, all_abstract_nodes: Dict[str, any] = None
+        self, xml_file: Path, _defs_dir: Path, all_abstract_nodes: Dict[str, any] = None
     ) -> List[Tuple[str, str, str, str]]:
         """
         从单个XML文件提取翻译数据
@@ -257,7 +257,7 @@ class DefsScanner(BaseExtractor):
         return abstract_nodes
 
     def _extract_inherited_stages(
-        self, def_node, abstract_nodes: Dict[str, any], def_name: str, def_type: str
+        self, def_node, abstract_nodes: Dict[str, any], def_name: str, _def_type: str
     ) -> List[Tuple[str, str, str]]:
         """
         提取继承的 stages

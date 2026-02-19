@@ -65,7 +65,7 @@ class DefInjectedExtractor(BaseExtractor):
         xml_files = list(definjected_dir.rglob("*.xml"))
 
         # 使用进度条进行提取
-        for i, xml_file in ui.iter_with_progress(
+        for _i, xml_file in ui.iter_with_progress(
             xml_files,
             prefix="扫描DefInjected",
             description=f"正在扫描 {language} DefInjected 目录中的 {len(xml_files)} 个文件",

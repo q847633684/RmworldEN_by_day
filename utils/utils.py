@@ -1,10 +1,8 @@
 import os
 import xml.etree.ElementTree as ET
-import logging
-from utils.logging_config import get_logger, log_error_with_context
-from typing import Optional, Dict, List, Tuple, Any, Callable
+from utils.logging_config import get_logger
+from typing import Optional, Dict, Any
 import re
-import csv
 from pathlib import Path
 from dataclasses import dataclass
 
@@ -28,7 +26,7 @@ def _get_config():
     """获取配置 - 使用新配置系统"""
     global CONFIG
     if CONFIG is None:
-        CONFIG = UserConfigManager()
+        CONFIG = UserConfigManager.get_instance()
     return CONFIG
 
 

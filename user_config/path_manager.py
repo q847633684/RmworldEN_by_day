@@ -50,7 +50,7 @@ class PathManager:
         if config_manager is None:
             from .core.user_config import UserConfigManager
 
-            config_manager = UserConfigManager()
+            config_manager = UserConfigManager.get_instance()
 
         self.config_manager = config_manager
         self.path_config = config_manager.path_config
@@ -490,7 +490,7 @@ class PathManager:
 
         if result.is_valid:
             # 检查是否为版本号结构
-            structure_type, mod_dir, content_dir = self._detect_mod_structure_type(
+            structure_type, mod_dir, _ = self._detect_mod_structure_type(
                 result.normalized_path
             )
             ui.print_info(f"{ui.Icons.SCAN} 检测模组结构: {structure_type} - {mod_dir}")
@@ -783,17 +783,8 @@ class PathManager:
                     )
                     result = validator(selected_path)
                     if result.is_valid:
-                        # 更新历史记录（复用现有逻辑）
-                        if path_type not in self._history_cache:
-                            self._history_cache[path_type] = PathHistory()
-                        history = self._history_cache[path_type]
-                        if result.normalized_path in history.paths:
-                            history.paths.remove(result.normalized_path)
-                        history.paths.insert(0, result.normalized_path)
-                        history.paths = history.paths[: history.max_length]
-                        history.last_used = result.normalized_path
-                        self._save_history()
-
+                        if self.path_config.get_value("remember_paths", True):
+                            self.path_config.add_to_history(path_type, result.normalized_path)
                         return result.normalized_path
                     else:
                         ui.print_error(
@@ -914,8 +905,6 @@ class PathManager:
             bool: 是否为版本号格式
         """
         # 匹配版本号格式：1.5, 1.4, 1.3, 1.5.0, v1.5 等
-        import re
-
         pattern = r"^v?(\d+\.)+\d+$"
         return bool(re.match(pattern, name))
 

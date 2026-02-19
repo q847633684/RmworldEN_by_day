@@ -12,7 +12,8 @@ import re
 from pathlib import Path
 from typing import Optional, List, Tuple
 from user_config import UserConfigManager
-from utils.logging_config import get_logger, log_user_action, log_error_with_context
+from utils.logging_config import get_logger, log_user_action
+from utils.error_handling import report_handler_error
 from utils.interaction import (
     select_mod_path_with_version_detection,
 )
@@ -28,7 +29,6 @@ from .interaction import InteractionManager
 
 def _sanitize_mod_name_for_filename(name: str) -> str:
     """将模组名转为安全的文件名（替换非法字符）"""
-    import re
     s = re.sub(r'[\\/:*?"<>|]', "_", str(name).strip())
     return s[:64] if s else ""
 
@@ -76,7 +76,7 @@ def handle_extract() -> Optional[tuple]:
         Optional[tuple]: (csv_path, mod_dir) 元组，如果失败则返回None
     """
     logger = get_logger(f"{__name__}.handle_extract")
-    config = UserConfigManager()
+    config = UserConfigManager.get_instance()
 
     print(f"日志文件路径：{config.system_config.get_value('log_file')}")
     if config.system_config.get_value("debug_mode"):
@@ -251,7 +251,7 @@ def handle_extract() -> Optional[tuple]:
             mod_name = _sanitize_mod_name_for_filename(_get_mod_display_name(mod_root))
             all_csv_paths: List[str] = []
             chosen_output_dir = smart_config["output_config"]["output_dir"]
-            rel_names: List[str] = []
+            _rel_names: List[str] = []
 
             def _is_external_output(out_dir: str, base_dir: str) -> bool:
                 try:
@@ -260,7 +260,6 @@ def handle_extract() -> Optional[tuple]:
                 except (ValueError, TypeError):
                     return True
 
-            rel_base = Path(load_folders_mod_root).resolve() if load_folders_mod_root else Path(mod_dir).resolve()
             multi_root_external = num_groups > 1 and _is_external_output(chosen_output_dir, mod_dir)
             groups_with_content: List[str] = []  # export_rel 列表，用于生成 LoadFolders.xml
             roots_with_content: set = set()
@@ -374,7 +373,7 @@ def handle_extract() -> Optional[tuple]:
                             has_input_keyed=has_input_keyed,
                             output_csv=output_csv,
                         )
-                    if translations:
+                    if translations and csv_path:
                         all_csv_paths.append(csv_path)
                         for r in roots:
                             roots_with_content.add(r)
@@ -488,39 +487,21 @@ def handle_extract() -> Optional[tuple]:
                 return (all_csv_paths[0], mod_dir) if all_csv_paths else None
 
         except (OSError, RuntimeError) as e:
-            ui.print_error(f"智能提取失败: {str(e)}")
-            log_error_with_context(e, "智能提取失败", mod_dir=mod_dir)
-            if config.system_config.get_value("debug_mode", False):
-                import traceback
-
-                traceback.print_exc()
+            report_handler_error(e, "智能提取失败", mod_dir=mod_dir)
             return None
         except ValueError as e:
             ui.print_error(
                 f"❌ 配置错误：{e}\n请检查 config.py 或用户配置文件，或尝试重新加载配置。"
             )
-            log_error_with_context(e, "配置错误", mod_dir=mod_dir)
-            if config.system_config.get_value("debug_mode", False):
-                import traceback
-
-                traceback.print_exc()
+            report_handler_error(e, "配置错误", mod_dir=mod_dir)
             return None
 
     except (OSError, ImportError, AttributeError) as e:
-        ui.print_error(f"提取模板功能失败: {str(e)}")
-        log_error_with_context(e, "提取模板功能失败")
-        if config.system_config.get_value("debug_mode", False):
-            import traceback
-
-            traceback.print_exc()
+        report_handler_error(e, "提取模板功能失败")
         return None
     except ValueError as e:
         ui.print_error(
             f"❌ 配置错误：{e}\n请检查 config.py 或用户配置文件，或尝试重新加载配置。"
         )
-        log_error_with_context(e, "配置错误")
-        if config.system_config.get_value("debug_mode", False):
-            import traceback
-
-            traceback.print_exc()
+        report_handler_error(e, "配置错误")
         return None

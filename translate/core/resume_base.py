@@ -5,7 +5,6 @@
 
 import csv
 import os
-from pathlib import Path
 from typing import Optional
 from utils.logging_config import get_logger
 
@@ -62,7 +61,7 @@ class ResumeBase:
             self.logger.debug("检查文件恢复状态失败: %s", e)
             return False
 
-    def get_resume_line_from_files(self, input_csv: str, output_csv: str) -> int:
+    def get_resume_line_from_files(self, _input_csv: str, output_csv: str) -> int:
         """
         通过对比CSV文件获取恢复起始行号
 
@@ -98,7 +97,7 @@ class ResumeBase:
         except Exception:
             return 0
 
-    def _get_resume_row(self, output_file: str, key_column: str) -> int:
+    def _get_resume_row(self, output_file: str, _key_column: str) -> int:
         """
         获取恢复起始行号
 
@@ -129,4 +128,3 @@ class ResumeBase:
             current_row: 当前行号
         """
         # 默认空实现，子类可以重写此方法
-        pass

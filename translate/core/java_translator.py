@@ -8,7 +8,6 @@ import subprocess
 import signal
 import threading
 import shutil
-import re
 import csv
 from utils.logging_config import get_logger
 from utils.ui_style import ui
@@ -347,9 +346,7 @@ class JavaTranslator(ResumeBase):
         except (subprocess.CalledProcessError, FileNotFoundError) as exc:
             raise RuntimeError("Java未安装或不在PATH中") from exc
 
-    def _signal_handler(
-        self, signum: int, frame: Any
-    ) -> None:  # pylint: disable=unused-argument
+    def _signal_handler(self, _signum: int, _frame: object) -> None:
         """信号处理器，用于处理中断信号"""
         with self.interrupt_lock:
             if not self.is_interrupted:
@@ -391,7 +388,7 @@ class JavaTranslator(ResumeBase):
         try:
             from user_config import UserConfigManager
 
-            config_manager = UserConfigManager()
+            config_manager = UserConfigManager.get_instance()
             api_manager = config_manager.api_manager
             primary_api = api_manager.get_primary_api()
 

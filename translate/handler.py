@@ -189,7 +189,7 @@ def handle_unified_translate(
             try:
                 from user_config import UserConfigManager
 
-                config_manager = UserConfigManager()
+                config_manager = UserConfigManager.get_instance()
                 api_manager = config_manager.api_manager
                 primary_api = api_manager.get_primary_api()
 

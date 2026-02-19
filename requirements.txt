@@ -1,4 +1,5 @@
 lxml
+pytest>=7.0
 aliyun-python-sdk-core
 aliyun-python-sdk-alimt
 tqdm

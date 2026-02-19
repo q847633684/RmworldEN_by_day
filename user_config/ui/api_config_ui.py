@@ -7,6 +7,7 @@ API配置界面
 from typing import Dict, Any
 from utils.logging_config import get_logger
 from utils.ui_style import ui
+from utils.interaction import confirm_action
 from ..api.base_api import BaseAPIConfig
 
 
@@ -62,7 +63,7 @@ class APIConfigUI:
             ui.print_section_header("API配置", ui.Icons.INFO)
 
             # 获取API状态
-            status = self.api_manager.get_api_status()
+            _ = self.api_manager.get_api_status()
             apis = self.api_manager.get_supported_apis()
 
             # 配置项列表
@@ -308,7 +309,7 @@ class APIConfigUI:
 
         # 显示当前值
         if field_type == "password" and current_value:
-            print(f"当前值: ****")
+            print("当前值: ****")
         else:
             print(f"当前值: {current_value if current_value is not None else '未设置'}")
 
@@ -487,7 +488,7 @@ class APIConfigUI:
         ui.print_warning("   • 此操作不可撤销!")
 
         print()
-        if ui.confirm(f"确定要重置{api_config.name}的所有配置吗？"):
+        if confirm_action(f"确定要重置{api_config.name}的所有配置吗？"):
             api_config.reset_to_defaults()
             ui.print_success(f"{api_config.name}配置已重置为默认值")
             # 自动保存重置后的配置

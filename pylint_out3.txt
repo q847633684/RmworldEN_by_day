@@ -1,0 +1,6 @@
+﻿************* Module Day_zh.translate.translator_factory
+translate\translator_factory.py:528:15: E1120: No value for argument '_protected_text' in method call (no-value-for-parameter)
+
+------------------------------------------------------------------
+Your code has been rated at 9.99/10 (previous run: 9.96/10, +0.04)
+

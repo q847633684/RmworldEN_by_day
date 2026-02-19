@@ -16,12 +16,7 @@ from tqdm import tqdm
 
 # 翻译配置已迁移到新配置系统
 from .core.java_translator import JavaTranslator
-from .core.python_translator import (
-    translate_csv,
-    AcsClient,
-    TranslateGeneralRequest,
-    PythonTranslator,
-)
+from .core.python_translator import translate_csv, PythonTranslator
 from .core.placeholders import PlaceholderManager
 from .core.resume_base import ResumeBase
 
@@ -385,8 +380,8 @@ class GoogleTranslatorAdapter(ResumeBase):
         self.config = config
         self.logger = get_logger(f"{__name__}.GoogleTranslatorAdapter")
 
-    def translate_csv(
-        self, input_csv: str, output_csv: str, protected_text: str, **kwargs
+    def translate_csv(  # pylint: disable=unused-argument
+        self, input_csv: str, output_csv: str, protected_text: str = "", **kwargs
     ) -> bool:
         """翻译 CSV，使用 protected_text 或 text 列，写入 translated 列。支持断点续传。"""
         try:

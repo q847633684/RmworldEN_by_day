@@ -5,7 +5,7 @@
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 from utils.logging_config import get_logger
 
 
@@ -35,7 +35,6 @@ class BaseConfig(ABC):
         Returns:
             配置模式字典
         """
-        pass
 
     @abstractmethod
     def validate(self) -> bool:
@@ -45,7 +44,6 @@ class BaseConfig(ABC):
         Returns:
             是否有效
         """
-        pass
 
     def set_value(self, key: str, value: Any) -> None:
         """
@@ -82,7 +80,7 @@ class BaseConfig(ABC):
             # 延迟导入避免循环依赖
             from user_config import UserConfigManager
 
-            config_manager = UserConfigManager()
+            config_manager = UserConfigManager.get_instance()
             config_manager.save_config()
 
             # 特殊处理：日志配置需要重新应用

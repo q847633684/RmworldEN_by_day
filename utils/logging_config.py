@@ -221,7 +221,7 @@ class LoggingConfig:
         try:
             from user_config import UserConfigManager
 
-            config_manager = UserConfigManager()
+            config_manager = UserConfigManager.get_instance()
             log_config = config_manager.log_config
 
             # 重置初始化状态
@@ -547,7 +547,7 @@ if not LoggingConfig.is_initialized():
         # 尝试从用户配置系统读取
         from user_config import UserConfigManager
 
-        config_manager = UserConfigManager()
+        config_manager = UserConfigManager.get_instance()
         log_config = config_manager.log_config
 
         log_level = log_config.get_value("log_level", "INFO")

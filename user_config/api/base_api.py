@@ -5,7 +5,7 @@ API配置基类
 """
 
 from abc import abstractmethod
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 from ..core.base_config import BaseConfig
 
 
@@ -54,7 +54,6 @@ class BaseAPIConfig(BaseConfig):
         Returns:
             (是否成功, 错误信息)
         """
-        pass
 
     @abstractmethod
     def get_auth_params(self) -> Dict[str, Any]:
@@ -64,7 +63,6 @@ class BaseAPIConfig(BaseConfig):
         Returns:
             认证参数字典
         """
-        pass
 
     @abstractmethod
     def get_request_params(self) -> Dict[str, Any]:
@@ -74,7 +72,6 @@ class BaseAPIConfig(BaseConfig):
         Returns:
             请求参数字典
         """
-        pass
 
     def is_enabled(self) -> bool:
         """

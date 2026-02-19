@@ -50,7 +50,8 @@ from import_template.handler import handle_import_template, handle_migrate_trans
 from translate.handler import handle_unified_translate
 from extract.cleanup_outdated_keys import handle_cleanup_outdated_keys
 from utils.interaction import show_main_menu, wait_for_user_input
-from utils.ui_style import confirm_action, ui
+from utils.ui_style import ui
+from utils.interaction import confirm_action
 
 # 初始化 colorama 以支持 Windows 终端颜色
 init()
@@ -67,7 +68,7 @@ def handle_config_manage():
 
     try:
         # 直接启动新的配置系统
-        config_manager = UserConfigManager()
+        config_manager = UserConfigManager.get_instance()
         config_ui = MainConfigUI(config_manager)
         config_ui.show_main_menu()
 
@@ -83,7 +84,7 @@ def main():
     try:
         from user_config import UserConfigManager
 
-        config_manager = UserConfigManager()
+        config_manager = UserConfigManager.get_instance()
         log_config = config_manager.log_config
 
         if log_config.get_value("auto_cleanup_logs", True):
@@ -148,6 +149,16 @@ def main():
             continue
         except (ValueError, RuntimeError, ImportError) as e:
             ui.print_error(f"❌ 程序执行出错: {str(e)}")
+            wait_for_user_input("按回车返回主菜单...")
+        except Exception as e:
+            ui.print_error(f"❌ 发生未预期的错误: {str(e)}")
+            try:
+                from user_config import UserConfigManager
+                if UserConfigManager.get_instance().system_config.get_value("debug_mode", False):
+                    import traceback
+                    traceback.print_exc()
+            except Exception:
+                pass
             wait_for_user_input("按回车返回主菜单...")
 
 

@@ -4,7 +4,7 @@ from utils.ui_style import ui
 import os
 import re
 import time
-from typing import List, Dict, Optional, Any
+from typing import List, Dict, Any
 from pathlib import Path
 from tqdm import tqdm
 from .resume_base import ResumeBase
@@ -269,7 +269,7 @@ class PythonTranslator(ResumeBase):
         try:
             from user_config import UserConfigManager
 
-            config_manager = UserConfigManager()
+            config_manager = UserConfigManager.get_instance()
             primary_api = config_manager.get_primary_api()
 
             if primary_api:
