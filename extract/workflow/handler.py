@@ -550,6 +550,9 @@ def handle_extract(
                         ui.print_info(f"   · {p}")
                     return (all_csv_paths[0], mod_dir)
                 return (all_csv_paths[0], mod_dir) if all_csv_paths else None
+            # num_groups==1 且 len(roots)>1（合并根）时，for 循环内已处理但未 return，需在此返回
+            if num_groups == 1 and all_csv_paths:
+                return (all_csv_paths[0], mod_dir)
 
         except (OSError, RuntimeError) as e:
             report_handler_error(e, "智能提取失败", mod_dir=mod_dir)

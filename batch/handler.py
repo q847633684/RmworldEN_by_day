@@ -72,19 +72,16 @@ def _get_mod_name_from_about(mod_dir: str) -> Optional[str]:
 
 
 def _get_package_id_from_about(mod_dir: str) -> Optional[str]:
-    """从 About/About.xml 读取 <packageId> 文本，用于总 LoadFolders 中无 IfModActive 时的默认条件。"""
+    """从 About/About.xml 读取根级 <packageId> 文本（仅 root 的直接子元素，排除 modDependencies 等内部的 packageId）。"""
     about_path = Path(mod_dir) / "About" / "About.xml"
     if not about_path.is_file():
         return None
     try:
         tree = ET.parse(about_path)
         root = tree.getroot()
-        for elem in root.iter():
-            if _local_tag(elem.tag) == "packageId" and elem.text:
-                return elem.text.strip()
-        pid_elem = root.find("packageId")
-        if pid_elem is not None and pid_elem.text:
-            return pid_elem.text.strip()
+        for child in root:
+            if _local_tag(child.tag) == "packageId" and child.text:
+                return child.text.strip()
     except (ET.ParseError, OSError, PermissionError, AttributeError):
         pass
     return None
