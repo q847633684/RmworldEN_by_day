@@ -5,15 +5,20 @@
 
 import csv
 import re
+import shutil
 import tempfile
 import xml.etree.ElementTree as ET
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Set, Tuple
 
 from utils.ui_style import ui
 
 TOTAL_CSV_NAME = "total_translations.csv"
+
+# 将选择的 1.6 或 1.5 下所有 Languages/ChineseSimplified 里的 Keyed 和 DefInjected 汇总到根目录：
+#   Languages/ChineseSimplified/Keyed/ 和 Languages/ChineseSimplified/DefInjected/
+# 使用原始文件名；同名时在扩展名前加序号 1、2、3…（如 AbilityDef1.xml），不覆盖。
 
 
 def _batch_extract_one(
@@ -317,6 +322,153 @@ def handle_batch_vanilla_extract():
             ui.print_warning(f"  · {mod_name}: {reason}")
 
 
+def _unique_dest_path(dest_dir: Path, rel_path: str, used_names: Set[str]) -> Path:
+    """生成唯一目标路径，同名时在扩展名前加序号 1、2、3…"""
+    rel_norm = rel_path.replace("\\", "/")
+    dest_file = dest_dir / rel_norm
+    base = dest_file.parent
+    stem = dest_file.stem
+    suffix = dest_file.suffix
+    if rel_norm not in used_names:
+        used_names.add(rel_norm)
+        return dest_file
+    n = 1
+    while True:
+        new_name = f"{stem}{n}{suffix}"
+        if base != dest_dir:
+            new_rel = str(base.relative_to(dest_dir)).replace("\\", "/") + "/" + new_name
+        else:
+            new_rel = new_name
+        if new_rel not in used_names:
+            used_names.add(new_rel)
+            return (base / new_name) if base != dest_dir else (dest_dir / new_name)
+        n += 1
+
+
+def _detect_version_dirs(root: Path) -> List[str]:
+    """扫描根目录下的版本号子目录（如 1.4、1.5、1.6、v1.6），返回排序后的版本名列表。"""
+    ver_pat = re.compile(r"^v?(\d+\.\d+)$")
+    found: List[str] = []
+    for sub in root.iterdir():
+        if sub.is_dir() and not sub.name.startswith("."):
+            m = ver_pat.match(sub.name)
+            if m:
+                found.append(sub.name)
+    return sorted(set(found), key=lambda x: [int(p) for p in re.findall(r"\d+", x)])
+
+
+def aggregate_chinese_translations_to_root(
+    root_dir: str,
+    versions: Optional[List[str]] = None,
+    language: Optional[str] = None,
+) -> Tuple[int, int]:
+    """
+    将根目录下各模组的 Languages/ChineseSimplified 的 Keyed 和 DefInjected 汇总到根目录。
+    同名文件在扩展名前加序号 1、2、3…，不覆盖。
+
+    Args:
+        root_dir: 批量导出根目录（含多个模组子目录）
+        versions: 可选，版本目录名列表如 ["1.5","1.6"]；为 None 时自动检测根目录下的版本号子目录
+        language: 语言目录名，默认 ChineseSimplified
+
+    Returns:
+        (keyed_count, definjected_count) 复制的文件数
+    """
+    from user_config import UserConfigManager
+    config = UserConfigManager.get_instance()
+    lang = language or config.language_config.get_value("cn_language", "ChineseSimplified")
+    keyed_name = config.language_config.get_value("keyed_dir", "Keyed")
+    def_name = config.language_config.get_value("definjected_dir", "DefInjected")
+
+    root = Path(root_dir)
+    if not root.is_dir():
+        return 0, 0
+
+    out_keyed = root / "Languages" / lang / keyed_name
+    out_def = root / "Languages" / lang / def_name
+    out_keyed.mkdir(parents=True, exist_ok=True)
+    out_def.mkdir(parents=True, exist_ok=True)
+
+    used_keyed: Set[str] = set()
+    used_def: Set[str] = set()
+    keyed_count = 0
+    def_count = 0
+
+    def _collect_and_copy(src_dir: Path, out_dir: Path, used: Set[str]) -> int:
+        cnt = 0
+        if not src_dir.is_dir():
+            return 0
+        for f in src_dir.rglob("*.xml"):
+            if not f.is_file():
+                continue
+            rel = str(f.relative_to(src_dir)).replace("\\", "/")
+            dest_path = _unique_dest_path(out_dir, rel, used)
+            dest_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(f, dest_path)
+            cnt += 1
+        return cnt
+
+    # 递归查找所有 Languages/lang/Keyed 和 Languages/lang/DefInjected 目录（含嵌套如 1.6/mod/1.6/ModCompatibility/Quirks/Languages/...）
+    def _find_lang_dirs(scan_root: Path) -> List[Tuple[Path, Path]]:
+        """返回 [(keyed_dir, def_dir)] 列表，def_dir 可能为空 Path"""
+        found: List[Tuple[Path, Path]] = []
+        for lang_parent in scan_root.rglob("Languages"):
+            if not lang_parent.is_dir():
+                continue
+            lang_dir = lang_parent / lang
+            if not lang_dir.is_dir():
+                continue
+            kd = lang_dir / keyed_name
+            dd = lang_dir / def_name
+            if kd.is_dir() or dd.is_dir():
+                found.append((kd, dd))
+        return found
+
+    bases_to_scan: List[Path] = [root]
+    if versions is None:
+        versions = _detect_version_dirs(root)
+    for ver in versions or []:
+        ver_dir = root / ver
+        if ver_dir.is_dir():
+            bases_to_scan.append(ver_dir)
+
+    seen_keyed: Set[Path] = set()
+    seen_def: Set[Path] = set()
+    for base in bases_to_scan:
+        for kd, dd in _find_lang_dirs(base):
+            if kd.is_dir() and kd not in seen_keyed:
+                seen_keyed.add(kd)
+                keyed_count += _collect_and_copy(kd, out_keyed, used_keyed)
+            if dd.is_dir() and dd not in seen_def:
+                seen_def.add(dd)
+                def_count += _collect_and_copy(dd, out_def, used_def)
+
+    return keyed_count, def_count
+
+
+def handle_aggregate_chinese_to_root():
+    """将各模组 Languages/ChineseSimplified 的 Keyed 和 DefInjected 汇总到根目录"""
+    ui.print_section_header("汇总中文翻译到根目录", ui.Icons.BATCH)
+    from utils.interaction import safe_input
+    out_raw = safe_input(ui.get_input_prompt("请输入批量导出根目录（即各模组所在父目录）"))
+    if not out_raw or not out_raw.strip():
+        ui.print_error("未输入根目录，已取消")
+        return
+    root = Path(out_raw.strip())
+    if not root.is_dir():
+        ui.print_error(f"目录不存在: {root}")
+        return
+    detected = _detect_version_dirs(root)
+    if detected:
+        ui.print_info(f"检测到版本目录: {', '.join(detected)}")
+    else:
+        ui.print_info("未检测到版本目录，仅扫描根目录下 Languages")
+
+    k_count, d_count = aggregate_chinese_translations_to_root(str(root), versions=None)
+    ui.print_success(f"汇总完成：Keyed {k_count} 个文件，DefInjected {d_count} 个文件")
+    ui.print_info(f"输出目录: {root}/Languages/ChineseSimplified/Keyed 与 DefInjected")
+
+
 def handle_batch_import_translations():
     """从总 CSV 批量导入翻译到各模组目录，按 mod 列分片，导入时使用 key+file 双校验。"""
     ui.print_section_header("批量导入翻译", ui.Icons.BATCH)
@@ -412,10 +564,17 @@ def handle_batch():
     ui.print_section_header("批量处理", ui.Icons.BATCH)
     ui.print_menu_item("1", "批量提取（Vanilla 前缀模组）", "从 Workshop 扫描并导出到 指定目录/模组名/", ui.Icons.SCAN, compact=True)
     ui.print_menu_item("2", "批量导入翻译", "从总 CSV 按 mod 分片导入，key+路径双校验", ui.Icons.FOLDER, compact=True)
+    ui.print_menu_item(
+        "3",
+        "汇总中文翻译到根目录",
+        "将各模组 Languages/ChineseSimplified 的 Keyed、DefInjected 汇总到根目录，同名加序号",
+        ui.Icons.FOLDER,
+        compact=True,
+    )
     ui.print_menu_item("q", "返回主菜单", "", ui.Icons.BACK, compact=True)
 
     from utils.interaction import safe_input
-    choice = safe_input(ui.get_input_prompt("请选择", options="1 / 2 / q"))
+    choice = safe_input(ui.get_input_prompt("请选择", options="1 / 2 / 3 / q"))
     if choice is None:
         return
     choice = (choice or "").strip().lower()
@@ -427,4 +586,7 @@ def handle_batch():
     if choice == "2":
         handle_batch_import_translations()
         return
-    ui.print_warning("无效选项，请选择 1、2 或 q")
+    if choice == "3":
+        handle_aggregate_chinese_to_root()
+        return
+    ui.print_warning("无效选项，请选择 1、2、3 或 q")
