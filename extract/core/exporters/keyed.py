@@ -4,7 +4,7 @@ Keyed 导出器
 专门用于导出 Keyed 格式的翻译文件
 """
 
-from typing import List, Tuple, Dict
+from typing import Dict, List, Optional, Tuple
 from pathlib import Path
 from utils.logging_config import get_logger
 from utils.ui_style import ui
@@ -43,7 +43,11 @@ class KeyedExporter(BaseExporter):
         return self.export_keyed_template(output_dir, language, translations)
 
     def export_keyed_template(
-        self, output_dir: str, output_language: str, def_translations: List[Tuple]
+        self,
+        output_dir: str,
+        output_language: str,
+        def_translations: List[Tuple],
+        prefix: Optional[str] = None,
     ) -> None:
         """
         导出 Keyed 翻译模板，按文件分组生成 XML 文件
@@ -52,6 +56,7 @@ class KeyedExporter(BaseExporter):
             output_dir: 输出目录
             output_language: 输出语言
             def_translations: Keyed 翻译数据
+            prefix: 进度条前缀，默认 "生成Keyed"
         """
         self.logger.info("导出 Keyed 翻译模板")
 
@@ -63,8 +68,8 @@ class KeyedExporter(BaseExporter):
         # 使用进度条进行导出
         for _, (file_path, translations) in ui.iter_with_progress(
             file_groups.items(),
-            prefix="生成Keyed",
-            description=f"正在生成 Keyed 模板中的 {len(file_groups)} 个文件",
+            prefix=prefix or "生成Keyed",
+            description="",
         ):
             if not translations:
                 continue

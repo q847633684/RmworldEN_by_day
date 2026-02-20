@@ -18,6 +18,26 @@ from .ui_style import (
 path_manager = PathManager()
 
 
+def prompt_choose_from_list(
+    options: List[str], title: str, default: str = "1"
+) -> Optional[str]:
+    """
+    让用户从列表中选一项，返回选中的项或 None（取消）。
+    供提取、批量等流程复用「请选择版本」类交互。
+    """
+    if not options:
+        return None
+    ui.print_info(title)
+    for i, v in enumerate(options, 1):
+        ui.print_info(f"  {i}. {v}")
+    opts = "/".join(str(i) for i in range(1, len(options) + 1))
+    choice = safe_input(ui.get_input_prompt("请选择版本", options=opts, default=default))
+    if choice is None:
+        return None
+    idx = int(choice) if choice.isdigit() else 0
+    return options[min(max(idx - 1, 0), len(options) - 1)]
+
+
 def safe_input(prompt: str, default: str = None) -> Optional[str]:
     """
     安全的输入函数，处理EOFError和KeyboardInterrupt

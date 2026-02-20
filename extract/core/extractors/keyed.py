@@ -4,8 +4,7 @@ Keyed 提取器
 专门用于从 Keyed 目录提取键值对翻译
 """
 
-import re
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 from pathlib import Path
 from utils.logging_config import get_logger
 from utils.ui_style import ui
@@ -33,14 +32,18 @@ class KeyedExtractor(BaseExtractor):
         self.content_filter = ContentFilter(config)
 
     def extract(
-        self, source_path: str, language: str
+        self,
+        source_path: str,
+        language: str,
+        prefix: Optional[str] = None,
     ) -> List[Tuple[str, str, str, str, str]]:
         """
-        从 Keyed 目录提取翻译
+        从 Keyed 目录提取翻译。只处理传入路径下的 Languages/<language>/Keyed，不回退到父目录。
 
         Args:
-            source_path: 模组目录路径
+            source_path: 模组/内容根路径
             language: 语言代码
+            prefix: 进度条前缀，默认 "扫描Keyed"
 
         Returns:
             List[Tuple[str, str, str, str, str]]: 五元组列表 (key, text, tag, rel_path, en_text)
@@ -54,17 +57,8 @@ class KeyedExtractor(BaseExtractor):
             source_path, language, "keyed"
         )
         if not keyed_dir.exists():
-            # 仅当当前路径为版本目录（如 1.6）时才回退到父目录；子内容根（如 1.6/Quirks）不回退，避免误用本体翻译
-            path_name = Path(source_path).name
-            if path_name and re.match(r"^\d+\.\d+$", path_name):
-                keyed_dir_root = self.config.language_config.get_language_subdir(
-                    str(Path(source_path).parent), language, "keyed"
-                )
-                if keyed_dir_root.exists():
-                    keyed_dir = keyed_dir_root
-            if not keyed_dir.exists():
-                self.logger.warning("Keyed 目录不存在: %s", keyed_dir)
-                return []
+            self.logger.warning("Keyed 目录不存在: %s", keyed_dir)
+            return []
 
         translations = []
         xml_files = list(keyed_dir.rglob("*.xml"))
@@ -72,8 +66,8 @@ class KeyedExtractor(BaseExtractor):
         # 使用进度条进行提取
         for _, xml_file in ui.iter_with_progress(
             xml_files,
-            prefix="扫描Keyed",
-            description=f"正在扫描 {language} Keyed 目录中的 {len(xml_files)} 个文件",
+            prefix=prefix or "扫描Keyed",
+            description="",
         ):
             file_translations = self._extract_from_xml_file(xml_file, keyed_dir)
             translations.extend(file_translations)

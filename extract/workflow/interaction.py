@@ -72,7 +72,7 @@ class InteractionManager:
             Dict[str, Any]: 智能流程决策结果
         """
         if not batch_mode:
-            self._print_separator("智能提取翻译模板工作流", "=", 60)
+            self._print_separator("智能提取", "=", 40)
 
         # 获取配置中的语言设置
         config = UserConfigManager.get_instance()
@@ -83,14 +83,14 @@ class InteractionManager:
 
         # 第一步：检测当前内容根下的英文目录状态（Keyed/DefInjected 与 Defs 同逻辑）
         if not batch_mode:
-            self._print_step_header(1, 4, "检测mod英文目录状态")
+            self._print_step_header(1, 4, "检测英文目录")
         import_status = self._detect_language_directories(
             mod_dir, language=en_language
         )
 
         # 第二步：检测输出目录状态
         if not batch_mode:
-            self._print_step_header(2, 4, "检测输出目录状态")
+            self._print_step_header(2, 4, "选择输出目录")
         output_dir, output_language = self._get_output_directory(
             mod_dir,
             language=cn_language,
@@ -103,7 +103,7 @@ class InteractionManager:
 
         # 第三步：选择数据来源
         if not batch_mode:
-            self._print_step_header(3, 4, "选择数据来源")
+            self._print_step_header(3, 4, "数据来源")
         if batch_mode:
             data_source_choice = self._get_data_source_default(import_status)
         else:
@@ -111,7 +111,7 @@ class InteractionManager:
 
         # 第四步：处理输出冲突
         if not batch_mode:
-            self._print_step_header(4, 4, "处理输出冲突")
+            self._print_step_header(4, 4, "冲突处理")
         if batch_mode:
             conflict_resolution = self._get_conflict_resolution_default(output_status)
         else:
@@ -152,7 +152,7 @@ class InteractionManager:
 
         # 配置确认和验证
         if self._confirm_configuration(smart_config):
-            self._print_separator("✅ 智能流程决策完成", "=", 60)
+            self._print_separator("✅ 配置完成", "=", 40)
 
             # 记录用户操作
             log_user_action(
@@ -178,34 +178,14 @@ class InteractionManager:
         Returns:
             bool: 用户是否确认配置
         """
-        ui.print_section_header("配置摘要确认", ui.Icons.SETTINGS)
-        ui.print_key_value("y", "确认，继续执行", ui.Icons.CONFIRM)
-        ui.print_key_value("n", "取消，退出流程", ui.Icons.CANCEL)
-        ui.print_key_value("r", "重新配置，回到第一步", ui.Icons.BACK)
-        ui.print_key_value(
-            "数据来源",
-            self._format_choice_description(config["data_sources"]["choice"]),
-            ui.Icons.DATA,
-        )
-        ui.print_key_value(
-            "输出目录", config["output_config"]["output_dir"], ui.Icons.FOLDER
-        )
-        ui.print_key_value(
-            "冲突处理",
-            self._format_conflict_description(
-                config["output_config"]["conflict_resolution"]
-            ),
-            ui.Icons.SETTINGS,
-        )
-        ui.print_key_value(
-            "文件结构",
-            self._format_structure_description(config["template_structure"]),
-            ui.Icons.FOLDER,
-        )
+        ui.print_section_header("配置确认", ui.Icons.SETTINGS)
+        ui.print_info(f"  数据: {self._format_choice_description(config['data_sources']['choice'])}  冲突: {self._format_conflict_description(config['output_config']['conflict_resolution'])}  结构: {self._format_structure_description(config['template_structure'])}")
+        ui.print_info(f"  输出: {config['output_config']['output_dir']}")
+        ui.print_tip("  y=确认  n=取消  r=重配")
 
         while True:
             choice = (
-                input(ui.get_input_prompt("确认以上配置", options="y/n/r"))
+                input(ui.get_input_prompt("确认", options="y/n/r"))
                 .strip()
                 .lower()
             )
@@ -255,15 +235,13 @@ class InteractionManager:
         Args:
             mod_dir: 当前内容根路径（如 1.6 或 1.6/rimvore-2/Common）
             language: 语言目录名（如 'English', 'ChineseSimplified'）
-            for_output: 若为 True 表示在检测「输出目录」状态，不回退到父目录 Keyed，只认当前路径下
+            for_output: 若为 True 表示在检测「输出目录」状态（仅影响调用方语义，本函数只认当前路径）
 
         Returns:
             Dict[str, Union[bool, str]]: 目录状态
         """
         config = UserConfigManager.get_instance()
         language_dir = config.language_config.get_language_dir(mod_dir, language)
-        ui.print_info(f"🔍 正在检测目录:{mod_dir} 语言:{language}...")
-        ui.print_info(f"🔍 正在检测 {language_dir} 目录状态...")
 
         def_dir = config.language_config.get_language_subdir(
             mod_dir, language, "definjected"
@@ -271,26 +249,13 @@ class InteractionManager:
         keyed_dir = config.language_config.get_language_subdir(
             mod_dir, language, "keyed"
         )
-        if not keyed_dir.exists() and not for_output:
-            # 仅检测「导入源」时回退到根目录 Languages；检测「输出目录」时只看当前路径，避免把父目录当成本目录有 Keyed
-            root_keyed = config.language_config.get_language_subdir(
-                str(Path(mod_dir).parent), language, "keyed"
-            )
-            if root_keyed.exists():
-                keyed_dir = root_keyed
         has_definjected = def_dir.exists() and any(def_dir.rglob("*.xml"))
         # 目录存在即视为有 Keyed，不强制要求 *.xml（避免漏检如 rjw-brothel-colony）
         has_keyed = keyed_dir.exists()
 
-        if has_definjected:
-            ui.print_success(f"   检测到{def_dir}目录: ✅ 有")
-        else:
-            ui.print_warning(f"   检测到{def_dir}目录: ❌ 否")
-
-        if has_keyed:
-            ui.print_success(f"   检测到{keyed_dir}目录: ✅ 有")
-        else:
-            ui.print_warning(f"   检测到{keyed_dir}目录: ❌ 否")
+        k = "✓" if has_keyed else "✗"
+        d = "✓" if has_definjected else "✗"
+        ui.print_info(f"  Keyed {k}  DefInjected {d}  ({language})")
 
         return {
             "has_definjected": has_definjected,
@@ -331,28 +296,25 @@ class InteractionManager:
 
         # 如果跳过用户选择，直接使用模组根目录
         if skip_user_selection:
-            ui.print_info("📁 使用默认输出目录")
-            ui.print_info(f"📁 输出目录: {default_dir}")
+            ui.print_info(f"✓ 输出: {default_dir}")
             path_manager.remember_path("output_dir", str(default_dir))
             return str(default_dir), language
 
-        # 美化输出目录选择界面
-        ui.print_header("📁 选择输出目录")
-
-        ui.print_section_header("推荐选择", ui.Icons.SETTINGS)
+        # 输出目录选择（步骤 2 已打印步骤头，此处仅选项）
+        ui.print_section_header("推荐", ui.Icons.SETTINGS)
         ui.print_menu_item(
-            "1", "使用默认目录", str(default_dir), ui.Icons.FOLDER, is_recommended=True
+            "1", "默认目录", str(default_dir), ui.Icons.FOLDER, is_recommended=True
         )
 
         if history:
-            ui.print_section_header("历史记录", ui.Icons.HISTORY)
+            ui.print_section_header("历史", ui.Icons.HISTORY)
             for i, hist_path in enumerate(history, 2):
                 ui.print_menu_item(
                     str(i), os.path.basename(hist_path), hist_path, ui.Icons.FOLDER
                 )
         else:
-            ui.print_section_header("历史记录", ui.Icons.HISTORY)
-            ui.print_info("暂无历史记录")
+            ui.print_section_header("历史", ui.Icons.HISTORY)
+            ui.print_info("暂无")
 
         max_choice = len(history) + 1
         while True:
@@ -370,21 +332,17 @@ class InteractionManager:
                 choice = "1"
 
             if choice == "1":
-                ui.print_success("输出目录选择成功")
-                ui.print_info(f"📁 选择目录: {default_dir}")
+                ui.print_success(f"✓ 输出: {default_dir}")
                 path_manager.remember_path("output_dir", str(default_dir))
                 return str(default_dir), language
             elif choice.isdigit() and 2 <= int(choice) <= max_choice:
                 selected_path = history[int(choice) - 2]
-                ui.print_success("输出目录选择成功")
-                ui.print_info(f"📁 选择目录: {selected_path}")
+                ui.print_success(f"✓ 输出: {selected_path}")
                 path_manager.remember_path("output_dir", selected_path)
-                # 判断是否为标准多语言目录
                 return selected_path, language
             elif choice:
                 if os.path.isdir(choice) or not os.path.exists(choice):
-                    ui.print_success("输出目录选择成功")
-                    ui.print_info(f"📁 选择目录: {choice}")
+                    ui.print_success(f"✓ 输出: {choice}")
                     path_manager.remember_path("output_dir", choice)
                     # 用户自定义目录，language 置空
                     return choice, language
@@ -436,7 +394,7 @@ class InteractionManager:
                 return "defs_only"
 
             recommendation = self._analyze_definjected_quality(str(definjected_path))
-            ui.print_success("检测DefInjected目录：有")
+            ui.print_info("DefInjected ✓")
 
             # 显示智能推荐
             if recommendation["recommended"] == "definjected_only":
@@ -473,8 +431,7 @@ class InteractionManager:
                 else:
                     ui.print_error("请输入 1、2、3 或直接回车")
         else:
-            ui.print_warning("检测DefInjected目录：没有")
-            ui.print_success("自动选择：扫描Defs文件重新提取")
+            ui.print_success("DefInjected 无，自动：扫描Defs")
             return "defs_only"
 
     def _analyze_definjected_quality(self, definjected_path: str) -> Dict[str, str]:
@@ -597,8 +554,7 @@ class InteractionManager:
                 else:
                     ui.print_error("请输入 1、2 或 3，或直接按回车使用智能推荐")
         else:
-            ui.print_info("输出目录中没有现有翻译文件")
-            ui.print_success("自动选择：新建")
+            ui.print_success("无现有文件，自动：新建")
             return "new"
 
     def _analyze_existing_files(

@@ -4,15 +4,20 @@
 """
 
 import csv
-import re
 import shutil
 import tempfile
-import xml.etree.ElementTree as ET
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
+from utils.interaction import prompt_choose_from_list, safe_input
+from utils.rimworld_about import (
+    get_mod_name_from_about,
+    get_package_id_from_about,
+    sanitize_mod_name_for_path,
+)
 from utils.ui_style import ui
+from extract.workflow.manager import get_version_dirs_from_fs
 
 TOTAL_CSV_NAME = "total_translations.csv"
 
@@ -46,52 +51,6 @@ DEFAULT_WORKSHOP_CONTENT = (
 )
 
 
-def _sanitize_mod_name_for_path(name: str) -> str:
-    """将模组名转为安全的目录名（替换非法字符）"""
-    s = re.sub(r'[\\/:*?"<>|]', "_", str(name).strip())
-    return s[:64] if s else ""
-
-
-def _local_tag(tag: str) -> str:
-    """XML 标签去掉命名空间前缀。"""
-    return tag.split("}")[-1] if "}" in tag else tag
-
-
-def _get_mod_name_from_about(mod_dir: str) -> Optional[str]:
-    """从 About/About.xml 读取 <name> 文本；支持默认命名空间。"""
-    about_path = Path(mod_dir) / "About" / "About.xml"
-    if not about_path.is_file():
-        return None
-    try:
-        tree = ET.parse(about_path)
-        root = tree.getroot()
-        for elem in root.iter():
-            if _local_tag(elem.tag) == "name" and elem.text:
-                return elem.text.strip()
-        name_elem = root.find("name")
-        if name_elem is not None and name_elem.text:
-            return name_elem.text.strip()
-    except (ET.ParseError, OSError, PermissionError, AttributeError):
-        pass
-    return None
-
-
-def _get_package_id_from_about(mod_dir: str) -> Optional[str]:
-    """从 About/About.xml 读取根级 <packageId> 文本（仅 root 的直接子元素，排除 modDependencies 等内部的 packageId）。"""
-    about_path = Path(mod_dir) / "About" / "About.xml"
-    if not about_path.is_file():
-        return None
-    try:
-        tree = ET.parse(about_path)
-        root = tree.getroot()
-        for child in root:
-            if _local_tag(child.tag) == "packageId" and child.text:
-                return child.text.strip()
-    except (ET.ParseError, OSError, PermissionError, AttributeError):
-        pass
-    return None
-
-
 def scan_vanilla_mods(workshop_content_dir: str) -> List[Tuple[str, str]]:
     """
     扫描 Workshop 目录，返回名字以 Vanilla 开头的模组列表。
@@ -106,7 +65,7 @@ def scan_vanilla_mods(workshop_content_dir: str) -> List[Tuple[str, str]]:
     for sub in workshop.iterdir():
         if not sub.is_dir():
             continue
-        name = _get_mod_name_from_about(str(sub))
+        name = get_mod_name_from_about(str(sub))
         if name and name.strip().startswith("Vanilla"):
             result.append((str(sub.resolve()), name.strip()))
     return result
@@ -118,7 +77,6 @@ def handle_batch_vanilla_extract():
 
     workshop_dir = DEFAULT_WORKSHOP_CONTENT
     ui.print_info(f"Workshop 目录（可回车使用默认）: {workshop_dir}")
-    from utils.interaction import safe_input
     raw = safe_input(ui.get_input_prompt("Workshop 目录", default=workshop_dir))
     if raw is None:
         return
@@ -136,14 +94,11 @@ def handle_batch_vanilla_extract():
     ui.print_success(f"找到 {len(vanilla_list)} 个 Vanilla 前缀模组")
     ui.print_header("选择游戏版本")
     ui.print_info("批量提取将统一使用所选版本，不会自动回退到其他版本。")
-    ver_raw = safe_input(
-        ui.get_input_prompt("请选择版本", options="1.6 / 1.5", default="1.6")
+    batch_version = prompt_choose_from_list(
+        ["1.6", "1.5"], "请选择版本：", default="1"
     )
-    if ver_raw is None:
+    if batch_version is None:
         return
-    batch_version = (ver_raw or "1.6").strip()
-    if batch_version not in ("1.6", "1.5"):
-        batch_version = "1.6"
     ui.print_success(f"已选择版本: {batch_version}")
 
     for mod_dir, mod_name in vanilla_list:
@@ -186,7 +141,7 @@ def handle_batch_vanilla_extract():
 
     tasks = []
     for mod_dir, mod_name in vanilla_list:
-        safe_name = _sanitize_mod_name_for_path(mod_name)
+        safe_name = sanitize_mod_name_for_path(mod_name)
         if not safe_name:
             safe_name = Path(mod_dir).name
         out_dir = str(output_base_path / safe_name)
@@ -235,7 +190,7 @@ def handle_batch_vanilla_extract():
         )
         total_entries: List[Tuple[str, Dict[str, str], Optional[str]]] = []
         for mod_dir, mod_name, safe_name in success_list:
-            package_id = _get_package_id_from_about(mod_dir)
+            package_id = get_package_id_from_about(mod_dir)
             li_attrs, ordered_paths = _parse_load_folders_from_mod(
                 mod_dir, batch_version
             )
@@ -245,34 +200,21 @@ def handle_batch_vanilla_extract():
                 attrs = {"IfModActive": package_id} if package_id else {}
                 total_entries.append((safe_name, attrs, comment_first))
             else:
-                # 与单次提取一致：版本根（如 1.6）与模组根合并为一个 Languages，总 XML 只保留一条 ModName，不另列 ModName/1.6
-                root_paths_set = ("", "/", ".", batch_version)
-                root_attrs: Dict[str, str] = {}
-                root_seen = False
-                non_root_entries: List[Tuple[str, Dict[str, str], Optional[str]]] = []
-                for path in ordered_paths:
+                # 总 XML 与各模组原 LoadFolders 一致，不合并根路径；无属性路径的「合并到一个 Languages」已在提取侧处理
+                seen_out: Set[str] = set()
+                for i, path in enumerate(ordered_paths):
                     path_norm = (path or "").strip().replace("\\", "/")
-                    if path_norm in root_paths_set:
-                        root_seen = True
-                        if not root_attrs:
-                            root_attrs = dict(li_attrs.get(path, {}))
-                            if not root_attrs and package_id:
-                                root_attrs = {"IfModActive": package_id}
+                    if path_norm in ("", "/", "."):
+                        out_path = safe_name
+                    else:
+                        out_path = f"{safe_name}/{path_norm}"
+                    if out_path in seen_out:
                         continue
-                    full_path = f"{safe_name}/{path_norm}"
+                    seen_out.add(out_path)
                     attrs = dict(li_attrs.get(path, {}))
                     if not attrs and package_id:
                         attrs = {"IfModActive": package_id}
-                    non_root_entries.append((full_path, attrs, None))
-                if root_seen:
-                    if not root_attrs and package_id:
-                        root_attrs = {"IfModActive": package_id}
-                    total_entries.append((safe_name, root_attrs, comment_first))
-                elif non_root_entries:
-                    # 无根路径时把注释放在第一条非根前
-                    first_path, first_attrs, _ = non_root_entries[0]
-                    non_root_entries[0] = (first_path, first_attrs, comment_first)
-                total_entries.extend(non_root_entries)
+                    total_entries.append((out_path, attrs, comment_first if i == 0 else None))
         xml_path = generate_total_load_folders_xml(
             str(output_base_path),
             batch_version,
@@ -345,22 +287,11 @@ def _unique_dest_path(dest_dir: Path, rel_path: str, used_names: Set[str]) -> Pa
         n += 1
 
 
-def _detect_version_dirs(root: Path) -> List[str]:
-    """扫描根目录下的版本号子目录（如 1.4、1.5、1.6、v1.6），返回排序后的版本名列表。"""
-    ver_pat = re.compile(r"^v?(\d+\.\d+)$")
-    found: List[str] = []
-    for sub in root.iterdir():
-        if sub.is_dir() and not sub.name.startswith("."):
-            m = ver_pat.match(sub.name)
-            if m:
-                found.append(sub.name)
-    return sorted(set(found), key=lambda x: [int(p) for p in re.findall(r"\d+", x)])
-
-
 def aggregate_chinese_translations_to_root(
     root_dir: str,
     versions: Optional[List[str]] = None,
     language: Optional[str] = None,
+    include_root: bool = True,
 ) -> Tuple[int, int]:
     """
     将根目录下各模组的 Languages/ChineseSimplified 的 Keyed 和 DefInjected 汇总到根目录。
@@ -370,6 +301,7 @@ def aggregate_chinese_translations_to_root(
         root_dir: 批量导出根目录（含多个模组子目录）
         versions: 可选，版本目录名列表如 ["1.5","1.6"]；为 None 时自动检测根目录下的版本号子目录
         language: 语言目录名，默认 ChineseSimplified
+        include_root: 是否同时扫描根目录；选单个版本时应为 False，避免 root 的 rglob 扫到其他版本
 
     Returns:
         (keyed_count, definjected_count) 复制的文件数
@@ -424,13 +356,17 @@ def aggregate_chinese_translations_to_root(
                 found.append((kd, dd))
         return found
 
-    bases_to_scan: List[Path] = [root]
+    bases_to_scan: List[Path] = []
     if versions is None:
-        versions = _detect_version_dirs(root)
+        versions = get_version_dirs_from_fs(str(root))
+    if include_root:
+        bases_to_scan.append(root)
     for ver in versions or []:
         ver_dir = root / ver
         if ver_dir.is_dir():
             bases_to_scan.append(ver_dir)
+    if not bases_to_scan:
+        bases_to_scan = [root]
 
     seen_keyed: Set[Path] = set()
     seen_def: Set[Path] = set()
@@ -449,7 +385,6 @@ def aggregate_chinese_translations_to_root(
 def handle_aggregate_chinese_to_root():
     """将各模组 Languages/ChineseSimplified 的 Keyed 和 DefInjected 汇总到根目录"""
     ui.print_section_header("汇总中文翻译到根目录", ui.Icons.BATCH)
-    from utils.interaction import safe_input
     out_raw = safe_input(ui.get_input_prompt("请输入批量导出根目录（即各模组所在父目录）"))
     if not out_raw or not out_raw.strip():
         ui.print_error("未输入根目录，已取消")
@@ -458,13 +393,41 @@ def handle_aggregate_chinese_to_root():
     if not root.is_dir():
         ui.print_error(f"目录不存在: {root}")
         return
-    detected = _detect_version_dirs(root)
+    detected = get_version_dirs_from_fs(str(root))
+    chosen_versions: Optional[List[str]] = None
+    include_root = True
     if detected:
         ui.print_info(f"检测到版本目录: {', '.join(detected)}")
+        ui.print_header("选择要汇总的版本")
+        options = ["仅根目录（不汇总版本子目录）"] + detected + ["全部（根目录 + 所有版本）"]
+        opts_str = " / ".join(f"{i + 1}={o}" for i, o in enumerate(options))
+        for i, opt in enumerate(options, 1):
+            ui.print_menu_item(str(i), opt, "", compact=True)
+        ver_choice = safe_input(ui.get_input_prompt("请选择", options=opts_str, default="1"))
+        if ver_choice is None:
+            return
+        idx = (ver_choice or "1").strip()
+        if idx.isdigit():
+            i = int(idx)
+            if 1 <= i <= len(options):
+                if i == 1:
+                    chosen_versions = []
+                    include_root = True
+                elif i == len(options):
+                    chosen_versions = detected
+                    include_root = True
+                else:
+                    chosen_versions = [detected[i - 2]]
+                    include_root = False
+        if chosen_versions is None:
+            chosen_versions = []
     else:
         ui.print_info("未检测到版本目录，仅扫描根目录下 Languages")
+        chosen_versions = []
 
-    k_count, d_count = aggregate_chinese_translations_to_root(str(root), versions=None)
+    k_count, d_count = aggregate_chinese_translations_to_root(
+        str(root), versions=chosen_versions, include_root=include_root
+    )
     ui.print_success(f"汇总完成：Keyed {k_count} 个文件，DefInjected {d_count} 个文件")
     ui.print_info(f"输出目录: {root}/Languages/ChineseSimplified/Keyed 与 DefInjected")
 
@@ -472,7 +435,6 @@ def handle_aggregate_chinese_to_root():
 def handle_batch_import_translations():
     """从总 CSV 批量导入翻译到各模组目录，按 mod 列分片，导入时使用 key+file 双校验。"""
     ui.print_section_header("批量导入翻译", ui.Icons.BATCH)
-    from utils.interaction import safe_input
     out_raw = safe_input(ui.get_input_prompt("请输入批量导出根目录（即各模组所在父目录）"))
     if not out_raw or not out_raw.strip():
         ui.print_error("未输入根目录，已取消")
@@ -573,7 +535,6 @@ def handle_batch():
     )
     ui.print_menu_item("q", "返回主菜单", "", ui.Icons.BACK, compact=True)
 
-    from utils.interaction import safe_input
     choice = safe_input(ui.get_input_prompt("请选择", options="1 / 2 / 3 / q"))
     if choice is None:
         return

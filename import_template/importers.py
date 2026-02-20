@@ -658,8 +658,7 @@ def migrate_translations_to_new(
     total_keyed = sum(len(m) for m in keyed_by_path.values())
     total_def = sum(len(f) for sc in definjected_by_path_file.values() for f in sc.values())
     ui.print_info(
-        f"从 %s 个旧目录按路径收集到 Keyed %s 条、DefInjected %s 条（%s 个 path scope）。"
-        % (len(old_base_dirs), total_keyed, total_def, len(set(keyed_by_path) | set(definjected_by_path_file)))
+        f"从 {len(old_base_dirs)} 个旧目录按路径收集到 Keyed {total_keyed} 条、DefInjected {total_def} 条（{len(set(keyed_by_path) | set(definjected_by_path_file))} 个 path scope）。"
     )
     if total_keyed == 0 and total_def == 0:
         logger.warning("未从旧目录收集到任何翻译，请确认旧目录下存在 Keyed/DefInjected 且 XML 中含译文")
@@ -683,7 +682,9 @@ def migrate_translations_to_new(
     new_scopes = [s for _, s in new_lang_dirs_with_scope]
     old_ver, new_ver = _infer_path_versions(old_scopes, new_scopes)
     logger.info("路径版本映射: 旧 %s -> 新 %s", old_ver, new_ver)
-    ui.print_info(f"找到 {len(new_lang_dirs_with_scope)} 个语言目录，按 LoadFolders 路径映射（%s→%s）更新", old_ver, new_ver)
+    ui.print_info(
+        f"找到 {len(new_lang_dirs_with_scope)} 个语言目录，按 LoadFolders 路径映射（{old_ver}→{new_ver}）更新"
+    )
     updated = 0
     for new_lang_dir, new_scope in new_lang_dirs_with_scope:
         new_scope_norm = (new_scope or "").replace("\\", "/")

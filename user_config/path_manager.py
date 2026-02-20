@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Dict, Optional, Callable, List, TYPE_CHECKING
 from utils.logging_config import get_logger
 from utils.ui_style import ui
+from utils.version_utils import parse_version_number
 from dataclasses import dataclass, field
 
 if TYPE_CHECKING:
@@ -495,14 +496,13 @@ class PathManager:
             )
             ui.print_info(f"{ui.Icons.SCAN} 检测模组结构: {structure_type} - {mod_dir}")
             if structure_type == "versioned":
-                # 让用户选择版本号，直接返回最终目录
-                final_dir = self._choose_versioned_content_dir(mod_dir)
-                if final_dir:
+                # 让用户选择版本号，返回 (模组根, 版本名) 供提取等复用，避免二次选择
+                choice_result = self._choose_versioned_content_dir(mod_dir)
+                if choice_result:
                     # 添加根目录到历史记录（保持与扫描功能的一致性）
                     self.path_config.add_to_history("mod_dir", result.normalized_path)
-                    # 注意：add_to_history 已经自动保存，无需再次调用 _save_history()
-                    # 版本结构只返回路径，不返回path_type
-                    return final_dir
+                    # choice_result 为 (mod_dir, version_name)
+                    return choice_result
                 else:
                     return None
             else:
@@ -522,15 +522,19 @@ class PathManager:
                 ui.print_error(result.error_message)
                 return None
 
-    def _choose_versioned_content_dir(self, mod_dir: str) -> Optional[str]:
+    def _choose_versioned_content_dir(self, mod_dir: str) -> Optional[tuple]:
         """
-        让用户选择版本号内容目录，直接返回最终目录。
+        让用户选择版本号，返回 (模组根, 版本名) 供调用方复用，避免提取时二次选择。
         版本列表优先从 LoadFolders.xml 读取；无则从模组根下版本号子目录（1.4、1.5、1.6 等）扫描。
         """
-        lf_versions = self._get_version_tags_from_load_folders(mod_dir)
+        from extract.workflow.manager import (
+            get_load_folders_versions,
+            get_version_dirs_from_fs,
+        )
+        lf_versions = get_load_folders_versions(mod_dir)
         from_load_folders = bool(lf_versions)
         if not lf_versions:
-            lf_versions = self._get_version_dirs_from_filesystem(mod_dir)
+            lf_versions = get_version_dirs_from_fs(mod_dir)
         version_dirs = []
         for name in lf_versions:
             item_path = os.path.join(mod_dir, name)
@@ -539,7 +543,7 @@ class PathManager:
                 version_dirs.append({
                     "name": name,
                     "path": path,
-                    "version": self._parse_version_number(name),
+                    "version": parse_version_number(name),
                 })
             except (ValueError, TypeError):
                 version_dirs.append({"name": name, "path": path, "version": (0, 0)})
@@ -606,7 +610,8 @@ class PathManager:
             ui.print_success(f"{ui.Icons.SUCCESS} 版本选择成功")
             ui.print_info(f"{ui.Icons.MODULE} 选择版本: {selected_version['name']}")
             ui.print_info(f"{ui.Icons.FOLDER} 内容目录: {selected_version['path']}")
-            return selected_version["path"]
+            # 返回 (模组根, 版本名)，供提取等流程复用版本选择，避免二次提示
+            return (mod_dir, selected_version["name"])
         else:
             ui.print_warning(f"{ui.Icons.WARNING} 未检测到版本号结构")
             ui.print_info(f"{ui.Icons.INFO} 该模组可能使用标准结构，将使用根目录内容")
@@ -809,51 +814,6 @@ class PathManager:
             # 降级到常规方法
             return self.get_path(path_type, prompt, validator_type, required, default)
 
-    def _get_version_tags_from_load_folders(self, mod_dir: str) -> List[str]:
-        """
-        从 LoadFolders.xml 读取版本标签（v1.6 -> 1.6），仅返回有 <li> 内容的版本块。
-        RimWorld 多版本模组以 LoadFolders.xml 为准，不再依赖扫描目录结构。
-        """
-        xml_path = Path(mod_dir) / "LoadFolders.xml"
-        if not xml_path.is_file():
-            return []
-        try:
-            # 显式用 UTF-8 打开，避免 Windows 下默认编码或 BOM 导致解析失败
-            with open(xml_path, "r", encoding="utf-8") as f:
-                tree = ET.parse(f)
-            root = tree.getroot()
-            versions = []
-            for child in root:
-                if not child.tag or len(child.tag) < 2:
-                    continue
-                if child.tag.startswith("v") and child.tag[1:].replace(".", "").isdigit():
-                    ver = child.tag[1:]
-                    if list(child.findall("li")):
-                        versions.append(ver)
-            return versions
-        except (ET.ParseError, OSError, IOError):
-            return []
-
-    def _get_version_dirs_from_filesystem(self, mod_dir: str) -> List[str]:
-        """
-        从模组根目录下扫描版本号子目录（如 1.4、1.5、1.6 或 v1.6），用于无 LoadFolders.xml 时的版本选择。
-        仅返回直接子目录且名称匹配 ^v?(\\d+\\.)+\\d+$ 的目录名，按版本号降序排列。
-        """
-        base = Path(mod_dir)
-        if not base.is_dir():
-            return []
-        pattern = re.compile(r"^v?(\d+\.)+\d+$", re.IGNORECASE)
-        found = []
-        for p in base.iterdir():
-            if p.is_dir() and pattern.match(p.name.strip()):
-                try:
-                    ver = self._parse_version_number(p.name)
-                    found.append((p.name, ver))
-                except (ValueError, TypeError):
-                    found.append((p.name, (0, 0)))
-        found.sort(key=lambda x: x[1], reverse=True)
-        return [name for name, _ in found]
-
     def _detect_mod_structure_type(self, mod_dir: str) -> tuple[str, str, str]:
         """
         检测模组目录结构类型
@@ -870,9 +830,13 @@ class PathManager:
         about_dir = os.path.join(mod_dir, "About")
         if os.path.isdir(about_dir):
             # 先以 LoadFolders.xml 判断 versioned；无则用目录下版本号子目录（1.4、1.5、1.6 等）作为回退
-            lf_versions = self._get_version_tags_from_load_folders(mod_dir)
+            from extract.workflow.manager import (
+                get_load_folders_versions,
+                get_version_dirs_from_fs,
+            )
+            lf_versions = get_load_folders_versions(mod_dir)
             if not lf_versions:
-                lf_versions = self._get_version_dirs_from_filesystem(mod_dir)
+                lf_versions = get_version_dirs_from_fs(mod_dir)
             if lf_versions:
                 return "versioned", mod_dir, mod_dir
 
@@ -921,46 +885,6 @@ class PathManager:
         versions_per_line = min(versions_per_line, 4)
 
         return versions_per_line, item_width
-
-    def _is_version_number(self, name: str) -> bool:
-        """
-        判断字符串是否为版本号格式
-
-        Args:
-            name (str): 目录名
-
-        Returns:
-            bool: 是否为版本号格式
-        """
-        # 匹配版本号格式：1.5, 1.4, 1.3, 1.5.0, v1.5 等
-        pattern = r"^v?(\d+\.)+\d+$"
-        return bool(re.match(pattern, name))
-
-    def _parse_version_number(self, version_str: str) -> tuple:
-        """
-        解析版本号字符串为可比较的元组
-
-        Args:
-            version_str (str): 版本号字符串
-
-        Returns:
-            tuple: 版本号元组
-        """
-        try:
-            # 去掉可能的 'v' 前缀
-            clean_version = version_str.strip().lower()
-            if clean_version.startswith("v"):
-                clean_version = clean_version[1:]
-
-            # 分割版本号并转换为整数
-            parts = []
-            for part in clean_version.split("."):
-                parts.append(int(part))
-
-            return tuple(parts)
-        except (ValueError, TypeError):
-            # 如果解析失败，返回 (0,) 表示最低版本
-            return (0,)
 
     def get_history_list(self, path_type: str) -> List[str]:
         """

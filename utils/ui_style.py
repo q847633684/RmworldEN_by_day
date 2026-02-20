@@ -166,9 +166,9 @@ class UIStyle:
         if icon:
             title = f"{icon} {title}"
 
-        step_text = f"【步骤 {step_num}/{total_steps}】{title}"
+        step_text = f"[{step_num}/{total_steps}] {title}"
         print(f"\n{cls.Colors.WARNING}{step_text}{cls.Colors.RESET}")
-        print(f"{cls.Colors.WARNING}{'─' * 50}{cls.Colors.RESET}")
+        print(f"{cls.Colors.WARNING}{'─' * 36}{cls.Colors.RESET}")
 
     @classmethod
     def print_menu_item(
@@ -656,24 +656,11 @@ def _calculate_adaptive_layout(
 
 
 def _get_mod_display_name(mod_path: str) -> str:
-    """获取模组的显示名称"""
-    # 首先尝试从About/About.xml读取模组名称
-    about_xml_path = os.path.join(mod_path, "About", "About.xml")
-    if os.path.exists(about_xml_path):
-        try:
-            import xml.etree.ElementTree as ET
+    """获取模组的显示名称（支持带命名空间的 About.xml）"""
+    from utils.rimworld_about import get_mod_name_from_about
 
-            tree = ET.parse(about_xml_path)
-            root = tree.getroot()
-            # 查找name标签
-            name_elem = root.find("name")
-            if name_elem is not None and name_elem.text:
-                return name_elem.text.strip()
-        except (ET.ParseError, FileNotFoundError, PermissionError, AttributeError):
-            pass
-
-    # 如果无法读取XML，使用目录名
-    return os.path.basename(mod_path)
+    name = get_mod_name_from_about(mod_path)
+    return name if name else os.path.basename(mod_path)
 
 
 def display_mods_with_adaptive_width(

@@ -122,6 +122,42 @@ def _parse_load_folders_from_mod(
     return path_to_attrib, ordered_paths
 
 
+def get_load_folders_versions(mod_dir: str) -> List[str]:
+    """
+    从 LoadFolders.xml 读取所有版本标签（如 <v1.4>、<v1.6>），返回标准化版本名列表 ['1.4', '1.6']。
+    无文件或解析失败返回 []。
+    """
+    xml_path = Path(mod_dir) / "LoadFolders.xml"
+    if not xml_path.is_file():
+        return []
+    try:
+        tree = ET.parse(xml_path)
+        root = tree.getroot()
+        versions = []
+        for child in root:
+            tag = (child.tag or "").strip()
+            if tag.startswith("v") and len(tag) > 1:
+                ver = tag[1:].strip()
+                if re.match(r"^(\d+\.)+\d+$", ver):
+                    versions.append(ver)
+        return sorted(versions)
+    except (ET.ParseError, OSError, IOError):
+        return []
+
+
+def get_version_dirs_from_fs(scan_base: str) -> List[str]:
+    """
+    扫描模组根下符合版本号形式的子目录名（如 1.6、v1.6、1.5），返回按版本降序的列表。
+    用于无 LoadFolders.xml 时根据目录结构选择版本。
+    """
+    from utils.version_utils import is_version_number, parse_version_number
+    base = Path(scan_base)
+    if not base.is_dir():
+        return []
+    found = [p.name for p in base.iterdir() if p.is_dir() and is_version_number(p.name)]
+    return sorted(found, key=parse_version_number, reverse=True)
+
+
 def _path_is_strict_under(path: str, ancestor: str) -> bool:
     """path 是否严格位于 ancestor 之下（ancestor 为 path 的祖先且 path != ancestor）。"""
     if path == ancestor:
@@ -135,39 +171,44 @@ def _path_is_strict_under(path: str, ancestor: str) -> bool:
 
 def get_content_roots_from_load_folders(
     scan_base: str, version: str
-) -> List[str]:
+) -> List[Tuple[str, Dict[str, str]]]:
     """
-    从 LoadFolders.xml 的指定版本块（如 v1.6）读取要加载的路径，作为内容根列表。
-    与游戏实际加载的目录一致；仅排除「某路径下的 Languages 子目录」作为内容根
-    （如存在 1.6 时排除 1.6/Languages），避免重复提取。与 1.6 同级的路径（如 Biotech）
-    保留为独立内容根，各自 Defs/Keyed 写入各自目录下的 Languages。
+    从 LoadFolders.xml 的指定版本块（如 v1.6）读取要加载的路径及每条目的属性。
+
+    - 有 <li>/</li> 就扫模组根，无则不扫；有 <li>1.6</li> 就扫 1.6 目录，无则不扫。路径即 scan_base + li 文本。
+    - 无 IfModActive/IfModNotActive 的路径已在 handler 里合并成一个 Languages。
 
     Args:
         scan_base: 模组根目录（其下应有 LoadFolders.xml）
         version: 版本名，如 "1.6" -> 解析 <v1.6> 内的 <li>
 
     Returns:
-        存在的绝对路径列表 [scan_base/1.6, scan_base/Biotech, ...]，仅去掉 xxx/Languages
+        [(绝对路径, 属性字典), ...]。同一物理目录只出现一次（按首次出现的属性），避免重复扫描。
     """
-    _, ordered_paths = _parse_load_folders_from_mod(scan_base, version)
+    path_to_attrib, ordered_paths = _parse_load_folders_from_mod(scan_base, version)
     base = Path(scan_base)
-    result = []
+    result: List[Tuple[str, Dict[str, str]]] = []
+    seen_resolved: set = set()
     for p in ordered_paths:
-        # <li>/</li> 表示模组根：归一化为 base，避免 Windows 下 base / "/" 变成盘符
         p_norm = (p or "").strip().replace("\\", "/")
         if p_norm in ("", "/", "."):
             full = base
         else:
             full = base / p_norm.replace("/", os.sep)
-        if full.exists() and full.is_dir():
-            result.append(str(full.resolve()))
-    # 只排除「某路径下的 Languages 子目录」作为内容根，避免 1.6 与 1.6/Languages 同时作为根；
-    # 与 1.6 同级的路径（如 Biotech）保留为独立内容根
+        if not full.exists() or not full.is_dir():
+            continue
+        resolved = str(full.resolve())
+        if resolved in seen_resolved:
+            continue
+        seen_resolved.add(resolved)
+        attrs = path_to_attrib.get(p_norm, {})
+        result.append((resolved, attrs))
+    # 排除某路径下的 Languages 子目录作为内容根
     result = [
-        r for r in result
+        (r, a) for r, a in result
         if not any(
             _path_is_strict_under(r, s) and Path(r).name.lower() == "languages"
-            for s in result
+            for s, _ in result
             if s != r
         )
     ]
@@ -304,6 +345,7 @@ class TemplateManager:
         template_structure: Optional[str] = None,
         has_input_keyed: bool = True,
         output_csv: Optional[str] = None,
+        scan_label: Optional[str] = None,
     ) -> tuple[List[Tuple[str, str, str, str]], str]:
         """
         提取翻译数据并生成模板，同时导出CSV。
@@ -318,6 +360,7 @@ class TemplateManager:
             template_structure: 模板结构选择
             has_input_keyed: 是否包含Keyed输入
             output_csv: CSV输出文件名
+            scan_label: 若指定则按「扫描\"label\"下」+  keyed/Defs 进度与获取数输出；生成阶段用「生成」+ Keyed/DefInjected 进度与条数
 
         Returns:
             tuple[List[Tuple[str, str, str, str]], str]: (提取的翻译数据, CSV文件路径)
@@ -341,11 +384,12 @@ class TemplateManager:
             import_language,
             data_source_choice=data_source_choice,
             has_input_keyed=has_input_keyed,
+            scan_label=scan_label,
         )
 
         if not keyed_translations and not def_translations:
             self.logger.warning("未找到任何翻译数据")
-            ui.print_warning("未找到任何翻译数据")
+            ui.print_warning("无数据")
             return [], ""
 
         # 步骤2：根据用户选择的输出模式生成翻译模板
@@ -356,6 +400,7 @@ class TemplateManager:
             def_translations=def_translations,
             template_structure=template_structure,
             has_input_keyed=has_input_keyed,
+            use_compact_format=scan_label is not None,
         )
 
         # 步骤3：导出CSV到输出目录
@@ -388,19 +433,25 @@ class TemplateManager:
         template_structure: Optional[str] = None,
         has_input_keyed: bool = True,
         output_csv: Optional[str] = None,
+        scan_labels: Optional[List[str]] = None,
     ) -> tuple[List[Tuple[str, str, str, str]], str]:
         """
         从多个内容根提取并合并到同一输出目录（一个 Languages/Keyed、一个 Languages/DefInjected）。
         用于「无 LoadFolders」或 LoadFolders 中版本路径（如 1.6）时，版本目录+同级目录合并导出。
+        scan_labels: 与 import_dirs 一一对应的显示标签（如 "/", "1.6"），用于输出「扫描"xxx"下」。
         """
         all_keyed: List[Tuple] = []
         all_def: List[Tuple] = []
-        for import_dir in import_dirs:
+        for i, import_dir in enumerate(import_dirs):
+            scan_label = (
+                scan_labels[i] if scan_labels and i < len(scan_labels) else None
+            )
             k, d = self.extract_all_translations(
                 import_dir,
                 import_language,
                 data_source_choice=data_source_choice,
                 has_input_keyed=has_input_keyed,
+                scan_label=scan_label,
             )
             all_keyed.extend(k)
             all_def.extend(d)
@@ -428,7 +479,7 @@ class TemplateManager:
             all_def = _out_d
         if not all_keyed and not all_def:
             self.logger.warning("多根合并：未找到任何翻译数据")
-            ui.print_warning("未找到任何翻译数据")
+            ui.print_warning("无数据")
             return [], ""
         log_user_action(
             "提取翻译模板（多根合并）",
@@ -472,6 +523,7 @@ class TemplateManager:
         output_csv: Optional[str] = None,
         input_keyed: Optional[List[Tuple]] = None,
         input_def: Optional[List[Tuple]] = None,
+        import_label: Optional[str] = None,
     ) -> tuple[List[Tuple[str, str, str, str]], str]:
         """
         执行智能合并模式处理翻译数据。
@@ -480,25 +532,42 @@ class TemplateManager:
         Args:
             input_keyed: 可选，预提取的 Keyed 数据（多根合并时传入）
             input_def: 可选，预提取的 DefInjected 数据（多根合并时传入）
+            import_label: 可选，当前组显示标签（如 "/", "1.6"），用于「【输入】xxx 英文源」「【输出】xxx 现有翻译」及扫描输出
         """
         if input_keyed is not None and input_def is not None:
             pass
         else:
-            ui.print_info("【输入】英文源")
+            if import_label:
+                ui.print_info(f"【输入】{import_label} 英文源")
+            else:
+                ui.print_info("【输入】英文源")
             input_keyed, input_def = self.extract_all_translations(
                 import_dir,
                 import_language,
                 data_source_choice=data_source_choice,
                 has_input_keyed=has_input_keyed,
+                scan_label=import_label,
             )
 
+        # 输入为空时跳过输出扫描与合并，减少无意义扫描
+        if not input_keyed and not input_def:
+            if import_label:
+                ui.print_info(f"  [{import_label}] 无输入，跳过")
+            else:
+                ui.print_info("  无输入，跳过")
+            return [], ""
+
         # 步骤2：提取输出目录现有翻译（用于与输入合并）
-        ui.print_info("【输出】现有翻译")
+        if import_label:
+            ui.print_info(f"【输出】{import_label} 现有翻译")
+        else:
+            ui.print_info("【输出】现有翻译")
         output_keyed, output_def = self.extract_all_translations(
             output_dir,
             output_language,
             data_source_choice="definjected_only",
             has_input_keyed=has_input_keyed,
+            scan_label=import_label,
         )
 
         # 步骤3：智能合并翻译数据（include_unchanged=False，不变项不进入 merged，故 CSV 也不会包含）
@@ -554,6 +623,7 @@ class TemplateManager:
         import_language: str,
         data_source_choice: Optional[str] = None,
         has_input_keyed: bool = True,
+        scan_label: Optional[str] = None,
     ) -> List[Tuple[str, str, str, str, str]]:
         """
         提取所有翻译数据。
@@ -564,45 +634,69 @@ class TemplateManager:
             import_language: 输入语言代码
             data_source_choice: 数据来源选择 ('definjected_only', 'defs_only')
             has_input_keyed: 是否包含Keyed输入
+            scan_label: 若指定则按「扫描"label"下」分组合并输出，进度条用  keyed/Defs 前缀
 
         Returns:
             List[Tuple[str, str, str, str, str]]: 五元组列表 (key, text, tag, rel_path, en_text)
         """
         data_source_choice = data_source_choice or "defs_only"
+        compact = scan_label is not None
+        keyed_prefix = "  keyed" if compact else "扫描Keyed"
+        defs_prefix = "  Defs" if compact else "扫描Defs"
+        definjected_prefix = "  DefInjected" if compact else "扫描DefInjected"
+
+        if compact:
+            ui.print_info(f'扫描"{scan_label}"下')
 
         # 提取Keyed翻译（与 Defs 同逻辑：从当前内容根 import_dir 下的 Languages/.../Keyed 读取）
         if has_input_keyed:
             self.logger.debug("正在扫描 Keyed 目录...")
             keyed_translations = self.keyed_extractor.extract(
-                import_dir, import_language
+                import_dir, import_language, prefix=keyed_prefix
             )
-            ui.print_info(f"  Keyed → {len(keyed_translations)} 条")
             self.logger.debug(
                 "从Keyed 目录提取到 %s 条 Keyed 翻译", len(keyed_translations)
             )
+            if compact and keyed_translations:
+                ui.print_info(f"     ；获取Keyed {len(keyed_translations)}")
         else:
             keyed_translations = []
 
         if data_source_choice == "definjected_only":
             self.logger.debug("正在扫描 DefInjected 目录...")
             definjected_translations = self.definjected_extractor.extract(
-                import_dir, import_language
+                import_dir, import_language, prefix=definjected_prefix
             )
-            ui.print_info(f"  DefInjected → {len(definjected_translations)} 条")
             self.logger.info(
                 "从DefInjected 目录提取到 %s 条 DefInjected 翻译",
                 len(definjected_translations),
             )
+            if compact:
+                ui.print_info(f"     ；获取DefInjected {len(definjected_translations)} 条")
+            else:
+                parts = []
+                if keyed_translations:
+                    parts.append(f"Keyed {len(keyed_translations)}")
+                parts.append(f"DefInjected {len(definjected_translations)} 条")
+                ui.print_info("  " + ", ".join(parts))
             return (keyed_translations, definjected_translations)
 
         elif data_source_choice == "defs_only":
             self.logger.debug("正在扫描 Defs 目录...")
-            defs_translations = self.defs_scanner.extract(import_dir)
-            ui.print_info(f"  Defs → {len(defs_translations)} 条")
+            defs_translations = self.defs_scanner.extract(
+                import_dir, prefix=defs_prefix
+            )
             self.logger.debug(
                 "从Defs目录提取到 %s 条 Defs 翻译", len(defs_translations)
             )
-            # Defs提取器直接返回六元组，无需转换
+            if compact:
+                ui.print_info(f"     ；获取Defs {len(defs_translations)} 条")
+            else:
+                parts = []
+                if keyed_translations:
+                    parts.append(f"Keyed {len(keyed_translations)}")
+                parts.append(f"Defs {len(defs_translations)} 条")
+                ui.print_info("  " + ", ".join(parts))
             return (keyed_translations, defs_translations)
 
         # 如果到了这里，说明没有匹配的data_source_choice
@@ -617,40 +711,47 @@ class TemplateManager:
         def_translations: List[Tuple],
         template_structure: Optional[str],
         has_input_keyed: bool = True,
+        use_compact_format: bool = False,
     ):
         """在指定输出目录生成翻译模板结构"""
         template_structure = template_structure or "original_structure"
         output_path = Path(output_dir)
+        keyed_prefix = "  Keyed" if use_compact_format else None
+        def_prefix = "  DefInjected" if use_compact_format else None
 
         if not keyed_translations and not def_translations:
             ui.print_warning("没有翻译数据需要生成模板")
             return
 
+        if use_compact_format:
+            ui.print_info("生成")
+
         # 生成Keyed模板
-        if has_input_keyed:
-            if keyed_translations:
-                ui.print_info(f"生成 {len(keyed_translations)} 条 Keyed 模板...")
-                self.keyed_exporter.export_keyed_template(
-                    output_dir, output_language, keyed_translations
-                )
-                self.logger.debug(
-                    "生成 %s 条 Keyed 模板到 %s", len(keyed_translations), output_path
-                )
-                ui.print_success("Keyed 模板已生成")
-            else:
-                ui.print_warning("未找到 Keyed 翻译数据，已跳过 Keyed 模板生成。")
-        else:
+        if has_input_keyed and keyed_translations:
+            self.keyed_exporter.export_keyed_template(
+                output_dir, output_language, keyed_translations, prefix=keyed_prefix
+            )
+            self.logger.debug(
+                "生成 %s 条 Keyed 模板到 %s", len(keyed_translations), output_path
+            )
+            if use_compact_format:
+                ui.print_info(f"     ；生成Keyed {len(keyed_translations)} 条")
+        elif has_input_keyed and not keyed_translations:
+            ui.print_warning("未找到 Keyed 翻译数据，已跳过 Keyed 模板生成。")
+        elif not has_input_keyed:
             ui.print_warning("未检测到输入 Keyed 目录，已跳过 Keyed 模板生成。")
 
         # 生成DefInjected模板
         if def_translations:
-            ui.print_info(f"生成 {len(def_translations)} 条 DefInjected 模板...")
             self._generate_definjected_with_structure(
                 def_translations,
                 output_dir,
                 output_language,
                 template_structure,
+                prefix=def_prefix,
             )
+            if use_compact_format:
+                ui.print_info(f"     ；生成DefInjected {len(def_translations)} 条")
 
     def _generate_definjected_with_structure(
         self,
@@ -658,33 +759,28 @@ class TemplateManager:
         output_dir: str,
         output_language: str,
         template_structure: str,
+        prefix: Optional[str] = None,
     ):
         """根据智能配置的结构选择生成DefInjected模板"""
         if template_structure == "original_structure":
-            # 使用原有结构的导出函数
             self.definjected_exporter.export_with_original_structure(
-                output_dir, output_language, def_translations
+                output_dir, output_language, def_translations, prefix=prefix
             )
             self.logger.debug(
                 "生成 %s 条 DefInjected 模板（保持原结构）", len(def_translations)
             )
-            ui.print_success("DefInjected 模板已生成（保持原结构）")
         elif template_structure == "defs_by_type":
-            # 按 Def 类型分组的导出函数（符合游戏要求）
             self.definjected_exporter.export_with_defs_structure(
-                output_dir, output_language, def_translations
+                output_dir, output_language, def_translations, prefix=prefix
             )
             self.logger.debug(
                 "生成 %s 条 DefInjected 模板（按DefType分组）", len(def_translations)
             )
-            ui.print_success("DefInjected 模板已生成（按DefType分组）")
         else:
-            # merge_logic 或未知值：按原结构写回
             self.definjected_exporter.export_with_original_structure(
-                output_dir, output_language, def_translations
+                output_dir, output_language, def_translations, prefix=prefix
             )
             self.logger.debug("生成 %s 条 DefInjected 模板", len(def_translations))
-            ui.print_success("DefInjected 模板已生成")
 
     def _write_merged_translations(
         self,
@@ -917,7 +1013,7 @@ class TemplateManager:
             ):
                 writer.writerow(item)
 
-        ui.print_success(f"导出 CSV → {Path(csv_path).name}")
+        ui.print_success(f"CSV → {Path(csv_path).name}")
         self.logger.debug("翻译数据已保存到CSV: %s", csv_path)
 
         # 记入历史：让提取生成的 CSV 出现在后续"Python机翻/导入翻译"的历史列表
@@ -939,9 +1035,11 @@ class TemplateManager:
         output_csv: str,
         input_keyed: Optional[List[Tuple]] = None,
         input_def: Optional[List[Tuple]] = None,
+        import_label: Optional[str] = None,
     ) -> Tuple[List[Tuple], str]:
         """
         新增模式：若提供 input_keyed/input_def（多根合并后的数据），则不再从 import_dir 提取。
+        import_label: 可选，当前组显示标签（如 "/", "1.6"），用于步骤提示及扫描输出。
         """
         self.logger.info("开始新增模式处理")
         ui.print_info("=== 新增模式：扫描对比现有内容 ===")
@@ -949,12 +1047,16 @@ class TemplateManager:
         if input_keyed is not None and input_def is not None:
             pass
         else:
-            ui.print_info("🔍 步骤1：提取输入数据...")
+            if import_label:
+                ui.print_info(f"🔍 步骤1：提取输入数据 ({import_label})...")
+            else:
+                ui.print_info("🔍 步骤1：提取输入数据...")
             input_keyed, input_def = self.extract_all_translations(
                 import_dir=import_dir,
                 import_language=import_language,
                 data_source_choice=data_source_choice,
                 has_input_keyed=has_input_keyed,
+                scan_label=import_label,
             )
 
         if not input_keyed and not input_def:
@@ -966,7 +1068,10 @@ class TemplateManager:
         )
 
         # 步骤2：提取输出数据
-        ui.print_info("📋 步骤2：提取输出数据...")
+        if import_label:
+            ui.print_info(f"📋 步骤2：提取输出数据 ({import_label})...")
+        else:
+            ui.print_info("📋 步骤2：提取输出数据...")
         output_keyed, output_def = self.extract_all_translations(
             import_dir=output_dir,
             import_language=output_language,

@@ -4,11 +4,11 @@ Defs 扫描器
 专门用于扫描 Defs 目录中的可翻译内容
 """
 
-import re
 from typing import List, Tuple, Dict, Optional
 from pathlib import Path
 from utils.logging_config import get_logger
 from utils.ui_style import ui
+from utils.xml_utils import local_tag
 from .base import BaseExtractor
 from ..filters import ContentFilter
 
@@ -32,7 +32,7 @@ class DefsScanner(BaseExtractor):
         self.content_filter = ContentFilter(config)
 
     def extract(
-        self, source_path: str, language: str = None
+        self, source_path: str, language: str = None, prefix: Optional[str] = None
     ) -> List[Tuple[str, str, str, str, str, str]]:
         """
         扫描 Defs 目录中的可翻译内容
@@ -40,6 +40,7 @@ class DefsScanner(BaseExtractor):
         Args:
             source_path: 模组目录路径
             language: 语言代码（Defs扫描不需要语言参数）
+            prefix: 进度条前缀，默认 "扫描Defs"
 
         Returns:
             List[Tuple[str, str, str, str, str, str]]: 六元组列表 (key, text, tag, rel_path, en_text, def_type)
@@ -49,22 +50,9 @@ class DefsScanner(BaseExtractor):
         if not self._validate_source(source_path):
             return []
 
-        # 版本优先、根目录回退：仅当当前路径为版本目录（如 1.6）时才回退；子内容根（如 1.6/Quirks）不回退，避免误用本体 Defs
         defs_dir = self._find_defs_directory(source_path)
-        if defs_dir is None and source_path:
-            path_name = Path(source_path).name
-            if path_name and re.match(r"^\d+\.\d+$", path_name):
-                try:
-                    src_resolved = Path(source_path).resolve()
-                    parent = src_resolved.parent
-                    if parent.exists() and parent.is_dir() and str(parent) != str(src_resolved):
-                        defs_dir = self._find_defs_directory(str(parent))
-                        if defs_dir:
-                            self.logger.info("Defs 使用根目录回退: %s", defs_dir)
-                except (OSError, ValueError, TypeError) as e:
-                    self.logger.debug("Defs 根目录回退失败: %s", e)
         if defs_dir is None:
-            self.logger.warning("未找到 Defs 目录，已尝试：当前路径/Defs、根目录/Defs")
+            self.logger.warning("未找到 Defs 目录: %s", source_path)
             return []
 
         translations = []
@@ -88,8 +76,8 @@ class DefsScanner(BaseExtractor):
         # 使用进度条进行提取
         for _, xml_file in ui.iter_with_progress(
             xml_files,
-            prefix="扫描Defs",
-            description=f"正在扫描 Defs 目录中的 {len(xml_files)} 个文件",
+            prefix=prefix or "扫描Defs",
+            description="",
         ):
             file_translations = self._extract_from_xml_file(
                 xml_file, defs_dir, all_abstract_nodes
@@ -138,7 +126,7 @@ class DefsScanner(BaseExtractor):
 
             for def_node in def_nodes:
                 # 去掉 XML 命名空间，保证输出目录为 HediffDef 而非 {uri}HediffDef
-                tag_local = self._local_tag(def_node.tag)
+                tag_local = local_tag(def_node.tag)
                 # DefInjected 子文件夹须与 RimWorld Def 类型一致：有 Class 属性时用 Class 最后一段（如 OpinionDef_SexPart），无则用标签名（如 BackstoryDef）
                 class_attr = (def_node.get("Class") or "").strip()
                 def_type = class_attr.split(".")[-1] if class_attr else tag_local
@@ -230,20 +218,10 @@ class DefsScanner(BaseExtractor):
         return def_nodes
 
     @staticmethod
-    def _local_tag(tag: str) -> str:
-        """去掉 XML 命名空间，如 {http://...}HediffDef -> HediffDef"""
-        if not isinstance(tag, str):
-            return tag
-        if "}" in tag:
-            return tag.split("}", 1)[-1]
-        return tag
-
-    @staticmethod
     def _find_child_by_local_name(parent, local_name: str):
         """按本地名查找子节点（兼容带命名空间的 XML）"""
         for child in parent:
-            local = DefsScanner._local_tag(child.tag)
-            if local == local_name:
+            if local_tag(child.tag) == local_name:
                 return child
         return None
 
@@ -345,7 +323,7 @@ class DefsScanner(BaseExtractor):
 
         translations = []
         node_tag = node.tag
-        node_tag_local = self._local_tag(node_tag)
+        node_tag_local = local_tag(node_tag)
 
         # 跳过 defName 节点
         if node_tag_local == "defName":
@@ -386,7 +364,7 @@ class DefsScanner(BaseExtractor):
             if node_tag_local == "li":
                 # li 节点特殊处理：只有当父标签在默认字段中时才提取
                 parent_local = (
-                    self._local_tag(parent_tag) if isinstance(parent_tag, str) else ""
+                    local_tag(parent_tag) if isinstance(parent_tag, str) else ""
                 )
                 if parent_local and parent_local.lower() in default_fields_lower:
                     should_extract = True
@@ -405,7 +383,7 @@ class DefsScanner(BaseExtractor):
 
         # 递归处理子节点
         for child in node:
-            if self._local_tag(child.tag) == "li":
+            if local_tag(child.tag) == "li":
                 # li 子节点传递当前节点作为父标签，但保持 list_indices 引用
                 child_translations = self._extract_translatable_fields_recursive(
                     child,

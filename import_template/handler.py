@@ -128,7 +128,11 @@ def handle_migrate_translations():
             language=language,
             only_fill_empty=only_fill_empty,
         )
-        ui.print_success(f"迁移完成，共更新 {updated} 个文件。")
+        if updated > 0:
+            ui.print_success(f"迁移完成，共更新 {updated} 个文件。")
+        else:
+            ui.print_info("迁移完成，共更新 0 个文件。")
+            ui.print_info("（已遍历新目录下所有文件；未写入修改可能因 key 与当前模板不一致，或译文与当前内容相同）")
     except (OSError, ValueError, RuntimeError, ImportError) as e:
         ui.print_error(f"迁移失败: {str(e)}")
         logger.error("迁移失败: %s", str(e), exc_info=True)

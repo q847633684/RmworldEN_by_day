@@ -59,6 +59,7 @@ class DefInjectedExporter(BaseExporter):
         output_language: str,
         def_translations: List[Tuple],
         xml_format: Optional[str] = None,
+        prefix: Optional[str] = None,
     ) -> None:
         """
         按原始文件路径结构导出 DefInjected 翻译。
@@ -68,6 +69,7 @@ class DefInjectedExporter(BaseExporter):
             output_language: 输出语言
             def_translations: DefInjected 翻译数据
             xml_format: 可选，nested / flat_with_li / flat_all，默认从配置读取
+            prefix: 进度条前缀，默认 "生成DefInjected"
         """
         self.logger.info("按原始文件路径结构导出 DefInjected 翻译")
 
@@ -87,8 +89,8 @@ class DefInjectedExporter(BaseExporter):
         # 使用进度条进行导出
         for _, (file_path, translations) in ui.iter_with_progress(
             file_groups.items(),
-            prefix="生成DefInjected",
-            description=f"正在生成 DefInjected 模板中的 {len(file_groups)} 个文件",
+            prefix=prefix or "生成DefInjected",
+            description="",
         ):
 
             output_file = def_injected_path / file_path
@@ -109,6 +111,7 @@ class DefInjectedExporter(BaseExporter):
         output_language: str,
         def_translations: List[Tuple],
         xml_format: Optional[str] = None,
+        prefix: Optional[str] = None,
     ) -> None:
         """
         按 Def 类型分组导出 DefInjected 翻译。
@@ -119,6 +122,7 @@ class DefInjectedExporter(BaseExporter):
 
         Args:
             xml_format: 可选，nested / flat_with_li / flat_all
+            prefix: 进度条前缀，默认 "生成DefInjected"
         """
         self.logger.info("按 DefType 分组导出 DefInjected 翻译")
 
@@ -137,8 +141,8 @@ class DefInjectedExporter(BaseExporter):
         # 使用进度条进行导出
         for _, (def_type, translations) in ui.iter_with_progress(
             file_groups.items(),
-            prefix="生成DefInjected",
-            description=f"正在生成 DefInjected 模板中的 {len(file_groups)} 个文件",
+            prefix=prefix or "生成DefInjected",
+            description="",
         ):
 
             # 创建对应的目录结构

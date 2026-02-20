@@ -5,8 +5,7 @@ DefInjected 提取器
 支持三种 XML 格式的解析：nested / flat_with_li / flat_all，统一输出 key 为 DefName.field 或 DefName.field.0。
 """
 
-import re
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 from pathlib import Path
 from utils.logging_config import get_logger
 from utils.ui_style import ui
@@ -32,7 +31,7 @@ class DefInjectedExtractor(BaseExtractor):
         self.logger = get_logger(f"{__name__}.DefInjectedExtractor")
 
     def extract(
-        self, source_path: str, language: str
+        self, source_path: str, language: str, prefix: Optional[str] = None
     ) -> List[Tuple[str, str, str, str, str]]:
         """
         从 DefInjected 目录提取翻译结构
@@ -40,6 +39,7 @@ class DefInjectedExtractor(BaseExtractor):
         Args:
             source_path: 模组目录路径
             language: 语言代码
+            prefix: 进度条前缀，默认 "扫描DefInjected"
 
         Returns:
             List[Tuple[str, str, str, str, str]]: 五元组列表 (key, text, tag, rel_path, en_text)
@@ -54,13 +54,6 @@ class DefInjectedExtractor(BaseExtractor):
         definjected_dir = self.config.language_config.get_language_subdir(
             source_path, language, "definjected"
         )
-        if not definjected_dir.exists() and source_path:
-            # 仅当当前路径为版本目录（如 1.6）时才回退到父目录；子内容根（如 1.6/Quirks）不回退，避免误用本体翻译
-            path_name = Path(source_path).name
-            if path_name and re.match(r"^\d+\.\d+$", path_name):
-                definjected_dir = self.config.language_config.get_language_subdir(
-                    str(Path(source_path).parent), language, "definjected"
-                )
         if not definjected_dir.exists():
             self.logger.warning("DefInjected 目录不存在: %s", definjected_dir)
             return []
@@ -71,8 +64,8 @@ class DefInjectedExtractor(BaseExtractor):
         # 使用进度条进行提取
         for _i, xml_file in ui.iter_with_progress(
             xml_files,
-            prefix="扫描DefInjected",
-            description=f"正在扫描 {language} DefInjected 目录中的 {len(xml_files)} 个文件",
+            prefix=prefix or "扫描DefInjected",
+            description="",
         ):
             file_translations = self._extract_from_xml_file(xml_file, definjected_dir)
             translations.extend(file_translations)
