@@ -42,6 +42,8 @@ import re
 import yaml
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
+from utils.constants import CSV_TRANSLATION_HEADER
+from utils.csv_utils import open_csv_reader, open_csv_writer
 from utils.logging_config import get_logger
 from utils.ui_style import ui
 
@@ -90,7 +92,7 @@ class PlaceholderManager:
 
             # 读取所有数据到内存
             rows = []
-            with open(csv_file, "r", encoding="utf-8") as infile:
+            with open_csv_reader(csv_file) as infile:
                 reader = csv.DictReader(infile)
                 # 过滤掉None字段名
                 fieldnames = (
@@ -99,15 +101,8 @@ class PlaceholderManager:
                     else []
                 )
 
-                # 确保包含所有必要字段
-                required_fields = [
-                    "key",
-                    "text",
-                    "tag",
-                    "file",
-                    "type",
-                    "protected_text",
-                ]
+                # 确保包含所有必要字段（与提取 CSV 表头一致 + 占位符保护字段）
+                required_fields = list(CSV_TRANSLATION_HEADER) + ["protected_text"]
                 for field in required_fields:
                     if field not in fieldnames:
                         fieldnames.append(field)
@@ -153,7 +148,7 @@ class PlaceholderManager:
                     rows.append(row)
 
             # 写回文件
-            with open(csv_file, "w", encoding="utf-8", newline="") as outfile:
+            with open_csv_writer(csv_file) as outfile:
                 writer = csv.DictWriter(outfile, fieldnames=fieldnames)
                 writer.writeheader()
                 writer.writerows(rows)
@@ -199,7 +194,7 @@ class PlaceholderManager:
             logger.info("CSV文件路径: %s", csv_file)
             # 读取所有数据到内存
             rows = []
-            with open(csv_file, "r", encoding="utf-8") as infile:
+            with open_csv_reader(csv_file) as infile:
                 reader = csv.DictReader(infile)
                 # 过滤掉None字段名
                 fieldnames = (
@@ -223,7 +218,7 @@ class PlaceholderManager:
                     rows.append(row)
 
             # 写回文件
-            with open(csv_file, "w", encoding="utf-8", newline="") as outfile:
+            with open_csv_writer(csv_file) as outfile:
                 writer = csv.DictWriter(outfile, fieldnames=fieldnames)
                 writer.writeheader()
                 writer.writerows(rows)
@@ -265,7 +260,7 @@ class PlaceholderManager:
         rows = []
         fieldnames = []
         try:
-            with open(csv_file, "r", encoding="utf-8") as f:
+            with open_csv_reader(csv_file) as f:
                 reader = csv.DictReader(f)
                 fieldnames = [x for x in (reader.fieldnames or []) if x is not None]
                 if "translated" not in fieldnames:
@@ -289,7 +284,7 @@ class PlaceholderManager:
                         row["translated"] = restored
                         restored_count += 1
             out_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(out_path, "w", encoding="utf-8", newline="") as f:
+            with open_csv_writer(out_path) as f:
                 w = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
                 w.writeheader()
                 w.writerows(rows)

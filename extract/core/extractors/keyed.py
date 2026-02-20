@@ -7,6 +7,7 @@ Keyed 提取器
 from typing import List, Optional, Tuple
 from pathlib import Path
 from utils.logging_config import get_logger
+from utils.path_utils import rel_path_str
 from utils.ui_style import ui
 from utils.utils import normalize_xml_entities_in_text
 from .base import BaseExtractor
@@ -95,7 +96,7 @@ class KeyedExtractor(BaseExtractor):
             if tree is None:
                 return translations
 
-            rel_path = str(xml_file.relative_to(keyed_dir))
+            rel_path = rel_path_str(keyed_dir, xml_file)
 
             # 手动处理 XML 以提取英文注释
             last_en_comment = ""

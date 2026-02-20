@@ -231,3 +231,23 @@
 - **收益**：减少重复、统一行为（尤其是路径与编码）、后续改表头或路径规则时改一处即可，测试与维护成本更低。
 
 以上为完整审核结论与实施建议，可按优先级分阶段落地。
+
+---
+
+## 六、实施记录（已落地）
+
+以下项已按建议实现：
+
+1. **utils/path_utils.py**：新增 `normalize_slashes`、`rel_path_str`、`resolve_path`、`key_to_dot_notation`、`compute_scan_labels_for_roots`。
+2. **extract/utils/merger.py**：新增并导出 `dedupe_translations_by_key`；extract/workflow/handler.py 与 manager.py 改为调用该函数，删除重复实现。
+3. **extract/workflow/handler.py**：多根 merge/incremental 使用 `rel_path_str(scan_base, r)` 作为标签；多根 rebuild 使用 `compute_scan_labels_for_roots(roots, scan_base)`；`_short_csv_basename` 使用 `normalize_slashes`。
+4. **utils/constants.py**：新增 `CSV_TRANSLATION_HEADER`、`CSV_ENCODING_READ`、`CSV_ENCODING_WRITE`。
+5. **表头与校验**：extract/workflow/manager.py、batch/handler.py、import_template/importers.py、translate/core/placeholders.py 改为使用 `CSV_TRANSLATION_HEADER`。
+6. **import_template/importers.py**：5 处 key 转点号改为调用 `key_to_dot_notation(key)`。
+7. **安全文件名**：handler 删除 `_sanitize_mod_name_for_filename`，改为使用 `utils.rimworld_about.sanitize_mod_name_for_path`（逻辑一致，避免重复）。
+
+**第三步（可选）已继续落地：**
+
+8. **utils/csv_utils.py**：新增 `open_csv_reader`、`open_csv_writer`（统一编码与 newline）。extract/workflow/manager.py、batch/handler.py、import_template/importers.py、translate/core/placeholders.py 中 CSV 读写改为使用上述封装。
+9. **提取器 rel_path**：extract/core/extractors/keyed.py、definjected.py 中 `rel_path` 计算改为使用 `utils.path_utils.rel_path_str`。
+10. **目录名常量**：utils/constants.py 新增 `KEYED_DIR`、`DEFINJECTED_DIR`、`DEFS_DIR`、`LOAD_FOLDERS_FILENAME`；extract/workflow/manager.py 与 handler.py 中相关字面量改为使用常量。

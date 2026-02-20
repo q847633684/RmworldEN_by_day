@@ -38,6 +38,28 @@ import re
 from utils.logging_config import get_logger, log_data_processing, log_performance
 
 
+def dedupe_translations_by_key(
+    keyed_list: List, def_list: List
+) -> Tuple[List, List]:
+    """
+    多根合并时按 key 去重，保留首次出现。
+    避免同一 Keyed/Def 目录被多个根解析到导致重复，或不同根产出相同 key 时重复。
+    """
+    seen_k, seen_d = set(), set()
+    out_k, out_d = [], []
+    for item in keyed_list:
+        k = item[0] if item else None
+        if k is not None and k not in seen_k:
+            seen_k.add(k)
+            out_k.append(item)
+    for item in def_list:
+        k = item[0] if item else None
+        if k is not None and k not in seen_d:
+            seen_d.add(k)
+            out_d.append(item)
+    return out_k, out_d
+
+
 class SmartMerger:
     """
     智能合并器类
@@ -278,6 +300,7 @@ class SmartMerger:
                                 f"'{out_item[4]}'" if not no_original_en else "'无'"
                             )
                             if no_original_en:
+                                # 输出无英文或英文同中文：保留现有译文，更新 en_text 为新英文
                                 merged.append(
                                     (
                                         key,
@@ -289,13 +312,14 @@ class SmartMerger:
                                     )
                                 )
                             else:
+                                # 英文源有更新：保留现有译文 out_item[1]，仅更新 en_text 为 in_item[1]（不把英文写入 text）
                                 merged.append(
                                     (
                                         key,
-                                        in_item[1],
+                                        out_item[1],
                                         tag,
                                         rel_path,
-                                        out_item[4],
+                                        in_item[1],
                                         f"原中文: '{out_item[1]}', 原英文: {orig_en_display} -> 新英文: '{in_item[1]}',更新于{today}",
                                     )
                                 )

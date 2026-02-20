@@ -18,6 +18,19 @@ COMMON_MOD_PATHS: List[str] = [
     r"D:\Program Files\Steam\steamapps\common\RimWorld\Mods",
 ]
 
+# 翻译 CSV 表头（提取/合并/机翻等统一使用）
+CSV_TRANSLATION_HEADER: tuple = ("key", "text", "tag", "file", "type")
+
+# CSV 读写编码（读时用 utf-8-sig 兼容 BOM）
+CSV_ENCODING_READ: str = "utf-8-sig"
+CSV_ENCODING_WRITE: str = "utf-8"
+
+# RimWorld 模组目录/文件名（与配置默认值一致，写死处可引用）
+KEYED_DIR: str = "Keyed"
+DEFINJECTED_DIR: str = "DefInjected"
+DEFS_DIR: str = "Defs"
+LOAD_FOLDERS_FILENAME: str = "LoadFolders.xml"
+
 # Steam Workshop 模组路径（RimWorld AppID 294100）
 STEAM_WORKSHOP_PATHS: List[str] = [
     r"C:\Program Files (x86)\Steam\steamapps\workshop\content\294100",

@@ -8,7 +8,6 @@ RimWorld 翻译提取主处理器
 - 错误处理和日志记录
 """
 
-import re
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from user_config import UserConfigManager
@@ -20,6 +19,14 @@ from utils.interaction import (
     select_mod_path_with_version_detection,
 )
 from utils.ui_style import ui, _get_mod_display_name
+from utils.constants import LOAD_FOLDERS_FILENAME
+from utils.rimworld_about import sanitize_mod_name_for_path
+from utils.path_utils import (
+    compute_scan_labels_for_roots,
+    normalize_slashes,
+    rel_path_str,
+)
+from extract.utils.merger import dedupe_translations_by_key
 from .manager import (
     TemplateManager,
     find_content_roots,
@@ -31,18 +38,12 @@ from .manager import (
 from .interaction import InteractionManager
 
 
-def _sanitize_mod_name_for_filename(name: str) -> str:
-    """将模组名转为安全的文件名（替换非法字符）"""
-    s = re.sub(r'[\\/:*?"<>|]', "_", str(name).strip())
-    return s[:64] if s else ""
-
-
 def _short_csv_basename(mod_name: str, export_rel: str) -> str:
     """生成简短 CSV 名。根目录用 {mod_name}_extracted.csv；子路径用 R_M_Biotech_extracted.csv 格式"""
     if not export_rel:
         return f"{mod_name}_extracted.csv" if mod_name else "extracted.csv"
     mod_prefix = (mod_name[0] if mod_name else "").upper()
-    parts = [p for p in export_rel.replace("\\", "/").split("/") if p]
+    parts = [p for p in normalize_slashes(export_rel).split("/") if p]
     if not parts:
         return f"{mod_prefix}_extracted.csv" if mod_prefix else "extracted.csv"
     initials = "_".join(p[0].upper() for p in parts[:-1])
@@ -52,25 +53,6 @@ def _short_csv_basename(mod_name: str, export_rel: str) -> str:
     else:
         base = f"{mod_prefix}_{last}"
     return f"{base}_extracted.csv"
-
-
-def _dedupe_translations_by_key(
-    keyed_list: List, def_list: List
-) -> Tuple[List, List]:
-    """多根合并时按 key 去重，避免同一 Keyed/Def 目录被多个根解析到导致重复。"""
-    seen_k, seen_d = set(), set()
-    out_k, out_d = [], []
-    for item in keyed_list:
-        k = item[0] if item else None
-        if k is not None and k not in seen_k:
-            seen_k.add(k)
-            out_k.append(item)
-    for item in def_list:
-        k = item[0] if item else None
-        if k is not None and k not in seen_d:
-            seen_d.add(k)
-            out_d.append(item)
-    return out_k, out_d
 
 
 def handle_extract(
@@ -125,7 +107,7 @@ def handle_extract(
         content_roots: List[str] = []
 
         # 1. 检查是否有 LoadFolders.xml
-        has_load_folders_xml = (Path(scan_base) / "LoadFolders.xml").is_file()
+        has_load_folders_xml = (Path(scan_base) / LOAD_FOLDERS_FILENAME).is_file()
         if has_load_folders_xml:
             versions = get_load_folders_versions(scan_base)
             if versions:
@@ -243,7 +225,7 @@ def handle_extract(
                 "output_csv", "translations.csv"
             )
             mod_root = load_folders_mod_root or mod_dir
-            mod_name = _sanitize_mod_name_for_filename(_get_mod_display_name(mod_root))
+            mod_name = sanitize_mod_name_for_path(_get_mod_display_name(mod_root))
             all_csv_paths: List[str] = []
             chosen_output_dir = smart_config["output_config"]["output_dir"]
             _rel_names: List[str] = []
@@ -277,18 +259,8 @@ def handle_extract(
                 if conflict_resolution == "merge":
                     if len(roots) > 1:
                         all_keyed, all_def = [], []
-                        scan_base_path = Path(scan_base).resolve()
                         for r in roots:
-                            rp = Path(r).resolve()
-                            if rp == scan_base_path:
-                                r_label = "/"
-                            else:
-                                try:
-                                    r_label = str(
-                                        rp.relative_to(scan_base_path)
-                                    ).replace("\\", "/")
-                                except ValueError:
-                                    r_label = Path(r).name or "?"
+                            r_label = rel_path_str(scan_base, r)
                             k, d = template_manager.extract_all_translations(
                                 r,
                                 import_language,
@@ -298,7 +270,7 @@ def handle_extract(
                             )
                             all_keyed.extend(k)
                             all_def.extend(d)
-                        all_keyed, all_def = _dedupe_translations_by_key(
+                        all_keyed, all_def = dedupe_translations_by_key(
                             all_keyed, all_def
                         )
                         translations, csv_path = template_manager.merge_mode(
@@ -344,18 +316,8 @@ def handle_extract(
                 elif conflict_resolution == "incremental":
                     if len(roots) > 1:
                         all_keyed, all_def = [], []
-                        scan_base_path = Path(scan_base).resolve()
                         for r in roots:
-                            rp = Path(r).resolve()
-                            if rp == scan_base_path:
-                                r_label = "/"
-                            else:
-                                try:
-                                    r_label = str(
-                                        rp.relative_to(scan_base_path)
-                                    ).replace("\\", "/")
-                                except ValueError:
-                                    r_label = Path(r).name or "?"
+                            r_label = rel_path_str(scan_base, r)
                             k, d = template_manager.extract_all_translations(
                                 r,
                                 import_language,
@@ -365,7 +327,7 @@ def handle_extract(
                             )
                             all_keyed.extend(k)
                             all_def.extend(d)
-                        all_keyed, all_def = _dedupe_translations_by_key(
+                        all_keyed, all_def = dedupe_translations_by_key(
                             all_keyed, all_def
                         )
                         translations, csv_path = template_manager.incremental_mode(
@@ -431,23 +393,9 @@ def handle_extract(
                                 f"⚠️ 无法删除某些文件（可能是系统文件），跳过：{e}"
                             )
                     if len(roots) > 1:
-                        scan_base_path = Path(scan_base).resolve()
-                        scan_labels_for_roots = []
-                        for r in roots:
-                            rp = Path(r).resolve()
-                            if rp == scan_base_path:
-                                scan_labels_for_roots.append("/")
-                            else:
-                                try:
-                                    scan_labels_for_roots.append(
-                                        str(rp.relative_to(scan_base_path)).replace(
-                                            "\\", "/"
-                                        )
-                                    )
-                                except ValueError:
-                                    scan_labels_for_roots.append(
-                                        Path(r).name or "?"
-                                    )
+                        scan_labels_for_roots = compute_scan_labels_for_roots(
+                            roots, scan_base
+                        )
                         translations, csv_path = template_manager.extract_and_generate_templates_from_roots(
                             import_dirs=roots,
                             import_language=import_language,

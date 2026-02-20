@@ -10,6 +10,8 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
+from utils.constants import CSV_TRANSLATION_HEADER
+from utils.csv_utils import open_csv_reader, open_csv_writer
 from utils.interaction import prompt_choose_from_list, safe_input
 from utils.rimworld_about import (
     get_mod_name_from_about,
@@ -238,7 +240,7 @@ def handle_batch_vanilla_extract():
                 if not lang_dir.is_dir():
                     continue
                 for csv_file in lang_dir.glob("*.csv"):
-                    with open(csv_file, "r", encoding="utf-8-sig", newline="") as f:
+                    with open_csv_reader(csv_file) as f:
                         reader = csv.DictReader(f)
                         if header is None and reader.fieldnames:
                             header = list(reader.fieldnames) + ["mod"]
@@ -247,7 +249,7 @@ def handle_batch_vanilla_extract():
                             total_rows.append(row)
             if header and total_rows:
                 total_csv_path = output_base_path / TOTAL_CSV_NAME
-                with open(total_csv_path, "w", encoding="utf-8", newline="") as f:
+                with open_csv_writer(total_csv_path) as f:
                     writer = csv.DictWriter(f, fieldnames=header, extrasaction="ignore")
                     writer.writeheader()
                     writer.writerows(total_rows)
@@ -454,7 +456,7 @@ def handle_batch_import_translations():
         ui.print_error(f"文件不存在: {total_csv}")
         return
     try:
-        with open(total_csv, "r", encoding="utf-8-sig", newline="") as f:
+        with open_csv_reader(total_csv) as f:
             reader = csv.DictReader(f)
             if not reader.fieldnames or "mod" not in reader.fieldnames:
                 ui.print_error("总 CSV 需包含 mod 列，请使用批量提取生成的总 CSV")
@@ -474,7 +476,7 @@ def handle_batch_import_translations():
         return
     fieldnames = [c for c in all_fieldnames if c != "mod"]
     if not fieldnames:
-        fieldnames = ["key", "text", "tag", "file", "type"]
+        fieldnames = list(CSV_TRANSLATION_HEADER)
     from import_template.importers import import_translations
     success = 0
     failed: List[str] = []

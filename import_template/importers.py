@@ -3,7 +3,10 @@
 """
 
 import csv
+from utils.constants import CSV_TRANSLATION_HEADER
+from utils.csv_utils import open_csv_reader
 from utils.logging_config import get_logger
+from utils.path_utils import key_to_dot_notation
 from utils.ui_style import ui
 from pathlib import Path
 from typing import Dict, Tuple, Any, Optional, Callable, List, Union
@@ -135,10 +138,11 @@ def _validate_csv_file(csv_path: str) -> bool:
         return False
 
     try:
-        with open(csv_path, "r", encoding="utf-8") as f:
+        with open_csv_reader(csv_path) as f:
             reader = csv.DictReader(f)
             header = reader.fieldnames
-            if not header or not all(col in header for col in ["key", "text"]):
+            required_cols = list(CSV_TRANSLATION_HEADER[:2])  # key, text
+            if not header or not all(col in header for col in required_cols):
                 logger.error("CSV文件格式无效：缺少必要的列 (key, text)")
                 return False
 
@@ -184,7 +188,7 @@ def _load_translations_from_csv(
     definjected_by_file: Dict[str, Dict[str, str]] = {}
 
     try:
-        with open(csv_path, "r", encoding="utf-8-sig") as f:
+            with open_csv_reader(csv_path) as f:
             reader = csv.DictReader(f)
             has_file_col = reader.fieldnames and "file" in reader.fieldnames
             for row in reader:
@@ -535,7 +539,7 @@ def _collect_old_translations(
                         text = (elem.text or "").strip()
                         if text:
                             if use_def_key:
-                                k = key.replace("\\", "/").replace("/", ".") if "/" in key or "\\" in key else key
+                                k = key_to_dot_notation(key)
                                 definjected_map[k] = text
                             else:
                                 keyed_map[key] = text
@@ -612,7 +616,7 @@ def _collect_old_translations_by_path(
                             if not text:
                                 continue
                             if use_def_key:
-                                k = key.replace("\\", "/").replace("/", ".") if "/" in key or "\\" in key else key
+                                k = key_to_dot_notation(key)
                                 if scope_norm not in definjected_by_path_file:
                                     definjected_by_path_file[scope_norm] = {}
                                 if file_rel not in definjected_by_path_file[scope_norm]:
@@ -761,7 +765,7 @@ def _update_definjected_by_scope(
                 continue
             normalized: Dict[str, str] = {}
             for key, value in translations.items():
-                k = key.replace("\\", "/").replace("/", ".") if "/" in key or "\\" in key else key
+                k = key_to_dot_notation(key)
                 normalized[k] = value
             tree = processor.parse_xml(str(xml_file))
             if tree is None:
@@ -829,7 +833,7 @@ def _update_xml_in_subdir(
     if subdir_type.lower() == "definjected":
         normalized: Dict[str, str] = {}
         for key, value in translations.items():
-            k = key.replace("\\", "/").replace("/", ".") if "/" in key or "\\" in key else key
+            k = key_to_dot_notation(key)
             normalized[k] = value
         translations = normalized
 
@@ -853,7 +857,7 @@ def _update_xml_in_subdir(
                 if subdir_type.lower() == "definjected" and file_translations:
                     norm_file: Dict[str, str] = {}
                     for key, value in file_translations.items():
-                        k = key.replace("\\", "/").replace("/", ".") if "/" in key or "\\" in key else key
+                        k = key_to_dot_notation(key)
                         norm_file[k] = value
                     file_translations = norm_file
             else:

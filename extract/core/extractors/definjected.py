@@ -8,6 +8,7 @@ DefInjected 提取器
 from typing import List, Optional, Tuple
 from pathlib import Path
 from utils.logging_config import get_logger
+from utils.path_utils import rel_path_str
 from utils.ui_style import ui
 from utils.utils import normalize_xml_entities_in_text
 from .base import BaseExtractor
@@ -94,7 +95,7 @@ class DefInjectedExtractor(BaseExtractor):
                 return translations
 
             root = tree.getroot()
-            rel_path = str(xml_file.relative_to(definjected_dir))
+            rel_path = rel_path_str(definjected_dir, xml_file)
             last_en_comment = ""
 
             for elem in root.iter():

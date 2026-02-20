@@ -13,6 +13,14 @@ from typing import Dict, List, Optional, Tuple
 
 from user_config import UserConfigManager
 from user_config.path_manager import PathManager
+from utils.constants import (
+    CSV_TRANSLATION_HEADER,
+    DEFS_DIR,
+    DEFINJECTED_DIR,
+    KEYED_DIR,
+    LOAD_FOLDERS_FILENAME,
+)
+from utils.csv_utils import open_csv_writer
 from utils.logging_config import (get_logger, log_data_processing,
                                   log_user_action)
 from utils.ui_style import ui
@@ -21,6 +29,7 @@ from utils.utils import sanitize_xml
 from ..core.exporters import DefInjectedExporter, KeyedExporter
 from ..core.extractors import DefInjectedExtractor, DefsScanner, KeyedExtractor
 from ..utils import SmartMerger
+from ..utils.merger import dedupe_translations_by_key
 
 
 def find_content_roots(
@@ -42,7 +51,7 @@ def find_content_roots(
         return []
     roots = set()
     # 1) 含 Defs 的目录
-    for p in base.rglob("Defs"):
+    for p in base.rglob(DEFS_DIR):
         if p.is_dir():
             roots.add(p.parent)
     # 2) 含 Languages/<lang>/Keyed 或 DefInjected 的目录（Keyed 与 Defs 同逻辑：在哪就在同目录下 Languages）
@@ -92,7 +101,7 @@ def _parse_load_folders_from_mod(
         - path_to_attrib: 路径(归一化) -> { "IfModActive"/"IfModNotActive": "..." }，仅包含有属性的项
         - ordered_paths: 原文件中该版本块内 <li> 的路径顺序（归一化后），用于生成时只输出原 mod 里有的项
     """
-    xml_path = Path(mod_dir) / "LoadFolders.xml"
+    xml_path = Path(mod_dir) / LOAD_FOLDERS_FILENAME
     path_to_attrib: Dict[str, Dict[str, str]] = {}
     ordered_paths: List[str] = []
     if not xml_path.is_file():
@@ -127,7 +136,7 @@ def get_load_folders_versions(mod_dir: str) -> List[str]:
     从 LoadFolders.xml 读取所有版本标签（如 <v1.4>、<v1.6>），返回标准化版本名列表 ['1.4', '1.6']。
     无文件或解析失败返回 []。
     """
-    xml_path = Path(mod_dir) / "LoadFolders.xml"
+    xml_path = Path(mod_dir) / LOAD_FOLDERS_FILENAME
     if not xml_path.is_file():
         return []
     try:
@@ -268,7 +277,7 @@ def generate_load_folders_xml(
             lines.append(f"    <li>{name}</li>")
     lines.append(f"  </{version_tag}>")
     lines.append("</loadFolders>")
-    xml_path = out / "LoadFolders.xml"
+    xml_path = out / LOAD_FOLDERS_FILENAME
     try:
         xml_path.write_text("\n".join(lines), encoding="utf-8")
         return xml_path
@@ -307,7 +316,7 @@ def generate_total_load_folders_xml(
             lines.append(f"    <li>{path_norm}</li>")
     lines.append(f"  </{version_tag}>")
     lines.append("</loadFolders>")
-    xml_path = out / "LoadFolders.xml"
+    xml_path = out / LOAD_FOLDERS_FILENAME
     try:
         xml_path.write_text("\n".join(lines), encoding="utf-8")
         return xml_path
@@ -455,28 +464,8 @@ class TemplateManager:
             )
             all_keyed.extend(k)
             all_def.extend(d)
-        # 多根时可能同一 Keyed/Def 目录被多个根解析到，按 key 去重保留首次出现
         if len(import_dirs) > 1:
-            _seen_k: set = set()
-            _out_k: List[Tuple] = []
-            for item in all_keyed:
-                if not item:
-                    continue
-                key = item[0]
-                if key is not None and key not in _seen_k:
-                    _seen_k.add(key)
-                    _out_k.append(item)
-            all_keyed = _out_k
-            _seen_d: set = set()
-            _out_d: List[Tuple] = []
-            for item in all_def:
-                if not item:
-                    continue
-                key = item[0]
-                if key is not None and key not in _seen_d:
-                    _seen_d.add(key)
-                    _out_d.append(item)
-            all_def = _out_d
+            all_keyed, all_def = dedupe_translations_by_key(all_keyed, all_def)
         if not all_keyed and not all_def:
             self.logger.warning("多根合并：未找到任何翻译数据")
             ui.print_warning("无数据")
@@ -584,12 +573,12 @@ class TemplateManager:
         # 写入合并结果（仅更新、新增、过时等，不含「不变」）
         if keyed_translations:
             self._write_merged_translations(
-                keyed_translations, output_dir, output_language, "Keyed", keyed_stats
+                keyed_translations, output_dir, output_language, KEYED_DIR, keyed_stats
             )
 
         if def_translations:
             self._write_merged_translations(
-                def_translations, output_dir, output_language, "DefInjected", def_stats
+                def_translations, output_dir, output_language, DEFINJECTED_DIR, def_stats
             )
         else:
             # DefInjected 参与合并但无需写入时，与 Keyed 同格式单行统计
@@ -987,9 +976,9 @@ class TemplateManager:
         )
         Path(csv_path).parent.mkdir(parents=True, exist_ok=True)
 
-        with open(csv_path, "w", encoding="utf-8", newline="") as f:
+        with open_csv_writer(csv_path) as f:
             writer = csv.writer(f)
-            writer.writerow(["key", "text", "tag", "file", "type"])
+            writer.writerow(CSV_TRANSLATION_HEADER)
 
             # 合并所有翻译数据
             all_translations = []
@@ -1103,13 +1092,13 @@ class TemplateManager:
         if keyed_new:
             ui.print_info("正在生成 Keyed 新增模板...")
             self._write_merged_translations(
-                keyed_new, output_dir, output_language, "Keyed"
+                keyed_new, output_dir, output_language, KEYED_DIR
             )
 
         if def_new:
             ui.print_info("正在生成 DefInjected 新增模板...")
             self._write_merged_translations(
-                def_new, output_dir, output_language, "DefInjected"
+                def_new, output_dir, output_language, DEFINJECTED_DIR
             )
 
         # 保存新增的CSV文件
