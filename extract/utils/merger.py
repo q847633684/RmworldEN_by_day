@@ -20,9 +20,6 @@ RimWorld 智能翻译合并器
 
 主要方法：
 - smart_merge_translations(): 静态方法，执行智能合并
-- create_for_definjected(): 为 DefInjected 数据创建专用合并器
-- create_for_keyed(): 为 Keyed 数据创建专用合并器
-- get_quality_report(): 生成数据质量报告
 
 特性：
 - 支持 DefInjected 和 Keyed 两种数据类型
@@ -35,6 +32,7 @@ from typing import List, Tuple, Any, Dict, Set
 import datetime
 import html
 import re
+import time
 from utils.logging_config import get_logger, log_data_processing, log_performance
 
 
@@ -73,7 +71,7 @@ class SmartMerger:
     def __init__(self, input_data: List[tuple], output_data: List[tuple]) -> None:
         """
         初始化时：
-        - 自动补齐为五元组 (key, test, tag, rel_path, en_test)
+        - 自动补齐为五元组 (key, text, tag, rel_path, en_text)
         - 创建输入和输出数据的映射表
         """
         self.logger = get_logger(f"{__name__}.SmartMerger")
@@ -108,18 +106,16 @@ class SmartMerger:
             raise ValueError(f"元组长度至少为4，实际长度: {len(item)}")
 
         if len(item) == 4:
-            # 四元组补齐为五元组：(key, test, tag, rel_path) -> (key, test, tag, rel_path, test)
-            return (item[0], item[1], item[2], item[3], item[1])
+            # 四元组补齐为五元组：(key, text, tag, rel_path) -> (key, text, tag, rel_path, text)
+            return (*item[:4], item[1])
         elif len(item) == 5:
-            # 五元组直接返回：(key, test, tag, rel_path, en_test)
-            return (item[0], item[1], item[2], item[3], item[4])
-        elif len(item) == 6:
-            # 六元组取前5个元素：(key, test, tag, rel_path, en_test, def_type) -> (key, test, tag, rel_path, en_test)
-            return (item[0], item[1], item[2], item[3], item[4])
+            # 五元组直接返回：(key, text, tag, rel_path, en_text)
+            return item[:5]
         else:
-            # 长度超过6的元组，只取前5个元素
-            self.logger.warning("元组长度超过6，截取前5个元素: %s", item)
-            return (item[0], item[1], item[2], item[3], item[4])
+            # 六元组或更长：只取前5个元素
+            if len(item) > 6:
+                self.logger.warning("元组长度超过6，截取前5个元素: %s", item)
+            return item[:5]
 
     @staticmethod
     def _normalize_html_entities(text: str) -> str:
@@ -158,23 +154,6 @@ class SmartMerger:
 
         return normalized
 
-    def merge(
-        self, include_unchanged: bool = False
-    ) -> List[Tuple[str, Any, Any, Any, Any, str]]:
-        """
-        执行智能合并操作
-
-        Args:
-            include_unchanged: 是否包含未变化的项目
-
-        Returns:
-            六元组列表：(key, test, tag, rel_path, en_test, history)
-        """
-        merged, _ = SmartMerger.smart_merge_translations(
-            self.input_data, self.output_data, include_unchanged
-        )
-        return merged
-
     @staticmethod
     def smart_merge_translations(
         input_data: list,
@@ -185,18 +164,16 @@ class SmartMerger:
     ) -> list:
         """
         通用智能合并方法，支持 DefInjected 和 Keyed。
-        - 输入、输出均为五元组(key, test, tag, rel_path, en_test)
-        - 返回六元组(key, test, tag, rel_path, en_test, history)
+        - 输入、输出均为五元组(key, text, tag, rel_path, en_text)
+        - 返回六元组(key, text, tag, rel_path, en_text, history)
 
         Args:
             input_data: 输入数据列表
             output_data: 输出数据列表
             include_unchanged: 是否包含未变化的项目
-            merge_strategy: 合并策略 ("input_priority", "output_priority")
-            preserve_metadata: 是否保留输出数据的元数据（tag, rel_path）
+            merge_strategy: 合并策略，("input_priority", "output_priority")，预留；当前调用方固定传 output_priority
+            preserve_metadata: 是否保留输出数据的元数据（tag, rel_path），预留；当前固定 True
         """
-        import time
-
         start_time = time.time()
         logger = get_logger(f"{__name__}.smart_merge_translations")
 
@@ -262,20 +239,13 @@ class SmartMerger:
                     is_duplicate_extra = len(items_in_file) > 1 and idx > 0
                     if is_duplicate_extra:
                         # 同一 Def 类型内重复 key：第二个及以后标「重复key，需删除」
-                        if preserve_metadata and merge_strategy == "output_priority":
-                            tag, rel_path = out_item[2], out_item[3]
-                        else:
-                            tag, rel_path = (in_item[2], in_item[3]) if in_item else (out_item[2], out_item[3])
-                        merged.append(
-                            (
-                                key,
-                                out_item[1],
-                                tag,
-                                rel_path,
-                                "",
-                                "重复key，需删除",
-                            )
+                        # use_out 时用 output 的 tag/rel_path；否则用 input 的（预留，merge_strategy=input_priority 时）
+                        _meta = (
+                            (out_item[2], out_item[3])
+                            if preserve_metadata and merge_strategy == "output_priority"
+                            else (in_item[2], in_item[3]) if in_item else (out_item[2], out_item[3])
                         )
+                        merged.append((key, out_item[1], *_meta, "", "重复key，需删除"))
                         continue
                     if in_item:
                         processed_input_keys.add((key, scope) if has_def_type else key)
@@ -289,38 +259,36 @@ class SmartMerger:
                                 )
                         else:
                             updated_count += 1
-                            if preserve_metadata and merge_strategy == "output_priority":
-                                tag, rel_path = out_item[2], out_item[3]
-                            else:
-                                tag, rel_path = in_item[2], in_item[3]
+                            # True=用 output 的 tag/rel_path；False=用 input 的（预留）
+                            use_out_meta = (
+                                preserve_metadata and merge_strategy == "output_priority"
+                            )
                             old_en = (out_item[4] or "").strip()
                             old_zh = (out_item[1] or "").strip()
                             no_original_en = not old_en or old_en == old_zh
-                            orig_en_display = (
-                                f"'{out_item[4]}'" if not no_original_en else "'无'"
-                            )
                             if no_original_en:
                                 # 输出无英文或英文同中文：保留现有译文，更新 en_text 为新英文
                                 merged.append(
                                     (
                                         key,
                                         out_item[1],
-                                        tag,
-                                        rel_path,
+                                        out_item[2] if use_out_meta else in_item[2],
+                                        out_item[3] if use_out_meta else in_item[3],
                                         in_item[1],
-                                        f"原中文: '{out_item[1]}', 原英文: {orig_en_display} -> 新英文: '{in_item[1]}',更新于{today}",
+                                        f"原中文: '{out_item[1]}', 无原英文；新英文: '{in_item[1]}', 更新于{today}",
                                     )
                                 )
                             else:
-                                # 英文源有更新：保留现有译文 out_item[1]，仅更新 en_text 为 in_item[1]（不把英文写入 text）
+                                # 英文源有更新：旧译文已不对应新英文，用新英文占位待重翻，history 保留原译文供参考
+                                orig_en_display = f"'{out_item[4]}'"
                                 merged.append(
                                     (
                                         key,
-                                        out_item[1],
-                                        tag,
-                                        rel_path,
                                         in_item[1],
-                                        f"原中文: '{out_item[1]}', 原英文: {orig_en_display} -> 新英文: '{in_item[1]}',更新于{today}",
+                                        out_item[2] if use_out_meta else in_item[2],
+                                        out_item[3] if use_out_meta else in_item[3],
+                                        in_item[1],
+                                        f"英文源已更新，待重新翻译；原译文: '{out_item[1]}', 原英文: {orig_en_display} -> 新英文: '{in_item[1]}', 更新于{today}",
                                     )
                                 )
                     else:
@@ -377,25 +345,19 @@ class SmartMerger:
 
         for key, out_items in output_map.items():
             field = key.split(".")[-1].strip() if "." in key else key.strip()
-            field_lower = field.lower() if field else ""
-            if field_lower in _translation_fields:
-                history_outdated = "过时key，需删除"
-            else:
-                history_outdated = "未识别字段，谨慎删除"
+            field_lower = (field or "").lower()
+            history_outdated = (
+                "过时key，需删除"
+                if field_lower in _translation_fields
+                else "未识别字段，谨慎删除"
+            )
             for out_item in out_items:
                 scope = _scope_from_rel_path(out_item[3])
                 if _get_in_item(key, scope) is not None:
                     continue  # 该 (key, scope) 在输入中有，已在上方合并过
                 outdated_count += 1
                 merged.append(
-                    (
-                        key,
-                        out_item[1],
-                        out_item[2],
-                        out_item[3],
-                        "",
-                        history_outdated,
-                    )
+                    (key, out_item[1], out_item[2], out_item[3], "", history_outdated)
                 )
 
         # 生成详细统计信息
@@ -474,71 +436,3 @@ class SmartMerger:
         logger.info("  合并策略: %s", stats.get("merge_strategy", "unknown"))
         logger.info("  保留元数据: %s", stats.get("preserve_metadata", False))
 
-    @classmethod
-    def create_for_definjected(
-        cls, input_data: list, output_data: list
-    ) -> "SmartMerger":
-        """
-        为DefInjected数据创建专门的合并器
-
-        Args:
-            input_data: 输入数据（通常是提取的翻译）
-            output_data: 输出数据（通常是现有的翻译）
-
-        Returns:
-            SmartMerger实例
-        """
-        return cls(input_data, output_data)
-
-    def get_quality_report(self) -> Dict[str, Any]:
-        """
-        生成数据质量报告
-
-        Returns:
-            包含质量指标的字典
-        """
-        report = {
-            "input_stats": self._analyze_data_quality(self.input_data, "输入数据"),
-            "output_stats": self._analyze_data_quality(self.output_data, "输出数据"),
-            "key_overlap": len(
-                set(self.input_map.keys()) & set(self.output_map.keys())
-            ),
-            "input_only_keys": len(
-                set(self.input_map.keys()) - set(self.output_map.keys())
-            ),
-            "output_only_keys": len(
-                set(self.output_map.keys()) - set(self.input_map.keys())
-            ),
-        }
-        return report
-
-    def _analyze_data_quality(self, data: list, _data_name: str) -> Dict[str, Any]:
-        """分析数据质量"""
-        if not data:
-            return {"count": 0, "empty_keys": 0, "empty_translations": 0}
-
-        empty_keys = sum(1 for item in data if not item[0].strip())
-        empty_translations = sum(1 for item in data if not item[1].strip())
-
-        return {
-            "count": len(data),
-            "empty_keys": empty_keys,
-            "empty_translations": empty_translations,
-            "quality_score": (
-                (len(data) - empty_keys - empty_translations) / len(data) if data else 0
-            ),
-        }
-
-    @classmethod
-    def create_for_keyed(cls, input_data: list, output_data: list) -> "SmartMerger":
-        """
-        为Keyed数据创建专门的合并器
-
-        Args:
-            input_data: 输入数据（通常是提取的翻译）
-            output_data: 输出数据（通常是现有的翻译）
-
-        Returns:
-            SmartMerger实例
-        """
-        return cls(input_data, output_data)

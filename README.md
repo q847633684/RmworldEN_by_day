@@ -194,8 +194,7 @@ day_translation/
 - 配备进度条显示
 
 **DefInjectedExporter**: 导出DefInjected格式的翻译文件
-- `export_with_original_structure()`: 按原始文件路径结构导出（DefInjected 数据来源时）
-- `export_with_defs_structure()`: 按 Def 类型分组导出，子文件夹名与游戏 Def 类型名一致（Defs 数据来源时）
+- `export_translations()`: 按 rel_path 统一导出，调用方保证 item[3] 为目标路径（defs_by_type 时 manager 将 def_type 转为 def_type/def_type.xml）
 - 所有方法都配备进度条显示
 
 ### 6. utils/ui_style.py - UI样式和进度条

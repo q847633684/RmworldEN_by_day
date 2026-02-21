@@ -401,6 +401,12 @@ class TemplateManager:
             ui.print_warning("无数据")
             return [], ""
 
+        # defs_by_type 时：将 def_translations 的 rel_path 转为 def_type/def_type.xml，确保 CSV 与导出的 XML 路径一致，导入时能正确匹配
+        if template_structure == "defs_by_type":
+            def_translations = self._convert_def_translations_to_defs_by_type_rel_path(
+                def_translations
+            )
+
         # 步骤2：根据用户选择的输出模式生成翻译模板
         self._generate_templates_to_output_dir_with_structure(
             output_dir=output_dir,
@@ -477,12 +483,15 @@ class TemplateManager:
             data_source=data_source_choice,
             template_structure=template_structure,
         )
+        ts = template_structure or "original_structure"
+        if ts == "defs_by_type":
+            all_def = self._convert_def_translations_to_defs_by_type_rel_path(all_def)
         self._generate_templates_to_output_dir_with_structure(
             output_dir=output_dir,
             output_language=output_language,
             keyed_translations=all_keyed,
             def_translations=all_def,
-            template_structure=template_structure or "original_structure",
+            template_structure=ts,
             has_input_keyed=has_input_keyed,
         )
         csv_path = self._save_translations_to_csv(
@@ -560,15 +569,20 @@ class TemplateManager:
         )
 
         # 步骤3：智能合并翻译数据（include_unchanged=False，不变项不进入 merged，故 CSV 也不会包含）
+        # 合并策略与元数据由调用方决定：保留现有翻译目录的 tag/rel_path，写回时路径正确
         keyed_translations, keyed_stats = SmartMerger.smart_merge_translations(
             input_data=input_keyed,
             output_data=output_keyed,
             include_unchanged=False,
+            merge_strategy="output_priority",
+            preserve_metadata=True,
         )
         def_translations, def_stats = SmartMerger.smart_merge_translations(
             input_data=input_def,
             output_data=output_def,
             include_unchanged=False,
+            merge_strategy="output_priority",
+            preserve_metadata=True,
         )
         # 写入合并结果（仅更新、新增、过时等，不含「不变」）
         if keyed_translations:
@@ -742,34 +756,39 @@ class TemplateManager:
             if use_compact_format:
                 ui.print_info(f"     ；生成DefInjected {len(def_translations)} 条")
 
+    def _convert_def_translations_to_defs_by_type_rel_path(
+        self, def_translations: List[Tuple]
+    ) -> List[Tuple]:
+        """将 Defs 6 元组的 rel_path 转为 def_type/def_type.xml，供 defs_by_type 导出与 CSV 使用"""
+        converted = []
+        for item in def_translations:
+            if len(item) >= 6:
+                def_type = item[5]
+                rel_path = f"{def_type}/{def_type}.xml"
+                converted.append((item[0], item[1], item[2], rel_path, item[4]))
+            else:
+                converted.append(item[:5] if len(item) >= 5 else item)
+        return converted
+
     def _generate_definjected_with_structure(
         self,
-        def_translations: List[Tuple[str, str, str, str]],
+        def_translations: List[Tuple],
         output_dir: str,
         output_language: str,
         template_structure: str,
         prefix: Optional[str] = None,
     ):
-        """根据智能配置的结构选择生成DefInjected模板"""
-        if template_structure == "original_structure":
-            self.definjected_exporter.export_with_original_structure(
-                output_dir, output_language, def_translations, prefix=prefix
+        """根据智能配置的结构选择生成DefInjected模板，统一按 rel_path 导出"""
+        # defs_by_type 时：6 元组需转为 5 元组，rel_path = def_type/def_type.xml
+        if template_structure == "defs_by_type":
+            def_translations = self._convert_def_translations_to_defs_by_type_rel_path(
+                def_translations
             )
-            self.logger.debug(
-                "生成 %s 条 DefInjected 模板（保持原结构）", len(def_translations)
-            )
-        elif template_structure == "defs_by_type":
-            self.definjected_exporter.export_with_defs_structure(
-                output_dir, output_language, def_translations, prefix=prefix
-            )
-            self.logger.debug(
-                "生成 %s 条 DefInjected 模板（按DefType分组）", len(def_translations)
-            )
-        else:
-            self.definjected_exporter.export_with_original_structure(
-                output_dir, output_language, def_translations, prefix=prefix
-            )
-            self.logger.debug("生成 %s 条 DefInjected 模板", len(def_translations))
+        # 其他情况（original_structure / merge_logic）：rel_path 已在 item[3]
+        self.definjected_exporter.export_translations(
+            output_dir, output_language, def_translations, prefix=prefix
+        )
+        self.logger.debug("生成 %s 条 DefInjected 模板", len(def_translations))
 
     def _write_merged_translations(
         self,

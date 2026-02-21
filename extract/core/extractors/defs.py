@@ -7,6 +7,7 @@ Defs 扫描器
 from typing import List, Tuple, Dict, Optional
 from pathlib import Path
 from utils.logging_config import get_logger
+from utils.path_utils import rel_path_str
 from utils.ui_style import ui
 from utils.xml_utils import local_tag
 from .base import BaseExtractor
@@ -124,10 +125,14 @@ class DefsScanner(BaseExtractor):
                 len(abstract_nodes),
             )
 
+            # rel_path 为该 xml 相对 Defs 目录的路径；def_type 在六元组第 6 项，合并时用 (key, def_type) 匹配
+            file_rel_path = rel_path_str(_defs_dir, xml_file)
+
             for def_node in def_nodes:
                 # 去掉 XML 命名空间，保证输出目录为 HediffDef 而非 {uri}HediffDef
                 tag_local = local_tag(def_node.tag)
                 # DefInjected 子文件夹须与 RimWorld Def 类型一致：有 Class 属性时用 Class 最后一段（如 OpinionDef_SexPart），无则用标签名（如 BackstoryDef）
+                # 155-169 内层循环用到的 def_type 即为此「class 的 def」类型名
                 class_attr = (def_node.get("Class") or "").strip()
                 def_type = class_attr.split(".")[-1] if class_attr else tag_local
                 defname_elem = def_node.find("defName")
@@ -160,8 +165,7 @@ class DefsScanner(BaseExtractor):
                     full_path = f"{def_type}/{def_name}.{clean_path}"
                     # 去除DefType/前缀，只保留defName.field
                     key = full_path.split("/", 1)[-1] if "/" in full_path else full_path
-                    # rel_path 用 DefInjected 路径格式（Def类型/Def类型.xml），合并写回时直接可用 in_item[3]
-                    rel_path = f"{def_type}/{def_type}.xml"
+                    rel_path = file_rel_path
                     # 导出六元组：(key, text, tag, rel_path, en_text, def_type)
                     translations.append((key, text, tag, rel_path, text, def_type))
 

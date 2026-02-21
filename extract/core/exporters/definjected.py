@@ -42,18 +42,17 @@ class DefInjectedExporter(BaseExporter):
         导出 DefInjected 翻译数据（实现抽象方法）
 
         Args:
-            translations: 翻译数据列表
+            translations: 翻译数据列表，每条 (key, text, tag, rel_path, en_text...) ，rel_path 为目标 xml 相对 DefInjected 目录的路径
             output_dir: 输出目录
             language: 语言代码
 
         Returns:
             bool: 是否成功
         """
-        # 使用原始结构导出
-        self.export_with_original_structure(output_dir, language, translations)
+        self.export_translations(output_dir, language, translations)
         return True
 
-    def export_with_original_structure(
+    def export_translations(
         self,
         output_dir: str,
         output_language: str,
@@ -62,103 +61,42 @@ class DefInjectedExporter(BaseExporter):
         prefix: Optional[str] = None,
     ) -> None:
         """
-        按原始文件路径结构导出 DefInjected 翻译。
+        按 rel_path 导出 DefInjected 翻译。
+
+        调用方保证每条 item[3] 为目标 xml 相对 DefInjected 目录的路径
+        （合并逻辑或上游已处理好 rel_path，导出器只负责按路径分组写入）。
 
         Args:
             output_dir: 输出目录
             output_language: 输出语言
-            def_translations: DefInjected 翻译数据
+            def_translations: DefInjected 翻译数据，(key, text, tag, rel_path, en_text) 或更长
             xml_format: 可选，nested / flat_with_li / flat_all，默认从配置读取
             prefix: 进度条前缀，默认 "生成DefInjected"
         """
-        self.logger.info("按原始文件路径结构导出 DefInjected 翻译")
+        self.logger.info("导出 DefInjected 翻译（按 rel_path）")
 
         def_injected_path = self._create_output_directory(
             output_dir, output_language, "definjected"
         )
 
-        # 按 file_path 分组，保留 en_text 用于导出注释
-        file_groups = {}
+        # 按 rel_path 分组，保留 en_text 用于导出注释
+        file_groups: dict = {}
         for item in def_translations:
-            key, text, tag, file_path = item[:4]
+            key, text, tag, rel_path = item[:4]
             en_text = item[4] if len(item) >= 5 else text
-            if file_path not in file_groups:
-                file_groups[file_path] = []
-            file_groups[file_path].append((key, text, tag, en_text))
+            file_groups.setdefault(rel_path, []).append((key, text, tag, en_text))
 
-        # 使用进度条进行导出
-        for _, (file_path, translations) in ui.iter_with_progress(
+        for _, (rel_path, translations) in ui.iter_with_progress(
             file_groups.items(),
             prefix=prefix or "生成DefInjected",
             description="",
         ):
-
-            output_file = def_injected_path / file_path
+            output_file = def_injected_path / rel_path
             output_file.parent.mkdir(parents=True, exist_ok=True)
-
             fmt = xml_format or self._get_definjected_xml_format()
             root = self._build_languagedata(translations, fmt)
-
-            success = self._save_xml_file(root, str(output_file))
-            if success:
-                self._log_export_stats(
-                    str(output_file), len(translations), "DefInjected"
-                )
-
-    def export_with_defs_structure(
-        self,
-        output_dir: str,
-        output_language: str,
-        def_translations: List[Tuple],
-        xml_format: Optional[str] = None,
-        prefix: Optional[str] = None,
-    ) -> None:
-        """
-        按 Def 类型分组导出 DefInjected 翻译。
-
-        子文件夹名 = Def 类型名（StatDef、BookDef、ThoughtDef 等），符合 RimWorld 要求：
-        「DefInjected 下子文件夹名必须与游戏/模组注册的 Def 类型名完全一致」，
-        可避免 "dir XXX 不对应任何 def 类型" 报错。
-
-        Args:
-            xml_format: 可选，nested / flat_with_li / flat_all
-            prefix: 进度条前缀，默认 "生成DefInjected"
-        """
-        self.logger.info("按 DefType 分组导出 DefInjected 翻译")
-
-        def_injected_path = self._create_output_directory(
-            output_dir, output_language, "definjected"
-        )
-
-        # 按 DefType 分组，保留 en_text 用于导出注释
-        file_groups = {}
-        for item in def_translations:
-            key, text, tag, _, en_text, def_type = item[:6]
-            if def_type not in file_groups:
-                file_groups[def_type] = []
-            file_groups[def_type].append((key, text, tag, en_text))
-
-        # 使用进度条进行导出
-        for _, (def_type, translations) in ui.iter_with_progress(
-            file_groups.items(),
-            prefix=prefix or "生成DefInjected",
-            description="",
-        ):
-
-            # 创建对应的目录结构
-            type_dir = def_injected_path / def_type
-            type_dir.mkdir(parents=True, exist_ok=True)
-
-            output_file = type_dir / f"{def_type}.xml"
-
-            fmt = xml_format or self._get_definjected_xml_format()
-            root = self._build_languagedata(translations, fmt)
-
-            success = self._save_xml_file(root, str(output_file))
-            if success:
-                self._log_export_stats(
-                    str(output_file), len(translations), "DefInjected"
-                )
+            if self._save_xml_file(root, str(output_file)):
+                self._log_export_stats(str(output_file), len(translations), "DefInjected")
 
     def _get_or_create_child(
         self, parent: Any, tag: str, text: Optional[str] = None

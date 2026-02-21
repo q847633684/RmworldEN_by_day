@@ -188,7 +188,7 @@ def _load_translations_from_csv(
     definjected_by_file: Dict[str, Dict[str, str]] = {}
 
     try:
-            with open_csv_reader(csv_path) as f:
+        with open_csv_reader(csv_path) as f:
             reader = csv.DictReader(f)
             has_file_col = reader.fieldnames and "file" in reader.fieldnames
             for row in reader:
@@ -637,6 +637,7 @@ def migrate_translations_to_new(
     new_base_dir: str,
     language: str,
     only_fill_empty: bool = True,
+    use_scope_mapping: bool = True,
 ) -> int:
     """
     从多个旧翻译目录收集所有 key→译文，合并后按 key 一一对应写入新模板；无需移动文件。
@@ -649,6 +650,8 @@ def migrate_translations_to_new(
         new_base_dir: 新模组/模板根目录、语言目录、或 Keyed/DefInjected 文件夹
         language: 语言代码
         only_fill_empty: 为 True 时仅填充新文件中空项，不覆盖已有翻译
+        use_scope_mapping: 为 True 时按 LoadFolders 路径(scope)映射旧→新；为 False 时
+            扁平合并所有旧翻译，直接按 key 写入每个新目录（旧翻译收集不到或路径结构不同时使用）
 
     Returns:
         更新的文件数量
@@ -661,8 +664,9 @@ def migrate_translations_to_new(
     )
     total_keyed = sum(len(m) for m in keyed_by_path.values())
     total_def = sum(len(f) for sc in definjected_by_path_file.values() for f in sc.values())
+    scope_count = len(set(keyed_by_path) | set(definjected_by_path_file))
     ui.print_info(
-        f"从 {len(old_base_dirs)} 个旧目录按路径收集到 Keyed {total_keyed} 条、DefInjected {total_def} 条（{len(set(keyed_by_path) | set(definjected_by_path_file))} 个 path scope）。"
+        f"从 {len(old_base_dirs)} 个旧目录收集到 Keyed {total_keyed} 条、DefInjected {total_def} 条（{scope_count} 个 path scope）。"
     )
     if total_keyed == 0 and total_def == 0:
         logger.warning("未从旧目录收集到任何翻译，请确认旧目录下存在 Keyed/DefInjected 且 XML 中含译文")
@@ -682,6 +686,35 @@ def migrate_translations_to_new(
         logger.warning("新模组下未找到语言目录: %s", new_base_dir)
         ui.print_warning(f"新模组下未找到 Languages/{language} 目录: {new_base_dir}")
         return 0
+
+    if use_scope_mapping:
+        return _migrate_with_scope_mapping(
+            keyed_by_path,
+            definjected_by_path_file,
+            new_base_dir,
+            new_lang_dirs_with_scope,
+            language,
+            only_fill_empty,
+        )
+    return _migrate_without_scope_mapping(
+        keyed_by_path,
+        definjected_by_path_file,
+        new_base_dir,
+        new_lang_dirs_with_scope,
+        language,
+        only_fill_empty,
+    )
+
+
+def _migrate_with_scope_mapping(
+    keyed_by_path: Dict[str, Dict[str, str]],
+    definjected_by_path_file: Dict[str, Dict[str, Dict[str, str]]],
+    new_base_dir: str,
+    new_lang_dirs_with_scope: List[Tuple[str, str]],
+    language: str,
+    only_fill_empty: bool,
+) -> int:
+    """使用 path scope 映射的迁移：旧 scope 与 1.5→1.6 等新 scope 匹配后写入。"""
     old_scopes = list(set(keyed_by_path) | set(definjected_by_path_file))
     new_scopes = [s for _, s in new_lang_dirs_with_scope]
     old_ver, new_ver = _infer_path_versions(old_scopes, new_scopes)
@@ -725,6 +758,51 @@ def migrate_translations_to_new(
                 only_fill_empty=only_fill_empty,
                 language_dir_override=new_lang_dir,
                 translations_by_file=definjected_by_file,
+            )
+    return updated
+
+
+def _migrate_without_scope_mapping(
+    keyed_by_path: Dict[str, Dict[str, str]],
+    definjected_by_path_file: Dict[str, Dict[str, Dict[str, str]]],
+    new_base_dir: str,
+    new_lang_dirs_with_scope: List[Tuple[str, str]],
+    language: str,
+    only_fill_empty: bool,
+) -> int:
+    """不使用 scope 映射的迁移：扁平合并所有旧翻译，直接按 key 写入每个新目录。"""
+    keyed_flat: Dict[str, str] = {}
+    for m in keyed_by_path.values():
+        keyed_flat.update(m)
+    definjected_flat: Dict[str, str] = {}
+    for sc in definjected_by_path_file.values():
+        for f_map in sc.values():
+            definjected_flat.update(f_map)
+    ui.print_info(
+        f"扁平模式：合并后 Keyed {len(keyed_flat)} 条、DefInjected {len(definjected_flat)} 条，写入 {len(new_lang_dirs_with_scope)} 个语言目录"
+    )
+    updated = 0
+    for new_lang_dir, _ in new_lang_dirs_with_scope:
+        if keyed_flat:
+            updated += _update_xml_in_subdir(
+                new_base_dir,
+                language,
+                "keyed",
+                keyed_flat,
+                merge=True,
+                only_fill_empty=only_fill_empty,
+                language_dir_override=new_lang_dir,
+            )
+        if definjected_flat:
+            updated += _update_xml_in_subdir(
+                new_base_dir,
+                language,
+                "definjected",
+                definjected_flat,
+                merge=True,
+                only_fill_empty=only_fill_empty,
+                language_dir_override=new_lang_dir,
+                translations_by_file=None,
             )
     return updated
 

@@ -117,6 +117,11 @@ def handle_migrate_translations():
             "是否仅填充空项、不覆盖？选 y 仅填充空项；直接回车则用旧翻译覆盖（推荐）"
         )
 
+        # y = 扁平模式（不按路径映射，旧翻译收集不到时推荐）；回车 = 路径映射模式（旧新结构相似如 1.5→1.6）
+        use_scope_mapping = not confirm_action(
+            "是否使用扁平模式（不按路径映射）？y=扁平模式；回车=路径映射"
+        )
+
         if not confirm_action("确认开始迁移？"):
             ui.print_warning("已取消迁移")
             return
@@ -127,6 +132,7 @@ def handle_migrate_translations():
             new_base_dir=new_dir,
             language=language,
             only_fill_empty=only_fill_empty,
+            use_scope_mapping=use_scope_mapping,
         )
         if updated > 0:
             ui.print_success(f"迁移完成，共更新 {updated} 个文件。")
