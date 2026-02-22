@@ -3,6 +3,7 @@
 """
 
 import csv
+import re
 from utils.constants import CSV_TRANSLATION_HEADER
 from utils.csv_utils import open_csv_reader
 from utils.logging_config import get_logger
@@ -557,11 +558,13 @@ def _collect_old_translations_by_path(
     Dict[str, Dict[str, Dict[str, str]]],
 ]:
     """
-    按 path scope 收集旧翻译，避免不同 LoadFolders 路径的同 key 互相覆盖。
+    按 path scope 收集旧翻译。
+    Keyed: scope 为 Languages 父路径（LoadFolders）。
+    DefInjected: scope 为 Def 类型文件夹名，如 DesignationCategoryDef、ThingDefs。
 
     Returns:
         keyed_by_path: scope -> {key -> value}
-        definjected_by_path_file: scope -> (file_rel -> {key -> value})
+        definjected_by_path_file: def_scope -> (file_rel -> {key -> value})
     """
     keyed_by_path: Dict[str, Dict[str, str]] = {}
     definjected_by_path_file: Dict[str, Dict[str, Dict[str, str]]] = {}
@@ -574,7 +577,6 @@ def _collect_old_translations_by_path(
         old_base_dir = old_base_dir.strip() if isinstance(old_base_dir, str) else ""
         if not old_base_dir:
             continue
-        base = Path(old_base_dir).resolve()
         lang_dirs_with_scope = _find_all_language_dirs_with_scope(old_base_dir, language)
         if not lang_dirs_with_scope:
             for subdir_type in ["keyed", "definjected"]:
@@ -595,6 +597,8 @@ def _collect_old_translations_by_path(
                 for xml_file in xml_files:
                     try:
                         file_rel = str(xml_file.relative_to(subdir)).replace("\\", "/")
+                        # DefInjected: scope = Def 类型文件夹，如 DesignationCategoryDef
+                        def_scope = file_rel.split("/")[0] if "/" in file_rel else ""
                         tree = processor.parse_xml(str(xml_file))
                         if tree is None:
                             continue
@@ -617,11 +621,11 @@ def _collect_old_translations_by_path(
                                 continue
                             if use_def_key:
                                 k = key_to_dot_notation(key)
-                                if scope_norm not in definjected_by_path_file:
-                                    definjected_by_path_file[scope_norm] = {}
-                                if file_rel not in definjected_by_path_file[scope_norm]:
-                                    definjected_by_path_file[scope_norm][file_rel] = {}
-                                definjected_by_path_file[scope_norm][file_rel][k] = text
+                                if def_scope not in definjected_by_path_file:
+                                    definjected_by_path_file[def_scope] = {}
+                                if file_rel not in definjected_by_path_file[def_scope]:
+                                    definjected_by_path_file[def_scope][file_rel] = {}
+                                definjected_by_path_file[def_scope][file_rel][k] = text
                             else:
                                 if scope_norm not in keyed_by_path:
                                     keyed_by_path[scope_norm] = {}
@@ -664,9 +668,11 @@ def migrate_translations_to_new(
     )
     total_keyed = sum(len(m) for m in keyed_by_path.values())
     total_def = sum(len(f) for sc in definjected_by_path_file.values() for f in sc.values())
-    scope_count = len(set(keyed_by_path) | set(definjected_by_path_file))
+    keyed_scopes = len(keyed_by_path)
+    def_types = list(definjected_by_path_file)
     ui.print_info(
-        f"从 {len(old_base_dirs)} 个旧目录收集到 Keyed {total_keyed} 条、DefInjected {total_def} 条（{scope_count} 个 path scope）。"
+        f"从 {len(old_base_dirs)} 个旧目录收集到 Keyed {total_keyed} 条（{keyed_scopes} 个 path scope）、"
+        f"DefInjected {total_def} 条（Def 类型: {', '.join(def_types) or '无'}）。"
     )
     if total_keyed == 0 and total_def == 0:
         logger.warning("未从旧目录收集到任何翻译，请确认旧目录下存在 Keyed/DefInjected 且 XML 中含译文")
@@ -714,41 +720,48 @@ def _migrate_with_scope_mapping(
     language: str,
     only_fill_empty: bool,
 ) -> int:
-    """使用 path scope 映射的迁移：旧 scope 与 1.5→1.6 等新 scope 匹配后写入。"""
-    old_scopes = list(set(keyed_by_path) | set(definjected_by_path_file))
+    """
+    使用 path scope 映射的迁移。
+    Keyed: 按 LoadFolders 路径（1.5→1.6）匹配后写入。
+    DefInjected: 按 Def 类型（DesignationCategoryDef 等）匹配，合并所有 def 类型后写入每个语言目录。
+    """
+    old_keyed_scopes = list(keyed_by_path)
     new_scopes = [s for _, s in new_lang_dirs_with_scope]
-    old_ver, new_ver = _infer_path_versions(old_scopes, new_scopes)
-    logger.info("路径版本映射: 旧 %s -> 新 %s", old_ver, new_ver)
+    old_ver, new_ver = _infer_path_versions(old_keyed_scopes, new_scopes)
+    logger.info("Keyed 路径版本映射: 旧 %s -> 新 %s", old_ver, new_ver)
+    def_types = list(definjected_by_path_file)
     ui.print_info(
-        f"找到 {len(new_lang_dirs_with_scope)} 个语言目录，按 LoadFolders 路径映射（{old_ver}→{new_ver}）更新"
+        f"找到 {len(new_lang_dirs_with_scope)} 个语言目录；Keyed 按路径映射（{old_ver}→{new_ver}）；"
+        f"DefInjected 按 Def 类型（{', '.join(def_types) or '无'}）"
     )
+    # DefInjected: 合并为 key→value，只按 key 匹配，不按文件路径
+    definjected_flat = {
+        k: v
+        for _def_scope, file_map in definjected_by_path_file.items()
+        for f in file_map.values()
+        for k, v in f.items()
+    }
     updated = 0
     for new_lang_dir, new_scope in new_lang_dirs_with_scope:
         new_scope_norm = (new_scope or "").replace("\\", "/")
         matched_old_scope = None
-        for old_scope in old_scopes:
+        for old_scope in old_keyed_scopes:
             if _map_old_scope_to_new(old_scope, new_scope_norm, old_ver, new_ver):
                 matched_old_scope = old_scope
                 break
-        if matched_old_scope is None:
-            logger.debug("未找到匹配的旧 path scope: new=%s", new_scope_norm)
-            continue
-        keyed_map = keyed_by_path.get(matched_old_scope, {})
-        definjected_by_file = definjected_by_path_file.get(matched_old_scope, {})
-        if not keyed_map and not definjected_by_file:
-            continue
-        if keyed_map:
-            updated += _update_xml_in_subdir(
-                new_base_dir,
-                language,
-                "keyed",
-                keyed_map,
-                merge=True,
-                only_fill_empty=only_fill_empty,
-                language_dir_override=new_lang_dir,
-            )
-        if definjected_by_file:
-            definjected_flat = {k: v for f in definjected_by_file.values() for k, v in f.items()}
+        if matched_old_scope is not None:
+            keyed_map = keyed_by_path.get(matched_old_scope, {})
+            if keyed_map:
+                updated += _update_xml_in_subdir(
+                    new_base_dir,
+                    language,
+                    "keyed",
+                    keyed_map,
+                    merge=True,
+                    only_fill_empty=only_fill_empty,
+                    language_dir_override=new_lang_dir,
+                )
+        if definjected_flat:
             updated += _update_xml_in_subdir(
                 new_base_dir,
                 language,
@@ -757,7 +770,7 @@ def _migrate_with_scope_mapping(
                 merge=True,
                 only_fill_empty=only_fill_empty,
                 language_dir_override=new_lang_dir,
-                translations_by_file=definjected_by_file,
+                translations_by_file=None,
             )
     return updated
 
@@ -1032,34 +1045,56 @@ def update_translations(
         key = get_key(elem)
         if not key:
             continue
-        # 精确匹配
-        value = translations.get(key)
+        # 精确匹配，查找时统一用点号形式（与 collect 时 key_to_dot_notation 一致）
+        key_norm = key_to_dot_notation(key)
+        value = translations.get(key_norm) or translations.get(key)
         # DefInjected 迁移：支持旧 flat_all / flat_with_li / nested 与任意新格式互导
         if value is None and generate_key_func is not None:
             tag = getattr(elem, "tag", None)
             tag_local = _definjected_tag_local(tag) if isinstance(tag, str) else ""
             # 1) 新模板是 <li> 时：旧 flat_all 可能为 .0、.1，用前缀匹配
             if tag_local == "li":
-                prefix = key + "."
+                prefix = key_norm + "."
                 candidates = [k for k in translations if k.startswith(prefix)]
                 if len(candidates) == 1:
                     value = translations[candidates[0]]
                 elif len(candidates) > 1:
                     value = translations.get(prefix + "RMBLabel") or translations.get(candidates[0])
             # 2) 按后缀匹配：旧翻译 key 可能带不同前缀（如不同 Def 文件夹结构），用路径后缀唯一匹配
-            if value is None and "." in key:
-                suffix = key.split(".", 1)[-1]
+            # 注意：多个候选时必须匹配 def 前缀，否则会误用其他 key（如 Hygiene.label）覆盖 SaunaRoom.label
+            if value is None and "." in key_norm:
+                suffix = key_norm.split(".", 1)[-1]
                 candidates = [k for k in translations if k == suffix or k.endswith("." + suffix)]
                 if len(candidates) == 1:
                     value = translations[candidates[0]]
                 elif len(candidates) > 1:
-                    def_name = key.split(".")[0]
+                    def_name = key_norm.split(".")[0]
                     for c in candidates:
                         if c.startswith(def_name + "."):
                             value = translations[c]
                             break
-                    if value is None:
-                        value = translations.get(candidates[0])
+                    # 无匹配 def 时不再用 candidates[0]，避免误覆盖
+            # 3) stages 匹配：新模板 stages.0/stages.1 与旧 stages.moderate/stages.severe 等互导
+            if value is None and generate_key_func is not None:
+                m = re.match(r"^([^.]+\.stages)\.(\d+)(\..+)$", key_norm)
+                if m:
+                    prefix, idx_str, suffix = m.group(1), m.group(2), m.group(3)
+                    idx = int(idx_str)
+                    pattern = re.escape(prefix) + r"\.[^.]+" + re.escape(suffix)
+                    raw = [k for k in translations if re.match(pattern + r"$", k)]
+                    # 按常见严重程度排序，使 0=最轻 对应 moderate/minor 等
+                    _STAGE_ORDER = (
+                        "trivial", "minor", "moderate", "major", "severe", "extreme",
+                        "need_the_bathroom", "bursting", "cold_water", "cold_shower", "cold_bath",
+                    )
+                    def _stage_sort_key(k):
+                        parts = k[len(prefix) + 1 :].split(".")  # 取 stages.xxx 的 xxx
+                        name = parts[0] if parts else ""
+                        base = name.split("-")[0]  # extreme-0 -> extreme
+                        return (_STAGE_ORDER.index(base) if base in _STAGE_ORDER else 999, name)
+                    candidates = sorted(raw, key=_stage_sort_key)
+                    if idx < len(candidates):
+                        value = translations[candidates[idx]]
         if value is not None:
             value = normalize_xml_entities_in_text(value)
             current = normalize_xml_entities_in_text((elem.text or "").strip())
@@ -1080,7 +1115,7 @@ def update_translations(
         if include_attributes:
             for attr_name, attr_value in elem.attrib.items():
                 if isinstance(attr_value, str) and attr_value.strip():
-                    attr_key = f"{get_key(elem)}.{attr_name}"
+                    attr_key = f"{key_norm}.{attr_name}"
                     if attr_key not in translations:
                         continue
                     current_attr = normalize_xml_entities_in_text((attr_value or "").strip())

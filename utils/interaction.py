@@ -100,6 +100,9 @@ def show_main_menu() -> str:
     ui.print_menu_item(
         "9", "迁移旧翻译到新模板", "将旧翻译目录中已有翻译填到新目录（可仅填充空项）", ui.Icons.IMPORT, compact=True
     )
+    ui.print_menu_item(
+        "10", "修补翻译", "扫描文件夹中的翻译 XML，修复 Google 错误（如 Error 500）并重新翻译", ui.Icons.TRANSLATE, compact=True
+    )
 
     # 退出选项
     ui.print_section_header("退出程序", ui.Icons.EXIT)
@@ -107,7 +110,7 @@ def show_main_menu() -> str:
 
     ui.print_separator()
 
-    result = safe_input(ui.get_input_prompt("请选择模式", options="1-9, q"), "q")
+    result = safe_input(ui.get_input_prompt("请选择模式", options="1-10, q"), "q")
     return result if result is not None else "q"
 
 
