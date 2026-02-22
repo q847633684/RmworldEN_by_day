@@ -16,20 +16,6 @@ except ImportError:
     LXML_AVAILABLE = False
     logger.warning("lxml 未安装，将使用 ElementTree")
 
-from user_config import UserConfigManager
-
-# 延迟初始化配置，避免循环导入
-CONFIG = None
-
-
-def _get_config():
-    """获取配置 - 使用新配置系统"""
-    global CONFIG
-    if CONFIG is None:
-        CONFIG = UserConfigManager.get_instance()
-    return CONFIG
-
-
 @dataclass
 class XMLProcessorConfig:
     """XML 处理器配置"""

@@ -1,16 +1,21 @@
 """
-智能交互管理器
+提取专用交互管理器（extract.workflow.interaction）
 
-实现用户友好的四步智能工作流程，自动检测和分析模组状态，提供智能化的决策建议
+与 utils.interaction（主菜单、通用交互）区分。实现提取流程的四步智能工作流，
+自动检测模组状态、提供智能决策建议。
 """
 
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, Any, Optional, Union
+from utils.constants import (
+    PATH_HISTORY_OUTPUT_DIR,
+    SUBDIR_TYPE_DEFINJECTED,
+    SUBDIR_TYPE_KEYED,
+)
 from utils.ui_style import ui
 from utils.logging_config import get_logger, log_user_action
-from user_config.path_manager import PathManager
 from user_config import UserConfigManager
 
 
@@ -23,7 +28,8 @@ class InteractionManager:
 
     def __init__(self):
         """初始化交互管理器"""
-        self.path_manager = PathManager()
+        self.config = UserConfigManager.get_instance()
+        self.path_manager = self.config.path_manager
         self.logger = get_logger(f"{__name__}.InteractionManager")
         self.logger.debug("初始化InteractionManager")
 
@@ -75,11 +81,8 @@ class InteractionManager:
             self._print_separator("智能提取", "=", 40)
 
         # 获取配置中的语言设置
-        config = UserConfigManager.get_instance()
-        en_language = config.language_config.get_value("en_language", "English")
-        cn_language = config.language_config.get_value(
-            "cn_language", "ChineseSimplified"
-        )
+        en_language = self.config.language_config.get_value("en_language", "English")
+        cn_language = self.config.language_config.get_default_cn_language()
 
         # 第一步：检测当前内容根下的英文目录状态（Keyed/DefInjected 与 Defs 同逻辑）
         if not batch_mode:
@@ -240,14 +243,13 @@ class InteractionManager:
         Returns:
             Dict[str, Union[bool, str]]: 目录状态
         """
-        config = UserConfigManager.get_instance()
-        language_dir = config.language_config.get_language_dir(mod_dir, language)
+        language_dir = self.config.language_config.get_language_dir(mod_dir, language)
 
-        def_dir = config.language_config.get_language_subdir(
-            mod_dir, language, "definjected"
+        def_dir = self.config.language_config.get_language_subdir(
+            mod_dir, language, SUBDIR_TYPE_DEFINJECTED
         )
-        keyed_dir = config.language_config.get_language_subdir(
-            mod_dir, language, "keyed"
+        keyed_dir = self.config.language_config.get_language_subdir(
+            mod_dir, language, SUBDIR_TYPE_KEYED
         )
         has_definjected = def_dir.exists() and any(def_dir.rglob("*.xml"))
         # 目录存在即视为有 Keyed，不强制要求 *.xml（避免漏检如 rjw-brothel-colony）
@@ -285,19 +287,19 @@ class InteractionManager:
         Returns:
             (str, str): 输出目录路径和语言名（自定义目录时 language 为空字符串）
         """
-        path_manager = PathManager()
+        path_manager = self.path_manager
         default_dir = str(Path(mod_dir))
-        history = path_manager.get_history_list("output_dir")
+        history = path_manager.get_history_list(PATH_HISTORY_OUTPUT_DIR)
 
         # 批量提取时使用指定输出目录
         if fixed_output_dir is not None:
-            path_manager.remember_path("output_dir", str(fixed_output_dir))
+            path_manager.remember_path(PATH_HISTORY_OUTPUT_DIR, str(fixed_output_dir))
             return str(fixed_output_dir), language
 
         # 如果跳过用户选择，直接使用模组根目录
         if skip_user_selection:
             ui.print_info(f"✓ 输出: {default_dir}")
-            path_manager.remember_path("output_dir", str(default_dir))
+            path_manager.remember_path(PATH_HISTORY_OUTPUT_DIR, str(default_dir))
             return str(default_dir), language
 
         # 输出目录选择（步骤 2 已打印步骤头，此处仅选项）
@@ -333,17 +335,17 @@ class InteractionManager:
 
             if choice == "1":
                 ui.print_success(f"✓ 输出: {default_dir}")
-                path_manager.remember_path("output_dir", str(default_dir))
+                path_manager.remember_path(PATH_HISTORY_OUTPUT_DIR, str(default_dir))
                 return str(default_dir), language
             elif choice.isdigit() and 2 <= int(choice) <= max_choice:
                 selected_path = history[int(choice) - 2]
                 ui.print_success(f"✓ 输出: {selected_path}")
-                path_manager.remember_path("output_dir", selected_path)
+                path_manager.remember_path(PATH_HISTORY_OUTPUT_DIR, selected_path)
                 return selected_path, language
             elif choice:
                 if os.path.isdir(choice) or not os.path.exists(choice):
                     ui.print_success(f"✓ 输出: {choice}")
-                    path_manager.remember_path("output_dir", choice)
+                    path_manager.remember_path(PATH_HISTORY_OUTPUT_DIR, choice)
                     # 用户自定义目录，language 置空
                     return choice, language
                 else:

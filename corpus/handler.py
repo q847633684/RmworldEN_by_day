@@ -9,11 +9,8 @@ from utils.interaction import (
     select_mod_path_with_version_detection,
 )
 from utils.ui_style import ui
-from user_config.path_manager import PathManager
 from user_config import UserConfigManager
 from .parallel_corpus import generate_parallel_corpus
-
-path_manager = PathManager()
 
 
 def select_corpus_mode(project_type: str = None):

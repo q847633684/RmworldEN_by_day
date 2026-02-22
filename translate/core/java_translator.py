@@ -9,6 +9,7 @@ import signal
 import threading
 import shutil
 import csv
+from utils.csv_utils import open_csv_reader
 from utils.logging_config import get_logger
 from utils.ui_style import ui
 from .resume_base import ResumeBase
@@ -31,7 +32,7 @@ def update_progress(current: int, total: int, status: str = ""):
 def count_csv_lines(csv_path: str) -> int:
     """统计CSV文件行数（不包括标题行）"""
     try:
-        with open(csv_path, "r", encoding="utf-8") as f:
+        with open_csv_reader(csv_path) as f:
             reader = csv.reader(f)
             lines = list(reader)
             # 减去标题行，只统计数据行
@@ -386,11 +387,9 @@ class JavaTranslator(ResumeBase):
 
         # 从新配置系统获取必要的参数
         try:
-            from user_config import UserConfigManager
+            from translate.api_utils import get_primary_api
 
-            config_manager = UserConfigManager.get_instance()
-            api_manager = config_manager.api_manager
-            primary_api = api_manager.get_primary_api()
+            primary_api = get_primary_api()
 
             if primary_api and primary_api.is_enabled():
                 # 根据API类型构建配置

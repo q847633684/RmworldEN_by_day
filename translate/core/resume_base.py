@@ -6,6 +6,7 @@
 import csv
 import os
 from typing import Optional
+from utils.csv_utils import open_csv_reader
 from utils.logging_config import get_logger
 
 
@@ -90,7 +91,7 @@ class ResumeBase:
             int: 数据行数
         """
         try:
-            with open(csv_file, "r", encoding="utf-8") as f:
+            with open_csv_reader(csv_file) as f:
                 reader = csv.reader(f)
                 lines = list(reader)
                 return len(lines) - 1  # 减去标题行
@@ -112,7 +113,7 @@ class ResumeBase:
             if not os.path.exists(output_file):
                 return 0
 
-            with open(output_file, "r", encoding="utf-8") as f:
+            with open_csv_reader(output_file) as f:
                 reader = csv.DictReader(f)
                 rows = list(reader)
                 return len(rows)

@@ -8,6 +8,7 @@ import time
 from typing import List, Dict
 from pathlib import Path
 from tqdm import tqdm
+from utils.csv_utils import open_csv_reader, open_csv_writer
 from utils.logging_config import get_logger
 from utils.ui_style import ui
 from .resume_base import ResumeBase
@@ -128,7 +129,7 @@ class GoogleTranslator(ResumeBase):
 
         try:
             # 读取CSV文件
-            with open(input_path, "r", encoding="utf-8") as infile:
+            with open_csv_reader(input_path) as infile:
                 reader = csv.DictReader(infile)
                 fieldnames = reader.fieldnames
 
@@ -144,7 +145,7 @@ class GoogleTranslator(ResumeBase):
                 return True
 
             # 写入翻译结果
-            with open(output_path, "w", encoding="utf-8", newline="") as outfile:
+            with open_csv_writer(output_path) as outfile:
                 writer = csv.DictWriter(outfile, fieldnames=fieldnames)
                 writer.writeheader()
 

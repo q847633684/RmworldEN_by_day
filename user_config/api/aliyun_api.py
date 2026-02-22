@@ -138,23 +138,6 @@ class AliyunAPIConfig(BaseAPIConfig):
                 return False, "配置验证失败，请检查AccessKey格式"
 
             # TODO: 实际调用阿里云API进行测试
-            # 这里应该发送真实的API请求来测试连接
-            # 示例代码：
-            # try:
-            #     from aliyunsdkcore.client import AcsClient
-            #     from aliyunsdkalimt.request.v20181012 import TranslateGeneralRequest
-            #
-            #     client = AcsClient(access_key_id, access_key_secret, self.get_value("region", "cn-hangzhou"))
-            #     request = TranslateGeneralRequest.TranslateGeneralRequest()
-            #     request.set_SourceText("test")
-            #     request.set_SourceLanguage("en")
-            #     request.set_TargetLanguage("zh")
-            #     response = client.do_action_with_exception(request)
-            #     return True, "连接测试成功"
-            # except Exception as e:
-            #     return False, f"API调用失败: {str(e)}"
-
-            # 暂时返回验证结果（实际项目中应该发送真实API请求）
             self.logger.info("阿里云API连接测试通过（基于配置验证）")
             return True, "连接测试成功（注意：这是基于配置验证，未实际调用API）"
 

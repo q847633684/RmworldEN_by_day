@@ -6,6 +6,7 @@
 
 from pathlib import Path
 from typing import Tuple
+from utils.constants import SUBDIR_TYPE_DEFINJECTED, SUBDIR_TYPE_KEYED
 from utils.logging_config import get_logger
 from utils.ui_style import ui
 from utils.utils import XMLProcessor
@@ -79,7 +80,7 @@ def cleanup_mod_outdated_keys(
     """
     config = UserConfigManager.get_instance()
     if language is None:
-        language = config.language_config.get_value("cn_language", "ChineseSimplified")
+        language = config.language_config.get_default_cn_language()
     lang_dir = config.language_config.get_language_dir(mod_dir, language)
     if not lang_dir.exists():
         logger.warning("语言目录不存在: %s", lang_dir)
@@ -89,7 +90,7 @@ def cleanup_mod_outdated_keys(
     total_deleted = 0
     files_modified = 0
 
-    for subdir_name in ("definjected", "keyed"):
+    for subdir_name in (SUBDIR_TYPE_DEFINJECTED, SUBDIR_TYPE_KEYED):
         subdir = config.language_config.get_language_subdir(mod_dir, language, subdir_name)
         if not subdir.exists():
             continue
@@ -119,7 +120,7 @@ def handle_cleanup_outdated_keys():
         return
     mod_dir = result if isinstance(result, str) else result[0]
     config = UserConfigManager.get_instance()
-    language = config.language_config.get_value("cn_language", "ChineseSimplified")
+    language = config.language_config.get_default_cn_language()
 
     if not confirm_action(f"确认清理模组内 {language} 的过时/重复 key？"):
         ui.print_warning("已取消")

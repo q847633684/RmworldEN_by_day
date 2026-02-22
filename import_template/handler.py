@@ -44,7 +44,7 @@ def handle_import_template(
             ui.print_info(f"使用提供的CSV路径: {csv_path}")
 
         config = UserConfigManager.get_instance()
-        language = config.language_config.get_value("cn_language", "ChineseSimplified")
+        language = config.language_config.get_default_cn_language()
         # 导入目标目录：未提供时由 CSV 所在目录推导；若 CSV 在 Languages/<语言> 下则用其上级模组根
         if not mod_dir:
             csv_parent = Path(csv_path).resolve().parent
@@ -89,7 +89,7 @@ def handle_migrate_translations():
     logger = get_logger(f"{__name__}.handle_migrate_translations")
     try:
         config = UserConfigManager.get_instance()
-        language = config.language_config.get_value("cn_language", "ChineseSimplified")
+        language = config.language_config.get_default_cn_language()
         ui.print_info("将从旧翻译目录收集所有 Keyed/DefInjected 的 key→译文，合并后按 key 一一对应写入新目录。")
         ui.print_info("支持多个旧目录：用分号 ; 分隔，将合并收集（同 key 后者覆盖），无需移动文件。")
         ui.print_info("旧/新目录可为模组根（含 Languages）、语言目录、或直接 Keyed/DefInjected 文件夹。")

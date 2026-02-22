@@ -40,7 +40,9 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 # 统一导入项目内部模块（避免分散导入导致的分组问题）
-from batch.handler import handle_batch, handle_batch_full_pipeline, handle_batch_vanilla_extract
+from batch.handler import handle_batch
+from extract.batch_extract import handle_batch_vanilla_extract
+from full_pipeline.handler import handle_batch_full_pipeline
 from corpus.handler import handle_corpus
 from extract import handle_extract
 from full_pipeline.handler import handle_full_pipeline
@@ -85,12 +87,12 @@ def handle_config_manage():
 
 def main():
     """主程序入口"""
+    from user_config import UserConfigManager
+
+    config_manager = UserConfigManager.get_instance()
 
     # 根据配置决定是否在启动时清理日志
     try:
-        from user_config import UserConfigManager
-
-        config_manager = UserConfigManager.get_instance()
         log_config = config_manager.log_config
 
         if log_config.get_value("auto_cleanup_logs", True):
@@ -153,6 +155,8 @@ def main():
                     handle_cleanup_outdated_keys()
                 elif sub == "5":
                     handle_corpus()
+                elif sub == "6":
+                    handle_batch()
                 elif sub != "b":
                     ui.print_warning("无效选项")
                 if sub != "b":
@@ -179,8 +183,7 @@ def main():
         except Exception as e:
             ui.print_error(f"❌ 发生未预期的错误: {str(e)}")
             try:
-                from user_config import UserConfigManager
-                if UserConfigManager.get_instance().system_config.get_value("debug_mode", False):
+                if config_manager.system_config.get_value("debug_mode", False):
                     import traceback
                     traceback.print_exc()
             except Exception:

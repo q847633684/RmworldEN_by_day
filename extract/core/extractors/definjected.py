@@ -7,6 +7,7 @@ DefInjected 提取器
 
 from typing import List, Optional, Tuple
 from pathlib import Path
+from utils.constants import SUBDIR_TYPE_DEFINJECTED
 from utils.logging_config import get_logger
 from utils.path_utils import rel_path_str
 from utils.ui_style import ui
@@ -53,7 +54,7 @@ class DefInjectedExtractor(BaseExtractor):
             return []
 
         definjected_dir = self.config.language_config.get_language_subdir(
-            source_path, language, "definjected"
+            source_path, language, SUBDIR_TYPE_DEFINJECTED
         )
         if not definjected_dir.exists():
             self.logger.warning("DefInjected 目录不存在: %s", definjected_dir)

@@ -6,6 +6,7 @@ Keyed 导出器
 
 from typing import Dict, List, Optional, Tuple
 from pathlib import Path
+from utils.constants import SUBDIR_TYPE_KEYED
 from utils.logging_config import get_logger
 from utils.ui_style import ui
 from .base import BaseExporter
@@ -60,7 +61,7 @@ class KeyedExporter(BaseExporter):
         """
         self.logger.info("导出 Keyed 翻译模板")
 
-        keyed_path = self._create_output_directory(output_dir, output_language, "keyed")
+        keyed_path = self._create_output_directory(output_dir, output_language, SUBDIR_TYPE_KEYED)
 
         # 按 file_path 分组翻译数据
         file_groups = self._group_by_file_path(def_translations)

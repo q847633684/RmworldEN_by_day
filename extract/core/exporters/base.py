@@ -63,8 +63,7 @@ class BaseExporter(ABC):
             Path: 创建的输出目录路径
         """
         # 使用新配置系统获取语言子目录
-        config_manager = UserConfigManager.get_instance()
-        output_path = config_manager.language_config.get_language_subdir(
+        output_path = self.config.language_config.get_language_subdir(
             output_dir, language, subdir_type
         )
 

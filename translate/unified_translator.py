@@ -46,11 +46,9 @@ class UnifiedTranslator:
             dict: 配置字典
         """
         try:
-            from user_config import UserConfigManager
+            from translate.api_utils import get_primary_api
 
-            config_manager = UserConfigManager.get_instance()
-            api_manager = config_manager.api_manager
-            primary_api = api_manager.get_primary_api()
+            primary_api = get_primary_api()
 
             if primary_api and primary_api.api_type == "aliyun":
                 return {

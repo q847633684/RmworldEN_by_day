@@ -38,59 +38,34 @@
 
 ## 🏗️ 项目架构
 
-```
-day_translation/
-├── main.py                      # 主入口
-├── core/                        # 核心业务逻辑层
-│   ├── translation_facade.py    # 翻译门面 - 统一接口
-│   ├── exceptions.py            # 异常定义
-│   ├── API_CALLS.md             # API接口文档
-│   └── QUICK_REFERENCE.md       # 快速参考
-├── extract/                     # 提取模块
-│   ├── core/                    # 核心提取组件
-│   │   ├── extractors/          # 提取器
-│   │   │   ├── base.py          # 基础提取器
-│   │   │   ├── keyed.py         # Keyed提取器
-│   │   │   ├── definjected.py   # DefInjected提取器
-│   │   │   └── defs.py          # Defs扫描器
-│   │   ├── exporters/           # 导出器
-│   │   │   ├── base.py          # 基础导出器
-│   │   │   ├── keyed.py         # Keyed导出器
-│   │   │   └── definjected.py   # DefInjected导出器
-│   │   └── filters/             # 内容过滤器
-│   │       ├── content_filter.py    # 内容过滤器
-│   │       └── text_validator.py    # 文本验证器
-│   ├── workflow/                # 工作流程管理
-│   │   ├── manager.py           # 模板管理器 - 核心控制器
-│   │   ├── handler.py           # 处理器 - 主要业务流程
-│   │   └── interaction.py       # 交互管理器
-│   ├── utils/                   # 提取工具
-│   │   └── merger.py            # 智能合并器
-│   └── docs/                    # 文档
-│       └── merge_flow.md        # 合并流程文档
-├── import_template/             # 导入模块
-│   ├── importers.py             # 导入器 - CSV到XML转换
-│   └── handler.py               # 导入处理器
-├── translate/                   # 翻译模块
-│   ├── core/                    # 翻译核心
-│   │   ├── placeholders.py          # 占位符保护系统
-│   │   ├── java_translator.py       # Java翻译器
-│   │   ├── python_translator.py     # Python翻译器
-│   │   ├── google_translator.py     # 谷歌翻译器
-│   │   └── resume_base.py           # 翻译恢复基类
-│   ├── unified_translator.py    # 统一翻译器
-│   ├── translator_factory.py   # 翻译器工厂
-│   ├── handler.py               # 翻译处理器
-│   └── MIGRATION_GUIDE.md       # 迁移指南
-├── batch/                       # 批量处理模块
-│   ├── batch_processor.py       # 批量处理器
-│   └── handler.py               # 批量处理处理器
-├── full_pipeline/               # 完整流程模块
-│   └── handler.py               # 完整流程处理器
-├── corpus/                      # 语料库模块
-│   ├── parallel_corpus.py       # 平行语料库
-│   └── handler.py               # 语料库处理器
+> 详细架构整理方案见 [docs/ARCHITECTURE_REORGANIZATION.md](docs/ARCHITECTURE_REORGANIZATION.md)
 
+```
+Day_zh/
+├── main.py                      # 主入口
+├── extract/                     # 提取模块
+│   ├── batch_extract.py         # 批量提取（Vanilla 前缀模组）
+│   ├── core/                    # 核心提取组件
+│   │   ├── extractors/          # 提取器（base, keyed, definjected, defs）
+│   │   ├── exporters/           # 导出器
+│   │   └── filters/             # 内容过滤器
+│   ├── utils/merger.py          # 智能合并器
+│   └── workflow/                # 工作流程（manager, handler, interaction）
+├── translate/                   # 翻译模块
+│   ├── core/                    # 占位符、各翻译器、resume_base
+│   ├── unified_translator.py    # 统一翻译器
+│   ├── translator_factory.py    # 翻译器工厂
+│   └── handler.py               # 翻译处理器
+├── import_template/             # 导入模块
+│   ├── importers.py             # CSV 到 XML 导入
+│   └── handler.py               # 导入处理器
+├── full_pipeline/               # 完整流程（单次 + 批量）
+│   └── handler.py               # 提取→翻译→导入→汇总
+├── batch/                       # 批量工具（导入、汇总）
+│   ├── handler.py               # 批量导入、汇总到根、handle_batch 子菜单
+│   └── batch_processor.py       # 批量处理器
+├── corpus/                      # 语料生成
+│   └── handler.py               # 英中平行语料
 ├── user_config/                 # 用户配置系统
 │   ├── core/                    # 配置核心
 │   │   ├── user_config.py       # 用户配置管理器
@@ -112,12 +87,14 @@ day_translation/
 │       ├── main_config_ui.py    # 主配置界面
 │       └── api_config_ui.py     # API配置界面
 ├── utils/                       # 工具模块
-│   ├── config.py                # 配置管理
-│   ├── utils.py                 # 工具函数和XMLProcessor
-│   ├── ui_style.py              # UI样式和进度条
-│   ├── interaction.py           # 交互工具
-│   ├── logging_config.py        # 日志配置
-│   └── path_manager.py          # 路径管理
+│   ├── constants.py             # 常量（TOTAL_CSV_NAME 等）
+│   ├── load_folders.py          # LoadFolders 版本检测（解耦 user_config↔extract）
+│   ├── utils.py                 # XMLProcessor、sanitize_xml
+│   ├── ui_style.py              # UI 样式和进度条
+│   ├── interaction.py           # 主菜单、通用交互
+│   ├── csv_utils.py             # CSV 读写
+│   ├── path_utils.py            # 路径工具
+│   └── logging_config.py        # 日志配置
 ├── logs/                        # 日志目录
 ├── requirements.txt             # 依赖包
 ├── pyproject.toml              # 项目配置
@@ -356,13 +333,12 @@ main()
 
 ### 主要功能模式
 
-- **模式1**: 生成模板和CSV - 提取翻译数据并生成模板
-- **模式2**: 统一翻译 - 执行占位符保护和机器翻译
-- **模式3**: 导入翻译 - 将翻译结果导入到模板
-- **模式4**: 批量处理 - 批量处理多个模组
-- **模式5**: 语料库生成 - 生成英中平行语料
-- **模式6**: 完整流程 - 一键完成整个翻译流程
-- **模式7**: 配置管理 - 管理API和系统配置
+- **1 完整流程** - 单次/批量：提取→翻译→导入→汇总
+- **2 提取模板** - 单次/批量提取翻译模板
+- **3 智能翻译** - 自动选择最佳翻译器
+- **4 导入模板** - 将 CSV 导入模板
+- **5 工具** - 迁移、恢复占位符、修补、清理、语料、批量操作
+- **6 配置管理** - 管理 API 和系统配置
 
 ### 占位符保护示例
 

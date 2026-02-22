@@ -44,7 +44,7 @@ def import_translations(
         bool: 导入是否成功
     """
     if language is None:
-        language = _get_config().language_config.get_value("cn_language", "ChineseSimplified")
+        language = _get_config().language_config.get_default_cn_language()
     logger.info("开始导入翻译到模板: %s", csv_path)
     try:
         # 步骤1：解析所有模板目录（含 mod 根下 Languages/<语言> 与子路径如 Common/Languages/<语言>）

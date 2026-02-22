@@ -31,8 +31,18 @@ TOTAL_CSV_NAME: str = "total_translations.csv"
 # RimWorld 模组目录/文件名（与配置默认值一致，写死处可引用）
 KEYED_DIR: str = "Keyed"
 DEFINJECTED_DIR: str = "DefInjected"
+
+# get_language_subdir 的 subdir_type 参数值（小写，与 user_config subdir_map 对应）
+SUBDIR_TYPE_KEYED: str = "keyed"
+SUBDIR_TYPE_DEFINJECTED: str = "definjected"
 DEFS_DIR: str = "Defs"
 LOAD_FOLDERS_FILENAME: str = "LoadFolders.xml"
+
+# PathManager 历史记录键（与 user_config path_history 对应）
+PATH_HISTORY_IMPORT_CSV: str = "import_csv"
+PATH_HISTORY_MOD_DIR: str = "mod_dir"
+PATH_HISTORY_OUTPUT_DIR: str = "output_dir"
+PATH_HISTORY_REPAIR_FOLDER: str = "repair_folder"
 
 # Steam Workshop 模组路径（RimWorld AppID 294100）
 STEAM_WORKSHOP_PATHS: List[str] = [

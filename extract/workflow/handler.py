@@ -27,13 +27,12 @@ from utils.path_utils import (
     rel_path_str,
 )
 from extract.utils.merger import dedupe_translations_by_key
+from utils.load_folders import get_load_folders_versions, get_version_dirs_from_fs
 from .manager import (
     TemplateManager,
     find_content_roots,
     generate_load_folders_xml,
     get_content_roots_from_load_folders,
-    get_load_folders_versions,
-    get_version_dirs_from_fs,
 )
 from .interaction import InteractionManager
 

@@ -5,8 +5,13 @@
 
 import os
 from typing import Optional, List
-from user_config.path_manager import PathManager
-from .constants import get_common_mod_paths, get_steam_workshop_paths
+from user_config import UserConfigManager
+from .constants import (
+    PATH_HISTORY_IMPORT_CSV,
+    PATH_HISTORY_MOD_DIR,
+    get_common_mod_paths,
+    get_steam_workshop_paths,
+)
 from .ui_style import (
     ui,
     display_mods_with_adaptive_width,
@@ -14,8 +19,9 @@ from .ui_style import (
     UIStyle,
 )
 
-# 全局路径管理器实例
-path_manager = PathManager()
+def _get_path_manager():
+    """获取 PathManager，统一从 UserConfigManager 获取"""
+    return UserConfigManager.get_instance().path_manager
 
 
 def prompt_choose_from_list(
@@ -82,7 +88,7 @@ def show_main_menu() -> str:
         "4", "导入模板", "将翻译后的 CSV 导入模板（自动识别批量/单次）", ui.Icons.IMPORT, compact=True
     )
     ui.print_menu_item(
-        "5", "工具", "迁移、恢复占位符、修补、清理、语料生成", ui.Icons.TOOLS, compact=True
+        "5", "工具", "迁移、恢复占位符、修补、清理、语料、批量操作", ui.Icons.TOOLS, compact=True
     )
     ui.print_menu_item("6", "配置管理", "管理翻译配置", ui.Icons.SETTINGS, compact=True)
 
@@ -126,16 +132,17 @@ def show_extract_submenu() -> Optional[str]:
 
 
 def show_tools_submenu() -> Optional[str]:
-    """工具子菜单，返回 1-5 / b"""
+    """工具子菜单，返回 1-6 / b"""
     ui.print_header("工具")
     ui.print_menu_item("1", "迁移旧翻译到新翻译", "将旧翻译目录填到新目录（可仅填充空项）", ui.Icons.IMPORT, compact=True)
     ui.print_menu_item("2", "恢复占位符", "恢复 CSV 中 (PH_1) 等占位符为原始文本", ui.Icons.TRANSLATE, compact=True)
     ui.print_menu_item("3", "修补翻译", "修复 Google 错误（如 Error 500）并重新翻译", ui.Icons.TRANSLATE, compact=True)
     ui.print_menu_item("4", "清理过时/重复 key", "删除带「过时key」或「重复key」标记的条目", ui.Icons.SETTINGS, compact=True)
     ui.print_menu_item("5", "语料生成", "生成英-中平行语料", ui.Icons.CORPUS, compact=True)
+    ui.print_menu_item("6", "批量操作", "批量导入、汇总到根目录", ui.Icons.BATCH, compact=True)
     ui.print_menu_item("b", "返回主菜单", "", ui.Icons.BACK, compact=True)
     ui.print_separator()
-    result = safe_input(ui.get_input_prompt("请选择", options="1-5 / b"), "b")
+    result = safe_input(ui.get_input_prompt("请选择", options="1-6 / b"), "b")
     return (result or "b").strip().lower()
 
 
@@ -144,7 +151,7 @@ def select_csv_path_with_history() -> Optional[str]:
     ui.print_info("请输入要翻译的 CSV 文件路径:")
 
     # 显示CSV文件历史记录
-    csv_history = path_manager.get_history_list("import_csv")
+    csv_history = _get_path_manager().get_history_list(PATH_HISTORY_IMPORT_CSV)
     if csv_history:
         ui.print_section_header("CSV文件历史记录", ui.Icons.HISTORY)
         for i, path in enumerate(csv_history, 1):
@@ -195,7 +202,7 @@ def select_csv_path_with_history() -> Optional[str]:
             continue
 
         # 记住路径
-        path_manager.remember_path("import_csv", csv_path)
+        _get_path_manager().remember_path(PATH_HISTORY_IMPORT_CSV, csv_path)
         ui.print_success(f"选择：{csv_path}")
         return csv_path
 
@@ -223,7 +230,7 @@ def select_mod_path_with_version_detection(
         )
 
     # 显示历史记录
-    history = path_manager.get_history_list("mod_dir")
+    history = _get_path_manager().get_history_list(PATH_HISTORY_MOD_DIR)
     if history:
         ui.print_section_header("历史记录", ui.Icons.HISTORY)
         start_idx = 3 if available_mod_dirs else 2
@@ -266,14 +273,14 @@ def select_mod_path_with_version_detection(
                 selected_path = history[choice_num - start_idx]
                 ui.print_success(f"选择：{selected_path}")
                 # 对历史记录路径也进行版本检测
-                return path_manager.detect_version_and_choose(
+                return _get_path_manager().detect_version_and_choose(
                     selected_path, allow_multidlc
                 )
         elif choice:
             # 直接输入路径 - 用户已经输入了路径，直接使用
             if os.path.exists(choice):
                 # 对直接输入的路径进行版本检测
-                return path_manager.detect_version_and_choose(choice, allow_multidlc)
+                return _get_path_manager().detect_version_and_choose(choice, allow_multidlc)
             else:
                 ui.print_error(f"路径不存在: {choice}")
                 ui.print_info("请重新选择或输入正确的路径")
@@ -310,8 +317,8 @@ def _select_mod_from_list(
         ui.print_success(success_label)
         ui.print_info(f"📁 路径：{selected}")
         ui.print_info(f"📦 模组名称：{_get_mod_display_name(selected)}")
-        path_manager.remember_path("mod_dir", selected)
-        return path_manager.detect_version_and_choose(selected)
+        _get_path_manager().remember_path(PATH_HISTORY_MOD_DIR, selected)
+        return _get_path_manager().detect_version_and_choose(selected)
     return None
 
 

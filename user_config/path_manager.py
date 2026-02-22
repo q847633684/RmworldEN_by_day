@@ -527,7 +527,7 @@ class PathManager:
         让用户选择版本号，返回 (模组根, 版本名) 供调用方复用，避免提取时二次选择。
         版本列表优先从 LoadFolders.xml 读取；无则从模组根下版本号子目录（1.4、1.5、1.6 等）扫描。
         """
-        from extract.workflow.manager import (
+        from utils.load_folders import (
             get_load_folders_versions,
             get_version_dirs_from_fs,
         )
@@ -830,7 +830,7 @@ class PathManager:
         about_dir = os.path.join(mod_dir, "About")
         if os.path.isdir(about_dir):
             # 先以 LoadFolders.xml 判断 versioned；无则用目录下版本号子目录（1.4、1.5、1.6 等）作为回退
-            from extract.workflow.manager import (
+            from utils.load_folders import (
                 get_load_folders_versions,
                 get_version_dirs_from_fs,
             )

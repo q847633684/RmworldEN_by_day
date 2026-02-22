@@ -6,6 +6,7 @@ Keyed 提取器
 
 from typing import List, Optional, Tuple
 from pathlib import Path
+from utils.constants import SUBDIR_TYPE_KEYED
 from utils.logging_config import get_logger
 from utils.path_utils import rel_path_str
 from utils.ui_style import ui
@@ -55,7 +56,7 @@ class KeyedExtractor(BaseExtractor):
             return []
 
         keyed_dir = self.config.language_config.get_language_subdir(
-            source_path, language, "keyed"
+            source_path, language, SUBDIR_TYPE_KEYED
         )
         if not keyed_dir.exists():
             self.logger.warning("Keyed 目录不存在: %s", keyed_dir)

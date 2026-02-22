@@ -12,7 +12,6 @@ import re
 from pathlib import Path
 from typing import List, Tuple
 from user_config import UserConfigManager
-from user_config.path_manager import PathManager
 
 try:
     from colorama import Fore, Style, init as _colorama_init  # type: ignore
@@ -122,7 +121,7 @@ def generate_parallel_corpus(mode: str, mod_dir: str) -> int:
         )
         keyed_dir = config.language_config.get_value("keyed_dir", "Keyed")
 
-        path_manager = PathManager(config)
+        path_manager = config.path_manager
         lang_path = path_manager.get_language_folder_path(mod_dir, cn_language)
         src_lang_path = path_manager.get_language_folder_path(mod_dir, en_language)
 

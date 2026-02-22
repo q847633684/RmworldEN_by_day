@@ -1,4 +1,5 @@
 import csv
+from utils.csv_utils import open_csv_reader, open_csv_writer
 from utils.logging_config import get_logger
 from utils.ui_style import ui
 import os
@@ -161,7 +162,7 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
     try:
         rows: List[Dict[str, str]] = []
 
-        with open(input_path, encoding="utf-8") as f:
+        with open_csv_reader(input_path) as f:
             reader = csv.DictReader(f)
             fieldnames = reader.fieldnames
 
@@ -230,7 +231,7 @@ def translate_csv(input_path: str, output_path: str = None, **kwargs) -> None:
         output_dir = os.path.dirname(output_path) or "."
         os.makedirs(output_dir, exist_ok=True)
 
-        with open(output_path, "w", encoding="utf-8", newline="") as f:
+        with open_csv_writer(output_path) as f:
             if rows:
                 fieldnames = rows[0].keys()
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -267,10 +268,9 @@ class PythonTranslator(ResumeBase):
 
         # 从新配置系统获取必要的参数
         try:
-            from user_config import UserConfigManager
+            from translate.api_utils import get_primary_api
 
-            config_manager = UserConfigManager.get_instance()
-            primary_api = config_manager.get_primary_api()
+            primary_api = get_primary_api()
 
             if primary_api:
                 kwargs = {
@@ -328,7 +328,7 @@ class PythonTranslator(ResumeBase):
 
             # 读取输入文件
             rows: List[Dict[str, str]] = []
-            with open(input_path, encoding="utf-8") as f:
+            with open_csv_reader(input_path) as f:
                 reader = csv.DictReader(f)
                 fieldnames = reader.fieldnames
                 for i, row in enumerate(reader, 1):
@@ -366,7 +366,7 @@ class PythonTranslator(ResumeBase):
             # 读取已有的输出文件内容（如果有的话）
             existing_rows = []
             if os.path.exists(output_path):
-                with open(output_path, encoding="utf-8") as f:
+                with open_csv_reader(output_path) as f:
                     reader = csv.DictReader(f)
                     existing_rows = list(reader)
 
@@ -374,7 +374,7 @@ class PythonTranslator(ResumeBase):
             all_rows = existing_rows + translated_rows
 
             # 写入输出文件
-            with open(output_path, "w", encoding="utf-8", newline="") as f:
+            with open_csv_writer(output_path) as f:
                 if fieldnames:
                     writer = csv.DictWriter(f, fieldnames=fieldnames + ["translated"])
                     writer.writeheader()

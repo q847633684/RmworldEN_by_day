@@ -11,10 +11,10 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Optional, Tuple, Dict
+from utils.csv_utils import open_csv_reader, open_csv_writer
 from utils.logging_config import get_logger
 from tqdm import tqdm
 
-# 翻译配置已迁移到新配置系统
 from .core.java_translator import JavaTranslator
 from .core.python_translator import translate_csv, PythonTranslator
 from .core.placeholders import PlaceholderManager
@@ -391,7 +391,7 @@ class GoogleTranslatorAdapter(ResumeBase):
                 self.logger.error("输入文件不存在: %s", input_csv)
                 return False
 
-            with open(input_path, encoding="utf-8") as f:
+            with open_csv_reader(str(input_path)) as f:
                 reader = csv.DictReader(f)
                 fieldnames = list(reader.fieldnames or [])
                 rows = list(reader)
@@ -407,7 +407,7 @@ class GoogleTranslatorAdapter(ResumeBase):
             if output_path.exists():
                 start_row = self._count_csv_lines(str(output_path))
                 if 0 < start_row < len(rows):
-                    with open(output_path, encoding="utf-8") as f:
+                    with open_csv_reader(str(output_path)) as f:
                         existing = list(csv.DictReader(f))
                     out_rows = existing
                     todo = rows[start_row:]
@@ -485,7 +485,7 @@ class GoogleTranslatorAdapter(ResumeBase):
                                 raw = pm.restore_text(raw, csv_key, placeholder_map)
                             row["translated"] = raw
                             out_rows.append(row)
-                        with open(output_path, "w", encoding="utf-8", newline="") as f:
+                        with open_csv_writer(str(output_path)) as f:
                             w = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
                             w.writeheader()
                             w.writerows(out_rows)

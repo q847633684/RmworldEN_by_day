@@ -4,25 +4,26 @@
 """
 
 import os
+from utils.constants import PATH_HISTORY_REPAIR_FOLDER
 from utils.logging_config import get_logger
 from utils.interaction import safe_input
 from utils.ui_style import ui
-from user_config.path_manager import PathManager
+from user_config import UserConfigManager
 from .repair import scan_and_repair_folder
 
 logger = get_logger(__name__)
-path_manager = PathManager()
 
 
 def handle_repair_translation() -> None:
     """
     修补翻译：扫描用户指定的文件夹，找出 Google 翻译错误，用英文源重新翻译并替换。
     """
+    config = UserConfigManager.get_instance()
     ui.print_header("修补翻译", ui.Icons.TRANSLATE)
     ui.print_info("将扫描指定文件夹中的翻译 XML，检测 Google 错误（如 Error 500）并用英文源重新翻译。")
     ui.print_info("支持 DefInjected 中带 <!--EN: xxx--> 注释的条目。")
 
-    history = path_manager.get_history_list("repair_folder")
+    history = config.path_manager.get_history_list(PATH_HISTORY_REPAIR_FOLDER)
     if history:
         ui.print_section_header("历史记录", ui.Icons.HISTORY)
         for i, p in enumerate(history[:8], 1):
@@ -56,7 +57,7 @@ def handle_repair_translation() -> None:
         ui.print_error(f"目录不存在: {folder}")
         return
 
-    path_manager.remember_path("repair_folder", folder)
+    config.path_manager.remember_path(PATH_HISTORY_REPAIR_FOLDER, folder)
     ui.print_info(f"扫描目录: {folder}")
     try:
         total = scan_and_repair_folder(folder)

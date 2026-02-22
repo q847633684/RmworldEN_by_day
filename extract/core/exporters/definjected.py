@@ -10,6 +10,7 @@ DefInjected 导出器
 
 import re
 from typing import List, Tuple, Any, Optional
+from utils.constants import SUBDIR_TYPE_DEFINJECTED
 from utils.logging_config import get_logger
 from utils.ui_style import ui
 from utils.utils import sanitize_xml
@@ -76,7 +77,7 @@ class DefInjectedExporter(BaseExporter):
         self.logger.info("导出 DefInjected 翻译（按 rel_path）")
 
         def_injected_path = self._create_output_directory(
-            output_dir, output_language, "definjected"
+            output_dir, output_language, SUBDIR_TYPE_DEFINJECTED
         )
 
         # 按 rel_path 分组，保留 en_text 用于导出注释

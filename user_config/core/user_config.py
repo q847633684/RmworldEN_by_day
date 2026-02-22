@@ -314,6 +314,10 @@ class LanguageConfig(BaseConfig):
 
         return True
 
+    def get_default_cn_language(self) -> str:
+        """获取配置的默认中文语言目录名（如 ChineseSimplified）"""
+        return self.get_value("cn_language", "ChineseSimplified")
+
     def get_language_dir(self, base_dir, language: str):
         """获取指定语言的 Languages 目录路径（标准结构：base_dir/Languages/language）"""
         return Path(base_dir) / "Languages" / language
@@ -592,6 +596,14 @@ class UserConfigManager:
         self.load_config()
 
         self.logger.info("用户配置管理器初始化完成")
+
+    @property
+    def path_manager(self):
+        """PathManager 单例，延迟初始化避免循环导入"""
+        if not hasattr(self, "_path_manager") or self._path_manager is None:
+            from ..path_manager import PathManager
+            self._path_manager = PathManager(self)
+        return self._path_manager
 
     def get_config_modules(self) -> Dict[str, BaseConfig]:
         """获取所有配置模块"""

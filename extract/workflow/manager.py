@@ -12,13 +12,13 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from user_config import UserConfigManager
-from user_config.path_manager import PathManager
 from utils.constants import (
     CSV_TRANSLATION_HEADER,
     DEFS_DIR,
     DEFINJECTED_DIR,
     KEYED_DIR,
     LOAD_FOLDERS_FILENAME,
+    PATH_HISTORY_IMPORT_CSV,
 )
 from utils.csv_utils import open_csv_writer
 from utils.logging_config import (get_logger, log_data_processing,
@@ -136,42 +136,6 @@ def _parse_load_folders_from_mod(
     except (ET.ParseError, OSError, IOError):
         pass
     return path_to_attrib, ordered_paths
-
-
-def get_load_folders_versions(mod_dir: str) -> List[str]:
-    """
-    从 LoadFolders.xml 读取所有版本标签（如 <v1.4>、<v1.6>），返回标准化版本名列表 ['1.4', '1.6']。
-    无文件或解析失败返回 []。
-    """
-    xml_path = Path(mod_dir) / LOAD_FOLDERS_FILENAME
-    if not xml_path.is_file():
-        return []
-    try:
-        tree = ET.parse(xml_path)
-        root = tree.getroot()
-        versions = []
-        for child in root:
-            tag = (child.tag or "").strip()
-            if tag.startswith("v") and len(tag) > 1:
-                ver = tag[1:].strip()
-                if re.match(r"^(\d+\.)+\d+$", ver):
-                    versions.append(ver)
-        return sorted(versions)
-    except (ET.ParseError, OSError, IOError):
-        return []
-
-
-def get_version_dirs_from_fs(scan_base: str) -> List[str]:
-    """
-    扫描模组根下符合版本号形式的子目录名（如 1.6、v1.6、1.5），返回按版本降序的列表。
-    用于无 LoadFolders.xml 时根据目录结构选择版本。
-    """
-    from utils.version_utils import is_version_number, parse_version_number
-    base = Path(scan_base)
-    if not base.is_dir():
-        return []
-    found = [p.name for p in base.iterdir() if p.is_dir() and is_version_number(p.name)]
-    return sorted(found, key=parse_version_number, reverse=True)
 
 
 def _path_is_strict_under(path: str, ancestor: str) -> bool:
@@ -1023,7 +987,7 @@ class TemplateManager:
 
         # 记入历史：让提取生成的 CSV 出现在后续"Python机翻/导入翻译"的历史列表
         try:
-            PathManager().remember_path("import_csv", str(csv_path))
+            config_manager.path_manager.remember_path(PATH_HISTORY_IMPORT_CSV, str(csv_path))
         except (OSError, IOError, PermissionError) as e:
             self.logger.warning("无法记录CSV历史路径: %s, 错误: %s", csv_path, e)
 

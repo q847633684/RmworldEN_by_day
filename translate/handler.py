@@ -7,10 +7,11 @@ import os
 import threading
 from pathlib import Path
 from typing import Optional
+from utils.constants import PATH_HISTORY_IMPORT_CSV
 from utils.logging_config import get_logger
 from utils.ui_style import ui
 from utils.interaction import select_csv_path_with_history, confirm_action
-from user_config.path_manager import PathManager
+from user_config import UserConfigManager
 
 # 延迟导入避免循环依赖
 
@@ -72,6 +73,7 @@ def handle_unified_translate(
             ui.print_info("或配置阿里云/Java 翻译。")
             return
 
+        config = UserConfigManager.get_instance()
         # 子选项：仅当未传入 csv_path 时显示
         if csv_path is None:
             ui.print_section_header("操作选择", ui.Icons.SETTINGS)
@@ -148,7 +150,7 @@ def handle_unified_translate(
                     logger.warning("断点续传后占位符恢复失败: %s", e)
                     ui.print_warning("占位符未自动恢复，请使用「仅恢复翻译列占位符」手动恢复")
                 ui.print_success("恢复翻译完成！")
-                PathManager().remember_path("import_csv", resume_file)
+                config.path_manager.remember_path(PATH_HISTORY_IMPORT_CSV, resume_file)
                 _ask_and_import_if_yes(resume_file)
                 return resume_file
             else:
@@ -189,25 +191,16 @@ def handle_unified_translate(
         # 仅在使用 Java/Python 时检查阿里云 API；Google 无需 API
         if actual_translator in ("java", "python"):
             try:
-                from user_config import UserConfigManager
+                from translate.api_utils import get_validated_primary_api
 
-                config_manager = UserConfigManager.get_instance()
-                api_manager = config_manager.api_manager
-                primary_api = api_manager.get_primary_api()
-
-                if not primary_api or not primary_api.is_enabled():
-                    ui.print_error("未找到启用的翻译API配置")
+                primary_api, err = get_validated_primary_api()
+                if err:
+                    ui.print_error(err)
                     ui.print_info("请先配置翻译API：")
                     ui.print_info("1. 运行主程序选择'配置管理'")
                     ui.print_info("2. 选择'API配置'进行设置")
                     ui.print_info("3. 配置并启用至少一个翻译API")
                     return None
-
-                if not primary_api.validate():
-                    ui.print_error(f"{primary_api.name}配置不完整或无效")
-                    ui.print_info("请检查API配置中的必需字段")
-                    return None
-
                 ui.print_info(f"🌐 使用翻译API: {primary_api.name}")
 
             except Exception as e:
@@ -239,7 +232,7 @@ def handle_unified_translate(
             success = translator.translate_csv(csv_path, output_csv, translator_type)
             if success:
                 ui.print_success(f"翻译完成：{output_csv}")
-                PathManager().remember_path("import_csv", output_csv)
+                config.path_manager.remember_path(PATH_HISTORY_IMPORT_CSV, output_csv)
                 if ask_import_after:
                     _ask_and_import_if_yes(output_csv)
                 return output_csv

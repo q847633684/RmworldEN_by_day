@@ -47,6 +47,7 @@ from .core.filters import (
 
 from .utils import SmartMerger
 from .workflow import TemplateManager, InteractionManager, handle_extract
+from .batch_extract import handle_batch_vanilla_extract
 
 
 __all__ = [
@@ -70,4 +71,5 @@ __all__ = [
     "TemplateManager",
     "InteractionManager",
     "handle_extract",
+    "handle_batch_vanilla_extract",
 ]

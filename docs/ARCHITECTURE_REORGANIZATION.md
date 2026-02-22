@@ -1,5 +1,161 @@
 # Day_zh 项目架构整理与优化方案
 
+## 〇、完整文件结构（当前）
+
+```
+Day_zh/
+├── main.py                          # 主入口
+├── __init__.py                      # 包入口
+├── requirements.txt
+├── TODO_TASKS.md
+├── pytest.ini
+├── .pylintrc
+├── README.md
+│
+├── batch/                           # 批量工具（导入、汇总）
+│   ├── __init__.py
+│   ├── handler.py                   # 批量导入、汇总到根、handle_batch 子菜单
+│   └── batch_processor.py
+│
+├── corpus/                          # 语料
+│   ├── __init__.py
+│   ├── handler.py
+│   └── parallel_corpus.py
+│
+├── extract/                         # 提取
+│   ├── __init__.py
+│   ├── cleanup_outdated_keys.py     # 清理过时/重复 key
+│   ├── merge_flow.md
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── extractors/              # DefsScanner, DefInjected, Keyed
+│   │   │   ├── __init__.py
+│   │   │   ├── base.py
+│   │   │   ├── defs.py
+│   │   │   ├── definjected.py
+│   │   │   └── keyed.py
+│   │   ├── exporters/
+│   │   │   ├── __init__.py
+│   │   │   ├── base.py
+│   │   │   ├── definjected.py
+│   │   │   └── keyed.py
+│   │   └── filters/
+│   │       ├── __init__.py
+│   │       ├── content_filter.py
+│   │       └── text_validator.py
+│   ├── utils/
+│   │   ├── __init__.py
+│   │   └── merger.py                # SmartMerger
+│   ├── batch_extract.py             # 批量提取（Vanilla 前缀模组）
+│   └── workflow/
+│       ├── __init__.py
+│       ├── handler.py               # handle_extract
+│       ├── interaction.py           # InteractionManager（提取专用）
+│       ├── manager.py               # TemplateManager
+│       └── rel_path_converter.py
+│
+├── full_pipeline/                   # 完整流程
+│   ├── __init__.py
+│   └── handler.py                   # 单次完整流程、批量完整流程
+│
+├── import_template/                 # 导入
+│   ├── __init__.py
+│   ├── handler.py
+│   └── importers.py                 # import_translations, migrate_translations_to_new
+│
+├── repair_translation/              # 修补翻译
+│   ├── __init__.py
+│   ├── handler.py
+│   └── repair.py
+│
+├── translate/                       # 翻译
+│   ├── __init__.py
+│   ├── handler.py                   # handle_unified_translate, handle_restore_placeholders
+│   ├── unified_translator.py
+│   ├── translator_factory.py
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── placeholders.py
+│   │   ├── google_translator.py
+│   │   ├── java_translator.py
+│   │   ├── python_translator.py
+│   │   ├── resume_base.py
+│   │   └── java_translate/          # Java 翻译 JAR 源码
+│   │       └── RimWorldBatchTranslate/
+│   │           ├── pom.xml
+│   │           ├── build.sh, build.bat
+│   │           ├── README.md
+│   │           └── src/main/java/...
+│   └── ...
+│
+├── user_config/                     # 配置
+│   ├── __init__.py
+│   ├── path_manager.py
+│   ├── README.md
+│   ├── api/                         # 各翻译 API 封装
+│   │   ├── __init__.py
+│   │   ├── base_api.py
+│   │   ├── api_manager.py
+│   │   ├── aliyun_api.py
+│   │   ├── baidu_api.py
+│   │   ├── google_api.py
+│   │   ├── tencent_api.py
+│   │   └── custom_api.py
+│   ├── config/
+│   │   ├── README.md
+│   │   ├── translation_fields.yaml
+│   │   ├── general_dictionary.yaml
+│   │   ├── game_dictionary.yaml
+│   │   ├── artist_dictionary.yaml
+│   │   └── adult_dictionary.yaml
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── user_config.py
+│   │   ├── system_config.py
+│   │   ├── base_config.py
+│   │   └── config_validator.py
+│   └── ui/
+│       ├── __init__.py
+│       ├── main_config_ui.py
+│       └── api_config_ui.py
+│
+├── utils/                           # 通用工具
+│   ├── __init__.py
+│   ├── constants.py
+│   ├── load_folders.py              # LoadFolders 版本检测（get_load_folders_versions, get_version_dirs_from_fs）
+│   ├── csv_utils.py
+│   ├── path_utils.py
+│   ├── xml_utils.py
+│   ├── ui_style.py
+│   ├── interaction.py               # 主菜单、通用交互
+│   ├── rimworld_about.py
+│   ├── version_utils.py
+│   ├── utils.py                     # XMLProcessor, sanitize_xml
+│   ├── error_handling.py
+│   └── logging_config.py
+│
+├── docs/
+│   ├── ARCHITECTURE_REORGANIZATION.md
+│   ├── MERGER_LOGIC_REVIEW.md
+│   ├── CODE_AUDIT_REPORT.md
+│   ├── Defs_extraction_faq.md
+│   └── UI_OPTIMIZATION_PLAN.md
+│
+├── tests/
+│   ├── __init__.py
+│   ├── test_smart_merger.py
+│   ├── test_config.py
+│   └── test_sanitize_xml.py
+│
+├── .github/
+│   ├── copilot-instructions.md
+│   ├── instructions/
+│   └── prompts/
+└── logs/                            # 运行时日志
+```
+
+---
+
 ## 一、现状与目标
 
 ### 1.1 设计原则
@@ -67,7 +223,7 @@ batch  ← 批量工具
   └─ 供 full_pipeline 或独立调用
 
 user_config  ← 配置
-  └─ 不依赖 extract / translate / import_template 等业务
+  └─ 不依赖 extract / translate / import_template 等业务（版本检测从 utils.load_folders 获取）
 
 utils  ← 工具
   └─ 尽量不依赖 user_config；必须处通过参数传入
@@ -91,13 +247,13 @@ utils  ← 工具
 | # | 任务 | 说明 |
 |---|------|------|
 | 5 | 解除 user_config → extract | 将 `get_load_folders_versions`、`get_version_dirs_from_fs`、`get_content_roots_from_load_folders` 等抽到 `utils/version_detection.py` 或 `utils/load_folders.py`，user_config 只依赖 utils |
-| 6 | 弱化 utils → user_config | `XMLProcessor` 等如需配置，通过构造函数/参数传入，避免顶层导入 UserConfigManager |
+| 6 | 弱化 utils → user_config | 移除 `utils.utils` 中未使用的 UserConfigManager 依赖 ✅ |
 
 ### 阶段三：命名与归属优化
 
 | # | 任务 | 说明 |
 |---|------|------|
-| 7 | interaction 命名区分 | `extract.workflow.interaction` 可重命名为 `extract.workflow.extraction_flow` 或保持，但在文档中明确为「提取专用交互」 |
+| 7 | interaction 命名区分 | `extract.workflow.interaction` 为**提取专用交互**（InteractionManager），与 `utils.interaction` 主菜单/通用交互区分 ✅ |
 | 8 | cleanup_outdated_keys 归属 | 保留在 extract（与 merger 输出格式强相关），或移至 `tools/` 新建模块；当前建议保留 |
 | 9 | PathManager 统一获取 | 从 `UserConfigManager.get_instance().path_manager` 或类似方式获取，减少各 handler 自行实例化 |
 
@@ -113,8 +269,8 @@ utils  ← 工具
 ## 四、文件级变更对照
 
 ### 4.1 新增文件
-- `extract/batch_extract.py`：批量提取（从 batch 迁入）
-- `utils/version_detection.py` 或 `utils/load_folders.py`（可选，用于解耦 user_config）
+- `extract/batch_extract.py`：批量提取（从 batch 迁入）✅
+- `utils/load_folders.py`：LoadFolders 版本检测（get_load_folders_versions, get_version_dirs_from_fs），解除 user_config→extract ✅
 
 ### 4.2 移动 / 合并
 - `handle_batch_full_pipeline`：batch/handler.py → full_pipeline/handler.py
@@ -150,8 +306,39 @@ utils  ← 工具
 
 ---
 
-## 六、风险与回滚
+## 六、变更记录与完成摘要
 
-- 移动代码时保持对外接口不变，main 仅改 import 路径
-- 依赖解耦可能影响 path_manager 的版本检测逻辑，需回归测试
-- 建议按阶段提交，每阶段通过测试后再进行下一阶段
+### 已完成的整理（2025-02）
+
+| 阶段 | 任务 | 状态 |
+|------|------|------|
+| 一 | 批量提取移至 extract.batch_extract | ✅ |
+| 一 | 批量完整流程移至 full_pipeline.handler | ✅ |
+| 一 | batch 保留汇总、批量导入、handle_batch | ✅ |
+| 一 | TOTAL_CSV_NAME 统一到 utils.constants | ✅ |
+| 二 | 解除 user_config → extract（utils/load_folders.py） | ✅ |
+| 二 | 移除 utils.utils 中未使用的 UserConfigManager | ✅ |
+| 三 | 明确 extract.workflow.interaction 为提取专用 | ✅ |
+| 四 | 工具子菜单增加「6 批量操作」入口 | ✅ |
+| 四 | 更新 README、架构文档 | ✅ |
+| 三 | PathManager 统一从 UserConfigManager.path_manager 获取 | ✅ |
+
+### 新增/修改文件
+
+- **新增**：`extract/batch_extract.py`、`utils/load_folders.py`
+- **新增测试**：`tests/test_load_folders.py`、`tests/test_batch_extract.py`
+- **修改**：`batch/handler.py`、`full_pipeline/handler.py`、`main.py`、`utils/interaction.py`、`extract/__init__.py`、`full_pipeline/__init__.py`、`extract/workflow/manager.py`、`user_config/path_manager.py`、`utils/utils.py`
+
+### 依赖关系（整理后）
+
+```
+user_config → utils（无 extract 依赖）
+batch       → utils.load_folders, import_template
+extract     → utils, user_config（仅读取配置）
+full_pipeline → extract.batch_extract, batch, translate, import_template
+main        → 各模块 handler
+```
+
+### 待选优化（可按需执行）
+
+- utils.logging_config / error_handling 对 UserConfigManager 的进一步解耦
