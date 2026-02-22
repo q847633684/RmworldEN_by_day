@@ -12,7 +12,7 @@ from typing import Dict, List, Optional, Set, Tuple
 
 from utils.constants import CSV_TRANSLATION_HEADER
 from utils.csv_utils import open_csv_reader, open_csv_writer
-from utils.interaction import prompt_choose_from_list, safe_input
+from utils.interaction import confirm_action, prompt_choose_from_list, safe_input
 from utils.rimworld_about import (
     get_mod_name_from_about,
     get_package_id_from_about,
@@ -73,8 +73,9 @@ def scan_vanilla_mods(workshop_content_dir: str) -> List[Tuple[str, str]]:
     return result
 
 
-def handle_batch_vanilla_extract():
-    """批量提取：仅处理 About 名字前缀为 Vanilla 的模组，输出到 指定文件夹/模组名/。"""
+def handle_batch_vanilla_extract() -> Optional[str]:
+    """批量提取：仅处理 About 名字前缀为 Vanilla 的模组，输出到 指定文件夹/模组名/。
+    成功时返回输出根目录路径，否则返回 None。"""
     ui.print_section_header("批量提取（Vanilla 前缀模组）", ui.Icons.BATCH)
 
     workshop_dir = DEFAULT_WORKSHOP_CONTENT
@@ -227,7 +228,7 @@ def handle_batch_vanilla_extract():
         else:
             ui.print_warning("未生成总 LoadFolders.xml，请检查输出目录是否可写")
 
-        # 生成总 CSV：合并各模组 CSV，增加 mod 列便于批量导入时 key+路径 双校验
+        # 生成总 CSV：合并各模组 CSV（含兼容模组子目录如 1.6/ModCompatibility/CE），增加 mod 列便于批量导入时 key+路径 双校验
         try:
             from user_config import UserConfigManager
             language = UserConfigManager.get_instance().language_config.get_value(
@@ -236,17 +237,22 @@ def handle_batch_vanilla_extract():
             total_rows: List[Dict[str, str]] = []
             header: Optional[List[str]] = None
             for _mod_dir, _mod_name, safe_name in success_list:
-                lang_dir = output_base_path / safe_name / "Languages" / language
-                if not lang_dir.is_dir():
+                mod_root = output_base_path / safe_name
+                if not mod_root.is_dir():
                     continue
-                for csv_file in lang_dir.glob("*.csv"):
-                    with open_csv_reader(csv_file) as f:
-                        reader = csv.DictReader(f)
-                        if header is None and reader.fieldnames:
-                            header = list(reader.fieldnames) + ["mod"]
-                        for row in reader:
-                            row["mod"] = safe_name
-                            total_rows.append(row)
+                # 递归查找所有 Languages/<lang> 下的 CSV，包含 ModCompatibility 等兼容模组
+                for lang_parent in mod_root.rglob("Languages"):
+                    lang_dir = lang_parent / language
+                    if not lang_dir.is_dir():
+                        continue
+                    for csv_file in lang_dir.glob("*.csv"):
+                        with open_csv_reader(csv_file) as f:
+                            reader = csv.DictReader(f)
+                            if header is None and reader.fieldnames:
+                                header = list(reader.fieldnames) + ["mod"]
+                            for row in reader:
+                                row["mod"] = safe_name
+                                total_rows.append(row)
             if header and total_rows:
                 total_csv_path = output_base_path / TOTAL_CSV_NAME
                 with open_csv_writer(total_csv_path) as f:
@@ -264,6 +270,9 @@ def handle_batch_vanilla_extract():
     if failed:
         for mod_name, mod_dir, reason in failed:
             ui.print_warning(f"  · {mod_name}: {reason}")
+    if success_count > 0:
+        return str(output_base_path)
+    return None
 
 
 def _unique_dest_path(dest_dir: Path, rel_path: str, used_names: Set[str]) -> Path:
@@ -294,6 +303,7 @@ def aggregate_chinese_translations_to_root(
     versions: Optional[List[str]] = None,
     language: Optional[str] = None,
     include_root: bool = True,
+    delete_existing: bool = False,
 ) -> Tuple[int, int]:
     """
     将根目录下各模组的 Languages/ChineseSimplified 的 Keyed 和 DefInjected 汇总到根目录。
@@ -304,6 +314,7 @@ def aggregate_chinese_translations_to_root(
         versions: 可选，版本目录名列表如 ["1.5","1.6"]；为 None 时自动检测根目录下的版本号子目录
         language: 语言目录名，默认 ChineseSimplified
         include_root: 是否同时扫描根目录；选单个版本时应为 False，避免 root 的 rglob 扫到其他版本
+        delete_existing: 为 True 时，汇总前先清空根目录的 Keyed/DefInjected（用于完整流程）
 
     Returns:
         (keyed_count, definjected_count) 复制的文件数
@@ -320,6 +331,13 @@ def aggregate_chinese_translations_to_root(
 
     out_keyed = root / "Languages" / lang / keyed_name
     out_def = root / "Languages" / lang / def_name
+    if delete_existing:
+        for d in (out_keyed, out_def):
+            if d.exists() and d.is_dir():
+                try:
+                    shutil.rmtree(d)
+                except OSError as e:
+                    ui.print_warning(f"清空 {d} 时出错: {e}")
     out_keyed.mkdir(parents=True, exist_ok=True)
     out_def.mkdir(parents=True, exist_ok=True)
 
@@ -521,6 +539,103 @@ def handle_batch_import_translations():
     if failed:
         for x in failed:
             ui.print_warning(f"  · {x}")
+
+
+def handle_batch_full_pipeline():
+    """批量提取完整流程：Vanilla 前缀模组 提取→翻译→导入→汇总到根目录（根目录现有语言文件将被删除）。"""
+    ui.print_header("批量提取完整流程", ui.Icons.BATCH)
+    ui.print_info("将执行：1. 批量提取 2. 翻译总 CSV 3. 批量导入 4. 汇总到根目录（删除根目录现有 Keyed/DefInjected）")
+
+    output_base = handle_batch_vanilla_extract()
+    if not output_base:
+        ui.print_warning("批量提取未完成或失败，已取消完整流程")
+        return
+
+    output_base_path = Path(output_base)
+    total_csv = output_base_path / TOTAL_CSV_NAME
+    if not total_csv.is_file():
+        ui.print_error(f"未找到总 CSV：{total_csv}")
+        return
+
+    if not confirm_action("是否立即进行机翻？"):
+        ui.print_info("已跳过翻译，可稍后手动翻译总 CSV 并运行「批量导入」「汇总到根目录」")
+        return
+
+    from translate.handler import handle_unified_translate
+
+    translated = handle_unified_translate(
+        csv_path=str(total_csv), ask_import_after=False
+    )
+    if not translated or not Path(translated).is_file():
+        ui.print_warning("翻译未完成，已取消后续步骤")
+        return
+
+    if not confirm_action("是否立即批量导入翻译？"):
+        ui.print_info("已跳过导入，可稍后手动运行「批量导入」")
+        return
+
+    from user_config import UserConfigManager
+
+    language = UserConfigManager.get_instance().language_config.get_value(
+        "cn_language", "ChineseSimplified"
+    )
+    try:
+        with open_csv_reader(str(translated)) as f:
+            reader = csv.DictReader(f)
+            fieldnames_list = reader.fieldnames or []
+            if "mod" not in fieldnames_list:
+                ui.print_error("总 CSV 需包含 mod 列")
+                return
+            all_fieldnames = list(fieldnames_list)
+            rows_by_mod = {}
+            for row in reader:
+                mod_name = (row.get("mod") or "").strip()
+                if mod_name:
+                    rows_by_mod.setdefault(mod_name, []).append(row)
+    except (OSError, IOError, csv.Error) as e:
+        ui.print_error(f"读取翻译后 CSV 失败: {e}")
+        return
+
+    fieldnames = [c for c in all_fieldnames if c != "mod"] or list(CSV_TRANSLATION_HEADER)
+    success = 0
+    for mod_folder, mod_rows in rows_by_mod.items():
+        mod_dir = str(output_base_path / mod_folder)
+        if not (output_base_path / mod_folder).is_dir():
+            continue
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".csv", delete=False, encoding="utf-8", newline=""
+            ) as tmp:
+                w = csv.DictWriter(tmp, fieldnames=fieldnames, extrasaction="ignore")
+                w.writeheader()
+                for row in mod_rows:
+                    w.writerow({k: row.get(k, "") for k in fieldnames})
+                tmp_path = tmp.name
+            from import_template.importers import import_translations
+
+            if import_translations(
+                csv_path=tmp_path,
+                mod_dir=mod_dir,
+                merge=True,
+                auto_create_templates=True,
+                language=language,
+            ):
+                success += 1
+                ui.print_info(f"已导入: {mod_folder}")
+            try:
+                Path(tmp_path).unlink(missing_ok=True)
+            except OSError:
+                pass
+        except Exception as e:  # pylint: disable=broad-except
+            ui.print_warning(f"导入失败 {mod_folder}: {e}")
+    ui.print_success(f"批量导入完成：成功 {success}/{len(rows_by_mod)}")
+
+    ui.print_info("正在汇总到根目录（将删除根目录现有 Keyed/DefInjected）...")
+    k_count, d_count = aggregate_chinese_translations_to_root(
+        output_base, delete_existing=True
+    )
+    ui.print_success(f"汇总完成：Keyed {k_count} 个文件，DefInjected {d_count} 个文件")
+    ui.print_success("批量提取完整流程完成！")
 
 
 def handle_batch():

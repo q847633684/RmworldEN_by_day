@@ -25,6 +25,9 @@ CSV_TRANSLATION_HEADER: tuple = ("key", "text", "tag", "file", "type")
 CSV_ENCODING_READ: str = "utf-8-sig"
 CSV_ENCODING_WRITE: str = "utf-8"
 
+# 批量导出总 CSV 文件名（提取合并、批量导入共用）
+TOTAL_CSV_NAME: str = "total_translations.csv"
+
 # RimWorld 模组目录/文件名（与配置默认值一致，写死处可引用）
 KEYED_DIR: str = "Keyed"
 DEFINJECTED_DIR: str = "DefInjected"

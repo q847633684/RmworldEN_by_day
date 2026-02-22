@@ -63,55 +63,80 @@ def show_main_menu() -> str:
     """显示主菜单并返回用户选择"""
     ui.print_header("Day Translation 主菜单")
 
-    # 核心功能 - 使用紧凑模式
-    ui.print_section_header("核心功能", ui.Icons.CORE)
+    ui.print_section_header("主菜单", ui.Icons.CORE)
     ui.print_menu_item(
         "1",
         "完整流程",
-        "提取→Java机翻→导入 一键完成",
+        "单次或批量：提取→翻译→导入 一键完成",
         ui.Icons.RUNNING,
         is_recommended=True,
         compact=True,
     )
     ui.print_menu_item(
-        "2", "提取模板", "提取翻译模板并生成 CSV 文件", ui.Icons.TEMPLATE, compact=True
+        "2", "提取模板", "单次或批量提取翻译模板", ui.Icons.TEMPLATE, compact=True
     )
     ui.print_menu_item(
-        "3",
-        "智能翻译",
-        "自动选择最佳翻译器（Java/Python）",
-        ui.Icons.TRANSLATE,
-        compact=True,
+        "3", "智能翻译", "自动选择最佳翻译器（Java/Python）", ui.Icons.TRANSLATE, compact=True
     )
     ui.print_menu_item(
-        "4", "导入模板", "将翻译后的 CSV 导入翻译模板", ui.Icons.IMPORT, compact=True
+        "4", "导入模板", "将翻译后的 CSV 导入模板（自动识别批量/单次）", ui.Icons.IMPORT, compact=True
     )
-
-    # 高级功能 - 使用紧凑模式
-    ui.print_section_header("高级功能", ui.Icons.ADVANCED)
-    ui.print_menu_item("5", "批量处理", "处理多个模组", ui.Icons.BATCH, compact=True)
+    ui.print_menu_item(
+        "5", "工具", "迁移、恢复占位符、修补、清理、语料生成", ui.Icons.TOOLS, compact=True
+    )
     ui.print_menu_item("6", "配置管理", "管理翻译配置", ui.Icons.SETTINGS, compact=True)
-    ui.print_menu_item(
-        "7", "语料生成", "生成英-中平行语料", ui.Icons.CORPUS, compact=True
-    )
-    ui.print_menu_item(
-        "8", "清理过时/重复 key", "删除带「过时key」或「重复key」标记的条目", ui.Icons.SETTINGS, compact=True
-    )
-    ui.print_menu_item(
-        "9", "迁移旧翻译到新模板", "将旧翻译目录中已有翻译填到新目录（可仅填充空项）", ui.Icons.IMPORT, compact=True
-    )
-    ui.print_menu_item(
-        "10", "修补翻译", "扫描文件夹中的翻译 XML，修复 Google 错误（如 Error 500）并重新翻译", ui.Icons.TRANSLATE, compact=True
-    )
 
-    # 退出选项
-    ui.print_section_header("退出程序", ui.Icons.EXIT)
+    ui.print_section_header("退出", ui.Icons.EXIT)
     ui.print_menu_item("q", "退出", "退出程序", ui.Icons.EXIT, compact=True)
 
     ui.print_separator()
 
-    result = safe_input(ui.get_input_prompt("请选择模式", options="1-10, q"), "q")
+    result = safe_input(ui.get_input_prompt("请选择", options="1-6, q"), "q")
     return result if result is not None else "q"
+
+
+def show_full_pipeline_submenu() -> Optional[str]:
+    """完整流程子菜单，返回 1.1 / 1.2 / b"""
+    ui.print_header("完整流程")
+    ui.print_menu_item(
+        "1", "单次提取完整流程", "提取→翻译→导入 一键完成", ui.Icons.RUNNING, compact=True
+    )
+    ui.print_menu_item(
+        "2",
+        "批量提取完整流程",
+        "Vanilla 前缀模组：批量提取+翻译+导入+汇总到根目录（根目录现有语言文件将被删除）",
+        ui.Icons.BATCH,
+        compact=True,
+    )
+    ui.print_menu_item("b", "返回主菜单", "", ui.Icons.BACK, compact=True)
+    ui.print_separator()
+    result = safe_input(ui.get_input_prompt("请选择", options="1 / 2 / b"), "b")
+    return (result or "b").strip().lower()
+
+
+def show_extract_submenu() -> Optional[str]:
+    """提取模板子菜单，返回 1 / 2 / b"""
+    ui.print_header("提取模板")
+    ui.print_menu_item("1", "单次提取", "单个模组提取翻译模板并生成 CSV", ui.Icons.TEMPLATE, compact=True)
+    ui.print_menu_item("2", "批量提取", "批量提取 Vanilla 前缀模组", ui.Icons.BATCH, compact=True)
+    ui.print_menu_item("b", "返回主菜单", "", ui.Icons.BACK, compact=True)
+    ui.print_separator()
+    result = safe_input(ui.get_input_prompt("请选择", options="1 / 2 / b"), "b")
+    return (result or "b").strip().lower()
+
+
+def show_tools_submenu() -> Optional[str]:
+    """工具子菜单，返回 1-5 / b"""
+    ui.print_header("工具")
+    ui.print_menu_item("1", "迁移旧翻译到新翻译", "将旧翻译目录填到新目录（可仅填充空项）", ui.Icons.IMPORT, compact=True)
+    ui.print_menu_item("2", "恢复占位符", "恢复 CSV 中 (PH_1) 等占位符为原始文本", ui.Icons.TRANSLATE, compact=True)
+    ui.print_menu_item("3", "修补翻译", "修复 Google 错误（如 Error 500）并重新翻译", ui.Icons.TRANSLATE, compact=True)
+    ui.print_menu_item("4", "清理过时/重复 key", "删除带「过时key」或「重复key」标记的条目", ui.Icons.SETTINGS, compact=True)
+    ui.print_menu_item("5", "语料生成", "生成英-中平行语料", ui.Icons.CORPUS, compact=True)
+    ui.print_menu_item("b", "返回主菜单", "", ui.Icons.BACK, compact=True)
+    ui.print_separator()
+    result = safe_input(ui.get_input_prompt("请选择", options="1-5 / b"), "b")
+    return (result or "b").strip().lower()
 
 
 def select_csv_path_with_history() -> Optional[str]:

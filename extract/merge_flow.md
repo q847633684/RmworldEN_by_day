@@ -6,6 +6,11 @@
 
 ## 🎯 核心概念
 
+### rel_path 转换规则
+- **提取器**：始终输出 def 路径（如 `ThingDefs/Weapons.xml`），不做转换
+- **新建/合并/新增**：当 `template_structure=defs_by_type` 时，由 `rel_path_converter` 统一将 rel_path 转为 `def_type/def_type.xml`
+- **模块**：`extract/workflow/rel_path_converter.py` 提供 `apply_if_defs_by_type()` 供三模式调用
+
 ### 目录状态判定标准
 - **有效目录**: 目录存在且包含至少一个 `.xml` 文件
 - **判定方法**: `os.path.isdir(path) && len(list(Path(path).rglob('*.xml'))) > 0`
@@ -39,7 +44,7 @@
 ## 🔄 智能合并核心逻辑
 
 ### 5.1 合并算法规则
-智能合并基于 key 匹配和内容比对，遵循以下优先级规则：
+智能合并基于 key 匹配（Keyed 按 key；DefInjected 按 (key, rel_path)）和内容比对，遵循以下优先级规则：
 
 1. **内容无变化**: `input_key == output_key && input_text == output_en_text`
    - **处理**: 保持原状，不做修改
@@ -369,30 +374,14 @@ def incremental_mode(input_data, output_data):
 ### 伪代码框架
 
 ```python
-def perform_smart_merge(output_dir, new_translations, smart_merger):
+def perform_smart_merge(output_dir, input_data, output_data):
     """
-    智能合并主流程
-    遍历输出目录下所有 DefInjected/Keyed 文件，提取现有翻译，
-    与 new_translations 按 key 比对，按 5.1 逻辑合并，
-    批量调用 smart_merger.merge_multiple_files。
-    返回合并结果统计。
+    智能合并主流程（当前 manager 实现）
+    提取输出目录 DefInjected/Keyed 的现有翻译为 output_data，
+    与 input_data 比对：Keyed 按 key，DefInjected 按 (key, rel_path)。
+    调用 SmartMerger.smart_merge_translations 合并，
+    再按 rel_path 分组写回 XML。返回合并统计。
     """
-    # 1. 遍历输出目录 DefInjected/Keyed 下所有 xml 文件
-    xml_files = find_all_xml_files(output_dir)
-    
-    # 2. 对每个文件，调用 extract_file_translations 提取属于该文件的翻译
-    file_mappings = {}
-    for xml_file in xml_files:
-        existing_translations = extract_file_translations(xml_file, existing_data)
-        new_file_translations = extract_file_translations(xml_file, new_translations)
-        merged_translations = merge_translations(existing_translations, new_file_translations)
-        file_mappings[xml_file] = merged_translations
-    
-    # 3. 组装 file_mappings，批量合并
-    merge_results = smart_merger.merge_multiple_files(file_mappings)
-    
-    # 4. 返回合并统计结果
-    return generate_merge_statistics(merge_results)
 
 def extract_file_translations(xml_file, translations):
     """

@@ -5,6 +5,7 @@
 - manager: 模板管理器
 - interaction: 交互管理器
 - handler: 主处理器
+- rel_path_converter: Def rel_path 转换（def 路径 <-> def_type/def_type.xml）
 """
 
 from .manager import TemplateManager

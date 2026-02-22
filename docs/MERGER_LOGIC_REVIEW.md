@@ -14,32 +14,25 @@
 
 | 位置 | Defs（六元组） | DefInjected（五元组） | Keyed（五元组） |
 |------|----------------|------------------------|-----------------|
-| **1 key** | defName.字段路径（如 Ability_Shoot.label） | 元素标签名（如 DefName.label，与 Defs key 一致） | 元素标签名（Keyed 的 key） |
+| **1 key** | def_type/defName.字段路径（如 AbilityDef/Ability_Shoot.label） | 元素标签名（合并前 manager 加 def_type 前缀以对齐） | 元素标签名（Keyed 的 key） |
 | **2 text** | 英文原文（Defs 里就是英文） | 译文（如中文）或占位 | 译文（如中文）或占位 |
 | **3 tag** | 字段标签（label、description 等） | 同上（label、description 等） | 同上 |
 | **4 rel_path** | 该 xml 相对 **Defs 目录**的路径（如 MainButton.xml） | 该 xml 相对 **DefInjected 目录**的路径（如 ThingDef/ThingDef.xml） | 该 xml 相对 **Keyed 目录**的路径（如 Keyed.xml） |
 | **5 en_text** | 同 text（Defs 里是英文） | EN 注释里的英文或空 | EN 注释里的英文或空 |
 | **6 def_type** | Def 类型名（ThingDef、KeyBindingDef 等）；仅 Defs 有 | — | — |
 
-- Defs 多一个 **def_type**，用于合并时 (key, def_type) 区分同 key 不同 Def 类型。
-- **DefInjected 五元组里没有 def_type**，但合并时**仍然能区分同 key 不同 Def 类型**：合并器用**输出条目的 rel_path 的第一段**（即 `_scope_from_rel_path(out_item[3])`，如 `ThingDef/ThingDef.xml` → `ThingDef`）作为 scope，与输入的 (key, def_type) 里的 def_type 对齐；因此只要 DefInjected 的目录结构是「Def类型/xxx.xml」（第一段等于 Def 类型名），就能正确匹配。
-- Keyed 没有 Def 类型概念，合并时按 key + scope（rel_path 第一段）匹配即可。
+- Defs 的 **key** 含 def_type 前缀（`def_type/def_name.field_path`），**rel_path** 为 xml 相对 Defs 的路径；合并前由 manager 调用 `normalize_input_rel_path_for_merge` 将 input 的 rel_path 规范为 `def_type/文件名.xml`。
+- **DefInjected** 的 rel_path 已是 `Def类型/xxx.xml` 格式；合并前 manager 调用 `add_def_type_prefix_to_definjected` 为 output 的 key 添加 def_type 前缀，与 Defs 输入对齐。
+- 合并器 DefInjected 用 **match_by_rel_path=True**，按 **(key, rel_path)** 匹配；Keyed 按 **key** 匹配。
 
 ## 二、合并流程概览
 
 1. **格式规范化**：四/五/六元组统一成五元组。
-2. **映射**  
-   - 若存在六元组（含 def_type）：`input_map` 用 `(key, def_type)` 区分同 key 不同 Def；否则用 `key`。  
-   - `output_map`：`key -> [所有 output 项]`（同 key 可多文件）。
-3. **scope**：`scope = _scope_from_rel_path(out_item[3])`，即 **rel_path 的第一段**（第一个 `/` 之前；若无 `/` 则整段 rel_path）。  
-   - 实现：`p.split("/")[0] if "/" in p else p`（先 `replace("\\", "/").strip()`）。  
-   - **rel_path 来源**：每条记录的元组第 4 项 `item[3]`。  
-     - **Defs 提取**：`rel_path = f"{def_type}/{def_type}.xml"`，如 `"ThingDef/ThingDef.xml"` → scope = **"ThingDef"**（Def 类型名）。  
-     - **DefInjected 提取**：xml 相对 DefInjected 目录的相对路径，如 `"ThingDef/ThingDef.xml"` 或 `"Core/Defs/....xml"` → scope = **"ThingDef"** 或 **"Core"**（目录/类型名）。  
-     - **Keyed 提取**：xml 相对 Keyed 目录的相对路径，如 `"Keyed.xml"` 或 `"SomeMod/Keyed.xml"` → scope = **"Keyed.xml"** 或 **"SomeMod"**。  
-   - **作用**：按「哪个文件/哪类 Def」把同一 key 的多条 output 分组，并与 input 的 (key, def_type) 或 key 对齐。
-4. **遍历 output_map**，对每个 `(key, scope)`：
-   - **重复 key**：同一 scope 内同一 key 出现多次 → 第 2 个及以后标 `"重复key，需删除"`。
+2. **映射**（DefInjected 合并时 `match_by_rel_path=True`）：  
+   - `input_map` / `output_map`：`(key, rel_path)` → 条目的映射；input/output 的 rel_path 均已规范为 `def_type/文件名.xml`。  
+   - Keyed 合并时仍用 `key` 作为 map_key。
+3. **遍历 output_map**，对每个 `map_key`（DefInjected 为 `(key, rel_path)`，Keyed 为 `key`）：
+   - **重复 key**：同一 map_key（DefInjected 下即同一 (key, rel_path)）对应多条 output → 第 2 个及以后标 `"重复key，需删除"`。
    - **不变**：`normalized(in_item[1]) == normalized(out_item[4])`（新英文 = 原存英文）→ 仅统计，若 `include_unchanged` 则保留 `(key, out_item[1], ..., out_item[4], "")`。  
      - 正确：保留现有译文 `out_item[1]`。
    - **更新**：英文源变化。  
@@ -47,9 +40,9 @@
      - **英文源有更新**（有原英文且新旧英文不同）：旧译文已不对应新英文，故 `text=in_item[1]`（**新英文占位**），`en_text=in_item[1]`，history 记录「英文源已更新，待重新翻译；原译文: ...」。写回后该条显示英文，需人工/机翻重译。
      - **无原英文**：保留现有译文 `text=out_item[1]`，仅更新 `en_text=in_item[1]`。
    - **输出有、输入无**：本轮不处理，留给后面「过时」逻辑。
-5. **新增**：input 中有而 output 中该 key（及 scope）无的项，追加 `(key, in_item[1], ..., history="翻译内容: ..., 新增于...")`。  
+5. **新增**：input 中有而 output 中该 map_key 无的项，追加 `(key, in_item[1], ..., history="翻译内容: ..., 新增于...")`。  
    - 此处 `in_item[1]` 为英文源，作为占位；后续可由机翻/人工填译文。
-6. **过时**：output 中有而 input 中该 key+scope 无的项，标 `"过时key，需删除"` 或 `"未识别字段，谨慎删除"`（由配置的 translation_fields 决定）。
+6. **过时**：output 中有而 input 中该 map_key 无的项，标 `"过时key，需删除"` 或 `"未识别字段，谨慎删除"`（由配置的 translation_fields 决定）。
 
 ## 三、策略与元数据
 
@@ -72,9 +65,9 @@
 
 - **来源**：每条**可翻译字段**（label、description、stages.0.label 等）需要一条唯一标识。
 - **规则**：  
-  - 先有 `full_path = f"{def_type}/{def_name}.{clean_path}"`，其中 `def_name` 来自该 Def 的 `<defName>` 文本，`clean_path` 为字段在 Def 内的路径（如 `label`、`stages.0.label`）。  
-  - 再 `key = full_path.split("/", 1)[-1]`，即 **去掉第一段**，得到 `defName.field_path`。  
-- **示例**：`def_name="Ability_Shoot"`，`clean_path="label"` → key = **"Ability_Shoot.label"**；`clean_path="stages.0.label"` → key = **"Ability_Shoot.stages.0.label"**。
+  - `full_path = f"{def_type}/{def_name}.{clean_path}"`，其中 `def_name` 来自该 Def 的 `<defName>` 文本，`clean_path` 为字段在 Def 内的路径（如 `label`、`stages.0.label`）。  
+  - `key = full_path`，即 **含 def_type 前缀**：`def_type/def_name.field_path`。  
+- **示例**：`def_name="Ability_Shoot"`，`clean_path="label"` → key = **"AbilityDef/Ability_Shoot.label"**；合并写出时 `strip_def_type_from_key=True` 会去除前缀，得到 **"Ability_Shoot.label"** 写入 XML。
 - **含义**：**单条翻译的唯一键**，格式为 `defName.字段路径`，与 DefInjected/Keyed 里使用的 key 一致。
 
 ### 区别小结
@@ -83,14 +76,14 @@
 |--------|------------------------|------------------------------|
 | **层级** | 整个 Def 节点一个值     | 每个可翻译字段一个值          |
 | **内容** | Def 类型名（ThingDef 等） | defName + 字段路径（如 MyDef.label） |
-| **用途** | 分组、写回路径（如 ThingDef/ThingDef.xml）、合并时 (key, def_type) 区分 | 唯一标识一条翻译，与 DefInjected/Keyed 的 key 对应 |
+| **用途** | 分组、rel_path 规范化（如 ThingDef/ThingDef.xml）、合并时 (key, rel_path) 匹配 | 唯一标识一条翻译，与 DefInjected/Keyed 的 key 对应 |
 | **数量** | 同一 XML 内同类型 Def 共用一个 def_type | 每条可翻译内容一条 key        |
 
 同一 def_type 下会有多条不同 key（同一 Def 类型、多个 defName 或同一 defName 下多字段）。
 
 ### rel_path 与 def_type 的分工
 
-**当前实现**：Defs 提取里 **rel_path** = 该 xml **相对 Defs 目录的路径**（如 `MainButton.xml`、`SubDir/Other.xml`），用 `rel_path_str(defs_dir, xml_file)` 得到；**def_type** 在六元组第 6 项，合并时用 **(key, def_type)** 与 output（DefInjected）的 (key, scope) 匹配，不依赖 rel_path。  
+**当前实现**：Defs 提取里 **rel_path** = 该 xml **相对 Defs 目录的路径**（如 `MainButton.xml`），用 `rel_path_str(defs_dir, xml_file)` 得到；**def_type** 在六元组第 6 项。合并前 manager 调用 `normalize_input_rel_path_for_merge` 将 input 的 rel_path 转为 `def_type/文件名.xml`，合并器按 **(key, rel_path)** 匹配。  
 写回 DefInjected 时由合并结果中的 rel_path 决定写哪条；通常用 output_priority 保留 output 的 rel_path（DefInjected 的 `Def类型/Def类型.xml`），故写回路径仍按 Def 类型分目录。
 
 ### 示例：MainButton.xml 提取结果
@@ -139,7 +132,7 @@
   - 合并结果里 `text = in_item[1]` = **"Attack enemy"**（新英文占位），`en_text = in_item[1]`，history =「英文源已更新，待重新翻译；原译文: '攻击', 原英文: 'Attack' -> 新英文: 'Attack enemy'」。  
   - 写回 XML 后该条显示英文 "Attack enemy"，需重新翻译；原译文「攻击」保留在 history 中供参考。
 
-## 六、导出方式可配置；合并用 (key, def_type) 区分
+## 六、导出方式可配置；合并用 (key, rel_path) 匹配
 
 **1. 导出方式可在配置里选**
 
@@ -150,10 +143,10 @@
   - 数据来源为 defs_only → `"defs_by_type"`。  
   所以**没有**在配置里单独一项「按什么文件结构导出」供用户改。若需要用户可设，可在交互流程里加一步「模板结构：保持原结构 / 按 Def 类型分组」或在 user_config 里增加默认项。
 
-**2. 合并逻辑里用 def 和 key 区分同 key 不同条**
+**2. 合并逻辑里用 (key, rel_path) 区分同 key 不同条**
 
-- 当输入为六元组（含 def_type）时，合并用 **(key, def_type)** 做唯一性：同一条 key（如 `DubsOptimizer.label`）在 **KeyBindingCategoryDef** 和 **MainButtonDef** 里算两条，不会互相覆盖。
-- 所以可以用 **def（def_type）和 key** 一起分辨「同 key、不同 Def 类型」的 text，合并不会把不同 Def 类型下的同 key 混成一条。
+- DefInjected 合并时，manager 规范 input/output 的 rel_path 为 `def_type/文件名.xml`，合并器用 **match_by_rel_path=True**，按 **(key, rel_path)** 做唯一性：同一条 key（如 `DubsOptimizer.label`）在 **KeyBindingCategoryDef** 和 **MainButtonDef** 里算两条（rel_path 不同），不会互相覆盖。
+- 所以可以用 **(key, rel_path)** 分辨「同 key、不同 Def 类型/文件」的 text，合并不会把不同 Def 类型下的同 key 混成一条。
 
 ## 七、是否用字面 "def"/"key" 做分支判断？
 
@@ -165,13 +158,12 @@
   因此每次进入合并器的要么全是 Keyed，要么全是 DefInjected，合并器本身不需要区分「这是 key 还是 def」。
 
 - **合并器内部**：  
-  - 若输入是**六元组**（来自 Defs 扫描）：用 `(key, def_type)` 建 input_map，其中 `def_type = item[5]` 是 **Def 类型名**（如 `"ThingDef"`、`"AbilityDef"`），用来区分「同 key 不同 Def 类型」的条目，避免互相覆盖。  
-  - 用 **scope** 对齐：`scope = _scope_from_rel_path(out_item[3])`，即 `rel_path` 的**第一段**（如 `"ThingDef"`、`"Core"`），用来按「哪个文件/哪种 Def」匹配 input 和 output。  
-  所以这里用的是 **Def 类型名**（ThingDef、AbilityDef 等）和 **路径第一段**（scope），不是字面量 `"def"` 或 `"key"`。
+  - DefInjected 合并时 `match_by_rel_path=True`：用 **(key, rel_path)** 建 input_map 和 output_map，其中 rel_path 已由 manager 规范为 `def_type/文件名.xml`，用来区分「同 key 不同 Def 类型/文件」的条目，避免互相覆盖。  
+  - Keyed 合并时仍用 **key** 作为 map_key。
 
 - **小结**：  
   - 「Keyed 和 DefInjected 谁是谁」在 **manager 调用两次** 时已经区分好；  
-  - 合并器里只按 **key + (def_type/scope)** 做匹配与去重，**不会**根据 `"def"` / `"key"` 做判断。
+  - 合并器里 DefInjected 按 **(key, rel_path)**、Keyed 按 **key** 做匹配与去重，**不会**根据字面量 `"def"` / `"key"` 做判断。
 
 ## 八、导出逻辑是否按 Def 文件格式？
 
@@ -182,5 +174,5 @@
 ## 九、建议（可选）
 
 - **merge_strategy 与「谁赢」**：若未来需要「输入优先」在内容上也覆盖译文，应在「更新」分支显式按策略选择 `text` 取 `in_item[1]` 还是 `out_item[1]`，并写清语义（例如仅 Defs 带译文时才允许覆盖）。
-- **路径规范化**：`_scope_from_rel_path` 内仍有 `(r or "").replace("\\", "/").strip()`，可与 `utils.path_utils.normalize_slashes` 统一。
+- **路径规范化**：rel_path 的 `(r or "").replace("\\", "/").strip()` 可与 `utils.path_utils.normalize_slashes` 统一。
 - **单测**：为「更新且有原英文」加一条用例，断言合并结果中 `text` 为新英文占位、`en_text` 为新英文、history 含「待重新翻译」及原译文，防止回归。

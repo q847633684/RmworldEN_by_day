@@ -125,7 +125,7 @@ class DefsScanner(BaseExtractor):
                 len(abstract_nodes),
             )
 
-            # rel_path 为该 xml 相对 Defs 目录的路径；def_type 在六元组第 6 项，合并时用 (key, def_type) 匹配
+            # rel_path 为该 xml 相对 Defs 目录的路径；def_type 在六元组第 6 项；合并前 manager 将 rel_path 规范为 def_type/文件名.xml，按 (key, rel_path) 匹配
             file_rel_path = rel_path_str(_defs_dir, xml_file)
 
             for def_node in def_nodes:
@@ -163,8 +163,7 @@ class DefsScanner(BaseExtractor):
                         clean_path = clean_path[len(tag_local) + 1 :]
 
                     full_path = f"{def_type}/{def_name}.{clean_path}"
-                    # 去除DefType/前缀，只保留defName.field
-                    key = full_path.split("/", 1)[-1] if "/" in full_path else full_path
+                    key = full_path  # key 含 def_type：def_type/def_name.field_path
                     rel_path = file_rel_path
                     # 导出六元组：(key, text, tag, rel_path, en_text, def_type)
                     translations.append((key, text, tag, rel_path, text, def_type))

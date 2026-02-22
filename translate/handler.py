@@ -25,7 +25,9 @@ def _ask_and_import_if_yes(translated_csv_path: str) -> None:
 
 
 def handle_unified_translate(
-    csv_path: Optional[str] = None, output_csv: Optional[str] = None
+    csv_path: Optional[str] = None,
+    output_csv: Optional[str] = None,
+    ask_import_after: bool = True,
 ) -> Optional[str]:
     """
     处理统一翻译功能
@@ -238,7 +240,8 @@ def handle_unified_translate(
             if success:
                 ui.print_success(f"翻译完成：{output_csv}")
                 PathManager().remember_path("import_csv", output_csv)
-                _ask_and_import_if_yes(output_csv)
+                if ask_import_after:
+                    _ask_and_import_if_yes(output_csv)
                 return output_csv
             else:
                 ui.print_warning("翻译未完成、已暂停或已中断，可重新运行翻译以继续")
@@ -270,3 +273,19 @@ def handle_unified_translate(
         ui.print_error(f"统一翻译发生系统错误: {str(e)}")
         logger.error("统一翻译发生系统错误: %s", str(e), exc_info=True)
         return None
+
+
+def handle_restore_placeholders() -> Optional[str]:
+    """恢复 CSV 中翻译列占位符，供工具菜单独立调用。"""
+    restore_path = select_csv_path_with_history()
+    if not restore_path:
+        return None
+    from translate.core.placeholders import PlaceholderManager
+
+    pm = PlaceholderManager()
+    ok, count = pm.restore_csv_translated_column(restore_path)
+    if ok:
+        ui.print_success(f"✅ 翻译列占位符已恢复，共 {count} 条。")
+        return restore_path
+    ui.print_error("恢复失败，请确认 CSV 含 key / text / translated 列。")
+    return None

@@ -31,6 +31,13 @@ from ..core.extractors import DefInjectedExtractor, DefsScanner, KeyedExtractor
 from ..utils import SmartMerger
 from ..utils.merger import dedupe_translations_by_key
 
+from .rel_path_converter import (
+    add_def_type_prefix_to_definjected,
+    apply_if_defs_by_type,
+    normalize_input_rel_path_for_merge,
+    strip_def_type_for_definjected_export,
+)
+
 
 def find_content_roots(
     base_path: str, language: Optional[str] = None
@@ -401,11 +408,11 @@ class TemplateManager:
             ui.print_warning("无数据")
             return [], ""
 
-        # defs_by_type 时：将 def_translations 的 rel_path 转为 def_type/def_type.xml，确保 CSV 与导出的 XML 路径一致，导入时能正确匹配
-        if template_structure == "defs_by_type":
-            def_translations = self._convert_def_translations_to_defs_by_type_rel_path(
-                def_translations
-            )
+        def_translations = apply_if_defs_by_type(
+            def_translations, template_structure
+        )
+        # 来自 Defs 的 key 含 def_type，写出 DefInjected/CSV 前需去除
+        def_translations = strip_def_type_for_definjected_export(def_translations)
 
         # 步骤2：根据用户选择的输出模式生成翻译模板
         self._generate_templates_to_output_dir_with_structure(
@@ -484,8 +491,8 @@ class TemplateManager:
             template_structure=template_structure,
         )
         ts = template_structure or "original_structure"
-        if ts == "defs_by_type":
-            all_def = self._convert_def_translations_to_defs_by_type_rel_path(all_def)
+        all_def = apply_if_defs_by_type(all_def, ts)
+        all_def = strip_def_type_for_definjected_export(all_def)
         self._generate_templates_to_output_dir_with_structure(
             output_dir=output_dir,
             output_language=output_language,
@@ -522,6 +529,7 @@ class TemplateManager:
         input_keyed: Optional[List[Tuple]] = None,
         input_def: Optional[List[Tuple]] = None,
         import_label: Optional[str] = None,
+        template_structure: Optional[str] = None,
     ) -> tuple[List[Tuple[str, str, str, str]], str]:
         """
         执行智能合并模式处理翻译数据。
@@ -555,7 +563,13 @@ class TemplateManager:
                 ui.print_info("  无输入，跳过")
             return [], ""
 
-        # 步骤2：提取输出目录现有翻译（用于与输入合并）
+        input_def = apply_if_defs_by_type(
+            input_def, template_structure or "original_structure"
+        )
+        # 批量合并：先转换输入 rel_path=def_type/文件名.xml，再按 (key, rel_path) 匹配
+        input_def = normalize_input_rel_path_for_merge(input_def)
+
+        # 步骤2：提取输出目录现有翻译
         if import_label:
             ui.print_info(f"【输出】{import_label} 现有翻译")
         else:
@@ -567,8 +581,9 @@ class TemplateManager:
             has_input_keyed=has_input_keyed,
             scan_label=import_label,
         )
+        output_def = add_def_type_prefix_to_definjected(output_def)
 
-        # 步骤3：智能合并翻译数据（include_unchanged=False，不变项不进入 merged，故 CSV 也不会包含）
+        # 步骤3：智能合并（key 含 def_type，无需 scope）
         # 合并策略与元数据由调用方决定：保留现有翻译目录的 tag/rel_path，写回时路径正确
         keyed_translations, keyed_stats = SmartMerger.smart_merge_translations(
             input_data=input_keyed,
@@ -583,6 +598,8 @@ class TemplateManager:
             include_unchanged=False,
             merge_strategy="output_priority",
             preserve_metadata=True,
+            strip_def_type_from_key=True,
+            match_by_rel_path=True,
         )
         # 写入合并结果（仅更新、新增、过时等，不含「不变」）
         if keyed_translations:
@@ -756,20 +773,6 @@ class TemplateManager:
             if use_compact_format:
                 ui.print_info(f"     ；生成DefInjected {len(def_translations)} 条")
 
-    def _convert_def_translations_to_defs_by_type_rel_path(
-        self, def_translations: List[Tuple]
-    ) -> List[Tuple]:
-        """将 Defs 6 元组的 rel_path 转为 def_type/def_type.xml，供 defs_by_type 导出与 CSV 使用"""
-        converted = []
-        for item in def_translations:
-            if len(item) >= 6:
-                def_type = item[5]
-                rel_path = f"{def_type}/{def_type}.xml"
-                converted.append((item[0], item[1], item[2], rel_path, item[4]))
-            else:
-                converted.append(item[:5] if len(item) >= 5 else item)
-        return converted
-
     def _generate_definjected_with_structure(
         self,
         def_translations: List[Tuple],
@@ -778,13 +781,7 @@ class TemplateManager:
         template_structure: str,
         prefix: Optional[str] = None,
     ):
-        """根据智能配置的结构选择生成DefInjected模板，统一按 rel_path 导出"""
-        # defs_by_type 时：6 元组需转为 5 元组，rel_path = def_type/def_type.xml
-        if template_structure == "defs_by_type":
-            def_translations = self._convert_def_translations_to_defs_by_type_rel_path(
-                def_translations
-            )
-        # 其他情况（original_structure / merge_logic）：rel_path 已在 item[3]
+        """生成 DefInjected 模板，按 rel_path 分组导出（上游已根据 template_structure 处理好 rel_path）。"""
         self.definjected_exporter.export_translations(
             output_dir, output_language, def_translations, prefix=prefix
         )
@@ -1044,6 +1041,7 @@ class TemplateManager:
         input_keyed: Optional[List[Tuple]] = None,
         input_def: Optional[List[Tuple]] = None,
         import_label: Optional[str] = None,
+        template_structure: Optional[str] = None,
     ) -> Tuple[List[Tuple], str]:
         """
         新增模式：若提供 input_keyed/input_def（多根合并后的数据），则不再从 import_dir 提取。
@@ -1094,9 +1092,15 @@ class TemplateManager:
         # 步骤3：新增翻译数据（只保留新增的部分）
         ui.print_info("🔍 步骤3：智能对比，筛选新增翻译数据...")
 
-        # 使用智能合并器，但只保留新增的部分
+        # Keyed：直接按 key 比较
         keyed_new = self._filter_new_translations(input_keyed, output_keyed)
-        def_new = self._filter_new_translations(input_def, output_def)
+
+        # Def：输入、输出 key 需统一格式（含 def_type）才能正确比较
+        input_def_for_cmp = add_def_type_prefix_to_definjected(
+            normalize_input_rel_path_for_merge(input_def)
+        )
+        output_def_for_cmp = add_def_type_prefix_to_definjected(output_def)
+        def_new = self._filter_new_translations(input_def_for_cmp, output_def_for_cmp)
 
         if not keyed_new and not def_new:
             ui.print_success("✅ 没有发现缺少的key，所有内容都已存在")
@@ -1105,6 +1109,14 @@ class TemplateManager:
         ui.print_success(
             f"发现新增翻译：Keyed {len(keyed_new)} 条，DefInjected {len(def_new)} 条"
         )
+
+        # 新增项：rel_path=def_type/文件名，key 去除 def_type 供 DefInjected 写出
+        def_new = apply_if_defs_by_type(
+            def_new,
+            template_structure or "original_structure",
+            data_source_choice=data_source_choice,
+        )
+        def_new = strip_def_type_for_definjected_export(def_new)
 
         # 生成新增的模板文件
         ui.print_info("📝 生成新增的模板文件...")

@@ -40,9 +40,7 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 # 统一导入项目内部模块（避免分散导入导致的分组问题）
-from batch.handler import handle_batch
-
-# 配置管理功能直接集成
+from batch.handler import handle_batch, handle_batch_full_pipeline, handle_batch_vanilla_extract
 from corpus.handler import handle_corpus
 from extract import handle_extract
 from full_pipeline.handler import handle_full_pipeline
@@ -50,7 +48,14 @@ from import_template.handler import handle_import_template, handle_migrate_trans
 from repair_translation.handler import handle_repair_translation
 from translate.handler import handle_unified_translate
 from extract.cleanup_outdated_keys import handle_cleanup_outdated_keys
-from utils.interaction import show_main_menu, wait_for_user_input
+from translate.handler import handle_restore_placeholders
+from utils.interaction import (
+    show_extract_submenu,
+    show_full_pipeline_submenu,
+    show_main_menu,
+    show_tools_submenu,
+    wait_for_user_input,
+)
 from utils.ui_style import ui
 from utils.interaction import confirm_action
 
@@ -109,11 +114,27 @@ def main():
 
         try:
             if mode == "1":
-                handle_full_pipeline()
-                wait_for_user_input("按回车返回主菜单...")
+                sub = show_full_pipeline_submenu()
+                if sub == "1":
+                    handle_full_pipeline()
+                    wait_for_user_input("按回车返回主菜单...")
+                elif sub == "2":
+                    handle_batch_full_pipeline()
+                    wait_for_user_input("按回车返回主菜单...")
+                elif sub != "b":
+                    ui.print_warning("无效选项")
+                    wait_for_user_input("按回车返回主菜单...")
             elif mode == "2":
-                handle_extract()
-                wait_for_user_input("按回车返回主菜单...")
+                sub = show_extract_submenu()
+                if sub == "1":
+                    handle_extract()
+                    wait_for_user_input("按回车返回主菜单...")
+                elif sub == "2":
+                    handle_batch_vanilla_extract()
+                    wait_for_user_input("按回车返回主菜单...")
+                elif sub != "b":
+                    ui.print_warning("无效选项")
+                    wait_for_user_input("按回车返回主菜单...")
             elif mode == "3":
                 handle_unified_translate()
                 wait_for_user_input("按回车返回主菜单...")
@@ -121,28 +142,29 @@ def main():
                 handle_import_template()
                 wait_for_user_input("按回车返回主菜单...")
             elif mode == "5":
-                handle_batch()
-                wait_for_user_input("按回车返回主菜单...")
+                sub = show_tools_submenu()
+                if sub == "1":
+                    handle_migrate_translations()
+                elif sub == "2":
+                    handle_restore_placeholders()
+                elif sub == "3":
+                    handle_repair_translation()
+                elif sub == "4":
+                    handle_cleanup_outdated_keys()
+                elif sub == "5":
+                    handle_corpus()
+                elif sub != "b":
+                    ui.print_warning("无效选项")
+                if sub != "b":
+                    wait_for_user_input("按回车返回主菜单...")
             elif mode == "6":
                 handle_config_manage()
-                wait_for_user_input("按回车返回主菜单...")
-            elif mode == "7":
-                handle_corpus()
-                wait_for_user_input("按回车返回主菜单...")
-            elif mode == "8":
-                handle_cleanup_outdated_keys()
-                wait_for_user_input("按回车返回主菜单...")
-            elif mode == "9":
-                handle_migrate_translations()
-                wait_for_user_input("按回车返回主菜单...")
-            elif mode == "10":
-                handle_repair_translation()
                 wait_for_user_input("按回车返回主菜单...")
             elif mode == "q":
                 ui.print_success("👋 感谢使用 Day Translation！")
                 break
             else:
-                ui.print_error("❌ 无效选项，请重新输入（1-10 或 q）。")
+                ui.print_error("❌ 无效选项，请重新输入（1-6 或 q）。")
                 wait_for_user_input("按回车返回主菜单...")
         except KeyboardInterrupt:
             ui.print_warning("\n⚠️ 用户中断操作")

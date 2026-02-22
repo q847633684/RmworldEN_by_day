@@ -219,14 +219,17 @@ def _load_translations_from_csv(
                     if has_file_col and file_rel:
                         keyed_by_file.setdefault(file_rel, {})[key] = value
                 elif translation_type == "def":
-                    definjected_translations[key] = value
                     if has_file_col and file_rel:
+                        # 有 file 列时：仅写入 by_file，严格按 key+file 校验，避免 def/key 不匹配时误导入
                         definjected_by_file.setdefault(file_rel, {})[key] = value
+                    elif not has_file_col:
+                        definjected_translations[key] = value
                 else:
                     if "/" in key:
-                        definjected_translations[key] = value
                         if has_file_col and file_rel:
                             definjected_by_file.setdefault(file_rel, {})[key] = value
+                        elif not has_file_col:
+                            definjected_translations[key] = value
                     else:
                         keyed_translations[key] = value
                         if has_file_col and file_rel:
@@ -818,65 +821,6 @@ def _migrate_without_scope_mapping(
                 translations_by_file=None,
             )
     return updated
-
-
-def _update_definjected_by_scope(
-    mod_dir: str,
-    language: str,
-    definjected_by_scope: Dict[str, Dict[str, str]],
-    only_fill_empty: bool = False,
-    language_dir_override: Optional[str] = None,
-) -> int:
-    """按 Def 类型(scope)更新 DefInjected：每个 XML 文件只使用对应 scope 的 key→译文。"""
-    if not definjected_by_scope:
-        return 0
-    def_name = _get_config().language_config.get_value("definjected_dir", "DefInjected")
-    if language_dir_override:
-        subdir = Path(language_dir_override) / def_name
-    else:
-        subdir = _get_config().language_config.get_language_subdir(mod_dir, language, "definjected")
-        if not subdir.exists():
-            subdir = _get_language_subdir_path(mod_dir, language, "definjected")
-    if not subdir.exists():
-        logger.warning("DefInjected 目录不存在: %s", subdir)
-        return 0
-    processor = XMLProcessor()
-    updated_count = 0
-    xml_files = list(Path(subdir).rglob("*.xml"))
-    total_files = len(xml_files)
-    if total_files == 0:
-        return 0
-    ui.print_info(f"正在更新 DefInjected 目录中的 {total_files} 个文件（按 Def 类型匹配）...")
-    for i, xml_file in enumerate(xml_files, 1):
-        try:
-            rel = xml_file.relative_to(subdir)
-            scope = rel.parts[0] if rel.parts else (xml_file.stem or "")
-            translations = definjected_by_scope.get(scope, {})
-            if not translations:
-                continue
-            normalized: Dict[str, str] = {}
-            for key, value in translations.items():
-                k = key_to_dot_notation(key)
-                normalized[k] = value
-            tree = processor.parse_xml(str(xml_file))
-            if tree is None:
-                continue
-            if update_translations(
-                processor,
-                tree,
-                normalized,
-                generate_key_func=_definjected_key_func,
-                merge=True,
-                include_attributes=True,
-                only_fill_empty=only_fill_empty,
-            ):
-                processor.save_xml(tree, str(xml_file))
-                updated_count += 1
-            ui.print_progress_bar(i, total_files, prefix="更新文件")
-        except (FileNotFoundError, PermissionError, OSError, ValueError, TypeError) as e:
-            logger.debug("跳过 %s: %s", xml_file, e)
-    ui.print_info("")
-    return updated_count
 
 
 def _update_xml_in_subdir(

@@ -284,6 +284,7 @@ def handle_extract(
                             input_keyed=all_keyed,
                             input_def=all_def,
                             import_label=label,
+                            template_structure=template_structure,
                         )
                     else:
                         translations, csv_path = template_manager.merge_mode(
@@ -295,6 +296,7 @@ def handle_extract(
                             has_input_keyed=has_input_keyed,
                             output_csv=output_csv,
                             import_label=label,
+                            template_structure=template_structure,
                         )
                     if csv_path:
                         all_csv_paths.append(csv_path)
@@ -341,6 +343,7 @@ def handle_extract(
                             input_keyed=all_keyed,
                             input_def=all_def,
                             import_label=label,
+                            template_structure=template_structure,
                         )
                     else:
                         translations, csv_path = template_manager.incremental_mode(
@@ -352,6 +355,7 @@ def handle_extract(
                             has_input_keyed=has_input_keyed,
                             output_csv=output_csv,
                             import_label=label,
+                            template_structure=template_structure,
                         )
                     if translations and csv_path:
                         all_csv_paths.append(csv_path)
