@@ -284,7 +284,9 @@ def _looks_like_en_placeholder(text: str) -> bool:
             pass
     # 以常见规则前缀开头（RimWorld / AROM 等）
     lower = t.lower()
-    for prefix in ("creation(", "episode(", "intro(", "conflict(", "victory(", "setup(", "story(", "lesson", "archist", "animist", "founder"):
+    prefixes = ("creation(", "episode(", "intro(", "conflict(", "victory(", "setup(", "story(", "lesson",
+                "archist", "animist", "founder")
+    for prefix in prefixes:
         if lower.startswith(prefix) and ("->" in t or "&gt;" in t):
             return True
     return False
@@ -1031,6 +1033,7 @@ def update_translations(
                         "trivial", "minor", "moderate", "major", "severe", "extreme",
                         "need_the_bathroom", "bursting", "cold_water", "cold_shower", "cold_bath",
                     )
+
                     def _stage_sort_key(k):
                         parts = k[len(prefix) + 1 :].split(".")  # 取 stages.xxx 的 xxx
                         name = parts[0] if parts else ""

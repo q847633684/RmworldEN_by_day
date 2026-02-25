@@ -5,4 +5,4 @@
 
 from .handler import handle_full_pipeline, handle_batch_full_pipeline
 
-__all__ = ["handle_full_pipeline", "handle_batch_full_pipeline"] 
+__all__ = ["handle_full_pipeline", "handle_batch_full_pipeline"]

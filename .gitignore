@@ -142,6 +142,9 @@ temp/
 *.bak
 
 # 项目特定的忽略文件
+# 官方汉化仓库（术语抽取用）
+.rimworld_official_zh/
+
 # 翻译输出文件
 output/
 translations/

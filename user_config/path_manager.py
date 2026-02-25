@@ -6,7 +6,6 @@
 
 import os
 import re
-import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Dict, Optional, Callable, List, TYPE_CHECKING
 from utils.logging_config import get_logger

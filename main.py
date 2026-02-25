@@ -29,10 +29,19 @@ Day Translation - RimWorld 模组汉化工具
 版本: 0.1.0
 """
 
+import io
 import os
 import sys
 from pathlib import Path
 from colorama import init  # type: ignore
+
+# Windows 控制台默认 GBK，emoji 会报 UnicodeEncodeError，强制使用 UTF-8
+if sys.platform == "win32" and hasattr(sys.stdout, "buffer"):
+    try:
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
+    except (AttributeError, io.UnsupportedOperation):
+        pass
 
 # 确保项目根目录在 sys.path 中，以支持直接运行脚本时的包导入
 project_root = Path(__file__).parent

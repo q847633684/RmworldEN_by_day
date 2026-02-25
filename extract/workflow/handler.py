@@ -15,7 +15,6 @@ from utils.logging_config import get_logger, log_user_action
 from utils.error_handling import report_handler_error
 from utils.interaction import (
     prompt_choose_from_list,
-    safe_input,
     select_mod_path_with_version_detection,
 )
 from utils.ui_style import ui, _get_mod_display_name
@@ -30,7 +29,6 @@ from extract.utils.merger import dedupe_translations_by_key
 from utils.load_folders import get_load_folders_versions, get_version_dirs_from_fs
 from .manager import (
     TemplateManager,
-    find_content_roots,
     generate_load_folders_xml,
     get_content_roots_from_load_folders,
 )
@@ -99,9 +97,7 @@ def handle_extract(
         # 用户输入即为模组根
         scan_base = mod_dir
         load_folders_mod_root = scan_base
-        en_lang = config.language_config.get_value("en_language", "English")
 
-        use_load_folders = False
         load_folders_entries: Optional[List[Tuple[str, Dict[str, str]]]] = None
         content_roots: List[str] = []
 
@@ -124,7 +120,6 @@ def handle_extract(
                 load_folders_entries = get_content_roots_from_load_folders(scan_base, ver)
                 if load_folders_entries:
                     content_roots = [p for p, _ in load_folders_entries]
-                    use_load_folders = True
                     ui.print_info(f"已从 LoadFolders.xml 读取 <v{ver}> 共 {len(content_roots)} 个内容根")
 
         # 2. 没有 LoadFolders 或未读到：读取目录里的版本号（1.6 / v1.6），选版本后扫描该版本+根目录合并到一个 Languages
@@ -227,7 +222,6 @@ def handle_extract(
             mod_name = sanitize_mod_name_for_path(_get_mod_display_name(mod_root))
             all_csv_paths: List[str] = []
             chosen_output_dir = smart_config["output_config"]["output_dir"]
-            _rel_names: List[str] = []
 
             def _is_external_output(out_dir: str, base_dir: str) -> bool:
                 try:

@@ -19,6 +19,7 @@ from .ui_style import (
     UIStyle,
 )
 
+
 def _get_path_manager():
     """获取 PathManager，统一从 UserConfigManager 获取"""
     return UserConfigManager.get_instance().path_manager

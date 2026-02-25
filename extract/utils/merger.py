@@ -340,4 +340,3 @@ class SmartMerger:
         logger.info("  最终输出项目: %d", stats.get("merged_count", 0))
         logger.info("  合并策略: %s", stats.get("merge_strategy", "unknown"))
         logger.info("  保留元数据: %s", stats.get("preserve_metadata", False))
-

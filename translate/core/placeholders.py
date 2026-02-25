@@ -37,7 +37,6 @@ RimWorld 模组翻译占位符保护系统
 版本: 2.0.0
 """
 
-import csv
 import re
 import yaml
 from pathlib import Path
@@ -365,37 +364,58 @@ class PlaceholderManager:
 
         return restored_text
 
-    def _load_dictionary(self):
-        """加载词典文件"""
-        try:
-            # 构建词典文件路径
-            config_path = Path(__file__).parent.parent.parent / "user_config" / "config"
-            dictionary_file = config_path / f"{self.dictionary_type}_dictionary.yaml"
+    def _normalize_dict_key(self, english: str) -> str:
+        """去除英文键外层的括号，便于匹配纯词（如 (bond) -> bond 可匹配 'bond'）"""
+        if not english or len(english) < 3:
+            return english
+        s = english.strip()
+        if (s.startswith("(") and s.endswith(")")) or (
+            s.startswith("（") and s.endswith("）")
+        ):
+            return s[1:-1].strip() or english
+        return english
 
-            if not dictionary_file.exists():
-                logger.warning("词典文件不存在: %s", dictionary_file)
-                return {}
-
-            with open(dictionary_file, "r", encoding="utf-8") as f:
-                data = yaml.safe_load(f)
-
-            # 提取所有词汇
-            dictionary = {}
-            for _category, category_data in data.items():
-                if isinstance(category_data, dict) and "entries" in category_data:
-                    entries = category_data["entries"]
-                    if isinstance(entries, list):
-                        for entry in entries:
-                            if (
-                                isinstance(entry, dict)
-                                and "english" in entry
-                                and "chinese" in entry
-                            ):
-                                english_word = entry["english"]
+    def _add_entries_to_dict(
+        self, dictionary: dict, data: dict
+    ) -> None:
+        """将 YAML 数据中的 entries 合并到 dictionary。"""
+        for _category, category_data in (data or {}).items():
+            if isinstance(category_data, dict) and "entries" in category_data:
+                entries = category_data["entries"]
+                if isinstance(entries, list):
+                    for entry in entries:
+                        if (
+                            isinstance(entry, dict)
+                            and "english" in entry
+                            and "chinese" in entry
+                        ):
+                            english_word = self._normalize_dict_key(
+                                str(entry["english"]).strip()
+                            )
+                            if english_word:
                                 dictionary[english_word] = {
                                     "chinese": entry["chinese"],
                                     "priority": entry.get("priority", "medium"),
                                 }
+
+    def _load_dictionary(self):
+        """加载词典文件。game 类型会额外合并 official_game_terms.yaml（后者先加载，主词典可覆盖）。"""
+        try:
+            config_path = Path(__file__).parent.parent.parent / "user_config" / "config"
+            dictionary = {}
+
+            if self.dictionary_type == "game":
+                official_file = config_path / "official_game_terms.yaml"
+                if official_file.exists():
+                    with open(official_file, "r", encoding="utf-8") as f:
+                        self._add_entries_to_dict(dictionary, yaml.safe_load(f))
+
+            dictionary_file = config_path / f"{self.dictionary_type}_dictionary.yaml"
+            if dictionary_file.exists():
+                with open(dictionary_file, "r", encoding="utf-8") as f:
+                    self._add_entries_to_dict(dictionary, yaml.safe_load(f))
+            elif not dictionary:
+                logger.warning("词典文件不存在: %s", dictionary_file)
 
             self.dictionary = dictionary
             logger.info(
@@ -543,6 +563,7 @@ class PlaceholderManager:
             return text, []
         combined = "|".join(f"({p})" for p in self._KEEP_PATTERNS)
         spans = []
+
         def repl(m):
             spans.append(m.group(0))
             return f"{self._KEEP_PLACEHOLDER}{len(spans)-1}{self._KEEP_PLACEHOLDER}"

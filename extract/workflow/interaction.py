@@ -182,7 +182,10 @@ class InteractionManager:
             bool: 用户是否确认配置
         """
         ui.print_section_header("配置确认", ui.Icons.SETTINGS)
-        ui.print_info(f"  数据: {self._format_choice_description(config['data_sources']['choice'])}  冲突: {self._format_conflict_description(config['output_config']['conflict_resolution'])}  结构: {self._format_structure_description(config['template_structure'])}")
+        data_desc = self._format_choice_description(config['data_sources']['choice'])
+        conflict_desc = self._format_conflict_description(config['output_config']['conflict_resolution'])
+        struct_desc = self._format_structure_description(config['template_structure'])
+        ui.print_info(f"  数据: {data_desc}  冲突: {conflict_desc}  结构: {struct_desc}")
         ui.print_info(f"  输出: {config['output_config']['output_dir']}")
         ui.print_tip("  y=确认  n=取消  r=重配")
 
@@ -243,7 +246,7 @@ class InteractionManager:
         Returns:
             Dict[str, Union[bool, str]]: 目录状态
         """
-        language_dir = self.config.language_config.get_language_dir(mod_dir, language)
+        self.config.language_config.get_language_dir(mod_dir, language)
 
         def_dir = self.config.language_config.get_language_subdir(
             mod_dir, language, SUBDIR_TYPE_DEFINJECTED

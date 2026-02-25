@@ -93,7 +93,10 @@ class APIConfigUI:
                 valid_text = "有效" if api_config.validate() else "无效"
                 connection_text = "连通" if test_success else "失败"
 
-                status_text = f"{enabled_icon}{enabled_text} {config_icon}{config_text} {valid_icon}{valid_text} {connection_icon}{connection_text}"
+                status_text = (
+                    f"{enabled_icon}{enabled_text} {config_icon}{config_text} "
+                    f"{valid_icon}{valid_text} {connection_icon}{connection_text}"
+                )
 
                 ui.print_menu_item(
                     str(i),

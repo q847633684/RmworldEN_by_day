@@ -137,9 +137,9 @@ class UIStyle:
             padding = 0
 
         print(f"\n{cls.Colors.PRIMARY}╔{'═' * (width - 2)}╗{cls.Colors.RESET}")
-        print(
-            f"{cls.Colors.PRIMARY}║{cls.Colors.RESET}{' ' * padding}{cls.Colors.HIGHLIGHT}{title}{cls.Colors.RESET}{' ' * (width - len(title) - padding - 2)}{cls.Colors.PRIMARY}║{cls.Colors.RESET}"
-        )
+        pad_right = width - len(title) - padding - 2
+        mid = f"{' ' * padding}{cls.Colors.HIGHLIGHT}{title}{cls.Colors.RESET}{' ' * pad_right}"
+        print(f"{cls.Colors.PRIMARY}║{cls.Colors.RESET}{mid}{cls.Colors.PRIMARY}║{cls.Colors.RESET}")
         print(f"{cls.Colors.PRIMARY}╚{'═' * (width - 2)}╝{cls.Colors.RESET}")
 
     @classmethod

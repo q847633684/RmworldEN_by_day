@@ -16,6 +16,7 @@ except ImportError:
     LXML_AVAILABLE = False
     logger.warning("lxml 未安装，将使用 ElementTree")
 
+
 @dataclass
 class XMLProcessorConfig:
     """XML 处理器配置"""

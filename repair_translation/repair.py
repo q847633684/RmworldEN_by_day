@@ -4,7 +4,7 @@
 
 import re
 from pathlib import Path
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 from dataclasses import dataclass
 from utils.logging_config import get_logger
 from utils.ui_style import ui
@@ -166,6 +166,7 @@ def scan_and_repair_folder(
     if translate_func is None:
         try:
             from translate.core.google_translator import translate_text
+
             def _tr(t):
                 return translate_text(t, target_lang="zh-CN", source_lang="auto")
             translate_func = _tr
